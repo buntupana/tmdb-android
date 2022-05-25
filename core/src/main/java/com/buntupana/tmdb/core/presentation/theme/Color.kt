@@ -1,6 +1,10 @@
-package com.buntupana.tmdb.ui.theme
+package com.buntupana.tmdb.core.presentation.theme
 
 import androidx.compose.ui.graphics.Color
+
+val Primary = Color(0xFF0D253F)
+val Secondary = Color(0xFF01B4E4)
+val Tertiary = Color(0xFF90CEA1)
 
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)

@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id 'com.google.devtools.ksp' version '1.6.21-1.0.5'
 }
 
 android {
@@ -35,6 +36,13 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
     }
+//    libraryVariants.all { variant ->
+//        kotlin.sourceSets {
+//            getByName(variant.name) {
+//                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+//            }
+//        }
+//    }
 }
 
 dependencies {
@@ -43,10 +51,14 @@ dependencies {
     api "androidx.core:core-ktx:$ktx_version"
     api "androidx.appcompat:appcompat:$appCompat_version"
     api "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    api "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
     // Compose
     api "androidx.compose.ui:ui:$compose_version"
     api "androidx.compose.ui:ui-tooling-preview:$compose_version"
+
+    api "io.github.raamcosta.compose-destinations:core:$navigation_destination_version"
+//    ksp "io.github.raamcosta.compose-destinations:ksp:$navigation_destination_version"
 
     // Material
     api "androidx.compose.material3:material3:$material_3_version"
@@ -56,6 +68,12 @@ dependencies {
     api "com.squareup.retrofit2:converter-moshi:$retrofit_version"
     api "com.squareup.okhttp3:okhttp:$okhttp_version"
     api "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+    // Dagger Hilt
+    api "com.google.dagger:hilt-android:$dagger_version"
+    kapt "com.google.dagger:hilt-android-compiler:$dagger_version"
+//    kapt "androidx.hilt:hilt-compiler:1.0.0"
+//    api 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     // Tools
     api "com.jakewharton.timber:timber:$timber_version"

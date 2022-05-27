@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
@@ -11,16 +11,11 @@ android {
     compileSdk compile_sdk_version
 
     defaultConfig {
-        applicationId "com.buntupana.tmdb.tmdb"
         minSdk min_sdk_version
         targetSdk compile_sdk_version
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary true
-        }
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -42,12 +37,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
     }
-    packagingOptions {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
-    }
-    applicationVariants.all { variant ->
+    libraryVariants.all { variant ->
         kotlin.sourceSets {
             getByName(variant.name) {
                 kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
@@ -59,15 +49,14 @@ android {
 dependencies {
 
     implementation project(path: ':core')
-    implementation project(path: ':feature:discover')
-
-    implementation "androidx.activity:activity-compose:$compose_activity_version"
-
-    ksp "io.github.raamcosta.compose-destinations:ksp:$navigation_destination_version"
 
     // Dagger Hilt
     implementation "com.google.dagger:hilt-android:$dagger_version"
     kapt "com.google.dagger:hilt-android-compiler:$dagger_version"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
     kapt "androidx.hilt:hilt-compiler:1.0.0"
+
+    // Compose Navigation
+    ksp "io.github.raamcosta.compose-destinations:ksp:$navigation_destination_version"
+
 }

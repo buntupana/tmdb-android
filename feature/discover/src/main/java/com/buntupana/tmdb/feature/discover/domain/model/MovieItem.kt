@@ -1,0 +1,18 @@
+package com.buntupana.tmdb.feature.discover.domain.model
+
+data class MovieItem(
+    val id: Long,
+    val title: String,
+    val originalTitle: String,
+    val overview: String,
+    val posterPath: String,
+    val backdropPath: String,
+    val originalLanguage: String,
+    val genreIds: List<Int>,
+    val popularity: Double,
+    val voteAverage: Double,
+    val voteCount: Int,
+    val releaseDate: String,
+    val video: Boolean,
+    val adult: Boolean
+)

@@ -43,6 +43,10 @@ android {
 //            }
 //        }
 //    }
+//    ksp {
+//        arg("compose-destinations.moduleName", "core")
+//        arg("compose-destinations.mode", "destinations")
+//    }
 }
 
 dependencies {
@@ -56,6 +60,7 @@ dependencies {
     // Compose
     api "androidx.compose.ui:ui:$compose_version"
     api "androidx.compose.ui:ui-tooling-preview:$compose_version"
+//    api "androidx.navigation:navigation-compose:$navigation_version"
 
     api "io.github.raamcosta.compose-destinations:core:$navigation_destination_version"
 //    ksp "io.github.raamcosta.compose-destinations:ksp:$navigation_destination_version"

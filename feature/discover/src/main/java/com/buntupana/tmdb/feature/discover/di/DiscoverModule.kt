@@ -18,5 +18,4 @@ object DiscoverModule {
     fun provideDiscoverApi(retrofit: Retrofit): DiscoverApi {
         return retrofit.create(DiscoverApi::class.java)
     }
-
 }

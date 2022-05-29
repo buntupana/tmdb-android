@@ -44,6 +44,10 @@ android {
             }
         }
     }
+    ksp {
+        arg("compose-destinations.moduleName", "discover")
+        arg("compose-destinations.mode", "destinations")
+    }
 }
 
 dependencies {

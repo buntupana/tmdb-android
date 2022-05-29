@@ -25,7 +25,7 @@ interface DiscoverApi {
         @Query("watch_region") watchRegion: String
     ): Response<ResponseListRaw<MovieItemRaw>>
 
-    @GET("3/discover/movie&api_key=e23ff495a9dde4baf581bcb5548f7f7a")
+    @GET("discover/movie")
     suspend fun fetchPopularMovies(
         @Query("with_watch_monetization_types") monetizationType: String? = null,
         @Query("watch_region") watchRegion: String? = null

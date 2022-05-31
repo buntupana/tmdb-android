@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination
@@ -34,7 +35,6 @@ fun DiscoverScreen(
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(288.dp)
         ) {
             items(state.movieItemList.size) { i ->
                 if (i == 0) {
@@ -42,14 +42,14 @@ fun DiscoverScreen(
                 }
 
                 val movieItem = state.movieItemList[i]
-                MovieItem(
-                    movie = movieItem,
+                MediaItem(
                     modifier = Modifier
+                        .width(Dimens.carouselMediaItemWidth)
                         .clip(RoundedCornerShape(5.dp))
                         .clickable {
                             // Navigate to detail screen
-                        }
-                        .width((200 * 2 / 3).dp)
+                        },
+                    movie = movieItem
                 )
                 if (i == state.movieItemList.size - 1) {
                     Spacer(modifier = Modifier.width(12.dp))

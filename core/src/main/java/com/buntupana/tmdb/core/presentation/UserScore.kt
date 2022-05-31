@@ -63,7 +63,7 @@ fun UserScore(
                 -90f,
                 360f,
                 useCenter = false,
-                alpha = 0.4f,
+                alpha = 0.3f,
                 style = Stroke(strokeSize.toPx())
             )
             drawArc(

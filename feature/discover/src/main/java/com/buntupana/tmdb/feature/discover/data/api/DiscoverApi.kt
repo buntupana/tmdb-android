@@ -20,14 +20,10 @@ interface DiscoverApi {
         @Path("time_window") timeWindow: String
     ): Response<ResponseListRaw<TvShowRaw>>
 
-    @GET("discover/movie?with_watch_monetization_types=flatrate")
-    suspend fun fetchPopularStreaming(
-        @Query("watch_region") watchRegion: String
-    ): Response<ResponseListRaw<MovieItemRaw>>
-
     @GET("discover/movie")
     suspend fun fetchPopularMovies(
         @Query("with_watch_monetization_types") monetizationType: String? = null,
-        @Query("watch_region") watchRegion: String? = null
+        @Query("watch_region") watchRegion: String? = null,
+        @Query("with_release_type") releaseType: String? = null
     ): Response<ResponseListRaw<MovieItemRaw>>
 }

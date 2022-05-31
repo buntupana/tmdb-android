@@ -1,30 +1,50 @@
 package com.buntupana.tmdb.feature.discover.presentation
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.buntupana.tmdb.feature.discover.domain.usecase.GetPopularMoviesStreaming
+import com.buntupana.tmdb.feature.discover.domain.entity.PopularType
+import com.buntupana.tmdb.feature.discover.domain.usecase.GetPopularMoviesListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
-    private val getPopularMoviesStreaming: GetPopularMoviesStreaming
+    private val getPopularMoviesListUseCase: GetPopularMoviesListUseCase
 ) : ViewModel() {
 
+    var state by mutableStateOf(DiscoverState())
+    private var getPopularMoviesJob: Job? = null
+
     init {
-        getPopularStreaming()
+        getPopularMovies(PopularType.STREAMING)
     }
 
-    private fun getPopularStreaming() {
-        viewModelScope.launch {
-            getPopularMoviesStreaming(Unit) {
-                loading { }
+    fun onEvent(event: DiscoverEvent) {
+        when (event) {
+            is DiscoverEvent.ChangePopularType -> {
+                getPopularMovies(event.popularType)
+            }
+        }
+    }
+
+    private fun getPopularMovies(popularType: PopularType) {
+
+        getPopularMoviesJob?.cancel()
+        getPopularMoviesJob = viewModelScope.launch {
+            getPopularMoviesListUseCase(popularType) {
+                loading {
+                    state = state.copy(isLoading = true)
+                }
                 error {
 
                 }
                 success { data ->
-
+                    state = state.copy(isLoading = false, movieItemList = data)
                 }
             }
         }

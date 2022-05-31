@@ -61,7 +61,14 @@ dependencies {
     // Compose
     api "androidx.compose.ui:ui:$compose_version"
     api "androidx.compose.ui:ui-tooling-preview:$compose_version"
-//    api "androidx.navigation:navigation-compose:$navigation_version"
+    api "androidx.constraintlayout:constraintlayout-compose:$compose_constraint_version"
+    api "androidx.compose.material:material:$compose_version"
+    debugApi "androidx.compose.ui:ui-tooling:$compose_version"
+    api "androidx.navigation:navigation-compose:$navigation_version"
+
+    // Fix bug in compose
+    debugApi "androidx.customview:customview:1.2.0-alpha01"
+    debugApi 'androidx.customview:customview-poolingcontainer:1.0.0-beta02'
 
     api "io.github.raamcosta.compose-destinations:core:$navigation_destination_version"
 //    ksp "io.github.raamcosta.compose-destinations:ksp:$navigation_destination_version"
@@ -78,13 +85,15 @@ dependencies {
     // Dagger Hilt
     api "com.google.dagger:hilt-android:$dagger_version"
     kapt "com.google.dagger:hilt-android-compiler:$dagger_version"
+    api "androidx.hilt:hilt-navigation-compose:$dagger_android_version"
 //    kapt "androidx.hilt:hilt-compiler:1.0.0"
-//    api 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     // Tools
     api "com.jakewharton.timber:timber:$timber_version"
-    api "com.github.bumptech.glide:glide:$glide_version"
-    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    api "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"
+//    api "com.github.bumptech.glide:glide:$glide_version"
+//    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    api "io.coil-kt:coil-compose:$coil_version"
 
     // Testing
 //    testImplementation 'junit:junit:4.13.2'

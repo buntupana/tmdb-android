@@ -10,7 +10,7 @@ data class MovieItem(
     val originalLanguage: String,
     val genreIds: List<Int>,
     val popularity: Double,
-    val voteAverage: Double,
+    val voteAverage: Int,
     val voteCount: Int,
     val releaseDate: String,
     val video: Boolean,

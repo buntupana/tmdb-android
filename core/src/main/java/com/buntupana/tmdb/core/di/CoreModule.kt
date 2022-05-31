@@ -40,7 +40,7 @@ object CoreModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(CoreApi.BASE_URL)
+            .baseUrl(CoreApi.BASE_URL_API)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()

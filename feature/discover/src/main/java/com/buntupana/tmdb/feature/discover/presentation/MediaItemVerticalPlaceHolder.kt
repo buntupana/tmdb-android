@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.discover.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -7,32 +8,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.presentation.UserScore
 import com.buntupana.tmdb.core.presentation.spToDp
 import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.HkFontFamily
 import com.buntupana.tmdb.core.presentation.theme.PlaceHolderColor
 
 private const val MAX_TITLE_LINES = 3
 
 @Composable
-fun MediaItemVertical(
+fun MediaItemVerticalPlaceHolder(
     modifier: Modifier = Modifier,
-    mediaItem: MediaItem,
     fontSize: TextUnit = TextUnit.Unspecified
 ) {
 
@@ -48,34 +39,26 @@ fun MediaItemVertical(
             ConstraintLayout {
                 val (posterImage, infoColumn, userScore) = createRefs()
 
-                AsyncImage(
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(Dimens.posterRound))
-                        .aspectRatio(2f / 3f)
-                        .constrainAs(posterImage) {
-                            top.linkTo(parent.top)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        },
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(mediaItem.posterPath)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = null,
-                    placeholder = ColorPainter(PlaceHolderColor)
+                Box(modifier = Modifier
+                    .clip(RoundedCornerShape(Dimens.posterRound))
+                    .aspectRatio(2f / 3f)
+                    .constrainAs(posterImage) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .background(PlaceHolderColor)
                 )
-                UserScore(
-                    score = mediaItem.voteAverage,
-                    modifier = Modifier
-                        .size((36f * maxWidth.value / 120f).dp)
-                        .constrainAs(userScore) {
-                            start.linkTo(posterImage.start, 4.dp)
-                            top.linkTo(posterImage.bottom)
-                            bottom.linkTo(posterImage.bottom)
-                        },
-                    fontFamily = HkFontFamily
-                )
+
+                Box(modifier = Modifier
+                    .size((36f * maxWidth.value / 120f).dp)
+                    .constrainAs(userScore) {
+                        start.linkTo(posterImage.start, 4.dp)
+                        top.linkTo(posterImage.bottom)
+                        bottom.linkTo(posterImage.bottom)
+                    }) {
+
+                }
                 Column(
                     horizontalAlignment = Alignment.Start,
                     modifier = Modifier
@@ -92,7 +75,7 @@ fun MediaItemVertical(
                     }
 
                     Text(
-                        text = mediaItem.name,
+                        text = "Movie Title",
                         maxLines = MAX_TITLE_LINES,
                         fontWeight = FontWeight.Bold,
                         overflow = TextOverflow.Ellipsis,
@@ -100,15 +83,19 @@ fun MediaItemVertical(
                             // Calc how many lines we need to fill the bottom
                             extraLinesCount = MAX_TITLE_LINES - it.lineCount
                         },
-                        fontSize = fontSize
+                        fontSize = fontSize,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(15.dp))
+                            .background(PlaceHolderColor),
+                        color = PlaceHolderColor
                     )
                     Text(
-                        text = mediaItem.releaseDate,
+                        text = "",
                         fontWeight = FontWeight.Normal,
-                        modifier = Modifier.alpha(0.6f),
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
-                        fontSize = fontSize
+                        fontSize = fontSize,
+                        color = PlaceHolderColor
                     )
                     // Height we need to fill the view
                     val lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * extraLinesCount
@@ -123,24 +110,8 @@ fun MediaItemVertical(
 
 @Preview(showBackground = true)
 @Composable
-fun MediaItemPreview() {
-    MediaItemVertical(
-        modifier = Modifier.width(120.dp),
-        mediaItem = MediaItem.Movie(
-            0,
-            "Fantastics Beasts: the Secrets of Dumbelbore",
-            "",
-            "",
-            "",
-            "",
-            "",
-            emptyList(),
-            0.0,
-            67,
-            0,
-            "31-Dec-2018",
-            false,
-            false
-        )
+fun MediaItemPlaceHolderPreview() {
+    MediaItemVerticalPlaceHolder(
+        modifier = Modifier.width(120.dp)
     )
 }

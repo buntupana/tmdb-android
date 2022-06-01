@@ -1,9 +1,6 @@
 package com.buntupana.tmdb.feature.discover.presentation
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,12 +23,14 @@ fun DiscoverScreen(
     val state = viewModel.state
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(
-            stringResource(id = R.string.text_whats_popular),
-            modifier = Modifier.padding(16.dp),
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 22.sp,
-        )
+        Row {
+            Text(
+                stringResource(id = R.string.text_whats_popular),
+                modifier = Modifier.padding(16.dp),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 22.sp,
+            )
+        }
         CarouselMediaItem(
             modifier = Modifier.fillMaxWidth(),
             state.popularMediaItemList,

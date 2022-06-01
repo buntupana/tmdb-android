@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 
+private const val PLACE_HOLDER_ITEM_NUMBER = 6
+
 @Composable
 fun CarouselMediaItem(
     modifier: Modifier = Modifier,
@@ -23,33 +25,58 @@ fun CarouselMediaItem(
     fontSize: TextUnit = TextUnit.Unspecified,
     onItemClicked: (MediaItem) -> Unit
 ) {
+
     LazyRow(
-        modifier = modifier
+        modifier = modifier,
+        userScrollEnabled = mediaItemList.isNotEmpty()
     ) {
-        items(mediaItemList.size) { i ->
 
-            // Adding some padding at the start
-            if (i == 0) {
-                Spacer(modifier = Modifier.width(paddingHorizontal))
-            }
+        if (mediaItemList.isEmpty()) {
 
-            // Adding media item
-            mediaItemList[i].let { mediaItem ->
-                MediaItemVertical(
-                    modifier = Modifier
-                        .width(itemWidth)
-                        .clip(RoundedCornerShape(Dimens.posterRound))
-                        .clickable {
-                            onItemClicked(mediaItem)
-                        },
-                    mediaItem = mediaItem,
+            items(PLACE_HOLDER_ITEM_NUMBER) { index ->
+
+                // Adding some padding at the start
+                if (index == 0) {
+                    Spacer(modifier = Modifier.width(paddingHorizontal))
+                }
+
+                MediaItemVerticalPlaceHolder(
+                    modifier = Modifier.width(itemWidth),
                     fontSize = fontSize
                 )
+
+                // Adding some padding at end
+                if (index == mediaItemList.size - 1) {
+                    Spacer(modifier = Modifier.width(paddingHorizontal))
+                }
             }
 
-            // Adding some padding at end
-            if (i == mediaItemList.size - 1) {
-                Spacer(modifier = Modifier.width(paddingHorizontal))
+        } else {
+            items(mediaItemList.size) { index ->
+
+                // Adding some padding at the start
+                if (index == 0) {
+                    Spacer(modifier = Modifier.width(paddingHorizontal))
+                }
+
+                // Adding media item
+                mediaItemList[index].let { mediaItem ->
+                    MediaItemVertical(
+                        modifier = Modifier
+                            .width(itemWidth)
+                            .clip(RoundedCornerShape(Dimens.posterRound))
+                            .clickable {
+                                onItemClicked(mediaItem)
+                            },
+                        mediaItem = mediaItem,
+                        fontSize = fontSize
+                    )
+                }
+
+                // Adding some padding at end
+                if (index == mediaItemList.size - 1) {
+                    Spacer(modifier = Modifier.width(paddingHorizontal))
+                }
             }
         }
     }

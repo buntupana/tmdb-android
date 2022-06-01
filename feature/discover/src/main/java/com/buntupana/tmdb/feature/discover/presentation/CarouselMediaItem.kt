@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.theme.Dimens
@@ -19,6 +20,7 @@ fun CarouselMediaItem(
     mediaItemList: List<MediaItem>,
     itemWidth: Dp = Dimens.carouselMediaItemWidth,
     paddingHorizontal: Dp = 12.dp,
+    fontSize: TextUnit = TextUnit.Unspecified,
     onItemClicked: (MediaItem) -> Unit
 ) {
     LazyRow(
@@ -36,11 +38,12 @@ fun CarouselMediaItem(
                 MediaItemVertical(
                     modifier = Modifier
                         .width(itemWidth)
-                        .clip(RoundedCornerShape(5.dp))
+                        .clip(RoundedCornerShape(Dimens.posterRound))
                         .clickable {
                             onItemClicked(mediaItem)
                         },
-                    mediaItem = mediaItem
+                    mediaItem = mediaItem,
+                    fontSize = fontSize
                 )
             }
 

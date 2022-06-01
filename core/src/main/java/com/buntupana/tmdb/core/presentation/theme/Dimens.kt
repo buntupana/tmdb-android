@@ -4,4 +4,5 @@ import androidx.compose.ui.unit.dp
 
 object Dimens {
     val carouselMediaItemWidth = 120.dp
+    val posterRound = 5.dp
 }

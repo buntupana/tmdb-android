@@ -13,12 +13,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.UserScore
 import com.buntupana.tmdb.core.presentation.spToDp
+import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.HkFontFamily
 
 private const val MAX_TITLE_LINES = 3
@@ -26,13 +28,16 @@ private const val MAX_TITLE_LINES = 3
 @Composable
 fun MediaItemVertical(
     modifier: Modifier = Modifier,
-    mediaItem: MediaItem
+    mediaItem: MediaItem,
+    fontSize: TextUnit = TextUnit.Unspecified
 ) {
 
     BoxWithConstraints(
         modifier = modifier
             .padding(4.dp)
     ) {
+
+        val maxWidth = maxWidth
 
         Column {
 
@@ -42,7 +47,7 @@ fun MediaItemVertical(
                 AsyncImage(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .clip(RoundedCornerShape(5.dp))
+                        .clip(RoundedCornerShape(Dimens.posterRound))
                         .aspectRatio(2f / 3f)
                         .constrainAs(posterImage) {
                             top.linkTo(parent.top)
@@ -55,7 +60,7 @@ fun MediaItemVertical(
                 UserScore(
                     score = mediaItem.voteAverage,
                     modifier = Modifier
-                        .size(36.dp)
+                        .size((36f * maxWidth.value / 120f).dp)
                         .constrainAs(userScore) {
                             start.linkTo(posterImage.start, 4.dp)
                             top.linkTo(posterImage.bottom)
@@ -86,14 +91,16 @@ fun MediaItemVertical(
                         onTextLayout = {
                             // Calc how many lines we need to fill the bottom
                             extraLinesCount = MAX_TITLE_LINES - it.lineCount
-                        }
+                        },
+                        fontSize = fontSize
                     )
                     Text(
                         text = mediaItem.releaseDate,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier.alpha(0.6f),
                         overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
+                        maxLines = 1,
+                        fontSize = fontSize
                     )
                     // Height we need to fill the view
                     val lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * extraLinesCount

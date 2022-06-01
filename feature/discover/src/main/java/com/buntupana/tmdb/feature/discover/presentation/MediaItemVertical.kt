@@ -2,8 +2,9 @@ package com.buntupana.tmdb.feature.discover.presentation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -15,14 +16,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
+import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.UserScore
+import com.buntupana.tmdb.core.presentation.spToDp
 import com.buntupana.tmdb.core.presentation.theme.HkFontFamily
-import com.buntupana.tmdb.feature.discover.domain.model.MovieItem
+
+private const val MAX_TITLE_LINES = 3
 
 @Composable
-fun MediaItem(
+fun MediaItemVertical(
     modifier: Modifier = Modifier,
-    movie: MovieItem
+    mediaItem: MediaItem
 ) {
 
     BoxWithConstraints(
@@ -45,11 +49,11 @@ fun MediaItem(
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                         },
-                    model = movie.posterPath,
+                    model = mediaItem.posterPath,
                     contentDescription = null
                 )
                 UserScore(
-                    score = movie.voteAverage,
+                    score = mediaItem.voteAverage,
                     modifier = Modifier
                         .size(36.dp)
                         .constrainAs(userScore) {
@@ -70,18 +74,31 @@ fun MediaItem(
                             end.linkTo(posterImage.end)
                         }) {
 
+                    var extraLinesCount by remember {
+                        mutableStateOf(0)
+                    }
+
                     Text(
-                        text = movie.title.addEmptyLines(3),
-                        maxLines = 3,
+                        text = mediaItem.name,
+                        maxLines = MAX_TITLE_LINES,
                         fontWeight = FontWeight.Bold,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        onTextLayout = {
+                            // Calc how many lines we need to fill the bottom
+                            extraLinesCount = MAX_TITLE_LINES - it.lineCount
+                        }
                     )
                     Text(
-                        movie.releaseDate,
+                        text = mediaItem.releaseDate,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier.alpha(0.6f),
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1
+                    )
+                    // Height we need to fill the view
+                    val lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * extraLinesCount
+                    Spacer(
+                        modifier = Modifier.height(spToDp(lineHeight))
                     )
                 }
             }
@@ -89,16 +106,14 @@ fun MediaItem(
     }
 }
 
-fun String.addEmptyLines(lines: Int) = this + "\n".repeat(lines)
-
 @Preview(showBackground = true)
 @Composable
 fun MediaItemPreview() {
-    MediaItem(
+    MediaItemVertical(
         modifier = Modifier.width(120.dp),
-        movie = MovieItem(
+        mediaItem = MediaItem.Movie(
             0,
-            "Fantastics Beast: The Secrets of Dumbledore",
+            "Fantastics Beasts",
             "",
             "",
             "",
@@ -111,7 +126,6 @@ fun MediaItemPreview() {
             "31-Dec-2018",
             false,
             false
-
         )
     )
 }

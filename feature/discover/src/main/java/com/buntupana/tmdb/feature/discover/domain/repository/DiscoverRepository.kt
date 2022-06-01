@@ -2,9 +2,9 @@ package com.buntupana.tmdb.feature.discover.domain.repository
 
 import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.feature.discover.domain.entity.PopularType
-import com.buntupana.tmdb.feature.discover.domain.model.MovieItem
+import com.buntupana.tmdb.core.domain.model.MediaItem
 
 interface DiscoverRepository {
 
-    suspend fun getMoviesPopular(popularType: PopularType): Resource<List<MovieItem>>
+    suspend fun getMoviesPopular(popularType: PopularType): Resource<List<MediaItem>>
 }

@@ -44,7 +44,7 @@ class DiscoverViewModel @Inject constructor(
 
                 }
                 success { data ->
-                    state = state.copy(isLoading = false, movieItemList = data)
+                    state = state.copy(isLoading = false, popularMediaItemList = data)
                 }
             }
         }

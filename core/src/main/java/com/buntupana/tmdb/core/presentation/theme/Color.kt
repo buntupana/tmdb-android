@@ -3,8 +3,13 @@ package com.buntupana.tmdb.core.presentation.theme
 import androidx.compose.ui.graphics.Color
 
 val Primary = Color(0xFF0D253F)
+val PrimaryDark = Color(0xFF032541)
+
 val Secondary = Color(0xFF01B4E4)
+
 val Tertiary = Color(0xFF90CEA1)
+val TertiaryDark = Color(0xFF1ED5A9)
+val TertiaryLight = Color(0xFFC0FECF)
 
 val PlaceHolderColor = Color.Gray
 

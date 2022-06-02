@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.buntupana.tmdb.core.presentation.theme.PrimaryDark
 
 private const val MAX_VALUE = 99
 private const val MIN_VALUE = 0
@@ -24,7 +25,7 @@ private const val MIN_VALUE = 0
 fun UserScore(
     modifier: Modifier = Modifier,
     score: Int = 50,
-    backGroundColor: Color = Color(0xFF081C22),
+    backGroundColor: Color = PrimaryDark,
     lowScoreColor: Color = Color(0xFFDB2360),
     mediumScoreColor: Color = Color(0xFFD2D531),
     highScoreColor: Color = Color(0xFF21D07A),

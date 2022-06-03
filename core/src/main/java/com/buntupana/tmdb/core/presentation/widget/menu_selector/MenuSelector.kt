@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.discover.presentation
+package com.buntupana.tmdb.core.presentation.widget.menu_selector
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -6,81 +6,59 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.MotionLayout
+import com.buntupana.tmdb.core.presentation.brush
 import com.buntupana.tmdb.core.presentation.theme.PrimaryDark
 import com.buntupana.tmdb.core.presentation.theme.TertiaryDark
 import com.buntupana.tmdb.core.presentation.theme.TertiaryLight
-import com.buntupana.tmdb.feature.discover.R
+import com.buntupana.tmdb.core.presentation.useNonBreakingSpace
 
 @OptIn(ExperimentalMotionApi::class)
 @Composable
-fun <T : DropMenuItem> Selector(
-    menuItemList: List<T> = emptyList(),
-    indexSelected: Int = 0
+fun <T : MenuSelectorItem> MenuSelector(
+    menuItemSet: Set<T> = emptySet(),
+    onItemClick: ((item: T, index: Int) -> Unit)? = null,
+    indexSelected: Int = 0,
+    expanded: Boolean = false
 ) {
 
-    val context = LocalContext.current
+    val isExpanded = remember { expanded }
 
-    val motionSceneJson = remember {
-        context.resources.openRawResource(R.raw.filter_scene).readBytes().decodeToString()
+    var _selectedIndex by remember {
+        mutableStateOf(if (indexSelected >= menuItemSet.size || indexSelected < 0) 0 else indexSelected)
     }
 
-    var _indexSelected by remember {
-        mutableStateOf(if (indexSelected >= menuItemList.size || indexSelected < 0) 0 else indexSelected)
-    }
-
-    var animateToEnd by remember { mutableStateOf(false) }
+    var animateToEnd by remember { mutableStateOf(isExpanded) }
     val progress by animateFloatAsState(
         targetValue = if (animateToEnd) 1f else 0f,
-        animationSpec = tween(5000)
+        animationSpec = tween(500)
     )
 
-    var resultStart = getBoxItemStart(menuItemList.size, _indexSelected)
-    var resultEnd = getBoxItemEnd(menuItemList.size, _indexSelected)
-
-    menuItemList.forEachIndexed { index, menuItem ->
-        resultStart += getItemStart(index, _indexSelected)
-        resultEnd += getItemEnd(index, menuItemList.size == index + 1)
-    }
-
-    resultStart = """
-        {
-         $resultStart
-        }
-    """.trimIndent()
-
-    resultEnd = """
-        {
-         $resultEnd
-        }
-    """.trimIndent()
-
-    val resultTransition = getTransition(_indexSelected, menuItemList.size)
-
+    val constraintSetStart = getConstraintSetStar(menuItemSet, _selectedIndex)
+    val constraintSetEnd = getConstraintSetEnd(menuItemSet)
 
     MotionLayout(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        start = ConstraintSet(resultStart),
-        end = ConstraintSet(resultEnd),
-//        transition = Transition(resultTransition),
-//        motionScene = MotionScene(motionSceneJson),
+            .fillMaxWidth(),
+        start = ConstraintSet(constraintSetStart),
+        end = ConstraintSet(constraintSetEnd),
         progress = progress,
     ) {
         Box(
@@ -98,17 +76,18 @@ fun <T : DropMenuItem> Selector(
                 .layoutId("box")
         )
 
-        menuItemList.forEachIndexed { index, menuItem ->
-            if (index != _indexSelected) {
+        menuItemSet.forEachIndexed { index, menuItem ->
+            if (index != _selectedIndex) {
                 Text(
-                    text = " ${stringResource(id = menuItem.strRes)} ",
+                    text = " ${stringResource(id = menuItem.strRes)} ".useNonBreakingSpace(),
                     color = PrimaryDark,
                     modifier = Modifier
                         .clip(RoundedCornerShape(15.dp))
                         .padding(horizontal = 6.dp)
                         .clickable {
-                            _indexSelected = index
+                            _selectedIndex = index
                             animateToEnd = !animateToEnd
+                            onItemClick?.invoke(menuItem, index)
                         }
                         .layoutId("item_$index"),
                     maxLines = 1,
@@ -118,34 +97,96 @@ fun <T : DropMenuItem> Selector(
         }
 
         SelectedText(
-            text = " ${stringResource(id = menuItemList[_indexSelected].strRes)} ",
-            modifier = Modifier.layoutId("item_$_indexSelected"),
+            text = " ${stringResource(id = menuItemSet.elementAt(_selectedIndex).strRes)} ",
+            modifier = Modifier.layoutId("item_$_selectedIndex"),
         ) {
             animateToEnd = !animateToEnd
+            onItemClick?.invoke(menuItemSet.elementAt(_selectedIndex), _selectedIndex)
         }
     }
 }
 
-private fun getBoxItemEnd(listSize: Int, selectedIndex: Int): String {
-    return """
-              box: {
-                width: 'spread',
-                height: 'spread',
-                start: ['item_0', 'start'],
-                end: ['item_${listSize - 1}', 'end'],
-                top: ['parent', 'top'],
-                bottom: ['parent', 'bottom']
-              },
-    """.trimIndent()
+@Composable
+fun SelectedText(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    onClick: (() -> Unit)? = null
+) {
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(15.dp))
+            .background(PrimaryDark)
+            .padding(horizontal = 16.dp, vertical = 6.dp)
+            .clickable {
+                onClick?.invoke()
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier
+                .brush(Brush.horizontalGradient(listOf(TertiaryLight, TertiaryDark))),
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1
+        )
+//        Spacer(modifier = Modifier.width(8.dp))
+//        Icon(
+//            modifier = Modifier
+//                .rotate(-90f)
+//                .size(14.dp)
+//                .brush(Brush.horizontalGradient(listOf(TertiaryLight, TertiaryDark))),
+//            painter = painterResource(id = R.drawable.ic_arrow_down),
+//            contentDescription = null
+//        )
+    }
 }
 
-private fun getBoxItemStart(listSize: Int, selectedIndex: Int): String {
+private fun <T : MenuSelectorItem> getConstraintSetStar(
+    menuItemSet: Set<T>,
+    indexSelected: Int
+): String {
+
+    var constraintSet = getBoxItem(menuItemSet.size)
+
+    menuItemSet.forEachIndexed { index, _ ->
+        constraintSet += getItemStart(index, indexSelected)
+    }
+
+    constraintSet = """
+        {
+         $constraintSet
+        }
+    """.trimIndent()
+
+    return constraintSet
+}
+
+private fun <T : MenuSelectorItem> getConstraintSetEnd(
+    menuItemSet: Set<T>
+): String {
+
+    var constraintSet = getBoxItem(menuItemSet.size)
+
+    menuItemSet.forEachIndexed { index, _ ->
+        constraintSet += getItemEnd(index, menuItemSet.size == index + 1)
+    }
+
+    constraintSet = """
+        {
+         $constraintSet
+        }
+    """.trimIndent()
+
+    return constraintSet
+}
+
+private fun getBoxItem(setSize: Int): String {
     return """
               box: {
                 width: 'spread',
                 height: 'spread',
                 start: ['item_0', 'start'],
-                end: ['item_${listSize-1}', 'end'],
+                end: ['item_${setSize - 1}', 'end'],
                 top: ['parent', 'top'],
                 bottom: ['parent', 'bottom']
               },
@@ -190,12 +231,11 @@ private fun getItemEnd(itemIndex: Int, isLastItem: Boolean): String {
     """.trimIndent()
 }
 
-private fun getTransition(selectedIndex: Int, listSize: Int): String {
-
+private fun getTransition(selectedIndex: Int, setSize: Int): String {
 
     var keyAttributes = ""
 
-    repeat(listSize) { index ->
+    repeat(setSize) { index ->
         if (index != selectedIndex) {
             keyAttributes += """
                  {
@@ -218,7 +258,6 @@ private fun getTransition(selectedIndex: Int, listSize: Int): String {
                   $keyAttributes
                 ]
               },
-            
         }
     """.trimIndent()
 }

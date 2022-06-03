@@ -20,6 +20,17 @@ class DiscoverViewModel @Inject constructor(
     var state by mutableStateOf(DiscoverState())
     private var getPopularMoviesJob: Job? = null
 
+    val popularFilterSet by mutableStateOf(
+        setOf(
+            PopularFilter.Streaming,
+            PopularFilter.OnTv,
+            PopularFilter.ForRent,
+            PopularFilter.InTheatres,
+        )
+    )
+
+    var popularFilterSelected = 0
+
     init {
         getPopularMovies(PopularType.STREAMING)
     }

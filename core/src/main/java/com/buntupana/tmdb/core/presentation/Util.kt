@@ -24,3 +24,9 @@ fun Modifier.brush(brush: Brush) = this
             drawRect(brush, blendMode = BlendMode.SrcAtop)
         }
     }
+
+fun String?.useNonBreakingSpace() = this.orEmpty()
+    .replace(
+        ' ',
+        '\u00A0'
+    )

@@ -15,6 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.presentation.brush
 import com.buntupana.tmdb.core.presentation.theme.PrimaryDark
@@ -35,8 +37,8 @@ fun DiscoverScreen(
     val popularFilterList by remember {
         mutableStateOf(
             listOf(
-                PopularFilter.Streaming(),
                 PopularFilter.OnTv(),
+                PopularFilter.Streaming(),
                 PopularFilter.ForRent(),
                 PopularFilter.InTheatres()
             )
@@ -56,7 +58,7 @@ fun DiscoverScreen(
             }
         )
         Spacer(modifier = Modifier.height(24.dp))
-        Selector(popularFilterList, 2)
+        Selector(popularFilterList, 0)
     }
 }
 
@@ -167,7 +169,8 @@ fun SelectedText(
             text = text,
             modifier = Modifier
                 .brush(Brush.horizontalGradient(listOf(TertiaryLight, TertiaryDark))),
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1
         )
 //        Spacer(modifier = Modifier.width(8.dp))
 //        Icon(
@@ -182,10 +185,34 @@ fun SelectedText(
 }
 
 
-
 @Preview(showBackground = true)
 @Composable
 fun DiscoverScreenPreview() {
-    DiscoverScreen(discoverNavigator = object : DiscoverNavigator {})
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+
+        val (mainRef, refTest) = createRefs()
+
+        Text(
+            text = "On Tv",
+            modifier = Modifier.constrainAs(mainRef){
+                top.linkTo(parent.top)
+                end.linkTo(parent.end)
+            }
+        )
+
+        Text(
+            text = "S hola",
+            modifier = Modifier
+                .constrainAs(
+                    refTest
+                ) {
+                    top.linkTo(mainRef.bottom)
+                    start.linkTo(mainRef.start)
+                    end.linkTo(parent.end)
+                    width = Dimension.fillToConstraints
+                },
+            maxLines = 1,
+        )
+    }
 }
 

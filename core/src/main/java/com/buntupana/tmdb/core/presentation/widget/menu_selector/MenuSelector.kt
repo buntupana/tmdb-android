@@ -29,6 +29,7 @@ import com.buntupana.tmdb.core.presentation.theme.PrimaryDark
 import com.buntupana.tmdb.core.presentation.theme.TertiaryDark
 import com.buntupana.tmdb.core.presentation.theme.TertiaryLight
 import com.buntupana.tmdb.core.presentation.useNonBreakingSpace
+import timber.log.Timber
 
 @OptIn(ExperimentalMotionApi::class)
 @Composable
@@ -39,15 +40,13 @@ fun <T : MenuSelectorItem> MenuSelector(
     expanded: Boolean = false
 ) {
 
-    val isExpanded = remember { expanded }
-
     var _selectedIndex by remember {
         mutableStateOf(if (indexSelected >= menuItemSet.size || indexSelected < 0) 0 else indexSelected)
     }
 
-    var animateToEnd by remember { mutableStateOf(isExpanded) }
-    val progress by animateFloatAsState(
-        targetValue = if (animateToEnd) 1f else 0f,
+    var isExpanded by remember { mutableStateOf(expanded) }
+    val animationProgress by animateFloatAsState(
+        targetValue = if (isExpanded) 1f else 0f,
         animationSpec = tween(500)
     )
 
@@ -59,7 +58,7 @@ fun <T : MenuSelectorItem> MenuSelector(
             .fillMaxWidth(),
         start = ConstraintSet(constraintSetStart),
         end = ConstraintSet(constraintSetEnd),
-        progress = progress,
+        progress = animationProgress,
     ) {
         Box(
             modifier = Modifier
@@ -83,12 +82,12 @@ fun <T : MenuSelectorItem> MenuSelector(
                     color = PrimaryDark,
                     modifier = Modifier
                         .clip(RoundedCornerShape(15.dp))
-                        .padding(horizontal = 6.dp)
                         .clickable {
+                            isExpanded = !isExpanded
                             _selectedIndex = index
-                            animateToEnd = !animateToEnd
                             onItemClick?.invoke(menuItem, index)
                         }
+                        .padding(horizontal = 6.dp)
                         .layoutId("item_$index"),
                     maxLines = 1,
                     overflow = TextOverflow.Visible
@@ -96,11 +95,14 @@ fun <T : MenuSelectorItem> MenuSelector(
             }
         }
 
+        Timber.d("MenuSelector: $isExpanded")
+
         SelectedText(
             text = " ${stringResource(id = menuItemSet.elementAt(_selectedIndex).strRes)} ",
             modifier = Modifier.layoutId("item_$_selectedIndex"),
+            isExpanded = isExpanded
         ) {
-            animateToEnd = !animateToEnd
+            isExpanded = !isExpanded
             onItemClick?.invoke(menuItemSet.elementAt(_selectedIndex), _selectedIndex)
         }
     }
@@ -110,8 +112,10 @@ fun <T : MenuSelectorItem> MenuSelector(
 fun SelectedText(
     modifier: Modifier = Modifier,
     text: String = "",
-    onClick: (() -> Unit)? = null
+    isExpanded: Boolean = false,
+    onClick: (() -> Unit)? = null,
 ) {
+
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(15.dp))
@@ -122,6 +126,7 @@ fun SelectedText(
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
+
         Text(
             text = text,
             modifier = Modifier
@@ -129,17 +134,33 @@ fun SelectedText(
             fontWeight = FontWeight.SemiBold,
             maxLines = 1
         )
-//        Spacer(modifier = Modifier.width(8.dp))
-//        Icon(
-//            modifier = Modifier
-//                .rotate(-90f)
-//                .size(14.dp)
-//                .brush(Brush.horizontalGradient(listOf(TertiaryLight, TertiaryDark))),
-//            painter = painterResource(id = R.drawable.ic_arrow_down),
-//            contentDescription = null
-//        )
+        // TODO: add arrow when is not expanded
+//        if (isExpanded.not()) {
+//            Spacer(modifier = Modifier.width(8.dp))
+//            Icon(
+//                modifier = Modifier
+//                    .rotate(-90f)
+//                    .size(14.dp)
+//                    .brush(Brush.horizontalGradient(listOf(TertiaryLight, TertiaryDark)))
+//                    .layoutId("icon"),
+//                painter = painterResource(id = R.drawable.ic_arrow_down),
+//                contentDescription = null
+//            )
+//        } else {
+//            Spacer(modifier = Modifier.width(0.dp))
+//            Icon(
+//                modifier = Modifier
+//                    .rotate(-90f)
+//                    .size(0.dp)
+//                    .brush(Brush.horizontalGradient(listOf(TertiaryLight, TertiaryDark)))
+//                    .layoutId("icon"),
+//                painter = painterResource(id = R.drawable.ic_arrow_down),
+//                contentDescription = null
+//            )
+//        }
     }
 }
+
 
 private fun <T : MenuSelectorItem> getConstraintSetStar(
     menuItemSet: Set<T>,
@@ -189,6 +210,9 @@ private fun getBoxItem(setSize: Int): String {
                 end: ['item_${setSize - 1}', 'end'],
                 top: ['parent', 'top'],
                 bottom: ['parent', 'bottom']
+              },
+              icon: {
+                width: '0'
               },
     """.trimIndent()
 }

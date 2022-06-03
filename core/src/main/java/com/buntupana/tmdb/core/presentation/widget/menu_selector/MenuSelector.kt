@@ -2,9 +2,7 @@ package com.buntupana.tmdb.core.presentation.widget.menu_selector
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,7 +27,7 @@ import com.buntupana.tmdb.core.presentation.theme.PrimaryDark
 import com.buntupana.tmdb.core.presentation.theme.TertiaryDark
 import com.buntupana.tmdb.core.presentation.theme.TertiaryLight
 import com.buntupana.tmdb.core.presentation.useNonBreakingSpace
-import timber.log.Timber
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMotionApi::class)
 @Composable
@@ -39,6 +37,8 @@ fun <T : MenuSelectorItem> MenuSelector(
     indexSelected: Int = 0,
     expanded: Boolean = false
 ) {
+
+    val coroutineScope = rememberCoroutineScope()
 
     var _selectedIndex by remember {
         mutableStateOf(if (indexSelected >= menuItemSet.size || indexSelected < 0) 0 else indexSelected)
@@ -53,13 +53,21 @@ fun <T : MenuSelectorItem> MenuSelector(
     val constraintSetStart = getConstraintSetStar(menuItemSet, _selectedIndex)
     val constraintSetEnd = getConstraintSetEnd(menuItemSet)
 
+    val scrollState = rememberScrollState()
+
     MotionLayout(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .horizontalScroll(
+                state = scrollState,
+                enabled = isExpanded,
+                reverseScrolling = false
+            ),
         start = ConstraintSet(constraintSetStart),
         end = ConstraintSet(constraintSetEnd),
         progress = animationProgress,
     ) {
+
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(15.dp))
@@ -83,6 +91,9 @@ fun <T : MenuSelectorItem> MenuSelector(
                     modifier = Modifier
                         .clip(RoundedCornerShape(15.dp))
                         .clickable {
+                            coroutineScope.launch {
+                                scrollState.animateScrollTo(0)
+                            }
                             isExpanded = !isExpanded
                             _selectedIndex = index
                             onItemClick?.invoke(menuItem, index)
@@ -95,13 +106,14 @@ fun <T : MenuSelectorItem> MenuSelector(
             }
         }
 
-        Timber.d("MenuSelector: $isExpanded")
-
         SelectedText(
             text = " ${stringResource(id = menuItemSet.elementAt(_selectedIndex).strRes)} ",
             modifier = Modifier.layoutId("item_$_selectedIndex"),
             isExpanded = isExpanded
         ) {
+            coroutineScope.launch {
+                scrollState.animateScrollTo(0)
+            }
             isExpanded = !isExpanded
             onItemClick?.invoke(menuItemSet.elementAt(_selectedIndex), _selectedIndex)
         }

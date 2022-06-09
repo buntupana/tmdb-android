@@ -4,8 +4,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
@@ -13,6 +16,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.theme.Dimens
+import kotlinx.coroutines.launch
 
 private const val PLACE_HOLDER_ITEM_NUMBER = 6
 
@@ -26,11 +30,20 @@ fun CarouselMediaItem(
     onItemClicked: (MediaItem) -> Unit
 ) {
 
+    val scope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(mediaItemList) {
+        scope.launch {
+            listState.scrollToItem(0)
+        }
+    }
+
     LazyRow(
         modifier = modifier,
-        userScrollEnabled = mediaItemList.isNotEmpty()
+        userScrollEnabled = mediaItemList.isNotEmpty(),
+        state = listState
     ) {
-
         if (mediaItemList.isEmpty()) {
 
             items(PLACE_HOLDER_ITEM_NUMBER) { index ->

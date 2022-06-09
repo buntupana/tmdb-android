@@ -2,15 +2,15 @@ package com.buntupana.tmdb.feature.discover.data.raw
 
 import com.squareup.moshi.Json
 
-data class MediaItemRaw(
-    val id: Int,
+data class AnyItemRaw(
+    val id: Long,
     @field:Json(name = "media_type")
     val mediaType: String,
     val overview: String,
     @field:Json(name = "poster_path")
-    val posterPath: String,
+    val posterPath: String?,
     @field:Json(name = "backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
     @field:Json(name = "original_language")
     val originalLanguage: String,
     @field:Json(name = "genre_ids")
@@ -29,6 +29,8 @@ data class MediaItemRaw(
     val video: Boolean?,
     val adult: Boolean?,
     // TV_Show fields
+    @field:Json(name = "original_name")
+    val originalName: String?,
     @field:Json(name = "first_air_date")
     val firstAirDate: String?,
     @field:Json(name = "origin_country")

@@ -9,9 +9,9 @@ import kotlin.reflect.KSuspendFunction1
 
 private typealias SourceResource<R> = Resource<R>
 
-private typealias LoadingListener<T> = suspend (T?) -> Unit
-private typealias ErrorListener<T> = suspend (T?) -> Unit
-private typealias SuccessListener<T> = suspend (T) -> Unit
+private typealias LoadingListener<T> = suspend (data: T?) -> Unit
+private typealias ErrorListener<T> = suspend (data: T?) -> Unit
+private typealias SuccessListener<T> = suspend (data: T) -> Unit
 typealias UseCaseResourceListenerAlias<R> = KSuspendFunction1<UseCaseResourceListenerHelper<R>.() -> Unit, Unit>
 
 abstract class UseCaseResource<P, R> {

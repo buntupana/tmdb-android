@@ -43,6 +43,24 @@ fun MediaItemVertical(
 
         val maxWidth = maxWidth
 
+        val voteAverage: Int
+        val releaseDate: String
+
+        when (mediaItem) {
+            is MediaItem.Movie -> {
+                voteAverage = mediaItem.voteAverage
+                releaseDate = mediaItem.releaseDate
+            }
+            is MediaItem.TvShow -> {
+                voteAverage = mediaItem.voteAverage
+                releaseDate = mediaItem.releaseDate
+            }
+            else -> {
+                voteAverage = -1
+                releaseDate = ""
+            }
+        }
+
         Column {
 
             ConstraintLayout {
@@ -65,17 +83,23 @@ fun MediaItemVertical(
                     contentDescription = null,
                     placeholder = ColorPainter(PlaceHolderColor)
                 )
-                UserScore(
-                    score = mediaItem.voteAverage,
+                Box(
                     modifier = Modifier
                         .size((36f * maxWidth.value / 120f).dp)
                         .constrainAs(userScore) {
                             start.linkTo(posterImage.start, 4.dp)
                             top.linkTo(posterImage.bottom)
                             bottom.linkTo(posterImage.bottom)
-                        },
-                    fontFamily = HkFontFamily
-                )
+                        }
+                ) {
+                    if (voteAverage >= 0) {
+                        UserScore(
+                            score = voteAverage,
+                            modifier = Modifier.fillMaxSize(),
+                            fontFamily = HkFontFamily
+                        )
+                    }
+                }
                 Column(
                     horizontalAlignment = Alignment.Start,
                     modifier = Modifier
@@ -102,8 +126,9 @@ fun MediaItemVertical(
                         },
                         fontSize = fontSize
                     )
+
                     Text(
-                        text = mediaItem.releaseDate,
+                        text = releaseDate,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier.alpha(0.6f),
                         overflow = TextOverflow.Ellipsis,

@@ -3,10 +3,7 @@ package com.buntupana.tmdb.core.presentation.widget.menu_selector
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -17,6 +14,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintSet
@@ -99,9 +97,11 @@ fun <T : MenuSelectorItem> MenuSelector(
                             onItemClick?.invoke(menuItem, index)
                         }
                         .padding(horizontal = 6.dp)
-                        .layoutId("item_$index"),
+                        .layoutId("item_$index")
+                        .defaultMinSize(minWidth = 50.dp),
                     maxLines = 1,
-                    overflow = TextOverflow.Visible
+                    overflow = TextOverflow.Visible,
+                    textAlign = TextAlign.Center
                 )
             }
         }
@@ -114,8 +114,10 @@ fun <T : MenuSelectorItem> MenuSelector(
             coroutineScope.launch {
                 scrollState.animateScrollTo(0)
             }
+            if (isExpanded) {
+                onItemClick?.invoke(menuItemSet.elementAt(_selectedIndex), _selectedIndex)
+            }
             isExpanded = !isExpanded
-            onItemClick?.invoke(menuItemSet.elementAt(_selectedIndex), _selectedIndex)
         }
     }
 }

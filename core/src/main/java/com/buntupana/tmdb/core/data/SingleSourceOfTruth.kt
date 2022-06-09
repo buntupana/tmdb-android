@@ -5,7 +5,7 @@ import timber.log.Timber
 
 suspend fun <T, A> networkResult(
     networkCall: suspend () -> Resource<T>,
-    mapResponse: suspend (T) -> A
+    mapResponse: suspend (response: T) -> A
 ): Resource<A> {
 
     val network = networkCall.invoke()

@@ -26,6 +26,7 @@ fun UserScore(
     modifier: Modifier = Modifier,
     score: Int = 50,
     backGroundColor: Color = PrimaryDark,
+    noScoreColor: Color = Color(0xFF666666),
     lowScoreColor: Color = Color(0xFFDB2360),
     mediumScoreColor: Color = Color(0xFFD2D531),
     highScoreColor: Color = Color(0xFF21D07A),
@@ -33,15 +34,16 @@ fun UserScore(
 ) {
 
     // checking that score is between valid values
-    val newScore = when {
+    val correctedScore = when {
         score > MAX_VALUE -> MAX_VALUE
         score < MIN_VALUE -> MIN_VALUE
         else -> score
     }
 
     // Choosing stroke color depending on score
-    val strokeColor = when (newScore) {
-        in 0..39 -> lowScoreColor
+    val strokeColor = when (correctedScore) {
+        0 -> noScoreColor
+        in 1..39 -> lowScoreColor
         in 40..69 -> mediumScoreColor
         else -> highScoreColor
     }
@@ -59,18 +61,19 @@ fun UserScore(
         val strokeSize = dimensionRef * 5f / 100f
 
         Canvas(modifier = Modifier.fillMaxSize(0.82f)) {
+            val backgroundAlpha = if(correctedScore < 1) 1f else 0.3f
             drawArc(
                 color = strokeColor,
                 -90f,
                 360f,
                 useCenter = false,
-                alpha = 0.3f,
+                alpha = backgroundAlpha,
                 style = Stroke(strokeSize.toPx())
             )
             drawArc(
                 color = strokeColor,
                 -90f,
-                score * 360f / 100f,
+                correctedScore * 360f / 100f,
                 useCenter = false,
                 style = Stroke(strokeSize.toPx(), cap = StrokeCap.Round)
             )
@@ -88,21 +91,32 @@ fun UserScore(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = newScore.toString(),
-                color = Color.White,
-                textAlign = TextAlign.End,
-                fontFamily = fontFamily,
-                fontSize = textSize
-            )
-            Text(
-                text = "%",
-                color = Color.White,
-                textAlign = TextAlign.Start,
-                fontFamily = fontFamily,
-                modifier = Modifier.fillMaxHeight(0.455f),
-                fontSize = symbolSize
-            )
+
+            if (correctedScore < 1) {
+                Text(
+                    text = "NR",
+                    color = Color.White,
+                    textAlign = TextAlign.End,
+                    fontFamily = fontFamily,
+                    fontSize = textSize
+                )
+            } else {
+                Text(
+                    text = correctedScore.toString(),
+                    color = Color.White,
+                    textAlign = TextAlign.End,
+                    fontFamily = fontFamily,
+                    fontSize = textSize
+                )
+                Text(
+                    text = "%",
+                    color = Color.White,
+                    textAlign = TextAlign.Start,
+                    fontFamily = fontFamily,
+                    modifier = Modifier.fillMaxHeight(0.455f),
+                    fontSize = symbolSize
+                )
+            }
         }
     }
 }
@@ -110,5 +124,5 @@ fun UserScore(
 @Composable
 @Preview
 fun UserScorePreview() {
-    UserScore(Modifier.size(width = 100.dp, height = 100.dp), score = 75)
+    UserScore(Modifier.size(width = 100.dp, height = 100.dp), score = 0)
 }

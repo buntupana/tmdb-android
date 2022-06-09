@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.app.presentation.navigation
 
+import com.buntupana.tmdb.feature.detail.presentation.destinations.MediaDetailScreenDestination
 import com.buntupana.tmdb.feature.discover.presentation.destinations.DiscoverScreenDestination
 import com.ramcosta.composedestinations.spec.DestinationSpec
 import com.ramcosta.composedestinations.spec.NavGraphSpec
@@ -12,7 +13,8 @@ import com.ramcosta.composedestinations.spec.NavGraphSpec
             override val startRoute = DiscoverScreenDestination
 
             override val destinationsByRoute = listOf<DestinationSpec<*>>(
-                DiscoverScreenDestination
+                DiscoverScreenDestination,
+                MediaDetailScreenDestination
             ).associateBy { it.route }
         }
     }

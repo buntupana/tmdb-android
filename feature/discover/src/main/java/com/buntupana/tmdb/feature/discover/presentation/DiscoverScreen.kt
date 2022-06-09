@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.buntupana.tmdb.core.domain.entity.MediaType
+import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.widget.menu_selector.MenuSelector
 import com.buntupana.tmdb.core.presentation.widget.menu_selector.MenuSelectorItem
 import com.buntupana.tmdb.feature.discover.R
@@ -66,8 +68,8 @@ fun DiscoverScreen(
         CarouselMediaItem(
             modifier = Modifier.fillMaxWidth(),
             state.popularMediaItemList,
-            onItemClicked = {
-
+            onItemClicked = { mediaItem ->
+                navigateToDetail(mediaItem, discoverNavigator)
             }
         )
         TitleAndFilter(
@@ -86,8 +88,8 @@ fun DiscoverScreen(
         CarouselMediaItem(
             modifier = Modifier.fillMaxWidth(),
             state.freeToWatchMediaItemList,
-            onItemClicked = {
-
+            onItemClicked = { mediaItem ->
+                navigateToDetail(mediaItem, discoverNavigator)
             }
         )
         TitleAndFilter(
@@ -109,17 +111,32 @@ fun DiscoverScreen(
                 painter = painterResource(id = R.drawable.img_trending),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
-                modifier = Modifier.fillMaxWidth().align(Alignment.Center)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center)
             )
 
             CarouselMediaItem(
                 modifier = Modifier.fillMaxWidth(),
                 state.trendingMediaItemList,
-                onItemClicked = {
-
+                onItemClicked = { mediaItem ->
+                    navigateToDetail(mediaItem, discoverNavigator)
                 }
             )
         }
+    }
+}
+
+private fun navigateToDetail(mediaItem: MediaItem, discoverNavigator: DiscoverNavigator) {
+    when (mediaItem) {
+        is MediaItem.Movie -> {
+            discoverNavigator.navigateToMediaDetail(mediaItem.id, MediaType.MOVIE)
+        }
+        is MediaItem.TvShow -> {
+            discoverNavigator.navigateToMediaDetail(mediaItem.id, MediaType.TV_SHOW)
+        }
+        is MediaItem.Person -> {}
+        MediaItem.Unknown -> {}
     }
 }
 
@@ -191,6 +208,5 @@ fun DiscoverScreenPreview() {
             )
         }
     }
-
 }
 

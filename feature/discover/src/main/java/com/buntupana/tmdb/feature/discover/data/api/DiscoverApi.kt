@@ -37,4 +37,7 @@ interface DiscoverApi {
         @Query("release_date.lte") toReleaseDate: String? = null,
         @Query("sort_by") sortBy: String? = null
     ): Response<ResponseListRaw<TvShowRaw>>
+
+    @GET("tv/on_the_air")
+    suspend fun fetchTvShowsOnAir(): Response<ResponseListRaw<TvShowRaw>>
 }

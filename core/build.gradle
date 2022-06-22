@@ -68,7 +68,7 @@ dependencies {
 
     // Fix bug in compose
     debugApi "androidx.customview:customview:1.2.0-alpha01"
-    debugApi 'androidx.customview:customview-poolingcontainer:1.0.0-beta02'
+    debugApi 'androidx.customview:customview-poolingcontainer:1.0.0-rc01'
 
     api "io.github.raamcosta.compose-destinations:core:$navigation_destination_version"
 //    ksp "io.github.raamcosta.compose-destinations:ksp:$navigation_destination_version"

@@ -122,15 +122,33 @@ fun MediaDetailScreen(
             }
 
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0x1A000000))
+                    .border(BorderStroke(1.dp, Color.Black))
+                    .padding(vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    
+
+                    Text(
+                        text = "U",
+                        color = textColor
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        text = "07/10/2015 (FR)  *  1h 19m",
+                        color = textColor
+                    )
                 }
+                Text(
+                    text = "Family, Animation, Comedy, Fantasy",
+                    color = textColor
+                )
             }
         }
     }
@@ -154,7 +172,7 @@ fun Header(
                 painter = ColorPainter(backgroundColor), contentDescription = null
             )
 
-            Box() {
+            Box {
 
                 AsyncImage(
                     modifier = Modifier.fillMaxSize(),

@@ -1,10 +1,15 @@
 package com.buntupana.tmdb.core.presentation
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFontFamilyResolver
@@ -102,6 +107,26 @@ fun AutoSizeText(
             onTextLayout = onTextLayout,
             maxLines = maxLines,
             style = style
+        )
+    }
+}
+
+@Composable
+fun CertificationText(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    color: Color = Color.Black,
+    outlineColor: Color = color
+) {
+
+    if (text.isNotEmpty()) {
+        Text(
+            modifier = modifier
+                .alpha(0.6f)
+                .border(BorderStroke(1.dp, outlineColor), RoundedCornerShape(2.dp))
+                .padding(horizontal = 4.dp),
+            text = "U",
+            color = color
         )
     }
 }

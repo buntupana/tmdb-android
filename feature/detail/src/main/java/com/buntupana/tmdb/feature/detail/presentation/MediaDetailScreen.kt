@@ -15,11 +15,14 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.buntupana.tmdb.core.domain.entity.MediaType
+import com.buntupana.tmdb.core.presentation.CertificationText
 import com.buntupana.tmdb.core.presentation.UserScore
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.feature.detail.R
@@ -125,7 +128,7 @@ fun MediaDetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color(0x1A000000))
-                    .border(BorderStroke(1.dp, Color.Black))
+                    .border(BorderStroke(1.dp, Color(0x40000000)))
                     .padding(vertical = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -135,11 +138,11 @@ fun MediaDetailScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    Text(
+                    CertificationText(
                         text = "U",
                         color = textColor
                     )
-                    Spacer(Modifier.width(4.dp))
+                    Spacer(Modifier.width(6.dp))
                     Text(
                         text = "07/10/2015 (FR)  *  1h 19m",
                         color = textColor
@@ -150,9 +153,29 @@ fun MediaDetailScreen(
                     color = textColor
                 )
             }
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                modifier = Modifier.alpha(0.7f),
+                text = "They're back to raise a little terror",
+                color = textColor,
+                fontStyle = FontStyle.Italic,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Overview",
+                color = textColor,
+                fontWeight = FontWeight(600),
+                fontSize = 18.sp
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "When the old-old-old-fashioned vampire Vlad arrives at the hotel for an impromptu family get-together, Hotel Transylvania is in for a collision of supernatural old-school and modern day cool.",
+                color = textColor
+            )
         }
     }
 }
+
 
 @Composable
 fun Header(

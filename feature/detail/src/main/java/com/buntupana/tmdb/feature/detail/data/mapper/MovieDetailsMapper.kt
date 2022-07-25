@@ -2,14 +2,14 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.core.data.api.CoreApi
 import com.buntupana.tmdb.feature.detail.data.raw.MovieDetailsRaw
-import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
+import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import org.threeten.bp.LocalDate
 
-fun MovieDetailsRaw.toModel(): MovieDetails {
+fun MovieDetailsRaw.toModel(): MediaDetails.MovieDetails {
 
     val releaseLocalDate = LocalDate.parse(releaseDate)
 
-    return MovieDetails(
+    return MediaDetails.MovieDetails(
         id,
         title,
         CoreApi.BASE_URL_POSTER + posterPath.orEmpty(),

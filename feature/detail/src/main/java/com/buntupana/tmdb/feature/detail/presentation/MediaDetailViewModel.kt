@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieDetailsUseCase
+import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MediaDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val getMovieDetailsUseCase: GetMovieDetailsUseCase
+    private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
+    private val getTvShowDetailsUseCase: GetTvShowDetailsUseCase
 ) : ViewModel() {
 
     val navArgs: MediaDetailNavArgs = savedStateHandle.navArgs()
@@ -24,10 +26,8 @@ class MediaDetailViewModel @Inject constructor(
 
     init {
         when (navArgs.mediaType) {
-            MediaType.MOVIE -> {
-                getMovieDetails()
-            }
-            MediaType.TV_SHOW -> TODO()
+            MediaType.MOVIE -> getMovieDetails()
+            MediaType.TV_SHOW -> getTvShowDetails()
         }
     }
 
@@ -41,7 +41,23 @@ class MediaDetailViewModel @Inject constructor(
                     state = state.copy(isLoading = false)
                 }
                 success {
-                    state = state.copy(isLoading = false, movieDetails = it)
+                    state = state.copy(isLoading = false, mediaDetails = it)
+                }
+            }
+        }
+    }
+
+    private fun getTvShowDetails() {
+        viewModelScope.launch {
+            getTvShowDetailsUseCase(navArgs.mediaId) {
+                loading {
+                    state = state.copy(isLoading = true)
+                }
+                error {
+                    state = state.copy(isLoading = false)
+                }
+                success {
+                    state = state.copy(isLoading = false, mediaDetails = it)
                 }
             }
         }

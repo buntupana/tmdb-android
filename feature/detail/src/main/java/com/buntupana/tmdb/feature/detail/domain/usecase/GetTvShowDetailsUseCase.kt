@@ -6,11 +6,11 @@ import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
 import javax.inject.Inject
 
-class GetMovieDetailsUseCase @Inject constructor(
+class GetTvShowDetailsUseCase @Inject constructor(
     private val detailRepository: DetailRepository
-) : UseCaseResource<Long, MediaDetails.MovieDetails>() {
+) : UseCaseResource<Long, MediaDetails.TvShowDetails>() {
 
-    override suspend fun getSource(params: Long): Resource<MediaDetails.MovieDetails> {
-        return detailRepository.getMovieDetails(params)
+    override suspend fun getSource(params: Long): Resource<MediaDetails.TvShowDetails> {
+        return detailRepository.getTvShowDetails(params)
     }
 }

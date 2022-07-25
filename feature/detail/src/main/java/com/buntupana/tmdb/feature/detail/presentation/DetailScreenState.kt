@@ -1,8 +1,8 @@
 package com.buntupana.tmdb.feature.detail.presentation
 
-import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
+import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 
 data class DetailScreenState(
     val isLoading: Boolean = false,
-    val movieDetails: MovieDetails? = null
+    val mediaDetails: MediaDetails? = null
 )

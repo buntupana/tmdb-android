@@ -30,7 +30,7 @@ import com.buntupana.tmdb.core.presentation.UserScore
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getBinaryForegroundColor
 import com.buntupana.tmdb.feature.detail.R
-import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
+import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination(
@@ -53,13 +53,13 @@ fun MediaDetailScreen(
         mutableStateOf(Color.Black)
     }
 
-    if (state.movieDetails != null) {
+    if (state.mediaDetails != null) {
         Column(
             Modifier.verticalScroll(scrollState)
         ) {
 
             Header(
-                state.movieDetails,
+                state.mediaDetails,
                 backgroundColor
             ) { palette ->
                 palette.dominantSwatch?.rgb?.let { dominantColor ->
@@ -71,7 +71,7 @@ fun MediaDetailScreen(
             }
 
             MainInfo(
-                movieDetails = state.movieDetails,
+                mediaDetails = state.mediaDetails,
                 backgroundColor = backgroundColor,
                 textColor = textColor
             )
@@ -81,7 +81,7 @@ fun MediaDetailScreen(
 
 @Composable
 fun Header(
-    movieDetails: MovieDetails,
+    mediaDetails: MediaDetails,
     backgroundColor: Color,
     setPalette: (palette: Palette) -> Unit
 ) {
@@ -106,7 +106,7 @@ fun Header(
                 AsyncImage(
                     modifier = Modifier.fillMaxSize(),
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(movieDetails.backdropUrl)
+                        .data(mediaDetails.backdropUrl)
                         .crossfade(true)
                         .build(),
                     contentDescription = "",
@@ -139,7 +139,7 @@ fun Header(
                     .aspectRatio(2f / 3f),
                 alignment = Alignment.CenterStart,
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(movieDetails.posterUrl)
+                    .data(mediaDetails.posterUrl)
                     .crossfade(true)
                     .allowHardware(false)
                     .listener { request, result ->
@@ -158,7 +158,7 @@ fun Header(
 
 @Composable
 fun MainInfo(
-    movieDetails: MovieDetails,
+    mediaDetails: MediaDetails,
     backgroundColor: Color,
     textColor: Color
 ) {
@@ -172,14 +172,14 @@ fun MainInfo(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = movieDetails.title,
+                text = mediaDetails.title,
                 color = textColor,
                 fontWeight = FontWeight(600),
                 fontSize = 20.sp
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = movieDetails.releaseDate.year.toString(),
+                text = mediaDetails.releaseDate.year.toString(),
                 color = textColor,
                 fontWeight = FontWeight(400)
             )
@@ -198,7 +198,7 @@ fun MainInfo(
             ) {
                 UserScore(
                     modifier = Modifier.size(50.dp),
-                    score = movieDetails.userScore
+                    score = mediaDetails.userScore
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
@@ -265,7 +265,7 @@ fun MainInfo(
                 )
             }
             Text(
-                text = movieDetails.genreList.joinToString(", "),
+                text = mediaDetails.genreList.joinToString(", "),
                 color = textColor
             )
         }
@@ -278,7 +278,7 @@ fun MainInfo(
 
             Text(
                 modifier = Modifier.alpha(0.7f),
-                text = movieDetails.tagLine,
+                text = mediaDetails.tagLine,
                 color = textColor,
                 fontStyle = FontStyle.Italic,
             )
@@ -291,7 +291,7 @@ fun MainInfo(
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = movieDetails.overview,
+                text = mediaDetails.overview,
                 color = textColor
             )
         }

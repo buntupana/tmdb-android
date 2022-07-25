@@ -1,7 +1,6 @@
 package com.buntupana.tmdb.app
 
 import android.app.Application
-import com.buntupana.tmdb.tmdb.BuildConfig
 import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber

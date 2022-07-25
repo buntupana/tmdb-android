@@ -5,7 +5,7 @@ import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.PopularType
 import com.buntupana.tmdb.feature.discover.domain.repository.DiscoverRepository
-import com.buntupana.tmdb.tmdb.domain.usecase.UseCaseResource
+import com.buntupana.tmdb.app.domain.usecase.UseCaseResource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.tmdb.domain.usecase
+package com.buntupana.tmdb.app.domain.usecase
 
 import com.buntupana.tmdb.core.domain.entity.Resource
 import kotlinx.coroutines.*

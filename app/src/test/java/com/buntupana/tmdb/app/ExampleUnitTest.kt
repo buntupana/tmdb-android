@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.tmdb
+package com.buntupana.tmdb.app
 
 import org.junit.Test
 

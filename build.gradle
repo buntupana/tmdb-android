@@ -19,7 +19,8 @@ buildscript {
         work_version = '2.4.0'
 
         // Android dependencies
-        compose_version = '1.2.0-rc02'
+        compose_compiler_version = '1.2.0'
+        compose_version = '1.2.0-rc03'
         compose_activity_version = '1.4.0'
         compose_constraint_version = '1.0.1'
         custom_view_version = '1.2.0-alpha01'
@@ -37,7 +38,8 @@ buildscript {
         browser_version = '1.3.0'
         legacySupport_version = '1.0.0'
         dataStore_version = '1.0.0'
-        navigation_destination_version = '1.5.12-beta'
+        navigation_destination_version = '1.6.13-beta'
+        palette_version = '1.0.0'
 
         // Material Design
         material_3_version = '1.0.0-alpha13'
@@ -86,7 +88,7 @@ buildscript {
 plugins {
     id 'com.android.application' version '7.2.1' apply false
     id 'com.android.library' version '7.2.1' apply false
-    id 'org.jetbrains.kotlin.android' version '1.6.21' apply false
+    id 'org.jetbrains.kotlin.android' version '1.7.0' apply false
 }
 
 task clean(type: Delete) {

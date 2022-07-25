@@ -4,7 +4,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -14,173 +14,78 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.drawable.toBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
-import com.buntupana.tmdb.core.domain.entity.MediaType
+import coil.request.ImageRequest
 import com.buntupana.tmdb.core.presentation.CertificationText
 import com.buntupana.tmdb.core.presentation.UserScore
 import com.buntupana.tmdb.core.presentation.theme.Dimens
+import com.buntupana.tmdb.core.presentation.util.getBinaryForegroundColor
 import com.buntupana.tmdb.feature.detail.R
+import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
 import com.ramcosta.composedestinations.annotation.Destination
 
-@Destination
+@Destination(
+    navArgsDelegate = MediaDetailNavArgs::class
+)
 @Composable
 fun MediaDetailScreen(
-    viewModel: DetailViewModel = hiltViewModel(),
-    detailNavigator: DetailNavigator,
-    id: Long,
-    mediaType: MediaType
+    viewModel: MediaDetailViewModel = hiltViewModel(),
+    detailNavigator: DetailNavigator
 ) {
+
+    val state = viewModel.state
 
     val scrollState = rememberScrollState()
 
-    val backGroundColor = Color(0xFF35B3DD)
-    val textColor = Color.White
+    var backgroundColor by remember {
+        mutableStateOf(Color.White)
+    }
+    var textColor by remember {
+        mutableStateOf(Color.Black)
+    }
 
-    Column(
-        Modifier.verticalScroll(scrollState)
-    ) {
+    if (state.movieDetails != null) {
+        Column(
+            Modifier.verticalScroll(scrollState)
+        ) {
 
-        Header(backGroundColor)
-
-        Column(modifier = Modifier.background(backGroundColor)) {
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "Hotel Transylvania 2",
-                    color = textColor,
-                    fontWeight = FontWeight(600)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "(2015)",
-                    color = textColor,
-                    fontWeight = FontWeight(400)
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Row(
-                    modifier = Modifier.weight(1f),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    UserScore(
-                        modifier = Modifier.size(50.dp),
-                        score = 68
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "User Score",
-                        color = textColor,
-                        fontWeight = FontWeight(700)
-                    )
-                }
-                Image(
-                    modifier = Modifier
-                        .size(height = 34.dp, width = 1.dp)
-                        .alpha(0.5f),
-                    painter = ColorPainter(textColor),
-                    contentDescription = null
-                )
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp)
-                        .clickable {
-
-                        },
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Image(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(id = R.drawable.ic_play),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(textColor)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        text = "Play Trailer",
-                        color = textColor,
-                        fontWeight = FontWeight(400),
-                    )
+            Header(
+                state.movieDetails,
+                backgroundColor
+            ) { palette ->
+                palette.dominantSwatch?.rgb?.let { dominantColor ->
+                    if (Color(dominantColor) != backgroundColor) {
+                        backgroundColor = Color(dominantColor)
+                        textColor = backgroundColor.getBinaryForegroundColor()
+                    }
                 }
             }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0x1A000000))
-                    .border(BorderStroke(1.dp, Color(0x40000000)))
-                    .padding(vertical = 8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    CertificationText(
-                        text = "U",
-                        color = textColor
-                    )
-                    Spacer(Modifier.width(6.dp))
-                    Text(
-                        text = "07/10/2015 (FR)  *  1h 19m",
-                        color = textColor
-                    )
-                }
-                Text(
-                    text = "Family, Animation, Comedy, Fantasy",
-                    color = textColor
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                modifier = Modifier.alpha(0.7f),
-                text = "They're back to raise a little terror",
-                color = textColor,
-                fontStyle = FontStyle.Italic,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Overview",
-                color = textColor,
-                fontWeight = FontWeight(600),
-                fontSize = 18.sp
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "When the old-old-old-fashioned vampire Vlad arrives at the hotel for an impromptu family get-together, Hotel Transylvania is in for a collision of supernatural old-school and modern day cool.",
-                color = textColor
+            MainInfo(
+                movieDetails = state.movieDetails,
+                backgroundColor = backgroundColor,
+                textColor = textColor
             )
         }
     }
 }
 
-
 @Composable
 fun Header(
-    backgroundColor: Color
+    movieDetails: MovieDetails,
+    backgroundColor: Color,
+    setPalette: (palette: Palette) -> Unit
 ) {
+
     Box(
         Modifier
             .fillMaxWidth()
@@ -192,14 +97,18 @@ fun Header(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(70.dp),
-                painter = ColorPainter(backgroundColor), contentDescription = null
+                painter = ColorPainter(backgroundColor),
+                contentDescription = null
             )
 
             Box {
 
                 AsyncImage(
                     modifier = Modifier.fillMaxSize(),
-                    model = "https://www.themoviedb.org/t/p/w1000_and_h450_multi_faces/2OQYAP64ybQZBiOcjthMVFcQRE.jpg",
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(movieDetails.backdropUrl)
+                        .crossfade(true)
+                        .build(),
                     contentDescription = "",
                     contentScale = ContentScale.Crop
                 )
@@ -229,9 +138,163 @@ fun Header(
                     .clip(RoundedCornerShape(Dimens.posterRound))
                     .aspectRatio(2f / 3f),
                 alignment = Alignment.CenterStart,
-                model = "https://www.themoviedb.org/t/p/w1280/kKFgwQnR5q08UFsAvtoYyTIiHyj.jpg",
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(movieDetails.posterUrl)
+                    .crossfade(true)
+                    .allowHardware(false)
+                    .listener { request, result ->
+                        Palette.Builder(result.drawable.toBitmap()).generate { palette ->
+                            palette?.let {
+                                setPalette(it)
+                            }
+                        }
+                    }
+                    .build(),
                 contentDescription = null
             )
         }
+    }
+}
+
+@Composable
+fun MainInfo(
+    movieDetails: MovieDetails,
+    backgroundColor: Color,
+    textColor: Color
+) {
+
+    Column(modifier = Modifier.background(backgroundColor)) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = movieDetails.title,
+                color = textColor,
+                fontWeight = FontWeight(600),
+                fontSize = 20.sp
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = movieDetails.releaseDate.year.toString(),
+                color = textColor,
+                fontWeight = FontWeight(400)
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                UserScore(
+                    modifier = Modifier.size(50.dp),
+                    score = movieDetails.userScore
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "User Score",
+                    color = textColor,
+                    fontWeight = FontWeight(700)
+                )
+            }
+            Image(
+                modifier = Modifier
+                    .size(height = 34.dp, width = 1.dp)
+                    .alpha(0.5f),
+                painter = ColorPainter(textColor),
+                contentDescription = null
+            )
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp)
+                    .clickable {
+
+                    },
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Image(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(id = R.drawable.ic_play),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(textColor)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    text = "Play Trailer",
+                    color = textColor,
+                    fontWeight = FontWeight(400),
+                )
+            }
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0x1A000000))
+                .border(BorderStroke(1.dp, Color(0x40000000)))
+                .padding(vertical = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                CertificationText(
+                    text = "U",
+                    color = textColor
+                )
+                Spacer(Modifier.width(6.dp))
+                Text(
+                    text = "07/10/2015 (FR)  *  1h 19m",
+                    color = textColor
+                )
+            }
+            Text(
+                text = movieDetails.genreList.joinToString(", "),
+                color = textColor
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+
+            Text(
+                modifier = Modifier.alpha(0.7f),
+                text = movieDetails.tagLine,
+                color = textColor,
+                fontStyle = FontStyle.Italic,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Overview",
+                color = textColor,
+                fontWeight = FontWeight(600),
+                fontSize = 18.sp
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = movieDetails.overview,
+                color = textColor
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }

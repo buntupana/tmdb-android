@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFontFamilyResolver
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Paragraph
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.*
+import com.buntupana.tmdb.core.R
 import kotlin.math.absoluteValue
 import kotlin.math.ceil
 
@@ -125,8 +127,30 @@ fun CertificationText(
                 .alpha(0.6f)
                 .border(BorderStroke(1.dp, outlineColor), RoundedCornerShape(2.dp))
                 .padding(horizontal = 4.dp),
-            text = "U",
+            text = text,
             color = color
         )
     }
+}
+
+@Composable
+fun HoursMinutesText(
+    modifier: Modifier = Modifier,
+    color: Color = Color.Black,
+    time: Int
+) {
+
+    val hours = time / 60
+    val minutes = time - (hours * 60)
+
+    val timeText = if (hours == 0) {
+        stringResource(id = R.string.text_minutes, minutes)
+    } else {
+        stringResource(id = R.string.text_hours_minutes, hours, minutes)
+    }
+    Text(
+        modifier = modifier,
+        text = timeText,
+        color = color
+    )
 }

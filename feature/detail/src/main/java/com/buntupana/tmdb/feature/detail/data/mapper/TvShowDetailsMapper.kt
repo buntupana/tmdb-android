@@ -2,14 +2,15 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.core.data.api.CoreApi
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
-import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import com.buntupana.tmdb.feature.detail.domain.model.CrewItem
+import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
 import org.threeten.bp.LocalDate
 
-fun TvShowDetailsRaw.toModel(): MediaDetails.TvShowDetails {
+fun TvShowDetailsRaw.toModel(): TvShowDetails {
 
     val releaseLocalDate = LocalDate.parse(firstAirDate)
 
-    return MediaDetails.TvShowDetails(
+    return TvShowDetails(
         id,
         name.orEmpty(),
         CoreApi.BASE_URL_POSTER + posterPath.orEmpty(),
@@ -19,6 +20,14 @@ fun TvShowDetailsRaw.toModel(): MediaDetails.TvShowDetails {
         releaseLocalDate,
         (((voteAverage ?: 0.0) * 10)).toInt(),
         episodeRunTime?.first() ?: 0,
-        genres?.map { it.name }.orEmpty()
+        genres?.map { it.name }.orEmpty(),
+        createdBy?.map {
+            CrewItem(
+                it.id,
+                it.name.orEmpty(),
+                CoreApi.BASE_URL_PROFILE + it.profilePath,
+                ""
+            )
+        }.orEmpty()
     )
 }

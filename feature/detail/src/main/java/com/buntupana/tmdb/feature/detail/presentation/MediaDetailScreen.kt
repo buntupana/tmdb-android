@@ -16,8 +16,10 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
@@ -26,11 +28,17 @@ import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.buntupana.tmdb.core.presentation.CertificationText
+import com.buntupana.tmdb.core.presentation.HoursMinutesText
+import com.buntupana.tmdb.core.presentation.NestedVerticalLazyGrid
 import com.buntupana.tmdb.core.presentation.UserScore
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getBinaryForegroundColor
 import com.buntupana.tmdb.feature.detail.R
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.SizeMode
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination(
@@ -42,7 +50,15 @@ fun MediaDetailScreen(
     detailNavigator: DetailNavigator
 ) {
 
-    val state = viewModel.state
+    MediaDetailContent(
+        mediaDetails = viewModel.state.mediaDetails
+    )
+}
+
+@Composable
+fun MediaDetailContent(
+    mediaDetails: MediaDetails?
+) {
 
     val scrollState = rememberScrollState()
 
@@ -53,28 +69,33 @@ fun MediaDetailScreen(
         mutableStateOf(Color.Black)
     }
 
-    if (state.mediaDetails != null) {
+    if (mediaDetails != null) {
         Column(
             Modifier.verticalScroll(scrollState)
         ) {
 
-            Header(
-                state.mediaDetails,
-                backgroundColor
-            ) { palette ->
-                palette.dominantSwatch?.rgb?.let { dominantColor ->
-                    if (Color(dominantColor) != backgroundColor) {
-                        backgroundColor = Color(dominantColor)
-                        textColor = backgroundColor.getBinaryForegroundColor()
+            Column(
+                Modifier.background(backgroundColor)
+            ) {
+
+                Header(
+                    mediaDetails,
+                    backgroundColor
+                ) { palette ->
+                    palette.dominantSwatch?.rgb?.let { dominantColor ->
+                        if (Color(dominantColor) != backgroundColor) {
+                            backgroundColor = Color(dominantColor)
+                            textColor = backgroundColor.getBinaryForegroundColor()
+                        }
                     }
                 }
-            }
 
-            MainInfo(
-                mediaDetails = state.mediaDetails,
-                backgroundColor = backgroundColor,
-                textColor = textColor
-            )
+                MainInfo(
+                    mediaDetails = mediaDetails,
+                    backgroundColor = backgroundColor,
+                    textColor = textColor
+                )
+            }
         }
     }
 }
@@ -130,7 +151,7 @@ fun Header(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(Dimens.padding.medium))
             AsyncImage(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -163,36 +184,53 @@ fun MainInfo(
     textColor: Color
 ) {
 
-    Column(modifier = Modifier.background(backgroundColor)) {
+    Column(
+        modifier = Modifier
+            .background(backgroundColor)
+    ) {
 
-        Row(
+        // Title and release year
+        FlowRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp),
-            horizontalArrangement = Arrangement.Center
+                .padding(
+                    top = Dimens.padding.medium,
+                    bottom = Dimens.padding.small,
+                    start = Dimens.padding.medium,
+                    end = Dimens.padding.medium
+                ),
+            mainAxisAlignment = FlowMainAxisAlignment.Center,
+            crossAxisAlignment = FlowCrossAxisAlignment.Center,
+            mainAxisSize = SizeMode.Expand
         ) {
             Text(
                 text = mediaDetails.title,
                 color = textColor,
                 fontWeight = FontWeight(600),
-                fontSize = 20.sp
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = mediaDetails.releaseDate.year.toString(),
+                modifier = Modifier.alpha(0.7f),
+                text = "(${mediaDetails.releaseDate.year})",
                 color = textColor,
                 fontWeight = FontWeight(400)
             )
         }
+
+        // User score and trailer
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(bottom = Dimens.padding.small),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
 
             Row(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(vertical = Dimens.padding.small, horizontal = Dimens.padding.medium),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -200,7 +238,7 @@ fun MainInfo(
                     modifier = Modifier.size(50.dp),
                     score = mediaDetails.userScore
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(Dimens.padding.small))
                 Text(
                     text = "User Score",
                     color = textColor,
@@ -217,7 +255,7 @@ fun MainInfo(
             Row(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(8.dp)
+                    .padding(Dimens.padding.small)
                     .clickable {
 
                     },
@@ -233,19 +271,20 @@ fun MainInfo(
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     modifier = Modifier.align(Alignment.CenterVertically),
-                    text = "Play Trailer",
+                    text = stringResource(R.string.text_play_trailer),
                     color = textColor,
                     fontWeight = FontWeight(400),
                 )
             }
         }
 
+        // Certification, duration and genres
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(0x1A000000))
                 .border(BorderStroke(1.dp, Color(0x40000000)))
-                .padding(vertical = 8.dp),
+                .padding(vertical = Dimens.padding.small, horizontal = Dimens.padding.medium),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Row(
@@ -255,12 +294,25 @@ fun MainInfo(
             ) {
 
                 CertificationText(
-                    text = "U",
+                    text = mediaDetails.ageCertification,
                     color = textColor
                 )
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    text = "07/10/2015 (FR)  *  1h 19m",
+
+                Spacer(Modifier.width(Dimens.padding.small))
+                if (mediaDetails is MediaDetails.Movie) {
+                    Text(
+                        text = "${mediaDetails.localReleaseDate.orEmpty()} (${mediaDetails.localCountryCodeRelease})",
+                        color = textColor
+                    )
+                    Spacer(Modifier.width(Dimens.padding.small))
+                }
+                Canvas(modifier = Modifier.size(4.dp), onDraw = {
+                    drawCircle(color = textColor)
+                })
+
+                Spacer(Modifier.width(Dimens.padding.small))
+                HoursMinutesText(
+                    time = mediaDetails.runTime,
                     color = textColor
                 )
             }
@@ -269,32 +321,82 @@ fun MainInfo(
                 color = textColor
             )
         }
-        Spacer(modifier = Modifier.height(16.dp))
+
+        // Tagline and overview
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = Dimens.padding.medium, vertical = Dimens.padding.medium)
         ) {
 
-            Text(
-                modifier = Modifier.alpha(0.7f),
-                text = mediaDetails.tagLine,
-                color = textColor,
-                fontStyle = FontStyle.Italic,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Overview",
-                color = textColor,
-                fontWeight = FontWeight(600),
-                fontSize = 18.sp
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = mediaDetails.overview,
-                color = textColor
-            )
+            if (mediaDetails.tagLine.isNotBlank()) {
+                Text(
+                    modifier = Modifier.alpha(0.7f),
+                    text = mediaDetails.tagLine,
+                    color = textColor,
+                    fontStyle = FontStyle.Italic,
+                )
+                Spacer(modifier = Modifier.height(Dimens.padding.small))
+            }
+            if (mediaDetails.overview.isNotBlank()) {
+                Text(
+                    text = stringResource(id = R.string.text_overview),
+                    color = textColor,
+                    fontWeight = FontWeight(600),
+                    fontSize = 18.sp
+                )
+                Spacer(modifier = Modifier.height(Dimens.padding.small))
+                Text(
+                    text = mediaDetails.overview,
+                    color = textColor
+                )
+            }
+
+            if (mediaDetails.creatorList.isNotEmpty()) {
+
+                Spacer(modifier = Modifier.height(Dimens.padding.medium))
+
+                NestedVerticalLazyGrid(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    columns = 2,
+                    itemList = mediaDetails.creatorList
+                ) { item ->
+                    Column(
+                        modifier = Modifier.padding(vertical = Dimens.padding.small)
+                    ) {
+                        Text(
+                            text = item.name,
+                            color = textColor,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = item.job.ifBlank { stringResource(R.string.text_creator) },
+                            color = textColor
+                        )
+                    }
+                }
+            }
         }
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
+
+//@Preview
+//@Composable
+//fun MediaDetailScreenPreview() {
+//
+//    val mediaDetails = MediaDetailsFull.MovieDetails(
+//        0L,
+//        "Thor: Love and Thunder",
+//        "",
+//        "",
+//        "After his retirement is interrupted by Gorr the God Butcher, a galactic killer who seeks the extinction of the gods, Thor enlists the help of King Valkyrie, Korg, and ex-girlfriend Jane Foster, who now inexplicably wields Mjolnir as the Mighty Thor. Together they embark upon a harrowing cosmic adventure to uncover the mystery of the God Butcher’s vengeance and stop him before it’s too late.",
+//        "The one is not the only.",
+//        LocalDate.now(),
+//        67,
+//        120,
+//        listOf("Action", "Adventure", "Fantasy"),
+//    )
+//
+//    MediaDetailContent(mediaDetails = mediaDetails)
+//}

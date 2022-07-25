@@ -1,9 +1,13 @@
 package com.buntupana.tmdb.feature.detail.domain.repository
 
 import com.buntupana.tmdb.core.domain.entity.Resource
-import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import com.buntupana.tmdb.feature.detail.domain.model.*
 
 interface DetailRepository {
-    suspend fun getMovieDetails(movieId: Long): Resource<MediaDetails.MovieDetails>
-    suspend fun getTvShowDetails(tvShowId: Long): Resource<MediaDetails.TvShowDetails>
+    suspend fun getMovieDetails(movieId: Long): Resource<MovieDetails>
+    suspend fun getTvShowDetails(tvShowId: Long): Resource<TvShowDetails>
+    suspend fun getMovieReleaseDates(movieId: Long): Resource<List<ReleaseDate>>
+    suspend fun getMovieCredits(movieId: Long): Resource<Credits>
+    suspend fun getTvShowCredits(tvShowId: Long): Resource<Credits>
+    suspend fun getTvShowCertificationList(tvShowId: Long): Resource<List<Certification>>
 }

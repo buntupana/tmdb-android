@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_play_trailer">Play Trailer</string>
+    <string name="text_overview">Overview</string>
+    <string name="text_creator">Creator</string>
+</resources>

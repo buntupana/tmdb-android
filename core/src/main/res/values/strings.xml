@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_hours_minutes">%1$dh %2$dm</string>
+    <string name="text_minutes">%1$dm</string>
+</resources>

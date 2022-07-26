@@ -37,8 +37,7 @@ fun MediaItemVertical(
 ) {
 
     BoxWithConstraints(
-        modifier = modifier
-            .padding(4.dp)
+        modifier = modifier.padding(4.dp)
     ) {
 
         val maxWidth = maxWidth

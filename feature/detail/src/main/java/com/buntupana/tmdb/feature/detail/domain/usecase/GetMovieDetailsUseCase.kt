@@ -63,7 +63,7 @@ class GetMovieDetailsUseCase @Inject constructor(
                 )
 
                 val creatorJobList =
-                    listOf("Director", "Writer", "Characters", "Screenplay", "Story")
+                    listOf("Director", "Writer", "Characters", "Screenplay", "Story", "Novel")
 
                 val creatorList =
                     movieCredits.data.crewList.filter { creatorJobList.contains(it.job) }

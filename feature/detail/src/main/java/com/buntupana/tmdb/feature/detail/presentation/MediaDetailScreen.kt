@@ -2,6 +2,8 @@ package com.buntupana.tmdb.feature.detail.presentation
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -34,6 +36,7 @@ import com.buntupana.tmdb.core.presentation.UserScore
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getBinaryForegroundColor
 import com.buntupana.tmdb.feature.detail.R
+import com.buntupana.tmdb.feature.detail.domain.model.CastItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
@@ -96,6 +99,8 @@ fun MediaDetailContent(
                     textColor = textColor
                 )
             }
+
+            CastHorizontalList(mediaDetails = mediaDetails)
         }
     }
 }
@@ -378,6 +383,64 @@ fun MainInfo(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun CastHorizontalList(
+    mediaDetails: MediaDetails
+) {
+
+    val castNumber = 9
+
+    if (mediaDetails.castList.isNotEmpty()) {
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        val castTitle = when (mediaDetails) {
+            is MediaDetails.Movie -> stringResource(id = R.string.text_cast_movie)
+            is MediaDetails.TvShow -> stringResource(id = R.string.text_cast_tv_show)
+        }
+
+        Text(
+            modifier = Modifier.padding(horizontal = Dimens.padding.medium),
+            text = castTitle,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyRow(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            item {
+                Spacer(modifier = Modifier.width(Dimens.padding.small))
+            }
+            items(mediaDetails.castList.take(castNumber)) { item: CastItem ->
+                Spacer(modifier = Modifier.width(Dimens.padding.small))
+                PersonItemVertical(
+                    name = item.name,
+                    profileUrl = item.profileUrl,
+                    character = item.character
+                )
+                Spacer(modifier = Modifier.width(Dimens.padding.small))
+            }
+            item {
+                Spacer(modifier = Modifier.width(Dimens.padding.small))
+            }
+        }
+
+        Spacer(modifier = Modifier.padding(Dimens.padding.medium))
+
+//        Text(
+//            modifier = Modifier.padding(horizontal = Dimens.padding.medium),
+//            text = stringResource(id = R.string.text_full_cast),
+//            fontSize = 20.sp,
+//            fontWeight = FontWeight.Bold,
+//        )
+//
+//        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 

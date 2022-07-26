@@ -3,4 +3,8 @@
     <string name="text_play_trailer">Play Trailer</string>
     <string name="text_overview">Overview</string>
     <string name="text_creator">Creator</string>
+
+    <string name="text_cast_movie">Top Billed Cast</string>
+    <string name="text_cast_tv_show">Series Cast</string>
+    <string name="text_full_cast">Full Cast &amp; Crew</string>
 </resources>

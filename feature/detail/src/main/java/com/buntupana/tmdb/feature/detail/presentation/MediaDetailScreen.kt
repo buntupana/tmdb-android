@@ -74,7 +74,7 @@ fun MediaDetailContent(
 
     val systemUiController = rememberSystemUiController()
 
-    systemUiController.setStatusBarColor(backgroundColor)
+    systemUiController.setSystemBarsColor(backgroundColor)
 
     if (mediaDetails != null) {
         Column(

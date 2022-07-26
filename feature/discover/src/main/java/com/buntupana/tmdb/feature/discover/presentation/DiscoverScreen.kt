@@ -1,9 +1,7 @@
 package com.buntupana.tmdb.feature.discover.presentation
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -22,6 +20,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.domain.model.MediaItem
+import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.Primary
 import com.buntupana.tmdb.core.presentation.widget.menu_selector.MenuSelector
 import com.buntupana.tmdb.core.presentation.widget.menu_selector.MenuSelectorItem
@@ -59,6 +58,9 @@ fun DiscoverScreen(
                 state = scrollState
             )
     ) {
+
+        TopBar()
+
         TitleAndFilter(
             title = stringResource(id = R.string.text_whats_popular),
             filterSet = viewModel.popularFilterSet,
@@ -146,6 +148,35 @@ private fun navigateToDetail(mediaItem: MediaItem, discoverNavigator: DiscoverNa
         }
         is MediaItem.Person -> {}
         MediaItem.Unknown -> {}
+    }
+}
+
+@Composable
+fun TopBar() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(Dimens.topBarHeight)
+            .background(Primary),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Image(
+            modifier = Modifier
+                .padding(vertical = Dimens.padding.small, horizontal = Dimens.padding.medium)
+                .weight(1f),
+            painter = painterResource(id = com.buntupana.tmdb.core.R.drawable.ic_logo_short),
+            contentDescription = null
+        )
+
+        Image(
+            modifier = Modifier
+                .padding(vertical = Dimens.padding.small, horizontal = Dimens.padding.medium)
+                .weight(1f)
+                .clickable { },
+            painter = painterResource(id = R.drawable.ic_search),
+            contentDescription = null,
+            alignment = Alignment.CenterEnd
+        )
     }
 }
 

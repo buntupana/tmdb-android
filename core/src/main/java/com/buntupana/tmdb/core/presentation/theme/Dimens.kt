@@ -9,6 +9,8 @@ object Dimens {
     val carouselMediaItemWidth = 120.dp
     val posterRound = 5.dp
 
+    val topBarHeight = 58.dp
+
     val padding: Padding = PaddingPhone
     val textSize: TextSize = TextPhone
 }

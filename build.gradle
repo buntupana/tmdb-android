@@ -42,7 +42,7 @@ buildscript {
         palette_version = '1.0.0'
 
         // Accompanist
-        flowLayout_version = '0.24.13-rc'
+        accompanist_version = '0.24.13-rc'
 
         // Material Design
         material_3_version = '1.0.0-alpha13'

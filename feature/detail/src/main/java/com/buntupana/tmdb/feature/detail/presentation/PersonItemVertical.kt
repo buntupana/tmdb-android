@@ -24,9 +24,11 @@ private const val MAX_CHARACTER_LINES = 2
 @Composable
 fun PersonItemVertical(
     itemWidth: Dp = 120.dp,
+    personId: Long,
     name: String,
     profileUrl: String,
-    character: String
+    character: String,
+    onItemClick: ((personId: Long) -> Unit)? = null
 ) {
     Surface(
         shadowElevation = 4.dp,
@@ -95,6 +97,7 @@ fun PersonItemVertical(
 @Composable
 fun PersonItemVerticalPreview() {
     PersonItemVertical(
+        personId = 0L,
         name = "Natalie Portman",
         profileUrl = "",
         character = "Jane Foster / The Mighty Thor"

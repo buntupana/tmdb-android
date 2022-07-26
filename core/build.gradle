@@ -67,7 +67,8 @@ dependencies {
     api "androidx.navigation:navigation-compose:$navigation_version"
 
     // Accompanist
-    api "com.google.accompanist:accompanist-flowlayout:$flowLayout_version"
+    api "com.google.accompanist:accompanist-flowlayout:$accompanist_version"
+    api "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
 
     // Fix bug in compose
     debugApi "androidx.customview:customview:1.2.0-alpha01"

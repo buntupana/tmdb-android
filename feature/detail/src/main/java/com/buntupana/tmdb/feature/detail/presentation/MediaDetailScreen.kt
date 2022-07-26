@@ -42,6 +42,7 @@ import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination(
@@ -52,7 +53,6 @@ fun MediaDetailScreen(
     viewModel: MediaDetailViewModel = hiltViewModel(),
     detailNavigator: DetailNavigator
 ) {
-
     MediaDetailContent(
         mediaDetails = viewModel.state.mediaDetails
     )
@@ -71,6 +71,10 @@ fun MediaDetailContent(
     var textColor by remember {
         mutableStateOf(Color.Black)
     }
+
+    val systemUiController = rememberSystemUiController()
+
+    systemUiController.setStatusBarColor(backgroundColor)
 
     if (mediaDetails != null) {
         Column(
@@ -420,6 +424,7 @@ fun CastHorizontalList(
             items(mediaDetails.castList.take(castNumber)) { item: CastItem ->
                 Spacer(modifier = Modifier.width(Dimens.padding.small))
                 PersonItemVertical(
+                    personId = item.id,
                     name = item.name,
                     profileUrl = item.profileUrl,
                     character = item.character

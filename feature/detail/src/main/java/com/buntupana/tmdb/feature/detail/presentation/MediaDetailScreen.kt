@@ -369,6 +369,7 @@ fun MainInfo(
                     modifier = Modifier
                         .fillMaxWidth(),
                     columns = 2,
+                    columnSeparation = 8.dp,
                     itemList = mediaDetails.creatorList
                 ) { item ->
                     Column(

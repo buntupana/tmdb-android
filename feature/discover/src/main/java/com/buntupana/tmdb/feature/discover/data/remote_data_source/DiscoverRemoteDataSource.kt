@@ -1,12 +1,13 @@
 package com.buntupana.tmdb.feature.discover.data.remote_data_source
 
+import androidx.compose.ui.text.intl.Locale
+import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
 import com.buntupana.tmdb.core.data.raw.ResponseListRaw
 import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
 import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.feature.discover.data.api.DiscoverApi
-import com.buntupana.tmdb.feature.discover.data.raw.AnyItemRaw
-import com.buntupana.tmdb.feature.discover.data.raw.MovieItemRaw
-import com.buntupana.tmdb.feature.discover.data.raw.TvShowRaw
+import com.buntupana.tmdb.core.data.raw.MovieItemRaw
+import com.buntupana.tmdb.core.data.raw.TvShowRaw
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
 import org.threeten.bp.LocalDate
@@ -18,7 +19,7 @@ class DiscoverRemoteDataSource @Inject constructor(
 
     companion object {
         private fun getRegion(): String {
-            return "FR"
+            return Locale.current.region
         }
     }
 
@@ -58,7 +59,7 @@ class DiscoverRemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getTrending(trendingType: TrendingType): Resource<ResponseListRaw<AnyItemRaw>> {
+    suspend fun getTrending(trendingType: TrendingType): Resource<ResponseListRaw<AnyMediaItemRaw>> {
         return getResourceResult {
             when (trendingType) {
                 TrendingType.TODAY -> discoverApi.fetchTrending("day")

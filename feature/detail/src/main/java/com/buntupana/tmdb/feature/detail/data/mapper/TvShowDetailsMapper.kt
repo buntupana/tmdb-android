@@ -5,10 +5,15 @@ import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CrewItem
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
 import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeParseException
 
 fun TvShowDetailsRaw.toModel(): TvShowDetails {
 
-    val releaseLocalDate = LocalDate.parse(firstAirDate)
+    val releaseLocalDate = try {
+        LocalDate.parse(firstAirDate)
+    } catch (exc: DateTimeParseException) {
+        null
+    }
 
     return TvShowDetails(
         id,
@@ -19,7 +24,7 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
         tagline.orEmpty(),
         releaseLocalDate,
         (((voteAverage ?: 0.0) * 10)).toInt(),
-        episodeRunTime?.first() ?: 0,
+        episodeRunTime?.firstOrNull() ?: 0,
         genres?.map { it.name }.orEmpty(),
         createdBy?.map {
             CrewItem(

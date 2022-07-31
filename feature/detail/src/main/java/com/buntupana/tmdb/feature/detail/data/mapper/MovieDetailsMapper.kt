@@ -4,10 +4,16 @@ import com.buntupana.tmdb.core.data.api.CoreApi
 import com.buntupana.tmdb.feature.detail.data.raw.MovieDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
 import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeParseException
 
 fun MovieDetailsRaw.toModel(): MovieDetails {
 
-    val releaseLocalDate = LocalDate.parse(releaseDate)
+
+    val releaseLocalDate = try {
+        LocalDate.parse(releaseDate)
+    } catch (exc: DateTimeParseException) {
+        null
+    }
 
     return MovieDetails(
         id,

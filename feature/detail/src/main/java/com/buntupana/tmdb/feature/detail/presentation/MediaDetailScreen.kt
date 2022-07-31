@@ -29,10 +29,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.buntupana.tmdb.core.presentation.CertificationText
-import com.buntupana.tmdb.core.presentation.HoursMinutesText
-import com.buntupana.tmdb.core.presentation.NestedVerticalLazyGrid
-import com.buntupana.tmdb.core.presentation.UserScore
+import com.buntupana.tmdb.core.presentation.composables.DivisorCircle
+import com.buntupana.tmdb.core.presentation.composables.HoursMinutesText
+import com.buntupana.tmdb.core.presentation.composables.NestedVerticalLazyGrid
+import com.buntupana.tmdb.core.presentation.composables.OutlinedText
+import com.buntupana.tmdb.core.presentation.composables.widget.UserScore
+import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getBinaryForegroundColor
 import com.buntupana.tmdb.feature.detail.R
@@ -66,10 +68,10 @@ fun MediaDetailContent(
     val scrollState = rememberScrollState()
 
     var backgroundColor by remember {
-        mutableStateOf(Color.White)
+        mutableStateOf(DetailBackgroundColor)
     }
     var textColor by remember {
-        mutableStateOf(Color.Black)
+        mutableStateOf(backgroundColor.getBinaryForegroundColor())
     }
 
     val systemUiController = rememberSystemUiController()
@@ -219,13 +221,15 @@ fun MainInfo(
                 fontSize = 24.sp,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                modifier = Modifier.alpha(0.7f),
-                text = "(${mediaDetails.releaseDate.year})",
-                color = textColor,
-                fontWeight = FontWeight(400)
-            )
+            mediaDetails.releaseDate?.let { releaseDate ->
+                Text(
+                    modifier = Modifier.alpha(0.7f),
+                    text = "(${releaseDate.year})",
+                    color = textColor,
+                    fontWeight = FontWeight(400)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+            }
         }
 
         // User score and trailer
@@ -302,7 +306,7 @@ fun MainInfo(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                CertificationText(
+                OutlinedText(
                     text = mediaDetails.ageCertification,
                     color = textColor
                 )
@@ -315,9 +319,11 @@ fun MainInfo(
                     )
                     Spacer(Modifier.width(Dimens.padding.small))
                 }
-                Canvas(modifier = Modifier.size(4.dp), onDraw = {
-                    drawCircle(color = textColor)
-                })
+
+                DivisorCircle(
+                    padding = 0.dp,
+                    color = textColor
+                )
 
                 Spacer(Modifier.width(Dimens.padding.small))
                 HoursMinutesText(

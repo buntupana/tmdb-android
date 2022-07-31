@@ -2,4 +2,14 @@
 <resources>
     <string name="text_hours_minutes">%1$dh %2$dm</string>
     <string name="text_minutes">%1$dm</string>
+
+    <string name="text_search">Search</string>
+
+    <string name="text_movies">Movies</string>
+    <string name="text_tv_shows">TV Shows</string>
+    <string name="text_people">People</string>
+
+    <string name="message_movies_no_result">There are no movies that matched your query.</string>
+    <string name="message_tv_shows_no_result">There are no TV shows that matched your query.</string>
+    <string name="message_people_no_result">There are no people that matched your query.</string>
 </resources>

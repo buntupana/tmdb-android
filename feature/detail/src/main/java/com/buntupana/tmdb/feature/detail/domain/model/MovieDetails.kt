@@ -9,7 +9,7 @@ data class MovieDetails(
     val backdropUrl: String,
     val overview: String,
     val tagLine: String,
-    val releaseDate: LocalDate,
+    val releaseDate: LocalDate?,
     val userScore: Int,
     val runTime: Int,
     val genreList: List<String>,

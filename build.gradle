@@ -45,7 +45,7 @@ buildscript {
         accompanist_version = '0.24.13-rc'
 
         // Material Design
-        material_3_version = '1.0.0-alpha13'
+        material_3_version = '1.0.0-alpha14'
 
         // Firebase
         firebase_version = '28.1.0'

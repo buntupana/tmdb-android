@@ -2,5 +2,5 @@ package com.buntupana.tmdb.core.data
 
 object DateUtil {
 
-    val dateFormat = "dd MMM yyyy"
+    const val dateFormat = "dd MMM yyyy"
 }

@@ -61,6 +61,7 @@ dependencies {
     implementation project(path: ':core')
     implementation project(path: ':feature:discover')
     implementation project(path: ':feature:detail')
+    implementation project(path: ':feature:search')
 
     implementation "androidx.activity:activity-compose:$compose_activity_version"
 

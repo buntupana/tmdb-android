@@ -21,7 +21,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.presentation.UserScore
+import com.buntupana.tmdb.core.presentation.composables.widget.UserScore
 import com.buntupana.tmdb.core.presentation.spToDp
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.HkFontFamily
@@ -76,7 +76,7 @@ fun MediaItemVertical(
                             end.linkTo(parent.end)
                         },
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(mediaItem.posterPath)
+                        .data(mediaItem.posterUrl)
                         .crossfade(true)
                         .build(),
                     contentDescription = null,

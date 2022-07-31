@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.discover.presentation.filter_type
 
-import com.buntupana.tmdb.core.presentation.widget.menu_selector.MenuSelectorItem
+import com.buntupana.tmdb.core.presentation.composables.widget.menu_selector.MenuSelectorItem
 import com.buntupana.tmdb.feature.discover.R
 
 sealed class PopularFilter(strRes: Int) : MenuSelectorItem(strRes) {

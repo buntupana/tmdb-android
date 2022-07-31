@@ -31,7 +31,7 @@ fun PersonItemVertical(
     onItemClick: ((personId: Long) -> Unit)? = null
 ) {
     Surface(
-        shadowElevation = 4.dp,
+        shadowElevation = Dimens.cardElevation,
         shape = RoundedCornerShape(Dimens.posterRound)
     ) {
         Box(

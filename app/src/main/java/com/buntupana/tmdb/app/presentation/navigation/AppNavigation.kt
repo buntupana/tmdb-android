@@ -2,6 +2,7 @@ package com.buntupana.tmdb.app.presentation.navigation
 
 import com.buntupana.tmdb.feature.detail.presentation.destinations.MediaDetailScreenDestination
 import com.buntupana.tmdb.feature.discover.presentation.destinations.DiscoverScreenDestination
+import com.buntupana.tmdb.feature.search.presentation.destinations.SearchScreenDestination
 import com.ramcosta.composedestinations.spec.DestinationSpec
 import com.ramcosta.composedestinations.spec.NavGraphSpec
 
@@ -14,7 +15,8 @@ import com.ramcosta.composedestinations.spec.NavGraphSpec
 
             override val destinationsByRoute = listOf<DestinationSpec<*>>(
                 DiscoverScreenDestination,
-                MediaDetailScreenDestination
+                MediaDetailScreenDestination,
+                SearchScreenDestination
             ).associateBy { it.route }
         }
     }

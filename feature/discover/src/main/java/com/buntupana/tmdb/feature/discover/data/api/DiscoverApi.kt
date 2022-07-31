@@ -1,9 +1,9 @@
 package com.buntupana.tmdb.feature.discover.data.api
 
+import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
 import com.buntupana.tmdb.core.data.raw.ResponseListRaw
-import com.buntupana.tmdb.feature.discover.data.raw.AnyItemRaw
-import com.buntupana.tmdb.feature.discover.data.raw.MovieItemRaw
-import com.buntupana.tmdb.feature.discover.data.raw.TvShowRaw
+import com.buntupana.tmdb.core.data.raw.MovieItemRaw
+import com.buntupana.tmdb.core.data.raw.TvShowRaw
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,7 +14,7 @@ interface DiscoverApi {
     @GET("trending/all/{time_window}")
     suspend fun fetchTrending(
         @Path("time_window") timeWindow: String
-    ): Response<ResponseListRaw<AnyItemRaw>>
+    ): Response<ResponseListRaw<AnyMediaItemRaw>>
 
     @GET("discover/movie")
     suspend fun fetchPopularMovies(

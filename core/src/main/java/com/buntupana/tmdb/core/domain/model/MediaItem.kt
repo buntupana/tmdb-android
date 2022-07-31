@@ -3,7 +3,7 @@ package com.buntupana.tmdb.core.domain.model
 sealed class MediaItem(
     val id: Long,
     val name: String,
-    val posterPath: String,
+    val posterUrl: String,
     val popularity: Double,
 ) {
 
@@ -56,7 +56,9 @@ sealed class MediaItem(
         posterPath: String,
         popularity: Double,
         val adult: Boolean,
-        val gender: Int
+        val gender: Int,
+        val knownForDepartment: String,
+        val knowFor: List<String>
     ) : MediaItem(
         id,
         name,

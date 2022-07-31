@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.sp
 object Dimens {
     val carouselMediaItemWidth = 120.dp
     val posterRound = 5.dp
+    val cardElevation = 4.dp
 
     val topBarHeight = 58.dp
 

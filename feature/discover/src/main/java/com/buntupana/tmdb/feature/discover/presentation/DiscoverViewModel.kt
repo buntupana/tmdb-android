@@ -3,6 +3,7 @@ package com.buntupana.tmdb.feature.discover.presentation
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
@@ -21,6 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val getPopularMoviesListUseCase: GetPopularMoviesListUseCase,
     private val getFreeToWatchMediaListUseCase: GetFreeToWatchMediaListUseCase,
     private val getTrendingMediaListUseCase: GetTrendingMediaListUseCase

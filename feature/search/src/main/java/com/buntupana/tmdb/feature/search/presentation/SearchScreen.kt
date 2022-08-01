@@ -297,10 +297,9 @@ fun SearchResults(
         val coroutineScope = rememberCoroutineScope()
         val pagerState = rememberPagerState()
 
+        // Adding a tab bar with result titles
         ScrollableTabRow(
-            // Our selected tab is our current page
             selectedTabIndex = pagerState.currentPage,
-            // Override the indicator, using the provided pagerTabIndicatorOffset modifier
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
                     Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
@@ -313,7 +312,7 @@ fun SearchResults(
             searchState.resultCountList.forEachIndexed { index, resultCount ->
                 Tab(
                     text = {
-                        TabTitle(
+                        TabSearchResult(
                             titleResId = resultCount.titleResId,
                             resultCount = resultCount.resultCount,
                             isSelected = pagerState.currentPage == index
@@ -329,6 +328,7 @@ fun SearchResults(
             }
         }
 
+        // Pager with all results pages
         HorizontalPager(
             modifier = Modifier.fillMaxSize(),
             count = searchState.resultCountList.size,
@@ -337,6 +337,7 @@ fun SearchResults(
 
             val itemHeight: Dp
             val noResultMessageStringRes: Int
+            // Getting Result information for each page of the pager
             val items = when (searchState.resultCountList[currentPage].titleResId) {
                 com.buntupana.tmdb.core.R.string.text_movies -> {
                     itemHeight = 120.dp
@@ -382,7 +383,9 @@ fun SearchResults(
                                 }
                             }
                         }
-                        is LoadState.Error -> {}
+                        is LoadState.Error -> {
+                            // TODO: Error to show when first page of paging fails
+                        }
                         is LoadState.NotLoading -> {
                             if (items.itemCount == 0) {
                                 item {
@@ -399,6 +402,8 @@ fun SearchResults(
                                 item {
                                     Spacer(modifier = Modifier.height(4.dp))
                                 }
+
+                                // Drawing result items
                                 items(items) { item ->
                                     item?.let {
                                         Spacer(modifier = Modifier.height(8.dp))
@@ -415,18 +420,26 @@ fun SearchResults(
                                         Spacer(modifier = Modifier.height(8.dp))
                                     }
                                 }
-                                if (items.loadState.append is LoadState.Loading) {
-                                    item {
-                                        Column(
-                                            Modifier.fillMaxWidth(),
-                                            horizontalAlignment = Alignment.CenterHorizontally
-                                        ) {
-                                            Spacer(modifier = Modifier.height(Dimens.padding.medium))
-                                            CircularProgressIndicator(
-                                                color = Primary
-                                            )
+
+                                // Appending result strategy
+                                when (items.loadState.append) {
+                                    LoadState.Loading -> {
+                                        item {
+                                            Column(
+                                                Modifier.fillMaxWidth(),
+                                                horizontalAlignment = Alignment.CenterHorizontally
+                                            ) {
+                                                Spacer(modifier = Modifier.height(Dimens.padding.medium))
+                                                CircularProgressIndicator(
+                                                    color = Primary
+                                                )
+                                            }
                                         }
                                     }
+                                    is LoadState.Error -> {
+                                        // TODO: item to show when append paging fails
+                                    }
+                                    else -> {}
                                 }
                                 item {
                                     Spacer(modifier = Modifier.height(4.dp))
@@ -435,16 +448,14 @@ fun SearchResults(
                         }
                     }
                 }
-                // When we have no result we set a message
             }
-
             Spacer(modifier = Modifier.height(4.dp))
         }
     }
 }
 
 @Composable
-fun TabTitle(
+fun TabSearchResult(
     @StringRes titleResId: Int,
     resultCount: Int,
     isSelected: Boolean

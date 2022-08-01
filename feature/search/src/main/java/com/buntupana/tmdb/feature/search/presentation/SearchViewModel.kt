@@ -34,19 +34,43 @@ class SearchViewModel @Inject constructor(
 
     fun onEvent(event: SearchEvent) {
         when (event) {
-            is SearchEvent.OnSearchSuggestions -> searchMedia(event.searchKey)
+            is SearchEvent.OnSearchSuggestions -> searchSuggestions(event.searchKey)
             is SearchEvent.OnSearch -> {
+                if (event.searchKey.isBlank()) {
+                    return
+                }
+                state = state.copy(
+                    searchKey = event.searchKey,
+                    isSearchSuggestionsLoading = false,
+                    searchSuggestionList = emptyList()
+                )
                 searchMovies(event.searchKey)
                 searchTvShows(event.searchKey)
                 searchPersons(event.searchKey)
                 getSearchResultCount(event.searchKey)
             }
+            SearchEvent.DismissSuggestions -> {
+                state = state.copy(
+                    isSearchSuggestionsLoading = false,
+                    searchSuggestionList = emptyList()
+                )
+            }
         }
     }
 
-    private fun searchMedia(searchKey: String) {
+    private fun searchSuggestions(searchKey: String) {
         searchSuggestionsJob?.cancel()
         searchSuggestionsJob = viewModelScope.launch {
+
+            if (searchKey.isBlank()) {
+                state = state.copy(
+                    searchKey = searchKey,
+                    isSearchSuggestionsLoading = false,
+                    searchSuggestionList = emptyList()
+                )
+                return@launch
+            }
+
             state = state.copy(searchKey = searchKey)
             delay(TYPING_DELAY)
             getSearchMediaUseCase(searchKey) {
@@ -57,7 +81,11 @@ class SearchViewModel @Inject constructor(
                     state = state.copy(isSearchSuggestionsLoading = false)
                 }
                 success {
-                    state = state.copy(isSearchSuggestionsLoading = false)
+                    state =
+                        state.copy(
+                            searchSuggestionList = it.take(13),
+                            isSearchSuggestionsLoading = false
+                        )
                 }
             }
         }

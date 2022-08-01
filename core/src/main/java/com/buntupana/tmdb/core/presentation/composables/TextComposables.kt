@@ -244,7 +244,8 @@ fun TextFieldSearch(
         if (value.isBlank()) {
             Text(
                 text = stringResource(id = R.string.text_search),
-                color = Color.Gray
+                color = Color.Gray,
+                fontSize = fontSize
             )
         }
     }

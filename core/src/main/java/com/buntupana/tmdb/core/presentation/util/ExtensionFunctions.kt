@@ -8,15 +8,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 
 /** Return a black/white color that will be readable on top */
-fun Color.getBinaryForegroundColor(): Color {
-
+fun Color.getOnBackgroundColor(): Color {
     return if (luminance() > 0.5f) Color.Black else Color.White
-
-//    return if ((toArgb().red * 0.299 + toArgb().green * 0.587 + toArgb().blue * 0.114) > 186) {
-//        Color.Black
-//    } else {
-//        Color.White
-//    }
 }
 
 fun <T> LazyGridScope.gridItems(

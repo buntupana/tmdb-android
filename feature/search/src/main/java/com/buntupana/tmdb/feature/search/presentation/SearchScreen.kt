@@ -8,6 +8,8 @@ import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScrollableTabRow
@@ -26,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -82,6 +85,9 @@ fun SearchScreen(
             mediaType?.let {
                 searchNavigator.navigateToMediaDetail(mediaItem.id, mediaType)
             }
+        },
+        onDismissSuggestionsClick = {
+            viewModel.onEvent(SearchEvent.DismissSuggestions)
         }
     )
 }
@@ -91,111 +97,190 @@ fun SearchScreenContent(
     searchState: SearchState,
     onSearchSuggestions: (searchKey: String) -> Unit,
     onSearch: (searchKey: String) -> Unit,
-    onMediaClick: (mediaItem: MediaItem) -> Unit
+    onMediaClick: (mediaItem: MediaItem) -> Unit,
+    onDismissSuggestionsClick: () -> Unit
 ) {
 
-    Column(
+    Box(
         modifier = Modifier.fillMaxSize()
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = Dimens.topBarHeight)
+        ) {
+            when {
+                searchState.isSearchLoading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            color = Primary
+                        )
+                    }
+                }
+                searchState.resultCountList.isNotEmpty() -> {
+                    SearchResults(
+                        modifier = Modifier.fillMaxWidth(),
+                        searchState = searchState,
+                        onMediaClick = onMediaClick
+                    )
+                }
+            }
+        }
+
         SearchBar(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(Dimens.topBarHeight),
+                .align(Alignment.TopCenter),
             searchKey = searchState.searchKey,
             onValueChanged = {
                 onSearchSuggestions(it)
             },
             isLoadingSuggestions = searchState.isSearchSuggestionsLoading,
-            onSearch = {
-                onSearch(it)
-            },
+            onSearch = onSearch,
             isLoadingSearch = searchState.isSearchLoading,
-            requestFocus = true
+            requestFocus = true,
+            suggestionList = searchState.searchSuggestionList,
+            clickable = {
+                onSearch(it.name)
+            },
+            onDismissSuggestionsClick = onDismissSuggestionsClick
         )
-
-        Divider()
-
-        when {
-            searchState.isSearchLoading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        color = Primary
-                    )
-                }
-            }
-            searchState.resultCountList.isNotEmpty() -> {
-                SearchResults(
-                    modifier = Modifier.fillMaxWidth(),
-                    searchState = searchState,
-                    onMediaClick = onMediaClick
-                )
-            }
-        }
     }
 }
 
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,
+    barHeight: Dp = Dimens.topBarHeight,
     onValueChanged: (searchKey: String) -> Unit,
     searchKey: String,
     onSearch: (searchKey: String) -> Unit,
     isLoadingSuggestions: Boolean = false,
     isLoadingSearch: Boolean = false,
-    requestFocus: Boolean = false
+    requestFocus: Boolean = false,
+    suggestionList: List<MediaItem>,
+    clickable: (mediaItem: MediaItem) -> Unit,
+    onDismissSuggestionsClick: () -> Unit
 ) {
-    Row(
-        modifier = modifier
-            .background(Primary)
-            .padding(horizontal = Dimens.padding.medium),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            modifier = Modifier.size(24.dp),
-            painter = painterResource(id = com.buntupana.tmdb.core.R.drawable.ic_search),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(Secondary)
-        )
-        TextFieldSearch(
+    Column(modifier = modifier) {
+        Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            value = searchKey,
-            onValueChange = {
-                onValueChanged(it)
-            },
-            onSearch = {
-                onSearch(it)
-            },
-            isEnabled = isLoadingSearch.not(),
-            requestFocus = requestFocus,
-            cursorColor = Secondary
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Box(
-            modifier = Modifier.size(24.dp)
+                .height(barHeight)
+                .background(Primary)
+                .padding(horizontal = Dimens.padding.medium),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            if (!isLoadingSuggestions && searchKey.isNotBlank()) {
-                val interactionSource = remember { MutableInteractionSource() }
-                Image(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .indication(
-                            indication = rememberRipple(color = Tertiary),
-                            interactionSource = interactionSource
-                        )
-                        .clickable {
-                            onValueChanged("")
-                        },
-                    painter = painterResource(id = com.buntupana.tmdb.core.R.drawable.ic_cancel),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(Secondary)
-                )
+            Image(
+                modifier = Modifier.size(24.dp),
+                painter = painterResource(id = com.buntupana.tmdb.core.R.drawable.ic_search),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(Secondary)
+            )
+            TextFieldSearch(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                value = searchKey,
+                onValueChange = {
+                    onValueChanged(it)
+                },
+                onSearch = {
+                    onSearch(it)
+                },
+                isEnabled = isLoadingSearch.not(),
+                requestFocus = requestFocus,
+                cursorColor = Secondary
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Box(
+                modifier = Modifier.size(24.dp)
+            ) {
+                if (!isLoadingSuggestions && searchKey.isNotBlank()) {
+                    val interactionSource = remember { MutableInteractionSource() }
+                    Image(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .indication(
+                                indication = rememberRipple(color = Tertiary),
+                                interactionSource = interactionSource
+                            )
+                            .clickable {
+                                onValueChanged("")
+                            },
+                        painter = painterResource(id = com.buntupana.tmdb.core.R.drawable.ic_cancel),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(Secondary)
+                    )
+                } else if (isLoadingSuggestions) {
+                    CircularProgressIndicator(
+                        color = Secondary
+                    )
+                }
             }
         }
+
+        if (suggestionList.isNotEmpty()) {
+            val listState = rememberLazyListState()
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                state = listState
+            ) {
+                items(suggestionList) {
+                    SuggestionItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(40.dp),
+                        mediaItem = it,
+                        clickable = clickable
+                    )
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.7f))
+                    .clickable {
+                        onDismissSuggestionsClick()
+                    }
+            )
+        }
+    }
+}
+
+@Composable
+fun SuggestionItem(
+    modifier: Modifier = Modifier,
+    mediaItem: MediaItem,
+    clickable: (mediaItem: MediaItem) -> Unit
+) {
+    val focusManager = LocalFocusManager.current
+
+    Column(
+        modifier = modifier
+            .background(MaterialTheme.colors.background)
+            .clickable {
+                focusManager.clearFocus()
+                clickable(mediaItem)
+            }
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(
+                    horizontal = Dimens.padding.medium,
+                    vertical = Dimens.padding.small
+                )
+                .weight(1f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = mediaItem.name)
+        }
+        Divider(
+            color = Primary,
+        )
     }
 }
 
@@ -278,7 +363,7 @@ fun SearchResults(
                 }
             }
 
-            if (items != null)
+            if (items != null) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                 ) {
@@ -349,8 +434,9 @@ fun SearchResults(
                             }
                         }
                     }
-                    // When we have no result we set a message
                 }
+                // When we have no result we set a message
+            }
 
             Spacer(modifier = Modifier.height(4.dp))
         }
@@ -400,9 +486,12 @@ fun TabTitle(
 @Composable
 fun SearchScreenPreview() {
     SearchScreenContent(
-        searchState = SearchState(),
+        searchState = SearchState(
+            searchSuggestionList = emptyList()
+        ),
         onSearchSuggestions = {},
         onSearch = {},
-        onMediaClick = {}
+        onMediaClick = {},
+        onDismissSuggestionsClick = {}
     )
 }

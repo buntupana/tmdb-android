@@ -18,7 +18,7 @@ class GenericPagingDataSource<ITEM : Any, RAW_ITEM, RESPONSE : ResponseListRaw<R
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ITEM> {
         lastCursor = params.key ?: 1
 
-        return when(val response = networkCall.invoke(lastCursor)) {
+        return when (val response = networkCall.invoke(lastCursor)) {
             is Resource.Success -> {
                 try {
                     val items = response.data.results.map {
@@ -30,8 +30,8 @@ class GenericPagingDataSource<ITEM : Any, RAW_ITEM, RESPONSE : ResponseListRaw<R
 
                     LoadResult.Page(
                         items,
-                        if(prevKey < 1) null else prevKey,
-                        nextKey
+                        if (prevKey < 1) null else prevKey,
+                        if (items.isEmpty()) null else nextKey
                     )
                 } catch (e: Exception) {
                     if (e is CancellationException) {

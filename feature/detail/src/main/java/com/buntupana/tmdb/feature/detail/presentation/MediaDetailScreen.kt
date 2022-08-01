@@ -36,7 +36,7 @@ import com.buntupana.tmdb.core.presentation.composables.OutlinedText
 import com.buntupana.tmdb.core.presentation.composables.widget.UserScore
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.util.getBinaryForegroundColor
+import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.R
 import com.buntupana.tmdb.feature.detail.domain.model.CastItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
@@ -71,7 +71,7 @@ fun MediaDetailContent(
         mutableStateOf(DetailBackgroundColor)
     }
     var textColor by remember {
-        mutableStateOf(backgroundColor.getBinaryForegroundColor())
+        mutableStateOf(backgroundColor.getOnBackgroundColor())
     }
 
     val systemUiController = rememberSystemUiController()
@@ -94,7 +94,7 @@ fun MediaDetailContent(
                     palette.dominantSwatch?.rgb?.let { dominantColor ->
                         if (Color(dominantColor) != backgroundColor) {
                             backgroundColor = Color(dominantColor)
-                            textColor = backgroundColor.getBinaryForegroundColor()
+                            textColor = backgroundColor.getOnBackgroundColor()
                         }
                     }
                 }

@@ -9,6 +9,7 @@ data class SearchState(
     val searchKey: String = "",
     val isSearchSuggestionsLoading: Boolean = false,
     val isSearchLoading: Boolean = false,
+    val trendingList: List<MediaItem> = emptyList(),
     val searchSuggestionList: List<MediaItem> = emptyList(),
     val movieItems: Flow<PagingData<MediaItem.Movie>> = flowOf(PagingData.empty()),
     val tvShowItems: Flow<PagingData<MediaItem.TvShow>> = flowOf(PagingData.empty()),

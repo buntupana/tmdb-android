@@ -14,6 +14,10 @@ class SearchRemoteDataSource @Inject constructor(
     private val searchApi: SearchApi
 ) : RemoteDataSource() {
 
+    suspend fun getTrending(): Resource<ResponseListRaw<AnyMediaItemRaw>> {
+        return getResourceResult { searchApi.fetchTrending() }
+    }
+
     suspend fun getSearchMedia(searchKey: String): Resource<ResponseListRaw<AnyMediaItemRaw>> {
         return getResourceResult { searchApi.fetchSearchMedia(searchKey) }
     }

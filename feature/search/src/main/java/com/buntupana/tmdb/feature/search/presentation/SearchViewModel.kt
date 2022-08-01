@@ -17,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val getTrendingMediaUseCase: GetTrendingMediaUseCase,
     private val getSearchMediaUseCase: GetSearchMediaUseCase,
     private val getSearchMoviesUseCase: GetSearchMoviesUseCase,
     private val getSearchTvShowsUseCase: GetSearchTvShowsUseCase,
@@ -26,11 +27,16 @@ class SearchViewModel @Inject constructor(
 
     var state by mutableStateOf(SearchState())
 
-    var searchSuggestionsJob: Job? = null
-    var searchMoviesJob: Job? = null
-    var searchTvShowsJob: Job? = null
-    var searchPersonsJob: Job? = null
-    var getSearchResultCountJob: Job? = null
+    private var getTrendingJob: Job? = null
+    private var searchSuggestionsJob: Job? = null
+    private var searchMoviesJob: Job? = null
+    private var searchTvShowsJob: Job? = null
+    private var searchPersonsJob: Job? = null
+    private var getSearchResultCountJob: Job? = null
+
+    init {
+        getTrendingList()
+    }
 
     fun onEvent(event: SearchEvent) {
         when (event) {
@@ -54,6 +60,24 @@ class SearchViewModel @Inject constructor(
                     isSearchSuggestionsLoading = false,
                     searchSuggestionList = emptyList()
                 )
+            }
+        }
+    }
+
+    private fun getTrendingList() {
+        getTrendingJob?.cancel()
+        getTrendingJob = viewModelScope.launch {
+
+            getTrendingMediaUseCase(Unit) {
+                loading {
+
+                }
+                error {
+
+                }
+                success { mediaItemList ->
+                    state = state.copy(trendingList = mediaItemList.take(10))
+                }
             }
         }
     }

@@ -13,4 +13,5 @@ interface SearchRepository {
     suspend fun getSearchMoviesResultCount(searchKey: String): Resource<Int>
     suspend fun getSearchTvShowsResultCount(searchKey: String): Resource<Int>
     suspend fun getSearchPersonsCount(searchKey: String): Resource<Int>
+    suspend fun getTrendingMedia(): Resource<List<MediaItem>>
 }

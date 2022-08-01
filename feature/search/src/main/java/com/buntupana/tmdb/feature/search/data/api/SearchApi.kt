@@ -11,6 +11,9 @@ import retrofit2.http.Query
 
 interface SearchApi {
 
+    @GET("trending/all/day")
+    suspend fun fetchTrending(): Response<ResponseListRaw<AnyMediaItemRaw>>
+
     @GET("search/multi")
     suspend fun fetchSearchMedia(
         @Query("query") searchKey: String

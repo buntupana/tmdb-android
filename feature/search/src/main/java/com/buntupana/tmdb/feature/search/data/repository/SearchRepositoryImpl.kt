@@ -18,6 +18,13 @@ class SearchRepositoryImpl @Inject constructor(
     private val searchRemoteDataSource: SearchRemoteDataSource
 ) : SearchRepository {
 
+    override suspend fun getTrendingMedia(): Resource<List<MediaItem>> {
+        return networkResult(
+            networkCall = { searchRemoteDataSource.getTrending() },
+            mapResponse = { response -> response.results.map { it.toModel() } }
+        )
+    }
+
     override suspend fun getSearchMedia(searchKey: String): Resource<List<MediaItem>> {
         return networkResult(
             networkCall = { searchRemoteDataSource.getSearchMedia(searchKey) },

@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -48,6 +49,7 @@ import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.Primary
 import com.buntupana.tmdb.core.presentation.theme.Secondary
 import com.buntupana.tmdb.core.presentation.theme.Tertiary
+import com.buntupana.tmdb.feature.search.R
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
@@ -55,6 +57,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.launch
+import com.buntupana.tmdb.core.R as RCore
 
 @Destination
 @Composable
@@ -127,6 +130,15 @@ fun SearchScreenContent(
                         onMediaClick = onMediaClick
                     )
                 }
+                searchState.resultCountList.isEmpty() -> {
+                    TrendingList(
+                        modifier = Modifier.fillMaxWidth(),
+                        mediaItemList = searchState.trendingList,
+                        clickable = {
+                            onSearch(it.name)
+                        }
+                    )
+                }
             }
         }
 
@@ -175,7 +187,7 @@ fun SearchBar(
         ) {
             Image(
                 modifier = Modifier.size(24.dp),
-                painter = painterResource(id = com.buntupana.tmdb.core.R.drawable.ic_search),
+                painter = painterResource(id = RCore.drawable.ic_search),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(Secondary)
             )
@@ -210,7 +222,7 @@ fun SearchBar(
                             .clickable {
                                 onValueChanged("")
                             },
-                        painter = painterResource(id = com.buntupana.tmdb.core.R.drawable.ic_cancel),
+                        painter = painterResource(id = RCore.drawable.ic_cancel),
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(Secondary)
                     )
@@ -230,9 +242,6 @@ fun SearchBar(
             ) {
                 items(suggestionList) {
                     SuggestionItem(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(40.dp),
                         mediaItem = it,
                         clickable = clickable
                     )
@@ -252,15 +261,76 @@ fun SearchBar(
 }
 
 @Composable
-fun SuggestionItem(
+fun TrendingList(
     modifier: Modifier = Modifier,
+    mediaItemList: List<MediaItem>,
+    clickable: (mediaItem: MediaItem) -> Unit
+) {
+
+    if (mediaItemList.isEmpty()) {
+        return
+    }
+
+    val listState = rememberLazyListState()
+
+    LazyColumn(
+        modifier = modifier.fillMaxWidth(),
+        state = listState
+    ) {
+        item {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .background(Color.Gray.copy(alpha = 0.2f))
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = Dimens.padding.medium,
+                            vertical = Dimens.padding.small
+                        ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        modifier = Modifier.size(32.dp),
+                        painter = painterResource(id = R.drawable.ic_trending_icon),
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(Dimens.padding.small))
+                    Text(
+                        text = stringResource(id = RCore.string.text_trending),
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Divider(
+                    color = Primary
+                )
+            }
+        }
+
+        items(mediaItemList) { mediaItem ->
+            SuggestionItem(
+                mediaItem = mediaItem,
+                clickable = clickable
+            )
+        }
+    }
+}
+
+@Composable
+fun SuggestionItem(
     mediaItem: MediaItem,
+    itemHeight: Dp = 40.dp,
     clickable: (mediaItem: MediaItem) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = modifier
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(itemHeight)
             .background(MaterialTheme.colors.background)
             .clickable {
                 focusManager.clearFocus()
@@ -276,6 +346,12 @@ fun SuggestionItem(
                 .weight(1f),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Image(
+                painter = painterResource(id = RCore.drawable.ic_search),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+            )
+            Spacer(modifier = Modifier.width(Dimens.padding.small))
             Text(text = mediaItem.name)
         }
         Divider(
@@ -339,22 +415,22 @@ fun SearchResults(
             val noResultMessageStringRes: Int
             // Getting Result information for each page of the pager
             val items = when (searchState.resultCountList[currentPage].titleResId) {
-                com.buntupana.tmdb.core.R.string.text_movies -> {
+                RCore.string.text_movies -> {
                     itemHeight = 120.dp
                     noResultMessageStringRes =
-                        com.buntupana.tmdb.core.R.string.message_movies_no_result
+                        RCore.string.message_movies_no_result
                     searchState.movieItems.collectAsLazyPagingItems()
                 }
-                com.buntupana.tmdb.core.R.string.text_tv_shows -> {
+                RCore.string.text_tv_shows -> {
                     itemHeight = 120.dp
                     noResultMessageStringRes =
-                        com.buntupana.tmdb.core.R.string.message_tv_shows_no_result
+                        RCore.string.message_tv_shows_no_result
                     searchState.tvShowItems.collectAsLazyPagingItems()
                 }
-                com.buntupana.tmdb.core.R.string.text_people -> {
+                RCore.string.text_people -> {
                     itemHeight = 60.dp
                     noResultMessageStringRes =
-                        com.buntupana.tmdb.core.R.string.message_people_no_result
+                        RCore.string.message_people_no_result
                     searchState.personItems.collectAsLazyPagingItems()
                 }
                 else -> {

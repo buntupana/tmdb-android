@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 fun DivisorCircle(
     size: Dp = 4.dp,
     padding: Dp = 4.dp,
-    color: Color = Color.Black
+    color: Color = Color.Unspecified
 ) {
     Canvas(
         modifier = Modifier

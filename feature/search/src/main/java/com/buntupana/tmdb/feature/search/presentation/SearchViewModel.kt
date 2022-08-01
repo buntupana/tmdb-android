@@ -46,9 +46,8 @@ class SearchViewModel @Inject constructor(
 
     private fun searchMedia(searchKey: String) {
         searchSuggestionsJob?.cancel()
-
         searchSuggestionsJob = viewModelScope.launch {
-            state = state.copy(searchKey = searchKey)
+            state = state.copy(searchKey = searchKey, focusSearchBar = false)
             delay(TYPING_DELAY)
             getSearchMediaUseCase(searchKey) {
                 loading {

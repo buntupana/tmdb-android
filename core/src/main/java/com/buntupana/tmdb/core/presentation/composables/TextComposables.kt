@@ -10,17 +10,21 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalFontFamilyResolver
@@ -38,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.presentation.theme.Dimens
+import com.buntupana.tmdb.core.presentation.theme.Primary
 import kotlin.math.absoluteValue
 import kotlin.math.ceil
 
@@ -155,7 +160,7 @@ fun OutlinedText(
 @Composable
 fun HoursMinutesText(
     modifier: Modifier = Modifier,
-    color: Color = Color.Black,
+    color: Color = Color.Unspecified,
     time: Int
 ) {
 
@@ -182,7 +187,9 @@ fun TextFieldSearch(
     onSearch: (searchKey: String) -> Unit,
     value: String,
     isEnabled: Boolean = true,
-    fontSize: TextUnit = MaterialTheme.typography.titleLarge.fontSize
+    fontSize: TextUnit = MaterialTheme.typography.titleLarge.fontSize,
+    requestFocus: Boolean = false,
+    cursorColor: Color = Primary
 ) {
     Box(
         modifier = modifier.padding(
@@ -195,33 +202,41 @@ fun TextFieldSearch(
         val focus = FocusRequester()
         val focusManager = LocalFocusManager.current
 
-        DisposableEffect(Unit) {
-            focus.requestFocus()
-            onDispose { }
+        LaunchedEffect(key1 = true) {
+            if (requestFocus) {
+                focus.requestFocus()
+            }
         }
 
-        BasicTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .focusRequester(focus),
-            value = value,
-            onValueChange = {
-                onValueChange(it)
-            },
-            textStyle = TextStyle(
-                color = fontColor,
-                fontSize = fontSize
-            ),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    onSearch(value)
-                    focusManager.clearFocus()
-                }
-            ),
-            enabled = isEnabled
+        val customTextSelectionColors = TextSelectionColors(
+            handleColor = cursorColor,
+            backgroundColor = cursorColor.copy(alpha = 0.4f)
         )
+        CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
+            BasicTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focus),
+                value = value,
+                onValueChange = {
+                    onValueChange(it)
+                },
+                textStyle = TextStyle(
+                    color = fontColor,
+                    fontSize = fontSize
+                ),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        onSearch(value)
+                        focusManager.clearFocus()
+                    }
+                ),
+                enabled = isEnabled,
+                cursorBrush = SolidColor(cursorColor)
+            )
+        }
         if (value.isBlank()) {
             Text(
                 text = stringResource(id = R.string.text_search),

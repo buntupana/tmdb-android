@@ -109,7 +109,8 @@ fun SearchScreenContent(
             onSearch = {
                 onSearch(it)
             },
-            isLoadingSearch = searchState.isSearchLoading
+            isLoadingSearch = searchState.isSearchLoading,
+            requestFocus = searchState.focusSearchBar
         )
 
         Divider()
@@ -143,7 +144,8 @@ fun SearchBar(
     searchKey: String,
     onSearch: (searchKey: String) -> Unit,
     isLoadingSuggestions: Boolean = false,
-    isLoadingSearch: Boolean = false
+    isLoadingSearch: Boolean = false,
+    requestFocus: Boolean = false
 ) {
     Row(
         modifier = modifier
@@ -168,7 +170,9 @@ fun SearchBar(
             onSearch = {
                 onSearch(it)
             },
-            isEnabled = isLoadingSearch.not()
+            isEnabled = isLoadingSearch.not(),
+            requestFocus = requestFocus,
+            cursorColor = Secondary
         )
         Spacer(modifier = Modifier.width(8.dp))
         Box(

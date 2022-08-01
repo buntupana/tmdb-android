@@ -35,7 +35,7 @@ fun CarouselMediaItem(
 
     LaunchedEffect(mediaItemList) {
         scope.launch {
-            listState.scrollToItem(0)
+//            listState.scrollToItem(0)
         }
     }
 

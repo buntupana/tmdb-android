@@ -110,7 +110,7 @@ fun SearchScreenContent(
                 onSearch(it)
             },
             isLoadingSearch = searchState.isSearchLoading,
-            requestFocus = searchState.focusSearchBar
+            requestFocus = true
         )
 
         Divider()

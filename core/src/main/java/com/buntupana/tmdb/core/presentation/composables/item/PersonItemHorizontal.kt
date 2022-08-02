@@ -22,7 +22,7 @@ fun PersonItemHorizontal(
     name: String,
     posterUrl: String,
     knownForDepartment: String,
-    knownFor: String
+    knownFor: String,
 ) {
 
     Row(

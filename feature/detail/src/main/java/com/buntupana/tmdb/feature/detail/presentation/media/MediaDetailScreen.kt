@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.detail.presentation
+package com.buntupana.tmdb.feature.detail.presentation.media
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -40,6 +40,7 @@ import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.R
 import com.buntupana.tmdb.feature.detail.domain.model.CastItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
@@ -56,13 +57,17 @@ fun MediaDetailScreen(
     detailNavigator: DetailNavigator
 ) {
     MediaDetailContent(
-        mediaDetails = viewModel.state.mediaDetails
+        mediaDetails = viewModel.state.mediaDetails,
+        onPersonClick = { personId ->
+            detailNavigator.navigateToPerson(personId)
+        }
     )
 }
 
 @Composable
 fun MediaDetailContent(
-    mediaDetails: MediaDetails?
+    mediaDetails: MediaDetails?,
+    onPersonClick: (personId: Long) -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -106,7 +111,10 @@ fun MediaDetailContent(
                 )
             }
 
-            CastHorizontalList(mediaDetails = mediaDetails)
+            CastHorizontalList(
+                mediaDetails = mediaDetails,
+                onItemClick = onPersonClick
+            )
         }
     }
 }
@@ -399,7 +407,8 @@ fun MainInfo(
 
 @Composable
 fun CastHorizontalList(
-    mediaDetails: MediaDetails
+    mediaDetails: MediaDetails,
+    onItemClick: (personId: Long) -> Unit
 ) {
 
     val castNumber = 9
@@ -434,7 +443,8 @@ fun CastHorizontalList(
                     personId = item.id,
                     name = item.name,
                     profileUrl = item.profileUrl,
-                    character = item.character
+                    character = item.character,
+                    onItemClick = onItemClick
                 )
                 Spacer(modifier = Modifier.width(Dimens.padding.small))
             }

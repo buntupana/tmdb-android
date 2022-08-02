@@ -2,7 +2,9 @@ package com.buntupana.tmdb.app.presentation.navigation
 
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
+import com.buntupana.tmdb.feature.detail.presentation.PersonDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.destinations.MediaDetailScreenDestination
+import com.buntupana.tmdb.feature.detail.presentation.destinations.PersonDetailScreenDestination
 import com.buntupana.tmdb.feature.discover.presentation.DiscoverNavigator
 import com.buntupana.tmdb.feature.search.presentation.SearchNavigator
 import com.buntupana.tmdb.feature.search.presentation.destinations.SearchScreenDestination
@@ -18,5 +20,9 @@ class CommonNavigation(
 
     override fun navigateToSearch() {
         destinationsNavigator.navigate(SearchScreenDestination())
+    }
+
+    override fun navigateToPerson(personId: Long) {
+        destinationsNavigator.navigate(PersonDetailScreenDestination(PersonDetailNavArgs(personId)))
     }
 }

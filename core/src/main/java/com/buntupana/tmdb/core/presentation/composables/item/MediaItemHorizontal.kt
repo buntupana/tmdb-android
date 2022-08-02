@@ -44,7 +44,8 @@ fun MediaItemHorizontal(
                 name = mediaItem.name,
                 posterUrl = mediaItem.posterUrl,
                 knownForDepartment = mediaItem.knownForDepartment,
-                knownFor = mediaItem.knowFor.joinToString(", ")
+                knownFor = mediaItem.knowFor.joinToString(", "),
+                clickable = clickable
             )
         }
         MediaItem.Unknown -> {}

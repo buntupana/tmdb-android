@@ -1,8 +1,8 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
-data class CrewItem(
+data class CastPersonItem(
     val id: Long,
     val name: String,
     val profileUrl: String,
-    val job: String
+    val character: String
 )

@@ -26,6 +26,13 @@ class DetailRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun getPersonDetails(personId: Long): Resource<PersonDetails> {
+        return networkResult(
+            networkCall = { detailRemoteDataSource.getPersonDetails(personId) },
+            mapResponse = { it.toModel() }
+        )
+    }
+
     override suspend fun getMovieReleaseDates(movieId: Long): Resource<List<ReleaseDate>> {
         return networkResult(
             networkCall = { detailRemoteDataSource.getMovieReleaseDateList(movieId) },
@@ -51,6 +58,20 @@ class DetailRepositoryImpl @Inject constructor(
         return networkResult(
             networkCall = { detailRemoteDataSource.getTvCredits(tvShowId) },
             mapResponse = { response -> response.toModel() }
+        )
+    }
+
+    override suspend fun getPersonFilmography(personId: Long): Resource<List<CreditPersonItem>> {
+        return networkResult(
+            networkCall = { detailRemoteDataSource.getPersonFilmography(personId) },
+            mapResponse = { it.toModel() }
+        )
+    }
+
+    override suspend fun getPersonExternalLinks(personId: Long): Resource<ExternalLinks> {
+        return networkResult(
+            networkCall = { detailRemoteDataSource.getPersonExternalLinks(personId) },
+            mapResponse = { it.toModel() }
         )
     }
 }

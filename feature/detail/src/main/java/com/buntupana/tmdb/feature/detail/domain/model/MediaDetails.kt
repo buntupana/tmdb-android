@@ -14,9 +14,9 @@ sealed class MediaDetails(
     open val runTime: Int,
     open val genreList: List<String>,
     open val ageCertification: String,
-    open val creatorList: List<CrewItem>,
-    open val castList: List<CastItem>,
-    open val crewList: List<CrewItem>
+    open val creatorList: List<CrewPersonItem>,
+    open val castList: List<CastPersonItem>,
+    open val crewList: List<CrewPersonItem>
 ) {
 
     data class Movie(
@@ -32,9 +32,9 @@ sealed class MediaDetails(
         override val runTime: Int,
         override val genreList: List<String>,
         override val ageCertification: String,
-        override val creatorList: List<CrewItem>,
-        override val castList: List<CastItem>,
-        override val crewList: List<CrewItem>,
+        override val creatorList: List<CrewPersonItem>,
+        override val castList: List<CastPersonItem>,
+        override val crewList: List<CrewPersonItem>,
         val localCountryCodeRelease: String
     ) : MediaDetails(
         id,
@@ -65,9 +65,9 @@ sealed class MediaDetails(
         override val runTime: Int,
         override val genreList: List<String>,
         override val ageCertification: String,
-        override val creatorList: List<CrewItem>,
-        override val castList: List<CastItem>,
-        override val crewList: List<CrewItem>
+        override val creatorList: List<CrewPersonItem>,
+        override val castList: List<CastPersonItem>,
+        override val crewList: List<CrewPersonItem>
     ) : MediaDetails(
         id,
         title,

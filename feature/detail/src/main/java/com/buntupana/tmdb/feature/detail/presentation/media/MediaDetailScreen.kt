@@ -38,7 +38,7 @@ import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.R
-import com.buntupana.tmdb.feature.detail.domain.model.CastItem
+import com.buntupana.tmdb.feature.detail.domain.model.CastPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
@@ -437,7 +437,7 @@ fun CastHorizontalList(
             item {
                 Spacer(modifier = Modifier.width(Dimens.padding.small))
             }
-            items(mediaDetails.castList.take(castNumber)) { item: CastItem ->
+            items(mediaDetails.castList.take(castNumber)) { item: CastPersonItem ->
                 Spacer(modifier = Modifier.width(Dimens.padding.small))
                 PersonItemVertical(
                     personId = item.id,

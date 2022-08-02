@@ -2,17 +2,17 @@ package com.buntupana.tmdb.feature.detail.data.raw
 
 import com.squareup.moshi.Json
 
-data class CrewRaw(
+data class MediaCastRaw(
     val adult: Boolean,
+    val character: String,
     @field:Json(name = "credit_id")
     val creditId: String,
-    val department: String,
     val gender: Int,
     val id: Long,
-    val job: String,
     @field:Json(name = "known_for_department")
     val knownForDepartment: String,
     val name: String,
+    val order: Int,
     @field:Json(name = "original_name")
     val originalName: String,
     val popularity: Double,

@@ -22,5 +22,5 @@ data class PersonDetailsRaw(
     val placeOfBirth: String?,
     val popularity: Double,
     @field:Json(name = "profile_path")
-    val profilePath: String
+    val profilePath: String?
 )

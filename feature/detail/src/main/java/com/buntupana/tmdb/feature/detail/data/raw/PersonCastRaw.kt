@@ -8,7 +8,7 @@ data class PersonCastRaw(
     val adult: Boolean,
     @field:Json(name = "backdrop_path")
     val backdropPath: String?,
-    val character: String,
+    val character: String?,
     @field:Json(name = "credit_id")
     val creditId: String,
     @field:Json(name = "episode_count")

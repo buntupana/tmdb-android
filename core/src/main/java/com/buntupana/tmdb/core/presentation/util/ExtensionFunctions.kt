@@ -6,6 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.res.stringResource
+import com.buntupana.tmdb.core.R
+import com.buntupana.tmdb.core.domain.model.Gender
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 /** Return a black/white color that will be readable on top */
 fun Color.getOnBackgroundColor(): Color {
@@ -41,4 +47,25 @@ fun <T> LazyGridScope.gridItems(
             }
         }
     }
+}
+
+@Composable
+fun Gender.getString(): String {
+    return when (this) {
+        Gender.NOT_SPECIFIED -> stringResource(id = R.string.text_gender_not_specified)
+        Gender.FEMALE -> stringResource(id = R.string.text_gender_female)
+        Gender.MALE -> stringResource(id = R.string.text_gender_male)
+        Gender.NON_BINARY -> stringResource(id = R.string.text_gender_no_binary)
+    }
+}
+
+fun LocalDate.toLocalFormat(): String {
+    val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(
+        java.util.Locale.getDefault()
+    )
+    return this.format(dateFormatter)
+}
+
+fun String?.ifNull(ifNull: () -> String): String {
+    return this ?: ifNull()
 }

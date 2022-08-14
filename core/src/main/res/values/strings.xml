@@ -14,4 +14,11 @@
     <string name="message_movies_no_result">There are no movies that matched your query.</string>
     <string name="message_tv_shows_no_result">There are no TV shows that matched your query.</string>
     <string name="message_people_no_result">There are no people that matched your query.</string>
+
+    <string name="text_gender_not_specified">Not specified</string>
+    <string name="text_gender_female">Female</string>
+    <string name="text_gender_male">Male</string>
+    <string name="text_gender_no_binary">No-Binary</string>
+
+    <string name="text_read_more">Read More</string>
 </resources>

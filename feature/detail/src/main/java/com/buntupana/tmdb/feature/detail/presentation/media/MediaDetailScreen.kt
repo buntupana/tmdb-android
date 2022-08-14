@@ -107,7 +107,8 @@ fun MediaDetailContent(
                 MainInfo(
                     mediaDetails = mediaDetails,
                     backgroundColor = backgroundColor,
-                    textColor = textColor
+                    textColor = textColor,
+                    onItemClick = onPersonClick
                 )
             }
 
@@ -200,6 +201,7 @@ fun Header(
 fun MainInfo(
     mediaDetails: MediaDetails,
     backgroundColor: Color,
+    onItemClick: (personId: Long) -> Unit,
     textColor: Color
 ) {
 
@@ -375,6 +377,7 @@ fun MainInfo(
                 )
             }
 
+            // Creators
             if (mediaDetails.creatorList.isNotEmpty()) {
 
                 Spacer(modifier = Modifier.height(Dimens.padding.medium))
@@ -387,7 +390,11 @@ fun MainInfo(
                     itemList = mediaDetails.creatorList
                 ) { item ->
                     Column(
-                        modifier = Modifier.padding(vertical = Dimens.padding.small)
+                        modifier = Modifier
+                            .padding(vertical = Dimens.padding.small)
+                            .clickable {
+                                onItemClick(item.id)
+                            }
                     ) {
                         Text(
                             text = item.name,

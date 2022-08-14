@@ -2,6 +2,7 @@ package com.buntupana.tmdb.feature.detail.domain.usecase
 
 import com.buntupana.tmdb.app.domain.usecase.UseCaseResource
 import com.buntupana.tmdb.core.domain.entity.Resource
+import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
 import kotlinx.coroutines.async
@@ -16,14 +17,14 @@ class GetPersonDetailsUseCase @Inject constructor(
 
         return coroutineScope {
             val personDetailsDef = async { detailRepository.getPersonDetails(params) }
-            val filmographyyListDef = async { detailRepository.getPersonFilmography(params) }
+            val filmographyListDef = async { detailRepository.getPersonFilmography(params) }
             val externalLinksDef = async { detailRepository.getPersonExternalLinks(params) }
 
             val personDetailsRes = personDetailsDef.await()
             if (personDetailsRes is Resource.Error) {
                 return@coroutineScope Resource.Error<PersonFullDetails>(personDetailsRes.message)
             }
-            val filmographyListRes = filmographyyListDef.await()
+            val filmographyListRes = filmographyListDef.await()
             if (filmographyListRes is Resource.Error) {
                 return@coroutineScope Resource.Error<PersonFullDetails>(filmographyListRes.message)
             }
@@ -36,19 +37,32 @@ class GetPersonDetailsUseCase @Inject constructor(
 
                 val personDetails = personDetailsRes.data
 
+                val externalLinks = mutableListOf<ExternalLink>()
+
+                externalLinks.addAll(externalListRes.data)
+
+//                if (personDetails.imdbLink.isNotBlank()) {
+//                    externalLinks.add(ExternalLink.ImdbLink(personDetails.imdbLink))
+//                }
+
+                if (personDetails.homePageUrl.isNotBlank()) {
+                    externalLinks.add(ExternalLink.HomePage(personDetails.homePageUrl))
+                }
+
                 val personFullDetails = PersonFullDetails(
                     personDetails.id,
                     personDetails.name,
                     personDetails.profileUrl,
-                    personDetails.homePageUrl,
                     personDetails.knownForDepartment,
                     personDetails.gender,
                     personDetails.birthDate,
                     personDetails.deathDate,
+                    personDetails.age,
                     personDetails.placeOfBirth,
                     personDetails.biography,
-                    externalListRes.data,
-                    filmographyListRes.data
+                    externalLinks,
+                    filmographyListRes.data,
+                    filmographyListRes.data.size
                 )
 
                 Resource.Success(personFullDetails)

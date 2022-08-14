@@ -26,7 +26,7 @@ fun FilmographyRaw.toModel(): List<CreditPersonItem> {
             id,
             getMediaType(it.mediaType),
             "Acting",
-            it.character,
+            it.character.orEmpty(),
             posterUrl.orEmpty(),
             backdropUrl.orEmpty(),
             it.popularity,

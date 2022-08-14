@@ -1,9 +1,9 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
-data class ExternalLinks(
-    val id: Long,
-    val facebookLink: String,
-    val imdbLink: String,
-    val instagramLink: String,
-    val twitterLink: String
-)
+sealed class ExternalLink(val link: String) {
+    class FacebookLink(link: String) : ExternalLink(link)
+    class ImdbLink(link: String) : ExternalLink(link)
+    class InstagramLink(link: String) : ExternalLink(link)
+    class TwitterLink(link: String) : ExternalLink(link)
+    class HomePage(link: String) : ExternalLink(link)
+}

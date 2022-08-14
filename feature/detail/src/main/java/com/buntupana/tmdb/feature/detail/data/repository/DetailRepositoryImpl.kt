@@ -68,7 +68,7 @@ class DetailRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getPersonExternalLinks(personId: Long): Resource<ExternalLinks> {
+    override suspend fun getPersonExternalLinks(personId: Long): Resource<List<ExternalLink>> {
         return networkResult(
             networkCall = { detailRemoteDataSource.getPersonExternalLinks(personId) },
             mapResponse = { it.toModel() }

@@ -1,11 +1,7 @@
 package com.buntupana.tmdb.core.presentation.composables
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -22,11 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalFontFamilyResolver
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Paragraph
 import androidx.compose.ui.text.TextLayoutResult
@@ -42,6 +38,7 @@ import androidx.compose.ui.unit.*
 import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.Primary
+import com.buntupana.tmdb.core.presentation.theme.Secondary
 import kotlin.math.absoluteValue
 import kotlin.math.ceil
 
@@ -249,6 +246,149 @@ fun TextFieldSearch(
             )
         }
     }
+}
+
+@Composable
+fun TitleAndSubtitle(
+    modifier: Modifier = Modifier,
+    title: String,
+    subtitle: String,
+    fontColor: Color = MaterialTheme.colorScheme.onBackground
+) {
+    Box(modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .padding(vertical = Dimens.padding.small)
+        ) {
+            Text(
+                text = title,
+                color = fontColor,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = subtitle,
+                color = fontColor
+            )
+        }
+    }
+}
+
+@Composable
+fun ExpandableText(
+    modifier: Modifier = Modifier,
+    text: String,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    fontWeight: FontWeight = FontWeight.Normal,
+    visibleLines: Int = 12
+) {
+
+    var textExpanded by remember {
+        mutableStateOf(false)
+    }
+
+    Box {
+
+        Text(
+            modifier = Modifier.fillMaxSize(),
+            text = text,
+            fontSize = fontSize,
+            fontWeight = fontWeight,
+            maxLines = if (textExpanded) 999999999 else visibleLines
+        )
+        if (textExpanded.not()) {
+            Row(
+                modifier = Modifier
+                    .height(IntrinsicSize.Min)
+                    .align(Alignment.BottomEnd),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Spacer(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .background(
+                            Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    MaterialTheme.colorScheme.background
+                                ),
+                                tileMode = TileMode.Mirror
+                            )
+                        )
+                )
+                Row(
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(Dimens.padding.small)
+                        .clickable {
+                            textExpanded = true
+                        },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.text_read_more),
+                        color = Secondary,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Image(
+                        modifier = Modifier.size(16.dp),
+                        painter = painterResource(id = R.drawable.ic_arrow_right),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(Secondary)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GradientPreview() {
+    Box(
+        modifier = Modifier.size(400.dp),
+    ) {
+        Box(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .background(
+                    Brush.linearGradient(
+                        (0.0f to Color.Transparent),
+                        (0.4f to Color.Transparent),
+                        (0.9f to Color.Green),
+                        tileMode = TileMode.Decal,
+
+                        )
+                )
+        ) {
+            Text(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp),
+                text = "TEST",
+                fontSize = 80.sp,
+                color = Color.White
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ExpandableTextPreview() {
+    ExpandableText(
+        text = """
+            1111111111111111111111111111111111
+            2222222222222222222222222222222222
+            3333333333333333333333333333333333
+            4444444444444444444444444444444444
+            5555555555555555555555555555555555
+            6666666666666666666666666666666666
+            7777777777777777777777777777777777
+            """.trimIndent(),
+        visibleLines = 8
+    )
 }
 
 @Preview(showBackground = true)

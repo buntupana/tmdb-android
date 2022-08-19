@@ -19,7 +19,7 @@ data class PersonCrewRaw(
     val job: String,
     @field:Json(name = "media_type")
     val mediaType: String,
-    val name: String,
+    val name: String?,
     @field:Json(name = "origin_country")
     val originCountry: List<String>,
     @field:Json(name = "original_language")
@@ -34,10 +34,10 @@ data class PersonCrewRaw(
     val posterPath: String?,
     @field:Json(name = "release_date")
     val releaseDate: String?,
-    val title: String,
+    val title: String?,
     val video: Boolean,
     @field:Json(name = "vote_average")
     val voteAverage: Double,
     @field:Json(name = "vote_count")
-    val vote_count: Int
+    val voteCount: Int
 )

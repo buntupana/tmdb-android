@@ -279,7 +279,7 @@ fun ExpandableText(
     text: String,
     fontSize: TextUnit = TextUnit.Unspecified,
     fontWeight: FontWeight = FontWeight.Normal,
-    visibleLines: Int = 12
+    collapsedVisibleLines: Int = 12
 ) {
 
     var textExpanded by remember {
@@ -293,7 +293,12 @@ fun ExpandableText(
             text = text,
             fontSize = fontSize,
             fontWeight = fontWeight,
-            maxLines = if (textExpanded) 999999999 else visibleLines
+            maxLines = if (textExpanded) 999999999 else collapsedVisibleLines,
+            onTextLayout = {
+                if (!textExpanded) {
+                    textExpanded = it.lineCount < collapsedVisibleLines && textExpanded == false
+                }
+            }
         )
         if (textExpanded.not()) {
             Row(
@@ -345,37 +350,6 @@ fun ExpandableText(
 
 @Preview(showBackground = true)
 @Composable
-fun GradientPreview() {
-    Box(
-        modifier = Modifier.size(400.dp),
-    ) {
-        Box(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .background(
-                    Brush.linearGradient(
-                        (0.0f to Color.Transparent),
-                        (0.4f to Color.Transparent),
-                        (0.9f to Color.Green),
-                        tileMode = TileMode.Decal,
-
-                        )
-                )
-        ) {
-            Text(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(16.dp),
-                text = "TEST",
-                fontSize = 80.sp,
-                color = Color.White
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
 fun ExpandableTextPreview() {
     ExpandableText(
         text = """
@@ -387,7 +361,7 @@ fun ExpandableTextPreview() {
             6666666666666666666666666666666666
             7777777777777777777777777777777777
             """.trimIndent(),
-        visibleLines = 8
+        collapsedVisibleLines = 8
     )
 }
 

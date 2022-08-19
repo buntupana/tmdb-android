@@ -19,7 +19,7 @@ class PersonDetailViewModel @Inject constructor(
     private val getPersonDetailsUseCase: GetPersonDetailsUseCase
 ) : ViewModel() {
 
-    val navArgs: PersonDetailNavArgs = savedStateHandle.navArgs()
+    private val navArgs: PersonDetailNavArgs = savedStateHandle.navArgs()
 
     var state by mutableStateOf(PersonState())
 

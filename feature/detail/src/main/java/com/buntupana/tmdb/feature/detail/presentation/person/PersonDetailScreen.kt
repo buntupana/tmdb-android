@@ -3,12 +3,13 @@ package com.buntupana.tmdb.feature.detail.presentation.person
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,19 +17,23 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.domain.model.Gender
 import com.buntupana.tmdb.core.presentation.composables.ExpandableText
 import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
 import com.buntupana.tmdb.core.presentation.composables.TitleAndSubtitle
+import com.buntupana.tmdb.core.presentation.spToDp
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getString
 import com.buntupana.tmdb.core.presentation.util.ifNull
 import com.buntupana.tmdb.core.presentation.util.toLocalFormat
 import com.buntupana.tmdb.feature.detail.R
+import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
@@ -54,7 +59,10 @@ fun PersonDetailScreen(
     if (viewModel.state.personDetails != null) {
         viewModel.state.personDetails?.let {
             PersonDetailContent(
-                it
+                it,
+                onMediaClick = { id: Long, mediaType: MediaType ->
+                    detailNavigator.navigateToMediaDetail(id, mediaType)
+                }
             )
         }
     }
@@ -62,7 +70,8 @@ fun PersonDetailScreen(
 
 @Composable
 fun PersonDetailContent(
-    personDetails: PersonFullDetails
+    personDetails: PersonFullDetails,
+    onMediaClick: (id: Long, mediaType: MediaType) -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -76,6 +85,11 @@ fun PersonDetailContent(
         HeaderContent(personDetails = personDetails)
 
         PersonalInfo(personDetails = personDetails)
+
+        KnownFor(
+            itemList = personDetails.knownFor,
+            onItemClick = onMediaClick
+        )
     }
 }
 
@@ -226,13 +240,89 @@ fun PersonalInfo(
 
         Spacer(Modifier.height(Dimens.padding.small))
 
-        Text(
-            text = "Known For",
-            style = MaterialTheme.typography.titleLarge
-        )
     }
 }
 
+@Composable
+private fun KnownFor(
+    itemList: List<CreditPersonItem>,
+    onItemClick: (id: Long, mediaType: MediaType) -> Unit
+) {
+
+    if (itemList.isEmpty()) {
+        return
+    }
+
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = Dimens.padding.medium),
+        text = stringResource(id = R.string.text_known_for),
+        style = MaterialTheme.typography.titleLarge
+    )
+
+    Spacer(modifier = Modifier.height(Dimens.padding.medium))
+
+    LazyRow(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+
+        item {
+            Spacer(modifier = Modifier.width(Dimens.padding.horizontal))
+        }
+
+        items(itemList.size) { index ->
+
+            val item = itemList[index]
+
+            Column(
+                modifier = Modifier
+                    .width(Dimens.carouselMediaItemWidth)
+                    .clip(RoundedCornerShape(Dimens.posterRound))
+                    .clickable {
+                        onItemClick(item.id, item.mediaType)
+                    }
+            ) {
+                ImageFromUrl(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(Dimens.posterRound))
+                        .fillMaxWidth()
+                        .aspectRatio(Dimens.aspectRatioMediaPoster),
+                    imageUrl = item.posterUrl,
+                )
+                var nameExtraLinesCount by remember {
+                    mutableStateOf(0)
+                }
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp),
+                    text = item.title,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    onTextLayout = {
+                        if(it.lineCount < 2) {
+                            nameExtraLinesCount = 2 - it.lineCount
+                        }
+                    }
+                )
+                // Height we need to fill the view
+                val lineHeight =
+                    MaterialTheme.typography.bodyLarge.lineHeight * nameExtraLinesCount
+                Spacer(
+                    modifier = Modifier.height(spToDp(lineHeight))
+                )
+            }
+            if (index < itemList.size - 1) {
+                Spacer(modifier = Modifier.width(Dimens.padding.small))
+            }
+        }
+
+        item {
+            Spacer(modifier = Modifier.width(Dimens.padding.horizontal))
+        }
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
@@ -259,8 +349,9 @@ fun PersonDetailsContentPreview() {
                 "Description above from the Wikipedia article Sean Connery, licensed under CC-BY-SA, full list of contributors on Wikipedia",
         emptyList(),
         emptyList(),
-        60
+        emptyList(),
+        60,
     )
 
-    PersonDetailContent(personDetails = personDetails)
+    PersonDetailContent(personDetails = personDetails, onMediaClick = { id, mediaType -> })
 }

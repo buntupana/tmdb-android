@@ -15,6 +15,7 @@ data class PersonFullDetails(
     val placeOfBirth: String,
     val biography: String,
     val externalLinks: List<ExternalLink>,
+    val knownFor: List<CreditPersonItem>,
     val creditList: List<CreditPersonItem>,
     val knownCredits: Int
 )

@@ -33,7 +33,13 @@ class GetPersonDetailsUseCase @Inject constructor(
                 return@coroutineScope Resource.Error<PersonFullDetails>(externalListRes.message)
             }
 
-            if (personDetailsRes is Resource.Success && filmographyListRes is Resource.Success && externalListRes is Resource.Success) {
+            if (
+                personDetailsRes is Resource.Success
+                &&
+                filmographyListRes is Resource.Success
+                &&
+                externalListRes is Resource.Success
+            ) {
 
                 val personDetails = personDetailsRes.data
 
@@ -49,6 +55,10 @@ class GetPersonDetailsUseCase @Inject constructor(
                     externalLinks.add(ExternalLink.HomePage(personDetails.homePageUrl))
                 }
 
+                val knownForList =
+                    filmographyListRes.data.filter { it.department == personDetails.knownForDepartment }
+                        .sortedByDescending { it.voteCount }.distinctBy { it.title }.take(9)
+
                 val personFullDetails = PersonFullDetails(
                     personDetails.id,
                     personDetails.name,
@@ -61,6 +71,7 @@ class GetPersonDetailsUseCase @Inject constructor(
                     personDetails.placeOfBirth,
                     personDetails.biography,
                     externalLinks,
+                    knownForList,
                     filmographyListRes.data,
                     filmographyListRes.data.size
                 )

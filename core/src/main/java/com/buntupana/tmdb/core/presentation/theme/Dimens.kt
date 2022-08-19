@@ -14,12 +14,19 @@ object Dimens {
 
     val padding: Padding = PaddingPhone
     val textSize: TextSize = TextPhone
+
+    const val aspectRatioMediaPoster = 2f/3f
 }
 
 object PaddingPhone : Padding {
+    override val tiny = 4.dp
     override val small = 8.dp
     override val medium = 16.dp
     override val big = 24.dp
+    override val huge = 32.dp
+    override val betweenTexts = tiny
+    override val horizontal = medium
+    override val vertical = medium
 }
 
 object TextPhone: TextSize {
@@ -28,9 +35,14 @@ object TextPhone: TextSize {
 }
 
 interface Padding {
+    val tiny: Dp
     val small: Dp
     val medium: Dp
     val big: Dp
+    val huge: Dp
+    val horizontal: Dp
+    val vertical: Dp
+    val betweenTexts: Dp
 }
 
 interface TextSize {

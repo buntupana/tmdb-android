@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 
 data class PersonCastRaw(
     val id: Long,
-    val name: String,
+    val name: String?,
     val adult: Boolean,
     @field:Json(name = "backdrop_path")
     val backdropPath: String?,
@@ -34,7 +34,7 @@ data class PersonCastRaw(
     val posterPath: String?,
     @field:Json(name = "release_date")
     val releaseDate: String?,
-    val title: String,
+    val title: String?,
     val video: Boolean,
     @field:Json(name = "vote_average")
     val voteAverage: Double,

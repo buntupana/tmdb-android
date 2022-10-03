@@ -7,6 +7,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 class GetPersonDetailsUseCase @Inject constructor(
@@ -59,6 +60,11 @@ class GetPersonDetailsUseCase @Inject constructor(
                     filmographyListRes.data.filter { it.department == personDetails.knownForDepartment }
                         .sortedByDescending { it.voteCount }.distinctBy { it.title }.take(9)
 
+                val creditMap =
+                    filmographyListRes.data
+                        .sortedByDescending { it.releaseDate ?: LocalDate.now().plusYears(1) }
+                        .groupBy { it.department }
+
                 val personFullDetails = PersonFullDetails(
                     personDetails.id,
                     personDetails.name,
@@ -72,7 +78,7 @@ class GetPersonDetailsUseCase @Inject constructor(
                     personDetails.biography,
                     externalLinks,
                     knownForList,
-                    filmographyListRes.data,
+                    creditMap,
                     filmographyListRes.data.size
                 )
 

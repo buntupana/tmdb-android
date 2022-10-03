@@ -13,10 +13,10 @@ data class PersonCrewRaw(
     @field:Json(name = "episode_count")
     val episodeCount: Int,
     @field:Json(name = "first_air_date")
-    val firstAirDate: String,
+    val firstAirDate: String?,
     @field:Json(name = "genre_ids")
     val genreIds: List<Int>,
-    val job: String,
+    val job: String?,
     @field:Json(name = "media_type")
     val mediaType: String,
     val name: String?,

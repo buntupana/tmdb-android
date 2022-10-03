@@ -1,47 +1,26 @@
 package com.buntupana.tmdb.feature.detail.presentation.person
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.domain.model.Gender
-import com.buntupana.tmdb.core.presentation.composables.ExpandableText
-import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
-import com.buntupana.tmdb.core.presentation.composables.TitleAndSubtitle
-import com.buntupana.tmdb.core.presentation.spToDp
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.util.getString
-import com.buntupana.tmdb.core.presentation.util.ifNull
-import com.buntupana.tmdb.core.presentation.util.toLocalFormat
-import com.buntupana.tmdb.feature.detail.R
-import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
-import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.PersonDetailNavArgs
+import com.buntupana.tmdb.feature.detail.presentation.person.composable.Credits
+import com.buntupana.tmdb.feature.detail.presentation.person.composable.HeaderContent
+import com.buntupana.tmdb.feature.detail.presentation.person.composable.KnownFor
+import com.buntupana.tmdb.feature.detail.presentation.person.composable.PersonalInfo
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
 import org.threeten.bp.LocalDate
-import com.buntupana.tmdb.core.R as RCore
 
 @Destination(
     navArgsDelegate = PersonDetailNavArgs::class
@@ -90,237 +69,13 @@ fun PersonDetailContent(
             itemList = personDetails.knownFor,
             onItemClick = onMediaClick
         )
-    }
-}
 
-@Composable
-private fun HeaderContent(
-    personDetails: PersonFullDetails
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(Dimens.padding.medium),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if (personDetails.profileUrl.isNotBlank()) {
-            ImageFromUrl(
-                modifier = Modifier
-                    .size(160.dp)
-                    .clip(RoundedCornerShape(Dimens.posterRound)),
-                imageUrl = personDetails.profileUrl
-            )
-        }
-        Spacer(modifier = Modifier.height(Dimens.padding.medium))
-        Text(
-            text = personDetails.name,
-            fontWeight = FontWeight.Bold,
-            fontSize = 32.sp
+        Credits(
+            personName = personDetails.name,
+            mainDepartment = personDetails.knownForDepartment,
+            creditMap = personDetails.creditMap,
+            onItemClick = onMediaClick
         )
-        if (personDetails.externalLinks.isNotEmpty()) {
-
-            Spacer(modifier = Modifier.height(Dimens.padding.small))
-
-            Row {
-                val uriHandler = LocalUriHandler.current
-                personDetails.externalLinks.forEachIndexed { index, externalLink ->
-
-                    val iconResId = when (externalLink) {
-                        is ExternalLink.FacebookLink -> R.drawable.ic_facebook
-                        is ExternalLink.HomePage -> RCore.drawable.ic_link
-                        is ExternalLink.ImdbLink -> RCore.drawable.ic_link
-                        is ExternalLink.InstagramLink -> R.drawable.ic_instagram
-                        is ExternalLink.TwitterLink -> R.drawable.ic_twitter
-                    }
-
-                    Image(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clickable {
-                                uriHandler.openUri(externalLink.link)
-                            },
-                        painter = painterResource(id = iconResId),
-                        contentDescription = null,
-                    )
-
-                    if (index < personDetails.externalLinks.size - 1) {
-                        Spacer(modifier = Modifier.width(Dimens.padding.small))
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun PersonalInfo(
-    personDetails: PersonFullDetails
-) {
-
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Dimens.padding.medium, vertical = Dimens.padding.small)
-    ) {
-
-        Spacer(modifier = Modifier.height(Dimens.padding.small))
-
-        Text(
-            text = stringResource(id = R.string.text_personal_info),
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        Row {
-            if (personDetails.knownForDepartment.isNotBlank()) {
-                TitleAndSubtitle(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth(),
-                    title = stringResource(id = R.string.text_known_for),
-                    subtitle = personDetails.knownForDepartment
-                )
-            }
-            TitleAndSubtitle(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                title = stringResource(id = R.string.text_known_credits),
-                subtitle = personDetails.knownCredits.toString()
-            )
-        }
-
-        TitleAndSubtitle(
-            title = stringResource(id = R.string.text_gender),
-            subtitle = personDetails.gender.getString()
-        )
-
-        val ageString = if (personDetails.age > 0) {
-            "(${stringResource(id = R.string.text_age, personDetails.age)})"
-        } else ""
-
-        val birthdayString = if (personDetails.deathDate == null) {
-            (personDetails.birthDate?.toLocalFormat().ifNull { " - " } + (" $ageString"))
-        } else {
-            personDetails.birthDate?.toLocalFormat() ?: " - "
-        }
-
-        TitleAndSubtitle(
-            title = stringResource(id = R.string.text_birthdate),
-            subtitle = birthdayString
-        )
-
-        if (personDetails.deathDate != null) {
-            TitleAndSubtitle(
-                title = stringResource(id = R.string.text_day_of_death),
-                subtitle = personDetails.deathDate.toLocalFormat() + " $ageString"
-            )
-        }
-        TitleAndSubtitle(
-            title = stringResource(id = R.string.text_place_birth),
-            subtitle = personDetails.placeOfBirth.ifBlank { " - " }
-        )
-
-        Spacer(modifier = Modifier.height(Dimens.padding.small))
-
-        Text(
-            text = stringResource(id = R.string.text_biography),
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        Spacer(modifier = Modifier.height(Dimens.padding.small))
-
-        ExpandableText(text = personDetails.biography.ifBlank {
-            stringResource(
-                id = R.string.text_no_biography,
-                personDetails.name
-            )
-        })
-
-        Spacer(Modifier.height(Dimens.padding.small))
-
-    }
-}
-
-@Composable
-private fun KnownFor(
-    itemList: List<CreditPersonItem>,
-    onItemClick: (id: Long, mediaType: MediaType) -> Unit
-) {
-
-    if (itemList.isEmpty()) {
-        return
-    }
-
-    Text(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Dimens.padding.medium),
-        text = stringResource(id = R.string.text_known_for),
-        style = MaterialTheme.typography.titleLarge
-    )
-
-    Spacer(modifier = Modifier.height(Dimens.padding.medium))
-
-    LazyRow(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-
-        item {
-            Spacer(modifier = Modifier.width(Dimens.padding.horizontal))
-        }
-
-        items(itemList.size) { index ->
-
-            val item = itemList[index]
-
-            Column(
-                modifier = Modifier
-                    .width(Dimens.carouselMediaItemWidth)
-                    .clip(RoundedCornerShape(Dimens.posterRound))
-                    .clickable {
-                        onItemClick(item.id, item.mediaType)
-                    }
-            ) {
-                ImageFromUrl(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(Dimens.posterRound))
-                        .fillMaxWidth()
-                        .aspectRatio(Dimens.aspectRatioMediaPoster),
-                    imageUrl = item.posterUrl,
-                )
-                var nameExtraLinesCount by remember {
-                    mutableStateOf(0)
-                }
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp),
-                    text = item.title,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    onTextLayout = {
-                        if(it.lineCount < 2) {
-                            nameExtraLinesCount = 2 - it.lineCount
-                        }
-                    }
-                )
-                // Height we need to fill the view
-                val lineHeight =
-                    MaterialTheme.typography.bodyLarge.lineHeight * nameExtraLinesCount
-                Spacer(
-                    modifier = Modifier.height(spToDp(lineHeight))
-                )
-            }
-            if (index < itemList.size - 1) {
-                Spacer(modifier = Modifier.width(Dimens.padding.small))
-            }
-        }
-
-        item {
-            Spacer(modifier = Modifier.width(Dimens.padding.horizontal))
-        }
     }
 }
 
@@ -349,7 +104,7 @@ fun PersonDetailsContentPreview() {
                 "Description above from the Wikipedia article Sean Connery, licensed under CC-BY-SA, full list of contributors on Wikipedia",
         emptyList(),
         emptyList(),
-        emptyList(),
+        emptyMap(),
         60,
     )
 

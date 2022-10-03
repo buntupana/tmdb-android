@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.presentation.composables
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -346,6 +347,30 @@ fun ExpandableText(
             }
         }
     }
+}
+
+@Composable
+fun TextWithIcon(
+    modifier: Modifier = Modifier,
+    text: String,
+    clickable: (() -> Unit)? = null,
+    @DrawableRes iconRes: Int
+) {
+
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = text)
+        Spacer(modifier = Modifier.width(Dimens.padding.tiny))
+        Image(
+            modifier = Modifier.size(16.dp),
+            painter = painterResource(iconRes),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+        )
+    }
+
 }
 
 @Preview(showBackground = true)

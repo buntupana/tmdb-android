@@ -12,9 +12,9 @@ data class PersonCastRaw(
     @field:Json(name = "credit_id")
     val creditId: String,
     @field:Json(name = "episode_count")
-    val episodeCount: Int,
+    val episodeCount: Int?,
     @field:Json(name = "first_air_date")
-    val firstAirDate: String,
+    val firstAirDate: String?,
     @field:Json(name = "genre_ids")
     val genreIds: List<Int>,
     @field:Json(name = "media_type")

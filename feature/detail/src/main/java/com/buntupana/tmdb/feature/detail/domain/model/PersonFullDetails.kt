@@ -16,6 +16,6 @@ data class PersonFullDetails(
     val biography: String,
     val externalLinks: List<ExternalLink>,
     val knownFor: List<CreditPersonItem>,
-    val creditList: List<CreditPersonItem>,
+    val creditMap: Map<String, List<CreditPersonItem>>,
     val knownCredits: Int
 )

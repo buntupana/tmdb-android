@@ -5,6 +5,9 @@
 
     <string name="text_search">Search</string>
 
+    <string name="text_department">Department</string>
+    <string name="text_clear">Clear</string>
+    <string name="text_all">All</string>
     <string name="text_movies">Movies</string>
     <string name="text_tv_shows">TV Shows</string>
     <string name="text_people">People</string>

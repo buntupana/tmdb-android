@@ -8,6 +8,7 @@ plugins {
 }
 
 android {
+    namespace 'com.buntupana.tmdb.core'
     compileSdk compile_sdk_version
 
     defaultConfig {
@@ -65,7 +66,7 @@ dependencies {
     api "androidx.compose.material:material:$compose_version"
     debugApi "androidx.compose.ui:ui-tooling:$compose_version"
     api "androidx.navigation:navigation-compose:$navigation_version"
-    api "androidx.paging:paging-compose:1.0.0-alpha15"
+    api 'androidx.paging:paging-compose:1.0.0-alpha16'
 
 
     // Accompanist
@@ -75,7 +76,7 @@ dependencies {
     api "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
 
     // Fix bug in compose
-    debugApi "androidx.customview:customview:1.2.0-alpha01"
+    debugApi 'androidx.customview:customview:1.2.0-alpha02'
     debugApi 'androidx.customview:customview-poolingcontainer:1.0.0'
 
     api "io.github.raamcosta.compose-destinations:core:$navigation_destination_version"

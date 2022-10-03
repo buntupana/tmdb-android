@@ -160,25 +160,25 @@ fun Credits(
             }
         }
 
-//        val creditMapFiltered = filterCreditsByMediaType(
-//            creditMap,
-//            mediaTypeSelected
-//        )
+        val creditMapFilteredAux = filterCreditsByMediaType(
+            creditMap,
+            mediaTypeSelected
+        )
 
         if (departmentSelectedRes == departmentAllRes) {
 
-            val mainCreditList = creditMapFiltered[mainDepartment].orEmpty()
+            val mainCreditList = creditMapFilteredAux[mainDepartment].orEmpty()
 
             if (mainCreditList.isEmpty()) {
                 NoCreditFount(personName = personName)
             } else {
-                HorizontalCreditItem(
-                    creditPersonList = creditMapFiltered[mainDepartment].orEmpty(),
+                CreditList(
+                    creditPersonList = creditMapFilteredAux[mainDepartment].orEmpty(),
                     onItemClick = onItemClick
                 )
             }
 
-            creditMapFiltered.filter { it.key != mainDepartment }
+            creditMapFilteredAux.filter { it.key != mainDepartment }
                 .forEach { (department, creditList) ->
 
                     if (mainCreditList.isEmpty()) {
@@ -195,22 +195,21 @@ fun Credits(
 
                         Spacer(modifier = Modifier.height(Dimens.padding.small))
 
-                        HorizontalCreditItem(
+                        CreditList(
                             creditPersonList = creditList,
                             onItemClick = onItemClick
                         )
                     }
                 }
         } else {
-            Spacer(modifier = Modifier.height(Dimens.padding.small))
 
-            val creditList = creditMapFiltered[departmentSelectedRes].orEmpty()
+            val creditList = creditMapFilteredAux[departmentSelectedRes].orEmpty()
 
             if (creditList.isEmpty()) {
                 NoCreditFount(personName = personName)
             } else {
-                HorizontalCreditItem(
-                    creditPersonList = creditMapFiltered[departmentSelectedRes].orEmpty(),
+                CreditList(
+                    creditPersonList = creditMapFilteredAux[departmentSelectedRes].orEmpty(),
                     onItemClick = onItemClick
                 )
             }
@@ -234,31 +233,28 @@ fun NoCreditFount(
     )
 }
 
-//private fun filterCreditsByMediaType(
-//    creditMap: Map<String, List<CreditPersonItem>>,
-//    mediaTypeRes: Int
-//): Map<String, List<CreditPersonItem>> {
-//
-//    val mediaType = when (mediaTypeRes) {
-//        RCore.string.text_movies -> MediaType.MOVIE
-//        RCore.string.text_tv_shows -> MediaType.TV_SHOW
-//        else -> null
-//    }
-//
-//    return creditMap.mapValues {
-//        it.value.filter { credit ->
-//
-//            if (mediaType == null) {
-//                true
-//            } else {
-//                credit.mediaType == mediaType
-//            }
-//        }
-//    }
-//}
+private fun filterCreditsByMediaType(
+    creditMap: Map<String, List<CreditPersonItem>>,
+    mediaTypeRes: Int
+): Map<String, List<CreditPersonItem>> {
+
+    val mediaType = when (mediaTypeRes) {
+        RCore.string.text_movies -> CreditPersonItem.Movie::class.java
+        RCore.string.text_tv_shows -> CreditPersonItem.TvShow::class.java
+        else -> null
+    }
+
+    return creditMap.mapValues {
+        if (mediaType == null) {
+            it.value
+        } else {
+            it.value.filterIsInstance(mediaType)
+        }
+    }
+}
 
 @Composable
-private fun HorizontalCreditItem(
+private fun CreditList(
     creditPersonList: List<CreditPersonItem>,
     onItemClick: (id: Long, mediaType: MediaType) -> Unit
 ) {

@@ -2,7 +2,9 @@ package com.buntupana.tmdb.feature.detail.presentation.person.composable
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -11,12 +13,13 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.buntupana.tmdb.core.domain.entity.MediaType
-import com.buntupana.tmdb.core.presentation.composables.TextWithIcon
+import com.buntupana.tmdb.core.presentation.composables.DropdownMenuText
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.Secondary
 import com.buntupana.tmdb.core.presentation.util.clickableTextPadding
 import com.buntupana.tmdb.feature.detail.R
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
+import timber.log.Timber
 import com.buntupana.tmdb.core.R as RCore
 
 @Composable
@@ -37,19 +40,19 @@ fun Credits(
         modifier = Modifier.fillMaxWidth()
     ) {
 
-        var creditMapFiltered = remember {
-            creditMap
-        }
-
         val departmentAllRes = stringResource(id = RCore.string.text_department)
 
         var mediaTypeSelected by remember {
             mutableStateOf(RCore.string.text_all)
         }
 
+        Timber.d("Credits: mediaTypeSelected = ${stringResource(id = mediaTypeSelected)}")
+
         var departmentSelectedRes by remember {
             mutableStateOf(departmentAllRes)
         }
+
+        Timber.d("Credits: departmentSelected = $departmentSelectedRes")
 
         Text(
             modifier = Modifier
@@ -63,11 +66,11 @@ fun Credits(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-
             if (mediaTypeSelected != RCore.string.text_all || departmentSelectedRes != departmentAllRes) {
                 Text(
                     modifier = Modifier
                         .clickable {
+                            Timber.d("Credits: click clear")
                             mediaTypeSelected = RCore.string.text_all
                             departmentSelectedRes = departmentAllRes
                         }
@@ -80,109 +83,62 @@ fun Credits(
                 )
             }
 
-            Box {
-
-                var mediaTypeDropdownExpanded by remember {
-                    mutableStateOf(false)
+            DropdownMenuText(
+                modifier = Modifier,
+                text = stringResource(id = mediaTypeSelected),
+                optionList = mapOf(
+                    RCore.string.text_movies to stringResource(id = RCore.string.text_movies),
+                    RCore.string.text_tv_shows to stringResource(id = RCore.string.text_tv_shows)
+                ),
+                onOptionClicked = { id, value ->
+                    Timber.d("Credits: selected type ${id}")
+                    mediaTypeSelected = id
                 }
+            )
 
-                TextWithIcon(
-                    modifier = Modifier
-                        .clickable {
-                            mediaTypeDropdownExpanded = true
-                        }
-                        .clickableTextPadding(),
-                    text = stringResource(id = mediaTypeSelected),
-                    iconRes = RCore.drawable.ic_arrow_down
-                )
-
-                DropdownMenu(expanded = mediaTypeDropdownExpanded, onDismissRequest = {
-                    mediaTypeDropdownExpanded = false
-                }) {
-                    DropdownMenuItem(
-                        text = {
-                            Text(text = stringResource(id = RCore.string.text_movies))
-                        },
-                        onClick = {
-                            mediaTypeDropdownExpanded = false
-                            creditMapFiltered = creditMap.mapValues {
-                                it.value.filterIsInstance<CreditPersonItem.Movie>()
-                            }
-                            mediaTypeSelected = RCore.string.text_movies
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = {
-                            Text(text = stringResource(id = RCore.string.text_tv_shows))
-                        },
-                        onClick = {
-                            mediaTypeDropdownExpanded = false
-                            creditMapFiltered = creditMap.mapValues {
-                                it.value.filterIsInstance<CreditPersonItem.TvShow>()
-                            }
-                            mediaTypeSelected = RCore.string.text_tv_shows
-                        }
-                    )
+            DropdownMenuText(
+                modifier = Modifier,
+                text = departmentSelectedRes,
+                optionList = creditMap.keys.associateWith { it },
+                onOptionClicked = { id, value ->
+                    Timber.d("Credits: selected department $value")
+                    departmentSelectedRes = value
                 }
-            }
+            )
+        }
 
-            Box {
-
-                var departmentDropdownExpanded by remember {
-                    mutableStateOf(false)
-                }
-
-                TextWithIcon(
-                    modifier = Modifier
-                        .clickable {
-                            departmentDropdownExpanded = true
-                        }
-                        .clickableTextPadding(),
-                    text = departmentSelectedRes,
-                    iconRes = RCore.drawable.ic_arrow_down
-                )
-
-                DropdownMenu(expanded = departmentDropdownExpanded, onDismissRequest = {
-                    departmentDropdownExpanded = false
-                }) {
-                    creditMap.keys.forEach { department ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = department)
-                            },
-                            onClick = {
-                                departmentDropdownExpanded = false
-                                departmentSelectedRes = department
-                            }
-                        )
-                    }
+        val creditMapFiltered = if (mediaTypeSelected == RCore.string.text_all) {
+            creditMap
+        } else {
+            creditMap.mapValues {
+                when (mediaTypeSelected) {
+                    RCore.string.text_movies -> it.value.filterIsInstance<CreditPersonItem.Movie>()
+                    RCore.string.text_tv_shows -> it.value.filterIsInstance<CreditPersonItem.TvShow>()
+                    else -> it.value
                 }
             }
         }
 
-        val creditMapFilteredAux = filterCreditsByMediaType(
-            creditMap,
-            mediaTypeSelected
-        )
-
         if (departmentSelectedRes == departmentAllRes) {
 
-            val mainCreditList = creditMapFilteredAux[mainDepartment].orEmpty()
+            Timber.d("Credits: Showing credits")
+            val mainCreditList = creditMapFiltered[mainDepartment].orEmpty()
 
             if (mainCreditList.isEmpty()) {
-                NoCreditFount(personName = personName)
+                NoCreditFound(personName = personName)
             } else {
                 CreditList(
-                    creditPersonList = creditMapFilteredAux[mainDepartment].orEmpty(),
+                    creditPersonList = creditMapFiltered[mainDepartment].orEmpty(),
                     onItemClick = onItemClick
                 )
             }
 
-            creditMapFilteredAux.filter { it.key != mainDepartment }
+            Timber.d("Credits: Showed main deparment credits")
+            creditMapFiltered.filter { it.key != mainDepartment }
                 .forEach { (department, creditList) ->
 
                     if (mainCreditList.isEmpty()) {
-                        NoCreditFount(personName = personName)
+                        NoCreditFound(personName = personName)
                     } else {
 
                         Spacer(modifier = Modifier.height(Dimens.padding.medium))
@@ -201,15 +157,18 @@ fun Credits(
                         )
                     }
                 }
+
+            Timber.d("Credits: Showed main rest department credits")
         } else {
 
-            val creditList = creditMapFilteredAux[departmentSelectedRes].orEmpty()
+            val creditList = creditMapFiltered[departmentSelectedRes].orEmpty()
 
             if (creditList.isEmpty()) {
-                NoCreditFount(personName = personName)
+                NoCreditFound(personName = personName)
             } else {
+                Timber.d("Credits: Showing credits")
                 CreditList(
-                    creditPersonList = creditMapFilteredAux[departmentSelectedRes].orEmpty(),
+                    creditPersonList = creditMapFiltered[departmentSelectedRes].orEmpty(),
                     onItemClick = onItemClick
                 )
             }
@@ -221,7 +180,7 @@ fun Credits(
 }
 
 @Composable
-fun NoCreditFount(
+fun NoCreditFound(
     personName: String
 ) {
     Text(

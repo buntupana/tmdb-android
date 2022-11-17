@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
@@ -42,7 +43,8 @@ fun HeaderContent(
         Text(
             text = personDetails.name,
             fontWeight = FontWeight.Bold,
-            fontSize = 32.sp
+            fontSize = 32.sp,
+            textAlign = TextAlign.Center
         )
         if (personDetails.externalLinks.isNotEmpty()) {
 

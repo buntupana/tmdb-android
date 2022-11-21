@@ -7,4 +7,19 @@
     <string name="text_cast_movie">Top Billed Cast</string>
     <string name="text_cast_tv_show">Series Cast</string>
     <string name="text_full_cast">Full Cast &amp; Crew</string>
+
+    <string name="text_as">as</string>
+
+    <string name="text_personal_info">Personal Info</string>
+    <string name="text_known_for">Known For</string>
+    <string name="text_gender">Gender</string>
+    <string name="text_known_credits">Known Credits</string>
+    <string name="text_birthdate">Birthdate</string>
+    <string name="text_day_of_death">Day of Death</string>
+    <string name="text_age">%d years old</string>
+    <string name="text_place_birth">Place of Birth</string>
+    <string name="text_biography">Biography</string>
+    <string name="text_no_biography">We don\'t have a biography for %s.</string>
+    <string name="text_no_credits">%s doesn\'t have any credits.</string>
+
 </resources>

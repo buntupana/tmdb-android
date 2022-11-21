@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.detail.presentation
+package com.buntupana.tmdb.feature.detail.presentation.media
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -38,8 +38,9 @@ import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.R
-import com.buntupana.tmdb.feature.detail.domain.model.CastItem
+import com.buntupana.tmdb.feature.detail.domain.model.CastPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
@@ -56,13 +57,17 @@ fun MediaDetailScreen(
     detailNavigator: DetailNavigator
 ) {
     MediaDetailContent(
-        mediaDetails = viewModel.state.mediaDetails
+        mediaDetails = viewModel.state.mediaDetails,
+        onPersonClick = { personId ->
+            detailNavigator.navigateToPerson(personId)
+        }
     )
 }
 
 @Composable
 fun MediaDetailContent(
-    mediaDetails: MediaDetails?
+    mediaDetails: MediaDetails?,
+    onPersonClick: (personId: Long) -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -102,11 +107,15 @@ fun MediaDetailContent(
                 MainInfo(
                     mediaDetails = mediaDetails,
                     backgroundColor = backgroundColor,
-                    textColor = textColor
+                    textColor = textColor,
+                    onItemClick = onPersonClick
                 )
             }
 
-            CastHorizontalList(mediaDetails = mediaDetails)
+            CastHorizontalList(
+                mediaDetails = mediaDetails,
+                onItemClick = onPersonClick
+            )
         }
     }
 }
@@ -192,6 +201,7 @@ fun Header(
 fun MainInfo(
     mediaDetails: MediaDetails,
     backgroundColor: Color,
+    onItemClick: (personId: Long) -> Unit,
     textColor: Color
 ) {
 
@@ -367,6 +377,7 @@ fun MainInfo(
                 )
             }
 
+            // Creators
             if (mediaDetails.creatorList.isNotEmpty()) {
 
                 Spacer(modifier = Modifier.height(Dimens.padding.medium))
@@ -379,7 +390,11 @@ fun MainInfo(
                     itemList = mediaDetails.creatorList
                 ) { item ->
                     Column(
-                        modifier = Modifier.padding(vertical = Dimens.padding.small)
+                        modifier = Modifier
+                            .padding(vertical = Dimens.padding.small)
+                            .clickable {
+                                onItemClick(item.id)
+                            }
                     ) {
                         Text(
                             text = item.name,
@@ -399,7 +414,8 @@ fun MainInfo(
 
 @Composable
 fun CastHorizontalList(
-    mediaDetails: MediaDetails
+    mediaDetails: MediaDetails,
+    onItemClick: (personId: Long) -> Unit
 ) {
 
     val castNumber = 9
@@ -428,13 +444,14 @@ fun CastHorizontalList(
             item {
                 Spacer(modifier = Modifier.width(Dimens.padding.small))
             }
-            items(mediaDetails.castList.take(castNumber)) { item: CastItem ->
+            items(mediaDetails.castList.take(castNumber)) { item: CastPersonItem ->
                 Spacer(modifier = Modifier.width(Dimens.padding.small))
                 PersonItemVertical(
                     personId = item.id,
                     name = item.name,
                     profileUrl = item.profileUrl,
-                    character = item.character
+                    character = item.character,
+                    onItemClick = onItemClick
                 )
                 Spacer(modifier = Modifier.width(Dimens.padding.small))
             }

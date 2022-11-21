@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.detail.presentation
+package com.buntupana.tmdb.feature.detail.presentation.media
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
+import com.buntupana.tmdb.feature.detail.presentation.navArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class MediaDetailViewModel @Inject constructor(
     private val getTvShowDetailsUseCase: GetTvShowDetailsUseCase
 ) : ViewModel() {
 
-    val navArgs: MediaDetailNavArgs = savedStateHandle.navArgs()
+    private val navArgs: MediaDetailNavArgs = savedStateHandle.navArgs()
 
     var state by mutableStateOf(DetailScreenState())
 

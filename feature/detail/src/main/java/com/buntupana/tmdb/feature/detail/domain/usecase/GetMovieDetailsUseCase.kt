@@ -3,7 +3,7 @@ package com.buntupana.tmdb.feature.detail.domain.usecase
 import androidx.compose.ui.text.intl.Locale
 import com.buntupana.tmdb.app.domain.usecase.UseCaseResource
 import com.buntupana.tmdb.core.domain.entity.Resource
-import com.buntupana.tmdb.feature.detail.domain.model.CrewItem
+import com.buntupana.tmdb.feature.detail.domain.model.CrewPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
 import kotlinx.coroutines.async
@@ -68,7 +68,7 @@ class GetMovieDetailsUseCase @Inject constructor(
                 val creatorList =
                     movieCredits.data.crewList.filter { creatorJobList.contains(it.job) }
                         .groupBy { it.id }.map {
-                        CrewItem(
+                        CrewPersonItem(
                             it.key,
                             it.value.firstOrNull()?.name.orEmpty(),
                             it.value.firstOrNull()?.profileUrl.orEmpty(),

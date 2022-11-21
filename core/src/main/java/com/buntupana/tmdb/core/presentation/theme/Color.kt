@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.core.presentation.theme
 
 import androidx.compose.ui.graphics.Color
-
+val Background = Color(0xFFFEFAFD)
 val Primary = Color(0xFF0D253F)
 val PrimaryDark = Color(0xFF032541)
 

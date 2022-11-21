@@ -69,7 +69,7 @@ fun MediaItemVertical(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .clip(RoundedCornerShape(Dimens.posterRound))
-                        .aspectRatio(2f / 3f)
+                        .aspectRatio(Dimens.aspectRatioMediaPoster)
                         .constrainAs(posterImage) {
                             top.linkTo(parent.top)
                             start.linkTo(parent.start)

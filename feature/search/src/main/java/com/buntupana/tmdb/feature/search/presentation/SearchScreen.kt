@@ -79,14 +79,17 @@ fun SearchScreen(
             viewModel.onEvent(SearchEvent.OnSearch(it))
         },
         onMediaClick = { mediaItem ->
-            val mediaType = when (mediaItem) {
-                is MediaItem.Movie -> MediaType.MOVIE
-                is MediaItem.TvShow -> MediaType.TV_SHOW
-                is MediaItem.Person -> null
-                MediaItem.Unknown -> null
-            }
-            mediaType?.let {
-                searchNavigator.navigateToMediaDetail(mediaItem.id, mediaType)
+            when (mediaItem) {
+                is MediaItem.Movie -> {
+                    searchNavigator.navigateToMediaDetail(mediaItem.id, MediaType.MOVIE)
+                }
+                is MediaItem.TvShow -> {
+                    searchNavigator.navigateToMediaDetail(mediaItem.id, MediaType.TV_SHOW)
+                }
+                is MediaItem.Person -> {
+                    searchNavigator.navigateToPerson(mediaItem.id)
+                }
+                MediaItem.Unknown -> {}
             }
         },
         onDismissSuggestionsClick = {

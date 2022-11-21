@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.detail.presentation
+package com.buntupana.tmdb.feature.detail.presentation.media
 
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 

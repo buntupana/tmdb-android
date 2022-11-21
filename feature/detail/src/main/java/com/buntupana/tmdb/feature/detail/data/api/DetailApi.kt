@@ -36,4 +36,19 @@ interface DetailApi {
     suspend fun getTvShowCredits(
         @Path("tvShowId") movieId: Long
     ): Response<CreditsRaw>
+
+    @GET("person/{personId}")
+    suspend fun getPersonDetails(
+        @Path("personId") personId: Long
+    ): Response<PersonDetailsRaw>
+
+    @GET("person/{personId}/combined_credits")
+    suspend fun getPersonFilmography(
+        @Path("personId") personId: Long
+    ): Response<FilmographyRaw>
+
+    @GET("person/{personId}/external_ids")
+    suspend fun getPersonExternalLinks(
+        @Path("personId") personId: Long
+    ): Response<ExternalLinksRaw>
 }

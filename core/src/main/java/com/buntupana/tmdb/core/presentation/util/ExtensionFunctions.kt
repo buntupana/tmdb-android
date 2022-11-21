@@ -6,6 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import com.buntupana.tmdb.core.presentation.theme.Dimens
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
+
 
 /** Return a black/white color that will be readable on top */
 fun Color.getOnBackgroundColor(): Color {
@@ -41,4 +46,19 @@ fun <T> LazyGridScope.gridItems(
             }
         }
     }
+}
+
+fun LocalDate.toLocalFormat(): String {
+    val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(
+        java.util.Locale.getDefault()
+    )
+    return this.format(dateFormatter)
+}
+
+fun String?.ifNull(ifNull: () -> String): String {
+    return this ?: ifNull()
+}
+
+fun Modifier.clickableTextPadding(): Modifier {
+    return padding(horizontal = Dimens.padding.medium, vertical = Dimens.padding.small)
 }

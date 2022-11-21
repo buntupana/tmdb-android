@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.core.data
 
 import com.buntupana.tmdb.core.domain.entity.Resource
+import kotlinx.coroutines.CancellationException
 import timber.log.Timber
 
 suspend fun <T, A> networkResult(
@@ -13,9 +14,13 @@ suspend fun <T, A> networkResult(
     return if (network is Resource.Success) {
         try {
             Resource.Success(mapResponse(network.data))
-        } catch (e: Exception) {
+        } catch (exc: Exception) {
+
+            if (exc is CancellationException) {
+                throw exc
+            }
 //            val networkException = NetworkException(cause = e)
-            Timber.e(e, "Mapping Error: ")
+            Timber.e(exc, "Mapping Error: ")
             // TODO: add proper error message
             Resource.Error("Mapping Error")
         }

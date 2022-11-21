@@ -8,6 +8,7 @@ plugins {
 }
 
 android {
+    namespace 'com.buntupana.tmdb.feature.search'
     compileSdk compile_sdk_version
 
     defaultConfig {

@@ -1,5 +1,6 @@
-package com.buntupana.tmdb.feature.detail.presentation
+package com.buntupana.tmdb.feature.detail.presentation.media
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -32,11 +33,14 @@ fun PersonItemVertical(
 ) {
     Surface(
         shadowElevation = Dimens.cardElevation,
-        shape = RoundedCornerShape(Dimens.posterRound)
+        shape = RoundedCornerShape(Dimens.posterRound),
     ) {
         Box(
             modifier = Modifier
                 .width(itemWidth)
+                .clickable {
+                    onItemClick?.invoke(personId)
+                },
         ) {
             Column {
                 AsyncImage(

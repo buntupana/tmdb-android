@@ -10,4 +10,7 @@ interface DetailRepository {
     suspend fun getMovieCredits(movieId: Long): Resource<Credits>
     suspend fun getTvShowCredits(tvShowId: Long): Resource<Credits>
     suspend fun getTvShowCertificationList(tvShowId: Long): Resource<List<Certification>>
+    suspend fun getPersonDetails(personId: Long): Resource<PersonDetails>
+    suspend fun getPersonFilmography(personId: Long): Resource<List<CreditPersonItem>>
+    suspend fun getPersonExternalLinks(personId: Long): Resource<List<ExternalLink>>
 }

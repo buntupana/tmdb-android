@@ -33,4 +33,16 @@ class DetailRemoteDataSource @Inject constructor(
     suspend fun getTvCredits(tvShowId: Long): Resource<CreditsRaw> {
         return getResourceResult { detailApi.getTvShowCredits(tvShowId) }
     }
+
+    suspend fun getPersonDetails(personId: Long): Resource<PersonDetailsRaw> {
+        return getResourceResult { detailApi.getPersonDetails(personId) }
+    }
+
+    suspend fun getPersonFilmography(personId: Long): Resource<FilmographyRaw> {
+        return getResourceResult { detailApi.getPersonFilmography(personId) }
+    }
+
+    suspend fun getPersonExternalLinks(personId: Long): Resource<ExternalLinksRaw> {
+        return getResourceResult { detailApi.getPersonExternalLinks(personId) }
+    }
 }

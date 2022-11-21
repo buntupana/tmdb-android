@@ -1,24 +1,23 @@
 package com.buntupana.tmdb.feature.detail.presentation.person
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.domain.model.Gender
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.PersonDetailNavArgs
-import com.buntupana.tmdb.feature.detail.presentation.person.composable.Credits
-import com.buntupana.tmdb.feature.detail.presentation.person.composable.HeaderContent
-import com.buntupana.tmdb.feature.detail.presentation.person.composable.KnownFor
-import com.buntupana.tmdb.feature.detail.presentation.person.composable.PersonalInfo
+import com.buntupana.tmdb.feature.detail.presentation.person.composable.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.ramcosta.composedestinations.annotation.Destination
 import org.threeten.bp.LocalDate
 
@@ -53,27 +52,59 @@ fun PersonDetailContent(
     onMediaClick: (id: Long, mediaType: MediaType) -> Unit
 ) {
 
-    val scrollState = rememberScrollState()
+    var mediaTypeSelected by remember {
+        mutableStateOf<Int?>(null)
+    }
 
-    Column(
+    var departmentSelected by remember {
+        mutableStateOf<String?>(null)
+    }
+
+    val mediaTypeMap = mapOf(
+        R.string.text_movies to stringResource(id = R.string.text_movies),
+        R.string.text_tv_shows to stringResource(id = R.string.text_tv_shows)
+    )
+
+    val departmentMap = personDetails.creditMap.keys.associateWith { it }
+
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState),
     ) {
+        item {
+            HeaderContent(personDetails = personDetails)
+        }
 
-        HeaderContent(personDetails = personDetails)
+        item {
+            PersonalInfo(personDetails = personDetails)
+        }
 
-        PersonalInfo(personDetails = personDetails)
+        item {
+            KnownFor(
+                itemList = personDetails.knownFor,
+                onItemClick = onMediaClick
+            )
+        }
 
-        KnownFor(
-            itemList = personDetails.knownFor,
-            onItemClick = onMediaClick
-        )
+        item {
+            CreditsFilter(
+                mainDepartment = personDetails.knownForDepartment,
+                mediaTypeMap,
+                departmentMap,
+                mediaTypeSelected,
+                departmentSelected
+            ) { mediaType, department ->
+                mediaTypeSelected = mediaType
+                departmentSelected = department
+            }
+        }
 
-        Credits(
+        credits(
             personName = personDetails.name,
-            mainDepartment = personDetails.knownForDepartment,
             creditMap = personDetails.creditMap,
+            mainDepartment = personDetails.knownForDepartment,
+            mediaTypeSelected = mediaTypeSelected,
+            departmentSelected = departmentSelected,
             onItemClick = onMediaClick
         )
     }
@@ -82,7 +113,7 @@ fun PersonDetailContent(
 @Preview(showBackground = true)
 @Composable
 fun PersonDetailsContentPreview() {
-
+    AndroidThreeTen.init(LocalContext.current)
     val personDetails = PersonFullDetails(
         0L,
         "Sean Connery",

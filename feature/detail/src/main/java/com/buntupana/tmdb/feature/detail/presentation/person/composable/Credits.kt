@@ -2,10 +2,12 @@ package com.buntupana.tmdb.feature.detail.presentation.person.composable
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -23,16 +25,21 @@ import timber.log.Timber
 import com.buntupana.tmdb.core.R as RCore
 
 @Composable
-fun Credits(
-    personName: String,
+fun CreditsFilter(
     mainDepartment: String,
-    creditMap: Map<String, List<CreditPersonItem>>,
-    onItemClick: (id: Long, mediaType: MediaType) -> Unit
+    mediaTypeMap: Map<Int, String>,
+    departmentMap: Map<String, String>,
+    mediaTypeSelected: Int?,
+    departmentSelected: String?,
+    onFilterChange: (mediaType: Int?, department: String?) -> Unit,
 ) {
 
-    if (creditMap.isEmpty()) {
-        return
-    }
+    val departmentAllValue = stringResource(id = RCore.string.text_department)
+
+    val departmentSelectedValue =
+        if (departmentSelected == null) departmentAllValue else departmentMap[departmentSelected].orEmpty()
+    val mediaTypeSelectedValue =
+        if (mediaTypeSelected == null) stringResource(id = RCore.string.text_all) else mediaTypeMap[mediaTypeSelected].orEmpty()
 
     Spacer(modifier = Modifier.height(Dimens.padding.big))
 
@@ -40,25 +47,11 @@ fun Credits(
         modifier = Modifier.fillMaxWidth()
     ) {
 
-        val departmentAllRes = stringResource(id = RCore.string.text_department)
-
-        var mediaTypeSelected by remember {
-            mutableStateOf(RCore.string.text_all)
-        }
-
-        Timber.d("Credits: mediaTypeSelected = ${stringResource(id = mediaTypeSelected)}")
-
-        var departmentSelectedRes by remember {
-            mutableStateOf(departmentAllRes)
-        }
-
-        Timber.d("Credits: departmentSelected = $departmentSelectedRes")
-
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickableTextPadding(),
-            text = if (departmentSelectedRes == departmentAllRes) mainDepartment else departmentSelectedRes,
+            text = if (departmentSelected == null) mainDepartment else departmentSelectedValue,
             style = MaterialTheme.typography.titleLarge
         )
 
@@ -66,13 +59,12 @@ fun Credits(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            if (mediaTypeSelected != RCore.string.text_all || departmentSelectedRes != departmentAllRes) {
+            if (mediaTypeSelected != null || departmentSelected != null) {
                 Text(
                     modifier = Modifier
                         .clickable {
                             Timber.d("Credits: click clear")
-                            mediaTypeSelected = RCore.string.text_all
-                            departmentSelectedRes = departmentAllRes
+                            onFilterChange(null, null)
                         }
                         .padding(
                             horizontal = Dimens.padding.medium,
@@ -85,61 +77,60 @@ fun Credits(
 
             DropdownMenuText(
                 modifier = Modifier,
-                text = stringResource(id = mediaTypeSelected),
-                optionList = mapOf(
-                    RCore.string.text_movies to stringResource(id = RCore.string.text_movies),
-                    RCore.string.text_tv_shows to stringResource(id = RCore.string.text_tv_shows)
-                ),
+                text = mediaTypeSelectedValue,
+                optionList = mediaTypeMap,
                 onOptionClicked = { id, value ->
-                    Timber.d("Credits: selected type ${id}")
-                    mediaTypeSelected = id
+                    Timber.d("Credits: selected type $value")
+                    onFilterChange(id, departmentSelected)
                 }
             )
 
             DropdownMenuText(
                 modifier = Modifier,
-                text = departmentSelectedRes,
-                optionList = creditMap.keys.associateWith { it },
+                text = departmentSelectedValue,
+                optionList = departmentMap,
                 onOptionClicked = { id, value ->
                     Timber.d("Credits: selected department $value")
-                    departmentSelectedRes = value
+                    onFilterChange(mediaTypeSelected, id)
                 }
             )
         }
 
-        val creditMapFiltered = if (mediaTypeSelected == RCore.string.text_all) {
-            creditMap
+    }
+}
+
+fun LazyListScope.credits(
+    personName: String,
+    creditMap: Map<String, List<CreditPersonItem>>,
+    mainDepartment: String,
+    mediaTypeSelected: Int?,
+    departmentSelected: String?,
+    onItemClick: (id: Long, mediaType: MediaType) -> Unit
+) {
+
+    val creditMapFiltered = filterCreditsByMediaType(creditMap, mediaTypeSelected)
+
+    if (departmentSelected == null) {
+
+        Timber.d("Credits: Showing credits")
+        val mainCreditList = creditMapFiltered[mainDepartment].orEmpty()
+
+        if (mainCreditList.isEmpty()) {
+            noCreditFound(personName = personName)
         } else {
-            creditMap.mapValues {
-                when (mediaTypeSelected) {
-                    RCore.string.text_movies -> it.value.filterIsInstance<CreditPersonItem.Movie>()
-                    RCore.string.text_tv_shows -> it.value.filterIsInstance<CreditPersonItem.TvShow>()
-                    else -> it.value
-                }
-            }
+            creditList(
+                creditPersonList = creditMapFiltered[mainDepartment].orEmpty(),
+                onItemClick = onItemClick
+            )
         }
+        creditMapFiltered.filter { it.key != mainDepartment }
+            .forEach { (department, creditList) ->
 
-        if (departmentSelectedRes == departmentAllRes) {
+                if (mainCreditList.isEmpty()) {
+                    noCreditFound(personName = personName)
+                } else {
 
-            Timber.d("Credits: Showing credits")
-            val mainCreditList = creditMapFiltered[mainDepartment].orEmpty()
-
-            if (mainCreditList.isEmpty()) {
-                NoCreditFound(personName = personName)
-            } else {
-                CreditList(
-                    creditPersonList = creditMapFiltered[mainDepartment].orEmpty(),
-                    onItemClick = onItemClick
-                )
-            }
-
-            Timber.d("Credits: Showed main deparment credits")
-            creditMapFiltered.filter { it.key != mainDepartment }
-                .forEach { (department, creditList) ->
-
-                    if (mainCreditList.isEmpty()) {
-                        NoCreditFound(personName = personName)
-                    } else {
+                    item {
 
                         Spacer(modifier = Modifier.height(Dimens.padding.medium))
 
@@ -150,70 +141,65 @@ fun Credits(
                         )
 
                         Spacer(modifier = Modifier.height(Dimens.padding.small))
-
-                        CreditList(
-                            creditPersonList = creditList,
-                            onItemClick = onItemClick
-                        )
                     }
+                    creditList(
+                        creditPersonList = creditList,
+                        onItemClick = onItemClick
+                    )
                 }
-
-            Timber.d("Credits: Showed main rest department credits")
-        } else {
-
-            val creditList = creditMapFiltered[departmentSelectedRes].orEmpty()
-
-            if (creditList.isEmpty()) {
-                NoCreditFound(personName = personName)
-            } else {
-                Timber.d("Credits: Showing credits")
-                CreditList(
-                    creditPersonList = creditMapFiltered[departmentSelectedRes].orEmpty(),
-                    onItemClick = onItemClick
-                )
             }
+    } else {
 
+        val creditList = creditMapFiltered[departmentSelected].orEmpty()
+
+        if (creditList.isEmpty()) {
+            noCreditFound(personName = personName)
+        } else {
+            Timber.d("Credits: Showing credits")
+            creditList(
+                creditPersonList = creditMapFiltered[departmentSelected].orEmpty(),
+                onItemClick = onItemClick
+            )
         }
+    }
 
+    item {
         Spacer(modifier = Modifier.height(Dimens.padding.medium))
     }
 }
 
-@Composable
-fun NoCreditFound(
+
+fun LazyListScope.noCreditFound(
     personName: String
 ) {
-    Text(
-        modifier = Modifier.padding(
-            horizontal = Dimens.padding.horizontal,
-            vertical = Dimens.padding.big
-        ),
-        text = stringResource(id = R.string.text_no_credits, personName)
-    )
+    item {
+        Text(
+            modifier = Modifier.padding(
+                horizontal = Dimens.padding.horizontal,
+                vertical = Dimens.padding.big
+            ),
+            text = stringResource(id = R.string.text_no_credits, personName)
+        )
+    }
 }
 
 private fun filterCreditsByMediaType(
     creditMap: Map<String, List<CreditPersonItem>>,
-    mediaTypeRes: Int
+    mediaTypeRes: Int?
 ): Map<String, List<CreditPersonItem>> {
 
     val mediaType = when (mediaTypeRes) {
         RCore.string.text_movies -> CreditPersonItem.Movie::class.java
         RCore.string.text_tv_shows -> CreditPersonItem.TvShow::class.java
-        else -> null
+        else -> return creditMap
     }
 
     return creditMap.mapValues {
-        if (mediaType == null) {
-            it.value
-        } else {
-            it.value.filterIsInstance(mediaType)
-        }
+        it.value.filterIsInstance(mediaType)
     }
 }
 
-@Composable
-private fun CreditList(
+private fun LazyListScope.creditList(
     creditPersonList: List<CreditPersonItem>,
     onItemClick: (id: Long, mediaType: MediaType) -> Unit
 ) {
@@ -222,57 +208,60 @@ private fun CreditList(
         return
     }
 
-    Column(modifier = Modifier.fillMaxWidth()) {
-
+    item {
         Spacer(modifier = Modifier.height(Dimens.padding.medium))
+    }
 
-        creditPersonList.groupBy { it.releaseDate?.year }.forEach { (year, creditList) ->
+    creditPersonList.groupBy { it.releaseDate?.year }.forEach { (_, creditList) ->
 
+        item {
             Divider()
+        }
 
-            creditList.forEach { credit ->
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            when (credit) {
-                                is CreditPersonItem.Movie -> MediaType.MOVIE
-                                is CreditPersonItem.TvShow -> MediaType.TV_SHOW
-                            }.let { mediaType ->
-                                onItemClick(credit.id, mediaType)
-                            }
+        items(creditList) { credit ->
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        when (credit) {
+                            is CreditPersonItem.Movie -> MediaType.MOVIE
+                            is CreditPersonItem.TvShow -> MediaType.TV_SHOW
+                        }.let { mediaType ->
+                            onItemClick(credit.id, mediaType)
                         }
-                        .padding(
-                            horizontal = Dimens.padding.horizontal,
-                            vertical = Dimens.padding.medium
-                        )
-                ) {
-                    Text(
-                        text = credit.releaseDate?.year?.toString() ?: "------"
+                    }
+                    .padding(
+                        horizontal = Dimens.padding.horizontal,
+                        vertical = Dimens.padding.medium
                     )
-                    Spacer(modifier = Modifier.width(Dimens.padding.medium))
-                    Text(
-                        buildAnnotatedString {
+            ) {
+                Text(
+                    text = credit.releaseDate?.year?.toString() ?: "------"
+                )
+                Spacer(modifier = Modifier.width(Dimens.padding.medium))
+                Text(
+                    buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(fontWeight = FontWeight.Bold)
+                        ) {
+                            append(credit.title)
+                        }
+                        if (credit.role.isNotBlank()) {
+                            append(" ")
                             withStyle(
-                                style = SpanStyle(fontWeight = FontWeight.Bold)
+                                style = SpanStyle(fontWeight = FontWeight.Light)
                             ) {
-                                append(credit.title)
+                                append(stringResource(id = R.string.text_as))
                             }
-                            if (credit.role.isNotBlank()) {
-                                append(" ")
-                                withStyle(
-                                    style = SpanStyle(fontWeight = FontWeight.Light)
-                                ) {
-                                    append(stringResource(id = R.string.text_as))
-                                }
-                                append(" ")
-                                append(credit.role)
-                            }
+                            append(" ")
+                            append(credit.role)
                         }
-                    )
-                }
+                    }
+                )
             }
         }
+    }
+    item {
         Divider()
     }
 }

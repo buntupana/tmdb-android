@@ -158,13 +158,13 @@ fun OutlinedText(
 fun HoursMinutesText(
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
-    time: Int
+    time: Long
 ) {
 
     val hours = time / 60
     val minutes = time - (hours * 60)
 
-    val timeText = if (hours == 0) {
+    val timeText = if (hours == 0L) {
         stringResource(id = R.string.text_minutes, minutes)
     } else {
         stringResource(id = R.string.text_hours_minutes, hours, minutes)
@@ -353,7 +353,7 @@ fun ExpandableText(
 fun TextWithIcon(
     modifier: Modifier = Modifier,
     text: String,
-    clickable: (() -> Unit)? = null,
+    clickable: (() -> Unit) = {},
     @DrawableRes iconRes: Int
 ) {
 

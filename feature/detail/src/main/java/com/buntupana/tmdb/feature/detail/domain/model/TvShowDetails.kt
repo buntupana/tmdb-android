@@ -7,11 +7,15 @@ data class TvShowDetails(
     val title: String,
     val posterUrl: String,
     val backdropUrl: String,
+    val trailerUrl: String,
     val overview: String,
     val tagLine: String,
     val releaseDate: LocalDate?,
     val userScore: Int,
-    val runTime: Int,
+    val runTime: Long,
     val genreList: List<String>,
-    val creatorList: List<CrewPersonItem>
+    val creatorList: List<CrewPersonItem>,
+    val certificationList: List<Certification>,
+    val videoList: List<Video>,
+    val credits: Credits
 )

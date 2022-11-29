@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,11 +18,13 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
@@ -46,7 +49,10 @@ import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.ramcosta.composedestinations.annotation.Destination
+import org.threeten.bp.LocalDate
+import com.buntupana.tmdb.core.R as RCore
 
 @Destination(
     navArgsDelegate = MediaDetailNavArgs::class
@@ -85,34 +91,33 @@ fun MediaDetailContent(
 
     if (mediaDetails != null) {
         Column(
-            Modifier.verticalScroll(scrollState)
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .background(backgroundColor)
         ) {
 
-            Column(
-                Modifier.background(backgroundColor)
-            ) {
-
-                Header(
-                    mediaDetails,
-                    backgroundColor
-                ) { palette ->
-                    palette.dominantSwatch?.rgb?.let { dominantColor ->
-                        if (Color(dominantColor) != backgroundColor) {
-                            backgroundColor = Color(dominantColor)
-                            textColor = backgroundColor.getOnBackgroundColor()
-                        }
+            Header(
+                mediaDetails,
+                backgroundColor
+            ) { palette ->
+                palette.dominantSwatch?.rgb?.let { dominantColor ->
+                    if (Color(dominantColor) != backgroundColor) {
+                        backgroundColor = Color(dominantColor)
+                        textColor = backgroundColor.getOnBackgroundColor()
                     }
                 }
-
-                MainInfo(
-                    mediaDetails = mediaDetails,
-                    backgroundColor = backgroundColor,
-                    textColor = textColor,
-                    onItemClick = onPersonClick
-                )
             }
 
+            MainInfo(
+                mediaDetails = mediaDetails,
+                backgroundColor = backgroundColor,
+                textColor = textColor,
+                onItemClick = onPersonClick
+            )
+
             CastHorizontalList(
+                modifier = Modifier.background(MaterialTheme.colorScheme.background),
                 mediaDetails = mediaDetails,
                 onItemClick = onPersonClick
             )
@@ -126,6 +131,11 @@ fun Header(
     backgroundColor: Color,
     setPalette: (palette: Palette) -> Unit
 ) {
+
+    // If there is no image info, the header won't be displayed
+    if (mediaDetails.backdropUrl.isBlank() && mediaDetails.posterUrl.isBlank()) {
+        return
+    }
 
     Box(
         Modifier
@@ -166,12 +176,24 @@ fun Header(
             }
         }
 
+        // hiding poster image when there is no info
+        if (mediaDetails.posterUrl.isBlank()) {
+            return
+        }
+
+        // if no backdrop image, the poster image will be shown in the center
+        val posterArrangement =
+            if (mediaDetails.backdropUrl.isBlank()) Arrangement.Center else Arrangement.Start
+
         Row(
             modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = posterArrangement
         ) {
 
-            Spacer(modifier = Modifier.width(Dimens.padding.medium))
+            if (mediaDetails.backdropUrl.isNotBlank()) {
+                Spacer(modifier = Modifier.width(Dimens.padding.medium))
+            }
             AsyncImage(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -205,6 +227,8 @@ fun MainInfo(
     textColor: Color
 ) {
 
+    val uriHandler = LocalUriHandler.current
+
     Column(
         modifier = Modifier
             .background(backgroundColor)
@@ -231,7 +255,11 @@ fun MainInfo(
                 fontSize = 24.sp,
                 textAlign = TextAlign.Center
             )
+
             mediaDetails.releaseDate?.let { releaseDate ->
+
+                Spacer(modifier = Modifier.width(Dimens.padding.small))
+
                 Text(
                     modifier = Modifier.alpha(0.7f),
                     text = "(${releaseDate.year})",
@@ -263,41 +291,43 @@ fun MainInfo(
                 )
                 Spacer(modifier = Modifier.width(Dimens.padding.small))
                 Text(
-                    text = "User Score",
+                    text = stringResource(id = RCore.string.text_user_score),
                     color = textColor,
                     fontWeight = FontWeight(700)
                 )
             }
-            Image(
-                modifier = Modifier
-                    .size(height = 34.dp, width = 1.dp)
-                    .alpha(0.5f),
-                painter = ColorPainter(textColor),
-                contentDescription = null
-            )
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(Dimens.padding.small)
-                    .clickable {
-
-                    },
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+            if (mediaDetails.trailerUrl.isNotBlank()) {
                 Image(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(id = R.drawable.ic_play),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(textColor)
+                    modifier = Modifier
+                        .size(height = 34.dp, width = 1.dp)
+                        .alpha(0.5f),
+                    painter = ColorPainter(textColor),
+                    contentDescription = null
                 )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    text = stringResource(R.string.text_play_trailer),
-                    color = textColor,
-                    fontWeight = FontWeight(400),
-                )
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(Dimens.padding.small)
+                        .clickable {
+                            uriHandler.openUri(mediaDetails.trailerUrl)
+                        },
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Image(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(id = R.drawable.ic_play),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(textColor)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        text = stringResource(R.string.text_play_trailer),
+                        color = textColor,
+                        fontWeight = FontWeight(400),
+                    )
+                }
             }
         }
 
@@ -317,95 +347,117 @@ fun MainInfo(
             ) {
 
                 OutlinedText(
+                    modifier = Modifier.padding(horizontal = Dimens.padding.tiny),
                     text = mediaDetails.ageCertification,
                     color = textColor
                 )
 
-                Spacer(Modifier.width(Dimens.padding.small))
+                var isReleaseDateAndCountryCodeInfo = false
                 if (mediaDetails is MediaDetails.Movie) {
-                    Text(
-                        text = "${mediaDetails.localReleaseDate.orEmpty()} (${mediaDetails.localCountryCodeRelease})",
-                        color = textColor
-                    )
-                    Spacer(Modifier.width(Dimens.padding.small))
+
+                    Row {
+                        if (mediaDetails.localReleaseDate.orEmpty().isNotBlank()) {
+                            Text(
+                                modifier = Modifier.padding(horizontal = Dimens.padding.tiny),
+                                text = mediaDetails.localReleaseDate.orEmpty(),
+                                color = textColor
+                            )
+                            isReleaseDateAndCountryCodeInfo = true
+                        }
+                        if (mediaDetails.localCountryCodeRelease.isNotBlank()) {
+                            Text(
+                                modifier = Modifier.padding(horizontal = Dimens.padding.tiny),
+                                text = "(${mediaDetails.localCountryCodeRelease})",
+                                color = textColor
+                            )
+                            isReleaseDateAndCountryCodeInfo = true
+                        }
+                    }
                 }
 
-                DivisorCircle(
-                    padding = 0.dp,
-                    color = textColor
-                )
+                if (
+                    (mediaDetails.ageCertification.isNotBlank() || isReleaseDateAndCountryCodeInfo) &&
+                    mediaDetails.runTime != 0L
+                ) {
+                    DivisorCircle(
+                        color = textColor
+                    )
+                }
 
-                Spacer(Modifier.width(Dimens.padding.small))
-                HoursMinutesText(
-                    time = mediaDetails.runTime,
-                    color = textColor
-                )
+                if (mediaDetails.runTime != 0L) {
+                    HoursMinutesText(
+                        modifier = Modifier.padding(horizontal = Dimens.padding.tiny),
+                        time = mediaDetails.runTime,
+                        color = textColor
+                    )
+                }
             }
             Text(
                 text = mediaDetails.genreList.joinToString(", "),
                 color = textColor
             )
         }
+    }
 
-        // Tagline and overview
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = Dimens.padding.medium, vertical = Dimens.padding.medium)
-        ) {
+    // Tagline and overview
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = Dimens.padding.medium, vertical = Dimens.padding.medium)
+    ) {
 
-            if (mediaDetails.tagLine.isNotBlank()) {
-                Text(
-                    modifier = Modifier.alpha(0.7f),
-                    text = mediaDetails.tagLine,
-                    color = textColor,
-                    fontStyle = FontStyle.Italic,
-                )
-                Spacer(modifier = Modifier.height(Dimens.padding.small))
-            }
-            if (mediaDetails.overview.isNotBlank()) {
-                Text(
-                    text = stringResource(id = R.string.text_overview),
-                    color = textColor,
-                    fontWeight = FontWeight(600),
-                    fontSize = 18.sp
-                )
-                Spacer(modifier = Modifier.height(Dimens.padding.small))
-                Text(
-                    text = mediaDetails.overview,
-                    color = textColor
-                )
-            }
+        if (mediaDetails.tagLine.isNotBlank()) {
+            Text(
+                modifier = Modifier.alpha(0.7f),
+                text = mediaDetails.tagLine,
+                color = textColor,
+                fontStyle = FontStyle.Italic,
+                fontSize = Dimens.textSize.title
+            )
+            Spacer(modifier = Modifier.height(Dimens.padding.small))
+        }
+        if (mediaDetails.overview.isNotBlank()) {
+            Text(
+                text = stringResource(id = R.string.text_overview),
+                color = textColor,
+                fontWeight = FontWeight(600),
+                fontSize = 18.sp
+            )
+            Spacer(modifier = Modifier.height(Dimens.padding.small))
+            Text(
+                text = mediaDetails.overview,
+                color = textColor
+            )
+        }
 
-            // Creators
-            if (mediaDetails.creatorList.isNotEmpty()) {
+        // Creators
+        if (mediaDetails.creatorList.isNotEmpty()) {
 
-                Spacer(modifier = Modifier.height(Dimens.padding.medium))
+            Spacer(modifier = Modifier.height(Dimens.padding.medium))
 
-                NestedVerticalLazyGrid(
+            NestedVerticalLazyGrid(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                columns = 2,
+                columnSeparation = 8.dp,
+                itemList = mediaDetails.creatorList
+            ) { item ->
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    columns = 2,
-                    columnSeparation = 8.dp,
-                    itemList = mediaDetails.creatorList
-                ) { item ->
-                    Column(
-                        modifier = Modifier
-                            .padding(vertical = Dimens.padding.small)
-                            .clickable {
-                                onItemClick(item.id)
-                            }
-                    ) {
-                        Text(
-                            text = item.name,
-                            color = textColor,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = item.job.ifBlank { stringResource(R.string.text_creator) },
-                            color = textColor
-                        )
-                    }
+                        .padding(vertical = Dimens.padding.small)
+                        .clickable {
+                            onItemClick(item.id)
+                        }
+                ) {
+                    Text(
+                        text = item.name,
+                        color = textColor,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = item.job.ifBlank { stringResource(R.string.text_creator) },
+                        color = textColor
+                    )
                 }
             }
         }
@@ -414,6 +466,7 @@ fun MainInfo(
 
 @Composable
 fun CastHorizontalList(
+    modifier: Modifier,
     mediaDetails: MediaDetails,
     onItemClick: (personId: Long) -> Unit
 ) {
@@ -422,45 +475,47 @@ fun CastHorizontalList(
 
     if (mediaDetails.castList.isNotEmpty()) {
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Column(modifier = modifier) {
 
-        val castTitle = when (mediaDetails) {
-            is MediaDetails.Movie -> stringResource(id = R.string.text_cast_movie)
-            is MediaDetails.TvShow -> stringResource(id = R.string.text_cast_tv_show)
-        }
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            modifier = Modifier.padding(horizontal = Dimens.padding.medium),
-            text = castTitle,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyRow(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            item {
-                Spacer(modifier = Modifier.width(Dimens.padding.small))
+            val castTitle = when (mediaDetails) {
+                is MediaDetails.Movie -> stringResource(id = R.string.text_cast_movie)
+                is MediaDetails.TvShow -> stringResource(id = R.string.text_cast_tv_show)
             }
-            items(mediaDetails.castList.take(castNumber)) { item: CastPersonItem ->
-                Spacer(modifier = Modifier.width(Dimens.padding.small))
-                PersonItemVertical(
-                    personId = item.id,
-                    name = item.name,
-                    profileUrl = item.profileUrl,
-                    character = item.character,
-                    onItemClick = onItemClick
-                )
-                Spacer(modifier = Modifier.width(Dimens.padding.small))
-            }
-            item {
-                Spacer(modifier = Modifier.width(Dimens.padding.small))
-            }
-        }
 
-        Spacer(modifier = Modifier.padding(Dimens.padding.medium))
+            Text(
+                modifier = Modifier.padding(horizontal = Dimens.padding.medium),
+                text = castTitle,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            LazyRow(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                item {
+                    Spacer(modifier = Modifier.width(Dimens.padding.small))
+                }
+                items(mediaDetails.castList.take(castNumber)) { item: CastPersonItem ->
+                    Spacer(modifier = Modifier.width(Dimens.padding.small))
+                    PersonItemVertical(
+                        personId = item.id,
+                        name = item.name,
+                        profileUrl = item.profileUrl,
+                        character = item.character,
+                        onItemClick = onItemClick
+                    )
+                    Spacer(modifier = Modifier.width(Dimens.padding.small))
+                }
+                item {
+                    Spacer(modifier = Modifier.width(Dimens.padding.small))
+                }
+            }
+
+            Spacer(modifier = Modifier.padding(Dimens.padding.medium))
 
 //        Text(
 //            modifier = Modifier.padding(horizontal = Dimens.padding.medium),
@@ -470,25 +525,36 @@ fun CastHorizontalList(
 //        )
 //
 //        Spacer(modifier = Modifier.height(16.dp))
+        }
     }
 }
 
-//@Preview
-//@Composable
-//fun MediaDetailScreenPreview() {
-//
-//    val mediaDetails = MediaDetailsFull.MovieDetails(
-//        0L,
-//        "Thor: Love and Thunder",
-//        "",
-//        "",
-//        "After his retirement is interrupted by Gorr the God Butcher, a galactic killer who seeks the extinction of the gods, Thor enlists the help of King Valkyrie, Korg, and ex-girlfriend Jane Foster, who now inexplicably wields Mjolnir as the Mighty Thor. Together they embark upon a harrowing cosmic adventure to uncover the mystery of the God Butcher’s vengeance and stop him before it’s too late.",
-//        "The one is not the only.",
-//        LocalDate.now(),
-//        67,
-//        120,
-//        listOf("Action", "Adventure", "Fantasy"),
-//    )
-//
-//    MediaDetailContent(mediaDetails = mediaDetails)
-//}
+@Preview
+@Composable
+fun MediaDetailScreenPreview() {
+
+    AndroidThreeTen.init(LocalContext.current)
+    val mediaDetails = MediaDetails.Movie(
+        0L,
+        "Thor: Love and Thunder",
+        "",
+        "",
+        "",
+        "After his retirement is interrupted by Gorr the God Butcher, a galactic killer who seeks the extinction of the gods, Thor enlists the help of King Valkyrie, Korg, and ex-girlfriend Jane Foster, who now inexplicably wields Mjolnir as the Mighty Thor. Together they embark upon a harrowing cosmic adventure to uncover the mystery of the God Butcher’s vengeance and stop him before it’s too late.",
+        "The one is not the only.",
+        LocalDate.now(),
+        "10-11-20",
+        120,
+        120,
+        listOf("Action", "Adventure", "Fantasy"),
+        "18",
+        emptyList(),
+        emptyList(),
+        emptyList(),
+        "ES"
+    )
+
+    MediaDetailContent(mediaDetails = mediaDetails) {
+
+    }
+}

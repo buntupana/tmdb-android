@@ -55,8 +55,16 @@ fun LocalDate.toLocalFormat(): String {
     return this.format(dateFormatter)
 }
 
-fun String?.ifNull(ifNull: () -> String): String {
-    return this ?: ifNull()
+fun String?.ifNull(block: () -> String): String {
+    return this ?: block()
+}
+
+fun String?.ifNullOrBlank(block: () -> String): String {
+    return if (this.isNullOrBlank()) {
+        block()
+    } else {
+        this
+    }
 }
 
 fun Modifier.clickableTextPadding(): Modifier {

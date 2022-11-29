@@ -49,7 +49,9 @@ fun PersonDetailsRaw.toModel(): PersonDetails {
         deathDateLocal,
         age,
         placeOfBirth.orEmpty(),
-        biography.orEmpty()
+        biography.orEmpty(),
+        externalLinks?.toModel().orEmpty(),
+        combinedCredits?.toModel().orEmpty()
     )
 }
 

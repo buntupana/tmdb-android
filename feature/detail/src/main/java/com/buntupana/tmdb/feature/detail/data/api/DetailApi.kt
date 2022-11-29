@@ -7,12 +7,12 @@ import retrofit2.http.Path
 
 interface DetailApi {
 
-    @GET("movie/{movieId}")
+    @GET("movie/{movieId}?append_to_response=release_dates,videos,credits")
     suspend fun getMovieDetails(
         @Path("movieId") movieId: Long
     ): Response<MovieDetailsRaw>
 
-    @GET("tv/{tvShowId}")
+    @GET("tv/{tvShowId}?append_to_response=content_ratings,videos,credits")
     suspend fun getTvShowDetails(
         @Path("tvShowId") tvShowId: Long
     ): Response<TvShowDetailsRaw>
@@ -37,7 +37,7 @@ interface DetailApi {
         @Path("tvShowId") movieId: Long
     ): Response<CreditsRaw>
 
-    @GET("person/{personId}")
+    @GET("person/{personId}?append_to_response=external_ids,combined_credits")
     suspend fun getPersonDetails(
         @Path("personId") personId: Long
     ): Response<PersonDetailsRaw>

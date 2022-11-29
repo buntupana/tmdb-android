@@ -15,5 +15,7 @@ data class PersonDetails(
     val deathDate: LocalDate?,
     val age: Int,
     val placeOfBirth: String,
-    val biography: String
+    val biography: String,
+    val externalLinkList: List<ExternalLink>,
+    val filmography: List<CreditPersonItem>
 )

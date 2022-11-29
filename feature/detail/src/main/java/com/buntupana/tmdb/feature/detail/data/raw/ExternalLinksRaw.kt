@@ -3,7 +3,6 @@ package com.buntupana.tmdb.feature.detail.data.raw
 import com.squareup.moshi.Json
 
 data class ExternalLinksRaw(
-    val id: Long,
     @field:Json(name = "facebook_id")
     val facebookId: String?,
     @field:Json(name = "freebase_id")

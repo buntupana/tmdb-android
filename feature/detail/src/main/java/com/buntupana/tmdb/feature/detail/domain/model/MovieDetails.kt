@@ -7,11 +7,15 @@ data class MovieDetails(
     val title: String,
     val posterUrl: String,
     val backdropUrl: String,
+    val trailerUrl: String,
     val overview: String,
     val tagLine: String,
     val releaseDate: LocalDate?,
     val userScore: Int,
-    val runTime: Int,
+    val runTime: Long,
     val genreList: List<String>,
-    val productionCountryCodeList: List<String>
+    val productionCountryCodeList: List<String>,
+    val releaseDateList: List<ReleaseDate>,
+    val videoList: List<Video>,
+    val credits: Credits
 )

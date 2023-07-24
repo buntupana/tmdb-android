@@ -24,4 +24,6 @@
     <string name="text_gender_no_binary">No-Binary</string>
 
     <string name="text_read_more">Read More</string>
+
+    <string name="text_user_score">User Score</string>
 </resources>

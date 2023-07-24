@@ -6,8 +6,6 @@ import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.feature.detail.domain.model.CrewPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 import javax.inject.Inject
@@ -18,43 +16,24 @@ class GetMovieDetailsUseCase @Inject constructor(
 
     override suspend fun getSource(params: Long): Resource<MediaDetails.Movie> {
 
-        return coroutineScope {
-            val movieDetailsDef = async { detailRepository.getMovieDetails(params) }
-            val movieReleaseListDef = async { detailRepository.getMovieReleaseDates(params) }
-            val movieCreditsDef = async { detailRepository.getMovieCredits(params) }
-
-            val movieDetails = movieDetailsDef.await()
-            if (movieDetails is Resource.Error) {
-                return@coroutineScope Resource.Error<MediaDetails.Movie>(movieDetails.message)
-            }
-            val movieReleaseList = movieReleaseListDef.await()
-            if (movieReleaseList is Resource.Error) {
-                return@coroutineScope Resource.Error<MediaDetails.Movie>(movieReleaseList.message)
-            }
-            val movieCredits = movieCreditsDef.await()
-            if (movieCredits is Resource.Error) {
-                return@coroutineScope Resource.Error<MediaDetails.Movie>(movieCredits.message)
-            }
-
-            if (movieDetails is Resource.Success && movieReleaseList is Resource.Success && movieCredits is Resource.Success) {
+        return when (val resource = detailRepository.getMovieDetails(params)) {
+            is Resource.Error -> Resource.Error(resource.message)
+            is Resource.Success -> {
 
                 // Checking if there is a release and certification for default locale
-                var releaseAndCertification =
-                    movieReleaseList.data.firstOrNull { it.countryCode == Locale.current.region }
-
                 // if not we can try to get the release and certification from the production country
-                if (releaseAndCertification == null) {
-                    releaseAndCertification =
-                        movieReleaseList.data.firstOrNull {
-                            it.countryCode == movieDetails.data.productionCountryCodeList.firstOrNull()
-                        }
-                }
+                val releaseAndCertification =
+                    resource.data.releaseDateList.firstOrNull {
+                        it.countryCode == Locale.current.region
+                    } ?: resource.data.releaseDateList.firstOrNull {
+                        it.countryCode == resource.data.productionCountryCodeList.firstOrNull()
+                    } ?: resource.data.releaseDateList.firstOrNull()
 
                 var certification = releaseAndCertification?.certification.orEmpty()
 
                 if (certification.isBlank()) {
                     certification =
-                        movieReleaseList.data.firstOrNull { it.countryCode == "US" }?.certification.orEmpty()
+                        resource.data.releaseDateList.firstOrNull { it.countryCode == "US" }?.certification.orEmpty()
                 }
 
                 val localReleaseDate = releaseAndCertification?.releaseDate
@@ -66,38 +45,37 @@ class GetMovieDetailsUseCase @Inject constructor(
                     listOf("Director", "Writer", "Characters", "Screenplay", "Story", "Novel")
 
                 val creatorList =
-                    movieCredits.data.crewList.filter { creatorJobList.contains(it.job) }
+                    resource.data.credits.crewList.filter { creatorJobList.contains(it.job) }
                         .groupBy { it.id }.map {
-                        CrewPersonItem(
-                            it.key,
-                            it.value.firstOrNull()?.name.orEmpty(),
-                            it.value.firstOrNull()?.profileUrl.orEmpty(),
-                            it.value.joinToString(", ") { crewItem -> crewItem.job }
-                        )
-                    }
+                            CrewPersonItem(
+                                it.key,
+                                it.value.firstOrNull()?.name.orEmpty(),
+                                it.value.firstOrNull()?.profileUrl.orEmpty(),
+                                it.value.joinToString(", ") { crewItem -> crewItem.job }
+                            )
+                        }
 
                 Resource.Success(
                     MediaDetails.Movie(
-                        movieDetails.data.id,
-                        movieDetails.data.title,
-                        movieDetails.data.posterUrl,
-                        movieDetails.data.backdropUrl,
-                        movieDetails.data.overview,
-                        movieDetails.data.tagLine,
-                        movieDetails.data.releaseDate,
+                        resource.data.id,
+                        resource.data.title,
+                        resource.data.posterUrl,
+                        resource.data.backdropUrl,
+                        resource.data.trailerUrl,
+                        resource.data.overview,
+                        resource.data.tagLine,
+                        resource.data.releaseDate,
                         localReleaseDate?.format(dateFormatter),
-                        movieDetails.data.userScore,
-                        movieDetails.data.runTime,
-                        movieDetails.data.genreList,
+                        resource.data.userScore,
+                        resource.data.runTime,
+                        resource.data.genreList,
                         certification,
                         creatorList,
-                        movieCredits.data.castList,
-                        movieCredits.data.crewList,
+                        resource.data.credits.castList,
+                        resource.data.credits.crewList,
                         releaseAndCertification?.countryCode.orEmpty()
                     )
                 )
-            } else {
-                Resource.Error("")
             }
         }
     }

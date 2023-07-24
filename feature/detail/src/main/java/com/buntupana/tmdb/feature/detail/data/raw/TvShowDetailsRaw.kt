@@ -18,7 +18,7 @@ data class TvShowDetailsRaw(
     @field:Json(name = "created_by")
     val createdBy: List<CreatedBy>?,
     @field:Json(name = "episode_run_time")
-    val episodeRunTime: List<Int>?,
+    val episodeRunTime: List<Long>?,
     val homepage: String?,
     val inProduction: Boolean?,
     val languages: List<String>?,
@@ -30,9 +30,9 @@ data class TvShowDetailsRaw(
     @field:Json(name = "next_episode_to_air")
     val nextEpisodeToAir: NextEpisodeToAir?,
     @field:Json(name = "number_of_episodes")
-    val numberOfEpisodes: Int?,
+    val numberOfEpisodes: Long?,
     @field:Json(name = "number_of_seasons")
-    val numberOfSeasons: Int?,
+    val numberOfSeasons: Long?,
     @field:Json(name = "origin_country")
     val originCountry: List<String>?,
     @field:Json(name = "original_language")
@@ -52,5 +52,9 @@ data class TvShowDetailsRaw(
     @field:Json(name = "vote_average")
     val voteAverage: Double?,
     @field:Json(name = "vote_count")
-    val voteCount: Int?
+    val voteCount: Long?,
+    val videos: MediaVideosRaw?,
+    @field:Json(name = "content_ratings")
+    val contentRatings: ContentRatingsRaw?,
+    val credits: CreditsRaw?
 )

@@ -2,6 +2,7 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.core.data.api.CoreApi
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
+import com.buntupana.tmdb.feature.detail.domain.model.Credits
 import com.buntupana.tmdb.feature.detail.domain.model.CrewPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
 import org.threeten.bp.LocalDate
@@ -15,11 +16,18 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
         null
     }
 
+    val posterUrl = if (posterPath.isNullOrBlank()) "" else CoreApi.BASE_URL_POSTER + posterPath
+    val backdropUrl =
+        if (backdropPath.isNullOrBlank()) "" else CoreApi.BASE_URL_BACKDROP + backdropPath
+
+    val videoList = videos?.toModel().orEmpty()
+
     return TvShowDetails(
         id,
         name.orEmpty(),
-        CoreApi.BASE_URL_POSTER + posterPath.orEmpty(),
-        CoreApi.BASE_URL_BACKDROP + backdropPath.orEmpty(),
+        posterUrl,
+        backdropUrl,
+        getVideoTrailerUrl(videoList),
         overview.orEmpty(),
         tagline.orEmpty(),
         releaseLocalDate,
@@ -33,6 +41,9 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
                 CoreApi.BASE_URL_PROFILE + it.profilePath,
                 ""
             )
-        }.orEmpty()
+        }.orEmpty(),
+        contentRatings?.results?.map { it.toModel() }.orEmpty(),
+        videoList,
+        credits?.toModel() ?: Credits(emptyList(), emptyList())
     )
 }

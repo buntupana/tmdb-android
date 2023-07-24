@@ -9,7 +9,7 @@ data class MovieDetailsRaw(
     val backdropPath: String?,
     @field:Json(name = "belongs_to_collection")
     val belongsToCollection: BelongsToCollection,
-    val budget: Int,
+    val budget: Long,
     val genres: List<Genre>,
     val homepage: String,
     @field:Json(name = "imdb_id")
@@ -28,8 +28,8 @@ data class MovieDetailsRaw(
     val productionCountries: List<ProductionCountry>,
     @field:Json(name = "release_date")
     val releaseDate: String,
-    val revenue: Int,
-    val runtime: Int,
+    val revenue: Long,
+    val runtime: Long,
     @field:Json(name = "spoken_languages")
     val spokenLanguages: List<SpokenLanguage>,
     val status: String,
@@ -38,6 +38,10 @@ data class MovieDetailsRaw(
     val video: Boolean,
     @field:Json(name = "vote_average")
     val voteAverage: Double,
+    val videos: MediaVideosRaw?,
+    @field:Json(name = "release_dates")
+    val releaseDates: ReleaseDatesRaw?,
     @field:Json(name = "vote_count")
-    val voteCount: Int
+    val voteCount: Long,
+    val credits: CreditsRaw?
 )

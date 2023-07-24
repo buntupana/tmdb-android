@@ -22,5 +22,9 @@ data class PersonDetailsRaw(
     val placeOfBirth: String?,
     val popularity: Double,
     @field:Json(name = "profile_path")
-    val profilePath: String?
+    val profilePath: String?,
+    @field:Json(name = "combined_credits")
+    val combinedCredits: FilmographyRaw?,
+    @field:Json(name = "external_ids")
+    val externalLinks: ExternalLinksRaw?
 )

@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.search.presentation
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScrollableTabRow
@@ -39,7 +42,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.composables.OutlinedText
@@ -50,10 +52,7 @@ import com.buntupana.tmdb.core.presentation.theme.Primary
 import com.buntupana.tmdb.core.presentation.theme.Secondary
 import com.buntupana.tmdb.core.presentation.theme.Tertiary
 import com.buntupana.tmdb.feature.search.R
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
-import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.launch
@@ -363,7 +362,7 @@ fun SuggestionItem(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchResults(
     modifier: Modifier = Modifier,
@@ -374,7 +373,7 @@ fun SearchResults(
     Column(modifier = modifier) {
 
         val coroutineScope = rememberCoroutineScope()
-        val pagerState = rememberPagerState()
+        val pagerState = rememberPagerState { searchState.resultCountList.size }
 
         // Adding a tab bar with result titles
         ScrollableTabRow(
@@ -410,14 +409,13 @@ fun SearchResults(
         // Pager with all results pages
         HorizontalPager(
             modifier = Modifier.fillMaxSize(),
-            count = searchState.resultCountList.size,
             state = pagerState
         ) { currentPage ->
 
             val itemHeight: Dp
             val noResultMessageStringRes: Int
             // Getting Result information for each page of the pager
-            val items = when (searchState.resultCountList[currentPage].titleResId) {
+            val pagingItems = when (searchState.resultCountList[currentPage].titleResId) {
                 RCore.string.text_movies -> {
                     itemHeight = 120.dp
                     noResultMessageStringRes =
@@ -443,12 +441,12 @@ fun SearchResults(
                 }
             }
 
-            if (items != null) {
+            if (pagingItems != null) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                 ) {
 
-                    when (items.loadState.refresh) {
+                    when (pagingItems.loadState.refresh) {
                         LoadState.Loading -> {
                             item {
                                 Column(
@@ -466,7 +464,7 @@ fun SearchResults(
                             // TODO: Error to show when first page of paging fails
                         }
                         is LoadState.NotLoading -> {
-                            if (items.itemCount == 0) {
+                            if (pagingItems.itemCount == 0) {
                                 item {
                                     Box(
                                         modifier = Modifier
@@ -483,7 +481,8 @@ fun SearchResults(
                                 }
 
                                 // Drawing result items
-                                items(items) { item ->
+                                items(pagingItems.itemCount) { index ->
+                                    val item = pagingItems[index]
                                     item?.let {
                                         Spacer(modifier = Modifier.height(8.dp))
                                         MediaItemHorizontal(
@@ -501,7 +500,7 @@ fun SearchResults(
                                 }
 
                                 // Appending result strategy
-                                when (items.loadState.append) {
+                                when (pagingItems.loadState.append) {
                                     LoadState.Loading -> {
                                         item {
                                             Column(

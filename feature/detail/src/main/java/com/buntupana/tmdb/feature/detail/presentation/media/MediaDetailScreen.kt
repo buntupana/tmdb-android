@@ -1,13 +1,37 @@
 package com.buntupana.tmdb.feature.detail.presentation.media
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -44,10 +68,9 @@ import com.buntupana.tmdb.feature.detail.R
 import com.buntupana.tmdb.feature.detail.domain.model.CastPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
-import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
-import com.google.accompanist.flowlayout.FlowMainAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.SizeMode
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.fade
+import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.ramcosta.composedestinations.annotation.Destination
@@ -64,6 +87,7 @@ fun MediaDetailScreen(
 ) {
     MediaDetailContent(
         mediaDetails = viewModel.state.mediaDetails,
+        isLoading = viewModel.state.isLoading,
         onPersonClick = { personId ->
             detailNavigator.navigateToPerson(personId)
         }
@@ -73,6 +97,7 @@ fun MediaDetailScreen(
 @Composable
 fun MediaDetailContent(
     mediaDetails: MediaDetails?,
+    isLoading: Boolean,
     onPersonClick: (personId: Long) -> Unit
 ) {
 
@@ -98,6 +123,7 @@ fun MediaDetailContent(
         ) {
 
             Header(
+                isLoading,
                 mediaDetails,
                 backgroundColor
             ) { palette ->
@@ -110,6 +136,7 @@ fun MediaDetailContent(
             }
 
             MainInfo(
+                isLoading = isLoading,
                 mediaDetails = mediaDetails,
                 backgroundColor = backgroundColor,
                 textColor = textColor,
@@ -127,6 +154,7 @@ fun MediaDetailContent(
 
 @Composable
 fun Header(
+    isLoading: Boolean,
     mediaDetails: MediaDetails,
     backgroundColor: Color,
     setPalette: (palette: Palette) -> Unit
@@ -155,7 +183,12 @@ fun Header(
             Box {
 
                 AsyncImage(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .placeholder(
+                            visible = isLoading,
+                            highlight = PlaceholderHighlight.fade()
+                        ),
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(mediaDetails.backdropUrl)
                         .crossfade(true)
@@ -177,7 +210,7 @@ fun Header(
         }
 
         // hiding poster image when there is no info
-        if (mediaDetails.posterUrl.isBlank()) {
+        if (mediaDetails.posterUrl.isBlank() && isLoading.not()) {
             return
         }
 
@@ -199,7 +232,11 @@ fun Header(
                 modifier = Modifier
                     .fillMaxHeight(0.8f)
                     .clip(RoundedCornerShape(Dimens.posterRound))
-                    .aspectRatio(2f / 3f),
+                    .aspectRatio(2f / 3f)
+                    .placeholder(
+                        visible = isLoading,
+                        highlight = PlaceholderHighlight.fade()
+                    ),
                 alignment = Alignment.CenterStart,
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(mediaDetails.posterUrl)
@@ -219,8 +256,10 @@ fun Header(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MainInfo(
+    isLoading: Boolean,
     mediaDetails: MediaDetails,
     backgroundColor: Color,
     onItemClick: (personId: Long) -> Unit,
@@ -243,12 +282,19 @@ fun MainInfo(
                     bottom = Dimens.padding.small,
                     start = Dimens.padding.medium,
                     end = Dimens.padding.medium
+                )
+                .placeholder(
+                    visible = isLoading,
+                    highlight = PlaceholderHighlight.fade()
                 ),
-            mainAxisAlignment = FlowMainAxisAlignment.Center,
-            crossAxisAlignment = FlowCrossAxisAlignment.Center,
-            mainAxisSize = SizeMode.Expand
+            horizontalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
+                modifier = Modifier.placeholder(
+                    visible = isLoading,
+                    highlight = PlaceholderHighlight.fade()
+                ),
                 text = mediaDetails.title,
                 color = textColor,
                 fontWeight = FontWeight(600),
@@ -261,7 +307,12 @@ fun MainInfo(
                 Spacer(modifier = Modifier.width(Dimens.padding.small))
 
                 Text(
-                    modifier = Modifier.alpha(0.7f),
+                    modifier = Modifier
+                        .alpha(0.7f)
+                        .placeholder(
+                            visible = isLoading,
+                            highlight = PlaceholderHighlight.fade()
+                        ),
                     text = "(${releaseDate.year})",
                     color = textColor,
                     fontWeight = FontWeight(400)
@@ -554,7 +605,7 @@ fun MediaDetailScreenPreview() {
         "ES"
     )
 
-    MediaDetailContent(mediaDetails = mediaDetails) {
+    MediaDetailContent(mediaDetails = mediaDetails, isLoading = false) {
 
     }
 }

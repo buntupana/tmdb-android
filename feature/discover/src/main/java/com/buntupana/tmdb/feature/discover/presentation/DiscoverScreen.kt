@@ -1,47 +1,29 @@
 package com.buntupana.tmdb.feature.discover.presentation
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.presentation.composables.widget.menu_selector.MenuSelector
-import com.buntupana.tmdb.core.presentation.composables.widget.menu_selector.MenuSelectorItem
-import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.Primary
-import com.buntupana.tmdb.core.presentation.theme.Secondary
 import com.buntupana.tmdb.feature.discover.R
-import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
-import com.buntupana.tmdb.feature.discover.domain.entity.PopularType
-import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
+import com.buntupana.tmdb.feature.discover.presentation.comp.CarouselMediaItem
+import com.buntupana.tmdb.feature.discover.presentation.comp.TitleAndFilter
+import com.buntupana.tmdb.feature.discover.presentation.comp.TopBar
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.FreeToWatchFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
@@ -55,182 +37,132 @@ fun DiscoverScreen(
     discoverNavigator: DiscoverNavigator
 ) {
 
+    DiscoverContent(
+        state = viewModel.state,
+        navigateToSearch = { discoverNavigator.navigateToSearch() },
+        changeTrendingType = { trendingType ->
+            viewModel.onEvent(DiscoverEvent.ChangeTrendingType(trendingType))
+        },
+        changePopularType = { popularFilter ->
+            viewModel.onEvent(DiscoverEvent.ChangePopularType(popularFilter))
+        },
+        changeFreeToWatchType = { freeToWatchType ->
+            viewModel.onEvent(DiscoverEvent.ChangeFreeToWatchType(freeToWatchType))
+        },
+        navigateToDetail = { mediaItem, posterDominantColor ->
+            when (mediaItem) {
+                is MediaItem.Movie -> {
+                    discoverNavigator.navigateToMediaDetail(
+                        mediaItem.id,
+                        MediaType.MOVIE,
+                        posterDominantColor
+                    )
+                }
+
+                is MediaItem.TvShow -> {
+                    discoverNavigator.navigateToMediaDetail(
+                        mediaItem.id,
+                        MediaType.TV_SHOW,
+                        posterDominantColor
+                    )
+                }
+
+                is MediaItem.Person -> {}
+                MediaItem.Unknown -> {}
+            }
+        }
+    )
+}
+
+
+@Composable
+fun DiscoverContent(
+    state: DiscoverState,
+    navigateToSearch: () -> Unit,
+    changeTrendingType: (trendingFilter: TrendingFilter) -> Unit,
+    changePopularType: (popularFilter: PopularFilter) -> Unit,
+    changeFreeToWatchType: (freeToWatchFilter: FreeToWatchFilter) -> Unit,
+    navigateToDetail: (mediaItem: MediaItem, posterDominantColor: Color) -> Unit
+) {
     val systemUiController = rememberSystemUiController()
 
     SideEffect {
         systemUiController.setSystemBarsColor(color = Primary)
     }
 
-    val state = viewModel.state
+    val scrollState = rememberScrollState()
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(
+                state = scrollState
+            )
+    ) {
 
         TopBar(
             clickOnSearch = {
-                discoverNavigator.navigateToSearch()
+                navigateToSearch()
             }
         )
 
-        val scrollState = rememberScrollState()
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(
-                    state = scrollState
-                )
-        ) {
-
-            TitleAndFilter(
-                title = stringResource(id = R.string.text_whats_popular),
-                filterSet = viewModel.popularFilterSet,
-                indexSelected = viewModel.popularFilterSelected,
-                filterClicked = { item, index ->
-                    val popularType = when (item) {
-                        PopularFilter.ForRent -> PopularType.FOR_RENT
-                        PopularFilter.InTheatres -> PopularType.IN_THEATRES
-                        PopularFilter.OnTv -> PopularType.ON_TV
-                        PopularFilter.Streaming -> PopularType.STREAMING
-                    }
-                    viewModel.popularFilterSelected = index
-                    viewModel.onEvent(DiscoverEvent.ChangePopularType(popularType))
-                }
-            )
-            CarouselMediaItem(
-                modifier = Modifier.fillMaxWidth(),
-                state.popularMediaItemList,
-                onItemClicked = { mediaItem ->
-                    navigateToDetail(mediaItem, discoverNavigator)
-                }
-            )
-            TitleAndFilter(
-                title = stringResource(id = R.string.text_trending),
-                filterSet = viewModel.trendingFilterSet,
-                indexSelected = viewModel.trendingFilterSelected,
-                filterClicked = { item, index ->
-                    val trendingType = when (item) {
-                        TrendingFilter.ThisWeek -> TrendingType.THIS_WEEK
-                        TrendingFilter.Today -> TrendingType.TODAY
-                    }
-                    viewModel.trendingFilterSelected = index
-                    viewModel.onEvent(DiscoverEvent.ChangeTrendingType(trendingType))
-                }
-            )
-            Box(modifier = Modifier.fillMaxWidth()) {
-
-                Image(
-                    painter = painterResource(id = R.drawable.img_trending),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.Center)
-                )
-
-                CarouselMediaItem(
-                    modifier = Modifier.fillMaxWidth(),
-                    state.trendingMediaItemList,
-                    onItemClicked = { mediaItem ->
-                        navigateToDetail(mediaItem, discoverNavigator)
-                    }
-                )
+        TitleAndFilter(
+            title = stringResource(id = R.string.text_trending),
+            filterSet = state.trendingFilterSet,
+            indexSelected = state.trendingFilterSet.indexOf(state.trendingFilterSelected),
+            filterClicked = { item, index ->
+                changeTrendingType(item)
             }
-            TitleAndFilter(
-                title = stringResource(id = R.string.text_free_to_watch),
-                filterSet = viewModel.freeToWatchFilterSet,
-                indexSelected = viewModel.freeToWatchFilterSelected,
-                filterClicked = { item, index ->
-                    val freeToWatchType = when (item) {
-                        FreeToWatchFilter.Movies -> FreeToWatchType.MOVIES
-                        FreeToWatchFilter.TvShows -> FreeToWatchType.TV_SHOWS
-                    }
-                    viewModel.freeToWatchFilterSelected = index
-                    viewModel.onEvent(DiscoverEvent.ChangeFreeToWatchType(freeToWatchType))
-                }
+        )
+        Box(modifier = Modifier.fillMaxWidth()) {
+
+            Image(
+                painter = painterResource(id = R.drawable.img_trending),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center)
             )
+
             CarouselMediaItem(
                 modifier = Modifier.fillMaxWidth(),
-                state.freeToWatchMediaItemList,
-                onItemClicked = { mediaItem ->
-                    navigateToDetail(mediaItem, discoverNavigator)
+                state.trendingMediaItemList,
+                onItemClicked = { mediaItem, mainPosterColor ->
+                    navigateToDetail(mediaItem, mainPosterColor)
                 }
             )
         }
-    }
 
-
-}
-
-private fun navigateToDetail(mediaItem: MediaItem, discoverNavigator: DiscoverNavigator) {
-    when (mediaItem) {
-        is MediaItem.Movie -> {
-            discoverNavigator.navigateToMediaDetail(mediaItem.id, MediaType.MOVIE)
-        }
-        is MediaItem.TvShow -> {
-            discoverNavigator.navigateToMediaDetail(mediaItem.id, MediaType.TV_SHOW)
-        }
-        is MediaItem.Person -> {}
-        MediaItem.Unknown -> {}
-    }
-}
-
-@Composable
-fun TopBar(
-    clickOnSearch: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(Dimens.topBarHeight)
-            .background(Primary),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Image(
-            modifier = Modifier
-                .padding(vertical = Dimens.padding.small, horizontal = Dimens.padding.medium)
-                .weight(1f),
-            painter = painterResource(id = com.buntupana.tmdb.core.R.drawable.ic_logo_short),
-            contentDescription = null
+        TitleAndFilter(
+            title = stringResource(id = R.string.text_whats_popular),
+            filterSet = state.popularFilterSet,
+            indexSelected = state.popularFilterSet.indexOf(state.popularFilterSelected),
+            filterClicked = { item, index ->
+                changePopularType(item)
+            }
+        )
+        CarouselMediaItem(
+            modifier = Modifier.fillMaxWidth(),
+            state.popularMediaItemList,
+            onItemClicked = { mediaItem, mainPosterColor ->
+                navigateToDetail(mediaItem, mainPosterColor)
+            }
         )
 
-        Image(
-            modifier = Modifier
-                .padding(vertical = Dimens.padding.small, horizontal = Dimens.padding.medium)
-                .size(24.dp)
-                .weight(1f)
-                .clickable {
-                    clickOnSearch()
-                },
-            painter = painterResource(id = com.buntupana.tmdb.core.R.drawable.ic_search),
-            contentDescription = null,
-            alignment = Alignment.CenterEnd,
-            colorFilter = ColorFilter.tint(Secondary)
+        TitleAndFilter(
+            title = stringResource(id = R.string.text_free_to_watch),
+            filterSet = state.freeToWatchFilterSet,
+            indexSelected = state.freeToWatchFilterSet.indexOf(state.freeToWatchFilterSelected),
+            filterClicked = { item, index ->
+                changeFreeToWatchType(item)
+            }
         )
-    }
-}
-
-@Composable
-fun <T : MenuSelectorItem> TitleAndFilter(
-    title: String = "",
-    filterSet: Set<T> = emptySet(),
-    indexSelected: Int = 0,
-    filterClicked: ((item: T, index: Int) -> Unit)? = null
-) {
-    Box(
-        modifier = Modifier.padding(16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = title,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 22.sp,
-            modifier = Modifier.align(Alignment.CenterStart)
-        )
-        MenuSelector(
-            menuItemSet = filterSet,
-            indexSelected = indexSelected,
-            onItemClick = { item, index ->
-                filterClicked?.invoke(item, index)
+        CarouselMediaItem(
+            modifier = Modifier.fillMaxWidth(),
+            state.freeToWatchMediaItemList,
+            onItemClicked = { mediaItem, mainPosterColor ->
+                navigateToDetail(mediaItem, mainPosterColor)
             }
         )
     }
@@ -239,43 +171,13 @@ fun <T : MenuSelectorItem> TitleAndFilter(
 @Preview(showBackground = true)
 @Composable
 fun DiscoverScreenPreview() {
-
-    Column {
-
-        Text(
-            text = "Hola estoy sola",
-            modifier = Modifier.width(60.dp),
-            maxLines = 1,
-            overflow = TextOverflow.Visible
-        )
-
-        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-
-            val (mainRef, refTest) = createRefs()
-
-            Text(
-                text = "On Tv",
-                modifier = Modifier.constrainAs(mainRef) {
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                }
-            )
-
-            Text(
-                text = "S hola",
-                modifier = Modifier
-                    .constrainAs(
-                        refTest
-                    ) {
-                        top.linkTo(mainRef.bottom)
-                        start.linkTo(mainRef.start)
-                        end.linkTo(parent.end)
-                        width = Dimension.fillToConstraints
-                    },
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
+    DiscoverContent(
+        state = DiscoverState(),
+        navigateToSearch = { /*TODO*/ },
+        changeTrendingType = {},
+        changePopularType = {},
+        changeFreeToWatchType = {},
+        navigateToDetail = { _, _ -> }
+    )
 }
 

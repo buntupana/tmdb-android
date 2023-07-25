@@ -12,6 +12,7 @@ buildscript {
 
         // Kotlin
 //        kotlin_version = '1.7.0'
+        desugar_jdk_version = '1.2.2'
         coroutines_version = '1.6.1'
         ktx_version = '1.10.1'
         ktlint_version = '0.30.0'

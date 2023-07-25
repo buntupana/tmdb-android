@@ -6,16 +6,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 object Dimens {
+
+    val icon = 24.dp
+
     val carouselMediaItemWidth = 120.dp
     val posterRound = 5.dp
     val cardElevation = 4.dp
-
-    val topBarHeight = 58.dp
 
     val padding: Padding = PaddingPhone
     val textSize: TextSize = TextPhone
 
     const val aspectRatioMediaPoster = 2f/3f
+
+    // Top bar
+    val topBarHeight = 58.dp
+    val topBarIconSize = 60.dp
 }
 
 object PaddingPhone : Padding {

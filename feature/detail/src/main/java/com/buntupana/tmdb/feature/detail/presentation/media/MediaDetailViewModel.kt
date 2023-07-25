@@ -3,10 +3,13 @@ package com.buntupana.tmdb.feature.detail.presentation.media
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.domain.entity.MediaType
+import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
 import com.buntupana.tmdb.feature.detail.presentation.navArgs
@@ -16,14 +19,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MediaDetailViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     private val getTvShowDetailsUseCase: GetTvShowDetailsUseCase
 ) : ViewModel() {
 
     private val navArgs: MediaDetailNavArgs = savedStateHandle.navArgs()
 
-    var state by mutableStateOf(DetailScreenState())
+    var state by mutableStateOf(
+        DetailScreenState(
+            backgroundColor = Color(navArgs.backgroundColor ?: DetailBackgroundColor.toArgb())
+        )
+    )
 
     init {
         when (navArgs.mediaType) {

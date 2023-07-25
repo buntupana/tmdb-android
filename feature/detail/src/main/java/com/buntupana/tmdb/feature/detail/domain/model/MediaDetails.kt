@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 
 sealed class MediaDetails(
     open val id: Long,

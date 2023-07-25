@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
 import com.buntupana.tmdb.core.domain.model.Gender
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 
 data class PersonFullDetails(
     val id: Long,

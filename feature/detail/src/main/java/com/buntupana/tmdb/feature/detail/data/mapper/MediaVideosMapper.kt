@@ -4,8 +4,8 @@ import com.buntupana.tmdb.core.presentation.util.ifNullOrBlank
 import com.buntupana.tmdb.feature.detail.data.raw.MediaVideosRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Video
 import com.buntupana.tmdb.feature.detail.domain.model.VideoType
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeParseException
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 
 private const val YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v="
 private const val VIMEO_BASE_URL = "https://vimeo.com/"

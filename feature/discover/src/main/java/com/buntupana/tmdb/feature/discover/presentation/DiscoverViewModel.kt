@@ -33,68 +33,48 @@ class DiscoverViewModel @Inject constructor(
     private var getFreeToWatchJob: Job? = null
     private var getTrendingJob: Job? = null
 
-    val popularFilterSet by mutableStateOf(
-        setOf(
-            PopularFilter.Streaming,
-            PopularFilter.OnTv,
-            PopularFilter.ForRent,
-            PopularFilter.InTheatres,
-        )
-    )
-
-    var popularFilterSelected = 0
-
-    val freeToWatchFilterSet by mutableStateOf(
-        setOf(
-            FreeToWatchFilter.Movies,
-            FreeToWatchFilter.TvShows
-        )
-    )
-
-    var freeToWatchFilterSelected = 0
-
-    val trendingFilterSet by mutableStateOf(
-        setOf(
-            TrendingFilter.Today,
-            TrendingFilter.ThisWeek
-        )
-    )
-
-    var trendingFilterSelected = 0
-
     init {
-        getPopularMovies(PopularType.STREAMING)
-        getFreeToWatchList(FreeToWatchType.MOVIES)
-        getTrendingList(TrendingType.TODAY)
+        getPopularMovies(state.popularFilterSelected)
+        getFreeToWatchList(state.freeToWatchFilterSelected)
+        getTrendingList(state.trendingFilterSelected)
     }
 
     fun onEvent(event: DiscoverEvent) {
         when (event) {
             is DiscoverEvent.ChangePopularType -> {
-                if (event.popularType != state.popularType) {
+                if (event.popularType != state.popularFilterSelected) {
                     getPopularMovies(event.popularType)
                 }
             }
+
             is DiscoverEvent.ChangeFreeToWatchType -> {
-                if (event.freeToWatchType != state.freeToWatchType) {
-                    getFreeToWatchList(event.freeToWatchType)
+                if (event.freeToWatchFilter != state.freeToWatchFilterSelected) {
+                    getFreeToWatchList(event.freeToWatchFilter)
                 }
             }
+
             is DiscoverEvent.ChangeTrendingType -> {
-                if (event.trendingType != state.trendingType) {
-                    getTrendingList(event.trendingType)
+                if (event.trendingFilter != state.trendingFilterSelected) {
+                    getTrendingList(event.trendingFilter)
                 }
             }
         }
     }
 
-    private fun getPopularMovies(popularType: PopularType) {
+    private fun getPopularMovies(popularFilter: PopularFilter) {
+
+        val popularType = when (popularFilter) {
+            PopularFilter.ForRent -> PopularType.FOR_RENT
+            PopularFilter.InTheatres -> PopularType.IN_THEATRES
+            PopularFilter.OnTv -> PopularType.ON_TV
+            PopularFilter.Streaming -> PopularType.STREAMING
+        }
 
         getPopularMoviesJob?.cancel()
         getPopularMoviesJob = viewModelScope.launch {
             getPopularMoviesListUseCase(popularType) {
                 loading {
-                    state = state.copy(isLoading = true, popularType = popularType)
+                    state = state.copy(isLoading = true, popularFilterSelected = popularFilter)
                 }
                 error {
 
@@ -106,13 +86,19 @@ class DiscoverViewModel @Inject constructor(
         }
     }
 
-    private fun getFreeToWatchList(freeToWatchType: FreeToWatchType) {
+    private fun getFreeToWatchList(freeToWatchFilter: FreeToWatchFilter) {
+
+        val freeToWatchType = when (freeToWatchFilter) {
+            FreeToWatchFilter.Movies -> FreeToWatchType.MOVIES
+            FreeToWatchFilter.TvShows -> FreeToWatchType.TV_SHOWS
+        }
 
         getFreeToWatchJob?.cancel()
         getFreeToWatchJob = viewModelScope.launch {
             getFreeToWatchMediaListUseCase(freeToWatchType) {
                 loading {
-                    state = state.copy(isLoading = true, freeToWatchType = freeToWatchType)
+                    state =
+                        state.copy(isLoading = true, freeToWatchFilterSelected = freeToWatchFilter)
                 }
                 success { data ->
                     state = state.copy(isLoading = false, freeToWatchMediaItemList = data)
@@ -121,12 +107,18 @@ class DiscoverViewModel @Inject constructor(
         }
     }
 
-    private fun getTrendingList(trendingType: TrendingType) {
+    private fun getTrendingList(trendingFilter: TrendingFilter) {
+
+        val trendingType = when (trendingFilter) {
+            TrendingFilter.ThisWeek -> TrendingType.THIS_WEEK
+            TrendingFilter.Today -> TrendingType.TODAY
+        }
+
         getTrendingJob?.cancel()
         getTrendingJob = viewModelScope.launch {
-            getTrendingMediaListUseCase(trendingType){
+            getTrendingMediaListUseCase(trendingType) {
                 loading {
-                    state = state.copy(isLoading = true, trendingType = trendingType)
+                    state = state.copy(isLoading = true, trendingFilterSelected = trendingFilter)
                 }
                 success { data ->
                     state = state.copy(isLoading = false, trendingMediaItemList = data)

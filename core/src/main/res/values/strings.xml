@@ -26,4 +26,9 @@
     <string name="text_read_more">Read More</string>
 
     <string name="text_user_score">User Score</string>
+
+    <string name="text_menu_selector_sample_streaming" translatable="false">Streaming</string>
+    <string name="text_menu_selector_sample_on_tv" translatable="false">On TV</string>
+    <string name="text_menu_selector_sample_for_rent" translatable="false">For Rent</string>
+    <string name="text_menu_selector_sample_in_theatres" translatable="false">In Theatres</string>
 </resources>

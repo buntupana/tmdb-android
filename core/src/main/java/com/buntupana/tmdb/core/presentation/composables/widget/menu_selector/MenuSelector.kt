@@ -16,10 +16,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.MotionLayout
+import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.presentation.brush
 import com.buntupana.tmdb.core.presentation.theme.PrimaryDark
 import com.buntupana.tmdb.core.presentation.theme.TertiaryDark
@@ -39,7 +41,7 @@ fun <T : MenuSelectorItem> MenuSelector(
     val coroutineScope = rememberCoroutineScope()
 
     var _selectedIndex by remember {
-        mutableStateOf(if (indexSelected >= menuItemSet.size || indexSelected < 0) 0 else indexSelected)
+        mutableIntStateOf(if (indexSelected >= menuItemSet.size || indexSelected < 0) 0 else indexSelected)
     }
 
     var isExpanded by remember { mutableStateOf(expanded) }
@@ -298,4 +300,24 @@ private fun getTransition(selectedIndex: Int, setSize: Int): String {
               },
         }
     """.trimIndent()
+}
+
+@Preview
+@Composable
+fun MenuSelectorPreview() {
+    MenuSelector(
+        menuItemSet = setOf(
+            MenuSelectorItemSample.Streaming,
+            MenuSelectorItemSample.OnTv,
+            MenuSelectorItemSample.ForRent,
+            MenuSelectorItemSample.InTheatres
+        )
+    )
+}
+
+private sealed class MenuSelectorItemSample(strRes: Int) : MenuSelectorItem(strRes) {
+    object Streaming : MenuSelectorItemSample(R.string.text_menu_selector_sample_streaming)
+    object OnTv : MenuSelectorItemSample(R.string.text_menu_selector_sample_streaming)
+    object ForRent : MenuSelectorItemSample(R.string.text_menu_selector_sample_streaming)
+    object InTheatres : MenuSelectorItemSample(R.string.text_menu_selector_sample_streaming)
 }

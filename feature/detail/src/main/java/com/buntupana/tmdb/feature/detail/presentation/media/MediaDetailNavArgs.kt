@@ -4,5 +4,6 @@ import com.buntupana.tmdb.core.domain.entity.MediaType
 
 data class MediaDetailNavArgs(
     val mediaId: Long,
-    val mediaType: MediaType
+    val mediaType: MediaType,
+    val backgroundColor: Int?
 )

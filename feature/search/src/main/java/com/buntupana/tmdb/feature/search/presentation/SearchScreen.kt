@@ -77,17 +77,20 @@ fun SearchScreen(
         onSearch = {
             viewModel.onEvent(SearchEvent.OnSearch(it))
         },
-        onMediaClick = { mediaItem ->
+        onMediaClick = { mediaItem, mainPosterColor ->
             when (mediaItem) {
                 is MediaItem.Movie -> {
-                    searchNavigator.navigateToMediaDetail(mediaItem.id, MediaType.MOVIE)
+                    searchNavigator.navigateToMediaDetail(mediaItem.id, MediaType.MOVIE, mainPosterColor)
                 }
+
                 is MediaItem.TvShow -> {
-                    searchNavigator.navigateToMediaDetail(mediaItem.id, MediaType.TV_SHOW)
+                    searchNavigator.navigateToMediaDetail(mediaItem.id, MediaType.TV_SHOW, mainPosterColor)
                 }
+
                 is MediaItem.Person -> {
                     searchNavigator.navigateToPerson(mediaItem.id)
                 }
+
                 MediaItem.Unknown -> {}
             }
         },
@@ -102,7 +105,7 @@ fun SearchScreenContent(
     searchState: SearchState,
     onSearchSuggestions: (searchKey: String) -> Unit,
     onSearch: (searchKey: String) -> Unit,
-    onMediaClick: (mediaItem: MediaItem) -> Unit,
+    onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color?) -> Unit,
     onDismissSuggestionsClick: () -> Unit
 ) {
 
@@ -125,6 +128,7 @@ fun SearchScreenContent(
                         )
                     }
                 }
+
                 searchState.resultCountList.isNotEmpty() -> {
                     SearchResults(
                         modifier = Modifier.fillMaxWidth(),
@@ -132,6 +136,7 @@ fun SearchScreenContent(
                         onMediaClick = onMediaClick
                     )
                 }
+
                 searchState.resultCountList.isEmpty() -> {
                     TrendingList(
                         modifier = Modifier.fillMaxWidth(),
@@ -367,7 +372,7 @@ fun SuggestionItem(
 fun SearchResults(
     modifier: Modifier = Modifier,
     searchState: SearchState,
-    onMediaClick: (mediaItem: MediaItem) -> Unit
+    onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color?) -> Unit
 ) {
 
     Column(modifier = modifier) {
@@ -422,18 +427,21 @@ fun SearchResults(
                         RCore.string.message_movies_no_result
                     searchState.movieItems.collectAsLazyPagingItems()
                 }
+
                 RCore.string.text_tv_shows -> {
                     itemHeight = 120.dp
                     noResultMessageStringRes =
                         RCore.string.message_tv_shows_no_result
                     searchState.tvShowItems.collectAsLazyPagingItems()
                 }
+
                 RCore.string.text_people -> {
                     itemHeight = 60.dp
                     noResultMessageStringRes =
                         RCore.string.message_people_no_result
                     searchState.personItems.collectAsLazyPagingItems()
                 }
+
                 else -> {
                     noResultMessageStringRes = 0
                     itemHeight = 0.dp
@@ -460,9 +468,11 @@ fun SearchResults(
                                 }
                             }
                         }
+
                         is LoadState.Error -> {
                             // TODO: Error to show when first page of paging fails
                         }
+
                         is LoadState.NotLoading -> {
                             if (pagingItems.itemCount == 0) {
                                 item {
@@ -491,8 +501,8 @@ fun SearchResults(
                                                 .height(itemHeight)
                                                 .padding(horizontal = Dimens.padding.medium),
                                             mediaItem = item,
-                                            clickable = {
-                                                onMediaClick(item)
+                                            clickable = { color ->
+                                                onMediaClick(item, color)
                                             }
                                         )
                                         Spacer(modifier = Modifier.height(8.dp))
@@ -514,9 +524,11 @@ fun SearchResults(
                                             }
                                         }
                                     }
+
                                     is LoadState.Error -> {
                                         // TODO: item to show when append paging fails
                                     }
+
                                     else -> {}
                                 }
                                 item {
@@ -580,7 +592,7 @@ fun SearchScreenPreview() {
         ),
         onSearchSuggestions = {},
         onSearch = {},
-        onMediaClick = {},
+        onMediaClick = { _, _ ->},
         onDismissSuggestionsClick = {}
     )
 }

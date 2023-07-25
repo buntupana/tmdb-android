@@ -26,6 +26,7 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
@@ -52,6 +53,8 @@ android {
 }
 
 dependencies {
+
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugar_jdk_version"
 
     // Android
     api "androidx.core:core-ktx:$ktx_version"
@@ -98,9 +101,6 @@ dependencies {
 
     // Tools
     api "com.jakewharton.timber:timber:$timber_version"
-    api "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"
-//    api "com.github.bumptech.glide:glide:$glide_version"
-//    kapt "com.github.bumptech.glide:compiler:$glide_version"
     api "io.coil-kt:coil-compose:$coil_version"
     api "androidx.palette:palette-ktx:$palette_version"
 

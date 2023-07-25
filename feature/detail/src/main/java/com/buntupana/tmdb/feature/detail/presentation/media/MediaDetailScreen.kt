@@ -1,81 +1,29 @@
 package com.buntupana.tmdb.feature.detail.presentation.media
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.graphics.drawable.toBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.palette.graphics.Palette
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.buntupana.tmdb.core.presentation.composables.DivisorCircle
-import com.buntupana.tmdb.core.presentation.composables.HoursMinutesText
-import com.buntupana.tmdb.core.presentation.composables.NestedVerticalLazyGrid
-import com.buntupana.tmdb.core.presentation.composables.OutlinedText
-import com.buntupana.tmdb.core.presentation.composables.widget.UserScore
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
-import com.buntupana.tmdb.feature.detail.R
-import com.buntupana.tmdb.feature.detail.domain.model.CastPersonItem
-import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.fade
-import com.google.accompanist.placeholder.material.placeholder
+import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
+import com.buntupana.tmdb.feature.detail.presentation.media.comp.CastHorizontalList
+import com.buntupana.tmdb.feature.detail.presentation.media.comp.Header
+import com.buntupana.tmdb.feature.detail.presentation.media.comp.MainInfo
+import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.jakewharton.threetenabp.AndroidThreeTen
 import com.ramcosta.composedestinations.annotation.Destination
-import org.threeten.bp.LocalDate
-import com.buntupana.tmdb.core.R as RCore
 
 @Destination(
     navArgsDelegate = MediaDetailNavArgs::class
@@ -86,8 +34,9 @@ fun MediaDetailScreen(
     detailNavigator: DetailNavigator
 ) {
     MediaDetailContent(
-        mediaDetails = viewModel.state.mediaDetails,
-        isLoading = viewModel.state.isLoading,
+        state = viewModel.state,
+        onBackClick = { detailNavigator.navigateBack() },
+        onSearchClick = { detailNavigator.navigateToSearch() },
         onPersonClick = { personId ->
             detailNavigator.navigateToPerson(personId)
         }
@@ -96,25 +45,25 @@ fun MediaDetailScreen(
 
 @Composable
 fun MediaDetailContent(
-    mediaDetails: MediaDetails?,
-    isLoading: Boolean,
+    state: DetailScreenState,
+    onBackClick: () -> Unit,
+    onSearchClick: () -> Unit,
     onPersonClick: (personId: Long) -> Unit
 ) {
 
     val scrollState = rememberScrollState()
 
     var backgroundColor by remember {
-        mutableStateOf(DetailBackgroundColor)
+        mutableStateOf(state.backgroundColor)
     }
-    var textColor by remember {
-        mutableStateOf(backgroundColor.getOnBackgroundColor())
-    }
+
+    val onBackgroundColor = backgroundColor.getOnBackgroundColor()
 
     val systemUiController = rememberSystemUiController()
 
     systemUiController.setSystemBarsColor(backgroundColor)
 
-    if (mediaDetails != null) {
+    if (state.mediaDetails != null) {
         Column(
             Modifier
                 .fillMaxSize()
@@ -122,460 +71,35 @@ fun MediaDetailContent(
                 .background(backgroundColor)
         ) {
 
+            TopBar(
+                backgroundColor = backgroundColor,
+                onSearchClick = { onSearchClick() },
+                onBackClick = { onBackClick() }
+            )
+
             Header(
-                isLoading,
-                mediaDetails,
-                backgroundColor
-            ) { palette ->
-                palette.dominantSwatch?.rgb?.let { dominantColor ->
-                    if (Color(dominantColor) != backgroundColor) {
-                        backgroundColor = Color(dominantColor)
-                        textColor = backgroundColor.getOnBackgroundColor()
-                    }
+                isLoading = state.isLoading,
+                mediaDetails = state.mediaDetails,
+                backgroundColor = backgroundColor
+            ) { dominantColor ->
+                if (dominantColor != backgroundColor) {
+                    backgroundColor = dominantColor
                 }
             }
 
             MainInfo(
-                isLoading = isLoading,
-                mediaDetails = mediaDetails,
+                isLoading = state.isLoading,
+                mediaDetails = state.mediaDetails,
                 backgroundColor = backgroundColor,
-                textColor = textColor,
+                textColor = onBackgroundColor,
                 onItemClick = onPersonClick
             )
 
             CastHorizontalList(
                 modifier = Modifier.background(MaterialTheme.colorScheme.background),
-                mediaDetails = mediaDetails,
+                mediaDetails = state.mediaDetails,
                 onItemClick = onPersonClick
             )
-        }
-    }
-}
-
-@Composable
-fun Header(
-    isLoading: Boolean,
-    mediaDetails: MediaDetails,
-    backgroundColor: Color,
-    setPalette: (palette: Palette) -> Unit
-) {
-
-    // If there is no image info, the header won't be displayed
-    if (mediaDetails.backdropUrl.isBlank() && mediaDetails.posterUrl.isBlank()) {
-        return
-    }
-
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .height(200.dp),
-    ) {
-
-        Row(modifier = Modifier.fillMaxSize()) {
-            Image(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(70.dp),
-                painter = ColorPainter(backgroundColor),
-                contentDescription = null
-            )
-
-            Box {
-
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .placeholder(
-                            visible = isLoading,
-                            highlight = PlaceholderHighlight.fade()
-                        ),
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(mediaDetails.backdropUrl)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "",
-                    contentScale = ContentScale.Crop
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(80.dp)
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(backgroundColor, Color.Transparent)
-                            )
-                        ),
-                )
-            }
-        }
-
-        // hiding poster image when there is no info
-        if (mediaDetails.posterUrl.isBlank() && isLoading.not()) {
-            return
-        }
-
-        // if no backdrop image, the poster image will be shown in the center
-        val posterArrangement =
-            if (mediaDetails.backdropUrl.isBlank()) Arrangement.Center else Arrangement.Start
-
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = posterArrangement
-        ) {
-
-            if (mediaDetails.backdropUrl.isNotBlank()) {
-                Spacer(modifier = Modifier.width(Dimens.padding.medium))
-            }
-            AsyncImage(
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxHeight(0.8f)
-                    .clip(RoundedCornerShape(Dimens.posterRound))
-                    .aspectRatio(2f / 3f)
-                    .placeholder(
-                        visible = isLoading,
-                        highlight = PlaceholderHighlight.fade()
-                    ),
-                alignment = Alignment.CenterStart,
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(mediaDetails.posterUrl)
-                    .crossfade(true)
-                    .allowHardware(false)
-                    .listener { request, result ->
-                        Palette.Builder(result.drawable.toBitmap()).generate { palette ->
-                            palette?.let {
-                                setPalette(it)
-                            }
-                        }
-                    }
-                    .build(),
-                contentDescription = null
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun MainInfo(
-    isLoading: Boolean,
-    mediaDetails: MediaDetails,
-    backgroundColor: Color,
-    onItemClick: (personId: Long) -> Unit,
-    textColor: Color
-) {
-
-    val uriHandler = LocalUriHandler.current
-
-    Column(
-        modifier = Modifier
-            .background(backgroundColor)
-    ) {
-
-        // Title and release year
-        FlowRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    top = Dimens.padding.medium,
-                    bottom = Dimens.padding.small,
-                    start = Dimens.padding.medium,
-                    end = Dimens.padding.medium
-                )
-                .placeholder(
-                    visible = isLoading,
-                    highlight = PlaceholderHighlight.fade()
-                ),
-            horizontalArrangement = Arrangement.Center,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                modifier = Modifier.placeholder(
-                    visible = isLoading,
-                    highlight = PlaceholderHighlight.fade()
-                ),
-                text = mediaDetails.title,
-                color = textColor,
-                fontWeight = FontWeight(600),
-                fontSize = 24.sp,
-                textAlign = TextAlign.Center
-            )
-
-            mediaDetails.releaseDate?.let { releaseDate ->
-
-                Spacer(modifier = Modifier.width(Dimens.padding.small))
-
-                Text(
-                    modifier = Modifier
-                        .alpha(0.7f)
-                        .placeholder(
-                            visible = isLoading,
-                            highlight = PlaceholderHighlight.fade()
-                        ),
-                    text = "(${releaseDate.year})",
-                    color = textColor,
-                    fontWeight = FontWeight(400)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-            }
-        }
-
-        // User score and trailer
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = Dimens.padding.small),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = Dimens.padding.small, horizontal = Dimens.padding.medium),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                UserScore(
-                    modifier = Modifier.size(50.dp),
-                    score = mediaDetails.userScore
-                )
-                Spacer(modifier = Modifier.width(Dimens.padding.small))
-                Text(
-                    text = stringResource(id = RCore.string.text_user_score),
-                    color = textColor,
-                    fontWeight = FontWeight(700)
-                )
-            }
-            if (mediaDetails.trailerUrl.isNotBlank()) {
-                Image(
-                    modifier = Modifier
-                        .size(height = 34.dp, width = 1.dp)
-                        .alpha(0.5f),
-                    painter = ColorPainter(textColor),
-                    contentDescription = null
-                )
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(Dimens.padding.small)
-                        .clickable {
-                            uriHandler.openUri(mediaDetails.trailerUrl)
-                        },
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Image(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(id = R.drawable.ic_play),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(textColor)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        text = stringResource(R.string.text_play_trailer),
-                        color = textColor,
-                        fontWeight = FontWeight(400),
-                    )
-                }
-            }
-        }
-
-        // Certification, duration and genres
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0x1A000000))
-                .border(BorderStroke(1.dp, Color(0x40000000)))
-                .padding(vertical = Dimens.padding.small, horizontal = Dimens.padding.medium),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                OutlinedText(
-                    modifier = Modifier.padding(horizontal = Dimens.padding.tiny),
-                    text = mediaDetails.ageCertification,
-                    color = textColor
-                )
-
-                var isReleaseDateAndCountryCodeInfo = false
-                if (mediaDetails is MediaDetails.Movie) {
-
-                    Row {
-                        if (mediaDetails.localReleaseDate.orEmpty().isNotBlank()) {
-                            Text(
-                                modifier = Modifier.padding(horizontal = Dimens.padding.tiny),
-                                text = mediaDetails.localReleaseDate.orEmpty(),
-                                color = textColor
-                            )
-                            isReleaseDateAndCountryCodeInfo = true
-                        }
-                        if (mediaDetails.localCountryCodeRelease.isNotBlank()) {
-                            Text(
-                                modifier = Modifier.padding(horizontal = Dimens.padding.tiny),
-                                text = "(${mediaDetails.localCountryCodeRelease})",
-                                color = textColor
-                            )
-                            isReleaseDateAndCountryCodeInfo = true
-                        }
-                    }
-                }
-
-                if (
-                    (mediaDetails.ageCertification.isNotBlank() || isReleaseDateAndCountryCodeInfo) &&
-                    mediaDetails.runTime != 0L
-                ) {
-                    DivisorCircle(
-                        color = textColor
-                    )
-                }
-
-                if (mediaDetails.runTime != 0L) {
-                    HoursMinutesText(
-                        modifier = Modifier.padding(horizontal = Dimens.padding.tiny),
-                        time = mediaDetails.runTime,
-                        color = textColor
-                    )
-                }
-            }
-            Text(
-                text = mediaDetails.genreList.joinToString(", "),
-                color = textColor
-            )
-        }
-    }
-
-    // Tagline and overview
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Dimens.padding.medium, vertical = Dimens.padding.medium)
-    ) {
-
-        if (mediaDetails.tagLine.isNotBlank()) {
-            Text(
-                modifier = Modifier.alpha(0.7f),
-                text = mediaDetails.tagLine,
-                color = textColor,
-                fontStyle = FontStyle.Italic,
-                fontSize = Dimens.textSize.title
-            )
-            Spacer(modifier = Modifier.height(Dimens.padding.small))
-        }
-        if (mediaDetails.overview.isNotBlank()) {
-            Text(
-                text = stringResource(id = R.string.text_overview),
-                color = textColor,
-                fontWeight = FontWeight(600),
-                fontSize = 18.sp
-            )
-            Spacer(modifier = Modifier.height(Dimens.padding.small))
-            Text(
-                text = mediaDetails.overview,
-                color = textColor
-            )
-        }
-
-        // Creators
-        if (mediaDetails.creatorList.isNotEmpty()) {
-
-            Spacer(modifier = Modifier.height(Dimens.padding.medium))
-
-            NestedVerticalLazyGrid(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                columns = 2,
-                columnSeparation = 8.dp,
-                itemList = mediaDetails.creatorList
-            ) { item ->
-                Column(
-                    modifier = Modifier
-                        .padding(vertical = Dimens.padding.small)
-                        .clickable {
-                            onItemClick(item.id)
-                        }
-                ) {
-                    Text(
-                        text = item.name,
-                        color = textColor,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = item.job.ifBlank { stringResource(R.string.text_creator) },
-                        color = textColor
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun CastHorizontalList(
-    modifier: Modifier,
-    mediaDetails: MediaDetails,
-    onItemClick: (personId: Long) -> Unit
-) {
-
-    val castNumber = 9
-
-    if (mediaDetails.castList.isNotEmpty()) {
-
-        Column(modifier = modifier) {
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            val castTitle = when (mediaDetails) {
-                is MediaDetails.Movie -> stringResource(id = R.string.text_cast_movie)
-                is MediaDetails.TvShow -> stringResource(id = R.string.text_cast_tv_show)
-            }
-
-            Text(
-                modifier = Modifier.padding(horizontal = Dimens.padding.medium),
-                text = castTitle,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LazyRow(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                item {
-                    Spacer(modifier = Modifier.width(Dimens.padding.small))
-                }
-                items(mediaDetails.castList.take(castNumber)) { item: CastPersonItem ->
-                    Spacer(modifier = Modifier.width(Dimens.padding.small))
-                    PersonItemVertical(
-                        personId = item.id,
-                        name = item.name,
-                        profileUrl = item.profileUrl,
-                        character = item.character,
-                        onItemClick = onItemClick
-                    )
-                    Spacer(modifier = Modifier.width(Dimens.padding.small))
-                }
-                item {
-                    Spacer(modifier = Modifier.width(Dimens.padding.small))
-                }
-            }
-
-            Spacer(modifier = Modifier.padding(Dimens.padding.medium))
-
-//        Text(
-//            modifier = Modifier.padding(horizontal = Dimens.padding.medium),
-//            text = stringResource(id = R.string.text_full_cast),
-//            fontSize = 20.sp,
-//            fontWeight = FontWeight.Bold,
-//        )
-//
-//        Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -584,28 +108,13 @@ fun CastHorizontalList(
 @Composable
 fun MediaDetailScreenPreview() {
 
-    AndroidThreeTen.init(LocalContext.current)
-    val mediaDetails = MediaDetails.Movie(
-        0L,
-        "Thor: Love and Thunder",
-        "",
-        "",
-        "",
-        "After his retirement is interrupted by Gorr the God Butcher, a galactic killer who seeks the extinction of the gods, Thor enlists the help of King Valkyrie, Korg, and ex-girlfriend Jane Foster, who now inexplicably wields Mjolnir as the Mighty Thor. Together they embark upon a harrowing cosmic adventure to uncover the mystery of the God Butcher’s vengeance and stop him before it’s too late.",
-        "The one is not the only.",
-        LocalDate.now(),
-        "10-11-20",
-        120,
-        120,
-        listOf("Action", "Adventure", "Fantasy"),
-        "18",
-        emptyList(),
-        emptyList(),
-        emptyList(),
-        "ES"
+    MediaDetailContent(
+        state = DetailScreenState(
+            mediaDetails = mediaDetailsMovieSample,
+            backgroundColor = DetailBackgroundColor
+        ),
+        onBackClick = {},
+        onSearchClick = {},
+        onPersonClick = {}
     )
-
-    MediaDetailContent(mediaDetails = mediaDetails, isLoading = false) {
-
-    }
 }

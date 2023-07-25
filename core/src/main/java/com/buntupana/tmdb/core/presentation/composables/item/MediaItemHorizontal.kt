@@ -2,12 +2,13 @@ package com.buntupana.tmdb.core.presentation.composables.item
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.buntupana.tmdb.core.domain.model.MediaItem
 
 @Composable
 fun MediaItemHorizontal(
     modifier: Modifier,
-    clickable: (() -> Unit)? = null,
+    clickable: ((mainPosterColor: Color?) -> Unit)? = null,
     mediaItem: MediaItem
 ) {
     when (mediaItem) {

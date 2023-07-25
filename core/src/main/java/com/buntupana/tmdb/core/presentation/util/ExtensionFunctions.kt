@@ -1,15 +1,23 @@
 package com.buntupana.tmdb.core.presentation.util
 
-import androidx.compose.foundation.layout.*
+import android.graphics.drawable.Drawable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.core.graphics.drawable.toBitmap
+import androidx.palette.graphics.Palette
 import com.buntupana.tmdb.core.presentation.theme.Dimens
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.FormatStyle
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 
 /** Return a black/white color that will be readable on top */
@@ -55,9 +63,11 @@ fun LocalDate.toLocalFormat(): String {
     return this.format(dateFormatter)
 }
 
-fun String?.ifNull(block: () -> String): String {
-    return this ?: block()
-}
+fun <T> T?.ifNullAux(block: () -> T?) = this ?: block()
+
+fun <T> T?.ifNull(block: () -> T) = this ?: block()
+
+fun <T> Any?.ifNotNull(block: () -> T?) = if (this != null) block() else null
 
 fun String?.ifNullOrBlank(block: () -> String): String {
     return if (this.isNullOrBlank()) {
@@ -69,4 +79,15 @@ fun String?.ifNullOrBlank(block: () -> String): String {
 
 fun Modifier.clickableTextPadding(): Modifier {
     return padding(horizontal = Dimens.padding.medium, vertical = Dimens.padding.small)
+}
+
+fun Drawable.getDominantColor(colorResult: (dominantColor: Color) -> Unit) {
+    Palette.Builder(toBitmap()).generate { palette ->
+        if (palette == null) {
+            return@generate
+        }
+        palette.dominantSwatch?.rgb?.let { dominantColor ->
+            colorResult(Color(dominantColor))
+        }
+    }
 }

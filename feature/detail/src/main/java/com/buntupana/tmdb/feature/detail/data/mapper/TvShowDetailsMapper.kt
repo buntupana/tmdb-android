@@ -5,8 +5,8 @@ import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
 import com.buntupana.tmdb.feature.detail.domain.model.CrewPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeParseException
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 
 fun TvShowDetailsRaw.toModel(): TvShowDetails {
 

@@ -1,14 +1,30 @@
-package com.buntupana.tmdb.feature.discover.presentation
+package com.buntupana.tmdb.feature.discover.presentation.comp
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -23,9 +39,11 @@ import coil.request.ImageRequest
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.composables.widget.UserScore
 import com.buntupana.tmdb.core.presentation.spToDp
+import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.HkFontFamily
 import com.buntupana.tmdb.core.presentation.theme.PlaceHolderColor
+import com.buntupana.tmdb.core.presentation.util.getDominantColor
 
 private const val MAX_TITLE_LINES = 3
 
@@ -33,12 +51,15 @@ private const val MAX_TITLE_LINES = 3
 fun MediaItemVertical(
     modifier: Modifier = Modifier,
     mediaItem: MediaItem,
-    fontSize: TextUnit = TextUnit.Unspecified
+    fontSize: TextUnit = TextUnit.Unspecified,
+    onClick: (mainPosterColor: Color) -> Unit
 ) {
 
     BoxWithConstraints(
         modifier = modifier.padding(4.dp)
     ) {
+
+        var mainPosterColor: Color = DetailBackgroundColor
 
         val maxWidth = maxWidth
 
@@ -50,17 +71,23 @@ fun MediaItemVertical(
                 voteAverage = mediaItem.voteAverage
                 releaseDate = mediaItem.releaseDate
             }
+
             is MediaItem.TvShow -> {
                 voteAverage = mediaItem.voteAverage
                 releaseDate = mediaItem.releaseDate
             }
+
             else -> {
                 voteAverage = -1
                 releaseDate = ""
             }
         }
 
-        Column {
+        Column(
+            modifier = Modifier.clickable {
+                onClick(mainPosterColor)
+            }
+        ) {
 
             ConstraintLayout {
                 val (posterImage, infoColumn, userScore) = createRefs()
@@ -77,7 +104,13 @@ fun MediaItemVertical(
                         },
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(mediaItem.posterUrl)
+                        .allowHardware(false)
                         .crossfade(true)
+                        .listener { _, result ->
+                            result.drawable.getDominantColor {
+                                mainPosterColor = it
+                            }
+                        }
                         .build(),
                     contentDescription = null,
                     placeholder = ColorPainter(PlaceHolderColor)
@@ -111,7 +144,7 @@ fun MediaItemVertical(
                         }) {
 
                     var extraLinesCount by remember {
-                        mutableStateOf(0)
+                        mutableIntStateOf(0)
                     }
 
                     Text(
@@ -165,6 +198,7 @@ fun MediaItemPreview() {
             "31-Dec-2018",
             false,
             false
-        )
+        ),
+        onClick = { }
     )
 }

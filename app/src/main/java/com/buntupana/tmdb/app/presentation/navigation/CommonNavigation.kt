@@ -1,5 +1,7 @@
 package com.buntupana.tmdb.app.presentation.navigation
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.PersonDetailNavArgs
@@ -14,8 +16,14 @@ class CommonNavigation(
     private val destinationsNavigator: DestinationsNavigator
 ) : DiscoverNavigator, DetailNavigator, SearchNavigator {
 
-    override fun navigateToMediaDetail(id: Long, mediaType: MediaType) {
-        destinationsNavigator.navigate(MediaDetailScreenDestination(id, mediaType))
+    override fun navigateToMediaDetail(id: Long, mediaType: MediaType, backgroundColor: Color?) {
+        destinationsNavigator.navigate(
+            MediaDetailScreenDestination(id, mediaType, backgroundColor?.toArgb())
+        )
+    }
+
+    override fun navigateBack() {
+        destinationsNavigator.navigateUp()
     }
 
     override fun navigateToSearch() {

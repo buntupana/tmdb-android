@@ -6,8 +6,8 @@ import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.presentation.util.ifNull
 import com.buntupana.tmdb.feature.detail.data.raw.FilmographyRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeParseException
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 
 fun FilmographyRaw.toModel(): List<CreditPersonItem> {
 
@@ -73,31 +73,31 @@ fun FilmographyRaw.toModel(): List<CreditPersonItem> {
         when (getMediaType(it.mediaType)) {
             MediaType.MOVIE -> {
                 CreditPersonItem.Movie(
-                    it.id,
-                    it.title.ifNull { it.name.orEmpty() },
-                    it.department,
-                    it.job.orEmpty(),
-                    posterUrl.orEmpty(),
-                    backdropUrl.orEmpty(),
-                    it.popularity,
-                    (it.voteAverage * 100).toInt(),
-                    it.voteCount,
-                    releaseDateLocal
+                    id = it.id,
+                    title = it.title.ifNull { it.name.orEmpty() },
+                    department = it.department,
+                    role = it.job.orEmpty(),
+                    posterUrl = posterUrl.orEmpty(),
+                    backdropUrl = backdropUrl.orEmpty(),
+                    popularity = it.popularity,
+                    userScore = (it.voteAverage * 100).toInt(),
+                    voteCount = it.voteCount,
+                    releaseDate = releaseDateLocal
                 )
             }
             MediaType.TV_SHOW -> {
                 CreditPersonItem.TvShow(
-                    it.id,
-                    it.title.ifNull { it.name.orEmpty() },
-                    it.department,
-                    it.job.orEmpty(),
-                    posterUrl.orEmpty(),
-                    backdropUrl.orEmpty(),
-                    it.popularity,
-                    (it.voteAverage * 100).toInt(),
-                    it.voteCount,
-                    releaseDateLocal,
-                    it.episodeCount ?: 0
+                    id = it.id,
+                    title = it.title.ifNull { it.name.orEmpty() },
+                    department = it.department,
+                    role = it.job.orEmpty(),
+                    posterUrl = posterUrl.orEmpty(),
+                    backdropUrl = backdropUrl.orEmpty(),
+                    popularity = it.popularity,
+                    userScore = (it.voteAverage * 100).toInt(),
+                    voteCount = it.voteCount,
+                    releaseDate = releaseDateLocal,
+                    episodeCount = it.episodeCount
                 )
             }
         }

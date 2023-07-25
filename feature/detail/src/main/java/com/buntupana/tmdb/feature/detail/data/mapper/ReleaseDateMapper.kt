@@ -2,8 +2,8 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.feature.detail.data.raw.ReleaseDateCountry
 import com.buntupana.tmdb.feature.detail.domain.model.ReleaseDate
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 fun ReleaseDateCountry.toModel(): ReleaseDate {
 

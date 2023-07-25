@@ -1,7 +1,14 @@
-package com.buntupana.tmdb.feature.detail.presentation.person.composable
+package com.buntupana.tmdb.feature.detail.presentation.person.comp
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
@@ -9,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -105,7 +113,7 @@ fun LazyListScope.credits(
     mainDepartment: String,
     mediaTypeSelected: Int?,
     departmentSelected: String?,
-    onItemClick: (id: Long, mediaType: MediaType) -> Unit
+    onItemClick: (id: Long, mediaType: MediaType, dominantColor: Color?) -> Unit
 ) {
 
     val creditMapFiltered = filterCreditsByMediaType(creditMap, mediaTypeSelected)
@@ -201,7 +209,7 @@ private fun filterCreditsByMediaType(
 
 private fun LazyListScope.creditList(
     creditPersonList: List<CreditPersonItem>,
-    onItemClick: (id: Long, mediaType: MediaType) -> Unit
+    onItemClick: (id: Long, mediaType: MediaType, dominantColor: Color?) -> Unit
 ) {
 
     if (creditPersonList.isEmpty()) {
@@ -227,7 +235,7 @@ private fun LazyListScope.creditList(
                             is CreditPersonItem.Movie -> MediaType.MOVIE
                             is CreditPersonItem.TvShow -> MediaType.TV_SHOW
                         }.let { mediaType ->
-                            onItemClick(credit.id, mediaType)
+                            onItemClick(credit.id, mediaType, null)
                         }
                     }
                     .padding(

@@ -1,6 +1,5 @@
-package com.buntupana.tmdb.feature.discover.presentation
+package com.buntupana.tmdb.feature.discover.presentation.comp
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -11,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -27,7 +27,7 @@ fun CarouselMediaItem(
     itemWidth: Dp = Dimens.carouselMediaItemWidth,
     paddingHorizontal: Dp = 12.dp,
     fontSize: TextUnit = TextUnit.Unspecified,
-    onItemClicked: (MediaItem) -> Unit
+    onItemClicked: (mediaItem: MediaItem, mainPosterColor: Color) -> Unit
 ) {
 
     val scope = rememberCoroutineScope()
@@ -77,12 +77,12 @@ fun CarouselMediaItem(
                     MediaItemVertical(
                         modifier = Modifier
                             .width(itemWidth)
-                            .clip(RoundedCornerShape(Dimens.posterRound))
-                            .clickable {
-                                onItemClicked(mediaItem)
-                            },
+                            .clip(RoundedCornerShape(Dimens.posterRound)),
                         mediaItem = mediaItem,
-                        fontSize = fontSize
+                        fontSize = fontSize,
+                        onClick = { mainPosterColor ->
+                            onItemClicked(mediaItem, mainPosterColor)
+                        }
                     )
                 }
 

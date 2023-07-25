@@ -4,8 +4,8 @@ import com.buntupana.tmdb.core.data.api.CoreApi
 import com.buntupana.tmdb.core.domain.model.Gender
 import com.buntupana.tmdb.feature.detail.data.raw.PersonDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.PersonDetails
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeParseException
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 
 private const val IMDB_BASE_URL = "https://www.imdb.com/name/"
 

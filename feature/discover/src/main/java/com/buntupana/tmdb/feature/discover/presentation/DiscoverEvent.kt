@@ -1,12 +1,12 @@
 package com.buntupana.tmdb.feature.discover.presentation
 
-import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
-import com.buntupana.tmdb.feature.discover.domain.entity.PopularType
-import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
+import com.buntupana.tmdb.feature.discover.presentation.filter_type.FreeToWatchFilter
+import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
+import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
 
 sealed class DiscoverEvent {
 
-    data class ChangePopularType(val popularType: PopularType) : DiscoverEvent()
-    data class ChangeFreeToWatchType(val freeToWatchType: FreeToWatchType): DiscoverEvent()
-    data class ChangeTrendingType(val trendingType: TrendingType): DiscoverEvent()
+    data class ChangePopularType(val popularType: PopularFilter) : DiscoverEvent()
+    data class ChangeFreeToWatchType(val freeToWatchFilter: FreeToWatchFilter): DiscoverEvent()
+    data class ChangeTrendingType(val trendingFilter: TrendingFilter): DiscoverEvent()
 }

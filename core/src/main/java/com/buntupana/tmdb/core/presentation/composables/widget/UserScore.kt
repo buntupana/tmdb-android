@@ -2,7 +2,14 @@ package com.buntupana.tmdb.core.presentation.composables.widget
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.presentation.dpToSp
 import com.buntupana.tmdb.core.presentation.theme.HkFontFamily
-import com.buntupana.tmdb.core.presentation.theme.PrimaryDark
+import com.buntupana.tmdb.core.presentation.theme.PrimaryDarkColor
 
 private const val MAX_VALUE = 99
 private const val MIN_VALUE = 0
@@ -27,7 +34,7 @@ private const val MIN_VALUE = 0
 fun UserScore(
     modifier: Modifier = Modifier,
     score: Int = 50,
-    backGroundColor: Color = PrimaryDark,
+    backGroundColor: Color = PrimaryDarkColor,
     noScoreColor: Color = Color(0xFF666666),
     lowScoreColor: Color = Color(0xFFDB2360),
     mediumScoreColor: Color = Color(0xFFD2D531),

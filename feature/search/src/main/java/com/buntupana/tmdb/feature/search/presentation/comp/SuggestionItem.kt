@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.Primary
+import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
 
 @Composable
 fun SuggestionItem(
@@ -62,7 +62,7 @@ fun SuggestionItem(
             Text(text = mediaItem.name)
         }
         Divider(
-            color = Primary,
+            color = PrimaryColor,
         )
     }
 }

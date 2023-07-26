@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.presentation.theme.Primary
+import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
 import com.buntupana.tmdb.feature.discover.R
 import com.buntupana.tmdb.feature.discover.presentation.comp.CarouselMediaItem
 import com.buntupana.tmdb.feature.discover.presentation.comp.TitleAndFilter
@@ -87,7 +87,7 @@ fun DiscoverContent(
     val systemUiController = rememberSystemUiController()
 
     SideEffect {
-        systemUiController.setSystemBarsColor(color = Primary)
+        systemUiController.setSystemBarsColor(color = PrimaryColor)
     }
 
     val scrollState = rememberScrollState()

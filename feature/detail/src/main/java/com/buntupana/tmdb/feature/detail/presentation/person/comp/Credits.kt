@@ -25,7 +25,7 @@ import androidx.compose.ui.text.withStyle
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.presentation.composables.DropdownMenuText
 import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.Secondary
+import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
 import com.buntupana.tmdb.core.presentation.util.clickableTextPadding
 import com.buntupana.tmdb.feature.detail.R
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
@@ -79,7 +79,7 @@ fun CreditsFilter(
                             vertical = Dimens.padding.small
                         ),
                     text = stringResource(id = RCore.string.text_clear),
-                    color = Secondary
+                    color = SecondaryColor
                 )
             }
 

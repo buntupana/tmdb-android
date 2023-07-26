@@ -55,7 +55,6 @@ fun MainInfo(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
     mediaDetails: MediaDetails,
-    backgroundColor: Color,
     textColor: Color,
     onItemClick: (personId: Long) -> Unit
 ) {
@@ -63,7 +62,7 @@ fun MainInfo(
     val uriHandler = LocalUriHandler.current
 
     Column(
-        modifier = modifier.background(backgroundColor)
+        modifier = modifier
     ) {
 
         // Title and release year
@@ -81,7 +80,8 @@ fun MainInfo(
                     highlight = PlaceholderHighlight.fade()
                 ),
             horizontalArrangement = Arrangement.Center,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+
         ) {
             Text(
                 modifier = Modifier.placeholder(
@@ -101,6 +101,7 @@ fun MainInfo(
 
                 Text(
                     modifier = Modifier
+                        .align(Alignment.CenterVertically)
                         .alpha(0.7f)
                         .placeholder(
                             visible = isLoading,
@@ -313,10 +314,9 @@ fun MainInfo(
 fun MainInfoPreview() {
 
     MainInfo(
-        modifier = Modifier.fillMaxHeight(),
+        modifier = Modifier.fillMaxHeight().background(DetailBackgroundColor),
         isLoading = false,
         mediaDetails = mediaDetailsMovieSample,
-        backgroundColor = DetailBackgroundColor,
         onItemClick = {},
         textColor = DetailBackgroundColor.getOnBackgroundColor()
     )

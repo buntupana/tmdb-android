@@ -16,8 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.Primary
-import com.buntupana.tmdb.core.presentation.theme.Secondary
+import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
+import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
 
 @Composable
 fun TopBar(
@@ -27,7 +27,7 @@ fun TopBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(Dimens.topBarHeight)
-            .background(Primary),
+            .background(PrimaryColor),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
@@ -49,7 +49,7 @@ fun TopBar(
             painter = painterResource(id = R.drawable.ic_search),
             contentDescription = null,
             alignment = Alignment.CenterEnd,
-            colorFilter = ColorFilter.tint(Secondary)
+            colorFilter = ColorFilter.tint(SecondaryColor)
         )
     }
 }

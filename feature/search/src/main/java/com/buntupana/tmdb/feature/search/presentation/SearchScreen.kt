@@ -15,7 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.Primary
+import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchBar
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchResults
 import com.buntupana.tmdb.feature.search.presentation.comp.TrendingList
@@ -32,7 +32,7 @@ fun SearchScreen(
     val systemUiController = rememberSystemUiController()
 
     SideEffect {
-        systemUiController.setSystemBarsColor(color = Primary)
+        systemUiController.setSystemBarsColor(color = PrimaryColor)
     }
 
     SearchScreenContent(
@@ -88,7 +88,7 @@ fun SearchScreenContent(
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator(
-                            color = Primary
+                            color = PrimaryColor
                         )
                     }
                 }

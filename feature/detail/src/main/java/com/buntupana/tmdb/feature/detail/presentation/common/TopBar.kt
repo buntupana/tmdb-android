@@ -22,18 +22,16 @@ import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 
 @Composable
 fun TopBar(
-    backgroundColor: Color,
+    modifier: Modifier = Modifier,
+    textColor: Color,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit
 ) {
 
-    val textColor = backgroundColor.getOnBackgroundColor()
-
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .height(Dimens.topBarHeight)
-            .background(backgroundColor),
+            .height(Dimens.topBarHeight),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -82,7 +80,8 @@ fun Modifier.clickableIcon(): Modifier {
 @Composable
 fun TopBarPreview() {
     TopBar(
-        backgroundColor = Color.Blue,
+        Modifier.background(Color.Blue),
+        textColor = Color.Blue.getOnBackgroundColor(),
         onSearchClick = {},
         onBackClick = {}
     )

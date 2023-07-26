@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.Primary
+import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
 import com.buntupana.tmdb.feature.search.R
 
 @Composable
@@ -73,7 +73,7 @@ fun TrendingList(
                     )
                 }
                 Divider(
-                    color = Primary
+                    color = PrimaryColor
                 )
             }
         }

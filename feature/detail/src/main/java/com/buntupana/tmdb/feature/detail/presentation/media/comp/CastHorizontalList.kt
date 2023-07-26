@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,18 +14,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.feature.detail.R
 import com.buntupana.tmdb.feature.detail.domain.model.CastPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
 
 @Composable
 fun CastHorizontalList(
     modifier: Modifier,
     mediaDetails: MediaDetails,
-    onItemClick: (personId: Long) -> Unit
+    onItemClick: (personId: Long) -> Unit,
+    onFullCastClick: () -> Unit
 ) {
 
     val castNumber = 9
@@ -43,7 +46,7 @@ fun CastHorizontalList(
             Text(
                 modifier = Modifier.padding(horizontal = Dimens.padding.medium),
                 text = castTitle,
-                fontSize = 18.sp,
+                fontSize = Dimens.textSize.title,
                 fontWeight = FontWeight.Bold
             )
 
@@ -73,14 +76,28 @@ fun CastHorizontalList(
 
             Spacer(modifier = Modifier.padding(Dimens.padding.medium))
 
-//        Text(
-//            modifier = Modifier.padding(horizontal = Dimens.padding.medium),
-//            text = stringResource(id = R.string.text_full_cast),
-//            fontSize = 20.sp,
-//            fontWeight = FontWeight.Bold,
-//        )
-//
-//        Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = Dimens.padding.medium)
+                    .clickable { onFullCastClick() },
+                text = stringResource(id = R.string.text_full_cast),
+                fontSize = Dimens.textSize.title,
+                fontWeight = FontWeight.Bold,
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
+
+@Preview
+@Composable
+fun CastHorizontalListPreview() {
+    CastHorizontalList(
+        modifier = Modifier,
+        mediaDetails = mediaDetailsMovieSample,
+        onFullCastClick = {},
+        onItemClick = {}
+    )
+}
+

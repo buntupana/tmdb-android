@@ -31,8 +31,8 @@ import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.Primary
-import com.buntupana.tmdb.core.presentation.theme.Secondary
+import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
+import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
 import com.buntupana.tmdb.feature.search.presentation.SearchState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import kotlinx.coroutines.launch
@@ -56,7 +56,7 @@ fun SearchResults(
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
                     Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
-                    color = Secondary
+                    color = SecondaryColor
                 )
             },
             backgroundColor = MaterialTheme.colors.background,
@@ -133,7 +133,7 @@ fun SearchResults(
                                 ) {
                                     Spacer(modifier = Modifier.height(Dimens.padding.medium))
                                     CircularProgressIndicator(
-                                        color = Primary
+                                        color = PrimaryColor
                                     )
                                 }
                             }
@@ -189,7 +189,7 @@ fun SearchResults(
                                             ) {
                                                 Spacer(modifier = Modifier.height(Dimens.padding.medium))
                                                 CircularProgressIndicator(
-                                                    color = Primary
+                                                    color = PrimaryColor
                                                 )
                                             }
                                         }

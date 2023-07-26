@@ -23,9 +23,9 @@ import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.MotionLayout
 import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.presentation.brush
-import com.buntupana.tmdb.core.presentation.theme.PrimaryDark
-import com.buntupana.tmdb.core.presentation.theme.TertiaryDark
-import com.buntupana.tmdb.core.presentation.theme.TertiaryLight
+import com.buntupana.tmdb.core.presentation.theme.PrimaryDarkColor
+import com.buntupana.tmdb.core.presentation.theme.TertiaryDarkColor
+import com.buntupana.tmdb.core.presentation.theme.TertiaryLightColor
 import com.buntupana.tmdb.core.presentation.useNonBreakingSpace
 import kotlinx.coroutines.launch
 
@@ -74,12 +74,12 @@ fun <T : MenuSelectorItem> MenuSelector(
                 .background(
                     Brush.horizontalGradient(
                         listOf(
-                            TertiaryLight,
-                            TertiaryDark
+                            TertiaryLightColor,
+                            TertiaryDarkColor
                         )
                     )
                 )
-                .border(2.dp, PrimaryDark, RoundedCornerShape(15.dp))
+                .border(2.dp, PrimaryDarkColor, RoundedCornerShape(15.dp))
                 .layoutId("box")
         )
 
@@ -87,7 +87,7 @@ fun <T : MenuSelectorItem> MenuSelector(
             if (index != _selectedIndex) {
                 Text(
                     text = " ${stringResource(id = menuItem.strRes)} ".useNonBreakingSpace(),
-                    color = PrimaryDark,
+                    color = PrimaryDarkColor,
                     modifier = Modifier
                         .clip(RoundedCornerShape(15.dp))
                         .clickable {
@@ -135,7 +135,7 @@ fun SelectedText(
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(15.dp))
-            .background(PrimaryDark)
+            .background(PrimaryDarkColor)
             .padding(horizontal = 16.dp, vertical = 6.dp)
             .clickable {
                 onClick?.invoke()
@@ -146,7 +146,7 @@ fun SelectedText(
         Text(
             text = text,
             modifier = Modifier
-                .brush(Brush.horizontalGradient(listOf(TertiaryLight, TertiaryDark))),
+                .brush(Brush.horizontalGradient(listOf(TertiaryLightColor, TertiaryDarkColor))),
             fontWeight = FontWeight.SemiBold,
             maxLines = 1
         )

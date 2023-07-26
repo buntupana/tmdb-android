@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.presentation.composables.OutlinedText
-import com.buntupana.tmdb.core.presentation.theme.Secondary
+import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
 
 @Composable
 fun TabSearchResult(
@@ -27,8 +27,8 @@ fun TabSearchResult(
     val fontWeight: FontWeight
 
     if (isSelected) {
-        textColor = Secondary
-        outLineColor = Secondary
+        textColor = SecondaryColor
+        outLineColor = SecondaryColor
         fontWeight = FontWeight.Bold
     } else {
         textColor = Color.Black

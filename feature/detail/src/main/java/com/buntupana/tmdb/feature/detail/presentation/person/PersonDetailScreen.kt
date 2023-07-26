@@ -15,6 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.domain.entity.MediaType
+import com.buntupana.tmdb.core.presentation.theme.PersonBackgroundColor
+import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.PersonDetailNavArgs
@@ -84,7 +86,7 @@ fun PersonDetailContent(
     ) {
         item {
             TopBar(
-                backgroundColor = MaterialTheme.colorScheme.background,
+                textColor = PersonBackgroundColor.getOnBackgroundColor(),
                 onBackClick = { onBackClick() },
                 onSearchClick = { onSearchClick() })
         }

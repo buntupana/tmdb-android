@@ -35,9 +35,9 @@ import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.composables.TextFieldSearch
 import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.Primary
-import com.buntupana.tmdb.core.presentation.theme.Secondary
-import com.buntupana.tmdb.core.presentation.theme.Tertiary
+import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
+import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
+import com.buntupana.tmdb.core.presentation.theme.TertiaryColor
 
 @Composable
 fun SearchBar(
@@ -57,7 +57,7 @@ fun SearchBar(
         Row(
             modifier = Modifier
                 .height(barHeight)
-                .background(Primary)
+                .background(PrimaryColor)
                 .padding(horizontal = Dimens.padding.medium),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -65,7 +65,7 @@ fun SearchBar(
                 modifier = Modifier.size(24.dp),
                 painter = painterResource(id = R.drawable.ic_search),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(Secondary)
+                colorFilter = ColorFilter.tint(SecondaryColor)
             )
             TextFieldSearch(
                 modifier = Modifier
@@ -80,7 +80,7 @@ fun SearchBar(
                 },
                 isEnabled = isLoadingSearch.not(),
                 requestFocus = requestFocus,
-                cursorColor = Secondary
+                cursorColor = SecondaryColor
             )
             Spacer(modifier = Modifier.width(8.dp))
             Box(
@@ -92,7 +92,7 @@ fun SearchBar(
                         modifier = Modifier
                             .clip(CircleShape)
                             .indication(
-                                indication = rememberRipple(color = Tertiary),
+                                indication = rememberRipple(color = TertiaryColor),
                                 interactionSource = interactionSource
                             )
                             .clickable {
@@ -100,11 +100,11 @@ fun SearchBar(
                             },
                         painter = painterResource(id = R.drawable.ic_cancel),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(Secondary)
+                        colorFilter = ColorFilter.tint(SecondaryColor)
                     )
                 } else if (isLoadingSuggestions) {
                     CircularProgressIndicator(
-                        color = Secondary
+                        color = SecondaryColor
                     )
                 }
             }

@@ -70,16 +70,12 @@ dependencies {
     debugApi "androidx.compose.ui:ui-tooling:$compose_version"
     api "androidx.navigation:navigation-compose:$navigation_version"
     api 'androidx.paging:paging-compose:3.2.0-rc01'
-    api "androidx.compose.foundation:foundation:1.5.0-beta03"
+    api "androidx.compose.foundation:foundation:$compose_foundation_version"
 
     // Accompanist
     api "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
     api "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
     api "com.google.accompanist:accompanist-placeholder-material:$accompanist_version"
-
-    // Fix bug in compose
-    debugApi 'androidx.customview:customview:1.2.0-alpha02'
-    debugApi 'androidx.customview:customview-poolingcontainer:1.0.0'
 
     api "io.github.raamcosta.compose-destinations:core:$navigation_destination_version"
 //    ksp "io.github.raamcosta.compose-destinations:ksp:$navigation_destination_version"

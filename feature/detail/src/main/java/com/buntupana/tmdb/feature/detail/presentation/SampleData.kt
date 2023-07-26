@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.detail.presentation
 
 import com.buntupana.tmdb.core.domain.model.Gender
+import com.buntupana.tmdb.feature.detail.domain.model.CastPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import java.time.LocalDate
@@ -31,22 +32,29 @@ val personDetailsSample = PersonFullDetails(
     knownCredits = 60,
 )
 
+val castPersonItemSample = CastPersonItem(
+    id = 0L,
+    name = "Aquaman",
+    profileUrl = "",
+    ""
+)
+
 val mediaDetailsMovieSample = MediaDetails.Movie(
-    0L,
-    "Thor: Love and Thunder",
-    "",
-    "",
-    "",
-    "After his retirement is interrupted by Gorr the God Butcher, a galactic killer who seeks the extinction of the gods, Thor enlists the help of King Valkyrie, Korg, and ex-girlfriend Jane Foster, who now inexplicably wields Mjolnir as the Mighty Thor. Together they embark upon a harrowing cosmic adventure to uncover the mystery of the God Butcher’s vengeance and stop him before it’s too late.",
-    "The one is not the only.",
-    LocalDate.now(),
-    "10-11-20",
-    120,
-    120,
-    listOf("Action", "Adventure", "Fantasy"),
-    "18",
-    emptyList(),
-    emptyList(),
-    emptyList(),
-    "ES"
+    id = 0L,
+    title = "Thor: Love and Thunder",
+    posterUrl = "",
+    backdropUrl = "",
+    trailerUrl = "test",
+    overview = "After his retirement is interrupted by Gorr the God Butcher, a galactic killer who seeks the extinction of the gods, Thor enlists the help of King Valkyrie, Korg, and ex-girlfriend Jane Foster, who now inexplicably wields Mjolnir as the Mighty Thor. Together they embark upon a harrowing cosmic adventure to uncover the mystery of the God Butcher’s vengeance and stop him before it’s too late.",
+    tagLine = "The one is not the only.",
+    releaseDate = LocalDate.now(),
+    localReleaseDate = "10-11-20",
+    userScore = 120,
+    runTime = 120,
+    genreList = listOf("Action", "Adventure", "Fantasy"),
+    ageCertification = "18",
+    creatorList = emptyList(),
+    castList = listOf(castPersonItemSample, castPersonItemSample, castPersonItemSample, castPersonItemSample),
+    crewList = emptyList(),
+    localCountryCodeRelease = "ES"
 )

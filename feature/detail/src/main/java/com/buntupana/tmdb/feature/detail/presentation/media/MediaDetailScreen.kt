@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.detail.presentation.media
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
@@ -12,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
@@ -39,6 +41,9 @@ fun MediaDetailScreen(
         onSearchClick = { detailNavigator.navigateToSearch() },
         onPersonClick = { personId ->
             detailNavigator.navigateToPerson(personId)
+        },
+        onFullCastClick = {
+
         }
     )
 }
@@ -48,7 +53,8 @@ fun MediaDetailContent(
     state: DetailScreenState,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onPersonClick: (personId: Long) -> Unit
+    onPersonClick: (personId: Long) -> Unit,
+    onFullCastClick: () -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -57,26 +63,31 @@ fun MediaDetailContent(
         mutableStateOf(state.backgroundColor)
     }
 
-    val onBackgroundColor = backgroundColor.getOnBackgroundColor()
-
     val systemUiController = rememberSystemUiController()
 
     systemUiController.setSystemBarsColor(backgroundColor)
 
-    if (state.mediaDetails != null) {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .background(backgroundColor)
-        ) {
+    // Added to avoid showing background in top when scrolling effect
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor)
+    )
 
-            TopBar(
-                backgroundColor = backgroundColor,
-                onSearchClick = { onSearchClick() },
-                onBackClick = { onBackClick() }
-            )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+            .background(backgroundColor)
+    ) {
 
+        TopBar(
+            textColor = backgroundColor.getOnBackgroundColor(),
+            onSearchClick = { onSearchClick() },
+            onBackClick = { onBackClick() }
+        )
+
+        if (state.mediaDetails != null) {
             Header(
                 isLoading = state.isLoading,
                 mediaDetails = state.mediaDetails,
@@ -90,16 +101,24 @@ fun MediaDetailContent(
             MainInfo(
                 isLoading = state.isLoading,
                 mediaDetails = state.mediaDetails,
-                backgroundColor = backgroundColor,
-                textColor = onBackgroundColor,
+                textColor = backgroundColor.getOnBackgroundColor(),
                 onItemClick = onPersonClick
             )
 
-            CastHorizontalList(
-                modifier = Modifier.background(MaterialTheme.colorScheme.background),
-                mediaDetails = state.mediaDetails,
-                onItemClick = onPersonClick
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+            ) {
+                CastHorizontalList(
+                    modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                    mediaDetails = state.mediaDetails,
+                    onItemClick = onPersonClick,
+                    onFullCastClick = { onFullCastClick }
+                )
+            }
+        } else {
+
         }
     }
 }
@@ -115,6 +134,7 @@ fun MediaDetailScreenPreview() {
         ),
         onBackClick = {},
         onSearchClick = {},
-        onPersonClick = {}
+        onPersonClick = {},
+        onFullCastClick = {}
     )
 }

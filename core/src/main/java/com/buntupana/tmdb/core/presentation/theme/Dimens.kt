@@ -36,7 +36,7 @@ object PaddingPhone : Padding {
 
 object TextPhone: TextSize {
     override val title = 20.sp
-    override val body = 12.sp
+    override val body = 14.sp
 }
 
 interface Padding {

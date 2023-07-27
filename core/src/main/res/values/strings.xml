@@ -1,34 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    // Common
+    <string name="text_trending">Trending</string>
+    <string name="message_loading_content_error">Sorry, there was an error loading this content</string>
+    <string name="text_retry">Retry</string>
+
+    // Time
     <string name="text_hours_minutes">%1$dh %2$dm</string>
     <string name="text_minutes">%1$dm</string>
 
-    <string name="text_search">Search</string>
+    // Discover
+    <string name="text_menu_selector_sample_streaming" translatable="false">Streaming</string>
+    <string name="text_menu_selector_sample_on_tv" translatable="false">On TV</string>
+    <string name="text_menu_selector_sample_for_rent" translatable="false">For Rent</string>
+    <string name="text_menu_selector_sample_in_theatres" translatable="false">In Theatres</string>
 
+    // Search
+    <string name="text_search">Search</string>
+    <string name="message_movies_no_result">There are no movies that matched your query.</string>
+    <string name="message_tv_shows_no_result">There are no TV shows that matched your query.</string>
+    <string name="message_people_no_result">There are no people that matched your query.</string>
+
+    // Person Detail
     <string name="text_department">Department</string>
     <string name="text_clear">Clear</string>
     <string name="text_all">All</string>
     <string name="text_movies">Movies</string>
     <string name="text_tv_shows">TV Shows</string>
     <string name="text_people">People</string>
-
-    <string name="text_trending">Trending</string>
-
-    <string name="message_movies_no_result">There are no movies that matched your query.</string>
-    <string name="message_tv_shows_no_result">There are no TV shows that matched your query.</string>
-    <string name="message_people_no_result">There are no people that matched your query.</string>
-
     <string name="text_gender_not_specified">Not specified</string>
     <string name="text_gender_female">Female</string>
     <string name="text_gender_male">Male</string>
     <string name="text_gender_no_binary">No-Binary</string>
-
     <string name="text_read_more">Read More</string>
 
+    // Media Detail
     <string name="text_user_score">User Score</string>
 
-    <string name="text_menu_selector_sample_streaming" translatable="false">Streaming</string>
-    <string name="text_menu_selector_sample_on_tv" translatable="false">On TV</string>
-    <string name="text_menu_selector_sample_for_rent" translatable="false">For Rent</string>
-    <string name="text_menu_selector_sample_in_theatres" translatable="false">In Theatres</string>
 </resources>

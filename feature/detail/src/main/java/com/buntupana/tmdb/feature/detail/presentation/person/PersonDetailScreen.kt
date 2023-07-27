@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.detail.presentation.person
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -12,14 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.domain.entity.MediaType
+import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.PersonBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
-import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.PersonDetailNavArgs
+import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.CreditsFilter
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.HeaderContent
@@ -39,31 +42,31 @@ fun PersonDetailScreen(
     detailNavigator: DetailNavigator
 ) {
 
-    val systemUiController = rememberSystemUiController()
-
-    systemUiController.setSystemBarsColor(MaterialTheme.colorScheme.background)
-
-    if (viewModel.state.personDetails != null) {
-        viewModel.state.personDetails?.let {
-            PersonDetailContent(
-                it,
-                onBackClick = { detailNavigator.navigateBack() },
-                onSearchClick = { detailNavigator.navigateToSearch() },
-                onMediaClick = { id, mediaType, dominantColor ->
-                    detailNavigator.navigateToMediaDetail(id, mediaType, dominantColor)
-                }
-            )
+    PersonDetailContent(
+        viewModel.state,
+        onBackClick = { detailNavigator.navigateBack() },
+        onSearchClick = { detailNavigator.navigateToSearch() },
+        onRetryClick = {
+            viewModel.onEvent(PersonDetailEvent.GetPersonDetails)
+        },
+        onMediaClick = { id, mediaType, dominantColor ->
+            detailNavigator.navigateToMediaDetail(id, mediaType, dominantColor)
         }
-    }
+    )
 }
 
 @Composable
 fun PersonDetailContent(
-    personDetails: PersonFullDetails,
+    state: PersonDetailState,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
+    onRetryClick: () -> Unit,
     onMediaClick: (id: Long, mediaType: MediaType, dominantColor: Color?) -> Unit
 ) {
+
+    val systemUiController = rememberSystemUiController()
+
+    systemUiController.setSystemBarsColor(MaterialTheme.colorScheme.background)
 
     var mediaTypeSelected by remember {
         mutableStateOf<Int?>(null)
@@ -78,11 +81,9 @@ fun PersonDetailContent(
         R.string.text_tv_shows to stringResource(id = R.string.text_tv_shows)
     )
 
-    val departmentMap = personDetails.creditMap.keys.associateWith { it }
 
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         item {
             TopBar(
@@ -91,42 +92,67 @@ fun PersonDetailContent(
                 onSearchClick = { onSearchClick() })
         }
 
-        item {
-            HeaderContent(personDetails = personDetails)
-        }
+        when {
+            state.isLoading -> {
+                item {
+                    MediaDetailsLoading(backgroundColor = MaterialTheme.colorScheme.background)
+                }
+            }
 
-        item {
-            PersonalInfo(personDetails = personDetails)
-        }
+            state.isGetPersonError -> {
+                item {
+                    ErrorAndRetry(
+                        modifier = Modifier
+                            .padding(vertical = 200.dp)
+                            .fillMaxSize(),
+                        errorMessage = stringResource(id = R.string.message_loading_content_error),
+                        onRetryClick = onRetryClick
+                    )
+                }
+            }
 
-        item {
-            KnownFor(
-                itemList = personDetails.knownFor,
-                onItemClick = onMediaClick
-            )
-        }
+            state.personDetails != null -> {
 
-        item {
-            CreditsFilter(
-                mainDepartment = personDetails.knownForDepartment,
-                mediaTypeMap,
-                departmentMap,
-                mediaTypeSelected,
-                departmentSelected
-            ) { mediaType, department ->
-                mediaTypeSelected = mediaType
-                departmentSelected = department
+                val departmentMap = state.personDetails.creditMap.keys.associateWith { it }
+
+                item {
+                    HeaderContent(personDetails = state.personDetails)
+                }
+
+                item {
+                    PersonalInfo(personDetails = state.personDetails)
+                }
+
+                item {
+                    KnownFor(
+                        itemList = state.personDetails.knownFor,
+                        onItemClick = onMediaClick
+                    )
+                }
+
+                item {
+                    CreditsFilter(
+                        mainDepartment = state.personDetails.knownForDepartment,
+                        mediaTypeMap = mediaTypeMap,
+                        departmentMap = departmentMap,
+                        mediaTypeSelected = mediaTypeSelected,
+                        departmentSelected = departmentSelected
+                    ) { mediaType, department ->
+                        mediaTypeSelected = mediaType
+                        departmentSelected = department
+                    }
+                }
+
+                credits(
+                    personName = state.personDetails.name,
+                    creditMap = state.personDetails.creditMap,
+                    mainDepartment = state.personDetails.knownForDepartment,
+                    mediaTypeSelected = mediaTypeSelected,
+                    departmentSelected = departmentSelected,
+                    onItemClick = onMediaClick
+                )
             }
         }
-
-        credits(
-            personName = personDetails.name,
-            creditMap = personDetails.creditMap,
-            mainDepartment = personDetails.knownForDepartment,
-            mediaTypeSelected = mediaTypeSelected,
-            departmentSelected = departmentSelected,
-            onItemClick = onMediaClick
-        )
     }
 }
 
@@ -135,9 +161,14 @@ fun PersonDetailContent(
 fun PersonDetailsContentPreview() {
 
     PersonDetailContent(
-        personDetails = personDetailsSample,
+        state = PersonDetailState(
+            isLoading = false,
+            isGetPersonError = false,
+            personDetails = personDetailsSample
+        ),
         onBackClick = {},
         onSearchClick = {},
-        onMediaClick = { id, mediaType, dominantColor -> }
+        onRetryClick = {},
+        onMediaClick = { _, _, _ -> }
     )
 }

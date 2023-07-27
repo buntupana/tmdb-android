@@ -15,6 +15,7 @@ import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
 import com.buntupana.tmdb.feature.detail.presentation.navArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,15 +28,24 @@ class MediaDetailViewModel @Inject constructor(
     private val navArgs: MediaDetailNavArgs = savedStateHandle.navArgs()
 
     var state by mutableStateOf(
-        DetailScreenState(
+        MediaDetailState(
             backgroundColor = Color(navArgs.backgroundColor ?: DetailBackgroundColor.toArgb())
         )
     )
 
     init {
-        when (navArgs.mediaType) {
-            MediaType.MOVIE -> getMovieDetails()
-            MediaType.TV_SHOW -> getTvShowDetails()
+        onEvent(MediaDetailEvent.GetMediaDetails)
+    }
+
+    fun onEvent(event: MediaDetailEvent) {
+        Timber.d("onEvent() called with: event = [$event]")
+        when(event) {
+            MediaDetailEvent.GetMediaDetails -> {
+                when (navArgs.mediaType) {
+                    MediaType.MOVIE -> getMovieDetails()
+                    MediaType.TV_SHOW -> getTvShowDetails()
+                }
+            }
         }
     }
 
@@ -43,13 +53,13 @@ class MediaDetailViewModel @Inject constructor(
         viewModelScope.launch {
             getMovieDetailsUseCase(navArgs.mediaId) {
                 loading {
-                    state = state.copy(isLoading = true)
+                    state = state.copy(isLoading = true, isGetContentError = false)
                 }
                 error {
-                    state = state.copy(isLoading = false)
+                    state = state.copy(isLoading = false, isGetContentError = true)
                 }
                 success {
-                    state = state.copy(isLoading = false, mediaDetails = it)
+                    state = state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
                 }
             }
         }
@@ -59,13 +69,13 @@ class MediaDetailViewModel @Inject constructor(
         viewModelScope.launch {
             getTvShowDetailsUseCase(navArgs.mediaId) {
                 loading {
-                    state = state.copy(isLoading = true)
+                    state = state.copy(isLoading = true, isGetContentError = false)
                 }
                 error {
-                    state = state.copy(isLoading = false)
+                    state = state.copy(isLoading = false, isGetContentError = true)
                 }
                 success {
-                    state = state.copy(isLoading = false, mediaDetails = it)
+                    state = state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
                 }
             }
         }

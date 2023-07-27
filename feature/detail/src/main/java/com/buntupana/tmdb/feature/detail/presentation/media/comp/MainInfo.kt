@@ -53,7 +53,7 @@ import com.google.accompanist.placeholder.material.placeholder
 @Composable
 fun MainInfo(
     modifier: Modifier = Modifier,
-    isLoading: Boolean,
+    isLoading: Boolean = false,
     mediaDetails: MediaDetails,
     textColor: Color,
     onItemClick: (personId: Long) -> Unit

@@ -11,6 +11,7 @@ import com.buntupana.tmdb.feature.detail.presentation.PersonDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.navArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,24 +22,35 @@ class PersonDetailViewModel @Inject constructor(
 
     private val navArgs: PersonDetailNavArgs = savedStateHandle.navArgs()
 
-    var state by mutableStateOf(PersonState())
+    var state by mutableStateOf(PersonDetailState())
 
     init {
-        getPersonDetails(navArgs.personId)
+        onEvent(PersonDetailEvent.GetPersonDetails)
     }
 
-    private fun getPersonDetails(personId: Long) {
+    fun onEvent(event: PersonDetailEvent) {
+        Timber.d("onEvent() called with: event = [$event]")
         viewModelScope.launch {
-            getPersonDetailsUseCase(personId) {
-                loading {
-                    state = state.copy(isLoading = true)
-                }
-                error {
-                    state = state.copy(isLoading = false)
-                }
-                success { personDetails ->
-                    state = state.copy(isLoading = false, personDetails = personDetails)
-                }
+            when (event) {
+                PersonDetailEvent.GetPersonDetails -> getPersonDetails(navArgs.personId)
+            }
+        }
+    }
+
+    private suspend fun getPersonDetails(personId: Long) {
+        getPersonDetailsUseCase(personId) {
+            loading {
+                state = state.copy(isLoading = true, isGetPersonError = false)
+            }
+            error {
+                state = state.copy(isLoading = false, isGetPersonError = true)
+            }
+            success { personDetails ->
+                state = state.copy(
+                    isLoading = false,
+                    isGetPersonError = false,
+                    personDetails = personDetails
+                )
             }
         }
     }

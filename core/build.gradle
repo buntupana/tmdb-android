@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
-    id 'com.google.devtools.ksp' version '1.8.21-1.0.11'
+    id 'com.google.devtools.ksp' version '1.9.10-1.0.13'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
@@ -69,7 +69,7 @@ dependencies {
     api "androidx.compose.material:material:$compose_version"
     debugApi "androidx.compose.ui:ui-tooling:$compose_version"
     api "androidx.navigation:navigation-compose:$navigation_version"
-    api 'androidx.paging:paging-compose:3.2.0-rc01'
+    api "androidx.paging:paging-compose:$compose_paging_version"
     api "androidx.compose.foundation:foundation:$compose_foundation_version"
 
     // Accompanist

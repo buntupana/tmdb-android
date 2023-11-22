@@ -37,7 +37,8 @@ fun CastDetailScreen(
         state = viewModel.state,
         onBackClick = { detailNavigator.navigateBack() },
         onSearchClick = { detailNavigator.navigateToSearch() },
-        onPersonClick = { personId -> detailNavigator.navigateToPerson(personId) }
+        onPersonClick = { personId -> detailNavigator.navigateToPerson(personId) },
+        onLogoClick = { detailNavigator.navigateToMainScreen() }
     )
 }
 
@@ -46,7 +47,8 @@ fun CastDetailContent(
     state: CastDetailState,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onPersonClick: (personId: Long) -> Unit
+    onPersonClick: (personId: Long) -> Unit,
+    onLogoClick: () -> Unit
 ) {
 
     var backgroundColor by remember {
@@ -81,7 +83,8 @@ fun CastDetailContent(
                 TopBar(
                     textColor = backgroundColor.getOnBackgroundColor(),
                     onSearchClick = { onSearchClick() },
-                    onBackClick = { onBackClick() }
+                    onBackClick = { onBackClick() },
+                    onLogoClick = { onLogoClick() }
                 )
 
                 CastHeader(
@@ -121,5 +124,6 @@ fun CastDetailScreenPreview() {
         onBackClick = {},
         onSearchClick = {},
         onPersonClick = {},
+        onLogoClick = {}
     )
 }

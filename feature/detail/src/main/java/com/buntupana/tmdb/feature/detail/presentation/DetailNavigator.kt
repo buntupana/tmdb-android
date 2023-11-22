@@ -22,4 +22,6 @@ interface DetailNavigator {
         mediaType: MediaType,
         backgroundColor: Color?
     )
+
+    fun navigateToMainScreen()
 }

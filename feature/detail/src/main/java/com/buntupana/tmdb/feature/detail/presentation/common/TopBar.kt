@@ -25,7 +25,8 @@ fun TopBar(
     modifier: Modifier = Modifier,
     textColor: Color,
     onBackClick: () -> Unit,
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    onLogoClick: () -> Unit
 ) {
 
     Row(
@@ -51,7 +52,7 @@ fun TopBar(
             modifier = Modifier
                 .size(Dimens.topBarIconSize)
                 .clickable {
-//                    onSearchClick()
+                    onLogoClick()
                 },
             painter = painterResource(id = R.drawable.img_logo),
             contentDescription = null,
@@ -83,6 +84,7 @@ fun TopBarPreview() {
         Modifier.background(Color.Blue),
         textColor = Color.Blue.getOnBackgroundColor(),
         onSearchClick = {},
-        onBackClick = {}
+        onBackClick = {},
+        onLogoClick = {}
     )
 }

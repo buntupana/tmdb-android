@@ -10,6 +10,7 @@ import com.buntupana.tmdb.feature.detail.presentation.destinations.MediaDetailSc
 import com.buntupana.tmdb.feature.detail.presentation.destinations.PersonDetailScreenDestination
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNavArgs
 import com.buntupana.tmdb.feature.discover.presentation.DiscoverNavigator
+import com.buntupana.tmdb.feature.discover.presentation.destinations.DiscoverScreenDestination
 import com.buntupana.tmdb.feature.search.presentation.SearchNavigator
 import com.buntupana.tmdb.feature.search.presentation.destinations.SearchScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -48,5 +49,12 @@ class CommonNavigation(
 
     override fun navigateToPerson(personId: Long) {
         destinationsNavigator.navigate(PersonDetailScreenDestination(PersonDetailNavArgs(personId)))
+    }
+
+    override fun navigateToMainScreen() {
+        destinationsNavigator.popBackStack(
+            route = DiscoverScreenDestination.route,
+            inclusive = false
+        )
     }
 }

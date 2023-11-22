@@ -50,6 +50,9 @@ fun PersonDetailScreen(
         },
         onMediaClick = { id, mediaType, dominantColor ->
             detailNavigator.navigateToMediaDetail(id, mediaType, dominantColor)
+        },
+        onLogoClick = {
+            detailNavigator.navigateToMainScreen()
         }
     )
 }
@@ -60,7 +63,8 @@ fun PersonDetailContent(
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onRetryClick: () -> Unit,
-    onMediaClick: (id: Long, mediaType: MediaType, dominantColor: Color?) -> Unit
+    onMediaClick: (id: Long, mediaType: MediaType, dominantColor: Color?) -> Unit,
+    onLogoClick: () -> Unit
 ) {
 
     val systemUiController = rememberSystemUiController()
@@ -88,7 +92,9 @@ fun PersonDetailContent(
             TopBar(
                 textColor = PersonBackgroundColor.getOnBackgroundColor(),
                 onBackClick = { onBackClick() },
-                onSearchClick = { onSearchClick() })
+                onSearchClick = { onSearchClick() },
+                onLogoClick = { onLogoClick() }
+            )
         }
 
         when {
@@ -168,6 +174,7 @@ fun PersonDetailsContentPreview() {
         onBackClick = {},
         onSearchClick = {},
         onRetryClick = {},
-        onMediaClick = { _, _, _ -> }
+        onMediaClick = { _, _, _ -> },
+        onLogoClick = {}
     )
 }

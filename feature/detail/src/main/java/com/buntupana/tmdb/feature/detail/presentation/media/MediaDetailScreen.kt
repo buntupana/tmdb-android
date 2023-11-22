@@ -59,6 +59,9 @@ fun MediaDetailScreen(
         },
         onRetryClick = {
             viewModel.onEvent(MediaDetailEvent.GetMediaDetails)
+        },
+        onLogoClick = {
+            detailNavigator.navigateToMainScreen()
         }
     )
 }
@@ -70,7 +73,8 @@ fun MediaDetailContent(
     onSearchClick: () -> Unit,
     onPersonClick: (personId: Long) -> Unit,
     onFullCastClick: (mediaDetails: MediaDetails, mediaType: MediaType, backgroundColor: Color) -> Unit,
-    onRetryClick: () -> Unit
+    onRetryClick: () -> Unit,
+    onLogoClick: () -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -100,7 +104,8 @@ fun MediaDetailContent(
         TopBar(
             textColor = backgroundColor.getOnBackgroundColor(),
             onSearchClick = { onSearchClick() },
-            onBackClick = { onBackClick() }
+            onBackClick = { onBackClick() },
+            onLogoClick = { onLogoClick() }
         )
 
         when {
@@ -176,6 +181,7 @@ fun MediaDetailScreenPreview() {
         onSearchClick = {},
         onPersonClick = {},
         onFullCastClick = { mediaDetails, mediaType, backgroundColor -> },
-        onRetryClick = {}
+        onRetryClick = {},
+        onLogoClick = {}
     )
 }

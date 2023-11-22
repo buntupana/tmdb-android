@@ -11,5 +11,8 @@ interface DiscoverNavigator {
     )
 
     fun navigateToPerson(personId: Long)
+
     fun navigateToSearch()
+
+    fun navigateToMainScreen()
 }

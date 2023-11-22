@@ -45,15 +45,11 @@ import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.fade
-import com.google.accompanist.placeholder.material.placeholder
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MainInfo(
     modifier: Modifier = Modifier,
-    isLoading: Boolean = false,
     mediaDetails: MediaDetails,
     textColor: Color,
     onItemClick: (personId: Long) -> Unit
@@ -74,20 +70,12 @@ fun MainInfo(
                     bottom = Dimens.padding.small,
                     start = Dimens.padding.medium,
                     end = Dimens.padding.medium
-                )
-                .placeholder(
-                    visible = isLoading,
-                    highlight = PlaceholderHighlight.fade()
                 ),
             horizontalArrangement = Arrangement.Center,
             verticalArrangement = Arrangement.Center,
 
         ) {
             Text(
-                modifier = Modifier.placeholder(
-                    visible = isLoading,
-                    highlight = PlaceholderHighlight.fade()
-                ),
                 text = mediaDetails.title,
                 color = textColor,
                 fontWeight = FontWeight(600),
@@ -102,11 +90,7 @@ fun MainInfo(
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
-                        .alpha(0.7f)
-                        .placeholder(
-                            visible = isLoading,
-                            highlight = PlaceholderHighlight.fade()
-                        ),
+                        .alpha(0.7f),
                     text = "(${releaseDate.year})",
                     color = textColor,
                     fontWeight = FontWeight(400)
@@ -315,7 +299,6 @@ fun MainInfoPreview() {
 
     MainInfo(
         modifier = Modifier.fillMaxHeight().background(DetailBackgroundColor),
-        isLoading = false,
         mediaDetails = mediaDetailsMovieSample,
         onItemClick = {},
         textColor = DetailBackgroundColor.getOnBackgroundColor()

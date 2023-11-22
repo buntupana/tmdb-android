@@ -20,9 +20,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.R
+import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
+import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
@@ -48,8 +50,12 @@ fun MediaDetailScreen(
         onPersonClick = { personId ->
             detailNavigator.navigateToPerson(personId)
         },
-        onFullCastClick = {
-
+        onFullCastClick = { mediaDetails, mediaType, backgroundColor ->
+            detailNavigator.navigateToFullCast(
+                mediaDetails = mediaDetails,
+                mediaType = mediaType,
+                backgroundColor = backgroundColor
+            )
         },
         onRetryClick = {
             viewModel.onEvent(MediaDetailEvent.GetMediaDetails)
@@ -63,7 +69,7 @@ fun MediaDetailContent(
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onPersonClick: (personId: Long) -> Unit,
-    onFullCastClick: () -> Unit,
+    onFullCastClick: (mediaDetails: MediaDetails, mediaType: MediaType, backgroundColor: Color) -> Unit,
     onRetryClick: () -> Unit
 ) {
 
@@ -140,7 +146,13 @@ fun MediaDetailContent(
                         modifier = Modifier.background(MaterialTheme.colorScheme.background),
                         mediaDetails = state.mediaDetails,
                         onItemClick = onPersonClick,
-                        onFullCastClick = { onFullCastClick }
+                        onFullCastClick = {
+                            onFullCastClick(
+                                state.mediaDetails,
+                                state.mediaType,
+                                state.backgroundColor
+                            )
+                        }
                     )
                 }
             }
@@ -154,14 +166,16 @@ fun MediaDetailScreenPreview() {
 
     MediaDetailContent(
         state = MediaDetailState(
+            mediaId = 0L,
+            mediaType = MediaType.MOVIE,
             mediaDetails = mediaDetailsMovieSample,
             backgroundColor = DetailBackgroundColor,
-            isGetContentError = true
+            isGetContentError = false
         ),
         onBackClick = {},
         onSearchClick = {},
         onPersonClick = {},
-        onFullCastClick = {},
+        onFullCastClick = { mediaDetails, mediaType, backgroundColor -> },
         onRetryClick = {}
     )
 }

@@ -1,7 +1,10 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 
+@Parcelize
 sealed class MediaDetails(
     open val id: Long,
     open val title: String,
@@ -15,10 +18,10 @@ sealed class MediaDetails(
     open val runTime: Long,
     open val genreList: List<String>,
     open val ageCertification: String,
-    open val creatorList: List<CrewPersonItem>,
-    open val castList: List<CastPersonItem>,
-    open val crewList: List<CrewPersonItem>
-) {
+    open val creatorList: List<Person.Crew>,
+    open val castList: List<Person.Cast>,
+    open val crewList: List<Person.Crew>
+) : Parcelable {
 
     data class Movie(
         override val id: Long,
@@ -34,9 +37,9 @@ sealed class MediaDetails(
         override val runTime: Long,
         override val genreList: List<String>,
         override val ageCertification: String,
-        override val creatorList: List<CrewPersonItem>,
-        override val castList: List<CastPersonItem>,
-        override val crewList: List<CrewPersonItem>,
+        override val creatorList: List<Person.Crew>,
+        override val castList: List<Person.Cast>,
+        override val crewList: List<Person.Crew>,
         val localCountryCodeRelease: String
     ) : MediaDetails(
         id,
@@ -69,9 +72,9 @@ sealed class MediaDetails(
         override val runTime: Long,
         override val genreList: List<String>,
         override val ageCertification: String,
-        override val creatorList: List<CrewPersonItem>,
-        override val castList: List<CastPersonItem>,
-        override val crewList: List<CrewPersonItem>
+        override val creatorList: List<Person.Crew>,
+        override val castList: List<Person.Cast>,
+        override val crewList: List<Person.Crew>
     ) : MediaDetails(
         id,
         title,

@@ -38,4 +38,8 @@
     // Media Detail
     <string name="text_user_score">User Score</string>
 
+    // Cast Detail
+    <string name="text_cast">Cast</string>
+    <string name="text_crew">Crew</string>
+
 </resources>

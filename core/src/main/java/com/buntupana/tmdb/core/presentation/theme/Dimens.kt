@@ -34,6 +34,7 @@ object PaddingPhone : Padding {
     override val betweenTexts = tiny
     override val horizontal = medium
     override val vertical = medium
+    override val verticalItem = small
 }
 
 object TextPhone: TextSize {
@@ -49,6 +50,7 @@ interface Padding {
     val huge: Dp
     val horizontal: Dp
     val vertical: Dp
+    val verticalItem: Dp
     val betweenTexts: Dp
 }
 

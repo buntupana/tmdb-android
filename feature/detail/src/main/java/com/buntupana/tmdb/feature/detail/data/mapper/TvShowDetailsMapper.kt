@@ -3,7 +3,7 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 import com.buntupana.tmdb.core.data.api.CoreApi
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
-import com.buntupana.tmdb.feature.detail.domain.model.CrewPersonItem
+import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
@@ -35,11 +35,12 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
         episodeRunTime?.firstOrNull() ?: 0,
         genres?.map { it.name }.orEmpty(),
         createdBy?.map {
-            CrewPersonItem(
-                it.id,
-                it.name.orEmpty(),
-                CoreApi.BASE_URL_PROFILE + it.profilePath,
-                ""
+            Person.Crew(
+                id = it.id,
+                name = it.name.orEmpty(),
+                profileUrl = CoreApi.BASE_URL_PROFILE + it.profilePath,
+                department = "",
+                job = ""
             )
         }.orEmpty(),
         contentRatings?.results?.map { it.toModel() }.orEmpty(),

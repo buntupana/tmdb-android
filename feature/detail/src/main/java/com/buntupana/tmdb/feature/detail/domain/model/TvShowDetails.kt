@@ -15,7 +15,7 @@ data class TvShowDetails(
     val userScore: Int,
     val runTime: Long,
     val genreList: List<String>,
-    val creatorList: List<CrewPersonItem>,
+    val creatorList: List<Person.Crew>,
     val certificationList: List<Certification>,
     val videoList: List<Video>,
     val credits: Credits

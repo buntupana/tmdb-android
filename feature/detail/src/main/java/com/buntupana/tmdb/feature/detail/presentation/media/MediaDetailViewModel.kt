@@ -29,6 +29,8 @@ class MediaDetailViewModel @Inject constructor(
 
     var state by mutableStateOf(
         MediaDetailState(
+            mediaId = navArgs.mediaId,
+            mediaType = navArgs.mediaType,
             backgroundColor = Color(navArgs.backgroundColor ?: DetailBackgroundColor.toArgb())
         )
     )

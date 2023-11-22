@@ -18,8 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.feature.detail.R
-import com.buntupana.tmdb.feature.detail.domain.model.CastPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
 
 @Composable
@@ -58,7 +58,7 @@ fun CastHorizontalList(
                 item {
                     Spacer(modifier = Modifier.width(Dimens.padding.small))
                 }
-                items(mediaDetails.castList.take(castNumber)) { item: CastPersonItem ->
+                items(mediaDetails.castList.take(castNumber)) { item: Person.Cast ->
                     Spacer(modifier = Modifier.width(Dimens.padding.small))
                     PersonItemVertical(
                         personId = item.id,

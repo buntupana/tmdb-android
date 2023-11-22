@@ -21,7 +21,6 @@ import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.PersonBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
-import com.buntupana.tmdb.feature.detail.presentation.PersonDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.CreditsFilter

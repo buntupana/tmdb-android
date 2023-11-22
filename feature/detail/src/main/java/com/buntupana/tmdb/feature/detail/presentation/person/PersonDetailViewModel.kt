@@ -7,7 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetPersonDetailsUseCase
-import com.buntupana.tmdb.feature.detail.presentation.PersonDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.navArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PersonDetailViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val getPersonDetailsUseCase: GetPersonDetailsUseCase
 ) : ViewModel() {
 

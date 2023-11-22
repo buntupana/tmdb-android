@@ -3,8 +3,8 @@ package com.buntupana.tmdb.feature.detail.domain.usecase
 import androidx.compose.ui.text.intl.Locale
 import com.buntupana.tmdb.app.domain.usecase.UseCaseResource
 import com.buntupana.tmdb.core.domain.entity.Resource
-import com.buntupana.tmdb.feature.detail.domain.model.CrewPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -47,11 +47,12 @@ class GetMovieDetailsUseCase @Inject constructor(
                 val creatorList =
                     resource.data.credits.crewList.filter { creatorJobList.contains(it.job) }
                         .groupBy { it.id }.map {
-                            CrewPersonItem(
-                                it.key,
-                                it.value.firstOrNull()?.name.orEmpty(),
-                                it.value.firstOrNull()?.profileUrl.orEmpty(),
-                                it.value.joinToString(", ") { crewItem -> crewItem.job }
+                            Person.Crew(
+                                id = it.key,
+                                name = it.value.firstOrNull()?.name.orEmpty(),
+                                profileUrl = it.value.firstOrNull()?.profileUrl.orEmpty(),
+                                department = "",
+                                job = it.value.joinToString(", ") { crewItem -> crewItem.job }
                             )
                         }
 

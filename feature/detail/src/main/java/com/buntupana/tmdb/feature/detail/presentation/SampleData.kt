@@ -1,8 +1,8 @@
 package com.buntupana.tmdb.feature.detail.presentation
 
 import com.buntupana.tmdb.core.domain.model.Gender
-import com.buntupana.tmdb.feature.detail.domain.model.CastPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import java.time.LocalDate
 
@@ -32,11 +32,19 @@ val personDetailsSample = PersonFullDetails(
     knownCredits = 60,
 )
 
-val castPersonItemSample = CastPersonItem(
+val castPersonSample = Person.Cast(
     id = 0L,
-    name = "Aquaman",
+    name = "Jason Momoa",
     profileUrl = "",
-    ""
+    character = "Aquaman"
+)
+
+val crewPersonSample = Person.Crew (
+    id = 0L,
+    name = "Stanley Kubrik",
+    profileUrl = "",
+    department = "Direction",
+    job = "Director"
 )
 
 val mediaDetailsMovieSample = MediaDetails.Movie(
@@ -54,7 +62,7 @@ val mediaDetailsMovieSample = MediaDetails.Movie(
     genreList = listOf("Action", "Adventure", "Fantasy"),
     ageCertification = "18",
     creatorList = emptyList(),
-    castList = listOf(castPersonItemSample, castPersonItemSample, castPersonItemSample, castPersonItemSample),
-    crewList = emptyList(),
+    castList = listOf(castPersonSample, castPersonSample, castPersonSample, castPersonSample),
+    crewList = listOf(crewPersonSample, crewPersonSample, crewPersonSample, crewPersonSample),
     localCountryCodeRelease = "ES"
 )

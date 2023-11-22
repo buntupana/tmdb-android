@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.app.presentation.navigation
 
+import com.buntupana.tmdb.feature.detail.presentation.destinations.CastDetailScreenDestination
 import com.buntupana.tmdb.feature.detail.presentation.destinations.MediaDetailScreenDestination
 import com.buntupana.tmdb.feature.detail.presentation.destinations.PersonDetailScreenDestination
 import com.buntupana.tmdb.feature.discover.presentation.destinations.DiscoverScreenDestination
@@ -19,7 +20,8 @@ import com.ramcosta.composedestinations.spec.NavGraphSpec
                 DiscoverScreenDestination,
                 MediaDetailScreenDestination,
                 SearchScreenDestination,
-                PersonDetailScreenDestination
+                PersonDetailScreenDestination,
+                CastDetailScreenDestination
             ).associateBy { it.route }
         }
     }

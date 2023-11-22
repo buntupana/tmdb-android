@@ -2,27 +2,27 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.core.data.api.CoreApi
 import com.buntupana.tmdb.feature.detail.data.raw.CreditsRaw
-import com.buntupana.tmdb.feature.detail.domain.model.CastPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
-import com.buntupana.tmdb.feature.detail.domain.model.CrewPersonItem
+import com.buntupana.tmdb.feature.detail.domain.model.Person
 
 fun CreditsRaw.toModel(): Credits {
 
     val castList = cast.map {
-        CastPersonItem(
-            it.id,
-            it.name,
-            CoreApi.BASE_URL_PROFILE + it.profilePath,
-            it.character
+        Person.Cast(
+            id = it.id,
+            name = it.name,
+            profileUrl = CoreApi.BASE_URL_PROFILE + it.profilePath,
+            character = it.character
         )
     }
 
     val crewList = crew.map {
-        CrewPersonItem(
-            it.id,
-            it.name,
-            CoreApi.BASE_URL_PROFILE + it.profilePath,
-            it.job
+        Person.Crew(
+            id = it.id,
+            name = it.name,
+            profileUrl = CoreApi.BASE_URL_PROFILE + it.profilePath,
+            department = it.department,
+            job = it.job
         )
     }
 

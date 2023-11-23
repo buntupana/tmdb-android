@@ -44,19 +44,26 @@ fun SearchScreen(
         onMediaClick = { mediaItem, mainPosterColor ->
             when (mediaItem) {
                 is MediaItem.Movie -> {
-                    searchNavigator.navigateToMediaDetail(mediaItem.id, MediaType.MOVIE, mainPosterColor)
+                    searchNavigator.navigateToMediaDetail(
+                        mediaItem.id,
+                        MediaType.MOVIE,
+                        mainPosterColor
+                    )
                 }
 
                 is MediaItem.TvShow -> {
-                    searchNavigator.navigateToMediaDetail(mediaItem.id, MediaType.TV_SHOW, mainPosterColor)
-                }
-
-                is MediaItem.Person -> {
-                    searchNavigator.navigateToPerson(mediaItem.id)
+                    searchNavigator.navigateToMediaDetail(
+                        mediaItem.id,
+                        MediaType.TV_SHOW,
+                        mainPosterColor
+                    )
                 }
 
                 MediaItem.Unknown -> {}
             }
+        },
+        onPersonClick = { personId ->
+            searchNavigator.navigateToPerson(personId)
         },
         onDismissSuggestionsClick = {
             viewModel.onEvent(SearchEvent.DismissSuggestions)
@@ -70,6 +77,7 @@ fun SearchScreenContent(
     onSearchSuggestions: (searchKey: String) -> Unit,
     onSearch: (searchKey: String) -> Unit,
     onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color?) -> Unit,
+    onPersonClick: (personId: Long) -> Unit,
     onDismissSuggestionsClick: () -> Unit
 ) {
 
@@ -87,9 +95,7 @@ fun SearchScreenContent(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator(
-                            color = PrimaryColor
-                        )
+                        CircularProgressIndicator(color = PrimaryColor)
                     }
                 }
 
@@ -97,11 +103,12 @@ fun SearchScreenContent(
                     SearchResults(
                         modifier = Modifier.fillMaxWidth(),
                         searchState = searchState,
-                        onMediaClick = onMediaClick
+                        onMediaClick = onMediaClick,
+                        onPersonClick = onPersonClick
                     )
                 }
 
-                searchState.resultCountList.isEmpty() -> {
+                else -> {
                     TrendingList(
                         modifier = Modifier.fillMaxWidth(),
                         mediaItemList = searchState.trendingList,
@@ -143,7 +150,8 @@ fun SearchScreenPreview() {
         ),
         onSearchSuggestions = {},
         onSearch = {},
-        onMediaClick = { _, _ ->},
+        onMediaClick = { _, _ -> },
+        onPersonClick = {},
         onDismissSuggestionsClick = {}
     )
 }

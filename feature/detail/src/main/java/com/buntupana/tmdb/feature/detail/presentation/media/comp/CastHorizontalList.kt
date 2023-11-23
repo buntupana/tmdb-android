@@ -63,6 +63,7 @@ fun CastHorizontalList(
                     PersonItemVertical(
                         personId = item.id,
                         name = item.name,
+                        gender = item.gender,
                         profileUrl = item.profileUrl,
                         character = item.character,
                         onItemClick = onItemClick

@@ -24,11 +24,9 @@ import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.theme.Dimens
+import com.buntupana.tmdb.core.presentation.util.isNotNullOrBlank
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.fade
-import com.google.accompanist.placeholder.material.placeholder
 
 @Composable
 fun Header(
@@ -40,7 +38,7 @@ fun Header(
 ) {
 
     // If there is no image info, the header won't be displayed
-    if (mediaDetails.backdropUrl.isBlank() && mediaDetails.posterUrl.isBlank()) {
+    if (mediaDetails.backdropUrl.isNullOrBlank() && mediaDetails.posterUrl.isNullOrBlank()) {
         return
     }
 
@@ -61,15 +59,12 @@ fun Header(
 
             Box {
 
-                ImageFromUrl(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .placeholder(
-                            visible = isLoading,
-                            highlight = PlaceholderHighlight.fade()
-                        ),
-                    imageUrl = mediaDetails.backdropUrl
-                )
+                if (mediaDetails.backdropUrl.isNotNullOrBlank()) {
+                    ImageFromUrl(
+                        modifier = Modifier.fillMaxSize(),
+                        imageUrl = mediaDetails.backdropUrl
+                    )
+                }
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -84,13 +79,13 @@ fun Header(
         }
 
         // hiding poster image when there is no info
-        if (mediaDetails.posterUrl.isBlank() && isLoading.not()) {
+        if (mediaDetails.posterUrl.isNullOrBlank() && isLoading.not()) {
             return
         }
 
         // if no backdrop image, the poster image will be shown in the center
         val posterArrangement =
-            if (mediaDetails.backdropUrl.isBlank()) Arrangement.Center else Arrangement.Start
+            if (mediaDetails.backdropUrl.isNullOrBlank()) Arrangement.Center else Arrangement.Start
 
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -98,7 +93,7 @@ fun Header(
             horizontalArrangement = posterArrangement
         ) {
 
-            if (mediaDetails.backdropUrl.isNotBlank()) {
+            if (mediaDetails.backdropUrl.isNotNullOrBlank()) {
                 Spacer(modifier = Modifier.width(Dimens.padding.medium))
             }
             ImageFromUrl(

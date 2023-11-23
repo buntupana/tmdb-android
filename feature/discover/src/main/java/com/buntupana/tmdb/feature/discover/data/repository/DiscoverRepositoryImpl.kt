@@ -1,9 +1,9 @@
 package com.buntupana.tmdb.feature.discover.data.repository
 
+import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.core.data.networkResult
 import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.discover.data.remote_data_source.DiscoverRemoteDataSource
 import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
@@ -47,6 +47,7 @@ class DiscoverRepositoryImpl @Inject constructor(
                     mapResponse = { response -> response.results.map { it.toModel() } }
                 )
             }
+
             FreeToWatchType.TV_SHOWS -> {
                 networkResult(
                     networkCall = {
@@ -61,7 +62,9 @@ class DiscoverRepositoryImpl @Inject constructor(
     override suspend fun getTrending(trendingType: TrendingType): Resource<List<MediaItem>> {
         return networkResult(
             networkCall = { discoverRemoteDataSource.getTrending(trendingType) },
-            mapResponse = { response -> response.results.map { it.toModel() } }
+            mapResponse = { response ->
+                response.results.map { it.toModel() }.filterNot { it is MediaItem.Unknown }
+            }
         )
     }
 

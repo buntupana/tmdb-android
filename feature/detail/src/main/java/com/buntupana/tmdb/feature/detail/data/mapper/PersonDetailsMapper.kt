@@ -1,7 +1,8 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.core.data.api.CoreApi
-import com.buntupana.tmdb.core.domain.model.Gender
+import com.buntupana.tmdb.core.data.mapper.getGender
+import com.buntupana.tmdb.core.presentation.util.ifNotNullOrBlank
 import com.buntupana.tmdb.feature.detail.data.raw.PersonDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.PersonDetails
 import java.time.LocalDate
@@ -23,8 +24,7 @@ fun PersonDetailsRaw.toModel(): PersonDetails {
         null
     }
 
-    val profileUrl =
-        if (profilePath.isNullOrBlank()) profilePath else CoreApi.BASE_URL_PROFILE + profilePath
+    val profileUrl = profilePath.ifNotNullOrBlank{ CoreApi.BASE_URL_PROFILE + profilePath }
 
     val imdbLink = if (imdbId.isNullOrBlank()) imdbId else IMDB_BASE_URL + imdbId
 
@@ -38,28 +38,19 @@ fun PersonDetailsRaw.toModel(): PersonDetails {
     }
 
     return PersonDetails(
-        id,
-        name,
-        profileUrl.orEmpty(),
-        homepage.orEmpty(),
-        imdbLink.orEmpty(),
-        knownForDepartment.orEmpty(),
-        getGender(gender),
-        birthDateLocal,
-        deathDateLocal,
-        age,
-        placeOfBirth.orEmpty(),
-        biography.orEmpty(),
-        externalLinks?.toModel().orEmpty(),
-        combinedCredits?.toModel().orEmpty()
+        id = id,
+        name = name,
+        profileUrl = profileUrl.orEmpty(),
+        homePageUrl = homepage.orEmpty(),
+        imdbLink = imdbLink.orEmpty(),
+        knownForDepartment = knownForDepartment.orEmpty(),
+        gender = getGender(gender),
+        birthDate = birthDateLocal,
+        deathDate = deathDateLocal,
+        age = age,
+        placeOfBirth = placeOfBirth.orEmpty(),
+        biography = biography.orEmpty(),
+        externalLinkList = externalLinks?.toModel().orEmpty(),
+        filmography = combinedCredits?.toModel().orEmpty()
     )
-}
-
-fun getGender(value: Int): Gender {
-    return when (value) {
-        1 -> Gender.FEMALE
-        2 -> Gender.MALE
-        3 -> Gender.NON_BINARY
-        else -> Gender.NOT_SPECIFIED
-    }
 }

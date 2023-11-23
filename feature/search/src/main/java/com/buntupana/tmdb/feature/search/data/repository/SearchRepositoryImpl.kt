@@ -8,6 +8,7 @@ import com.buntupana.tmdb.core.data.networkResult
 import com.buntupana.tmdb.core.data.repository.GenericPagingDataSource
 import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.core.domain.model.MediaItem
+import com.buntupana.tmdb.core.domain.model.PersonItem
 import com.buntupana.tmdb.feature.search.data.mapper.toModel
 import com.buntupana.tmdb.feature.search.data.remote_data_source.SearchRemoteDataSource
 import com.buntupana.tmdb.feature.search.domain.repository.SearchRepository
@@ -84,7 +85,7 @@ class SearchRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getSearchPersons(searchKey: String): Flow<PagingData<MediaItem.Person>> {
+    override suspend fun getSearchPersons(searchKey: String): Flow<PagingData<PersonItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,

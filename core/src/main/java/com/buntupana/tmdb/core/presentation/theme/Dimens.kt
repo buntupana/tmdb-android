@@ -16,13 +16,14 @@ object Dimens {
     val padding: Padding = PaddingPhone
     val textSize: TextSize = TextPhone
 
-    const val aspectRatioMediaPoster = 2f/3f
-    const val aspectRatioMediaBackdrop = 20f/9f
+    const val aspectRatioMediaPoster = 2f / 3f
+    const val aspectRatioMediaBackdrop = 20f / 9f
 
     // Top bar
     val topBarHeight = 58.dp
     val topBarIconSize = 60.dp
 
+    val imageSize = ImagePhone
 }
 
 object PaddingPhone : Padding {
@@ -37,9 +38,18 @@ object PaddingPhone : Padding {
     override val verticalItem = small
 }
 
-object TextPhone: TextSize {
+object TextPhone : TextSize {
     override val title = 20.sp
     override val body = 14.sp
+}
+
+object ImagePhone : ImageSize {
+    override val personHeightSmall = 80.dp
+    override val personHeight = 100.dp
+    override val personHeightBig = 160.dp
+    override val posterHeightSmall = 120.dp
+    override val posterHeight = 120.dp
+
 }
 
 interface Padding {
@@ -57,4 +67,12 @@ interface Padding {
 interface TextSize {
     val title: TextUnit
     val body: TextUnit
+}
+
+interface ImageSize {
+    val personHeightSmall: Dp
+    val personHeight: Dp
+    val personHeightBig: Dp
+    val posterHeightSmall: Dp
+    val posterHeight: Dp
 }

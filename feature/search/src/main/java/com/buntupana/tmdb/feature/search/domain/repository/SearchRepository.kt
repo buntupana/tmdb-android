@@ -3,12 +3,13 @@ package com.buntupana.tmdb.feature.search.domain.repository
 import androidx.paging.PagingData
 import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.core.domain.model.MediaItem
+import com.buntupana.tmdb.core.domain.model.PersonItem
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
     suspend fun getSearchMedia(searchKey: String): Resource<List<MediaItem>>
     suspend fun getSearchMovies(searchKey: String): Flow<PagingData<MediaItem.Movie>>
-    suspend fun getSearchPersons(searchKey: String): Flow<PagingData<MediaItem.Person>>
+    suspend fun getSearchPersons(searchKey: String): Flow<PagingData<PersonItem>>
     suspend fun getSearchTvShows(searchKey: String): Flow<PagingData<MediaItem.TvShow>>
     suspend fun getSearchMoviesResultCount(searchKey: String): Resource<Int>
     suspend fun getSearchTvShowsResultCount(searchKey: String): Resource<Int>

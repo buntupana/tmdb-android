@@ -7,52 +7,52 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.buntupana.tmdb.core.presentation.composables.DivisorCircle
-import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
+import com.buntupana.tmdb.core.domain.model.Gender
+import com.buntupana.tmdb.core.presentation.composables.ImagePersonFromUrl
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 
 @Composable
 fun PersonItemHorizontal(
-    modifier: Modifier,
-    clickable: ((mainPosterColor: Color?) -> Unit)? = null,
+    modifier: Modifier = Modifier,
+    personId: Long,
     name: String,
-    posterUrl: String,
-    knownForDepartment: String,
-    knownFor: String,
+    gender: Gender,
+    profileUrl: String?,
+    description: String,
+    onClick: (personId: Long) -> Unit
 ) {
-
 
     Row(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(Dimens.posterRound))
-            .clickable {
-                clickable?.invoke(null)
-            }
+            .clickable { onClick(personId) }
+            .padding(horizontal = Dimens.padding.horizontal, vertical = Dimens.padding.verticalItem)
     ) {
 
-        ImageFromUrl(
+        ImagePersonFromUrl(
             modifier = Modifier
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(Dimens.posterRound)),
-            imageUrl = posterUrl
+            imageUrl = profileUrl,
+            gender = gender
         )
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(Dimens.padding.small),
+                .padding(start = Dimens.padding.small),
             verticalArrangement = Arrangement.Center
         ) {
             Text(
@@ -62,22 +62,27 @@ fun PersonItemHorizontal(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = knownForDepartment,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                DivisorCircle()
-                Text(
-                    text = knownFor,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
+            Text(
+                text = description,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
+}
+
+@Preview
+@Composable
+fun PersonItemHorizontalPreview() {
+    PersonItemHorizontal(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(Dimens.imageSize.personHeightSmall),
+        personId = 0L,
+        name = "Jason Momoa",
+        profileUrl = "",
+        description = "Acting • Aquaman",
+        gender = Gender.MALE,
+        onClick = {}
+    )
 }

@@ -25,25 +25,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.buntupana.tmdb.core.domain.model.MediaItem
+import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
 import com.buntupana.tmdb.core.presentation.composables.widget.UserScore
 import com.buntupana.tmdb.core.presentation.spToDp
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.HkFontFamily
-import com.buntupana.tmdb.core.presentation.theme.PlaceHolderColor
-import com.buntupana.tmdb.core.presentation.util.getDominantColor
 
 private const val MAX_TITLE_LINES = 3
 
@@ -92,8 +86,7 @@ fun MediaItemVertical(
             ConstraintLayout {
                 val (posterImage, infoColumn, userScore) = createRefs()
 
-                AsyncImage(
-                    contentScale = ContentScale.Crop,
+                ImageFromUrl(
                     modifier = Modifier
                         .clip(RoundedCornerShape(Dimens.posterRound))
                         .aspectRatio(Dimens.aspectRatioMediaPoster)
@@ -102,18 +95,8 @@ fun MediaItemVertical(
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                         },
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(mediaItem.posterUrl)
-                        .allowHardware(false)
-                        .crossfade(true)
-                        .listener { _, result ->
-                            result.drawable.getDominantColor {
-                                mainPosterColor = it
-                            }
-                        }
-                        .build(),
-                    contentDescription = null,
-                    placeholder = ColorPainter(PlaceHolderColor)
+                    imageUrl = mediaItem.posterUrl,
+                    setDominantColor = { mainPosterColor = it }
                 )
                 Box(
                     modifier = Modifier

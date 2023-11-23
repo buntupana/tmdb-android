@@ -18,6 +18,8 @@ import com.buntupana.tmdb.core.presentation.theme.Dimens
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 
 /** Return a black/white color that will be readable on top */
@@ -63,6 +65,14 @@ fun LocalDate.toLocalFormat(): String {
     return this.format(dateFormatter)
 }
 
+@OptIn(ExperimentalContracts::class)
+fun CharSequence?.isNotNullOrBlank(): Boolean {
+    contract {
+        returns(true) implies (this@isNotNullOrBlank != null)
+    }
+    return this.isNullOrBlank().not()
+}
+
 fun <T> T?.ifNullAux(block: () -> T?) = this ?: block()
 
 fun <T> T?.ifNull(block: () -> T) = this ?: block()
@@ -74,6 +84,14 @@ fun String?.ifNullOrBlank(block: () -> String): String {
         block()
     } else {
         this
+    }
+}
+
+fun String?.ifNotNullOrBlank(block: () -> String): String? {
+    return if (this.isNullOrBlank()) {
+        this
+    } else {
+        block()
     }
 }
 

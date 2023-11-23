@@ -14,13 +14,16 @@ data class KnownFor(
     @field:Json(name = "original_language")
     val originalLanguage: String,
     @field:Json(name = "original_title")
-    val originalTitle: String,
+    val originalTitle: String?,
+    @field:Json(name = "original_name")
+    val originalName: String?,
     val overview: String,
     @field:Json(name = "poster_path")
-    val posterPath: String,
+    val posterPath: String?,
     @field:Json(name = "release_date")
     val releaseDate: String,
-    val title: String,
+    val title: String?,
+    val name: String?,
     val video: Boolean,
     @field:Json(name = "vote_average")
     val voteAverage: Double,

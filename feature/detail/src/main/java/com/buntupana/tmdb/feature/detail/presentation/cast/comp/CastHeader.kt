@@ -30,7 +30,7 @@ import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 fun CastHeader(
     modifier: Modifier = Modifier,
     backgroundColor: Color,
-    posterUrl: String,
+    posterUrl: String?,
     mediaName: String,
     releaseYear: String?,
     setDominantColor: (color: Color) -> Unit

@@ -3,6 +3,7 @@ package com.buntupana.tmdb.feature.detail.domain.usecase
 import androidx.compose.ui.text.intl.Locale
 import com.buntupana.tmdb.app.domain.usecase.UseCaseResource
 import com.buntupana.tmdb.core.domain.entity.Resource
+import com.buntupana.tmdb.core.domain.model.Gender
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
@@ -50,6 +51,7 @@ class GetMovieDetailsUseCase @Inject constructor(
                             Person.Crew(
                                 id = it.key,
                                 name = it.value.firstOrNull()?.name.orEmpty(),
+                                gender = it.value.firstOrNull()?.gender ?: Gender.NOT_SPECIFIED,
                                 profileUrl = it.value.firstOrNull()?.profileUrl.orEmpty(),
                                 department = "",
                                 job = it.value.joinToString(", ") { crewItem -> crewItem.job }

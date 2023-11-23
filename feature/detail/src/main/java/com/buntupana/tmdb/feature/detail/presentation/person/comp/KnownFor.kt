@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
@@ -29,9 +30,11 @@ import com.buntupana.tmdb.core.presentation.spToDp
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.feature.detail.R
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
+import com.buntupana.tmdb.feature.detail.presentation.creditItemPerson
 
 @Composable
 fun KnownFor(
+    modifier: Modifier = Modifier,
     itemList: List<CreditPersonItem>,
     onItemClick: (id: Long, mediaType: MediaType, dominantColor: Color?) -> Unit
 ) {
@@ -118,4 +121,13 @@ fun KnownFor(
             Spacer(modifier = Modifier.width(Dimens.padding.horizontal))
         }
     }
+}
+
+@Preview
+@Composable
+private fun KnownForPreview() {
+    KnownFor(
+        itemList = listOf(creditItemPerson, creditItemPerson, creditItemPerson),
+        onItemClick = {_,_,_ ->}
+    )
 }

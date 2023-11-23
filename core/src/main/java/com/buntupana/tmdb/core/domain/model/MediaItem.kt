@@ -1,75 +1,71 @@
 package com.buntupana.tmdb.core.domain.model
 
 sealed class MediaItem(
-    val id: Long,
-    val name: String,
-    val posterUrl: String,
-    val popularity: Double,
+    open val id: Long,
+    open val name: String,
+    open val posterUrl: String?,
+    open val backdropUrl: String?,
+    open val popularity: Double,
+    open val overview: String,
+    open val releaseDate: String
 ) {
 
-    class Movie(
-        id: Long,
-        name: String,
+    data class Movie(
+        override val id: Long,
+        override val name: String,
         val originalName: String,
-        val overview: String,
-        posterPath: String,
-        val backdropPath: String,
+        override val overview: String,
+        override val posterUrl: String?,
+        override val backdropUrl: String?,
         val originalLanguage: String,
         val genreIds: List<Int>,
-        popularity: Double,
+        override val popularity: Double,
         val voteAverage: Int,
         val voteCount: Int,
-        val releaseDate: String,
+        override val releaseDate: String,
         val video: Boolean,
         val adult: Boolean
     ) : MediaItem(
-        id,
-        name,
-        posterPath,
-        popularity
+        id = id,
+        name = name,
+        posterUrl = posterUrl,
+        backdropUrl = backdropUrl,
+        popularity = popularity,
+        overview = overview,
+        releaseDate = releaseDate
     )
 
-    class TvShow(
-        id: Long,
-        name: String,
+    data class TvShow(
+        override val id: Long,
+        override val name: String,
         val originalName: String,
-        val overview: String,
-        posterPath: String,
-        val backdropPath: String,
+        override val overview: String,
+        override val posterUrl: String?,
+        override val backdropUrl: String?,
         val originalLanguage: String,
         val genreIds: List<Int>,
-        popularity: Double,
+        override val popularity: Double,
         val voteAverage: Int,
         val voteCount: Int,
-        val releaseDate: String,
+        override val releaseDate: String,
         val originCountry: List<String>
     ) : MediaItem(
-        id,
-        name,
-        posterPath,
-        popularity
+        id = id,
+        name = name,
+        posterUrl = posterUrl,
+        backdropUrl = Unknown.backdropUrl,
+        popularity = popularity,
+        overview = overview,
+        releaseDate = releaseDate
     )
 
-    class Person(
-        id: Long,
-        name: String,
-        posterPath: String,
-        popularity: Double,
-        val adult: Boolean,
-        val gender: Int,
-        val knownForDepartment: String,
-        val knowFor: List<String>
-    ) : MediaItem(
-        id,
-        name,
-        posterPath,
-        popularity
-    )
-
-    object Unknown : MediaItem(
-        0,
-        "",
-        "",
-        0.0
+    data object Unknown : MediaItem(
+        id = 0,
+        name = "",
+        posterUrl = null,
+        backdropUrl = null,
+        popularity = 0.0,
+        overview = "",
+        releaseDate = ""
     )
 }

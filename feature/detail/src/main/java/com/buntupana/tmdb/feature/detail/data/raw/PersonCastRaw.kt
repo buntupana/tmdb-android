@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 data class PersonCastRaw(
     val id: Long,
     val name: String?,
-    val adult: Boolean,
+    val adult: Boolean?,
     @field:Json(name = "backdrop_path")
     val backdropPath: String?,
     val character: String?,

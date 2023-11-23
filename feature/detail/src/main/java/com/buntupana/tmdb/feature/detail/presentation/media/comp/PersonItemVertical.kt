@@ -19,14 +19,13 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import com.buntupana.tmdb.core.domain.model.Gender
+import com.buntupana.tmdb.core.presentation.composables.ImagePersonFromUrl
 import com.buntupana.tmdb.core.presentation.spToDp
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 
@@ -38,7 +37,8 @@ fun PersonItemVertical(
     itemWidth: Dp = 120.dp,
     personId: Long,
     name: String,
-    profileUrl: String,
+    gender: Gender,
+    profileUrl: String?,
     character: String,
     onItemClick: ((personId: Long) -> Unit)? = null
 ) {
@@ -54,15 +54,12 @@ fun PersonItemVertical(
                 },
         ) {
             Column {
-                AsyncImage(
+                ImagePersonFromUrl(
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(120f / 133f),
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(profileUrl)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = null
+                    imageUrl = profileUrl,
+                    gender = gender
                 )
                 Column(modifier = Modifier.padding(Dimens.padding.small)) {
                     var nameExtraLinesCount by remember {
@@ -114,6 +111,7 @@ fun PersonItemVerticalPreview() {
     PersonItemVertical(
         personId = 0L,
         name = "Natalie Portman",
+        gender = Gender.FEMALE,
         profileUrl = "",
         character = "Jane Foster / The Mighty Thor"
     )

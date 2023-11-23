@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 
 data class PersonCrewRaw(
     val id: Long,
-    val adult: Boolean,
+    val adult: Boolean?,
     @field:Json(name = "backdrop_path")
     val backdropPath: String?,
     @field:Json(name = "credit_id")

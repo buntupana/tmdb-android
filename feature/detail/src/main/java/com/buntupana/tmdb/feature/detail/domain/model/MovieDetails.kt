@@ -6,8 +6,8 @@ import java.time.LocalDate
 data class MovieDetails(
     val id: Long,
     val title: String,
-    val posterUrl: String,
-    val backdropUrl: String,
+    val posterUrl: String?,
+    val backdropUrl: String?,
     val trailerUrl: String,
     val overview: String,
     val tagLine: String,

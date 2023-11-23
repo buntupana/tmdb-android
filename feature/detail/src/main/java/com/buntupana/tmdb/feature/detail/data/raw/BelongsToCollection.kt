@@ -8,5 +8,5 @@ data class BelongsToCollection(
     @field:Json(name = "backdrop_path")
     val backdropPath: String,
     @field:Json(name = "poster_path")
-    val posterPath: String
+    val posterPath: String?
 )

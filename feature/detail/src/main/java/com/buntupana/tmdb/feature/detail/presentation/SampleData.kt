@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.detail.presentation
 
 import com.buntupana.tmdb.core.domain.model.Gender
+import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
@@ -35,13 +36,15 @@ val personDetailsSample = PersonFullDetails(
 val castPersonSample = Person.Cast(
     id = 0L,
     name = "Jason Momoa",
+    gender = Gender.MALE,
     profileUrl = "",
     character = "Aquaman"
 )
 
-val crewPersonSample = Person.Crew (
+val crewPersonSample = Person.Crew(
     id = 0L,
     name = "Stanley Kubrik",
+    gender = Gender.MALE,
     profileUrl = "",
     department = "Direction",
     job = "Director"
@@ -65,4 +68,17 @@ val mediaDetailsMovieSample = MediaDetails.Movie(
     castList = listOf(castPersonSample, castPersonSample, castPersonSample, castPersonSample),
     crewList = listOf(crewPersonSample, crewPersonSample, crewPersonSample, crewPersonSample),
     localCountryCodeRelease = "ES"
+)
+
+val creditItemPerson = CreditPersonItem.Movie(
+    id = 0L,
+    title = "Thor Ragnarock",
+    department = "Acting",
+    role = "Acting",
+    posterUrl = null,
+    backdropUrl = null,
+    popularity = 0.0,
+    userScore = 0,
+    voteCount = 0,
+    releaseDate = null
 )

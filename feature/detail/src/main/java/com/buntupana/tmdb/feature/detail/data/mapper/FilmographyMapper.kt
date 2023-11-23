@@ -3,6 +3,7 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 import com.buntupana.tmdb.core.data.api.CoreApi
 import com.buntupana.tmdb.core.data.mapper.getMediaType
 import com.buntupana.tmdb.core.domain.entity.MediaType
+import com.buntupana.tmdb.core.presentation.util.ifNotNullOrBlank
 import com.buntupana.tmdb.core.presentation.util.ifNull
 import com.buntupana.tmdb.feature.detail.data.raw.FilmographyRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
@@ -14,9 +15,9 @@ fun FilmographyRaw.toModel(): List<CreditPersonItem> {
     val castItemList = cast?.map {
 
         val posterUrl =
-            if (it.posterPath.isNullOrBlank()) it.posterPath else CoreApi.BASE_URL_POSTER + it.posterPath
+            it.posterPath.ifNotNullOrBlank { CoreApi.BASE_URL_POSTER + it.posterPath.orEmpty() }
         val backdropUrl =
-            if (it.backdropPath.isNullOrBlank()) it.backdropPath else CoreApi.BASE_URL_POSTER + it.backdropPath
+            it.backdropPath.ifNotNullOrBlank { CoreApi.BASE_URL_BACKDROP + it.backdropPath.orEmpty() }
 
         val releaseDateLocal = try {
             LocalDate.parse(it.releaseDate.ifNull { it.firstAirDate.orEmpty() })
@@ -27,31 +28,32 @@ fun FilmographyRaw.toModel(): List<CreditPersonItem> {
         when (getMediaType(it.mediaType)) {
             MediaType.MOVIE -> {
                 CreditPersonItem.Movie(
-                    it.id,
-                    it.title.ifNull { it.name.orEmpty() },
-                    "Acting",
-                    it.character.orEmpty(),
-                    posterUrl.orEmpty(),
-                    backdropUrl.orEmpty(),
-                    it.popularity,
-                    (it.voteAverage * 100).toInt(),
-                    it.voteCount,
-                    releaseDateLocal
+                    id = it.id,
+                    title = it.title.ifNull { it.name.orEmpty() },
+                    department = "Acting",
+                    role = it.character.orEmpty(),
+                    posterUrl = posterUrl,
+                    backdropUrl = backdropUrl,
+                    popularity = it.popularity,
+                    userScore = (it.voteAverage * 100).toInt(),
+                    voteCount = it.voteCount,
+                    releaseDate = releaseDateLocal
                 )
             }
+
             MediaType.TV_SHOW -> {
                 CreditPersonItem.TvShow(
-                    it.id,
-                    it.title.ifNull { it.name.orEmpty() },
-                    "Acting",
-                    it.character.orEmpty(),
-                    posterUrl.orEmpty(),
-                    backdropUrl.orEmpty(),
-                    it.popularity,
-                    (it.voteAverage * 100).toInt(),
-                    it.voteCount,
-                    releaseDateLocal,
-                    it.episodeCount ?: 0
+                    id = it.id,
+                    title = it.title.ifNull { it.name.orEmpty() },
+                    department = "Acting",
+                    role = it.character.orEmpty(),
+                    posterUrl = posterUrl,
+                    backdropUrl = backdropUrl,
+                    popularity = it.popularity,
+                    userScore = (it.voteAverage * 100).toInt(),
+                    voteCount = it.voteCount,
+                    releaseDate = releaseDateLocal,
+                    episodeCount = it.episodeCount ?: 0
                 )
             }
         }
@@ -60,9 +62,9 @@ fun FilmographyRaw.toModel(): List<CreditPersonItem> {
     val crewItemList = crew?.map {
 
         val posterUrl =
-            if (it.posterPath.isNullOrBlank()) it.posterPath else CoreApi.BASE_URL_POSTER + it.posterPath
+            it.posterPath.ifNotNullOrBlank { CoreApi.BASE_URL_POSTER + it.posterPath.orEmpty() }
         val backdropUrl =
-            if (it.posterPath.isNullOrBlank()) it.backdropPath else CoreApi.BASE_URL_POSTER + it.backdropPath
+            it.backdropPath.ifNotNullOrBlank { CoreApi.BASE_URL_BACKDROP + it.backdropPath.orEmpty() }
 
         val releaseDateLocal = try {
             LocalDate.parse(it.releaseDate.ifNull { it.firstAirDate.orEmpty() })
@@ -77,22 +79,23 @@ fun FilmographyRaw.toModel(): List<CreditPersonItem> {
                     title = it.title.ifNull { it.name.orEmpty() },
                     department = it.department,
                     role = it.job.orEmpty(),
-                    posterUrl = posterUrl.orEmpty(),
-                    backdropUrl = backdropUrl.orEmpty(),
+                    posterUrl = posterUrl,
+                    backdropUrl = backdropUrl,
                     popularity = it.popularity,
                     userScore = (it.voteAverage * 100).toInt(),
                     voteCount = it.voteCount,
                     releaseDate = releaseDateLocal
                 )
             }
+
             MediaType.TV_SHOW -> {
                 CreditPersonItem.TvShow(
                     id = it.id,
                     title = it.title.ifNull { it.name.orEmpty() },
                     department = it.department,
                     role = it.job.orEmpty(),
-                    posterUrl = posterUrl.orEmpty(),
-                    backdropUrl = backdropUrl.orEmpty(),
+                    posterUrl = posterUrl,
+                    backdropUrl = backdropUrl,
                     popularity = it.popularity,
                     userScore = (it.voteAverage * 100).toInt(),
                     voteCount = it.voteCount,

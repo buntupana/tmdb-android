@@ -1,6 +1,8 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.core.data.api.CoreApi
+import com.buntupana.tmdb.core.data.mapper.getGender
+import com.buntupana.tmdb.core.presentation.util.ifNotNullOrBlank
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
 import com.buntupana.tmdb.feature.detail.domain.model.Person
@@ -16,9 +18,9 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
         null
     }
 
-    val posterUrl = if (posterPath.isNullOrBlank()) "" else CoreApi.BASE_URL_POSTER + posterPath
+    val posterUrl = posterPath.ifNotNullOrBlank { CoreApi.BASE_URL_POSTER + posterPath.orEmpty() }
     val backdropUrl =
-        if (backdropPath.isNullOrBlank()) "" else CoreApi.BASE_URL_BACKDROP + backdropPath
+        backdropPath.ifNotNullOrBlank { CoreApi.BASE_URL_BACKDROP + backdropPath.orEmpty() }
 
     val videoList = videos?.toModel().orEmpty()
 
@@ -35,10 +37,12 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
         episodeRunTime?.firstOrNull() ?: 0,
         genres?.map { it.name }.orEmpty(),
         createdBy?.map {
+            val profileUrl = it.profilePath.ifNotNullOrBlank{ CoreApi.BASE_URL_PROFILE + it.profilePath }
             Person.Crew(
                 id = it.id,
                 name = it.name.orEmpty(),
-                profileUrl = CoreApi.BASE_URL_PROFILE + it.profilePath,
+                gender = getGender(it.gender),
+                profileUrl = profileUrl,
                 department = "",
                 job = ""
             )

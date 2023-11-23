@@ -6,7 +6,7 @@ import java.time.LocalDate
 data class PersonDetails(
     val id: Long,
     val name: String,
-    val profileUrl: String,
+    val profileUrl: String?,
     val homePageUrl: String,
     val imdbLink: String,
     val knownForDepartment: String,

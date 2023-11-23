@@ -67,7 +67,6 @@ fun DiscoverScreen(
                     )
                 }
 
-                is MediaItem.Person -> {}
                 MediaItem.Unknown -> {}
             }
         }

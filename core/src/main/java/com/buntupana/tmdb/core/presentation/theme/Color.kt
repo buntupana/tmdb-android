@@ -12,7 +12,7 @@ val TertiaryColor = Color(0xFF90CEA1)
 val TertiaryDarkColor = Color(0xFF1ED5A9)
 val TertiaryLightColor = Color(0xFFC0FECF)
 
-val PlaceHolderColor = Color.Gray
+val PlaceHolderColor = Color(0xffdbdbdb)
 
 val DetailBackgroundColor = Color(0xFFE3E3E3)
 val PersonBackgroundColor = BackgroundColor

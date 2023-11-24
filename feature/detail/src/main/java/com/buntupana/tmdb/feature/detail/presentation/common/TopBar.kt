@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.presentation.theme.Dimens
+import com.buntupana.tmdb.core.presentation.util.clickableIcon
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 
 @Composable
@@ -62,19 +63,15 @@ fun TopBar(
         Image(
             modifier = Modifier
                 .padding(horizontal = Dimens.padding.small)
-                .clickableIcon()
                 .clickable {
                     onSearchClick()
-                },
+                }
+                .clickableIcon(),
             painter = painterResource(id = R.drawable.ic_search),
             contentDescription = null,
             colorFilter = ColorFilter.tint(textColor)
         )
     }
-}
-
-fun Modifier.clickableIcon(): Modifier {
-    return padding(Dimens.padding.small).size(Dimens.icon)
 }
 
 @Preview

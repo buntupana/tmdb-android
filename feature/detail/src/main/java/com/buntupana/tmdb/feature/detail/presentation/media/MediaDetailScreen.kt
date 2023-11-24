@@ -145,7 +145,7 @@ fun MediaDetailContent(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.White)
+                        .background(MaterialTheme.colorScheme.background)
                 ) {
                     CastHorizontalList(
                         modifier = Modifier.background(MaterialTheme.colorScheme.background),

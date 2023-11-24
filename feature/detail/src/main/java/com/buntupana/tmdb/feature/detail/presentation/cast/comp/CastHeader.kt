@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.detail.presentation.cast.comp
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.Typography
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.presentation.util.isNotNullOrBlank
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -41,20 +43,28 @@ fun CastHeader(
             .fillMaxWidth()
             .background(backgroundColor)
             .padding(horizontal = Dimens.padding.medium),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        ImageFromUrl(
-            modifier = Modifier
-                .fillMaxHeight(0.8f)
-                .clip(RoundedCornerShape(Dimens.posterRound))
-                .aspectRatio(Dimens.aspectRatioMediaPoster),
-            imageUrl = posterUrl,
-            setDominantColor = { setDominantColor(it) }
-        )
 
-        Spacer(modifier = Modifier.padding(Dimens.padding.small))
+        val titleArrangement = if (posterUrl.isNotNullOrBlank()) {
+            ImageFromUrl(
+                modifier = Modifier
+                    .fillMaxHeight(0.8f)
+                    .clip(RoundedCornerShape(Dimens.posterRound))
+                    .aspectRatio(Dimens.aspectRatioMediaPoster),
+                imageUrl = posterUrl,
+                setDominantColor = { setDominantColor(it) }
+            )
+            Spacer(modifier = Modifier.padding(Dimens.padding.small))
+            Arrangement.Start
+        } else {
+            Arrangement.Center
+        }
 
-        FlowRow {
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = titleArrangement
+        ) {
             Text(
                 text = mediaName,
                 color = backgroundColor.getOnBackgroundColor(),
@@ -78,7 +88,7 @@ fun CastHeader(
 private fun CastHeaderPreview() {
     CastHeader(
         backgroundColor = DetailBackgroundColor,
-        posterUrl = "Pain Hustlers",
+        posterUrl = null,
         mediaName = "Pain Hustlers",
         releaseYear = "2023",
         setDominantColor = {}

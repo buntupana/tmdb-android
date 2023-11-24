@@ -27,7 +27,7 @@ import com.buntupana.tmdb.core.presentation.theme.Dimens
 
 @Composable
 fun MediaItemHorizontal(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     onMediaClick: ((mediaId: Long, mainPosterColor: Color) -> Unit),
     mediaId: Long,
     title: String,

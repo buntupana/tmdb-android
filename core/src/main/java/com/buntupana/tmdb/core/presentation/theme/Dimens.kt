@@ -48,7 +48,7 @@ object ImagePhone : ImageSize {
     override val personHeight = 100.dp
     override val personHeightBig = 160.dp
     override val posterHeightSmall = 120.dp
-    override val posterHeight = 120.dp
+    override val posterHeight = 160.dp
 
 }
 

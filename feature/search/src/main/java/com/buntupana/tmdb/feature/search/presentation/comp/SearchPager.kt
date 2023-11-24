@@ -84,7 +84,7 @@ fun SearchPager(
                     when (item) {
                         is MediaItem -> {
                             MediaItemHorizontal(
-                                modifier = modifier.height(Dimens.imageSize.posterHeightSmall),
+                                modifier = modifier.height(Dimens.imageSize.posterHeight),
                                 onMediaClick = { _, mainPosterColor ->
                                     onMediaClick(item, mainPosterColor)
                                 },

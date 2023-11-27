@@ -68,8 +68,6 @@ fun DiscoverScreen(
                         posterDominantColor
                     )
                 }
-
-                MediaItem.Unknown -> {}
             }
         }
     )

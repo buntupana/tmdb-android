@@ -57,7 +57,7 @@ fun PersonItemVertical(
                 ImagePersonFromUrl(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .aspectRatio(120f / 133f),
+                        .aspectRatio(12f / 13.3f),
                     imageUrl = profileUrl,
                     gender = gender
                 )

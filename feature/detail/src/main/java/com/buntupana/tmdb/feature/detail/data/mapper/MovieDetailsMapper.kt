@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.core.data.api.CoreApi
+import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.core.presentation.util.ifNotNullOrBlank
 import com.buntupana.tmdb.feature.detail.data.raw.MovieDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
@@ -37,6 +38,7 @@ fun MovieDetailsRaw.toModel(): MovieDetails {
         productionCountryCodeList = productionCountries.map { it.iso_3166_1 },
         releaseDateList = releaseDates?.results?.map { it.toModel() }.orEmpty(),
         videoList = videoList,
-        credits = credits?.toModel() ?: Credits(emptyList(), emptyList())
+        credits = credits?.toModel() ?: Credits(emptyList(), emptyList()),
+        recommendationList = recommendations.results.toModel()
     )
 }

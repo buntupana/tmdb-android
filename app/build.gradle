@@ -26,8 +26,10 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {
@@ -49,9 +51,9 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
-    applicationVariants.all { variant ->
+    applicationVariants.configureEach { variant ->
         kotlin.sourceSets {
-            getByName(variant.name) {
+            named(variant.name) {
                 kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
             }
         }

@@ -7,12 +7,12 @@ import retrofit2.http.Path
 
 interface DetailApi {
 
-    @GET("movie/{movieId}?append_to_response=release_dates,videos,credits")
+    @GET("movie/{movieId}?append_to_response=release_dates,videos,credits,recommendations")
     suspend fun getMovieDetails(
         @Path("movieId") movieId: Long
     ): Response<MovieDetailsRaw>
 
-    @GET("tv/{tvShowId}?append_to_response=content_ratings,videos,credits")
+    @GET("tv/{tvShowId}?append_to_response=content_ratings,videos,credits,recommendations")
     suspend fun getTvShowDetails(
         @Path("tvShowId") tvShowId: Long
     ): Response<TvShowDetailsRaw>

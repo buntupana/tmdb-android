@@ -24,21 +24,22 @@ class GetTvShowDetailsUseCase @Inject constructor(
                 } ?: resource.data.certificationList.firstOrNull()
 
                 val tvShow = MediaDetails.TvShow(
-                    resource.data.id,
-                    resource.data.title,
-                    resource.data.posterUrl,
-                    resource.data.backdropUrl,
-                    resource.data.trailerUrl,
-                    resource.data.overview,
-                    resource.data.tagLine,
-                    resource.data.releaseDate,
-                    resource.data.userScore,
-                    resource.data.runTime,
-                    resource.data.genreList,
-                    certification?.rating.orEmpty(),
-                    resource.data.creatorList,
-                    resource.data.credits.castList,
-                    resource.data.credits.crewList
+                    id = resource.data.id,
+                    title = resource.data.title,
+                    posterUrl = resource.data.posterUrl,
+                    backdropUrl = resource.data.backdropUrl,
+                    trailerUrl = resource.data.trailerUrl,
+                    overview = resource.data.overview,
+                    tagLine = resource.data.tagLine,
+                    releaseDate = resource.data.releaseDate,
+                    userScore = resource.data.userScore,
+                    runTime = resource.data.runTime,
+                    genreList = resource.data.genreList,
+                    ageCertification = certification?.rating.orEmpty(),
+                    creatorList = resource.data.creatorList,
+                    castList = resource.data.credits.castList,
+                    crewList = resource.data.credits.crewList,
+                    recommendationList = resource.data.recommendationList
                 )
 
                 Resource.Success(tvShow)

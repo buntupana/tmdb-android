@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
 import android.os.Parcelable
+import com.buntupana.tmdb.core.domain.model.MediaItem
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 
@@ -20,7 +21,8 @@ sealed class MediaDetails(
     open val ageCertification: String,
     open val creatorList: List<Person.Crew>,
     open val castList: List<Person.Cast>,
-    open val crewList: List<Person.Crew>
+    open val crewList: List<Person.Crew>,
+    open val recommendationList: List<MediaItem>
 ) : Parcelable {
 
     data class Movie(
@@ -40,23 +42,25 @@ sealed class MediaDetails(
         override val creatorList: List<Person.Crew>,
         override val castList: List<Person.Cast>,
         override val crewList: List<Person.Crew>,
+        override val recommendationList: List<MediaItem>,
         val localCountryCodeRelease: String
     ) : MediaDetails(
-        id,
-        title,
-        posterUrl,
-        backdropUrl,
-        trailerUrl,
-        overview,
-        tagLine,
-        releaseDate,
-        userScore,
-        runTime,
-        genreList,
-        ageCertification,
-        creatorList,
-        castList,
-        crewList
+        id = id,
+        title = title,
+        posterUrl = posterUrl,
+        backdropUrl = backdropUrl,
+        trailerUrl = trailerUrl,
+        overview = overview,
+        tagLine = tagLine,
+        releaseDate = releaseDate,
+        userScore = userScore,
+        runTime = runTime,
+        genreList = genreList,
+        ageCertification = ageCertification,
+        creatorList = creatorList,
+        castList = castList,
+        crewList = crewList,
+        recommendationList = recommendationList
     )
 
     data class TvShow(
@@ -74,22 +78,24 @@ sealed class MediaDetails(
         override val ageCertification: String,
         override val creatorList: List<Person.Crew>,
         override val castList: List<Person.Cast>,
-        override val crewList: List<Person.Crew>
+        override val crewList: List<Person.Crew>,
+        override val recommendationList: List<MediaItem>,
     ) : MediaDetails(
-        id,
-        title,
-        posterUrl,
-        backdropUrl,
-        trailerUrl,
-        overview,
-        tagLine,
-        releaseDate,
-        userScore,
-        runTime,
-        genreList,
-        ageCertification,
-        creatorList,
-        castList,
-        crewList
+        id = id,
+        title = title,
+        posterUrl = posterUrl,
+        backdropUrl = backdropUrl,
+        trailerUrl = trailerUrl,
+        overview = overview,
+        tagLine = tagLine,
+        releaseDate = releaseDate,
+        userScore = userScore,
+        runTime = runTime,
+        genreList = genreList,
+        ageCertification = ageCertification,
+        creatorList = creatorList,
+        castList = castList,
+        crewList = crewList,
+        recommendationList = recommendationList
     )
 }

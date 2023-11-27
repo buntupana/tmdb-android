@@ -22,14 +22,14 @@ class SearchRepositoryImpl @Inject constructor(
     override suspend fun getTrendingMedia(): Resource<List<MediaItem>> {
         return networkResult(
             networkCall = { searchRemoteDataSource.getTrending() },
-            mapResponse = { response -> response.results.map { it.toModel() } }
+            mapResponse = { response -> response.results.toModel() }
         )
     }
 
     override suspend fun getSearchMedia(searchKey: String): Resource<List<MediaItem>> {
         return networkResult(
             networkCall = { searchRemoteDataSource.getSearchMedia(searchKey) },
-            mapResponse = { response -> response.results.map { it.toModel() } }
+            mapResponse = { response -> response.results.toModel() }
         )
     }
 

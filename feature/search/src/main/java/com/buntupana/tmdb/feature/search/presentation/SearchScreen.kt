@@ -58,8 +58,6 @@ fun SearchScreen(
                         mainPosterColor
                     )
                 }
-
-                MediaItem.Unknown -> {}
             }
         },
         onPersonClick = { personId ->

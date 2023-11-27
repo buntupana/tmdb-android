@@ -3,7 +3,9 @@ package com.buntupana.tmdb.feature.detail.presentation.media
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -23,6 +25,7 @@ import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
@@ -31,6 +34,7 @@ import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.CastHorizontalList
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.Header
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.MainInfo
+import com.buntupana.tmdb.feature.detail.presentation.media.comp.RecommendationsHorizontal
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
@@ -57,6 +61,13 @@ fun MediaDetailScreen(
                 backgroundColor = backgroundColor
             )
         },
+        onRecommendationClick = { mediaId, mediaType ->
+            detailNavigator.navigateToMediaDetail(
+                id = mediaId,
+                mediaType = mediaType,
+                backgroundColor = null
+            )
+        },
         onRetryClick = {
             viewModel.onEvent(MediaDetailEvent.GetMediaDetails)
         },
@@ -73,6 +84,7 @@ fun MediaDetailContent(
     onSearchClick: () -> Unit,
     onPersonClick: (personId: Long) -> Unit,
     onFullCastClick: (mediaDetails: MediaDetails, mediaType: MediaType, backgroundColor: Color) -> Unit,
+    onRecommendationClick: (mediaId: Long, mediaType: MediaType) -> Unit,
     onRetryClick: () -> Unit,
     onLogoClick: () -> Unit
 ) {
@@ -147,6 +159,7 @@ fun MediaDetailContent(
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
                 ) {
+
                     CastHorizontalList(
                         modifier = Modifier.background(MaterialTheme.colorScheme.background),
                         mediaDetails = state.mediaDetails,
@@ -159,6 +172,14 @@ fun MediaDetailContent(
                             )
                         }
                     )
+
+                    RecommendationsHorizontal(
+                        modifier = Modifier.fillMaxWidth(),
+                        mediaItemList = state.mediaDetails.recommendationList,
+                        onItemClick = onRecommendationClick
+                    )
+
+                    Spacer(modifier = Modifier.padding(Dimens.padding.vertical))
                 }
             }
         }
@@ -181,6 +202,7 @@ fun MediaDetailScreenPreview() {
         onSearchClick = {},
         onPersonClick = {},
         onFullCastClick = { mediaDetails, mediaType, backgroundColor -> },
+        onRecommendationClick = { _, _ -> },
         onRetryClick = {},
         onLogoClick = {}
     )

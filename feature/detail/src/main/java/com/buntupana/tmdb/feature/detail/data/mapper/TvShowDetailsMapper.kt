@@ -2,6 +2,7 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.core.data.api.CoreApi
 import com.buntupana.tmdb.core.data.mapper.getGender
+import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.core.presentation.util.ifNotNullOrBlank
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
@@ -25,18 +26,18 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
     val videoList = videos?.toModel().orEmpty()
 
     return TvShowDetails(
-        id,
-        name.orEmpty(),
-        posterUrl,
-        backdropUrl,
-        getVideoTrailerUrl(videoList),
-        overview.orEmpty(),
-        tagline.orEmpty(),
-        releaseLocalDate,
-        (((voteAverage ?: 0.0) * 10)).toInt(),
-        episodeRunTime?.firstOrNull() ?: 0,
-        genres?.map { it.name }.orEmpty(),
-        createdBy?.map {
+        id = id,
+        title = name.orEmpty(),
+        posterUrl = posterUrl,
+        backdropUrl = backdropUrl,
+        trailerUrl = getVideoTrailerUrl(videoList),
+        overview = overview.orEmpty(),
+        tagLine = tagline.orEmpty(),
+        releaseDate = releaseLocalDate,
+        userScore = (((voteAverage ?: 0.0) * 10)).toInt(),
+        runTime = episodeRunTime?.firstOrNull() ?: 0,
+        genreList = genres?.map { it.name }.orEmpty(),
+        creatorList = createdBy?.map {
             val profileUrl = it.profilePath.ifNotNullOrBlank{ CoreApi.BASE_URL_PROFILE + it.profilePath }
             Person.Crew(
                 id = it.id,
@@ -47,8 +48,9 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
                 job = ""
             )
         }.orEmpty(),
-        contentRatings?.results?.map { it.toModel() }.orEmpty(),
-        videoList,
-        credits?.toModel() ?: Credits(emptyList(), emptyList())
+        certificationList = contentRatings?.results?.map { it.toModel() }.orEmpty(),
+        videoList = videoList,
+        credits = credits?.toModel() ?: Credits(emptyList(), emptyList()),
+        recommendationList = recommendations.results.toModel()
     )
 }

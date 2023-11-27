@@ -60,23 +60,24 @@ class GetMovieDetailsUseCase @Inject constructor(
 
                 Resource.Success(
                     MediaDetails.Movie(
-                        resource.data.id,
-                        resource.data.title,
-                        resource.data.posterUrl,
-                        resource.data.backdropUrl,
-                        resource.data.trailerUrl,
-                        resource.data.overview,
-                        resource.data.tagLine,
-                        resource.data.releaseDate,
-                        localReleaseDate?.format(dateFormatter),
-                        resource.data.userScore,
-                        resource.data.runTime,
-                        resource.data.genreList,
-                        certification,
-                        creatorList,
-                        resource.data.credits.castList,
-                        resource.data.credits.crewList,
-                        releaseAndCertification?.countryCode.orEmpty()
+                        id = resource.data.id,
+                        title = resource.data.title,
+                        posterUrl = resource.data.posterUrl,
+                        backdropUrl = resource.data.backdropUrl,
+                        trailerUrl = resource.data.trailerUrl,
+                        overview = resource.data.overview,
+                        tagLine = resource.data.tagLine,
+                        releaseDate = resource.data.releaseDate,
+                        localReleaseDate = localReleaseDate?.format(dateFormatter),
+                        userScore = resource.data.userScore,
+                        runTime = resource.data.runTime,
+                        genreList = resource.data.genreList,
+                        ageCertification = certification,
+                        creatorList = creatorList,
+                        castList = resource.data.credits.castList,
+                        crewList = resource.data.credits.crewList,
+                        recommendationList = resource.data.recommendationList,
+                        localCountryCodeRelease = releaseAndCertification?.countryCode.orEmpty()
                     )
                 )
             }

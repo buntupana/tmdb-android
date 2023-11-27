@@ -39,9 +39,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_compiler_version
     }
-    libraryVariants.all { variant ->
+    libraryVariants.configureEach { variant ->
         kotlin.sourceSets {
-            getByName(variant.name) {
+            named(variant.name) {
                 kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
             }
         }

@@ -56,7 +56,7 @@ fun CastHorizontalList(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 item {
-                    Spacer(modifier = Modifier.width(Dimens.padding.small))
+                    Spacer(modifier = Modifier.width(Dimens.padding.verticalItem))
                 }
                 items(mediaDetails.castList.take(castNumber)) { item: Person.Cast ->
                     Spacer(modifier = Modifier.width(Dimens.padding.small))
@@ -71,7 +71,7 @@ fun CastHorizontalList(
                     Spacer(modifier = Modifier.width(Dimens.padding.small))
                 }
                 item {
-                    Spacer(modifier = Modifier.width(Dimens.padding.small))
+                    Spacer(modifier = Modifier.width(Dimens.padding.vertical))
                 }
             }
 
@@ -83,10 +83,9 @@ fun CastHorizontalList(
                     .clickable { onFullCastClick() },
                 text = stringResource(id = R.string.text_full_cast),
                 fontSize = Dimens.textSize.title,
-                fontWeight = FontWeight.Bold,
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(Dimens.padding.vertical))
         }
     }
 }

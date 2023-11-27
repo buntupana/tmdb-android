@@ -9,64 +9,75 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-fun AnyMediaItemRaw.toModel(): MediaItem {
+fun List<AnyMediaItemRaw>.toModel(): List<MediaItem> {
 
-    val formatter = DateTimeFormatter.ofPattern(DateUtil.dateFormat)
+    val result = mutableListOf<MediaItem>()
 
-    val posterUrl = posterPath.ifNotNullOrBlank { CoreApi.BASE_URL_POSTER + posterPath.orEmpty() }
-    val backdropUrl =
-        backdropPath.ifNotNullOrBlank { CoreApi.BASE_URL_BACKDROP + backdropPath.orEmpty() }
+    forEach { item ->
 
-    return when (mediaType) {
-        "tv" -> {
-            val releaseLocalDate = LocalDate.parse(firstAirDate)
-            val releaseDate = releaseLocalDate.format(formatter)
+        val formatter = DateTimeFormatter.ofPattern(DateUtil.dateFormat)
 
-            MediaItem.TvShow(
-                id = id,
-                name = name.orEmpty(),
-                originalName = originalName.orEmpty(),
-                overview = overview,
-                posterUrl = posterUrl,
-                backdropUrl = backdropUrl,
-                originalLanguage = originalLanguage,
-                genreIds = genreIds,
-                popularity = popularity,
-                voteAverage = (voteAverage * 10).toInt(),
-                voteCount = voteCount,
-                releaseDate = releaseDate,
-                originCountry = originCountry.orEmpty()
-            )
-        }
+        val posterUrl =
+            item.posterPath.ifNotNullOrBlank { CoreApi.BASE_URL_POSTER + item.posterPath.orEmpty() }
+        val backdropUrl =
+            item.backdropPath.ifNotNullOrBlank { CoreApi.BASE_URL_BACKDROP + item.backdropPath.orEmpty() }
 
-        "movie" -> {
+        when (item.mediaType) {
+            "tv" -> {
+                val releaseDate = try {
+                    LocalDate.parse(item.firstAirDate).format(formatter)
+                } catch (e: DateTimeParseException) {
+                    ""
+                }
 
-            val releaseLocalDate = try {
-                LocalDate.parse(releaseDate).format(formatter)
-            } catch (e: DateTimeParseException) {
-                ""
+                result.add(
+                    MediaItem.TvShow(
+                        id = item.id,
+                        name = item.name.orEmpty(),
+                        originalName = item.originalName.orEmpty(),
+                        overview = item.overview,
+                        posterUrl = posterUrl,
+                        backdropUrl = backdropUrl,
+                        originalLanguage = item.originalLanguage,
+                        genreIds = item.genreIds,
+                        popularity = item.popularity,
+                        voteAverage = (item.voteAverage * 10).toInt(),
+                        voteCount = item.voteCount,
+                        releaseDate = releaseDate,
+                        originCountry = item.originCountry.orEmpty()
+                    )
+                )
             }
 
-            MediaItem.Movie(
-                id = id,
-                name = title.orEmpty(),
-                originalName = originalTitle.orEmpty(),
-                overview = overview,
-                posterUrl = posterUrl,
-                backdropUrl = backdropUrl,
-                originalLanguage = originalLanguage,
-                genreIds = genreIds,
-                popularity = popularity,
-                voteAverage = (voteAverage * 10).toInt(),
-                voteCount = voteCount,
-                releaseDate = releaseLocalDate,
-                video = video ?: false,
-                adult = adult ?: false
-            )
-        }
+            "movie" -> {
+                val releaseLocalDate = try {
+                    LocalDate.parse(item.releaseDate).format(formatter)
+                } catch (e: DateTimeParseException) {
+                    ""
+                }
 
-        else -> {
-            MediaItem.Unknown
+                result.add(
+                    MediaItem.Movie(
+                        id = item.id,
+                        name = item.title.orEmpty(),
+                        originalName = item.originalTitle.orEmpty(),
+                        overview = item.overview,
+                        posterUrl = posterUrl,
+                        backdropUrl = backdropUrl,
+                        originalLanguage = item.originalLanguage,
+                        genreIds = item.genreIds,
+                        popularity = item.popularity,
+                        voteAverage = (item.voteAverage * 10).toInt(),
+                        voteCount = item.voteCount,
+                        releaseDate = releaseLocalDate,
+                        video = item.video ?: false,
+                        adult = item.adult ?: false
+                    )
+                )
+            }
+
+            else -> {}
         }
     }
+    return result
 }

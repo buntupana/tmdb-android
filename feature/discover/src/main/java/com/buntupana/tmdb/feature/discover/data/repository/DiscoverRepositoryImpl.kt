@@ -18,7 +18,9 @@ class DiscoverRepositoryImpl @Inject constructor(
     override suspend fun getMoviesPopular(monetizationType: MonetizationType): Resource<List<MediaItem>> {
         return networkResult(
             networkCall = { discoverRemoteDataSource.getMoviesPopular(monetizationType) },
-            mapResponse = { response -> response.results.map { it.toModel() } }
+            mapResponse = {
+                    response -> response.results.map { it.toModel() }
+            }
         )
     }
 
@@ -63,7 +65,7 @@ class DiscoverRepositoryImpl @Inject constructor(
         return networkResult(
             networkCall = { discoverRemoteDataSource.getTrending(trendingType) },
             mapResponse = { response ->
-                response.results.map { it.toModel() }.filterNot { it is MediaItem.Unknown }
+                response.results.toModel()
             }
         )
     }

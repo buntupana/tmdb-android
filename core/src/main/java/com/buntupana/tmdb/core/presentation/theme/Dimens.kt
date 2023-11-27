@@ -18,12 +18,15 @@ object Dimens {
 
     const val aspectRatioMediaPoster = 2f / 3f
     const val aspectRatioMediaBackdrop = 20f / 9f
+    const val aspectRatioMediaRecommendation = 250f / 141f
 
     // Top bar
     val topBarHeight = 58.dp
     val topBarIconSize = 60.dp
 
     val imageSize = ImagePhone
+
+    val recommendationItemWidth = 275.dp
 }
 
 object PaddingPhone : Padding {

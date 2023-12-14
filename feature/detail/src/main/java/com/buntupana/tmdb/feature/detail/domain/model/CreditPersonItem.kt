@@ -26,7 +26,8 @@ sealed class CreditPersonItem(
         override val popularity: Double,
         override val userScore: Int,
         override val voteCount: Int,
-        override val releaseDate: LocalDate?
+        override val releaseDate: LocalDate?,
+        val castOrder: Int
     ) : CreditPersonItem(
         id,
         title,

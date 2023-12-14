@@ -2,6 +2,7 @@ package com.buntupana.tmdb.feature.detail.domain.usecase
 
 import com.buntupana.tmdb.app.domain.usecase.UseCaseResource
 import com.buntupana.tmdb.core.domain.entity.Resource
+import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
@@ -11,6 +12,10 @@ import javax.inject.Inject
 class GetPersonDetailsUseCase @Inject constructor(
     private val detailRepository: DetailRepository
 ) : UseCaseResource<Long, PersonFullDetails>() {
+
+    companion object {
+        private const val KNOWN_FOR_SIZE = 8
+    }
 
     override suspend fun getSource(params: Long): Resource<PersonFullDetails> {
 
@@ -30,9 +35,24 @@ class GetPersonDetailsUseCase @Inject constructor(
                     externalLinks.add(ExternalLink.HomePage(resource.data.homePageUrl))
                 }
 
-                val knownForList =
-                    resource.data.filmography.filter { it.department == resource.data.knownForDepartment }
-                        .sortedByDescending { it.voteCount }.distinctBy { it.title }.take(9)
+                val knownForList = resource.data.filmography
+                    .distinctBy { it.title }
+                    .filter { it.department == resource.data.knownForDepartment }
+                    .sortedByDescending {
+
+                        val firstSortingValue = it.voteCount * it.userScore
+
+                        when (it) {
+                            is CreditPersonItem.Movie -> firstSortingValue / (it.castOrder + 1f)
+                            is CreditPersonItem.TvShow -> {
+                                when {
+                                    it.episodeCount < 8 -> 0f
+                                    it.episodeCount <= 100 -> firstSortingValue
+                                    else -> firstSortingValue * (it.episodeCount.toFloat() / 100f)
+                                }
+                            }
+                        }.toInt()
+                    }.take(KNOWN_FOR_SIZE)
 
                 val creditMap =
                     resource.data.filmography

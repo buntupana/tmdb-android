@@ -122,5 +122,6 @@ val creditItemPerson = CreditPersonItem.Movie(
     popularity = 0.0,
     userScore = 0,
     voteCount = 0,
-    releaseDate = null
+    releaseDate = null,
+    castOrder = 0
 )

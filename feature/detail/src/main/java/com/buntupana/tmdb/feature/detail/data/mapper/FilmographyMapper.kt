@@ -37,7 +37,8 @@ fun FilmographyRaw.toModel(): List<CreditPersonItem> {
                     popularity = it.popularity,
                     userScore = (it.voteAverage * 100).toInt(),
                     voteCount = it.voteCount,
-                    releaseDate = releaseDateLocal
+                    releaseDate = releaseDateLocal,
+                    castOrder = it.order
                 )
             }
 
@@ -84,7 +85,8 @@ fun FilmographyRaw.toModel(): List<CreditPersonItem> {
                     popularity = it.popularity,
                     userScore = (it.voteAverage * 100).toInt(),
                     voteCount = it.voteCount,
-                    releaseDate = releaseDateLocal
+                    releaseDate = releaseDateLocal,
+                    castOrder = 0
                 )
             }
 

@@ -22,6 +22,8 @@ import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
 
+private const val CAST_NUMBER = 9
+
 @Composable
 fun CastHorizontalList(
     modifier: Modifier,
@@ -29,8 +31,6 @@ fun CastHorizontalList(
     onItemClick: (personId: Long) -> Unit,
     onFullCastClick: () -> Unit
 ) {
-
-    val castNumber = 9
 
     if (mediaDetails.castList.isNotEmpty()) {
 
@@ -58,16 +58,16 @@ fun CastHorizontalList(
                 item {
                     Spacer(modifier = Modifier.width(Dimens.padding.verticalItem))
                 }
-                items(mediaDetails.castList.take(castNumber)) { item: Person.Cast ->
+
+                items(mediaDetails.castList.take(CAST_NUMBER)) { item: Person.Cast ->
+
                     Spacer(modifier = Modifier.width(Dimens.padding.small))
+
                     PersonItemVertical(
-                        personId = item.id,
-                        name = item.name,
-                        gender = item.gender,
-                        profileUrl = item.profileUrl,
-                        character = item.character,
+                        personCast = item,
                         onItemClick = onItemClick
                     )
+
                     Spacer(modifier = Modifier.width(Dimens.padding.small))
                 }
                 item {

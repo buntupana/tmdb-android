@@ -44,6 +44,7 @@ import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -74,7 +75,7 @@ fun MainInfo(
             horizontalArrangement = Arrangement.Center,
             verticalArrangement = Arrangement.Center,
 
-        ) {
+            ) {
             Text(
                 text = mediaDetails.title,
                 color = textColor,
@@ -283,8 +284,14 @@ fun MainInfo(
                         color = textColor,
                         fontWeight = FontWeight.Bold
                     )
+
+                    val job = when (item) {
+                        is Person.Crew.Movie -> item.job
+                        is Person.Crew.TvShow -> item.jobList.joinToString("/") { it.job }
+                    }
+
                     Text(
-                        text = item.job.ifBlank { stringResource(com.buntupana.tmdb.feature.detail.R.string.text_creator) },
+                        text = job.ifBlank { stringResource(com.buntupana.tmdb.feature.detail.R.string.text_creator) },
                         color = textColor
                     )
                 }
@@ -298,7 +305,9 @@ fun MainInfo(
 fun MainInfoPreview() {
 
     MainInfo(
-        modifier = Modifier.fillMaxHeight().background(DetailBackgroundColor),
+        modifier = Modifier
+            .fillMaxHeight()
+            .background(DetailBackgroundColor),
         mediaDetails = mediaDetailsMovieSample,
         onItemClick = {},
         textColor = DetailBackgroundColor.getOnBackgroundColor()

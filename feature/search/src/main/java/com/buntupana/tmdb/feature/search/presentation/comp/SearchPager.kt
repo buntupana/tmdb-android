@@ -19,7 +19,6 @@ import androidx.paging.compose.LazyPagingItems
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.domain.model.PersonItem
 import com.buntupana.tmdb.core.presentation.composables.item.MediaItemHorizontal
-import com.buntupana.tmdb.core.presentation.composables.item.PersonItemHorizontal
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
 

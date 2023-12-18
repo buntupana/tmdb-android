@@ -48,7 +48,7 @@ class GetMovieDetailsUseCase @Inject constructor(
                 val creatorList =
                     resource.data.credits.crewList.filter { creatorJobList.contains(it.job) }
                         .groupBy { it.id }.map {
-                            Person.Crew(
+                            Person.Crew.Movie(
                                 id = it.key,
                                 name = it.value.firstOrNull()?.name.orEmpty(),
                                 gender = it.value.firstOrNull()?.gender ?: Gender.NOT_SPECIFIED,

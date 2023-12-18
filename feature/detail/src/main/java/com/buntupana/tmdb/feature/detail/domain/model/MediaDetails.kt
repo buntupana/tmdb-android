@@ -39,9 +39,9 @@ sealed class MediaDetails(
         override val runTime: Long,
         override val genreList: List<String>,
         override val ageCertification: String,
-        override val creatorList: List<Person.Crew>,
-        override val castList: List<Person.Cast>,
-        override val crewList: List<Person.Crew>,
+        override val creatorList: List<Person.Crew.Movie>,
+        override val castList: List<Person.Cast.Movie>,
+        override val crewList: List<Person.Crew.Movie>,
         override val recommendationList: List<MediaItem>,
         val localCountryCodeRelease: String
     ) : MediaDetails(
@@ -76,9 +76,9 @@ sealed class MediaDetails(
         override val runTime: Long,
         override val genreList: List<String>,
         override val ageCertification: String,
-        override val creatorList: List<Person.Crew>,
-        override val castList: List<Person.Cast>,
-        override val crewList: List<Person.Crew>,
+        override val creatorList: List<Person.Crew.TvShow>,
+        override val castList: List<Person.Cast.TvShow>,
+        override val crewList: List<Person.Crew.TvShow>,
         override val recommendationList: List<MediaItem>,
     ) : MediaDetails(
         id = id,

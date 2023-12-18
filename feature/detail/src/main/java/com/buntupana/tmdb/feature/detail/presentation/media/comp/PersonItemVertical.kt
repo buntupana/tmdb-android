@@ -19,15 +19,19 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.domain.model.Gender
 import com.buntupana.tmdb.core.presentation.composables.ImagePersonFromUrl
 import com.buntupana.tmdb.core.presentation.spToDp
 import com.buntupana.tmdb.core.presentation.theme.Dimens
+import com.buntupana.tmdb.feature.detail.R
+import com.buntupana.tmdb.feature.detail.domain.model.Person
+import com.buntupana.tmdb.feature.detail.presentation.castTvShowPersonSample
 
 private const val MAX_NAME_LINES = 2
 private const val MAX_CHARACTER_LINES = 2
@@ -35,11 +39,7 @@ private const val MAX_CHARACTER_LINES = 2
 @Composable
 fun PersonItemVertical(
     itemWidth: Dp = 120.dp,
-    personId: Long,
-    name: String,
-    gender: Gender,
-    profileUrl: String?,
-    character: String,
+    personCast: Person.Cast,
     onItemClick: ((personId: Long) -> Unit)? = null
 ) {
     Surface(
@@ -50,7 +50,7 @@ fun PersonItemVertical(
             modifier = Modifier
                 .width(itemWidth)
                 .clickable {
-                    onItemClick?.invoke(personId)
+                    onItemClick?.invoke(personCast.id)
                 },
         ) {
             Column {
@@ -58,8 +58,8 @@ fun PersonItemVertical(
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(12f / 13.3f),
-                    imageUrl = profileUrl,
-                    gender = gender
+                    imageUrl = personCast.profileUrl,
+                    gender = personCast.gender
                 )
                 Column(modifier = Modifier.padding(Dimens.padding.small)) {
                     var nameExtraLinesCount by remember {
@@ -75,7 +75,7 @@ fun PersonItemVertical(
                         mutableIntStateOf(2)
                     }
                     Text(
-                        text = name,
+                        text = personCast.name,
                         fontWeight = FontWeight.Bold,
                         maxLines = nameMaxLines,
                         overflow = TextOverflow.Ellipsis,
@@ -84,6 +84,21 @@ fun PersonItemVertical(
                             nameExtraLinesCount = MAX_NAME_LINES - it.lineCount
                         }
                     )
+
+                    val character: String
+                    val episodesCount: Int
+                    when (personCast) {
+                        is Person.Cast.Movie -> {
+                            character = personCast.character
+                            episodesCount = 0
+                        }
+
+                        is Person.Cast.TvShow -> {
+                            character = personCast.roleList.joinToString("/") { it.character }
+                            episodesCount = personCast.totalEpisodeCount
+                        }
+                    }
+
                     Text(
                         text = character,
                         maxLines = characterMaxLines,
@@ -93,6 +108,12 @@ fun PersonItemVertical(
                             characterExtraLinesCount = MAX_CHARACTER_LINES - it.lineCount
                         }
                     )
+                    if (episodesCount > 0) {
+                        Text(
+                            modifier = Modifier.alpha(0.5f),
+                            text = pluralStringResource(id = R.plurals.text_episodes_count, count = episodesCount, episodesCount),
+                        )
+                    }
                     // Height we need to fill the view
                     val lineHeight =
                         MaterialTheme.typography.bodyLarge.lineHeight * (nameExtraLinesCount + characterExtraLinesCount)
@@ -109,10 +130,6 @@ fun PersonItemVertical(
 @Composable
 fun PersonItemVerticalPreview() {
     PersonItemVertical(
-        personId = 0L,
-        name = "Natalie Portman",
-        gender = Gender.FEMALE,
-        profileUrl = "",
-        character = "Jane Foster / The Mighty Thor"
+        personCast = castTvShowPersonSample
     )
 }

@@ -3,7 +3,6 @@ package com.buntupana.tmdb.feature.detail.presentation.cast.comp
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -15,7 +14,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.R
-import com.buntupana.tmdb.core.presentation.composables.item.PersonItemHorizontal
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.Typography
 import com.buntupana.tmdb.feature.detail.domain.model.Person
@@ -52,15 +50,9 @@ fun LazyListScope.castList(
         personCastList.forEach { person ->
             item {
 
-                PersonItemHorizontal(
-                    modifier = modifier
-                        .height(Dimens.imageSize.personHeight)
-                        .fillMaxWidth(),
-                    personId = person.id,
-                    name = person.name,
-                    gender = person.gender,
-                    profileUrl = person.profileUrl,
-                    description = person.character,
+                PersonItemCastHorizontal(
+                    modifier = modifier.fillMaxWidth(),
+                    person = person,
                     onClick = onPersonClick
                 )
             }
@@ -110,14 +102,9 @@ fun LazyListScope.castList(
         }
         personList.forEach { person ->
             item {
-                PersonItemHorizontal(modifier = modifier
-                    .height(Dimens.imageSize.personHeight)
-                    .fillMaxWidth(),
-                    personId = person.id,
-                    name = person.name,
-                    gender = person.gender,
-                    profileUrl = person.profileUrl,
-                    description = person.job,
+                PersonItemCastHorizontal(
+                    modifier = modifier.fillMaxWidth(),
+                    person = person,
                     onClick = onPersonClick
                 )
             }

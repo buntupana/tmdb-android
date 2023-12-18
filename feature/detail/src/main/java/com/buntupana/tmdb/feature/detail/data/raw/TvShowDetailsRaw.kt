@@ -56,6 +56,7 @@ data class TvShowDetailsRaw(
     val videos: MediaVideosRaw?,
     @field:Json(name = "content_ratings")
     val contentRatings: ContentRatingsRaw?,
-    val credits: CreditsRaw?,
+    @field:Json(name = "aggregate_credits")
+    val credits: CreditsTvShowRaw?,
     val recommendations: RecommendationsRaw
 )

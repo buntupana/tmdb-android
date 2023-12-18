@@ -43,6 +43,6 @@ data class MovieDetailsRaw(
     val releaseDates: ReleaseDatesRaw?,
     @field:Json(name = "vote_count")
     val voteCount: Long,
-    val credits: CreditsRaw?,
+    val credits: CreditsMovieRaw?,
     val recommendations: RecommendationsRaw
 )

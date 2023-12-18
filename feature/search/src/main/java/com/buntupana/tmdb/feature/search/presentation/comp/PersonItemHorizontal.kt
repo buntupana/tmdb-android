@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.core.presentation.composables.item
+package com.buntupana.tmdb.feature.search.presentation.comp
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

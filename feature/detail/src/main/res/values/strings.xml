@@ -22,4 +22,9 @@
     <string name="text_no_biography">We don\'t have a biography for %s.</string>
     <string name="text_no_credits">%s doesn\'t have any credits.</string>
 
+    <plurals name="text_episodes_count">
+        <item quantity="one">%d episode</item>
+        <item quantity="other">%d episodes</item>
+    </plurals>
+
 </resources>

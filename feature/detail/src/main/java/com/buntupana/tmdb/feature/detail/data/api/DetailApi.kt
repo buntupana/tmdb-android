@@ -12,7 +12,7 @@ interface DetailApi {
         @Path("movieId") movieId: Long
     ): Response<MovieDetailsRaw>
 
-    @GET("tv/{tvShowId}?append_to_response=content_ratings,videos,credits,recommendations")
+    @GET("tv/{tvShowId}?append_to_response=content_ratings,videos,aggregate_credits,recommendations")
     suspend fun getTvShowDetails(
         @Path("tvShowId") tvShowId: Long
     ): Response<TvShowDetailsRaw>
@@ -30,12 +30,12 @@ interface DetailApi {
     @GET("movie/{movieId}/credits")
     suspend fun getMovieCredits(
         @Path("movieId") movieId: Long
-    ): Response<CreditsRaw>
+    ): Response<CreditsMovieRaw>
 
     @GET("tv/{tvShowId}/credits")
     suspend fun getTvShowCredits(
         @Path("tvShowId") movieId: Long
-    ): Response<CreditsRaw>
+    ): Response<CreditsMovieRaw>
 
     @GET("person/{personId}?append_to_response=external_ids,combined_credits")
     suspend fun getPersonDetails(

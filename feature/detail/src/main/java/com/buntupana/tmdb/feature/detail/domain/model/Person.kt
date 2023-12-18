@@ -11,20 +11,92 @@ sealed class Person(
     open val gender: Gender,
     open val profileUrl: String?
 ) : Parcelable {
-    data class Cast(
-        override val id: Long,
-        override val name: String,
-        override val gender: Gender,
-        override val profileUrl: String?,
-        val character: String
-    ) : Person(id = id, name = name, gender = gender, profileUrl = profileUrl)
 
-    data class Crew(
+    sealed class Cast(
+        override val id: Long,
+        override val name: String,
+        override val gender: Gender,
+        override val profileUrl: String?
+    ) : Person(
+        id = id,
+        name = name,
+        gender = gender,
+        profileUrl = profileUrl
+    ) {
+
+        @Parcelize
+        data class Movie(
+            override val id: Long,
+            override val name: String,
+            override val gender: Gender,
+            override val profileUrl: String?,
+            val character: String
+        ) : Cast(
+            id = id,
+            name = name,
+            gender = gender,
+            profileUrl = profileUrl
+        )
+
+        @Parcelize
+        data class TvShow(
+            override val id: Long,
+            override val name: String,
+            override val gender: Gender,
+            override val profileUrl: String?,
+            val totalEpisodeCount: Int,
+            val roleList: List<Role>
+        ) : Cast(
+            id = id,
+            name = name,
+            gender = gender,
+            profileUrl = profileUrl
+        )
+    }
+
+    sealed class Crew(
         override val id: Long,
         override val name: String,
         override val gender: Gender,
         override val profileUrl: String?,
-        val department: String,
-        val job: String
-    ) : Person(id = id, name = name, gender = gender, profileUrl = profileUrl)
+        open val department: String
+    ) : Person(
+        id = id,
+        name = name,
+        gender = gender,
+        profileUrl = profileUrl
+    ) {
+        @Parcelize
+        data class Movie(
+            override val id: Long,
+            override val name: String,
+            override val gender: Gender,
+            override val profileUrl: String?,
+            override val department: String,
+            val job: String
+        ) : Crew(
+            id = id,
+            name = name,
+            gender = gender,
+            profileUrl = profileUrl,
+            department = department
+        )
+
+        @Parcelize
+        data class TvShow(
+            override val id: Long,
+            override val name: String,
+            override val gender: Gender,
+            override val profileUrl: String?,
+            override val department: String,
+            val totalEpisodeCount: Int,
+            val jobList: List<Job>
+        ) : Crew(
+            id = id,
+            name = name,
+            gender = gender,
+            profileUrl = profileUrl,
+            department = department
+        )
+    }
 }

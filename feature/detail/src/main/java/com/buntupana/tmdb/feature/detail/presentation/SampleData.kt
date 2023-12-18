@@ -6,6 +6,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
+import com.buntupana.tmdb.feature.detail.domain.model.Role
 import java.time.LocalDate
 
 
@@ -34,7 +35,7 @@ val personDetailsSample = PersonFullDetails(
     knownCredits = 60,
 )
 
-val castPersonSample = Person.Cast(
+val castMoviePersonSample = Person.Cast.Movie(
     id = 0L,
     name = "Jason Momoa",
     gender = Gender.MALE,
@@ -42,7 +43,16 @@ val castPersonSample = Person.Cast(
     character = "Aquaman"
 )
 
-val crewPersonSample = Person.Crew(
+val castTvShowPersonSample = Person.Cast.TvShow(
+    id = 0L,
+    name = "Jason Momoa",
+    gender = Gender.MALE,
+    profileUrl = "",
+    totalEpisodeCount = 140,
+    roleList = listOf(Role("The Flash", 140), Role("The Flash", 1), Role("The Flash", 1), Role("The Flash", 1), Role("The Flash", 1), Role("The Flash", 1))
+)
+
+val crewPersonSample = Person.Crew.Movie(
     id = 0L,
     name = "Stanley Kubrik",
     gender = Gender.MALE,
@@ -99,7 +109,7 @@ val mediaDetailsMovieSample = MediaDetails.Movie(
     genreList = listOf("Action", "Adventure", "Fantasy"),
     ageCertification = "18",
     creatorList = emptyList(),
-    castList = listOf(castPersonSample, castPersonSample, castPersonSample, castPersonSample),
+    castList = listOf(castMoviePersonSample, castMoviePersonSample, castMoviePersonSample, castMoviePersonSample),
     crewList = listOf(crewPersonSample, crewPersonSample, crewPersonSample, crewPersonSample),
     localCountryCodeRelease = "ES",
     recommendationList = listOf(

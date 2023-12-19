@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,7 +37,8 @@ import com.buntupana.tmdb.feature.detail.presentation.media.comp.CastHorizontalL
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.Header
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.MainInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.RecommendationsHorizontal
-import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
+import com.buntupana.tmdb.feature.detail.presentation.media.comp.SeasonsSection
+import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -47,6 +50,9 @@ fun MediaDetailScreen(
     viewModel: MediaDetailViewModel = hiltViewModel(),
     detailNavigator: DetailNavigator
 ) {
+
+    val context = LocalContext.current
+
     MediaDetailContent(
         state = viewModel.state,
         onBackClick = { detailNavigator.navigateBack() },
@@ -60,6 +66,12 @@ fun MediaDetailScreen(
                 mediaType = mediaType,
                 backgroundColor = backgroundColor
             )
+        },
+        onSeasonClick = { mediaId, seasonId ->
+            Toast.makeText(context, "On Last Season Clicked", Toast.LENGTH_SHORT).show()
+        },
+        onAllSeasonsClick = { mediaId ->
+            Toast.makeText(context, "On All Seasons Clicked", Toast.LENGTH_SHORT).show()
         },
         onRecommendationClick = { mediaId, mediaType ->
             detailNavigator.navigateToMediaDetail(
@@ -84,6 +96,8 @@ fun MediaDetailContent(
     onSearchClick: () -> Unit,
     onPersonClick: (personId: Long) -> Unit,
     onFullCastClick: (mediaDetails: MediaDetails, mediaType: MediaType, backgroundColor: Color) -> Unit,
+    onSeasonClick: (mediaId: Long, seasonId: Long) -> Unit,
+    onAllSeasonsClick: (mediaId: Long) -> Unit,
     onRecommendationClick: (mediaId: Long, mediaType: MediaType) -> Unit,
     onRetryClick: () -> Unit,
     onLogoClick: () -> Unit
@@ -173,6 +187,17 @@ fun MediaDetailContent(
                         }
                     )
 
+                    if (state.mediaDetails is MediaDetails.TvShow) {
+                        SeasonsSection(
+                            seasonList = state.mediaDetails.seasonList,
+                            isInAir = state.mediaDetails.isInAir,
+                            lastEpisode = state.mediaDetails.lastEpisode,
+                            nextEpisode = state.mediaDetails.nextEpisode,
+                            onLastSeasonClick = { onSeasonClick(state.mediaId, it) },
+                            onAllSeasonsClick = { onAllSeasonsClick(state.mediaId) }
+                        )
+                    }
+
                     RecommendationsHorizontal(
                         modifier = Modifier.fillMaxWidth(),
                         mediaItemList = state.mediaDetails.recommendationList,
@@ -186,7 +211,7 @@ fun MediaDetailContent(
     }
 }
 
-@Preview
+@Preview(heightDp = 2000)
 @Composable
 fun MediaDetailScreenPreview() {
 
@@ -194,14 +219,16 @@ fun MediaDetailScreenPreview() {
         state = MediaDetailState(
             mediaId = 0L,
             mediaType = MediaType.MOVIE,
-            mediaDetails = mediaDetailsMovieSample,
+            mediaDetails = mediaDetailsTvShowSample,
             backgroundColor = DetailBackgroundColor,
             isGetContentError = false
         ),
         onBackClick = {},
         onSearchClick = {},
         onPersonClick = {},
-        onFullCastClick = { mediaDetails, mediaType, backgroundColor -> },
+        onFullCastClick = { _, _, _ -> },
+        onSeasonClick = { _, _ -> },
+        onAllSeasonsClick = { _ -> },
         onRecommendationClick = { _, _ -> },
         onRetryClick = {},
         onLogoClick = {}

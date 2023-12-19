@@ -25,14 +25,14 @@ data class TvShowDetailsRaw(
     @field:Json(name = "last_air_date")
     val lastAirDate: String?,
     @field:Json(name = "last_episode_to_air")
-    val lastEpisodeToAir: LastEpisodeToAir?,
+    val lastEpisodeToAir: EpisodeRaw?,
     val networks: List<Network>?,
     @field:Json(name = "next_episode_to_air")
-    val nextEpisodeToAir: NextEpisodeToAir?,
+    val nextEpisodeToAir: EpisodeRaw?,
     @field:Json(name = "number_of_episodes")
-    val numberOfEpisodes: Long?,
+    val numberOfEpisodes: Int?,
     @field:Json(name = "number_of_seasons")
-    val numberOfSeasons: Long?,
+    val numberOfSeasons: Int?,
     @field:Json(name = "origin_country")
     val originCountry: List<String>?,
     @field:Json(name = "original_language")
@@ -44,7 +44,7 @@ data class TvShowDetailsRaw(
     val productionCompanies: List<ProductionCompany>?,
     @field:Json(name = "production_countries")
     val productionCountries: List<ProductionCountry>?,
-    val seasons: List<Season>?,
+    val seasons: List<SeasonRaw>?,
     @field:Json(name = "spoken_languages")
     val spokenLanguages: List<SpokenLanguage>?,
     val status: String?,

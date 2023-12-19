@@ -80,6 +80,10 @@ sealed class MediaDetails(
         override val castList: List<Person.Cast.TvShow>,
         override val crewList: List<Person.Crew.TvShow>,
         override val recommendationList: List<MediaItem>,
+        val seasonList: List<Season>,
+        val lastEpisode: Episode?,
+        val nextEpisode: Episode?,
+        val isInAir: Boolean
     ) : MediaDetails(
         id = id,
         title = title,

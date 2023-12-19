@@ -2,7 +2,7 @@ package com.buntupana.tmdb.feature.detail.data.raw
 
 import com.squareup.moshi.Json
 
-data class NextEpisodeToAir(
+data class EpisodeRaw(
     @field:Json(name = "air_date")
     val airDate: String?,
     @field:Json(name = "episode_number")
@@ -16,7 +16,7 @@ data class NextEpisodeToAir(
     @field:Json(name = "season_number")
     val seasonNumber: Int?,
     @field:Json(name = "show_id")
-    val showId: Int?,
+    val showId: Long?,
     @field:Json(name = "still_path")
     val stillPath: String?,
     @field:Json(name = "vote_average")

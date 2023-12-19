@@ -65,6 +65,13 @@ fun LocalDate.toLocalFormat(): String {
     return this.format(dateFormatter)
 }
 
+fun LocalDate.toFullDate(): String {
+    val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(
+        java.util.Locale.getDefault()
+    )
+    return this.format(dateFormatter)
+}
+
 @OptIn(ExperimentalContracts::class)
 fun CharSequence?.isNotNullOrBlank(): Boolean {
     contract {

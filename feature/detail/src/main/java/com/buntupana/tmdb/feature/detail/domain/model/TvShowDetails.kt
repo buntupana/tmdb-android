@@ -20,5 +20,9 @@ data class TvShowDetails(
     val certificationList: List<Certification>,
     val videoList: List<Video>,
     val credits: CreditsTvShow,
-    val recommendationList: List<MediaItem>
+    val seasonList: List<Season>,
+    val lastEpisode: Episode?,
+    val nextEpisode: Episode?,
+    val isInAir: Boolean,
+    val recommendationList: List<MediaItem>,
 )

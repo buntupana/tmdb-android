@@ -38,7 +38,8 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
         runTime = episodeRunTime?.firstOrNull() ?: 0,
         genreList = genres?.map { it.name }.orEmpty(),
         creatorList = createdBy?.map {
-            val profileUrl = it.profilePath.ifNotNullOrBlank{ CoreApi.BASE_URL_PROFILE + it.profilePath }
+            val profileUrl =
+                it.profilePath.ifNotNullOrBlank { CoreApi.BASE_URL_PROFILE + it.profilePath }
             Person.Crew.TvShow(
                 id = it.id,
                 name = it.name.orEmpty(),
@@ -52,6 +53,10 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
         certificationList = contentRatings?.results?.map { it.toModel() }.orEmpty(),
         videoList = videoList,
         credits = credits?.toModel() ?: CreditsTvShow(emptyList(), emptyList()),
+        seasonList = seasons?.toModel().orEmpty(),
+        isInAir = nextEpisodeToAir != null,
+        nextEpisode = nextEpisodeToAir?.toModel(),
+        lastEpisode = lastEpisodeToAir?.toModel(),
         recommendationList = recommendations.results.toModel()
     )
 }

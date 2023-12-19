@@ -39,7 +39,11 @@ class GetTvShowDetailsUseCase @Inject constructor(
                     creatorList = resource.data.creatorList,
                     castList = resource.data.credits.castList,
                     crewList = resource.data.credits.crewList,
-                    recommendationList = resource.data.recommendationList
+                    recommendationList = resource.data.recommendationList,
+                    seasonList = resource.data.seasonList,
+                    lastEpisode = resource.data.lastEpisode,
+                    nextEpisode = resource.data.nextEpisode,
+                    isInAir = resource.data.isInAir
                 )
 
                 Resource.Success(tvShow)

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -46,7 +47,7 @@ fun CastHorizontalList(
             Text(
                 modifier = Modifier.padding(horizontal = Dimens.padding.medium),
                 text = castTitle,
-                fontSize = Dimens.textSize.title,
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
 
@@ -82,7 +83,7 @@ fun CastHorizontalList(
                     .padding(horizontal = Dimens.padding.medium)
                     .clickable { onFullCastClick() },
                 text = stringResource(id = R.string.text_full_cast),
-                fontSize = Dimens.textSize.title,
+                style = MaterialTheme.typography.titleMedium
             )
 
             Spacer(modifier = Modifier.height(Dimens.padding.vertical))
@@ -90,7 +91,7 @@ fun CastHorizontalList(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun CastHorizontalListPreview() {
     CastHorizontalList(

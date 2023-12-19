@@ -3,10 +3,13 @@ package com.buntupana.tmdb.feature.detail.presentation
 import com.buntupana.tmdb.core.domain.model.Gender
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
+import com.buntupana.tmdb.feature.detail.domain.model.Episode
+import com.buntupana.tmdb.feature.detail.domain.model.Job
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Role
+import com.buntupana.tmdb.feature.detail.domain.model.Season
 import java.time.LocalDate
 
 
@@ -49,16 +52,38 @@ val castTvShowPersonSample = Person.Cast.TvShow(
     gender = Gender.MALE,
     profileUrl = "",
     totalEpisodeCount = 140,
-    roleList = listOf(Role("The Flash", 140), Role("The Flash", 1), Role("The Flash", 1), Role("The Flash", 1), Role("The Flash", 1), Role("The Flash", 1))
+    roleList = listOf(
+        Role("The Flash", 140),
+        Role("The Flash", 1),
+        Role("The Flash", 1),
+        Role("The Flash", 1),
+        Role("The Flash", 1),
+        Role("The Flash", 1)
+    )
 )
 
-val crewPersonSample = Person.Crew.Movie(
+val crewMoviePersonSample = Person.Crew.Movie(
     id = 0L,
     name = "Stanley Kubrik",
     gender = Gender.MALE,
     profileUrl = "",
     department = "Direction",
     job = "Director"
+)
+
+val crewTvShowPersonSample = Person.Crew.TvShow(
+    id = 0L,
+    name = "Stanley Kubrik",
+    gender = Gender.MALE,
+    profileUrl = "",
+    department = "Direction",
+    jobList = listOf(
+        Job("Director", 9),
+        Job("Director", 9),
+        Job("Director", 9),
+        Job("Director", 9)
+    ),
+    totalEpisodeCount = 102
 )
 
 val mediaItemMovie = MediaItem.Movie(
@@ -109,8 +134,18 @@ val mediaDetailsMovieSample = MediaDetails.Movie(
     genreList = listOf("Action", "Adventure", "Fantasy"),
     ageCertification = "18",
     creatorList = emptyList(),
-    castList = listOf(castMoviePersonSample, castMoviePersonSample, castMoviePersonSample, castMoviePersonSample),
-    crewList = listOf(crewPersonSample, crewPersonSample, crewPersonSample, crewPersonSample),
+    castList = listOf(
+        castMoviePersonSample,
+        castMoviePersonSample,
+        castMoviePersonSample,
+        castMoviePersonSample
+    ),
+    crewList = listOf(
+        crewMoviePersonSample,
+        crewMoviePersonSample,
+        crewMoviePersonSample,
+        crewMoviePersonSample
+    ),
     localCountryCodeRelease = "ES",
     recommendationList = listOf(
         mediaItemMovie,
@@ -122,7 +157,7 @@ val mediaDetailsMovieSample = MediaDetails.Movie(
     )
 )
 
-val creditItemPerson = CreditPersonItem.Movie(
+val creditItemPersonSample = CreditPersonItem.Movie(
     id = 0L,
     title = "Thor Ragnarock",
     department = "Acting",
@@ -134,4 +169,71 @@ val creditItemPerson = CreditPersonItem.Movie(
     voteCount = 0,
     releaseDate = null,
     castOrder = 0
+)
+
+val episodeSample = Episode(
+    id = 0L,
+    showId = 0L,
+    name = "A Night at the Symphony",
+    airDate = LocalDate.now(),
+    episodeNumber = 4,
+    overview = "We don't have an overview translated in English. Help us expand our database by adding one.",
+    runtime = 60,
+    seasonNumber = 2,
+    stillPath = "",
+    voteAverage = 7.0,
+    voteCount = 24
+)
+
+val seasonSample = Season(
+    id = 0L,
+    name = "Season 1",
+    airDate = LocalDate.now(),
+    episodeCount = 8,
+    overview = "Based on\"Bad Luck and Trouble,\" when members of Reacher's old military unit start turning up dead, Reacher has just one thing on his mind—revenge.",
+    posterPath = null,
+    seasonNumber = 1,
+    voteAverage = 7f
+)
+
+val mediaDetailsTvShowSample = MediaDetails.TvShow(
+    id = 0L,
+    title = "Thor: Love and Thunder",
+    posterUrl = "test",
+    backdropUrl = "test",
+    trailerUrl = "test",
+    overview = "After his retirement is interrupted by Gorr the God Butcher, a galactic killer who seeks the extinction of the gods, Thor enlists the help of King Valkyrie, Korg, and ex-girlfriend Jane Foster, who now inexplicably wields Mjolnir as the Mighty Thor. Together they embark upon a harrowing cosmic adventure to uncover the mystery of the God Butcher’s vengeance and stop him before it’s too late.",
+    tagLine = "The one is not the only.",
+    releaseDate = LocalDate.now(),
+    userScore = 60,
+    runTime = 120,
+    genreList = listOf("Action", "Adventure", "Fantasy"),
+    ageCertification = "18",
+    creatorList = emptyList(),
+    castList = listOf(
+        castTvShowPersonSample,
+        castTvShowPersonSample,
+        castTvShowPersonSample,
+        castTvShowPersonSample
+    ),
+    crewList = listOf(
+        crewTvShowPersonSample,
+        crewTvShowPersonSample,
+        crewTvShowPersonSample,
+        crewTvShowPersonSample
+    ),
+    recommendationList = listOf(
+        mediaItemMovie,
+        mediaItemTvShow,
+        mediaItemMovie,
+        mediaItemTvShow,
+        mediaItemMovie,
+        mediaItemTvShow
+    ),
+    seasonList = listOf(
+        seasonSample
+    ),
+    nextEpisode = episodeSample,
+    lastEpisode = episodeSample,
+    isInAir = true
 )

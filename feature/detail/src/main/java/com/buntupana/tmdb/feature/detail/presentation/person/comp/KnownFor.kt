@@ -30,7 +30,7 @@ import com.buntupana.tmdb.core.presentation.spToDp
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.feature.detail.R
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
-import com.buntupana.tmdb.feature.detail.presentation.creditItemPerson
+import com.buntupana.tmdb.feature.detail.presentation.creditItemPersonSample
 
 @Composable
 fun KnownFor(
@@ -123,11 +123,11 @@ fun KnownFor(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun KnownForPreview() {
     KnownFor(
-        itemList = listOf(creditItemPerson, creditItemPerson, creditItemPerson),
+        itemList = listOf(creditItemPersonSample, creditItemPersonSample, creditItemPersonSample),
         onItemClick = {_,_,_ ->}
     )
 }

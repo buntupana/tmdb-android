@@ -112,14 +112,15 @@ fun LazyListScope.castList(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun CastListPreview() {
     LazyColumn {
         castList(
             personCastList = mediaDetailsMovieSample.castList,
             personCrewMap = mediaDetailsMovieSample.crewList.groupBy { it.department },
-            onPersonClick = {})
+            onPersonClick = {}
+        )
     }
 }
 

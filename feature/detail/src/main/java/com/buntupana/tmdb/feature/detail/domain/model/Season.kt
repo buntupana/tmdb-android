@@ -11,7 +11,7 @@ data class Season(
     val airDate: LocalDate?,
     val episodeCount: Int?,
     val overview: String?,
-    val posterPath: String?,
+    val posterUrl: String?,
     val seasonNumber: Int?,
-    val voteAverage: Float?
+    val voteAverage: Float
 ) : Parcelable

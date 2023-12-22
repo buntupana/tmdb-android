@@ -15,5 +15,5 @@ data class SeasonRaw(
     @field:Json(name = "season_number")
     val seasonNumber: Int?,
     @field:Json(name = "vote_average")
-    val voteAverage: Float?
+    val voteAverage: Float
 )

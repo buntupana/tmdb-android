@@ -191,7 +191,7 @@ val seasonSample = Season(
     airDate = LocalDate.now(),
     episodeCount = 8,
     overview = "Based on\"Bad Luck and Trouble,\" when members of Reacher's old military unit start turning up dead, Reacher has just one thing on his mind—revenge.",
-    posterPath = null,
+    posterUrl = null,
     seasonNumber = 1,
     voteAverage = 7f
 )

@@ -1,11 +1,13 @@
-package com.buntupana.tmdb.feature.detail.presentation.cast
+package com.buntupana.tmdb.feature.detail.presentation.seasons
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,42 +15,48 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.cast.comp.CastHeader
-import com.buntupana.tmdb.feature.detail.presentation.cast.comp.castList
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
-import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
+import com.buntupana.tmdb.feature.detail.presentation.seasonSample
+import com.buntupana.tmdb.feature.detail.presentation.seasons.comp.SeasonItem
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination(
-    navArgsDelegate = CastDetailNavArgs::class
+    navArgsDelegate = SeasonsDetailNavArgs::class
 )
 @Composable
-fun CastDetailScreen(
-    viewModel: CastDetailViewModel = hiltViewModel(),
+fun SeasonsDetailScreen(
+    viewModel: SeasonDetailViewModel = hiltViewModel(),
     detailNavigator: DetailNavigator
 ) {
-    CastDetailContent(
+
+    val context = LocalContext.current
+
+    SeasonsContent(
         state = viewModel.state,
         onBackClick = { detailNavigator.navigateBack() },
         onSearchClick = { detailNavigator.navigateToSearch() },
-        onPersonClick = { personId -> detailNavigator.navigateToPerson(personId) },
-        onLogoClick = { detailNavigator.navigateToMainScreen() }
+        onLogoClick = { detailNavigator.navigateToMainScreen() },
+        onSeasonClick = { mediaId, seasonId ->
+            Toast.makeText(context, "Season Clicked", Toast.LENGTH_SHORT).show()
+        }
     )
 }
 
 @Composable
-fun CastDetailContent(
-    state: CastDetailState,
+private fun SeasonsContent(
+    state: SeasonsDetailState,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onPersonClick: (personId: Long) -> Unit,
-    onLogoClick: () -> Unit
+    onLogoClick: () -> Unit,
+    onSeasonClick: (mediaId: Long, seasonId: Long) -> Unit
 ) {
 
     var backgroundColor by remember {
@@ -96,33 +104,41 @@ fun CastDetailContent(
                 )
             }
         }
-        castList(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(systemBackground),
-            personCastList = state.personCastList,
-            personCrewMap = state.personCrewMap,
-            onPersonClick = { onPersonClick(it) }
-        )
+
+        items(state.seasonList.size) { index ->
+            val season = state.seasonList[index]
+
+            if (index != 0) {
+                Divider()
+            }
+
+            SeasonItem(
+                modifier = Modifier.background(systemBackground),
+                tvShowName = state.mediaName,
+                season = season,
+                onSeasonClick = { seasonId ->
+                    onSeasonClick(state.mediaId, seasonId)
+                }
+            )
+        }
     }
 }
 
-@Preview
+@Preview(showBackground = true, heightDp = 2000)
 @Composable
-fun CastDetailScreenPreview() {
-
-    CastDetailContent(
-        state = CastDetailState(
-            mediaName = "Pain Hustlers",
-            releaseYear = "2023",
-            posterUrl = "",
+private fun SeasonsScreenPreview() {
+    SeasonsContent(
+        state = SeasonsDetailState(
+            mediaId = 0L,
+            mediaName = "Jack Reacher",
+            posterUrl = null,
+            releaseYear = "2003",
             backgroundColor = DetailBackgroundColor,
-            personCastList = mediaDetailsMovieSample.castList,
-            personCrewMap = mediaDetailsMovieSample.crewList.groupBy { it.department }
+            seasonList = listOf(seasonSample, seasonSample, seasonSample)
         ),
         onBackClick = {},
-        onSearchClick = {},
-        onPersonClick = {},
-        onLogoClick = {}
+        onSearchClick = { },
+        onLogoClick = {},
+        onSeasonClick = { _, _ -> }
     )
 }

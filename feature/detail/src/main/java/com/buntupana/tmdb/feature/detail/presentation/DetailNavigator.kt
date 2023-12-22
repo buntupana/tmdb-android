@@ -23,5 +23,10 @@ interface DetailNavigator {
         backgroundColor: Color?
     )
 
+    fun navigateToSeasons(
+        mediaDetails: MediaDetails.TvShow,
+        backgroundColor: Color?
+    )
+
     fun navigateToMainScreen()
 }

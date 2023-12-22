@@ -12,6 +12,7 @@
     <string name="text_current_season">Current Season</string>
     <string name="text_last_season">Last Season</string>
     <string name="text_view_all_seasons">View All Seasons</string>
+    <string name="message_season_premiered">"%1$s of %2$s premiered on %3$s"</string>
 
     <string name="text_as">as</string>
 

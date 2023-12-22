@@ -8,6 +8,7 @@ import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.destinations.CastDetailScreenDestination
 import com.buntupana.tmdb.feature.detail.presentation.destinations.MediaDetailScreenDestination
 import com.buntupana.tmdb.feature.detail.presentation.destinations.PersonDetailScreenDestination
+import com.buntupana.tmdb.feature.detail.presentation.destinations.SeasonsDetailScreenDestination
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNavArgs
 import com.buntupana.tmdb.feature.discover.presentation.DiscoverNavigator
 import com.buntupana.tmdb.feature.discover.presentation.destinations.DiscoverScreenDestination
@@ -21,7 +22,11 @@ class CommonNavigation(
 
     override fun navigateToMediaDetail(id: Long, mediaType: MediaType, backgroundColor: Color?) {
         destinationsNavigator.navigate(
-            MediaDetailScreenDestination(id, mediaType, backgroundColor?.toArgb())
+            MediaDetailScreenDestination(
+                mediaId = id,
+                mediaType = mediaType,
+                backgroundColor = backgroundColor?.toArgb()
+            )
         )
     }
 
@@ -40,9 +45,17 @@ class CommonNavigation(
     ) {
         destinationsNavigator.navigate(
             CastDetailScreenDestination(
-                mediaDetails,
-                mediaType,
-                backgroundColor?.toArgb()
+                mediaDetails = mediaDetails,
+                mediaType = mediaType,
+                backgroundColor = backgroundColor?.toArgb()
+            )
+        )
+    }
+
+    override fun navigateToSeasons(mediaDetails: MediaDetails.TvShow, backgroundColor: Color?) {
+        destinationsNavigator.navigate(
+            SeasonsDetailScreenDestination(
+                tvShowDetails = mediaDetails, backgroundColor = backgroundColor?.toArgb()
             )
         )
     }

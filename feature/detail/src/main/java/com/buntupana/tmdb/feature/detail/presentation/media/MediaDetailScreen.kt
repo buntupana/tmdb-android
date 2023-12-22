@@ -70,8 +70,8 @@ fun MediaDetailScreen(
         onSeasonClick = { mediaId, seasonId ->
             Toast.makeText(context, "On Last Season Clicked", Toast.LENGTH_SHORT).show()
         },
-        onAllSeasonsClick = { mediaId ->
-            Toast.makeText(context, "On All Seasons Clicked", Toast.LENGTH_SHORT).show()
+        onAllSeasonsClick = { mediaDetails, backgroundColor ->
+            detailNavigator.navigateToSeasons(mediaDetails, backgroundColor)
         },
         onRecommendationClick = { mediaId, mediaType ->
             detailNavigator.navigateToMediaDetail(
@@ -97,7 +97,7 @@ fun MediaDetailContent(
     onPersonClick: (personId: Long) -> Unit,
     onFullCastClick: (mediaDetails: MediaDetails, mediaType: MediaType, backgroundColor: Color) -> Unit,
     onSeasonClick: (mediaId: Long, seasonId: Long) -> Unit,
-    onAllSeasonsClick: (mediaId: Long) -> Unit,
+    onAllSeasonsClick: (mediaDetails: MediaDetails.TvShow, backgroundColor: Color) -> Unit,
     onRecommendationClick: (mediaId: Long, mediaType: MediaType) -> Unit,
     onRetryClick: () -> Unit,
     onLogoClick: () -> Unit
@@ -194,7 +194,12 @@ fun MediaDetailContent(
                             lastEpisode = state.mediaDetails.lastEpisode,
                             nextEpisode = state.mediaDetails.nextEpisode,
                             onLastSeasonClick = { onSeasonClick(state.mediaId, it) },
-                            onAllSeasonsClick = { onAllSeasonsClick(state.mediaId) }
+                            onAllSeasonsClick = {
+                                onAllSeasonsClick(
+                                    state.mediaDetails,
+                                    state.backgroundColor
+                                )
+                            }
                         )
                     }
 
@@ -228,7 +233,7 @@ fun MediaDetailScreenPreview() {
         onPersonClick = {},
         onFullCastClick = { _, _, _ -> },
         onSeasonClick = { _, _ -> },
-        onAllSeasonsClick = { _ -> },
+        onAllSeasonsClick = { _, _ -> },
         onRecommendationClick = { _, _ -> },
         onRetryClick = {},
         onLogoClick = {}

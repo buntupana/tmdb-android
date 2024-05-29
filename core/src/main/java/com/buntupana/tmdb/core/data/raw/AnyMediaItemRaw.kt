@@ -8,44 +8,44 @@ import com.squareup.moshi.Json
  * */
 data class AnyMediaItemRaw(
     val id: Long,
-    @field:Json(name = "media_type")
+    @Json(name = "media_type")
     val mediaType: String,
     val overview: String,
-    @field:Json(name = "poster_path")
+    @Json(name = "poster_path")
     val posterPath: String?,
-    @field:Json(name = "backdrop_path")
+    @Json(name = "backdrop_path")
     val backdropPath: String?,
-    @field:Json(name = "original_language")
+    @Json(name = "original_language")
     val originalLanguage: String,
-    @field:Json(name = "genre_ids")
+    @Json(name = "genre_ids")
     val genreIds: List<Int>,
     val popularity: Double,
-    @field:Json(name = "vote_average")
+    @Json(name = "vote_average")
     val voteAverage: Double,
-    @field:Json(name = "vote_count")
+    @Json(name = "vote_count")
     val voteCount: Int,
     // Movie fields
     val title: String?,
-    @field:Json(name = "original_title")
+    @Json(name = "original_title")
     val originalTitle: String?,
-    @field:Json(name = "release_date")
+    @Json(name = "release_date")
     val releaseDate: String?,
     val video: Boolean?,
     val adult: Boolean?,
     // TV_Show fields
-    @field:Json(name = "original_name")
+    @Json(name = "original_name")
     val originalName: String?,
-    @field:Json(name = "first_air_date")
+    @Json(name = "first_air_date")
     val firstAirDate: String?,
-    @field:Json(name = "origin_country")
+    @Json(name = "origin_country")
     val originCountry: List<String>?,
     // Person fields
     val name: String?,
-    @field:Json(name = "profile_path")
+    @Json(name = "profile_path")
     val profilePath: String?,
     val gender: Int?,
-    @field:Json(name = "known_for_department")
+    @Json(name = "known_for_department")
     val knownForDepartment: String?,
-    @field:Json(name = "known_for")
+    @Json(name = "known_for")
     val knownFor: List<KnownFor>?,
 )

@@ -37,18 +37,8 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
-//    libraryVariants.all { variant ->
-//        kotlin.sourceSets {
-//            getByName(variant.name) {
-//                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
-//            }
-//        }
-//    }
-//    ksp {
-//        arg("compose-destinations.moduleName", "core")
-//        arg("compose-destinations.mode", "destinations")
-//    }
 }
 
 dependencies {
@@ -94,6 +84,8 @@ dependencies {
     api(libs.jakewharton.timber)
     api(libs.io.coil.kt)
     api(libs.androidx.pallete)
+    implementation(libs.squareup.moshi)
+    ksp(libs.squareup.moshi.ksp)
 
     // Testing
 //    testImplementation 'junit:junit:4.13.2'

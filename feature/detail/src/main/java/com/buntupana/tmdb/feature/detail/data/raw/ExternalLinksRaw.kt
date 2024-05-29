@@ -3,18 +3,18 @@ package com.buntupana.tmdb.feature.detail.data.raw
 import com.squareup.moshi.Json
 
 data class ExternalLinksRaw(
-    @field:Json(name = "facebook_id")
+    @Json(name = "facebook_id")
     val facebookId: String?,
-    @field:Json(name = "freebase_id")
+    @Json(name = "freebase_id")
     val freebaseId: String?,
-    @field:Json(name = "freebase_mid")
+    @Json(name = "freebase_mid")
     val freebaseMid: String?,
-    @field:Json(name = "imdb_id")
+    @Json(name = "imdb_id")
     val imdbId: String?,
-    @field:Json(name = "instagram_id")
+    @Json(name = "instagram_id")
     val instagramId: String?,
-    @field:Json(name = "tvrage_id")
+    @Json(name = "tvrage_id")
     val tvrageId: Int?,
-    @field:Json(name = "twitter_id")
+    @Json(name = "twitter_id")
     val twitterId: String?
 )

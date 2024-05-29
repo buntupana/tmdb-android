@@ -9,7 +9,7 @@ data class VideoRaw(
     val key: String?,
     val name: String?,
     val official: Boolean?,
-    @field:Json(name = "published_at")
+    @Json(name = "published_at")
     val publishedAt: String?,
     val site: String?,
     val size: Int?,

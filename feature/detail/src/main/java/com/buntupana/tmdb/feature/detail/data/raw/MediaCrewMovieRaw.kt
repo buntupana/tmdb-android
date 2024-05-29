@@ -5,17 +5,17 @@ import com.squareup.moshi.Json
 data class MediaCrewMovieRaw(
     val id: Long,
     val adult: Boolean,
-    @field:Json(name = "credit_id")
+    @Json(name = "credit_id")
     val creditId: String,
     val department: String,
     val gender: Int,
     val job: String,
-    @field:Json(name = "known_for_department")
+    @Json(name = "known_for_department")
     val knownForDepartment: String,
     val name: String,
-    @field:Json(name = "original_name")
+    @Json(name = "original_name")
     val originalName: String,
     val popularity: Double,
-    @field:Json(name = "profile_path")
-    val profilePath: String
+    @Json(name = "profile_path")
+    val profilePath: String?
 )

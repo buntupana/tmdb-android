@@ -7,56 +7,56 @@ data class TvShowDetailsRaw(
     val name: String?,
     val overview: String?,
     val tagline: String?,
-    @field:Json(name = "poster_path")
+    @Json(name = "poster_path")
     val posterPath: String?,
-    @field:Json(name = "backdrop_path")
+    @Json(name = "backdrop_path")
     val backdropPath: String?,
     val genres: List<Genre>?,
-    @field:Json(name = "first_air_date")
+    @Json(name = "first_air_date")
     val firstAirDate: String?,
     val adult: Boolean?,
-    @field:Json(name = "created_by")
+    @Json(name = "created_by")
     val createdBy: List<CreatedBy>?,
-    @field:Json(name = "episode_run_time")
+    @Json(name = "episode_run_time")
     val episodeRunTime: List<Long>?,
     val homepage: String?,
     val inProduction: Boolean?,
     val languages: List<String>?,
-    @field:Json(name = "last_air_date")
+    @Json(name = "last_air_date")
     val lastAirDate: String?,
-    @field:Json(name = "last_episode_to_air")
+    @Json(name = "last_episode_to_air")
     val lastEpisodeToAir: EpisodeRaw?,
     val networks: List<Network>?,
-    @field:Json(name = "next_episode_to_air")
+    @Json(name = "next_episode_to_air")
     val nextEpisodeToAir: EpisodeRaw?,
-    @field:Json(name = "number_of_episodes")
+    @Json(name = "number_of_episodes")
     val numberOfEpisodes: Int?,
-    @field:Json(name = "number_of_seasons")
+    @Json(name = "number_of_seasons")
     val numberOfSeasons: Int?,
-    @field:Json(name = "origin_country")
+    @Json(name = "origin_country")
     val originCountry: List<String>?,
-    @field:Json(name = "original_language")
+    @Json(name = "original_language")
     val originalLanguage: String?,
-    @field:Json(name = "original_name")
+    @Json(name = "original_name")
     val originalName: String?,
     val popularity: Double?,
-    @field:Json(name = "production_companies")
+    @Json(name = "production_companies")
     val productionCompanies: List<ProductionCompany>?,
-    @field:Json(name = "production_countries")
+    @Json(name = "production_countries")
     val productionCountries: List<ProductionCountry>?,
     val seasons: List<SeasonRaw>?,
-    @field:Json(name = "spoken_languages")
+    @Json(name = "spoken_languages")
     val spokenLanguages: List<SpokenLanguage>?,
     val status: String?,
     val type: String?,
-    @field:Json(name = "vote_average")
+    @Json(name = "vote_average")
     val voteAverage: Double?,
-    @field:Json(name = "vote_count")
+    @Json(name = "vote_count")
     val voteCount: Long?,
     val videos: MediaVideosRaw?,
-    @field:Json(name = "content_ratings")
+    @Json(name = "content_ratings")
     val contentRatings: ContentRatingsRaw?,
-    @field:Json(name = "aggregate_credits")
+    @Json(name = "aggregate_credits")
     val credits: CreditsTvShowRaw?,
     val recommendations: RecommendationsRaw
 )

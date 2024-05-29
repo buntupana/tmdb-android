@@ -4,6 +4,6 @@ import com.squareup.moshi.Json
 
 data class ReleaseDateCountry(
     val iso_3166_1: String,
-    @field:Json(name = "release_dates")
+    @Json(name = "release_dates")
     val releaseDates: List<ReleaseDateRaw>
 )

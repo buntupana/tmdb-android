@@ -34,7 +34,7 @@ fun MovieItemRaw.toModel(): MediaItem.Movie {
         voteAverage = (voteAverage * 10).toInt(),
         voteCount = voteCount,
         releaseDate = releaseLocalDate,
-        video = video,
+        video = video ?: false,
         adult = adult
     )
 }

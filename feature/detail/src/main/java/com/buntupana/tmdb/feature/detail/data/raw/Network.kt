@@ -4,9 +4,9 @@ import com.squareup.moshi.Json
 
 data class Network(
     val id: Long,
-    @field:Json(name = "logo_path")
+    @Json(name = "logo_path")
     val logoPath: String?,
     val name: String?,
-    @field:Json(name = "origin_country")
+    @Json(name = "origin_country")
     val originCountry: String?
 )

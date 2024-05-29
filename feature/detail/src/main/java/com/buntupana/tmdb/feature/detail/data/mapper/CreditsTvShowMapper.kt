@@ -20,7 +20,7 @@ fun CreditsTvShowRaw.toModel(): CreditsTvShow {
             gender = getGender(it.gender),
             profileUrl = profileUrl,
             totalEpisodeCount = it.totalEpisodeCount,
-            roleList = it.roles.map { roleRaw ->  Role(roleRaw.character, roleRaw.episodeCount) }
+            roleList = it.roles.map { roleRaw ->  Role(roleRaw.character, roleRaw.episodeCount ?: 0) }
         )
     }
 
@@ -34,7 +34,7 @@ fun CreditsTvShowRaw.toModel(): CreditsTvShow {
             profileUrl = profileUrl,
             department = it.department,
             totalEpisodeCount = it.totalEpisodeCount,
-            jobList = it.jobs.map { jobRaw -> Job(jobRaw.job, jobRaw.episodeCount) }
+            jobList = it.jobs.map { jobRaw -> Job(jobRaw.job, jobRaw.episodeCount?: 0) }
         )
     }
 

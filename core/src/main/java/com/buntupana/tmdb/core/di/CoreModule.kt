@@ -3,6 +3,8 @@ package com.buntupana.tmdb.core.di
 import com.buntupana.tmdb.core.BuildConfig
 import com.buntupana.tmdb.core.data.api.AuthInterceptor
 import com.buntupana.tmdb.core.data.api.CoreApi
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,10 +41,14 @@ object CoreModule {
             .addInterceptor(authInterceptor)
             .build()
 
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+
         return Retrofit.Builder()
             .baseUrl(CoreApi.BASE_URL_API)
             .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
 }

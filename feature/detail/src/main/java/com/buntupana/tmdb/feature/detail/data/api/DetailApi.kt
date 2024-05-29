@@ -1,6 +1,14 @@
 package com.buntupana.tmdb.feature.detail.data.api
 
-import com.buntupana.tmdb.feature.detail.data.raw.*
+import com.buntupana.tmdb.feature.detail.data.raw.ContentRatingsRaw
+import com.buntupana.tmdb.feature.detail.data.raw.CreditsMovieRaw
+import com.buntupana.tmdb.feature.detail.data.raw.ExternalLinksRaw
+import com.buntupana.tmdb.feature.detail.data.raw.FilmographyRaw
+import com.buntupana.tmdb.feature.detail.data.raw.MovieDetailsRaw
+import com.buntupana.tmdb.feature.detail.data.raw.PersonDetailsRaw
+import com.buntupana.tmdb.feature.detail.data.raw.ReleaseDatesRaw
+import com.buntupana.tmdb.feature.detail.data.raw.SeasonDetailsRaw
+import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,6 +24,12 @@ interface DetailApi {
     suspend fun getTvShowDetails(
         @Path("tvShowId") tvShowId: Long
     ): Response<TvShowDetailsRaw>
+
+    @GET("tv/{series_id}/season/{season_number}")
+    suspend fun getSeasonDetails(
+        @Path("series_id") tvShowId: Long,
+        @Path("season_number") seasonNumber: Int
+    ): Response<SeasonDetailsRaw>
 
     @GET("movie/{movieId}/release_dates")
     suspend fun getMovieReleaseDates(

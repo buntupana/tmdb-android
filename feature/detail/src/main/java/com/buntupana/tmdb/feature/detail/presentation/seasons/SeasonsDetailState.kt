@@ -5,9 +5,9 @@ import com.buntupana.tmdb.feature.detail.domain.model.Season
 
 data class SeasonsDetailState(
     val mediaId: Long,
-    val mediaName: String,
-    val posterUrl: String?,
-    val releaseYear: String?,
+    val mediaName: String = "",
+    val posterUrl: String? = null,
+    val releaseYear: String? = null,
     val backgroundColor: Color,
-    val seasonList: List<Season>
+    val seasonList: List<Season> = emptyList()
 )

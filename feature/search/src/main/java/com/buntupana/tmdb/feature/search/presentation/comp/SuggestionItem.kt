@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,7 +38,7 @@ fun SuggestionItem(
         modifier = Modifier
             .fillMaxWidth()
             .height(itemHeight)
-            .background(MaterialTheme.colors.background)
+            .background(MaterialTheme.colorScheme.background)
             .clickable {
                 focusManager.clearFocus()
                 clickable(mediaItem)
@@ -56,7 +56,7 @@ fun SuggestionItem(
             Image(
                 painter = painterResource(id = R.drawable.ic_search),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
             )
             Spacer(modifier = Modifier.width(Dimens.padding.small))
             Text(text = mediaItem.name)

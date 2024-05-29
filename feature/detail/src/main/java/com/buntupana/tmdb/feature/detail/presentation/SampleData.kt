@@ -180,7 +180,7 @@ val episodeSample = Episode(
     overview = "We don't have an overview translated in English. Help us expand our database by adding one.",
     runtime = 60,
     seasonNumber = 2,
-    stillPath = "",
+    stillUrl = "",
     voteAverage = 7.0,
     voteCount = 24
 )

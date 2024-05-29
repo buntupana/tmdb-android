@@ -1,16 +1,18 @@
 package com.buntupana.tmdb.feature.search.presentation.comp
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ScrollableTabRow
-import androidx.compose.material.TabRowDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -22,7 +24,6 @@ import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
 import com.buntupana.tmdb.feature.search.presentation.SearchState
-import com.google.accompanist.pager.pagerTabIndicatorOffset
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -42,13 +43,13 @@ fun SearchResults(
         // Adding a tab bar with result titles
         ScrollableTabRow(
             selectedTabIndex = pagerState.currentPage,
+            Modifier.background(MaterialTheme.colorScheme.background),
             indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
-                    Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
-                    color = SecondaryColor
+                SecondaryIndicator(
+                    modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
+                    color = SecondaryColor,
                 )
-            },
-            backgroundColor = MaterialTheme.colors.background,
+            }
         ) {
             // Add tabs for all of our pages
             searchState.resultCountList.forEachIndexed { index, resultCount ->

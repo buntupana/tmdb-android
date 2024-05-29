@@ -10,6 +10,7 @@ import com.buntupana.tmdb.feature.detail.data.raw.FilmographyRaw
 import com.buntupana.tmdb.feature.detail.data.raw.MovieDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.PersonDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.ReleaseDatesRaw
+import com.buntupana.tmdb.feature.detail.data.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import javax.inject.Inject
 
@@ -23,6 +24,10 @@ class DetailRemoteDataSource @Inject constructor(
 
     suspend fun getTvShowDetail(tvShowId: Long): Resource<TvShowDetailsRaw> {
         return getResourceResult { detailApi.getTvShowDetails(tvShowId) }
+    }
+
+    suspend fun getSeasonDetail(tvShowId: Long, seasonNumber: Int): Resource<SeasonDetailsRaw> {
+        return getResourceResult { detailApi.getSeasonDetails(tvShowId, seasonNumber) }
     }
 
     suspend fun getMovieReleaseDateList(movieId: Long): Resource<ReleaseDatesRaw> {

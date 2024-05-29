@@ -3,11 +3,11 @@ package com.buntupana.tmdb.feature.detail.data.raw
 import com.squareup.moshi.Json
 
 data class EpisodeRaw(
-    @field:Json(name = "air_date")
-    val airDate: String?,
+    val id: Long,
     @field:Json(name = "episode_number")
     val episodeNumber: Int?,
-    val id: Long,
+    @field:Json(name = "air_date")
+    val airDate: String?,
     val name: String?,
     val overview: String?,
     @field:Json(name = "production_code")
@@ -21,6 +21,11 @@ data class EpisodeRaw(
     val stillPath: String?,
     @field:Json(name = "vote_average")
     val voteAverage: Double?,
+    @field:Json(name = "episode_type")
+    val episodeType: String?,
     @field:Json(name = "vote_count")
-    val voteCount: Int?
+    val voteCount: Int?,
+    @field:Json(name = "guest_stars")
+    val guestStars: List<MediaCastMovieRaw>,
+    val crew: List<MediaCrewMovieRaw>
 )

@@ -23,3 +23,6 @@
 -keep class * extends java.lang.Enum { *; }
 -keepclassmembers enum * { *; }
 -keep class * extends android.os.Parcelable { *; }
+
+
+-dontwarn java.lang.invoke.StringConcatFactory

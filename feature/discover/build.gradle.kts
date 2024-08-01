@@ -38,6 +38,9 @@ android {
     buildFeatures {
         compose = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
     libraryVariants.all {
         addJavaSourceFoldersToModel(
             File(buildDir, "generated/ksp/$name/kotlin")

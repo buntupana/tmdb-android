@@ -96,9 +96,9 @@ compose-destinations-ksp = { group = "io.github.raamcosta.compose-destinations",
 
 #Dagger Hilt
 dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger" }
-dagger-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "dagger_android" }
+#dagger-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "dagger_android" }
+dagger-hilt-ksp = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "dagger" }
 dagger-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "dagger_android" }
-dagger-hilt-kapt = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "dagger" }
 
 #Material
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }

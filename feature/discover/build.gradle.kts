@@ -39,9 +39,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
     libraryVariants.all {
         addJavaSourceFoldersToModel(
             File(buildDir, "generated/ksp/$name/kotlin")
@@ -61,8 +58,7 @@ dependencies {
 
     // Dagger Hilt
     implementation(libs.dagger.hilt)
-    kapt(libs.dagger.hilt.compiler)
-    kapt(libs.dagger.hilt.kapt)
+    ksp(libs.dagger.hilt.ksp)
 
     // Compose Navigation
     ksp(libs.compose.destinations.ksp)

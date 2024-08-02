@@ -40,9 +40,6 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
 }
 
 dependencies {
@@ -81,7 +78,7 @@ dependencies {
 
     // Dagger Hilt
     api(libs.dagger.hilt)
-    kapt(libs.dagger.hilt.kapt)
+    ksp(libs.dagger.hilt.ksp)
     api(libs.dagger.hilt.navigation.compose)
 
     // Tools

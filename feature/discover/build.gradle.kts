@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.dagger.hilt)
 }
@@ -21,7 +20,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

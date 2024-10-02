@@ -65,8 +65,9 @@ class CommonNavigation(
     }
 
     override fun navigateToMainScreen() {
+
         destinationsNavigator.popBackStack(
-            route = DiscoverScreenDestination.route,
+            route = DiscoverScreenDestination,
             inclusive = false
         )
     }

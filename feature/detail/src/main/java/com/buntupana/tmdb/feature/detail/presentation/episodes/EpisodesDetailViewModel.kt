@@ -8,8 +8,8 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.presentation.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetSeasonDetailsUseCase
-import com.buntupana.tmdb.feature.detail.presentation.navArgs
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -24,7 +24,7 @@ class EpisodesDetailViewModel @Inject constructor(
 
     var state by mutableStateOf(
         SeasonsDetailState(
-            mediaId = navArgs.tvShowId,
+            tvShowId = navArgs.tvShowId,
             backgroundColor = Color(navArgs.backgroundColor ?: DetailBackgroundColor.toArgb())
         )
     )

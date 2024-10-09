@@ -38,15 +38,6 @@ android {
     buildFeatures {
         compose = true
     }
-    libraryVariants.all {
-        addJavaSourceFoldersToModel(
-            File(buildDir, "generated/ksp/$name/kotlin")
-        )
-    }
-    ksp {
-        arg("compose-destinations.moduleName", "search")
-        arg("compose-destinations.mode", "destinations")
-    }
 }
 
 dependencies {
@@ -58,7 +49,4 @@ dependencies {
     // Dagger Hilt
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.ksp)
-
-    // Compose Navigation
-    ksp(libs.compose.destinations.ksp)
 }

@@ -2,7 +2,6 @@ package com.buntupana.tmdb.feature.detail.presentation
 
 import androidx.compose.ui.graphics.Color
 import com.buntupana.tmdb.core.domain.entity.MediaType
-import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 
 interface DetailNavigator {
     fun navigateBack()
@@ -10,7 +9,7 @@ interface DetailNavigator {
     fun navigateToPerson(personId: Long)
 
     fun navigateToMediaDetail(
-        id: Long,
+        mediaId: Long,
         mediaType: MediaType,
         backgroundColor: Color?
     )
@@ -18,13 +17,19 @@ interface DetailNavigator {
     fun navigateToSearch()
 
     fun navigateToFullCast(
-        mediaDetails: MediaDetails,
+        mediaId: Long,
         mediaType: MediaType,
+        mediaTitle: String,
+        mediaReleaseYear: String?,
+        mediaPosterUrl: String?,
         backgroundColor: Color?
     )
 
     fun navigateToSeasons(
-        mediaDetails: MediaDetails.TvShow,
+        tvShowId: Long,
+        tvShowTitle: String,
+        releaseYear: String?,
+        posterUrl: String?,
         backgroundColor: Color?
     )
 

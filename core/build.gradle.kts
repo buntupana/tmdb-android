@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.google.devtools.ksp)
@@ -54,7 +55,8 @@ dependencies {
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.ui)
     api(libs.androidx.ui.graphics)
-    api(libs.androidx.ui.tooling.preview)
+    debugApi(libs.androidx.ui.tooling)
+    debugApi(libs.androidx.ui.tooling.preview)
     api(libs.androidx.navigation)
     api(libs.androidx.paging.compose)
     api(libs.androidx.compose.foundation)
@@ -64,7 +66,6 @@ dependencies {
     api(libs.google.accompanist.systemuicontroller)
 
     // Navigation
-    api(libs.compose.destinations)
 
     // Material
     api(libs.androidx.material3)
@@ -86,6 +87,8 @@ dependencies {
     api(libs.androidx.pallete)
     implementation(libs.squareup.moshi)
     ksp(libs.squareup.moshi.ksp)
+
+    implementation(libs.kotlinx.serialization.json)
 
     // Testing
 //    testImplementation 'junit:junit:4.13.2'

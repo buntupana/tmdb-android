@@ -6,8 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,21 +17,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.buntupana.tmdb.core.R
+import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.cast.comp.CastHeader
+import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.seasonSample
 import com.buntupana.tmdb.feature.detail.presentation.seasons.comp.SeasonItem
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ramcosta.composedestinations.annotation.Destination
 
-@Destination(
-    navArgsDelegate = SeasonsDetailNavArgs::class
-)
 @Composable
 fun SeasonsDetailScreen(
     viewModel: SeasonDetailViewModel = hiltViewModel(),
@@ -42,6 +44,7 @@ fun SeasonsDetailScreen(
     SeasonsContent(
         state = viewModel.state,
         onBackClick = { detailNavigator.navigateBack() },
+        onRetryClick = { viewModel.onEvent(SeasonsDetailEvent.GetSeasons) },
         onSearchClick = { detailNavigator.navigateToSearch() },
         onLogoClick = { detailNavigator.navigateToMainScreen() },
         onSeasonClick = { mediaId, seasonId ->
@@ -54,6 +57,7 @@ fun SeasonsDetailScreen(
 private fun SeasonsContent(
     state: SeasonsDetailState,
     onBackClick: () -> Unit,
+    onRetryClick: () -> Unit,
     onSearchClick: () -> Unit,
     onLogoClick: () -> Unit,
     onSeasonClick: (mediaId: Long, seasonId: Long) -> Unit
@@ -98,26 +102,49 @@ private fun SeasonsContent(
                 CastHeader(
                     backgroundColor = backgroundColor,
                     posterUrl = state.posterUrl,
-                    mediaName = state.mediaName,
+                    mediaName = state.tvShowName,
                     releaseYear = state.releaseYear,
                     setDominantColor = { backgroundColor = it }
                 )
             }
         }
 
+        item {
+            when {
+                state.isLoading -> {
+                    MediaDetailsLoading(
+                        backgroundColor = backgroundColor
+                    )
+                }
+
+                state.isGetSessionsError -> {
+                    ErrorAndRetry(
+                        modifier = Modifier
+                            .padding(vertical = 200.dp)
+                            .fillMaxSize(),
+                        textColor = backgroundColor.getOnBackgroundColor(),
+                        errorMessage = stringResource(id = R.string.message_loading_content_error),
+                        onRetryClick = onRetryClick
+                    )
+                }
+            }
+        }
+
+        if (state.seasonList.isNullOrEmpty()) return@LazyColumn
+
         items(state.seasonList.size) { index ->
             val season = state.seasonList[index]
 
             if (index != 0) {
-                Divider()
+                HorizontalDivider()
             }
 
             SeasonItem(
                 modifier = Modifier.background(systemBackground),
-                tvShowName = state.mediaName,
+                tvShowName = state.tvShowName,
                 season = season,
                 onSeasonClick = { seasonId ->
-                    onSeasonClick(state.mediaId, seasonId)
+                    onSeasonClick(state.tvShowId, seasonId)
                 }
             )
         }
@@ -129,14 +156,15 @@ private fun SeasonsContent(
 private fun SeasonsScreenPreview() {
     SeasonsContent(
         state = SeasonsDetailState(
-            mediaId = 0L,
-            mediaName = "Jack Reacher",
+            tvShowId = 0L,
+            tvShowName = "Jack Reacher",
             posterUrl = null,
             releaseYear = "2003",
             backgroundColor = DetailBackgroundColor,
             seasonList = listOf(seasonSample, seasonSample, seasonSample)
         ),
         onBackClick = {},
+        onRetryClick = {},
         onSearchClick = { },
         onLogoClick = {},
         onSeasonClick = { _, _ -> }

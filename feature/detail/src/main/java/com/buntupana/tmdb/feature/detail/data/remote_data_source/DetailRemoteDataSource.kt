@@ -5,6 +5,7 @@ import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.feature.detail.data.api.DetailApi
 import com.buntupana.tmdb.feature.detail.data.raw.ContentRatingsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.CreditsMovieRaw
+import com.buntupana.tmdb.feature.detail.data.raw.CreditsTvShowRaw
 import com.buntupana.tmdb.feature.detail.data.raw.ExternalLinksRaw
 import com.buntupana.tmdb.feature.detail.data.raw.FilmographyRaw
 import com.buntupana.tmdb.feature.detail.data.raw.MovieDetailsRaw
@@ -12,6 +13,7 @@ import com.buntupana.tmdb.feature.detail.data.raw.PersonDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.ReleaseDatesRaw
 import com.buntupana.tmdb.feature.detail.data.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
+import com.buntupana.tmdb.feature.detail.data.raw.TvShowSeasonsDetailsRaw
 import javax.inject.Inject
 
 class DetailRemoteDataSource @Inject constructor(
@@ -42,7 +44,7 @@ class DetailRemoteDataSource @Inject constructor(
         return getResourceResult { detailApi.getMovieCredits(movieId) }
     }
 
-    suspend fun getTvCredits(tvShowId: Long): Resource<CreditsMovieRaw> {
+    suspend fun getTvCredits(tvShowId: Long): Resource<CreditsTvShowRaw> {
         return getResourceResult { detailApi.getTvShowCredits(tvShowId) }
     }
 
@@ -56,5 +58,9 @@ class DetailRemoteDataSource @Inject constructor(
 
     suspend fun getPersonExternalLinks(personId: Long): Resource<ExternalLinksRaw> {
         return getResourceResult { detailApi.getPersonExternalLinks(personId) }
+    }
+
+    suspend fun getTvShowSeasonsDetails(tvShowId: Long): Resource<TvShowSeasonsDetailsRaw> {
+        return getResourceResult { detailApi.getTvShowSeasonsDetails(tvShowId) }
     }
 }

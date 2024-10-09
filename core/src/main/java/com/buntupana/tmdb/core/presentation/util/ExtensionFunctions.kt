@@ -6,15 +6,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.SavedStateHandle
 import androidx.palette.graphics.Palette
-import com.buntupana.tmdb.core.presentation.theme.Dimens
+import java.net.URLDecoder
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -102,8 +104,28 @@ fun String?.ifNotNullOrBlank(block: () -> String): String? {
     }
 }
 
-fun Modifier.clickableTextPadding(): Modifier {
-    return padding(horizontal = Dimens.padding.medium, vertical = Dimens.padding.small)
+fun String.encodeUrl(): String {
+    return URLEncoder.encode(this, StandardCharsets.UTF_8.toString())
+}
+
+fun String.decodeUrl(): String {
+    return URLDecoder.decode(this, StandardCharsets.UTF_8.toString())
+}
+
+@OptIn(ExperimentalContracts::class)
+fun <T> Collection<T>?.isNotNullOrEmpty(): Boolean {
+    contract {
+        returns(true) implies (this@isNotNullOrEmpty != null)
+    }
+    return this.isNullOrEmpty().not()
+}
+
+@OptIn(ExperimentalContracts::class)
+fun <K, V> Map<out K, V>?.isNotNullOrEmpty(): Boolean {
+    contract {
+        returns(true) implies (this@isNotNullOrEmpty != null)
+    }
+    return this.isNullOrEmpty().not()
 }
 
 fun Drawable.getDominantColor(colorResult: (dominantColor: Color) -> Unit) {
@@ -115,4 +137,8 @@ fun Drawable.getDominantColor(colorResult: (dominantColor: Color) -> Unit) {
             colorResult(Color(dominantColor))
         }
     }
+}
+
+fun <T>SavedStateHandle.navArgs(): T {
+    return get<T>("args")!!
 }

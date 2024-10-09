@@ -1,10 +1,17 @@
 package com.buntupana.tmdb.feature.detail.presentation.cast
 
+import android.os.Parcelable
 import com.buntupana.tmdb.core.domain.entity.MediaType
-import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
+@Parcelize
+@Serializable
 data class CastDetailNavArgs(
-    val mediaDetails: MediaDetails,
+    val mediaId: Long,
     val mediaType: MediaType,
-    val backgroundColor: Int?
-)
+    val mediaTitle: String,
+    val posterUrlEncoded: String?,
+    val backgroundColor: Int?,
+    val releaseYear: String?
+) : Parcelable

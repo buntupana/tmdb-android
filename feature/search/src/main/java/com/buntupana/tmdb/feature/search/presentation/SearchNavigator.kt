@@ -5,7 +5,7 @@ import com.buntupana.tmdb.core.domain.entity.MediaType
 
 interface SearchNavigator {
     fun navigateToMediaDetail(
-        id: Long,
+        mediaId: Long,
         mediaType: MediaType,
         backgroundColor: Color?
     )

@@ -13,8 +13,3 @@ class GetSeasonDetailsUseCase @Inject constructor(
         return detailRepository.getSeasonDetails(params.tvShowId, params.seasonNumber)
     }
 }
-
-data class GetSeasonDetailsUseCaseParams(
-    val tvShowId: Long,
-    val seasonNumber: Int
-)

@@ -19,7 +19,7 @@ ksp = "2.0.20-1.0.25"
 composeBom = "2024.09.03"
 compose_activity = "1.9.2"
 compose_constraint = '1.0.1'
-compose_foundation = "1.7.2"
+compose_foundation = "1.7.3"
 compose_paging = "3.3.2"
 
 #Android dependencies
@@ -47,7 +47,7 @@ okhttp = "4.12.0"
 
 #Tools
 timber = '5.0.1'
-serialization = "1.7.1"
+serialization = "1.7.3"
 moshi = '1.15.1'
 desugar_jdk = "2.0.4"
 secrets = "2.0.1"

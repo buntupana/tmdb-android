@@ -15,7 +15,7 @@ data class MediaCastTvShowRaw(
     val popularity: Double,
     @Json(name = "profile_path")
     val profilePath: String?,
-    val roles: List<RoleRaw>,
+    val roles: List<RoleRaw>?,
     @Json(name = "total_episode_count")
-    val totalEpisodeCount: Int
+    val totalEpisodeCount: Int?
 )

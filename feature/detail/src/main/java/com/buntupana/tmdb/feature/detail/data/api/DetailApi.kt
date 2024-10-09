@@ -53,7 +53,7 @@ interface DetailApi {
         @Path("movieId") movieId: Long
     ): Response<CreditsMovieRaw>
 
-    @GET("tv/{tvShowId}/credits")
+    @GET("tv/{tvShowId}/aggregate_credits")
     suspend fun getTvShowCredits(
         @Path("tvShowId") movieId: Long
     ): Response<CreditsTvShowRaw>

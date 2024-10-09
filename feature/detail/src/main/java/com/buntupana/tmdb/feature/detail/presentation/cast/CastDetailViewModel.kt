@@ -81,14 +81,15 @@ class CastDetailViewModel @Inject constructor(
         getTvShowCreditsUseCase(
             parameters = state.mediaId,
             loading = {
-                state = state.copy(isLoading = true)
+                state = state.copy(isLoading = true, isGetContentError = false)
             },
             error = {
-                state = state.copy(isLoading = false)
+                state = state.copy(isLoading = false, isGetContentError = true)
             },
             success = {
                 state = state.copy(
                     isLoading = false,
+                    isGetContentError = false,
                     personCastList = it.personCastList,
                     personCrewMap = it.personCrewMap
                 )

@@ -36,7 +36,7 @@ fun SeasonSubtitle(season: Season) {
                 text = " — ",
                 fontWeight = FontWeight.Bold
             )
-        } else {
+        } else if(season.voteAverage != 0f) {
             Row(
                 modifier = Modifier
                     .clip(RoundedCornerShape(Dimens.posterRound))
@@ -54,7 +54,7 @@ fun SeasonSubtitle(season: Season) {
                     contentDescription = null,
                 )
                 Text(
-                    text = season.voteAverage.toString(),
+                    text = "${(season.voteAverage * 10).toInt()}%",
                     color = MaterialTheme.colorScheme.background
                 )
             }

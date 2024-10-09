@@ -1,8 +1,15 @@
 package com.buntupana.tmdb.feature.detail.presentation.seasons
 
-import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
+@Parcelize
+@Serializable
 data class SeasonsDetailNavArgs(
-    val tvShowDetails: MediaDetails.TvShow,
+    val tvShowId: Long,
+    val tvShowName: String,
+    val releaseYear: String?,
+    val posterUrlEncoded: String?,
     val backgroundColor: Int?
-)
+) : Parcelable

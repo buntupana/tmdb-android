@@ -27,6 +27,6 @@ fun SeasonRaw.toModel(): Season {
     )
 }
 
-fun List<SeasonRaw>.toModel(): List<Season> {
-    return map { it.toModel() }
+fun List<SeasonRaw>?.toModel(): List<Season> {
+    return this?.map { it.toModel() }.orEmpty()
 }

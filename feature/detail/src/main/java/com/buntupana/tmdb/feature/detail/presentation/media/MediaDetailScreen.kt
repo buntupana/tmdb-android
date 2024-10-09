@@ -70,7 +70,13 @@ fun MediaDetailScreen(
             Toast.makeText(context, "On Last Season Clicked", Toast.LENGTH_SHORT).show()
         },
         onAllSeasonsClick = { mediaDetails, backgroundColor ->
-            detailNavigator.navigateToSeasons(mediaDetails, backgroundColor)
+            detailNavigator.navigateToSeasons(
+                tvShowId = mediaDetails.id,
+                tvShowTitle = mediaDetails.title,
+                releaseYear = mediaDetails.releaseDate?.year.toString(),
+                posterUrl = mediaDetails.posterUrl,
+                backgroundColor = backgroundColor
+            )
         },
         onRecommendationClick = { mediaId, mediaType ->
             detailNavigator.navigateToMediaDetail(

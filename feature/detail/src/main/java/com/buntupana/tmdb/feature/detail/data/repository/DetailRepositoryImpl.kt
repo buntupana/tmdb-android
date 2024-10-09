@@ -12,6 +12,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
 import com.buntupana.tmdb.feature.detail.domain.model.PersonDetails
 import com.buntupana.tmdb.feature.detail.domain.model.ReleaseDate
+import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.domain.model.SeasonDetail
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
@@ -88,6 +89,13 @@ class DetailRepositoryImpl @Inject constructor(
         return networkResult(
             networkCall = { detailRemoteDataSource.getPersonExternalLinks(personId) },
             mapResponse = { it.toModel() }
+        )
+    }
+
+    override suspend fun getTvShowSeasonsDetails(tvShowId: Long): Resource<List<Season>>{
+        return networkResult(
+            networkCall = { detailRemoteDataSource.getTvShowSeasonsDetails(tvShowId) },
+            mapResponse = { response -> response.seasons.toModel() }
         )
     }
 }

@@ -5,9 +5,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.NavHostController
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.presentation.util.encodeUrl
-import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailNavArgs
+import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNavArgs
+import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNavArgs
 
 class CommonNavigation(
     private val navHostController: NavHostController
@@ -66,15 +67,31 @@ class CommonNavigation(
         )
     }
 
-    override fun navigateToSeasons(mediaDetails: MediaDetails.TvShow, backgroundColor: Color?) {
-//        destinationsNavigator.navigate(
-//            SeasonsDetailScreenDestination(
-//                tvShowDetails = mediaDetails, backgroundColor = backgroundColor?.toArgb()
-//            )
-//        )
+    override fun navigateToPerson(personId: Long) {
+        navHostController.navigate(
+            Routes.PersonDetail(
+                args = PersonDetailNavArgs(personId)
+            )
+        )
     }
 
-    override fun navigateToPerson(personId: Long) {
-//        destinationsNavigator.navigate(PersonDetailScreenDestination(PersonDetailNavArgs(personId)))
+    override fun navigateToSeasons(
+        tvShowId: Long,
+        tvShowTitle: String,
+        releaseYear: String?,
+        posterUrl: String?,
+        backgroundColor: Color?
+    ) {
+        navHostController.navigate(
+            Routes.SeasonDetail(
+                args = SeasonsDetailNavArgs(
+                    tvShowId = tvShowId,
+                    tvShowName = tvShowTitle,
+                    posterUrlEncoded = posterUrl?.encodeUrl(),
+                    releaseYear = releaseYear,
+                    backgroundColor = backgroundColor?.toArgb()
+                )
+            )
+        )
     }
 }

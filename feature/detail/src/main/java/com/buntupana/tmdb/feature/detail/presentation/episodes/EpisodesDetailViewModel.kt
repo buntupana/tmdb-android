@@ -24,7 +24,7 @@ class EpisodesDetailViewModel @Inject constructor(
 
     var state by mutableStateOf(
         SeasonsDetailState(
-            mediaId = navArgs.tvShowId,
+            tvShowId = navArgs.tvShowId,
             backgroundColor = Color(navArgs.backgroundColor ?: DetailBackgroundColor.toArgb())
         )
     )

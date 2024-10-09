@@ -14,6 +14,10 @@ import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailScreen
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailScreen
+import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNavArgs
+import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailScreen
+import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNavArgs
+import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
 import com.buntupana.tmdb.feature.discover.presentation.DiscoverScreen
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +59,26 @@ class MainActivity : ComponentActivity() {
                         )
                     ) {
                         CastDetailScreen(detailNavigator = commonNavigation)
+                    }
+                    composable<Routes.PersonDetail>(
+                        typeMap = mapOf(
+                            typeOf<PersonDetailNavArgs>() to CustomNavType(
+                                PersonDetailNavArgs::class.java,
+                                PersonDetailNavArgs.serializer()
+                            )
+                        )
+                    ) {
+                        PersonDetailScreen(detailNavigator = commonNavigation)
+                    }
+                    composable<Routes.SeasonDetail>(
+                        typeMap = mapOf(
+                            typeOf<SeasonsDetailNavArgs>() to CustomNavType(
+                                SeasonsDetailNavArgs::class.java,
+                                SeasonsDetailNavArgs.serializer()
+                            )
+                        )
+                    ) {
+                        SeasonsDetailScreen(detailNavigator = commonNavigation)
                     }
                 }
             }

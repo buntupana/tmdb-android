@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.google.devtools.ksp)
@@ -52,11 +53,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    applicationVariants.all {
-        addJavaSourceFoldersToModel(
-            File(buildDir, "generated/ksp/$name/kotlin")
-        )
-    }
 }
 
 dependencies {
@@ -68,9 +64,9 @@ dependencies {
     implementation(project(":feature:detail"))
     implementation(project(":feature:search"))
 
-    implementation(libs.androidx.activity.compose)
+    implementation(libs.kotlinx.serialization.json)
 
-    ksp(libs.compose.destinations.ksp)
+    implementation(libs.androidx.activity.compose)
 
     // Dagger Hilt
     implementation(libs.dagger.hilt)

@@ -10,7 +10,7 @@ interface DetailNavigator {
     fun navigateToPerson(personId: Long)
 
     fun navigateToMediaDetail(
-        id: Long,
+        mediaId: Long,
         mediaType: MediaType,
         backgroundColor: Color?
     )
@@ -18,8 +18,11 @@ interface DetailNavigator {
     fun navigateToSearch()
 
     fun navigateToFullCast(
-        mediaDetails: MediaDetails,
+        mediaId: Long,
         mediaType: MediaType,
+        mediaTitle: String,
+        mediaReleaseYear: String?,
+        mediaPosterUrl: String?,
         backgroundColor: Color?
     )
 

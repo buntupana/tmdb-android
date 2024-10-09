@@ -7,4 +7,5 @@ plugins {
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.dagger.hilt) apply false
     alias(libs.plugins.secrets.gradle) apply false
+    alias(libs.plugins.kotlinSerialization) apply  false
 }

@@ -2,6 +2,7 @@ package com.buntupana.tmdb.feature.detail.data.api
 
 import com.buntupana.tmdb.feature.detail.data.raw.ContentRatingsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.CreditsMovieRaw
+import com.buntupana.tmdb.feature.detail.data.raw.CreditsTvShowRaw
 import com.buntupana.tmdb.feature.detail.data.raw.ExternalLinksRaw
 import com.buntupana.tmdb.feature.detail.data.raw.FilmographyRaw
 import com.buntupana.tmdb.feature.detail.data.raw.MovieDetailsRaw
@@ -49,7 +50,7 @@ interface DetailApi {
     @GET("tv/{tvShowId}/credits")
     suspend fun getTvShowCredits(
         @Path("tvShowId") movieId: Long
-    ): Response<CreditsMovieRaw>
+    ): Response<CreditsTvShowRaw>
 
     @GET("person/{personId}?append_to_response=external_ids,combined_credits")
     suspend fun getPersonDetails(

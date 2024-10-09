@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.google.devtools.ksp)
@@ -38,15 +39,6 @@ android {
     buildFeatures {
         compose = true
     }
-    libraryVariants.all {
-        addJavaSourceFoldersToModel(
-            File(buildDir, "generated/ksp/$name/kotlin")
-        )
-    }
-    ksp {
-        arg("compose-destinations.moduleName", "detail")
-        arg("compose-destinations.mode", "destinations")
-    }
 }
 
 dependencies {
@@ -59,6 +51,6 @@ dependencies {
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.ksp)
 
-    // Compose Navigation
-    ksp(libs.compose.destinations.ksp)
+
+    implementation(libs.kotlinx.serialization.json)
 }

@@ -30,11 +30,7 @@ import com.buntupana.tmdb.feature.detail.presentation.person.comp.PersonalInfo
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.credits
 import com.buntupana.tmdb.feature.detail.presentation.personDetailsSample
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ramcosta.composedestinations.annotation.Destination
 
-@Destination(
-    navArgsDelegate = PersonDetailNavArgs::class
-)
 @Composable
 fun PersonDetailScreen(
     viewModel: PersonDetailViewModel = hiltViewModel(),

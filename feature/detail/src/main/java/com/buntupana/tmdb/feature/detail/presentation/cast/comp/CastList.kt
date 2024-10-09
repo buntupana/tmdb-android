@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,17 +16,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.Typography
+import com.buntupana.tmdb.core.presentation.util.isNotNullOrEmpty
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
 
 fun LazyListScope.castList(
     modifier: Modifier = Modifier,
-    personCastList: List<Person.Cast>,
-    personCrewMap: Map<String, List<Person.Crew>>,
+    personCastList: List<Person.Cast>?,
+    personCrewMap: Map<String, List<Person.Crew>>?,
     onPersonClick: (personId: Long) -> Unit
 ) {
 
-    if (personCastList.isNotEmpty()) {
+    if (personCastList.isNotNullOrEmpty()) {
+
         item {
             Row(
                 modifier = modifier
@@ -59,9 +61,9 @@ fun LazyListScope.castList(
         }
     }
 
-    if (personCrewMap.isNotEmpty()) {
+    if (personCrewMap.isNotNullOrEmpty()) {
         item {
-            Divider(
+            HorizontalDivider(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(vertical = Dimens.padding.verticalItem)
@@ -87,29 +89,32 @@ fun LazyListScope.castList(
                 )
             }
         }
-    }
-
-    personCrewMap.forEach { (department, personList) ->
-        item {
-            Text(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = Dimens.padding.horizontal)
-                    .padding(top = Dimens.padding.vertical, bottom = Dimens.padding.verticalItem),
-                text = department,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        personList.forEach { person ->
+        personCrewMap.forEach { (department, personList) ->
             item {
-                PersonItemCastHorizontal(
-                    modifier = modifier.fillMaxWidth(),
-                    person = person,
-                    onClick = onPersonClick
+                Text(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Dimens.padding.horizontal)
+                        .padding(
+                            top = Dimens.padding.vertical,
+                            bottom = Dimens.padding.verticalItem
+                        ),
+                    text = department,
+                    fontWeight = FontWeight.Bold
                 )
+            }
+            personList.forEach { person ->
+                item {
+                    PersonItemCastHorizontal(
+                        modifier = modifier.fillMaxWidth(),
+                        person = person,
+                        onClick = onPersonClick
+                    )
+                }
             }
         }
     }
+
 }
 
 @Preview(showBackground = true)

@@ -5,6 +5,7 @@ import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.feature.detail.data.api.DetailApi
 import com.buntupana.tmdb.feature.detail.data.raw.ContentRatingsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.CreditsMovieRaw
+import com.buntupana.tmdb.feature.detail.data.raw.CreditsTvShowRaw
 import com.buntupana.tmdb.feature.detail.data.raw.ExternalLinksRaw
 import com.buntupana.tmdb.feature.detail.data.raw.FilmographyRaw
 import com.buntupana.tmdb.feature.detail.data.raw.MovieDetailsRaw
@@ -42,7 +43,7 @@ class DetailRemoteDataSource @Inject constructor(
         return getResourceResult { detailApi.getMovieCredits(movieId) }
     }
 
-    suspend fun getTvCredits(tvShowId: Long): Resource<CreditsMovieRaw> {
+    suspend fun getTvCredits(tvShowId: Long): Resource<CreditsTvShowRaw> {
         return getResourceResult { detailApi.getTvShowCredits(tvShowId) }
     }
 

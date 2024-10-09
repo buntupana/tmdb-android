@@ -23,3 +23,7 @@ fun Gender.getString(): String {
 fun Modifier.clickableIcon(): Modifier {
     return padding(Dimens.padding.small).size(Dimens.icon)
 }
+
+fun Modifier.clickableTextPadding(): Modifier {
+    return padding(horizontal = Dimens.padding.medium, vertical = Dimens.padding.small)
+}

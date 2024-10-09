@@ -20,9 +20,7 @@ import com.buntupana.tmdb.feature.search.presentation.comp.SearchBar
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchResults
 import com.buntupana.tmdb.feature.search.presentation.comp.TrendingList
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ramcosta.composedestinations.annotation.Destination
 
-@Destination
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel(),

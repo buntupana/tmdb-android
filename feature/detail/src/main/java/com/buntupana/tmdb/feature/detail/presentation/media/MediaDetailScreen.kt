@@ -40,11 +40,7 @@ import com.buntupana.tmdb.feature.detail.presentation.media.comp.Recommendations
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.SeasonsSection
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ramcosta.composedestinations.annotation.Destination
 
-@Destination(
-    navArgsDelegate = MediaDetailNavArgs::class
-)
 @Composable
 fun MediaDetailScreen(
     viewModel: MediaDetailViewModel = hiltViewModel(),
@@ -62,8 +58,11 @@ fun MediaDetailScreen(
         },
         onFullCastClick = { mediaDetails, mediaType, backgroundColor ->
             detailNavigator.navigateToFullCast(
-                mediaDetails = mediaDetails,
+                mediaId = mediaDetails.id,
                 mediaType = mediaType,
+                mediaTitle = mediaDetails.title,
+                mediaReleaseYear = mediaDetails.releaseDate?.year.toString(),
+                mediaPosterUrl = mediaDetails.posterUrl,
                 backgroundColor = backgroundColor
             )
         },
@@ -75,7 +74,7 @@ fun MediaDetailScreen(
         },
         onRecommendationClick = { mediaId, mediaType ->
             detailNavigator.navigateToMediaDetail(
-                id = mediaId,
+                mediaId = mediaId,
                 mediaType = mediaType,
                 backgroundColor = null
             )

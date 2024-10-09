@@ -7,6 +7,7 @@ import com.buntupana.tmdb.feature.detail.data.remote_data_source.DetailRemoteDat
 import com.buntupana.tmdb.feature.detail.domain.model.Certification
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
+import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
 import com.buntupana.tmdb.feature.detail.domain.model.PersonDetails
@@ -69,7 +70,7 @@ class DetailRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getTvShowCredits(tvShowId: Long): Resource<Credits> {
+    override suspend fun getTvShowCredits(tvShowId: Long): Resource<CreditsTvShow> {
         return networkResult(
             networkCall = { detailRemoteDataSource.getTvCredits(tvShowId) },
             mapResponse = { response -> response.toModel() }

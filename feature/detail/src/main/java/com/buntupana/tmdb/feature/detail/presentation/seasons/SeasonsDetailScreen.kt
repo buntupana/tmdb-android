@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,11 +26,7 @@ import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.seasonSample
 import com.buntupana.tmdb.feature.detail.presentation.seasons.comp.SeasonItem
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ramcosta.composedestinations.annotation.Destination
 
-@Destination(
-    navArgsDelegate = SeasonsDetailNavArgs::class
-)
 @Composable
 fun SeasonsDetailScreen(
     viewModel: SeasonDetailViewModel = hiltViewModel(),
@@ -109,7 +105,7 @@ private fun SeasonsContent(
             val season = state.seasonList[index]
 
             if (index != 0) {
-                Divider()
+                HorizontalDivider()
             }
 
             SeasonItem(

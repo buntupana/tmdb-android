@@ -167,20 +167,20 @@ fun MediaItemPreview() {
     MediaItemVertical(
         modifier = Modifier.width(120.dp),
         mediaItem = MediaItem.Movie(
-            0,
-            "Fantastics Beasts: the Secrets of Dumbelbore",
-            "",
-            "",
-            "",
-            "",
-            "",
-            emptyList(),
-            0.0,
-            67,
-            0,
-            "31-Dec-2018",
-            false,
-            false
+            id = 0,
+            name = "Fantastics Beasts: the Secrets of Dumbelbore",
+            originalName = "",
+            overview = "",
+            posterUrl = "",
+            backdropUrl = "",
+            originalLanguage = "",
+            genreIds = emptyList(),
+            popularity = 0f,
+            voteAverage = 67,
+            voteCount = 0,
+            releaseDate = "31-Dec-2018",
+            video = false,
+            adult = false
         ),
         onClick = { }
     )

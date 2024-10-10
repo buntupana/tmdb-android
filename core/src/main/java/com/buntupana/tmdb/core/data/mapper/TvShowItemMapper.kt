@@ -26,14 +26,14 @@ fun TvShowRaw.toModel(): MediaItem.TvShow {
         id = id,
         name = name,
         originalName = originalName,
-        overview = overview,
+        overview = overview.orEmpty(),
         posterUrl = posterUrl,
         backdropUrl = backdropUrl,
         originalLanguage = originalLanguage,
         genreIds = genreIds,
-        popularity = popularity,
-        voteAverage = (voteAverage * 10).toInt(),
-        voteCount = voteCount,
+        popularity = popularity ?: 0f,
+        voteAverage = ((voteAverage ?: 0f) * 10).toInt(),
+        voteCount = voteCount ?: 0,
         releaseDate = releaseDate,
         originCountry = originCountry
     )

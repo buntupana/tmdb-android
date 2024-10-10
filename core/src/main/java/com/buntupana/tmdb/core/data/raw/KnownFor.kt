@@ -28,5 +28,5 @@ data class KnownFor(
     @Json(name = "vote_average")
     val voteAverage: Double,
     @Json(name = "vote_count")
-    val voteCount: Int
+    val voteCount: Int?
 )

@@ -18,11 +18,11 @@ data class TvShowRaw(
     @Json(name = "origin_country")
     val originCountry: List<String>,
     @Json(name = "original_language")
-    val originalLanguage: String,
-    val overview: String,
-    val popularity: Double,
+    val originalLanguage: String?,
+    val overview: String?,
+    val popularity: Float?,
     @Json(name = "vote_average")
-    val voteAverage: Double,
+    val voteAverage: Float?,
     @Json(name = "vote_count")
-    val voteCount: Int
+    val voteCount: Int?
 )

@@ -10,20 +10,20 @@ data class AnyMediaItemRaw(
     val id: Long,
     @Json(name = "media_type")
     val mediaType: String,
-    val overview: String,
+    val overview: String?,
     @Json(name = "poster_path")
     val posterPath: String?,
     @Json(name = "backdrop_path")
     val backdropPath: String?,
     @Json(name = "original_language")
-    val originalLanguage: String,
+    val originalLanguage: String?,
     @Json(name = "genre_ids")
     val genreIds: List<Int>?,
-    val popularity: Double,
+    val popularity: Float?,
     @Json(name = "vote_average")
-    val voteAverage: Double,
+    val voteAverage: Float?,
     @Json(name = "vote_count")
-    val voteCount: Int,
+    val voteCount: Int?,
     // Movie fields
     val title: String?,
     @Json(name = "original_title")

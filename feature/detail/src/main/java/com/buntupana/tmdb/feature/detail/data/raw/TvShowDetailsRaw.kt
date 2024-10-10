@@ -52,7 +52,7 @@ data class TvShowDetailsRaw(
     @Json(name = "vote_average")
     val voteAverage: Double?,
     @Json(name = "vote_count")
-    val voteCount: Long?,
+    val voteCount: Int?,
     val videos: MediaVideosRaw?,
     @Json(name = "content_ratings")
     val contentRatings: ContentRatingsRaw?,

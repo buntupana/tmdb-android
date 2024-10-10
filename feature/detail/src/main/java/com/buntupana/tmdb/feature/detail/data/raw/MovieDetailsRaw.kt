@@ -42,7 +42,7 @@ data class MovieDetailsRaw(
     @Json(name = "release_dates")
     val releaseDates: ReleaseDatesRaw?,
     @Json(name = "vote_count")
-    val voteCount: Long,
+    val voteCount: Int?,
     val credits: CreditsMovieRaw?,
     val recommendations: RecommendationsRaw
 )

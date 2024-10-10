@@ -90,7 +90,7 @@ fun SearchPager(
                                 mediaId = item.id,
                                 title = item.name,
                                 posterUrl = item.posterUrl,
-                                overview = item.overview,
+                                overview = item.overview.orEmpty(),
                                 releaseDate = item.releaseDate
                             )
                         }

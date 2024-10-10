@@ -1,8 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.seasons
 
-import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,8 +23,9 @@ import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
+import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
-import com.buntupana.tmdb.feature.detail.presentation.cast.comp.CastHeader
+import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.seasonSample
@@ -39,16 +38,21 @@ fun SeasonsDetailScreen(
     detailNavigator: DetailNavigator
 ) {
 
-    val context = LocalContext.current
-
     SeasonsContent(
         state = viewModel.state,
         onBackClick = { detailNavigator.navigateBack() },
         onRetryClick = { viewModel.onEvent(SeasonsDetailEvent.GetSeasons) },
         onSearchClick = { detailNavigator.navigateToSearch() },
         onLogoClick = { detailNavigator.navigateToMainScreen() },
-        onSeasonClick = { mediaId, seasonId ->
-            Toast.makeText(context, "Season Clicked", Toast.LENGTH_SHORT).show()
+        onSeasonClick = { tvShowId, season, backgroundColor ->
+            detailNavigator.navigateToEpisodes(
+                tvShowId = tvShowId,
+                seasonName = season.name,
+                seasonNumber = season.seasonNumber ?: 0,
+                posterUrl = season.posterUrl,
+                backgroundColor = backgroundColor,
+                releaseYear = season.airDate?.year.toString()
+            )
         }
     )
 }
@@ -60,7 +64,11 @@ private fun SeasonsContent(
     onRetryClick: () -> Unit,
     onSearchClick: () -> Unit,
     onLogoClick: () -> Unit,
-    onSeasonClick: (mediaId: Long, seasonId: Long) -> Unit
+    onSeasonClick: (
+        tvShowId: Long,
+        season: Season,
+        backgroundColor: Color,
+    ) -> Unit
 ) {
 
     var backgroundColor by remember {
@@ -72,13 +80,6 @@ private fun SeasonsContent(
     systemUiController.setSystemBarsColor(backgroundColor)
 
     val systemBackground = MaterialTheme.colorScheme.background
-
-    // Added to avoid showing background in top when scrolling effect
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundColor)
-    )
 
     LazyColumn(
         modifier = Modifier
@@ -99,7 +100,7 @@ private fun SeasonsContent(
                     onLogoClick = { onLogoClick() }
                 )
 
-                CastHeader(
+                HeaderSimple(
                     backgroundColor = backgroundColor,
                     posterUrl = state.posterUrl,
                     mediaName = state.tvShowName,
@@ -112,12 +113,10 @@ private fun SeasonsContent(
         item {
             when {
                 state.isLoading -> {
-                    MediaDetailsLoading(
-                        backgroundColor = backgroundColor
-                    )
+                    MediaDetailsLoading()
                 }
 
-                state.isGetSessionsError -> {
+                state.isGetSeasonsError -> {
                     ErrorAndRetry(
                         modifier = Modifier
                             .padding(vertical = 200.dp)
@@ -140,11 +139,10 @@ private fun SeasonsContent(
             }
 
             SeasonItem(
-                modifier = Modifier.background(systemBackground),
                 tvShowName = state.tvShowName,
                 season = season,
-                onSeasonClick = { seasonId ->
-                    onSeasonClick(state.tvShowId, seasonId)
+                onSeasonClick = {
+                    onSeasonClick(state.tvShowId, season, backgroundColor)
                 }
             )
         }
@@ -167,6 +165,6 @@ private fun SeasonsScreenPreview() {
         onRetryClick = {},
         onSearchClick = { },
         onLogoClick = {},
-        onSeasonClick = { _, _ -> }
+        onSeasonClick = { _, _, _ -> }
     )
 }

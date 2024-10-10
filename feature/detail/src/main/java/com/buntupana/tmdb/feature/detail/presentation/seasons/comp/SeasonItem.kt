@@ -30,13 +30,13 @@ fun SeasonItem(
     modifier: Modifier = Modifier,
     tvShowName: String,
     season: Season,
-    onSeasonClick: (seasonId: Long) -> Unit
+    onSeasonClick: () -> Unit
 ) {
 
     Row(
         modifier = modifier
             .clickable {
-                onSeasonClick(season.id)
+                onSeasonClick()
             }
             .padding(horizontal = Dimens.padding.horizontal, vertical = Dimens.padding.vertical)
     ) {

@@ -1,8 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media
 
-import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,6 +27,7 @@ import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
@@ -46,8 +44,6 @@ fun MediaDetailScreen(
     viewModel: MediaDetailViewModel = hiltViewModel(),
     detailNavigator: DetailNavigator
 ) {
-
-    val context = LocalContext.current
 
     MediaDetailContent(
         state = viewModel.state,
@@ -66,8 +62,15 @@ fun MediaDetailScreen(
                 backgroundColor = backgroundColor
             )
         },
-        onSeasonClick = { mediaId, seasonId ->
-            Toast.makeText(context, "On Last Season Clicked", Toast.LENGTH_SHORT).show()
+        onSeasonClick = { tvShowId, season, backgroundColor ->
+            detailNavigator.navigateToEpisodes(
+                tvShowId = tvShowId,
+                seasonName = season.name,
+                seasonNumber = season.seasonNumber ?: 0,
+                posterUrl = season.posterUrl,
+                backgroundColor = backgroundColor,
+                releaseYear = season.airDate?.year.toString()
+            )
         },
         onAllSeasonsClick = { mediaDetails, backgroundColor ->
             detailNavigator.navigateToSeasons(
@@ -101,7 +104,7 @@ fun MediaDetailContent(
     onSearchClick: () -> Unit,
     onPersonClick: (personId: Long) -> Unit,
     onFullCastClick: (mediaDetails: MediaDetails, mediaType: MediaType, backgroundColor: Color) -> Unit,
-    onSeasonClick: (mediaId: Long, seasonId: Long) -> Unit,
+    onSeasonClick: (tvShowId: Long, season: Season, backgroundColor: Color) -> Unit,
     onAllSeasonsClick: (mediaDetails: MediaDetails.TvShow, backgroundColor: Color) -> Unit,
     onRecommendationClick: (mediaId: Long, mediaType: MediaType) -> Unit,
     onRetryClick: () -> Unit,
@@ -118,21 +121,14 @@ fun MediaDetailContent(
 
     systemUiController.setSystemBarsColor(backgroundColor)
 
-    // Added to avoid showing background in top when scrolling effect
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundColor)
-    )
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .background(backgroundColor)
     ) {
 
         TopBar(
+            modifier = Modifier.background(backgroundColor),
             textColor = backgroundColor.getOnBackgroundColor(),
             onSearchClick = { onSearchClick() },
             onBackClick = { onBackClick() },
@@ -141,9 +137,7 @@ fun MediaDetailContent(
 
         when {
             state.isLoading -> {
-                MediaDetailsLoading(
-                    backgroundColor = backgroundColor
-                )
+                MediaDetailsLoading()
             }
 
             state.isGetContentError -> {
@@ -158,26 +152,25 @@ fun MediaDetailContent(
             }
 
             state.mediaDetails != null -> {
-                Header(
-                    mediaDetails = state.mediaDetails,
-                    backgroundColor = backgroundColor
-                ) { dominantColor ->
-                    if (dominantColor != backgroundColor) {
-                        backgroundColor = dominantColor
-                    }
-                }
-
-                MainInfo(
-                    mediaDetails = state.mediaDetails,
-                    textColor = backgroundColor.getOnBackgroundColor(),
-                    onItemClick = onPersonClick
-                )
-
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background)
+                    Modifier.background(backgroundColor)
                 ) {
+
+                    Header(
+                        mediaDetails = state.mediaDetails,
+                        backgroundColor = backgroundColor
+                    ) { dominantColor ->
+                        if (dominantColor != backgroundColor) {
+                            backgroundColor = dominantColor
+                        }
+                    }
+
+                    MainInfo(
+                        mediaDetails = state.mediaDetails,
+                        textColor = backgroundColor.getOnBackgroundColor(),
+                        onItemClick = onPersonClick
+                    )
+                }
 
                     CastHorizontalList(
                         modifier = Modifier.background(MaterialTheme.colorScheme.background),
@@ -198,7 +191,9 @@ fun MediaDetailContent(
                             isInAir = state.mediaDetails.isInAir,
                             lastEpisode = state.mediaDetails.lastEpisode,
                             nextEpisode = state.mediaDetails.nextEpisode,
-                            onLastSeasonClick = { onSeasonClick(state.mediaId, it) },
+                            onLastSeasonClick = { season ->
+                                onSeasonClick(state.mediaId, season, state.backgroundColor)
+                            },
                             onAllSeasonsClick = {
                                 onAllSeasonsClick(
                                     state.mediaDetails,
@@ -216,7 +211,6 @@ fun MediaDetailContent(
 
                     Spacer(modifier = Modifier.padding(Dimens.padding.vertical))
                 }
-            }
         }
     }
 }
@@ -237,7 +231,7 @@ fun MediaDetailScreenPreview() {
         onSearchClick = {},
         onPersonClick = {},
         onFullCastClick = { _, _, _ -> },
-        onSeasonClick = { _, _ -> },
+        onSeasonClick = { _, _, _ -> },
         onAllSeasonsClick = { _, _ -> },
         onRecommendationClick = { _, _ -> },
         onRetryClick = {},

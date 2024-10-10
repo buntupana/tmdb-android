@@ -1,9 +1,9 @@
-package com.buntupana.tmdb.feature.detail.presentation.cast.comp
+package com.buntupana.tmdb.feature.detail.presentation.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -18,6 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
@@ -29,13 +32,14 @@ import com.buntupana.tmdb.core.presentation.util.isNotNullOrBlank
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun CastHeader(
+fun HeaderSimple(
     modifier: Modifier = Modifier,
     backgroundColor: Color,
     posterUrl: String?,
     mediaName: String,
     releaseYear: String?,
-    setDominantColor: (color: Color) -> Unit
+    subtitle: String? = null,
+    setDominantColor: (color: Color) -> Unit = {}
 ) {
     Row(
         modifier = modifier
@@ -46,7 +50,7 @@ fun CastHeader(
         verticalAlignment = Alignment.CenterVertically,
     ) {
 
-        val titleArrangement = if (posterUrl.isNotNullOrBlank()) {
+        if (posterUrl.isNotNullOrBlank()) {
             ImageFromUrl(
                 modifier = Modifier
                     .fillMaxHeight(0.8f)
@@ -61,24 +65,28 @@ fun CastHeader(
             Arrangement.Center
         }
 
-        FlowRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = titleArrangement
-        ) {
+        Column {
             Text(
-                text = mediaName,
+                modifier = Modifier.fillMaxWidth(),
+                text = buildAnnotatedString {
+                    withStyle(SpanStyle(fontWeight = Typography.titleLarge.fontWeight)) {
+                        append(mediaName)
+                    }
+                    append(" ")
+                    append("($releaseYear)")
+                },
                 color = backgroundColor.getOnBackgroundColor(),
-                fontSize = Typography.titleLarge.fontSize,
-                fontWeight = Typography.titleLarge.fontWeight
+                fontSize = Typography.titleLarge.fontSize
             )
-            Spacer(modifier = Modifier.padding(Dimens.padding.tiny))
-            if (releaseYear != null) {
-                Text(
-                    text = "($releaseYear)",
-                    color = backgroundColor.getOnBackgroundColor(),
-                    fontSize = Typography.titleLarge.fontSize,
-                )
-            }
+
+            if (subtitle.isNullOrBlank()) return@Column
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = subtitle,
+                color = backgroundColor.getOnBackgroundColor(),
+                fontSize = Typography.titleMedium.fontSize
+            )
         }
     }
 }
@@ -86,10 +94,11 @@ fun CastHeader(
 @Preview
 @Composable
 private fun CastHeaderPreview() {
-    CastHeader(
+    HeaderSimple(
         backgroundColor = DetailBackgroundColor,
         posterUrl = null,
         mediaName = "Pain Hustlers",
+        subtitle = "asdf",
         releaseYear = "2023",
         setDominantColor = {}
     )

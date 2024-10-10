@@ -16,7 +16,7 @@ data class PersonCastRaw(
     @Json(name = "first_air_date")
     val firstAirDate: String?,
     @Json(name = "genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>?,
     @Json(name = "media_type")
     val mediaType: String,
     val order: Int?,
@@ -29,7 +29,7 @@ data class PersonCastRaw(
     @Json(name = "original_title")
     val originalTitle: String?,
     val overview: String,
-    val popularity: Double,
+    val popularity: Float?,
     @Json(name = "poster_path")
     val posterPath: String?,
     @Json(name = "release_date")
@@ -37,7 +37,7 @@ data class PersonCastRaw(
     val title: String?,
     val video: Boolean?,
     @Json(name = "vote_average")
-    val voteAverage: Double,
+    val voteAverage: Float?,
     @Json(name = "vote_count")
-    val voteCount: Int
+    val voteCount: Int?
 )

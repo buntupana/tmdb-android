@@ -15,6 +15,6 @@ data class Episode(
     val runtime: Int?,
     val seasonNumber: Int?,
     val stillUrl: String?,
-    val voteAverage: Double?,
+    val voteAverage: Float?,
     val voteCount: Int?
 ) : Parcelable

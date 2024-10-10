@@ -34,4 +34,13 @@ interface DetailNavigator {
     )
 
     fun navigateToMainScreen()
+
+    fun navigateToEpisodes(
+        tvShowId: Long,
+        seasonName: String,
+        seasonNumber: Int,
+        posterUrl: String?,
+        backgroundColor: Color?,
+        releaseYear: String?
+    )
 }

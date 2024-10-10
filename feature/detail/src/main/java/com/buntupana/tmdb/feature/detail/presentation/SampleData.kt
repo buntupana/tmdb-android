@@ -164,7 +164,7 @@ val creditItemPersonSample = CreditPersonItem.Movie(
     role = "Acting",
     posterUrl = null,
     backdropUrl = null,
-    popularity = 0.0,
+    popularity = 0f,
     userScore = 0,
     voteCount = 0,
     releaseDate = null,
@@ -178,10 +178,10 @@ val episodeSample = Episode(
     airDate = LocalDate.now(),
     episodeNumber = 4,
     overview = "We don't have an overview translated in English. Help us expand our database by adding one.",
-    runtime = 60,
+    runtime = 67,
     seasonNumber = 2,
     stillUrl = "",
-    voteAverage = 7.0,
+    voteAverage = 7.2f,
     voteCount = 24
 )
 

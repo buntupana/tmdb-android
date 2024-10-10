@@ -18,7 +18,7 @@ import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 @Composable
 fun MediaDetailsLoading(
     modifier: Modifier = Modifier,
-    backgroundColor: Color
+    backgroundColor: Color = MaterialTheme.colorScheme.background
 ) {
     Column(
         modifier = modifier

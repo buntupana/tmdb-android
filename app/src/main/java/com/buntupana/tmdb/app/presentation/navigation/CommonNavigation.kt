@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.presentation.util.encodeUrl
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNavArgs
+import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNavArgs
@@ -87,6 +88,28 @@ class CommonNavigation(
                 args = SeasonsDetailNavArgs(
                     tvShowId = tvShowId,
                     tvShowName = tvShowTitle,
+                    posterUrlEncoded = posterUrl?.encodeUrl(),
+                    releaseYear = releaseYear,
+                    backgroundColor = backgroundColor?.toArgb()
+                )
+            )
+        )
+    }
+
+    override fun navigateToEpisodes(
+        tvShowId: Long,
+        seasonName: String,
+        seasonNumber: Int,
+        posterUrl: String?,
+        backgroundColor: Color?,
+        releaseYear: String?
+    ) {
+        navHostController.navigate(
+            Routes.EpisodesDetail(
+                args = EpisodesDetailNavArgs(
+                    tvShowId = tvShowId,
+                    seasonNumber = seasonNumber,
+                    seasonName = seasonName,
                     posterUrlEncoded = posterUrl?.encodeUrl(),
                     releaseYear = releaseYear,
                     backgroundColor = backgroundColor?.toArgb()

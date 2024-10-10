@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,7 +39,7 @@ fun SeasonsSection(
     isInAir: Boolean,
     lastEpisode: Episode?,
     nextEpisode: Episode?,
-    onLastSeasonClick: (seasonId: Long) -> Unit,
+    onLastSeasonClick: (season: Season) -> Unit,
     onAllSeasonsClick: () -> Unit
 ) {
 
@@ -56,7 +56,7 @@ fun SeasonsSection(
     Column(
         modifier = modifier
     ) {
-        Divider()
+        HorizontalDivider()
 
         Text(
             modifier = Modifier.padding(
@@ -74,7 +74,7 @@ fun SeasonsSection(
                     horizontal = Dimens.padding.horizontal,
                     vertical = Dimens.padding.small
                 )
-                .clickable { onLastSeasonClick(lastSeason.id) },
+                .clickable { onLastSeasonClick(lastSeason) },
             elevation = CardDefaults.cardElevation(defaultElevation = Dimens.cardElevation),
             shape = RoundedCornerShape(Dimens.posterRound)
         ) {
@@ -167,6 +167,6 @@ private fun SeasonsPreview() {
         lastEpisode = episodeSample,
         nextEpisode = episodeSample,
         onAllSeasonsClick = {},
-        onLastSeasonClick = {}
+        onLastSeasonClick = { _ ->}
     )
 }

@@ -1,7 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.cast
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,8 +23,8 @@ import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
-import com.buntupana.tmdb.feature.detail.presentation.cast.comp.CastHeader
 import com.buntupana.tmdb.feature.detail.presentation.cast.comp.castList
+import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
@@ -66,13 +65,6 @@ fun CastDetailContent(
 
     val systemBackground = MaterialTheme.colorScheme.background
 
-    // Added to avoid showing background in top when scrolling effect
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundColor)
-    )
-
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -92,7 +84,7 @@ fun CastDetailContent(
                     onLogoClick = { onLogoClick() }
                 )
 
-                CastHeader(
+                HeaderSimple(
                     backgroundColor = backgroundColor,
                     posterUrl = state.posterUrl,
                     mediaName = state.mediaName,
@@ -105,9 +97,7 @@ fun CastDetailContent(
         item {
             when {
                 state.isLoading -> {
-                    MediaDetailsLoading(
-                        backgroundColor = backgroundColor
-                    )
+                    MediaDetailsLoading()
                 }
 
                 state.isGetContentError -> {

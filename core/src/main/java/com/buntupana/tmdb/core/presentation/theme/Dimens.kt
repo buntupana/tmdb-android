@@ -19,6 +19,7 @@ object Dimens {
     const val aspectRatioMediaPoster = 2f / 3f
     const val aspectRatioMediaBackdrop = 20f / 9f
     const val aspectRatioMediaRecommendation = 250f / 141f
+    const val aspectRatioMediaEpisode = 227f / 127f
 
     // Top bar
     val topBarHeight = 58.dp

@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.app.presentation.navigation
 
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNavArgs
+import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNavArgs
@@ -33,4 +34,9 @@ sealed class Routes {
     data class SeasonDetail(
         val args: SeasonsDetailNavArgs
     ) : Routes()
+
+    @Serializable
+    data class EpisodesDetail(
+        val args: EpisodesDetailNavArgs
+    ): Routes()
 }

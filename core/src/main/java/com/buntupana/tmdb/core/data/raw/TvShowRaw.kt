@@ -14,7 +14,7 @@ data class TvShowRaw(
     @Json(name = "first_air_date")
     val firstAirDate: String?,
     @Json(name = "genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>?,
     @Json(name = "origin_country")
     val originCountry: List<String>,
     @Json(name = "original_language")

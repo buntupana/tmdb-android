@@ -112,6 +112,21 @@ fun String.decodeUrl(): String {
     return URLDecoder.decode(this, StandardCharsets.UTF_8.toString())
 }
 
+fun formatTime(time: Int): String {
+    var result = ""
+    val hours = time / 60
+    val minutes = time % 60
+
+    if (hours != 0) {
+        result += "${hours}h "
+    }
+    if (minutes != 0) {
+        result += "${minutes}m"
+    }
+
+    return result
+}
+
 @OptIn(ExperimentalContracts::class)
 fun <T> Collection<T>?.isNotNullOrEmpty(): Boolean {
     contract {

@@ -52,13 +52,13 @@ class SeasonDetailViewModel @Inject constructor(
         getTvShowSeasonsUseCase(
             parameters = state.tvShowId,
             loading = {
-                state = state.copy(isLoading = true, isGetSessionsError = false)
+                state = state.copy(isLoading = true, isGetSeasonsError = false)
             },
             error = {
-                state = state.copy(isLoading = false, isGetSessionsError = true)
+                state = state.copy(isLoading = false, isGetSeasonsError = true)
             },
             success = { seasonList ->
-                state = state.copy(isLoading = false, isGetSessionsError = false, seasonList = seasonList)
+                state = state.copy(isLoading = false, isGetSeasonsError = false, seasonList = seasonList)
             }
         )
     }

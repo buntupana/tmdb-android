@@ -18,7 +18,7 @@ data class AnyMediaItemRaw(
     @Json(name = "original_language")
     val originalLanguage: String,
     @Json(name = "genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>?,
     val popularity: Double,
     @Json(name = "vote_average")
     val voteAverage: Double,

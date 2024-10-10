@@ -56,7 +56,7 @@ dependencies {
     api(libs.androidx.ui)
     api(libs.androidx.ui.graphics)
     debugApi(libs.androidx.ui.tooling)
-    debugApi(libs.androidx.ui.tooling.preview)
+    api(libs.androidx.ui.tooling.preview)
     api(libs.androidx.navigation)
     api(libs.androidx.paging.compose)
     api(libs.androidx.compose.foundation)

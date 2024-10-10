@@ -12,6 +12,8 @@ import com.buntupana.tmdb.app.presentation.navigation.Routes
 import com.buntupana.tmdb.core.presentation.theme.TMDBTheme
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailScreen
+import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailNavArgs
+import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailScreen
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailScreen
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNavArgs
@@ -79,6 +81,16 @@ class MainActivity : ComponentActivity() {
                         )
                     ) {
                         SeasonsDetailScreen(detailNavigator = commonNavigation)
+                    }
+                    composable<Routes.EpisodesDetail>(
+                        typeMap = mapOf(
+                            typeOf<EpisodesDetailNavArgs>() to CustomNavType(
+                                EpisodesDetailNavArgs::class.java,
+                                EpisodesDetailNavArgs.serializer()
+                            )
+                        )
+                    ) {
+                        EpisodesDetailScreen(detailNavigator = commonNavigation)
                     }
                 }
             }

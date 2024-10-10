@@ -16,7 +16,7 @@ data class MovieItemRaw(
     val originalLanguage: String,
     val adult: Boolean,
     @Json(name = "genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>?,
     val popularity: Double,
     @Json(name = "release_date")
     val releaseDate: String?,

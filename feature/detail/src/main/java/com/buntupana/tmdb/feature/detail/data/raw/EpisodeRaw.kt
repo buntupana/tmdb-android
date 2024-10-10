@@ -20,7 +20,7 @@ data class EpisodeRaw(
     @Json(name = "still_path")
     val stillPath: String?,
     @Json(name = "vote_average")
-    val voteAverage: Double?,
+    val voteAverage: Float?,
     @Json(name = "episode_type")
     val episodeType: String?,
     @Json(name = "vote_count")

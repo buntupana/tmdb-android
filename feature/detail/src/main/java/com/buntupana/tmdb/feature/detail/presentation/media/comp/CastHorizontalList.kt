@@ -71,6 +71,7 @@ fun CastHorizontalList(
 
                     Spacer(modifier = Modifier.width(Dimens.padding.small))
                 }
+
                 item {
                     Spacer(modifier = Modifier.width(Dimens.padding.vertical))
                 }

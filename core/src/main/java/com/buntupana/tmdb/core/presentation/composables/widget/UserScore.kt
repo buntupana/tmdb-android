@@ -19,6 +19,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,7 +72,7 @@ fun UserScore(
         val strokeSize = dimensionRef * 5f / 100f
 
         Canvas(modifier = Modifier.fillMaxSize(0.82f)) {
-            val backgroundAlpha = if(correctedScore < 1) 1f else 0.3f
+            val backgroundAlpha = if (correctedScore < 1) 1f else 0.3f
             drawArc(
                 color = strokeColor,
                 -90f,
@@ -113,17 +115,26 @@ fun UserScore(
                 Text(
                     text = correctedScore.toString(),
                     color = Color.White,
-                    textAlign = TextAlign.End,
+                    textAlign = TextAlign.Center,
                     fontFamily = fontFamily,
-                    fontSize = textSize
+                    fontSize = textSize,
+                    style = TextStyle(
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = true
+                        )
+                    )
                 )
                 Text(
                     text = "%",
                     color = Color.White,
-                    textAlign = TextAlign.Start,
                     fontFamily = fontFamily,
-                    modifier = Modifier.fillMaxHeight(0.455f),
-                    fontSize = symbolSize
+                    modifier = Modifier.fillMaxHeight(0.5f),
+                    fontSize = symbolSize,
+                    style = TextStyle(
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = true
+                        )
+                    )
                 )
             }
         }
@@ -133,5 +144,5 @@ fun UserScore(
 @Composable
 @Preview
 fun UserScorePreview() {
-    UserScore(Modifier.size(width = 100.dp, height = 100.dp), score = 0)
+    UserScore(Modifier.size(width = 500.dp, height = 500.dp), score = 90)
 }

@@ -20,6 +20,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -29,15 +31,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.R
-import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.composables.TextFieldSearch
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
 import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
 import com.buntupana.tmdb.core.presentation.theme.TertiaryColor
+import com.buntupana.tmdb.feature.search.domain.model.SearchItem
+import com.buntupana.tmdb.feature.search.presentation.searchItemMovieSample
+import com.buntupana.tmdb.feature.search.presentation.searchItemPersonSample
+import com.buntupana.tmdb.feature.search.presentation.searchItemTVShowSample
 
 @Composable
 fun SearchBar(
@@ -49,8 +57,9 @@ fun SearchBar(
     isLoadingSuggestions: Boolean = false,
     isLoadingSearch: Boolean = false,
     requestFocus: Boolean = false,
-    suggestionList: List<MediaItem>,
-    clickable: (mediaItem: MediaItem) -> Unit,
+    suggestionList: List<SearchItem>?,
+    onSuggestionItemClick: (mediaItem: SearchItem, isHighlighted: Boolean) -> Unit,
+    isSearchSuggestionError: Boolean,
     onDismissSuggestionsClick: () -> Unit
 ) {
     Column(modifier = modifier) {
@@ -110,28 +119,66 @@ fun SearchBar(
             }
         }
 
-        if (suggestionList.isNotEmpty()) {
+        if (suggestionList == null || searchKey.isBlank()) return@Column
+
+        val errorTextResId = when {
+            isSearchSuggestionError -> R.string.message_loading_content_error
+            suggestionList.isEmpty() && searchKey.isNotBlank() -> R.string.text_no_results
+            else -> null
+        }
+
+        if (errorTextResId != null) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(vertical = Dimens.padding.big),
+                text = stringResource(errorTextResId),
+                textAlign = TextAlign.Center
+            )
+        } else {
             val listState = rememberLazyListState()
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
                 state = listState
             ) {
-                items(suggestionList) {
+                items(suggestionList) { searchItem ->
                     SuggestionItem(
-                        mediaItem = it,
-                        clickable = clickable
+                        mediaItem = searchItem,
+                        showItemIcon = searchItem.isHighlighted,
+                        clickable = { onSuggestionItemClick(searchItem, searchItem.isHighlighted) }
                     )
                 }
             }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.7f))
-                    .clickable {
-                        onDismissSuggestionsClick()
-                    }
-            )
         }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.7f))
+                .clickable {
+                    onDismissSuggestionsClick()
+                }
+        )
     }
+}
+
+@Preview
+@Composable
+fun SearchBarPreview() {
+
+    val suggestionList = listOf(
+        searchItemMovieSample,
+        searchItemTVShowSample,
+        searchItemPersonSample
+    )
+
+    SearchBar(
+        onValueChanged = {},
+        searchKey = "hola",
+        onSearch = {},
+        suggestionList = suggestionList,
+        isSearchSuggestionError = true,
+        onSuggestionItemClick = { _, _ -> },
+        onDismissSuggestionsClick = {}
+    )
 }

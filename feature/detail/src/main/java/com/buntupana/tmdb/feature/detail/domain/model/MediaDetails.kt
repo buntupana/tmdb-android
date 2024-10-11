@@ -1,11 +1,9 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
-import android.os.Parcelable
 import com.buntupana.tmdb.core.domain.model.MediaItem
-import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 
-@Parcelize
+
 sealed class MediaDetails(
     open val id: Long,
     open val title: String,
@@ -23,7 +21,7 @@ sealed class MediaDetails(
     open val castList: List<Person.Cast>,
     open val crewList: List<Person.Crew>,
     open val recommendationList: List<MediaItem>
-) : Parcelable {
+)  {
 
     data class Movie(
         override val id: Long,

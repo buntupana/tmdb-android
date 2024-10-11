@@ -7,7 +7,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.presentation.util.TYPING_DELAY
-import com.buntupana.tmdb.feature.search.domain.usecase.*
+import com.buntupana.tmdb.feature.search.domain.usecase.GetSearchMediaUseCase
+import com.buntupana.tmdb.feature.search.domain.usecase.GetSearchMoviesUseCase
+import com.buntupana.tmdb.feature.search.domain.usecase.GetSearchPersonsUseCase
+import com.buntupana.tmdb.feature.search.domain.usecase.GetSearchResultCountUseCase
+import com.buntupana.tmdb.feature.search.domain.usecase.GetSearchTvShowsUseCase
+import com.buntupana.tmdb.feature.search.domain.usecase.GetTrendingMediaUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -48,17 +53,20 @@ class SearchViewModel @Inject constructor(
                 state = state.copy(
                     searchKey = event.searchKey,
                     isSearchSuggestionsLoading = false,
-                    searchSuggestionList = emptyList()
+                    searchSuggestionList = null,
+                    isSearchSuggestionsError = false
                 )
                 searchMovies(event.searchKey)
                 searchTvShows(event.searchKey)
                 searchPersons(event.searchKey)
                 getSearchResultCount(event.searchKey)
             }
+
             SearchEvent.DismissSuggestions -> {
                 state = state.copy(
                     isSearchSuggestionsLoading = false,
-                    searchSuggestionList = emptyList()
+                    searchSuggestionList = null,
+                    isSearchSuggestionsError = false
                 )
             }
         }
@@ -90,7 +98,7 @@ class SearchViewModel @Inject constructor(
                 state = state.copy(
                     searchKey = searchKey,
                     isSearchSuggestionsLoading = false,
-                    searchSuggestionList = emptyList()
+                    searchSuggestionList = null
                 )
                 return@launch
             }
@@ -99,16 +107,24 @@ class SearchViewModel @Inject constructor(
             delay(TYPING_DELAY)
             getSearchMediaUseCase(searchKey) {
                 loading {
-                    state = state.copy(isSearchSuggestionsLoading = true)
+                    state = state.copy(
+                        isSearchSuggestionsLoading = true,
+                        isSearchSuggestionsError = false
+                    )
                 }
                 error {
-                    state = state.copy(isSearchSuggestionsLoading = false)
+                    state = state.copy(
+                        isSearchSuggestionsLoading = false,
+                        isSearchSuggestionsError = true,
+                        searchSuggestionList = emptyList()
+                    )
                 }
                 success {
                     state =
                         state.copy(
                             searchSuggestionList = it.take(13),
-                            isSearchSuggestionsLoading = false
+                            isSearchSuggestionsLoading = false,
+                            isSearchSuggestionsError = false
                         )
                 }
             }

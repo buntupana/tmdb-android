@@ -23,16 +23,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
 import com.buntupana.tmdb.feature.search.R
+import com.buntupana.tmdb.feature.search.domain.model.SearchItem
 
 @Composable
 fun TrendingList(
     modifier: Modifier = Modifier,
-    mediaItemList: List<MediaItem>,
-    clickable: (mediaItem: MediaItem) -> Unit
+    mediaItemList: List<SearchItem>,
+    clickable: (mediaItem: SearchItem) -> Unit
 ) {
 
     if (mediaItemList.isEmpty()) {

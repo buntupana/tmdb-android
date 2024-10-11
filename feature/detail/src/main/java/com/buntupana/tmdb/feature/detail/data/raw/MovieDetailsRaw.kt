@@ -13,7 +13,7 @@ data class MovieDetailsRaw(
     val genres: List<Genre>,
     val homepage: String,
     @Json(name = "imdb_id")
-    val imdbId: String,
+    val imdbId: String?,
     @Json(name = "original_language")
     val originalLanguage: String,
     @Json(name = "original_title")

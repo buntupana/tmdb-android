@@ -10,7 +10,9 @@ import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.domain.model.PersonItem
 import com.buntupana.tmdb.feature.search.data.mapper.toModel
+import com.buntupana.tmdb.feature.search.data.mapper.toSearchModel
 import com.buntupana.tmdb.feature.search.data.remote_data_source.SearchRemoteDataSource
+import com.buntupana.tmdb.feature.search.domain.model.SearchItem
 import com.buntupana.tmdb.feature.search.domain.repository.SearchRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -19,17 +21,17 @@ class SearchRepositoryImpl @Inject constructor(
     private val searchRemoteDataSource: SearchRemoteDataSource
 ) : SearchRepository {
 
-    override suspend fun getTrendingMedia(): Resource<List<MediaItem>> {
+    override suspend fun getTrendingMedia(): Resource<List<SearchItem>> {
         return networkResult(
             networkCall = { searchRemoteDataSource.getTrending() },
-            mapResponse = { response -> response.results.toModel() }
+            mapResponse = { response -> response.results.toSearchModel() }
         )
     }
 
-    override suspend fun getSearchMedia(searchKey: String): Resource<List<MediaItem>> {
+    override suspend fun getSearchMedia(searchKey: String): Resource<List<SearchItem>> {
         return networkResult(
             networkCall = { searchRemoteDataSource.getSearchMedia(searchKey) },
-            mapResponse = { response -> response.results.toModel() }
+            mapResponse = { response -> response.results.toSearchModel() }
         )
     }
 

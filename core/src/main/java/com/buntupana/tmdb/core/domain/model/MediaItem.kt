@@ -1,10 +1,7 @@
 package com.buntupana.tmdb.core.domain.model
 
-import android.os.Parcelable
 import com.buntupana.tmdb.core.domain.entity.MediaType
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 sealed class MediaItem(
     open val id: Long,
     open val name: String,
@@ -14,7 +11,7 @@ sealed class MediaItem(
     open val overview: String?,
     open val releaseDate: String,
     open val mediaType: MediaType
-) : Parcelable {
+) {
 
     data class Movie(
         override val id: Long,

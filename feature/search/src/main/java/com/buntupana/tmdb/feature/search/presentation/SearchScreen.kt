@@ -10,6 +10,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.domain.entity.MediaType
@@ -29,12 +30,14 @@ fun SearchScreen(
 
     val systemUiController = rememberSystemUiController()
 
+    val focusManager = LocalFocusManager.current
+
     SideEffect {
         systemUiController.setSystemBarsColor(color = PrimaryColor)
     }
 
     SearchScreenContent(
-        searchState = viewModel.state,
+        state = viewModel.state,
         onSearchSuggestions = { viewModel.onEvent(SearchEvent.OnSearchSuggestions(it)) },
         onSearch = {
             viewModel.onEvent(SearchEvent.OnSearch(it))
@@ -62,6 +65,7 @@ fun SearchScreen(
             searchNavigator.navigateToPerson(personId)
         },
         onDismissSuggestionsClick = {
+            focusManager.clearFocus()
             viewModel.onEvent(SearchEvent.DismissSuggestions)
         }
     )
@@ -69,7 +73,7 @@ fun SearchScreen(
 
 @Composable
 fun SearchScreenContent(
-    searchState: SearchState,
+    state: SearchState,
     onSearchSuggestions: (searchKey: String) -> Unit,
     onSearch: (searchKey: String) -> Unit,
     onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color?) -> Unit,
@@ -86,7 +90,7 @@ fun SearchScreenContent(
                 .padding(top = Dimens.topBarHeight)
         ) {
             when {
-                searchState.isSearchLoading -> {
+                state.isSearchLoading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -95,10 +99,10 @@ fun SearchScreenContent(
                     }
                 }
 
-                searchState.resultCountList.isNotEmpty() -> {
+                state.resultCountList.isNotEmpty() -> {
                     SearchResults(
                         modifier = Modifier.fillMaxWidth(),
-                        searchState = searchState,
+                        searchState = state,
                         onMediaClick = onMediaClick,
                         onPersonClick = onPersonClick
                     )
@@ -107,7 +111,7 @@ fun SearchScreenContent(
                 else -> {
                     TrendingList(
                         modifier = Modifier.fillMaxWidth(),
-                        mediaItemList = searchState.trendingList,
+                        mediaItemList = state.trendingList,
                         clickable = {
                             onSearch(it.name)
                         }
@@ -120,17 +124,18 @@ fun SearchScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter),
-            searchKey = searchState.searchKey,
+            searchKey = state.searchKey,
             onValueChanged = {
                 onSearchSuggestions(it)
             },
-            isLoadingSuggestions = searchState.isSearchSuggestionsLoading,
+            isLoadingSuggestions = state.isSearchSuggestionsLoading,
             onSearch = onSearch,
-            isLoadingSearch = searchState.isSearchLoading,
+            isLoadingSearch = state.isSearchLoading,
             requestFocus = true,
-            suggestionList = searchState.searchSuggestionList,
-            clickable = {
-                onSearch(it.name)
+            suggestionList = state.searchSuggestionList,
+            isSearchSuggestionError = state.isSearchSuggestionsError,
+            onSuggestionItemClick = { mediaItem, isHighlighted ->
+                onSearch(mediaItem.name)
             },
             onDismissSuggestionsClick = onDismissSuggestionsClick
         )
@@ -141,7 +146,7 @@ fun SearchScreenContent(
 @Composable
 fun SearchScreenPreview() {
     SearchScreenContent(
-        searchState = SearchState(
+        state = SearchState(
             searchSuggestionList = emptyList()
         ),
         onSearchSuggestions = {},

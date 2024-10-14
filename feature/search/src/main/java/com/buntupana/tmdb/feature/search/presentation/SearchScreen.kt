@@ -11,10 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.domain.model.MediaItem
+import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchBar
@@ -39,8 +42,8 @@ fun SearchScreen(
     SearchScreenContent(
         state = viewModel.state,
         onSearchSuggestions = { viewModel.onEvent(SearchEvent.OnSearchSuggestions(it)) },
-        onSearch = {
-            viewModel.onEvent(SearchEvent.OnSearch(it))
+        onSearch = { searchKey, searchType ->
+            viewModel.onEvent(SearchEvent.OnSearch(searchKey, searchType))
         },
         onMediaClick = { mediaItem, mainPosterColor ->
             when (mediaItem) {
@@ -75,7 +78,7 @@ fun SearchScreen(
 fun SearchScreenContent(
     state: SearchState,
     onSearchSuggestions: (searchKey: String) -> Unit,
-    onSearch: (searchKey: String) -> Unit,
+    onSearch: (searchKey: String, searchType: SearchType?) -> Unit,
     onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color?) -> Unit,
     onPersonClick: (personId: Long) -> Unit,
     onDismissSuggestionsClick: () -> Unit
@@ -97,6 +100,18 @@ fun SearchScreenContent(
                     ) {
                         CircularProgressIndicator(color = PrimaryColor)
                     }
+
+                }
+
+                state.isSearchError -> {
+                    ErrorAndRetry(
+                        modifier = Modifier
+                            .padding(vertical = 200.dp)
+                            .fillMaxSize(),
+                        errorMessage = stringResource(com.buntupana.tmdb.core.R.string.message_loading_content_error)
+                    ) {
+                        onSearch(state.searchKey, null)
+                    }
                 }
 
                 state.resultCountList.isNotEmpty() -> {
@@ -113,7 +128,7 @@ fun SearchScreenContent(
                         modifier = Modifier.fillMaxWidth(),
                         mediaItemList = state.trendingList,
                         clickable = {
-                            onSearch(it.name)
+                            onSearch(it.name, null)
                         }
                     )
                 }
@@ -129,13 +144,15 @@ fun SearchScreenContent(
                 onSearchSuggestions(it)
             },
             isLoadingSuggestions = state.isSearchSuggestionsLoading,
-            onSearch = onSearch,
+            onSearch = { searchKey ->
+                onSearch(searchKey, null)
+            },
             isLoadingSearch = state.isSearchLoading,
             requestFocus = true,
             suggestionList = state.searchSuggestionList,
             isSearchSuggestionError = state.isSearchSuggestionsError,
-            onSuggestionItemClick = { mediaItem, isHighlighted ->
-                onSearch(mediaItem.name)
+            onSuggestionItemClick = { mediaItemName, searchType ->
+                onSearch(mediaItemName, searchType)
             },
             onDismissSuggestionsClick = onDismissSuggestionsClick
         )
@@ -147,10 +164,11 @@ fun SearchScreenContent(
 fun SearchScreenPreview() {
     SearchScreenContent(
         state = SearchState(
-            searchSuggestionList = emptyList()
+            searchSuggestionList = null,
+            isSearchError = true
         ),
         onSearchSuggestions = {},
-        onSearch = {},
+        onSearch = { _, _ -> },
         onMediaClick = { _, _ -> },
         onPersonClick = {},
         onDismissSuggestionsClick = {}

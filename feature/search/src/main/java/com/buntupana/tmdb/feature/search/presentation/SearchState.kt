@@ -11,11 +11,13 @@ data class SearchState(
     val searchKey: String = "",
     val isSearchSuggestionsLoading: Boolean = false,
     val isSearchLoading: Boolean = false,
+    val isSearchError: Boolean = false,
     val isSearchSuggestionsError: Boolean = false,
     val trendingList: List<SearchItem> = emptyList(),
     val searchSuggestionList: List<SearchItem>? = null,
     val movieItems: Flow<PagingData<MediaItem.Movie>> = flowOf(PagingData.empty()),
     val tvShowItems: Flow<PagingData<MediaItem.TvShow>> = flowOf(PagingData.empty()),
     val personItems: Flow<PagingData<PersonItem>> = flowOf(PagingData.empty()),
-    val resultCountList: List<MediaResultCount> = emptyList()
+    val resultCountList: List<MediaResultCount> = emptyList(),
+    val defaultSearchType: SearchType? = null
 )

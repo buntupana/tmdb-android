@@ -105,7 +105,6 @@ fun CastDetailContent(
                         modifier = Modifier
                             .padding(vertical = 200.dp)
                             .fillMaxSize(),
-                        textColor = backgroundColor.getOnBackgroundColor(),
                         errorMessage = stringResource(id = R.string.message_loading_content_error),
                         onRetryClick = onRetryClick
                     )

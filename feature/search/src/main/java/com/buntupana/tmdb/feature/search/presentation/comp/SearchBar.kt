@@ -43,6 +43,7 @@ import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
 import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
 import com.buntupana.tmdb.core.presentation.theme.TertiaryColor
 import com.buntupana.tmdb.feature.search.domain.model.SearchItem
+import com.buntupana.tmdb.feature.search.presentation.SearchType
 import com.buntupana.tmdb.feature.search.presentation.searchItemMovieSample
 import com.buntupana.tmdb.feature.search.presentation.searchItemPersonSample
 import com.buntupana.tmdb.feature.search.presentation.searchItemTVShowSample
@@ -58,7 +59,10 @@ fun SearchBar(
     isLoadingSearch: Boolean = false,
     requestFocus: Boolean = false,
     suggestionList: List<SearchItem>?,
-    onSuggestionItemClick: (mediaItem: SearchItem, isHighlighted: Boolean) -> Unit,
+    onSuggestionItemClick: (
+        mediaItemName: String,
+        searchType: SearchType?
+    ) -> Unit,
     isSearchSuggestionError: Boolean,
     onDismissSuggestionsClick: () -> Unit
 ) {
@@ -146,7 +150,19 @@ fun SearchBar(
                     SuggestionItem(
                         mediaItem = searchItem,
                         showItemIcon = searchItem.isHighlighted,
-                        clickable = { onSuggestionItemClick(searchItem, searchItem.isHighlighted) }
+                        clickable = {
+
+                            val searchType:SearchType? = if (searchItem.isHighlighted) {
+                                when (searchItem) {
+                                    is SearchItem.Movie -> SearchType.MOVIE
+                                    is SearchItem.Person -> SearchType.PERSON
+                                    is SearchItem.TvShow -> SearchType.TV_SHOW
+                                }
+                            } else {
+                                null
+                            }
+                            onSuggestionItemClick(searchItem.name, searchType)
+                        }
                     )
                 }
             }

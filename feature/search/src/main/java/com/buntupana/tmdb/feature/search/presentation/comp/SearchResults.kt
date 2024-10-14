@@ -1,6 +1,5 @@
 package com.buntupana.tmdb.feature.search.presentation.comp
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,19 +13,27 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
+import com.buntupana.tmdb.feature.search.presentation.MediaResultCount
 import com.buntupana.tmdb.feature.search.presentation.SearchState
+import com.buntupana.tmdb.feature.search.presentation.SearchType
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchResults(
     modifier: Modifier = Modifier,
@@ -39,6 +46,17 @@ fun SearchResults(
 
         val coroutineScope = rememberCoroutineScope()
         val pagerState = rememberPagerState { searchState.resultCountList.size }
+
+        var defaultPageSelector by remember { mutableStateOf(true) }
+
+        SideEffect {
+            if (defaultPageSelector) {
+                val defaultIndex =
+                    searchState.resultCountList.indexOfFirst { it.searchType == searchState.defaultSearchType }
+                pagerState.requestScrollToPage(defaultIndex)
+            }
+            defaultPageSelector = false
+        }
 
         // Adding a tab bar with result titles
         ScrollableTabRow(
@@ -53,10 +71,17 @@ fun SearchResults(
         ) {
             // Add tabs for all of our pages
             searchState.resultCountList.forEachIndexed { index, resultCount ->
+
+                val titleResId = when (resultCount.searchType) {
+                    SearchType.MOVIE -> R.string.text_movies
+                    SearchType.TV_SHOW -> R.string.text_tv_shows
+                    SearchType.PERSON -> R.string.text_people
+                }
+
                 Tab(
                     text = {
                         TabSearchResult(
-                            titleResId = resultCount.titleResId,
+                            titleResId = titleResId,
                             resultCount = resultCount.resultCount,
                             isSelected = pagerState.currentPage == index
                         )
@@ -73,34 +98,30 @@ fun SearchResults(
 
         // Pager with all results pages
         HorizontalPager(
-            modifier = Modifier.fillMaxSize(),
-            state = pagerState
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            state = pagerState,
+            beyondViewportPageCount = 2
         ) { currentPage ->
 
+            Timber.d("SearchResults() called with: currentPage = [$currentPage]")
             val noResultMessageStringRes: Int
             // Getting Result information for each page of the pager
-            val pagingItems = when (searchState.resultCountList[currentPage].titleResId) {
-                R.string.text_movies -> {
-                    noResultMessageStringRes =
-                        R.string.message_movies_no_result
+            val pagingItems = when (searchState.resultCountList[currentPage].searchType) {
+                SearchType.MOVIE -> {
+                    noResultMessageStringRes = R.string.message_movies_no_result
                     searchState.movieItems.collectAsLazyPagingItems()
                 }
 
-                R.string.text_tv_shows -> {
-                    noResultMessageStringRes =
-                        R.string.message_tv_shows_no_result
+                SearchType.TV_SHOW -> {
+                    noResultMessageStringRes = R.string.message_tv_shows_no_result
                     searchState.tvShowItems.collectAsLazyPagingItems()
                 }
 
-                R.string.text_people -> {
-                    noResultMessageStringRes =
-                        R.string.message_people_no_result
+                SearchType.PERSON -> {
+                    noResultMessageStringRes = R.string.message_people_no_result
                     searchState.personItems.collectAsLazyPagingItems()
-                }
-
-                else -> {
-                    noResultMessageStringRes = 0
-                    null
                 }
             }
 
@@ -115,4 +136,20 @@ fun SearchResults(
             Spacer(modifier = Modifier.height(Dimens.padding.tiny))
         }
     }
+}
+
+@Preview
+@Composable
+fun SearchResultsPreview() {
+    SearchResults(
+        searchState = SearchState(
+            resultCountList = listOf(
+                MediaResultCount(SearchType.MOVIE, 100),
+                MediaResultCount(SearchType.TV_SHOW, 87),
+                MediaResultCount(SearchType.PERSON, 10)
+            )
+        ),
+        onMediaClick = { _, _ -> },
+        onPersonClick = {}
+    )
 }

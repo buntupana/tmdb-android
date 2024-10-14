@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.buntupana.tmdb.core.presentation.util.TYPING_DELAY
 import com.buntupana.tmdb.feature.search.domain.usecase.GetSearchMediaUseCase
 import com.buntupana.tmdb.feature.search.domain.usecase.GetSearchMoviesUseCase
@@ -17,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,6 +46,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun onEvent(event: SearchEvent) {
+        Timber.d("onEvent() called with: event = [$event]")
         when (event) {
             is SearchEvent.OnSearchSuggestions -> searchSuggestions(event.searchKey)
             is SearchEvent.OnSearch -> {
@@ -54,7 +57,8 @@ class SearchViewModel @Inject constructor(
                     searchKey = event.searchKey,
                     isSearchSuggestionsLoading = false,
                     searchSuggestionList = null,
-                    isSearchSuggestionsError = false
+                    isSearchSuggestionsError = false,
+                    defaultSearchType = event.searchType
                 )
                 searchMovies(event.searchKey)
                 searchTvShows(event.searchKey)
@@ -77,12 +81,8 @@ class SearchViewModel @Inject constructor(
         getTrendingJob = viewModelScope.launch {
 
             getTrendingMediaUseCase(Unit) {
-                loading {
-
-                }
-                error {
-
-                }
+                loading {}
+                error {}
                 success { mediaItemList ->
                     state = state.copy(trendingList = mediaItemList.take(10))
                 }
@@ -135,7 +135,7 @@ class SearchViewModel @Inject constructor(
         searchMoviesJob?.cancel()
         searchMoviesJob = viewModelScope.launch {
             getSearchMoviesUseCase(searchKey).let {
-                state = state.copy(movieItems = it)
+                state = state.copy(movieItems = it.cachedIn(viewModelScope))
             }
         }
     }
@@ -144,7 +144,7 @@ class SearchViewModel @Inject constructor(
         searchTvShowsJob?.cancel()
         searchTvShowsJob = viewModelScope.launch {
             getSearchTvShowsUseCase(searchKey).let {
-                state = state.copy(tvShowItems = it)
+                state = state.copy(tvShowItems = it.cachedIn(viewModelScope))
             }
         }
     }
@@ -153,7 +153,7 @@ class SearchViewModel @Inject constructor(
         searchPersonsJob?.cancel()
         searchPersonsJob = viewModelScope.launch {
             getSearchPersonsUseCase(searchKey).let {
-                state = state.copy(personItems = it)
+                state = state.copy(personItems = it.cachedIn(viewModelScope))
             }
         }
     }
@@ -163,37 +163,40 @@ class SearchViewModel @Inject constructor(
         getSearchResultCountJob = viewModelScope.launch {
             getSearchResultCountUseCase(searchKey) {
                 loading {
-                    state = state.copy(isSearchLoading = true)
+                    state = state.copy(isSearchLoading = true, isSearchError = false)
                 }
                 error {
-                    state = state.copy(isSearchLoading = false)
+                    state = state.copy(isSearchLoading = false, isSearchError = true)
                 }
                 success { result ->
 
                     val mediaResultCountList = mutableListOf<MediaResultCount>()
 
                     MediaResultCount(
-                        com.buntupana.tmdb.core.R.string.text_movies,
+                        SearchType.MOVIE,
                         result.moviesCount
                     ).let {
                         mediaResultCountList.add(it)
                     }
 
                     MediaResultCount(
-                        com.buntupana.tmdb.core.R.string.text_tv_shows,
+                        SearchType.TV_SHOW,
                         result.tvShowsCount
                     ).let {
                         mediaResultCountList.add(it)
                     }
 
                     MediaResultCount(
-                        com.buntupana.tmdb.core.R.string.text_people,
+                        SearchType.PERSON,
                         result.personsCount
                     ).let {
                         mediaResultCountList.add(it)
                     }
-                    state =
-                        state.copy(resultCountList = mediaResultCountList, isSearchLoading = false)
+                    state = state.copy(
+                        resultCountList = mediaResultCountList,
+                        isSearchLoading = false,
+                        isSearchError = false
+                    )
                 }
             }
         }

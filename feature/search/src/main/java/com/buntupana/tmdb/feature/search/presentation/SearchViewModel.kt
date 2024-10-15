@@ -58,7 +58,7 @@ class SearchViewModel @Inject constructor(
                     isSearchSuggestionsLoading = false,
                     searchSuggestionList = null,
                     isSearchSuggestionsError = false,
-                    defaultSearchType = event.searchType
+                    defaultSearchType = event.searchType ?: SearchType.MOVIE
                 )
                 searchMovies(event.searchKey)
                 searchTvShows(event.searchKey)

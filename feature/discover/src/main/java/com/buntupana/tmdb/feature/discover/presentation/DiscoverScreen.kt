@@ -1,16 +1,13 @@
 package com.buntupana.tmdb.feature.discover.presentation
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
+import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.discover.R
 import com.buntupana.tmdb.feature.discover.presentation.comp.CarouselMediaItem
 import com.buntupana.tmdb.feature.discover.presentation.comp.TitleAndFilter
@@ -29,7 +26,6 @@ import com.buntupana.tmdb.feature.discover.presentation.comp.TopBar
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.FreeToWatchFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun DiscoverScreen(
@@ -81,21 +77,13 @@ fun DiscoverContent(
     changeFreeToWatchType: (freeToWatchFilter: FreeToWatchFilter) -> Unit,
     navigateToDetail: (mediaItem: MediaItem, posterDominantColor: Color) -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-
-    SideEffect {
-        systemUiController.setSystemBarsColor(color = PrimaryColor)
-    }
-
     val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
-            .background(PrimaryColor)
             .fillMaxSize()
-            .verticalScroll(
-                state = scrollState
-            )
+            .setStatusNavigationBarColor()
+            .verticalScroll(state = scrollState)
     ) {
 
         TopBar(
@@ -104,9 +92,7 @@ fun DiscoverContent(
             }
         )
 
-        Column(
-            modifier = Modifier.background(MaterialTheme.colorScheme.background)
-        ) {
+        Column {
 
             TitleAndFilter(
                 title = stringResource(id = R.string.text_trending),

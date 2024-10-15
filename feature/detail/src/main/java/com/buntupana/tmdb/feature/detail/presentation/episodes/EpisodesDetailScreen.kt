@@ -1,7 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.episodes
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,13 +21,13 @@ import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.isNotNullOrEmpty
+import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
 import com.buntupana.tmdb.feature.detail.presentation.episodes.comp.EpisodeHorizontal
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun EpisodesDetailScreen(
@@ -53,20 +52,11 @@ private fun EpisodesDetailContent(
     onLogoClick: () -> Unit
 ) {
 
-    val systemUiController = rememberSystemUiController()
-
-    systemUiController.setSystemBarsColor(state.backgroundColor)
-
     val systemBackground = MaterialTheme.colorScheme.background
-
-    // Added to avoid showing background in top when scrolling effect
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    )
 
     LazyColumn(
         modifier = Modifier
+            .setStatusNavigationBarColor(state.backgroundColor)
             .fillMaxWidth()
     ) {
 

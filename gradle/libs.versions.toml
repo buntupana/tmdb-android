@@ -5,8 +5,8 @@
 #build_tools = '30.0.3'
 
 #Sdk and tools
-compile_sdk = "34"
-target_sdk = "34"
+compile_sdk = "35"
+target_sdk = "35"
 min_sdk = "21"
 
 #Kotlin
@@ -62,7 +62,7 @@ test_runner = '1.4.0'
 mockito = '4.5.0'
 
 # Plugins
-agp = "8.7.0"
+agp = "8.7.1"
 uiToolingPreviewAndroid = "1.6.7"
 uiTooling = "1.7.3"
 

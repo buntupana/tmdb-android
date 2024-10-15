@@ -26,6 +26,7 @@ import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
@@ -37,7 +38,6 @@ import com.buntupana.tmdb.feature.detail.presentation.media.comp.MainInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.RecommendationsHorizontal
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.SeasonsSection
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun MediaDetailScreen(
@@ -117,13 +117,9 @@ fun MediaDetailContent(
         mutableStateOf(state.backgroundColor)
     }
 
-    val systemUiController = rememberSystemUiController()
-
-    systemUiController.setSystemBarsColor(backgroundColor)
-
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .setStatusNavigationBarColor(backgroundColor)
             .verticalScroll(scrollState)
     ) {
 

@@ -22,13 +22,13 @@ import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.cast.comp.castList
 import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun CastDetailScreen(
@@ -59,15 +59,11 @@ fun CastDetailContent(
         mutableStateOf(state.backgroundColor)
     }
 
-    val systemUiController = rememberSystemUiController()
-
-    systemUiController.setSystemBarsColor(backgroundColor)
-
     val systemBackground = MaterialTheme.colorScheme.background
 
     LazyColumn(
         modifier = Modifier
-            .fillMaxWidth()
+            .setStatusNavigationBarColor(backgroundColor)
     ) {
 
         item {

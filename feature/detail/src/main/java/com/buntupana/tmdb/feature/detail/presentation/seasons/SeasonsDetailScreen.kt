@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +22,7 @@ import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
@@ -30,7 +30,6 @@ import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.seasonSample
 import com.buntupana.tmdb.feature.detail.presentation.seasons.comp.SeasonItem
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun SeasonsDetailScreen(
@@ -75,15 +74,8 @@ private fun SeasonsContent(
         mutableStateOf(state.backgroundColor)
     }
 
-    val systemUiController = rememberSystemUiController()
-
-    systemUiController.setSystemBarsColor(backgroundColor)
-
-    val systemBackground = MaterialTheme.colorScheme.background
-
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.setStatusNavigationBarColor(state.backgroundColor)
     ) {
 
         item {

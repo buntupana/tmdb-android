@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,10 +19,10 @@ import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
+import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchBar
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchResults
 import com.buntupana.tmdb.feature.search.presentation.comp.TrendingList
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun SearchScreen(
@@ -31,13 +30,7 @@ fun SearchScreen(
     searchNavigator: SearchNavigator
 ) {
 
-    val systemUiController = rememberSystemUiController()
-
     val focusManager = LocalFocusManager.current
-
-    SideEffect {
-        systemUiController.setSystemBarsColor(color = PrimaryColor)
-    }
 
     SearchScreenContent(
         state = viewModel.state,
@@ -85,7 +78,7 @@ fun SearchScreenContent(
 ) {
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.setStatusNavigationBarColor()
     ) {
         Box(
             modifier = Modifier

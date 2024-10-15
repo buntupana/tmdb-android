@@ -20,6 +20,7 @@ import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.PersonBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
@@ -29,7 +30,6 @@ import com.buntupana.tmdb.feature.detail.presentation.person.comp.KnownFor
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.PersonalInfo
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.credits
 import com.buntupana.tmdb.feature.detail.presentation.personDetailsSample
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun PersonDetailScreen(
@@ -63,10 +63,6 @@ fun PersonDetailContent(
     onLogoClick: () -> Unit
 ) {
 
-    val systemUiController = rememberSystemUiController()
-
-    systemUiController.setSystemBarsColor(MaterialTheme.colorScheme.background)
-
     var mediaTypeSelected by remember {
         mutableStateOf<Int?>(null)
     }
@@ -80,9 +76,9 @@ fun PersonDetailContent(
         R.string.text_tv_shows to stringResource(id = R.string.text_tv_shows)
     )
 
-
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .setStatusNavigationBarColor(MaterialTheme.colorScheme.background)
     ) {
         item {
             TopBar(

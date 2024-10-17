@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.person
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -76,78 +77,84 @@ fun PersonDetailContent(
         R.string.text_tv_shows to stringResource(id = R.string.text_tv_shows)
     )
 
-    LazyColumn(
+    Column(
         modifier = Modifier
+            .fillMaxSize()
             .setStatusNavigationBarColor(MaterialTheme.colorScheme.background)
     ) {
-        item {
-            TopBar(
-                textColor = PersonBackgroundColor.getOnBackgroundColor(),
-                onBackClick = { onBackClick() },
-                onSearchClick = { onSearchClick() },
-                onLogoClick = { onLogoClick() }
-            )
-        }
 
-        when {
-            state.isLoading -> {
-                item {
-                    MediaDetailsLoading(backgroundColor = MaterialTheme.colorScheme.background)
-                }
-            }
+        TopBar(
+            textColor = PersonBackgroundColor.getOnBackgroundColor(),
+            onBackClick = { onBackClick() },
+            onSearchClick = { onSearchClick() },
+            onLogoClick = { onLogoClick() }
+        )
 
-            state.isGetPersonError -> {
-                item {
-                    ErrorAndRetry(
-                        modifier = Modifier
-                            .padding(vertical = 200.dp)
-                            .fillMaxSize(),
-                        errorMessage = stringResource(id = R.string.message_loading_content_error),
-                        onRetryClick = onRetryClick
-                    )
-                }
-            }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
 
-            state.personDetails != null -> {
-
-                val departmentMap = state.personDetails.creditMap.keys.associateWith { it }
-
-                item {
-                    HeaderContent(personDetails = state.personDetails)
-                }
-
-                item {
-                    PersonalInfo(personDetails = state.personDetails)
-                }
-
-                item {
-                    KnownFor(
-                        itemList = state.personDetails.knownFor,
-                        onItemClick = onMediaClick
-                    )
-                }
-
-                item {
-                    CreditsFilter(
-                        mainDepartment = state.personDetails.knownForDepartment,
-                        mediaTypeMap = mediaTypeMap,
-                        departmentMap = departmentMap,
-                        mediaTypeSelected = mediaTypeSelected,
-                        departmentSelected = departmentSelected
-                    ) { mediaType, department ->
-                        mediaTypeSelected = mediaType
-                        departmentSelected = department
+            when {
+                state.isLoading -> {
+                    item {
+                        MediaDetailsLoading(backgroundColor = MaterialTheme.colorScheme.background)
                     }
                 }
 
-                credits(
-                    personName = state.personDetails.name,
-                    creditMap = state.personDetails.creditMap,
-                    mainDepartment = state.personDetails.knownForDepartment,
-                    mediaTypeSelected = mediaTypeSelected,
-                    departmentSelected = departmentSelected,
-                    onItemClick = onMediaClick
-                )
+                state.isGetPersonError -> {
+                    item {
+                        ErrorAndRetry(
+                            modifier = Modifier
+                                .padding(vertical = 200.dp)
+                                .fillMaxSize(),
+                            errorMessage = stringResource(id = R.string.message_loading_content_error),
+                            onRetryClick = onRetryClick
+                        )
+                    }
+                }
+
+                state.personDetails != null -> {
+
+                    val departmentMap = state.personDetails.creditMap.keys.associateWith { it }
+
+                    item {
+                        HeaderContent(personDetails = state.personDetails)
+                    }
+
+                    item {
+                        PersonalInfo(personDetails = state.personDetails)
+                    }
+
+                    item {
+                        KnownFor(
+                            itemList = state.personDetails.knownFor,
+                            onItemClick = onMediaClick
+                        )
+                    }
+
+                    item {
+                        CreditsFilter(
+                            mainDepartment = state.personDetails.knownForDepartment,
+                            mediaTypeMap = mediaTypeMap,
+                            departmentMap = departmentMap,
+                            mediaTypeSelected = mediaTypeSelected,
+                            departmentSelected = departmentSelected
+                        ) { mediaType, department ->
+                            mediaTypeSelected = mediaType
+                            departmentSelected = department
+                        }
+                    }
+
+                    credits(
+                        personName = state.personDetails.name,
+                        creditMap = state.personDetails.creditMap,
+                        mainDepartment = state.personDetails.knownForDepartment,
+                        mediaTypeSelected = mediaTypeSelected,
+                        departmentSelected = departmentSelected,
+                        onItemClick = onMediaClick
+                    )
+                }
             }
         }
     }

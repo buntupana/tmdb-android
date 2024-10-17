@@ -3,7 +3,6 @@ package com.buntupana.tmdb.feature.detail.presentation.seasons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
@@ -74,24 +73,23 @@ private fun SeasonsContent(
         mutableStateOf(state.backgroundColor)
     }
 
-    LazyColumn(
-        modifier = Modifier.setStatusNavigationBarColor(state.backgroundColor)
+    Column(
+        modifier = Modifier
+            .setStatusNavigationBarColor(backgroundColor)
     ) {
 
-        item {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(backgroundColor)
-            ) {
+        TopBar(
+            modifier = Modifier.background(backgroundColor),
+            textColor = backgroundColor.getOnBackgroundColor(),
+            onSearchClick = { onSearchClick() },
+            onBackClick = { onBackClick() },
+            onLogoClick = { onLogoClick() }
+        )
 
-                TopBar(
-                    textColor = backgroundColor.getOnBackgroundColor(),
-                    onSearchClick = { onSearchClick() },
-                    onBackClick = { onBackClick() },
-                    onLogoClick = { onLogoClick() }
-                )
-
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            item {
                 HeaderSimple(
                     backgroundColor = backgroundColor,
                     posterUrl = state.posterUrl,
@@ -100,42 +98,42 @@ private fun SeasonsContent(
                     setDominantColor = { backgroundColor = it }
                 )
             }
-        }
 
-        item {
-            when {
-                state.isLoading -> {
-                    MediaDetailsLoading()
-                }
+            item {
+                when {
+                    state.isLoading -> {
+                        MediaDetailsLoading()
+                    }
 
-                state.isGetSeasonsError -> {
-                    ErrorAndRetry(
-                        modifier = Modifier
-                            .padding(vertical = 200.dp)
-                            .fillMaxSize(),
-                        errorMessage = stringResource(id = R.string.message_loading_content_error),
-                        onRetryClick = onRetryClick
-                    )
+                    state.isGetSeasonsError -> {
+                        ErrorAndRetry(
+                            modifier = Modifier
+                                .padding(vertical = 200.dp)
+                                .fillMaxSize(),
+                            errorMessage = stringResource(id = R.string.message_loading_content_error),
+                            onRetryClick = onRetryClick
+                        )
+                    }
                 }
             }
-        }
 
-        if (state.seasonList.isNullOrEmpty()) return@LazyColumn
+            if (state.seasonList.isNullOrEmpty()) return@LazyColumn
 
-        items(state.seasonList.size) { index ->
-            val season = state.seasonList[index]
+            items(state.seasonList.size) { index ->
+                val season = state.seasonList[index]
 
-            if (index != 0) {
-                HorizontalDivider()
-            }
-
-            SeasonItem(
-                tvShowName = state.tvShowName,
-                season = season,
-                onSeasonClick = {
-                    onSeasonClick(state.tvShowId, season, backgroundColor)
+                if (index != 0) {
+                    HorizontalDivider()
                 }
-            )
+
+                SeasonItem(
+                    tvShowName = state.tvShowName,
+                    season = season,
+                    onSeasonClick = {
+                        onSeasonClick(state.tvShowId, season, backgroundColor)
+                    }
+                )
+            }
         }
     }
 }

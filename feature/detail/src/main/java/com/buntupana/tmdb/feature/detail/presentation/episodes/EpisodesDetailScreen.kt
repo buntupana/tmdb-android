@@ -54,25 +54,26 @@ private fun EpisodesDetailContent(
 
     val systemBackground = MaterialTheme.colorScheme.background
 
-    LazyColumn(
+    Column(
         modifier = Modifier
+            .fillMaxSize()
             .setStatusNavigationBarColor(state.backgroundColor)
-            .fillMaxWidth()
     ) {
 
-        item {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(state.backgroundColor)
-            ) {
-                TopBar(
-                    textColor = state.backgroundColor.getOnBackgroundColor(),
-                    onSearchClick = { onSearchClick() },
-                    onBackClick = { onBackClick() },
-                    onLogoClick = { onLogoClick() }
-                )
+        TopBar(
+            modifier = Modifier.background(state.backgroundColor),
+            textColor = state.backgroundColor.getOnBackgroundColor(),
+            onSearchClick = { onSearchClick() },
+            onBackClick = { onBackClick() },
+            onLogoClick = { onLogoClick() }
+        )
 
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+
+            item {
                 val subtitle = if (state.episodeList.isNotNullOrEmpty()) {
                     pluralStringResource(
                         id = com.buntupana.tmdb.feature.detail.R.plurals.text_episodes_count,
@@ -91,49 +92,49 @@ private fun EpisodesDetailContent(
                     releaseYear = state.releaseYear,
                 )
             }
-        }
 
-        item {
-            when {
-                state.isLoading -> {
-                    MediaDetailsLoading(
-                        backgroundColor = systemBackground
-                    )
-                }
+            item {
+                when {
+                    state.isLoading -> {
+                        MediaDetailsLoading(
+                            backgroundColor = systemBackground
+                        )
+                    }
 
-                state.isGetEpisodesError -> {
-                    ErrorAndRetry(
-                        modifier = Modifier
-                            .padding(vertical = 200.dp)
-                            .fillMaxSize(),
-                        errorMessage = stringResource(id = R.string.message_loading_content_error),
-                        onRetryClick = onRetryClick
-                    )
+                    state.isGetEpisodesError -> {
+                        ErrorAndRetry(
+                            modifier = Modifier
+                                .padding(vertical = 200.dp)
+                                .fillMaxSize(),
+                            errorMessage = stringResource(id = R.string.message_loading_content_error),
+                            onRetryClick = onRetryClick
+                        )
+                    }
                 }
             }
-        }
 
-        if (state.episodeList.isNullOrEmpty()) return@LazyColumn
+            if (state.episodeList.isNullOrEmpty()) return@LazyColumn
 
-        items(state.episodeList.size) { index ->
-            EpisodeHorizontal(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = Dimens.padding.horizontal,
-                        vertical = Dimens.padding.vertical
-                    ),
-                episode = state.episodeList[index],
-                onItemClick = {}
-            )
-        }
+            items(state.episodeList.size) { index ->
+                EpisodeHorizontal(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = Dimens.padding.horizontal,
+                            vertical = Dimens.padding.vertical
+                        ),
+                    episode = state.episodeList[index],
+                    onItemClick = {}
+                )
+            }
 
-        item {
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Dimens.padding.small)
-            )
+            item {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Dimens.padding.small)
+                )
+            }
         }
     }
 }

@@ -38,7 +38,7 @@ fun CastDetailScreen(
     CastDetailContent(
         state = viewModel.state,
         onBackClick = { detailNavigator.navigateBack() },
-        onRetryClick = { viewModel.onEvent(CastDetailEvent.GetCredits)},
+        onRetryClick = { viewModel.onEvent(CastDetailEvent.GetCredits) },
         onSearchClick = { detailNavigator.navigateToSearch() },
         onPersonClick = { personId -> detailNavigator.navigateToPerson(personId) },
         onLogoClick = { detailNavigator.navigateToMainScreen() }
@@ -61,25 +61,24 @@ fun CastDetailContent(
 
     val systemBackground = MaterialTheme.colorScheme.background
 
-    LazyColumn(
+    Column(
         modifier = Modifier
+            .fillMaxSize()
             .setStatusNavigationBarColor(backgroundColor)
     ) {
+        TopBar(
+            modifier = Modifier.background(backgroundColor),
+            textColor = backgroundColor.getOnBackgroundColor(),
+            onSearchClick = { onSearchClick() },
+            onBackClick = { onBackClick() },
+            onLogoClick = { onLogoClick() }
+        )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
 
-        item {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(backgroundColor)
-            ) {
-
-                TopBar(
-                    textColor = backgroundColor.getOnBackgroundColor(),
-                    onSearchClick = { onSearchClick() },
-                    onBackClick = { onBackClick() },
-                    onLogoClick = { onLogoClick() }
-                )
-
+            item {
                 HeaderSimple(
                     backgroundColor = backgroundColor,
                     posterUrl = state.posterUrl,
@@ -88,34 +87,34 @@ fun CastDetailContent(
                     setDominantColor = { backgroundColor = it }
                 )
             }
-        }
 
-        item {
-            when {
-                state.isLoading -> {
-                    MediaDetailsLoading()
-                }
+            item {
+                when {
+                    state.isLoading -> {
+                        MediaDetailsLoading()
+                    }
 
-                state.isGetContentError -> {
-                    ErrorAndRetry(
-                        modifier = Modifier
-                            .padding(vertical = 200.dp)
-                            .fillMaxSize(),
-                        errorMessage = stringResource(id = R.string.message_loading_content_error),
-                        onRetryClick = onRetryClick
-                    )
+                    state.isGetContentError -> {
+                        ErrorAndRetry(
+                            modifier = Modifier
+                                .padding(vertical = 200.dp)
+                                .fillMaxSize(),
+                            errorMessage = stringResource(id = R.string.message_loading_content_error),
+                            onRetryClick = onRetryClick
+                        )
+                    }
                 }
             }
-        }
 
-        castList(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(systemBackground),
-            personCastList = state.personCastList,
-            personCrewMap = state.personCrewMap,
-            onPersonClick = { onPersonClick(it) }
-        )
+            castList(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(systemBackground),
+                personCastList = state.personCastList,
+                personCrewMap = state.personCrewMap,
+                onPersonClick = { onPersonClick(it) }
+            )
+        }
     }
 }
 

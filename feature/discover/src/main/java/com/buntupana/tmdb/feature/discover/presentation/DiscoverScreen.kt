@@ -79,83 +79,86 @@ fun DiscoverContent(
     changeFreeToWatchType: (freeToWatchFilter: FreeToWatchFilter) -> Unit,
     navigateToDetail: (mediaItem: MediaItem, posterDominantColor: Color) -> Unit
 ) {
-    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .setStatusNavigationBarColor()
-            .verticalScroll(state = scrollState)
     ) {
-
         TopBar(
             clickOnSearch = {
                 navigateToSearch()
             }
         )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(state = rememberScrollState())
+        ) {
 
-        Column {
+            Column {
 
-            TitleAndFilter(
-                modifier = Modifier.padding(vertical = Dimens.padding.medium),
-                title = stringResource(id = R.string.text_trending),
-                filterSet = state.trendingFilterSet,
-                indexSelected = state.trendingFilterSet.indexOf(state.trendingFilterSelected),
-                filterClicked = { item, index ->
-                    changeTrendingType(item)
-                }
-            )
-            Box(modifier = Modifier.fillMaxWidth()) {
-
-                Image(
-                    painter = painterResource(id = R.drawable.img_trending),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.Center)
+                TitleAndFilter(
+                    modifier = Modifier.padding(vertical = Dimens.padding.medium),
+                    title = stringResource(id = R.string.text_trending),
+                    filterSet = state.trendingFilterSet,
+                    indexSelected = state.trendingFilterSet.indexOf(state.trendingFilterSelected),
+                    filterClicked = { item, index ->
+                        changeTrendingType(item)
+                    }
                 )
+                Box(modifier = Modifier.fillMaxWidth()) {
 
+                    Image(
+                        painter = painterResource(id = R.drawable.img_trending),
+                        contentDescription = null,
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.Center)
+                    )
+
+                    CarouselMediaItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        state.trendingMediaItemList,
+                        onItemClicked = { mediaItem, mainPosterColor ->
+                            navigateToDetail(mediaItem, mainPosterColor)
+                        }
+                    )
+                }
+                TitleAndFilter(
+                    modifier = Modifier.padding(vertical = Dimens.padding.medium),
+                    title = stringResource(id = R.string.text_whats_popular),
+                    filterSet = state.popularFilterSet,
+                    indexSelected = state.popularFilterSet.indexOf(state.popularFilterSelected),
+                    filterClicked = { item, index ->
+                        changePopularType(item)
+                    }
+                )
                 CarouselMediaItem(
                     modifier = Modifier.fillMaxWidth(),
-                    state.trendingMediaItemList,
+                    state.popularMediaItemList,
+                    onItemClicked = { mediaItem, mainPosterColor ->
+                        navigateToDetail(mediaItem, mainPosterColor)
+                    }
+                )
+                TitleAndFilter(
+                    modifier = Modifier.padding(vertical = Dimens.padding.medium),
+                    title = stringResource(id = R.string.text_free_to_watch),
+                    filterSet = state.freeToWatchFilterSet,
+                    indexSelected = state.freeToWatchFilterSet.indexOf(state.freeToWatchFilterSelected),
+                    filterClicked = { item, index ->
+                        changeFreeToWatchType(item)
+                    }
+                )
+                CarouselMediaItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    state.freeToWatchMediaItemList,
                     onItemClicked = { mediaItem, mainPosterColor ->
                         navigateToDetail(mediaItem, mainPosterColor)
                     }
                 )
             }
-            TitleAndFilter(
-                modifier = Modifier.padding(vertical = Dimens.padding.medium),
-                title = stringResource(id = R.string.text_whats_popular),
-                filterSet = state.popularFilterSet,
-                indexSelected = state.popularFilterSet.indexOf(state.popularFilterSelected),
-                filterClicked = { item, index ->
-                    changePopularType(item)
-                }
-            )
-            CarouselMediaItem(
-                modifier = Modifier.fillMaxWidth(),
-                state.popularMediaItemList,
-                onItemClicked = { mediaItem, mainPosterColor ->
-                    navigateToDetail(mediaItem, mainPosterColor)
-                }
-            )
-            TitleAndFilter(
-                modifier = Modifier.padding(vertical = Dimens.padding.medium),
-                title = stringResource(id = R.string.text_free_to_watch),
-                filterSet = state.freeToWatchFilterSet,
-                indexSelected = state.freeToWatchFilterSet.indexOf(state.freeToWatchFilterSelected),
-                filterClicked = { item, index ->
-                    changeFreeToWatchType(item)
-                }
-            )
-            CarouselMediaItem(
-                modifier = Modifier.fillMaxWidth(),
-                state.freeToWatchMediaItemList,
-                onItemClicked = { mediaItem, mainPosterColor ->
-                    navigateToDetail(mediaItem, mainPosterColor)
-                }
-            )
         }
     }
 }

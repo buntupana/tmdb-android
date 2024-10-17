@@ -120,7 +120,6 @@ fun MediaDetailContent(
     Column(
         modifier = Modifier
             .setStatusNavigationBarColor(backgroundColor)
-            .verticalScroll(scrollState)
     ) {
 
         TopBar(
@@ -131,41 +130,46 @@ fun MediaDetailContent(
             onLogoClick = { onLogoClick() }
         )
 
-        when {
-            state.isLoading -> {
-                MediaDetailsLoading()
-            }
+        Column(
+            modifier = Modifier
+                .verticalScroll(scrollState)
+        ) {
 
-            state.isGetContentError -> {
-                ErrorAndRetry(
-                    modifier = Modifier
-                        .padding(vertical = 200.dp)
-                        .fillMaxSize(),
-                    errorMessage = stringResource(id = R.string.message_loading_content_error),
-                    onRetryClick = onRetryClick
-                )
-            }
+            when {
+                state.isLoading -> {
+                    MediaDetailsLoading()
+                }
 
-            state.mediaDetails != null -> {
-                Column(
-                    Modifier.background(backgroundColor)
-                ) {
-
-                    Header(
-                        mediaDetails = state.mediaDetails,
-                        backgroundColor = backgroundColor
-                    ) { dominantColor ->
-                        if (dominantColor != backgroundColor) {
-                            backgroundColor = dominantColor
-                        }
-                    }
-
-                    MainInfo(
-                        mediaDetails = state.mediaDetails,
-                        textColor = backgroundColor.getOnBackgroundColor(),
-                        onItemClick = onPersonClick
+                state.isGetContentError -> {
+                    ErrorAndRetry(
+                        modifier = Modifier
+                            .padding(vertical = 200.dp)
+                            .fillMaxSize(),
+                        errorMessage = stringResource(id = R.string.message_loading_content_error),
+                        onRetryClick = onRetryClick
                     )
                 }
+
+                state.mediaDetails != null -> {
+                    Column(
+                        Modifier.background(backgroundColor)
+                    ) {
+
+                        Header(
+                            mediaDetails = state.mediaDetails,
+                            backgroundColor = backgroundColor
+                        ) { dominantColor ->
+                            if (dominantColor != backgroundColor) {
+                                backgroundColor = dominantColor
+                            }
+                        }
+
+                        MainInfo(
+                            mediaDetails = state.mediaDetails,
+                            textColor = backgroundColor.getOnBackgroundColor(),
+                            onItemClick = onPersonClick
+                        )
+                    }
 
                     CastHorizontalList(
                         modifier = Modifier.background(MaterialTheme.colorScheme.background),
@@ -206,6 +210,7 @@ fun MediaDetailContent(
 
                     Spacer(modifier = Modifier.padding(Dimens.padding.vertical))
                 }
+            }
         }
     }
 }

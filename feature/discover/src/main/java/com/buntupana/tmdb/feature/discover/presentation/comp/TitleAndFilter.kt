@@ -8,33 +8,39 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.buntupana.tmdb.core.presentation.composables.widget.menu_selector.MenuSelector
-import com.buntupana.tmdb.core.presentation.composables.widget.menu_selector.MenuSelectorItem
+import com.buntupana.tmdb.core.presentation.composables.widget.menu_selector.ExpandableMenuSelector
+import com.buntupana.tmdb.core.presentation.composables.widget.menu_selector.ExpandableMenuSelectorAlign
+import com.buntupana.tmdb.core.presentation.composables.widget.menu_selector.ExpandableMenuSelectorItem
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 
 @Composable
-fun <T : MenuSelectorItem> TitleAndFilter(
+fun <T : ExpandableMenuSelectorItem> TitleAndFilter(
+    modifier: Modifier = Modifier,
     title: String = "",
     filterSet: Set<T> = emptySet(),
     indexSelected: Int = 0,
     filterClicked: ((item: T, index: Int) -> Unit)? = null
 ) {
     Box(
-        modifier = Modifier.padding(Dimens.padding.medium),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         Text(
+            modifier = Modifier
+                .padding(start = Dimens.padding.medium)
+                .align(Alignment.CenterStart),
             text = title,
             fontWeight = FontWeight.SemiBold,
             fontSize = 22.sp,
-            modifier = Modifier.align(Alignment.CenterStart)
         )
-        MenuSelector(
+        ExpandableMenuSelector(
             menuItemSet = filterSet,
-            indexSelected = indexSelected,
+            defaultIndexSelected = indexSelected,
             onItemClick = { item, index ->
                 filterClicked?.invoke(item, index)
-            }
+            },
+            menuAlign = ExpandableMenuSelectorAlign.END,
+            horizontalPadding = Dimens.padding.medium
         )
     }
 }

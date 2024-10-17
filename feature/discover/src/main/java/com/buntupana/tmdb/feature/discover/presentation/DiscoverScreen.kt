@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.domain.model.MediaItem
+import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.discover.R
 import com.buntupana.tmdb.feature.discover.presentation.comp.CarouselMediaItem
@@ -95,6 +97,7 @@ fun DiscoverContent(
         Column {
 
             TitleAndFilter(
+                modifier = Modifier.padding(vertical = Dimens.padding.medium),
                 title = stringResource(id = R.string.text_trending),
                 filterSet = state.trendingFilterSet,
                 indexSelected = state.trendingFilterSet.indexOf(state.trendingFilterSelected),
@@ -122,6 +125,7 @@ fun DiscoverContent(
                 )
             }
             TitleAndFilter(
+                modifier = Modifier.padding(vertical = Dimens.padding.medium),
                 title = stringResource(id = R.string.text_whats_popular),
                 filterSet = state.popularFilterSet,
                 indexSelected = state.popularFilterSet.indexOf(state.popularFilterSelected),
@@ -137,6 +141,7 @@ fun DiscoverContent(
                 }
             )
             TitleAndFilter(
+                modifier = Modifier.padding(vertical = Dimens.padding.medium),
                 title = stringResource(id = R.string.text_free_to_watch),
                 filterSet = state.freeToWatchFilterSet,
                 indexSelected = state.freeToWatchFilterSet.indexOf(state.freeToWatchFilterSelected),

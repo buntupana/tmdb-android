@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.core.presentation.composables
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,7 +9,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -26,7 +26,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,120 +46,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.Paragraph
-import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.isSpecified
-import androidx.compose.ui.unit.isUnspecified
-import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
 import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
-import kotlin.math.absoluteValue
-import kotlin.math.ceil
-
-@Composable
-fun AutoSizeText(
-    text: String,
-    modifier: Modifier = Modifier,
-    acceptableError: Dp = 5.dp,
-    maxFontSize: TextUnit = TextUnit.Unspecified,
-    color: Color = Color.Unspecified,
-    fontStyle: FontStyle? = null,
-    fontWeight: FontWeight? = null,
-    fontFamily: FontFamily? = null,
-    letterSpacing: TextUnit = TextUnit.Unspecified,
-    textDecoration: TextDecoration? = null,
-    textAlign: TextAlign = TextAlign.Unspecified,
-    lineHeight: TextUnit = TextUnit.Unspecified,
-    maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {},
-    style: TextStyle = LocalTextStyle.current
-) {
-    BoxWithConstraints(modifier = modifier) {
-        var shrunkFontSize = if (maxFontSize.isSpecified) maxFontSize else 100.sp
-
-        val calculateIntrinsics = @Composable {
-            val mergedStyle = style.merge(
-                TextStyle(
-                    color = color,
-                    fontSize = shrunkFontSize,
-                    fontWeight = fontWeight,
-                    textAlign = textAlign,
-                    lineHeight = lineHeight,
-                    fontFamily = fontFamily,
-                    textDecoration = textDecoration,
-                    fontStyle = fontStyle,
-                    letterSpacing = letterSpacing
-                )
-            )
-            Paragraph(
-                text = text,
-                style = mergedStyle,
-                spanStyles = listOf(),
-                placeholders = listOf(),
-                maxLines = maxLines,
-                ellipsis = false,
-                constraints = Constraints(maxWidth = ceil(LocalDensity.current.run { maxWidth.toPx() }).toInt()),
-                density = LocalDensity.current,
-                fontFamilyResolver = LocalFontFamilyResolver.current
-            )
-        }
-
-        var intrinsics = calculateIntrinsics()
-
-        val targetWidth = maxWidth - acceptableError / 2f
-
-        with(LocalDensity.current) {
-            if (maxFontSize.isUnspecified || targetWidth < intrinsics.minIntrinsicWidth.toDp() || intrinsics.didExceedMaxLines) {
-                while ((targetWidth - intrinsics.minIntrinsicWidth.toDp()).toPx().absoluteValue.toDp() > acceptableError / 2f) {
-                    shrunkFontSize *= targetWidth.toPx() / intrinsics.minIntrinsicWidth
-                    intrinsics = calculateIntrinsics()
-                }
-                while (intrinsics.didExceedMaxLines || maxHeight < intrinsics.height.toDp()) {
-                    shrunkFontSize *= 0.9f
-                    intrinsics = calculateIntrinsics()
-                }
-            }
-        }
-
-        if (maxFontSize.isSpecified && shrunkFontSize > maxFontSize)
-            shrunkFontSize = maxFontSize
-
-        Text(
-            text = text,
-            color = color,
-            fontSize = shrunkFontSize,
-            fontStyle = fontStyle,
-            fontWeight = fontWeight,
-            fontFamily = fontFamily,
-            letterSpacing = letterSpacing,
-            textDecoration = textDecoration,
-            textAlign = textAlign,
-            lineHeight = lineHeight,
-            onTextLayout = onTextLayout,
-            maxLines = maxLines,
-            style = style
-        )
-    }
-}
 
 @Composable
 fun OutlinedText(
@@ -320,10 +219,12 @@ fun ExpandableText(
         mutableStateOf(false)
     }
 
-    Box {
+    Box(modifier = modifier) {
 
         Text(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .animateContentSize(),
             text = text,
             fontSize = fontSize,
             fontWeight = fontWeight,

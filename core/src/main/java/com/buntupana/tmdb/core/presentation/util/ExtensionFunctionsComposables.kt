@@ -10,8 +10,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.core.view.WindowCompat
 import com.buntupana.tmdb.core.R
 import com.buntupana.tmdb.core.domain.model.Gender
@@ -57,3 +59,9 @@ fun Modifier.setStatusNavigationBarColor(backgroundColor: Color = PrimaryColor):
         .safeDrawingPadding()
         .background(MaterialTheme.colorScheme.background)
 }
+
+@Composable
+fun Int.pxToDp() = with(LocalDensity.current) { this@pxToDp.toDp() }
+
+@Composable
+fun Dp.dpToPx() = with(LocalDensity.current) { this@dpToPx.toPx() }

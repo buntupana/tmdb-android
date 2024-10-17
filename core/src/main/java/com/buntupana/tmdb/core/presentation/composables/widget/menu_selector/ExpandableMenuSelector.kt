@@ -157,8 +157,10 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
                 isCollapsed = isCollapsed,
                 onClick = {
                     selectedIndex = index
+                    if (isCollapsed.not() && isSelected.not()) {
+                        onItemClick(item, index)
+                    }
                     isCollapsed = isCollapsed.not()
-                    onItemClick(item, index)
                 }
             )
         }

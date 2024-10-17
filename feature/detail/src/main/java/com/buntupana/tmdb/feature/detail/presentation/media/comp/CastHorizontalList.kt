@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -35,7 +36,7 @@ fun CastHorizontalList(
 
     if (mediaDetails.castList.isNotEmpty()) {
 
-        Column(modifier = modifier) {
+        Column(modifier = modifier.animateContentSize()) {
 
             Spacer(modifier = Modifier.height(16.dp))
 

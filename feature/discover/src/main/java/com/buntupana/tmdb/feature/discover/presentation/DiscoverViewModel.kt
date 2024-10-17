@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.buntupana.tmdb.core.presentation.util.LOADING_DELAY
 import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
 import com.buntupana.tmdb.feature.discover.domain.entity.PopularType
 import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
@@ -17,6 +18,7 @@ import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilte
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -61,6 +63,32 @@ class DiscoverViewModel @Inject constructor(
         }
     }
 
+    private fun getTrendingList(trendingFilter: TrendingFilter) {
+
+        val trendingType = when (trendingFilter) {
+            TrendingFilter.ThisWeek -> TrendingType.THIS_WEEK
+            TrendingFilter.Today -> TrendingType.TODAY
+        }
+
+        getTrendingJob?.cancel()
+        getTrendingJob = viewModelScope.launch {
+            getTrendingMediaListUseCase(trendingType) {
+                loading {
+                    state = state.copy(
+                        isLoading = true,
+                        trendingFilterSelected = trendingFilter,
+                        trendingMediaItemList = emptyList()
+                    )
+                }
+                success { data ->
+                    // Fake delay to show loading
+                    delay(LOADING_DELAY)
+                    state = state.copy(isLoading = false, trendingMediaItemList = data)
+                }
+            }
+        }
+    }
+
     private fun getPopularMovies(popularFilter: PopularFilter) {
 
         val popularType = when (popularFilter) {
@@ -74,12 +102,18 @@ class DiscoverViewModel @Inject constructor(
         getPopularMoviesJob = viewModelScope.launch {
             getPopularMoviesListUseCase(popularType) {
                 loading {
-                    state = state.copy(isLoading = true, popularFilterSelected = popularFilter)
+                    state = state.copy(
+                        isLoading = true,
+                        popularFilterSelected = popularFilter,
+                        popularMediaItemList = emptyList()
+                    )
                 }
                 error {
 
                 }
                 success { data ->
+                    // Fake delay to show loading
+                    delay(LOADING_DELAY)
                     state = state.copy(isLoading = false, popularMediaItemList = data)
                 }
             }
@@ -98,30 +132,15 @@ class DiscoverViewModel @Inject constructor(
             getFreeToWatchMediaListUseCase(freeToWatchType) {
                 loading {
                     state =
-                        state.copy(isLoading = true, freeToWatchFilterSelected = freeToWatchFilter)
+                        state.copy(
+                            isLoading = true,
+                            freeToWatchFilterSelected = freeToWatchFilter,
+                            freeToWatchMediaItemList = emptyList()
+                        )
                 }
-                success { data ->
+                success { data ->// Fake delay to show loading
+                    delay(LOADING_DELAY)
                     state = state.copy(isLoading = false, freeToWatchMediaItemList = data)
-                }
-            }
-        }
-    }
-
-    private fun getTrendingList(trendingFilter: TrendingFilter) {
-
-        val trendingType = when (trendingFilter) {
-            TrendingFilter.ThisWeek -> TrendingType.THIS_WEEK
-            TrendingFilter.Today -> TrendingType.TODAY
-        }
-
-        getTrendingJob?.cancel()
-        getTrendingJob = viewModelScope.launch {
-            getTrendingMediaListUseCase(trendingType) {
-                loading {
-                    state = state.copy(isLoading = true, trendingFilterSelected = trendingFilter)
-                }
-                success { data ->
-                    state = state.copy(isLoading = false, trendingMediaItemList = data)
                 }
             }
         }

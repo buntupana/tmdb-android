@@ -15,7 +15,7 @@ fun EpisodeRaw.toModel(): Episode {
         null
     }
 
-    val stillUrl = stillPath.ifNotNullOrBlank { CoreApi.BASE_URL_POSTER + stillPath.orEmpty() }
+    val stillUrl = stillPath.ifNotNullOrBlank { CoreApi.BASE_URL_BACKDROP + stillPath.orEmpty() }
 
     return Episode(
         id = id,

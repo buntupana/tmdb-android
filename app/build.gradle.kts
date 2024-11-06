@@ -65,6 +65,7 @@ dependencies {
     implementation(project(":feature:search"))
 
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlin.reflect)
 
     implementation(libs.androidx.activity.compose)
 

@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.presentation.util.decodeUrl
 import com.buntupana.tmdb.core.presentation.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieCreditsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowCreditsUseCase
@@ -34,7 +33,7 @@ class CastDetailViewModel @Inject constructor(
             mediaType = navArgs.mediaType,
             mediaName = navArgs.mediaTitle,
             releaseYear = navArgs.releaseYear,
-            posterUrl = navArgs.posterUrlEncoded?.decodeUrl(),
+            posterUrl = navArgs.posterUrl,
             backgroundColor = Color(navArgs.backgroundColor ?: DetailBackgroundColor.toArgb()),
         )
     )

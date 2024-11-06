@@ -9,7 +9,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.presentation.util.decodeUrl
 import com.buntupana.tmdb.core.presentation.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetSeasonDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetSeasonDetailsUseCaseParams
@@ -31,7 +30,7 @@ class EpisodesDetailViewModel @Inject constructor(
             tvShowId = navArgs.tvShowId,
             sessionName = navArgs.seasonName,
             seasonNumber = navArgs.seasonNumber,
-            posterUrl = navArgs.posterUrlEncoded?.decodeUrl(),
+            posterUrl = navArgs.posterUrl,
             releaseYear = navArgs.releaseYear,
             backgroundColor = Color(navArgs.backgroundColor ?: DetailBackgroundColor.toArgb())
         )

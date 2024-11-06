@@ -2,9 +2,7 @@ package com.buntupana.tmdb.app.presentation.navigation
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.navigation.NavHostController
 import com.buntupana.tmdb.core.domain.entity.MediaType
-import com.buntupana.tmdb.core.presentation.util.encodeUrl
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailNavArgs
@@ -12,22 +10,22 @@ import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNavArgs
 
 class CommonNavigation(
-    private val navHostController: NavHostController
+    private val navRoutesMain: NavRoutesMain
 ) : CommonNavigationBase {
 
     override fun navigateBack() {
-        navHostController.navigateUp()
+        navRoutesMain.popBackStack()
     }
 
     override fun navigateToMainScreen() {
-        navHostController.popBackStack(
-            route = Routes.Discover,
-            inclusive = false
+        navRoutesMain.popBackStack(
+            destination = Routes.Discover::class,
+            inclusive = true
         )
     }
 
     override fun navigateToSearch() {
-        navHostController.navigate(Routes.Search)
+        navRoutesMain.navigate(Routes.Search)
     }
 
     override fun navigateToMediaDetail(
@@ -35,7 +33,7 @@ class CommonNavigation(
         mediaType: MediaType,
         backgroundColor: Color?
     ) {
-        navHostController.navigate(
+        navRoutesMain.navigate(
             Routes.MediaDetail(
                 args = MediaDetailNavArgs(
                     mediaId = mediaId,
@@ -54,7 +52,7 @@ class CommonNavigation(
         mediaPosterUrl: String?,
         backgroundColor: Color?
     ) {
-        navHostController.navigate(
+        navRoutesMain.navigate(
             Routes.CastDetail(
                 args = CastDetailNavArgs(
                     mediaId = mediaId,
@@ -62,14 +60,14 @@ class CommonNavigation(
                     mediaTitle = mediaTitle,
                     backgroundColor = backgroundColor?.toArgb(),
                     releaseYear = mediaReleaseYear,
-                    posterUrlEncoded = mediaPosterUrl?.encodeUrl()
+                    posterUrl = mediaPosterUrl
                 )
             )
         )
     }
 
     override fun navigateToPerson(personId: Long) {
-        navHostController.navigate(
+        navRoutesMain.navigate(
             Routes.PersonDetail(
                 args = PersonDetailNavArgs(personId)
             )
@@ -83,12 +81,12 @@ class CommonNavigation(
         posterUrl: String?,
         backgroundColor: Color?
     ) {
-        navHostController.navigate(
+        navRoutesMain.navigate(
             Routes.SeasonDetail(
                 args = SeasonsDetailNavArgs(
                     tvShowId = tvShowId,
                     tvShowName = tvShowTitle,
-                    posterUrlEncoded = posterUrl?.encodeUrl(),
+                    posterUrl = posterUrl,
                     releaseYear = releaseYear,
                     backgroundColor = backgroundColor?.toArgb()
                 )
@@ -104,13 +102,13 @@ class CommonNavigation(
         backgroundColor: Color?,
         releaseYear: String?
     ) {
-        navHostController.navigate(
+        navRoutesMain.navigate(
             Routes.EpisodesDetail(
                 args = EpisodesDetailNavArgs(
                     tvShowId = tvShowId,
                     seasonNumber = seasonNumber,
                     seasonName = seasonName,
-                    posterUrlEncoded = posterUrl?.encodeUrl(),
+                    posterUrl = posterUrl,
                     releaseYear = releaseYear,
                     backgroundColor = backgroundColor?.toArgb()
                 )

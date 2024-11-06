@@ -14,9 +14,6 @@ import androidx.compose.ui.graphics.luminance
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.SavedStateHandle
 import androidx.palette.graphics.Palette
-import java.net.URLDecoder
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -104,14 +101,6 @@ fun String?.ifNotNullOrBlank(block: () -> String): String? {
     }
 }
 
-fun String.encodeUrl(): String {
-    return URLEncoder.encode(this, StandardCharsets.UTF_8.toString())
-}
-
-fun String.decodeUrl(): String {
-    return URLDecoder.decode(this, StandardCharsets.UTF_8.toString())
-}
-
 fun formatTime(time: Int): String {
     var result = ""
     val hours = time / 60
@@ -155,5 +144,5 @@ fun Drawable.getDominantColor(colorResult: (dominantColor: Color) -> Unit) {
 }
 
 fun <T>SavedStateHandle.navArgs(): T {
-    return get<T>("args")!!
+    return get<T>("args")?.decodeAllStrings() ?: throw IllegalStateException("Nav args not found")
 }

@@ -11,7 +11,7 @@ data class CastDetailNavArgs(
     val mediaId: Long,
     val mediaType: MediaType,
     val mediaTitle: String,
-    val posterUrlEncoded: String?,
+    val posterUrl: String?,
     val backgroundColor: Int?,
     val releaseYear: String?
 ) : Parcelable

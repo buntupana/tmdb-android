@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.buntupana.tmdb.app.presentation.navigation.CommonNavigation
 import com.buntupana.tmdb.app.presentation.navigation.CustomNavType
+import com.buntupana.tmdb.app.presentation.navigation.NavRoutesMain
 import com.buntupana.tmdb.app.presentation.navigation.Routes
 import com.buntupana.tmdb.core.presentation.theme.TMDBTheme
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNavArgs
@@ -24,17 +25,23 @@ import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScree
 import com.buntupana.tmdb.feature.discover.presentation.DiscoverScreen
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.reflect.typeOf
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var navRoutesMain: NavRoutesMain
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             TMDBTheme {
                 val navController = rememberNavController()
-                val commonNavigation = CommonNavigation(navController)
+                navRoutesMain.init(navController)
+                val commonNavigation = CommonNavigation(navRoutesMain)
                 NavHost(navController = navController, startDestination = Routes.Discover) {
 
                     composable<Routes.Discover> {

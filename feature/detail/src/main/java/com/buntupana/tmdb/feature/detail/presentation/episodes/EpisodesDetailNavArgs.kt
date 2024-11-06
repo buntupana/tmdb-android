@@ -10,7 +10,7 @@ data class EpisodesDetailNavArgs(
     val tvShowId: Long,
     val seasonName: String,
     val seasonNumber: Int,
-    val posterUrlEncoded: String?,
+    val posterUrl: String?,
     val backgroundColor: Int?,
     val releaseYear: String?
 ) : Parcelable

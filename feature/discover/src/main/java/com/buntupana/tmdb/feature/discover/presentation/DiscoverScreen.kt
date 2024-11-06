@@ -72,7 +72,6 @@ fun DiscoverScreen(
     )
 }
 
-
 @Composable
 fun DiscoverContent(
     state: DiscoverState,
@@ -108,7 +107,7 @@ fun DiscoverContent(
                 title = stringResource(id = R.string.text_trending),
                 filterSet = state.trendingFilterSet,
                 indexSelected = state.trendingFilterSet.indexOf(state.trendingFilterSelected),
-                filterClicked = { item, index ->
+                filterClicked = { item, _ ->
                     changeTrendingType(item)
                     lazyListStateTrending.requestScrollToItem(index = 0)
                 }
@@ -127,9 +126,13 @@ fun DiscoverContent(
                 CarouselMediaItem(
                     modifier = Modifier.fillMaxWidth(),
                     mediaItemList = state.trendingMediaItemList,
+                    isLoadingError = state.isTrendingMediaLoadingError,
                     lazyListState = lazyListStateTrending,
                     onItemClicked = { mediaItem, mainPosterColor ->
                         navigateToDetail(mediaItem, mainPosterColor)
+                    },
+                    onRetryClicked = {
+                        changeTrendingType(state.trendingFilterSelected)
                     }
                 )
             }
@@ -138,7 +141,7 @@ fun DiscoverContent(
                 title = stringResource(id = R.string.text_whats_popular),
                 filterSet = state.popularFilterSet,
                 indexSelected = state.popularFilterSet.indexOf(state.popularFilterSelected),
-                filterClicked = { item, index ->
+                filterClicked = { item, _ ->
                     changePopularType(item)
                     lazyListStatePopular.requestScrollToItem(index = 0)
                 }
@@ -147,9 +150,13 @@ fun DiscoverContent(
             CarouselMediaItem(
                 modifier = Modifier.fillMaxWidth(),
                 mediaItemList = state.popularMediaItemList,
+                isLoadingError = state.isPopularMediaLoadingError,
                 lazyListState = lazyListStatePopular,
                 onItemClicked = { mediaItem, mainPosterColor ->
                     navigateToDetail(mediaItem, mainPosterColor)
+                },
+                onRetryClicked = {
+                    changePopularType(state.popularFilterSelected)
                 }
             )
 
@@ -158,7 +165,7 @@ fun DiscoverContent(
                 title = stringResource(id = R.string.text_free_to_watch),
                 filterSet = state.freeToWatchFilterSet,
                 indexSelected = state.freeToWatchFilterSet.indexOf(state.freeToWatchFilterSelected),
-                filterClicked = { item, index ->
+                filterClicked = { item, _ ->
                     changeFreeToWatchType(item)
                     lazyListStateFree.requestScrollToItem(index = 0)
                 }
@@ -167,9 +174,13 @@ fun DiscoverContent(
             CarouselMediaItem(
                 modifier = Modifier.fillMaxWidth(),
                 mediaItemList = state.freeToWatchMediaItemList,
+                isLoadingError = state.isFreeToWatchMediaLoadingError,
                 lazyListState = lazyListStateFree,
                 onItemClicked = { mediaItem, mainPosterColor ->
                     navigateToDetail(mediaItem, mainPosterColor)
+                },
+                onRetryClicked = {
+                    changeFreeToWatchType(state.freeToWatchFilterSelected)
                 }
             )
 

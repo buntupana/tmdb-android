@@ -58,7 +58,7 @@ fun ErrorAndRetry(
 @Composable
 fun ErrorAndRetryPreview() {
     ErrorAndRetry(
-        modifier = Modifier.background(Color.Blue),
+        modifier = Modifier.background(Color.White),
         textColor = Color.Black,
         errorMessage = "Unknown Error",
         onRetryClick = {}

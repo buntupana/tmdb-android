@@ -3,7 +3,6 @@ package com.buntupana.tmdb.feature.discover.presentation
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.presentation.util.LOADING_DELAY
@@ -24,7 +23,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
     private val getPopularMoviesListUseCase: GetPopularMoviesListUseCase,
     private val getFreeToWatchMediaListUseCase: GetFreeToWatchMediaListUseCase,
     private val getTrendingMediaListUseCase: GetTrendingMediaListUseCase
@@ -44,26 +42,24 @@ class DiscoverViewModel @Inject constructor(
     fun onEvent(event: DiscoverEvent) {
         when (event) {
             is DiscoverEvent.ChangePopularType -> {
-                if (event.popularType != state.popularFilterSelected) {
-                    getPopularMovies(event.popularType)
-                }
+                getPopularMovies(event.popularType)
             }
 
             is DiscoverEvent.ChangeFreeToWatchType -> {
-                if (event.freeToWatchFilter != state.freeToWatchFilterSelected) {
-                    getFreeToWatchList(event.freeToWatchFilter)
-                }
+                getFreeToWatchList(event.freeToWatchFilter)
             }
 
             is DiscoverEvent.ChangeTrendingType -> {
-                if (event.trendingFilter != state.trendingFilterSelected) {
-                    getTrendingList(event.trendingFilter)
-                }
+                getTrendingList(event.trendingFilter)
             }
         }
     }
 
     private fun getTrendingList(trendingFilter: TrendingFilter) {
+
+        if (trendingFilter == state.trendingFilterSelected && state.trendingMediaItemList.isNotEmpty()) {
+            return
+        }
 
         val trendingType = when (trendingFilter) {
             TrendingFilter.ThisWeek -> TrendingType.THIS_WEEK
@@ -76,20 +72,35 @@ class DiscoverViewModel @Inject constructor(
                 loading {
                     state = state.copy(
                         isLoading = true,
+                        isTrendingMediaLoadingError = false,
                         trendingFilterSelected = trendingFilter,
                         trendingMediaItemList = emptyList()
+                    )
+                }
+                error {
+                    state = state.copy(
+                        isLoading = false,
+                        isTrendingMediaLoadingError = true
                     )
                 }
                 success { data ->
                     // Fake delay to show loading
                     delay(LOADING_DELAY)
-                    state = state.copy(isLoading = false, trendingMediaItemList = data)
+                    state = state.copy(
+                        isLoading = false,
+                        isTrendingMediaLoadingError = false,
+                        trendingMediaItemList = data
+                    )
                 }
             }
         }
     }
 
     private fun getPopularMovies(popularFilter: PopularFilter) {
+
+        if (popularFilter == state.popularFilterSelected && state.popularMediaItemList.isNotEmpty()) {
+            return
+        }
 
         val popularType = when (popularFilter) {
             PopularFilter.ForRent -> PopularType.FOR_RENT
@@ -104,23 +115,35 @@ class DiscoverViewModel @Inject constructor(
                 loading {
                     state = state.copy(
                         isLoading = true,
+                        isPopularMediaLoadingError = false,
                         popularFilterSelected = popularFilter,
                         popularMediaItemList = emptyList()
                     )
                 }
                 error {
-
+                    state = state.copy(
+                        isLoading = false,
+                        isPopularMediaLoadingError = true,
+                    )
                 }
                 success { data ->
                     // Fake delay to show loading
                     delay(LOADING_DELAY)
-                    state = state.copy(isLoading = false, popularMediaItemList = data)
+                    state = state.copy(
+                        isLoading = false,
+                        isPopularMediaLoadingError = false,
+                        popularMediaItemList = data
+                    )
                 }
             }
         }
     }
 
     private fun getFreeToWatchList(freeToWatchFilter: FreeToWatchFilter) {
+
+        if (freeToWatchFilter == state.freeToWatchFilterSelected && state.freeToWatchMediaItemList.isNotEmpty()) {
+            return
+        }
 
         val freeToWatchType = when (freeToWatchFilter) {
             FreeToWatchFilter.Movies -> FreeToWatchType.MOVIES
@@ -134,13 +157,21 @@ class DiscoverViewModel @Inject constructor(
                     state =
                         state.copy(
                             isLoading = true,
+                            isFreeToWatchMediaLoadingError = false,
                             freeToWatchFilterSelected = freeToWatchFilter,
                             freeToWatchMediaItemList = emptyList()
                         )
                 }
+                error {
+                    state = state.copy(isLoading = false, isFreeToWatchMediaLoadingError = false)
+                }
                 success { data ->// Fake delay to show loading
                     delay(LOADING_DELAY)
-                    state = state.copy(isLoading = false, freeToWatchMediaItemList = data)
+                    state = state.copy(
+                        isLoading = false,
+                        isFreeToWatchMediaLoadingError = false,
+                        freeToWatchMediaItemList = data
+                    )
                 }
             }
         }

@@ -8,8 +8,11 @@ import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilt
 data class DiscoverState(
     val isLoading: Boolean = false,
     val popularMediaItemList: List<MediaItem> = emptyList(),
+    val isPopularMediaLoadingError: Boolean = false,
     val freeToWatchMediaItemList: List<MediaItem> = emptyList(),
+    val isFreeToWatchMediaLoadingError: Boolean = false,
     val trendingMediaItemList: List<MediaItem> = emptyList(),
+    val isTrendingMediaLoadingError: Boolean = false,
     val trendingFilterSelected: TrendingFilter = TrendingFilter.Today,
     val popularFilterSelected: PopularFilter = PopularFilter.Streaming,
     val freeToWatchFilterSelected: FreeToWatchFilter = FreeToWatchFilter.Movies,

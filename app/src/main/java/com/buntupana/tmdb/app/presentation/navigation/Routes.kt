@@ -10,10 +10,19 @@ import kotlinx.serialization.Serializable
 sealed class Routes {
 
     @Serializable
+    data object Home : Routes()
+
+    @Serializable
     data object Discover : Routes()
 
     @Serializable
     data object Search : Routes()
+
+    @Serializable
+    data object Movies: Routes()
+
+    @Serializable
+    data object TvShows: Routes()
 
     @Serializable
     data class MediaDetail(

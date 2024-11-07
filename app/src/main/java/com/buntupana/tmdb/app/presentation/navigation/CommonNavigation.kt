@@ -8,23 +8,24 @@ import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNavArgs
+import timber.log.Timber
 
 class CommonNavigation(
     private val navRoutesMain: NavRoutesMain
 ) : CommonNavigationBase {
 
     override fun navigateBack() {
+        Timber.d("navigateBack() called")
         navRoutesMain.popBackStack()
     }
 
     override fun navigateToMainScreen() {
-        navRoutesMain.popBackStack(
-            destination = Routes.Discover::class,
-            inclusive = true
-        )
+        Timber.d("navigateToMainScreen() called")
+        navRoutesMain.popBackStack(destination = Routes.Home::class)
     }
 
     override fun navigateToSearch() {
+        Timber.d("navigateToSearch() called")
         navRoutesMain.navigate(Routes.Search)
     }
 
@@ -33,6 +34,7 @@ class CommonNavigation(
         mediaType: MediaType,
         backgroundColor: Color?
     ) {
+        Timber.d("navigateToMediaDetail() called with: mediaId = [$mediaId], mediaType = [$mediaType], backgroundColor = [$backgroundColor]")
         navRoutesMain.navigate(
             Routes.MediaDetail(
                 args = MediaDetailNavArgs(
@@ -52,6 +54,7 @@ class CommonNavigation(
         mediaPosterUrl: String?,
         backgroundColor: Color?
     ) {
+        Timber.d("navigateToFullCast() called with: mediaId = [$mediaId], mediaType = [$mediaType], mediaTitle = [$mediaTitle], mediaReleaseYear = [$mediaReleaseYear], mediaPosterUrl = [$mediaPosterUrl], backgroundColor = [$backgroundColor]")
         navRoutesMain.navigate(
             Routes.CastDetail(
                 args = CastDetailNavArgs(
@@ -67,6 +70,7 @@ class CommonNavigation(
     }
 
     override fun navigateToPerson(personId: Long) {
+        Timber.d("navigateToPerson() called with: personId = [$personId]")
         navRoutesMain.navigate(
             Routes.PersonDetail(
                 args = PersonDetailNavArgs(personId)
@@ -81,6 +85,7 @@ class CommonNavigation(
         posterUrl: String?,
         backgroundColor: Color?
     ) {
+        Timber.d("navigateToSeasons() called with: tvShowId = [$tvShowId], tvShowTitle = [$tvShowTitle], releaseYear = [$releaseYear], posterUrl = [$posterUrl], backgroundColor = [$backgroundColor]")
         navRoutesMain.navigate(
             Routes.SeasonDetail(
                 args = SeasonsDetailNavArgs(
@@ -102,6 +107,7 @@ class CommonNavigation(
         backgroundColor: Color?,
         releaseYear: String?
     ) {
+        Timber.d("navigateToEpisodes() called with: tvShowId = [$tvShowId], seasonName = [$seasonName], seasonNumber = [$seasonNumber], posterUrl = [$posterUrl], backgroundColor = [$backgroundColor], releaseYear = [$releaseYear]")
         navRoutesMain.navigate(
             Routes.EpisodesDetail(
                 args = EpisodesDetailNavArgs(

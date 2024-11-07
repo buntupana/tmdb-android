@@ -61,6 +61,7 @@ dependencies {
     api(libs.androidx.paging.compose)
     api(libs.androidx.compose.foundation)
     api(libs.androidx.constraintlayout)
+    api(libs.androidx.icons.extended)
 
     // Accompanist
     api(libs.google.accompanist.systemuicontroller)

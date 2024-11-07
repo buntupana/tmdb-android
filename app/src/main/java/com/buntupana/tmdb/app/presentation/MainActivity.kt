@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.buntupana.tmdb.app.presentation.home.HomeScreen
 import com.buntupana.tmdb.app.presentation.navigation.CommonNavigation
 import com.buntupana.tmdb.app.presentation.navigation.CustomNavType
 import com.buntupana.tmdb.app.presentation.navigation.NavRoutesMain
@@ -22,7 +23,6 @@ import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailScreen
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
-import com.buntupana.tmdb.feature.discover.presentation.DiscoverScreen
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -42,10 +42,10 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 navRoutesMain.init(navController)
                 val commonNavigation = CommonNavigation(navRoutesMain)
-                NavHost(navController = navController, startDestination = Routes.Discover) {
+                NavHost(navController = navController, startDestination = Routes.Home) {
 
-                    composable<Routes.Discover> {
-                        DiscoverScreen(discoverNavigator = commonNavigation)
+                    composable<Routes.Home> {
+                        HomeScreen(discoverNavigator = commonNavigation)
                     }
                     composable<Routes.Search> {
                         SearchScreen(searchNavigator = commonNavigation)

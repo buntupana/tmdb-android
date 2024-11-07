@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.discover.presentation
+package com.buntupana.tmdb.feature.discover.presentation.discover
 
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.FreeToWatchFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter

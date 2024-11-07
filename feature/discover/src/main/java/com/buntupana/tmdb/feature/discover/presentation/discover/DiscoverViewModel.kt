@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.discover.presentation
+package com.buntupana.tmdb.feature.discover.presentation.discover
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

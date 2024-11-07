@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.discover.presentation
+package com.buntupana.tmdb.feature.discover.presentation.discover
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -27,7 +27,6 @@ import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.discover.R
 import com.buntupana.tmdb.feature.discover.presentation.comp.CarouselMediaItem
 import com.buntupana.tmdb.feature.discover.presentation.comp.TitleAndFilter
-import com.buntupana.tmdb.feature.discover.presentation.comp.TopBar
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.FreeToWatchFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
@@ -40,7 +39,6 @@ fun DiscoverScreen(
 
     DiscoverContent(
         state = viewModel.state,
-        navigateToSearch = { discoverNavigator.navigateToSearch() },
         changeTrendingType = { trendingType ->
             viewModel.onEvent(DiscoverEvent.ChangeTrendingType(trendingType))
         },
@@ -75,7 +73,6 @@ fun DiscoverScreen(
 @Composable
 fun DiscoverContent(
     state: DiscoverState,
-    navigateToSearch: () -> Unit,
     changeTrendingType: (trendingFilter: TrendingFilter) -> Unit,
     changePopularType: (popularFilter: PopularFilter) -> Unit,
     changeFreeToWatchType: (freeToWatchFilter: FreeToWatchFilter) -> Unit,
@@ -87,11 +84,6 @@ fun DiscoverContent(
             .fillMaxSize()
             .setStatusNavigationBarColor()
     ) {
-        TopBar(
-            clickOnSearch = {
-                navigateToSearch()
-            }
-        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -194,7 +186,6 @@ fun DiscoverContent(
 fun DiscoverScreenPreview() {
     DiscoverContent(
         state = DiscoverState(),
-        navigateToSearch = { /*TODO*/ },
         changeTrendingType = {},
         changePopularType = {},
         changeFreeToWatchType = {},

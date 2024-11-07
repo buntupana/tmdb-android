@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.discover.presentation
+package com.buntupana.tmdb.feature.discover.presentation.discover
 
 import androidx.compose.ui.graphics.Color
 import com.buntupana.tmdb.core.domain.entity.MediaType

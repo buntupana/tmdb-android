@@ -60,6 +60,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk)
 
     implementation(project(":core"))
+    implementation(project(":feature:account:presentation"))
     implementation(project(":feature:discover"))
     implementation(project(":feature:detail"))
     implementation(project(":feature:search"))

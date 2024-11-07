@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -223,7 +223,7 @@ private fun LazyListScope.creditList(
     creditPersonList.groupBy { it.releaseDate?.year }.forEach { (_, creditList) ->
 
         item {
-            Divider()
+            HorizontalDivider()
         }
 
         items(creditList) { credit ->
@@ -270,6 +270,6 @@ private fun LazyListScope.creditList(
         }
     }
     item {
-        Divider()
+        HorizontalDivider()
     }
 }

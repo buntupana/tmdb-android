@@ -25,6 +25,9 @@ sealed class Routes {
     data object TvShows: Routes()
 
     @Serializable
+    data object Account: Routes()
+
+    @Serializable
     data class MediaDetail(
         val args: MediaDetailNavArgs
     ) : Routes()

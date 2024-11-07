@@ -46,6 +46,9 @@ dependencies {
 
     coreLibraryDesugaring(libs.desugar.jdk)
 
+    // Kotlin
+    implementation(libs.kotlinx.serialization.json)
+
     // Android
     api(libs.androidx.core.ktx)
     api(libs.androidx.lifecycle.runtime.ktx)
@@ -88,8 +91,6 @@ dependencies {
     api(libs.androidx.pallete)
     implementation(libs.squareup.moshi)
     ksp(libs.squareup.moshi.ksp)
-
-    implementation(libs.kotlinx.serialization.json)
 
     // Testing
 //    testImplementation 'junit:junit:4.13.2'

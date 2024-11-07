@@ -35,6 +35,7 @@ import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
 import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
+import com.buntupana.tmdb.feature.account.presentation.AccountScreen
 import com.buntupana.tmdb.feature.discover.presentation.comp.TopBar
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNavigator
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverScreen
@@ -85,7 +86,7 @@ fun HomeScreenContent(
             selectedIcon = Icons.Rounded.Person,
             unselectedIcon = Icons.Outlined.Person,
             isSelected = false,
-            route = Routes.TvShows
+            route = Routes.Account
         )
     )
 
@@ -150,6 +151,9 @@ fun HomeScreenContent(
             }
             composable<Routes.TvShows> {
                 TvShowsScreen()
+            }
+            composable<Routes.Account> {
+                AccountScreen()
             }
         }
     }

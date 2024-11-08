@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.buntupana.tmdb.feature.detail.di"
+    namespace = "com.buntupana.tmdb.feature.discover.di"
     compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
@@ -36,9 +36,9 @@ android {
 
 dependencies {
 
-    implementation(project(":feature:detail:presentation"))
-    implementation(project(":feature:detail:domain"))
-    implementation(project(":feature:detail:data"))
+    implementation(project(":feature:discover:presentation"))
+    implementation(project(":feature:discover:domain"))
+    implementation(project(":feature:discover:data"))
     implementation(project(":core"))
 
     // Dagger Hilt

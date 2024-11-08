@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.buntupana.tmdb.feature.detail.di"
+    namespace = "com.buntupana.tmdb.feature.discover.data"
     compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
@@ -26,6 +26,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -36,14 +37,16 @@ android {
 
 dependencies {
 
-    implementation(project(":feature:detail:presentation"))
-    implementation(project(":feature:detail:domain"))
-    implementation(project(":feature:detail:data"))
+    coreLibraryDesugaring(libs.desugar.jdk)
+
+    // Modules
+    implementation(project(":feature:discover:domain"))
     implementation(project(":core"))
 
     // Dagger Hilt
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.ksp)
+    implementation(libs.dagger.hilt.navigation.compose)
 
     // Networking
     implementation(libs.squareup.retrofit2.retrofit)
@@ -51,6 +54,13 @@ dependencies {
     implementation(libs.squareup.okhttp3.okhttp)
     implementation(libs.squareup.okhttp3.login.interceptor)
 
+    // Tools
+    api(libs.jakewharton.timber)
+    implementation(libs.squareup.moshi)
+    ksp(libs.squareup.moshi.ksp)
+
     // Testing
     testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

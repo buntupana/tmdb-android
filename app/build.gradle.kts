@@ -61,7 +61,8 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":feature:account:presentation"))
-    implementation(project(":feature:discover"))
+    implementation(project(":feature:discover:presentation"))
+    implementation(project(":feature:discover:di"))
     implementation(project(":feature:detail:presentation"))
     implementation(project(":feature:detail:di"))
     implementation(project(":feature:search"))

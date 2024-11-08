@@ -42,7 +42,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
     buildFeatures {
         compose = true
@@ -62,7 +62,8 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":feature:account:presentation"))
     implementation(project(":feature:discover"))
-    implementation(project(":feature:detail"))
+    implementation(project(":feature:detail:presentation"))
+    implementation(project(":feature:detail:di"))
     implementation(project(":feature:search"))
 
     implementation(libs.kotlinx.serialization.json)

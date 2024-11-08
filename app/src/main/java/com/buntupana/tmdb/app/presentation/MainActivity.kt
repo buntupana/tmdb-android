@@ -23,7 +23,6 @@ import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailScreen
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNavArgs
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
-import com.buntupana.tmdb.feature.search.presentation.SearchScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.reflect.typeOf
@@ -48,7 +47,7 @@ class MainActivity : ComponentActivity() {
                         HomeScreen(discoverNavigator = commonNavigation)
                     }
                     composable<Routes.Search> {
-                        SearchScreen(searchNavigator = commonNavigation)
+                        com.buntupana.tmdb.feature.search.presentation.SearchScreen(searchNavigator = commonNavigation)
                     }
                     composable<Routes.MediaDetail>(
                         typeMap = mapOf(

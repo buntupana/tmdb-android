@@ -17,12 +17,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.R
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.util.formatTime
-import com.buntupana.tmdb.core.presentation.util.toFullDate
+import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
+import com.panabuntu.tmdb.core.common.formatTime
+import com.panabuntu.tmdb.core.common.toFullDate
 
 
 @Composable

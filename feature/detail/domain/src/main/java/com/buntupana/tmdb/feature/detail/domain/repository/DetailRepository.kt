@@ -1,6 +1,5 @@
 package com.buntupana.tmdb.feature.detail.domain.repository
 
-import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.feature.detail.domain.model.Certification
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
@@ -12,6 +11,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.ReleaseDate
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.domain.model.SeasonDetail
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
+import com.panabuntu.tmdb.core.common.entity.Resource
 
 interface DetailRepository {
     suspend fun getMovieDetails(movieId: Long): Resource<MovieDetails>

@@ -1,8 +1,8 @@
 package com.buntupana.tmdb.feature.detail.presentation.cast
 
 import androidx.compose.ui.graphics.Color
-import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.feature.detail.domain.model.Person
+import com.panabuntu.tmdb.core.common.entity.MediaType
 
 data class CastDetailState(
     val isLoading: Boolean = false,

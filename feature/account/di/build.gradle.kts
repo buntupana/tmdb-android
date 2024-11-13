@@ -39,7 +39,6 @@ dependencies {
     implementation(project(":feature:account:presentation"))
     implementation(project(":feature:account:domain"))
     implementation(project(":feature:account:data"))
-    implementation(project(":core"))
 
     // Dagger Hilt
     implementation(libs.dagger.hilt)

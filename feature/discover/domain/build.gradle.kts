@@ -40,7 +40,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk)
 
     // Modules
-    implementation(project(":core"))
+    api(project(":core:common"))
 
     // Dagger Hilt
     implementation(libs.dagger.hilt)

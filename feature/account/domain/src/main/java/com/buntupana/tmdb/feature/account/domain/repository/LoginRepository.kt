@@ -1,8 +1,9 @@
 package com.buntupana.tmdb.feature.account.domain.repository
 
-import com.buntupana.tmdb.core.domain.entity.NetworkError
-import com.buntupana.tmdb.core.domain.entity.Result
+
 import com.buntupana.tmdb.feature.account.domain.model.AccountDetails
+import com.panabuntu.tmdb.core.common.entity.NetworkError
+import com.panabuntu.tmdb.core.common.entity.Result
 
 interface LoginRepository {
 

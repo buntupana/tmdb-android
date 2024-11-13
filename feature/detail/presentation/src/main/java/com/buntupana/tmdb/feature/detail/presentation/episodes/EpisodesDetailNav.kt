@@ -1,11 +1,8 @@
 package com.buntupana.tmdb.feature.detail.presentation.episodes
 
-import android.os.Parcelable
-import com.buntupana.tmdb.core.presentation.navigation.Routes
-import kotlinx.parcelize.Parcelize
+import com.buntupana.tmdb.core.ui.navigation.Routes
 import kotlinx.serialization.Serializable
 
-@Parcelize
 @Serializable
 data class EpisodesDetailNav(
     val tvShowId: Long,
@@ -14,4 +11,4 @@ data class EpisodesDetailNav(
     val posterUrl: String?,
     val backgroundColor: Int?,
     val releaseYear: String?
-) : Parcelable, Routes
+) : Routes

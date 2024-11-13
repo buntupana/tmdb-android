@@ -18,16 +18,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.buntupana.tmdb.core.domain.model.Gender
-import com.buntupana.tmdb.core.presentation.composables.ImagePersonFromUrl
-import com.buntupana.tmdb.core.presentation.theme.Dimens
+import com.buntupana.tmdb.core.ui.composables.ImagePersonFromUrl
+import com.buntupana.tmdb.core.ui.theme.Dimens
 
 @Composable
 fun PersonItemHorizontal(
     modifier: Modifier = Modifier,
     personId: Long,
     name: String,
-    gender: Gender,
+    gender: com.panabuntu.tmdb.core.common.model.Gender,
     profileUrl: String?,
     description: String,
     onClick: (personId: Long) -> Unit
@@ -82,7 +81,7 @@ fun PersonItemHorizontalPreview() {
         name = "Jason Momoa",
         profileUrl = "",
         description = "Acting • Aquaman",
-        gender = Gender.MALE,
+        gender = com.panabuntu.tmdb.core.common.model.Gender.MALE,
         onClick = {}
     )
 }

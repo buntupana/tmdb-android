@@ -23,13 +23,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.util.isNotNullOrBlank
+import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.personDetailsSample
+import com.panabuntu.tmdb.core.common.isNotNullOrBlank
+import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun HeaderContent(
@@ -66,8 +67,8 @@ fun HeaderContent(
 
                     val iconResId = when (externalLink) {
                         is ExternalLink.FacebookLink -> R.drawable.ic_facebook
-                        is ExternalLink.HomePage -> com.buntupana.tmdb.core.R.drawable.ic_link
-                        is ExternalLink.ImdbLink -> com.buntupana.tmdb.core.R.drawable.ic_link
+                        is ExternalLink.HomePage -> RCore.drawable.ic_link
+                        is ExternalLink.ImdbLink -> RCore.drawable.ic_link
                         is ExternalLink.InstagramLink -> R.drawable.ic_instagram
                         is ExternalLink.TwitterLink -> R.drawable.ic_twitter
                     }

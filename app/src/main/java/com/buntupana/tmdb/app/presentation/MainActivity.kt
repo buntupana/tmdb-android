@@ -12,9 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import com.buntupana.tmdb.app.presentation.home.HomeNav
 import com.buntupana.tmdb.app.presentation.home.HomeScreen
-import com.buntupana.tmdb.core.data.api.CoreApi
-import com.buntupana.tmdb.core.presentation.navigation.NavRoutesMain
-import com.buntupana.tmdb.core.presentation.theme.TMDBTheme
+import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
+import com.buntupana.tmdb.core.ui.theme.TMDBTheme
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInNav
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInScreen
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNav
@@ -29,6 +28,7 @@ import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
 import com.buntupana.tmdb.feature.search.presentation.SearchNav
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
+import com.panabuntu.tmdb.core.common.api.CoreApi
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject

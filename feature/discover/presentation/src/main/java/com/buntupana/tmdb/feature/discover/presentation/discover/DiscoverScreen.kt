@@ -20,16 +20,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.buntupana.tmdb.core.domain.entity.MediaType
-import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.discover.presentation.R
 import com.buntupana.tmdb.feature.discover.presentation.comp.CarouselMediaItem
 import com.buntupana.tmdb.feature.discover.presentation.comp.TitleAndFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.FreeToWatchFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
+import com.panabuntu.tmdb.core.common.entity.MediaType
 
 @Composable
 fun DiscoverScreen(
@@ -50,7 +49,7 @@ fun DiscoverScreen(
         },
         navigateToDetail = { mediaItem, posterDominantColor ->
             when (mediaItem) {
-                is MediaItem.Movie -> {
+                is com.panabuntu.tmdb.core.common.model.MediaItem.Movie -> {
                     onMediaItemClicked(
                         mediaItem.id,
                         MediaType.MOVIE,
@@ -58,7 +57,7 @@ fun DiscoverScreen(
                     )
                 }
 
-                is MediaItem.TvShow -> {
+                is com.panabuntu.tmdb.core.common.model.MediaItem.TvShow -> {
                     onMediaItemClicked(
                         mediaItem.id,
                         MediaType.TV_SHOW,
@@ -76,7 +75,7 @@ fun DiscoverContent(
     changeTrendingType: (trendingFilter: TrendingFilter) -> Unit,
     changePopularType: (popularFilter: PopularFilter) -> Unit,
     changeFreeToWatchType: (freeToWatchFilter: FreeToWatchFilter) -> Unit,
-    navigateToDetail: (mediaItem: MediaItem, posterDominantColor: Color) -> Unit
+    navigateToDetail: (mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem, posterDominantColor: Color) -> Unit
 ) {
 
     Column(

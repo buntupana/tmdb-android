@@ -1,7 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation
 
-import com.buntupana.tmdb.core.domain.model.Gender
-import com.buntupana.tmdb.core.domain.model.MediaItem
+
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.domain.model.Job
@@ -10,6 +9,8 @@ import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Role
 import com.buntupana.tmdb.feature.detail.domain.model.Season
+import com.panabuntu.tmdb.core.common.model.Gender
+import com.panabuntu.tmdb.core.common.model.MediaItem
 import java.time.LocalDate
 
 
@@ -53,12 +54,12 @@ val castTvShowPersonSample = Person.Cast.TvShow(
     profileUrl = "",
     totalEpisodeCount = 140,
     roleList = listOf(
-        Role("The Flash", 140),
-        Role("The Flash", 1),
-        Role("The Flash", 1),
-        Role("The Flash", 1),
-        Role("The Flash", 1),
-        Role("The Flash", 1)
+        Role(character = "The Flash", episodeCount = 140),
+        Role(character = "The Flash", episodeCount = 1),
+        Role(character = "The Flash", episodeCount = 1),
+        Role(character = "The Flash", episodeCount = 1),
+        Role(character = "The Flash", episodeCount = 1),
+        Role(character = "The Flash", episodeCount = 1),
     )
 )
 

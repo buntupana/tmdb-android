@@ -14,11 +14,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import com.buntupana.tmdb.core.domain.entity.MediaType
-import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
-import com.buntupana.tmdb.core.presentation.theme.Dimens
+import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.presentation.mediaItemMovie
+import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.panabuntu.tmdb.core.common.model.MediaItem
 
 @Composable
 fun RecommendationItem(

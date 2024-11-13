@@ -14,11 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.domain.entity.MediaType
-import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.presentation.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
+import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.panabuntu.tmdb.core.common.model.MediaItem
 
 @Composable
 fun RecommendationsHorizontal(

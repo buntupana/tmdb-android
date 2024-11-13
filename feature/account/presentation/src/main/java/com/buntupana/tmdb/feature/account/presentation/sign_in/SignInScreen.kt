@@ -21,15 +21,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
-import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
-import com.buntupana.tmdb.core.presentation.util.getCustomTabIntent
-import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
-import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
-import com.buntupana.tmdb.feature.account.presentation.R
+import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.util.getCustomTabIntent
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun SignInScreen(
@@ -86,7 +86,7 @@ fun SignInContent(
     ) {
         Image(
             modifier = Modifier.padding(top = 100.dp),
-            painter = painterResource(com.buntupana.tmdb.core.R.drawable.img_logo),
+            painter = painterResource(RCore.drawable.img_logo),
             contentDescription = "Logo"
         )
         Column(
@@ -98,7 +98,7 @@ fun SignInContent(
         ) {
             if (state.isLoading) {
                 Text(
-                    text = stringResource(R.string.text_signing_in),
+                    text = stringResource(com.buntupana.tmdb.feature.account.presentation.R.string.text_signing_in),
                     color = PrimaryColor.getOnBackgroundColor()
                 )
                 Spacer(
@@ -110,7 +110,7 @@ fun SignInContent(
             } else if (state.isSignInError) {
                 ErrorAndRetry(
                     textColor = PrimaryColor.getOnBackgroundColor(),
-                    errorMessage = stringResource(R.string.text_signing_in_error),
+                    errorMessage = stringResource(com.buntupana.tmdb.feature.account.presentation.R.string.text_signing_in_error),
                     onRetryClick = onRetryClicked
                 )
             }

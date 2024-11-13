@@ -1,13 +1,12 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.core.data.api.CoreApi
-import com.buntupana.tmdb.core.data.mapper.getGender
-import com.buntupana.tmdb.core.data.mapper.toModel
-import com.buntupana.tmdb.core.presentation.util.ifNotNullOrBlank
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
+import com.panabuntu.tmdb.core.common.api.CoreApi
+import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
+import com.panabuntu.tmdb.core.common.mapper.toModel
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
@@ -43,7 +42,7 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
             Person.Crew.TvShow(
                 id = it.id,
                 name = it.name.orEmpty(),
-                gender = getGender(it.gender),
+                gender = com.panabuntu.tmdb.core.common.mapper.getGender(it.gender),
                 profileUrl = profileUrl,
                 department = "",
                 totalEpisodeCount = 0,

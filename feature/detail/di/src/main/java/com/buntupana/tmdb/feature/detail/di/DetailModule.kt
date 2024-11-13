@@ -1,10 +1,10 @@
 package com.buntupana.tmdb.detail.di
 
-import com.buntupana.tmdb.core.di.CoreModule
 import com.buntupana.tmdb.feature.detail.data.api.DetailApi
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.DetailRemoteDataSource
 import com.buntupana.tmdb.feature.detail.data.repository.DetailRepositoryImpl
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
+import com.panabuntu.tmdb.core.common.di.CoreCommonModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-@Module(includes = [CoreModule::class])
+@Module(includes = [CoreCommonModule::class])
 @InstallIn(SingletonComponent::class)
 class DetailModule {
 

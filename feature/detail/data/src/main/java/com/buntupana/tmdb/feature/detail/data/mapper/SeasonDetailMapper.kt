@@ -1,9 +1,9 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.core.data.api.CoreApi
-import com.buntupana.tmdb.core.presentation.util.ifNotNullOrBlank
 import com.buntupana.tmdb.feature.detail.data.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.SeasonDetail
+import com.panabuntu.tmdb.core.common.api.CoreApi
+import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 

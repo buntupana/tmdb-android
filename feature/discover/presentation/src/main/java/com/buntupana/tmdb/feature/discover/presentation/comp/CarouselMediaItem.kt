@@ -19,22 +19,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
-import com.buntupana.tmdb.core.presentation.theme.Dimens
+import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.R as RCore
 
 private const val PLACE_HOLDER_ITEM_NUMBER = 6
 
 @Composable
 fun CarouselMediaItem(
     modifier: Modifier = Modifier,
-    mediaItemList: List<MediaItem>,
+    mediaItemList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
     isLoadingError: Boolean,
     itemWidth: Dp = Dimens.carouselMediaItemWidth,
     paddingHorizontal: Dp = 12.dp,
     fontSize: TextUnit = TextUnit.Unspecified,
     lazyListState: LazyListState = rememberLazyListState(),
-    onItemClicked: (mediaItem: MediaItem, mainPosterColor: Color) -> Unit,
+    onItemClicked: (mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem, mainPosterColor: Color) -> Unit,
     onRetryClicked: () -> Unit
 ) {
 
@@ -99,7 +99,7 @@ fun CarouselMediaItem(
                     .matchParentSize()
                     .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
                 textColor = MaterialTheme.colorScheme.onBackground,
-                errorMessage = stringResource(com.buntupana.tmdb.core.R.string.message_loading_content_error),
+                errorMessage = stringResource(RCore.string.message_loading_content_error),
                 onRetryClick = onRetryClicked
             )
         }

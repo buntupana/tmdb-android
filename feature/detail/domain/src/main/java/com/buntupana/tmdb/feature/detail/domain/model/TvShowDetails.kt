@@ -1,6 +1,5 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
-import com.buntupana.tmdb.core.domain.model.MediaItem
 import java.time.LocalDate
 
 
@@ -24,5 +23,5 @@ data class TvShowDetails(
     val lastEpisode: Episode?,
     val nextEpisode: Episode?,
     val isInAir: Boolean,
-    val recommendationList: List<MediaItem>,
+    val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
 )

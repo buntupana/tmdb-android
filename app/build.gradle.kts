@@ -59,7 +59,8 @@ dependencies {
 
     coreLibraryDesugaring(libs.desugar.jdk)
 
-    implementation(project(":core"))
+    implementation(project(":core:common"))
+    implementation(project(":core:ui"))
     implementation(project(":feature:account:presentation"))
     implementation(project(":feature:account:di"))
     implementation(project(":feature:discover:presentation"))
@@ -72,10 +73,15 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlin.reflect)
 
+    // Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.compose)
     implementation(libs.androidx.activity.compose)
+
     implementation(libs.androidx.browser)
 
     // Dagger Hilt
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.ksp)
+    api(libs.dagger.hilt.navigation.compose)
 }

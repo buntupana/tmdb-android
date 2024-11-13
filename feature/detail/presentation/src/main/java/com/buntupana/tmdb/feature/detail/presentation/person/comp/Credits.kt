@@ -22,15 +22,15 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import com.buntupana.tmdb.core.domain.entity.MediaType
-import com.buntupana.tmdb.core.presentation.composables.DropdownMenuText
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
-import com.buntupana.tmdb.core.presentation.util.clickableTextPadding
+import com.buntupana.tmdb.core.ui.composables.DropdownMenuText
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.util.clickableTextPadding
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.buntupana.tmdb.feature.detail.presentation.R
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import timber.log.Timber
-import com.buntupana.tmdb.core.R as RCore
+import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun CreditsFilter(

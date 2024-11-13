@@ -26,10 +26,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.feature.search.presentation.R
-import com.buntupana.tmdb.core.R as RCore
+import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun SuggestionItem(

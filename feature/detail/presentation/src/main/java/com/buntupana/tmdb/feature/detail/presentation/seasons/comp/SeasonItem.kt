@@ -16,14 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.util.isNotNullOrBlank
-import com.buntupana.tmdb.core.presentation.util.toFullDate
+import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.common.SeasonSubtitle
 import com.buntupana.tmdb.feature.detail.presentation.seasonSample
+import com.panabuntu.tmdb.core.common.isNotNullOrBlank
+import com.panabuntu.tmdb.core.common.toFullDate
 
 @Composable
 fun SeasonItem(

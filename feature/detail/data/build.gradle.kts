@@ -41,7 +41,6 @@ dependencies {
 
     // Modules
     implementation(project(":feature:detail:domain"))
-    implementation(project(":core"))
 
     // Dagger Hilt
     implementation(libs.dagger.hilt)

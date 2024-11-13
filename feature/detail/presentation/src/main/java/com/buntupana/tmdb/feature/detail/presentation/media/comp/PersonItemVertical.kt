@@ -26,9 +26,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.presentation.composables.ImagePersonFromUrl
-import com.buntupana.tmdb.core.presentation.spToDp
-import com.buntupana.tmdb.core.presentation.theme.Dimens
+import com.buntupana.tmdb.core.ui.composables.ImagePersonFromUrl
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.spToDp
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.castTvShowPersonSample

@@ -1,8 +1,8 @@
 package com.buntupana.tmdb.feature.search.domain.usecase
 
-import com.buntupana.tmdb.app.domain.usecase.UseCaseResource
-import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.feature.search.domain.repository.SearchRepository
+import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.usecase.UseCaseResource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject

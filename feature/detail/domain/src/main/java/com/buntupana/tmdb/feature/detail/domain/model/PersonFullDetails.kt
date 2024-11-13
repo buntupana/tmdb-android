@@ -1,6 +1,5 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
-import com.buntupana.tmdb.core.domain.model.Gender
 import java.time.LocalDate
 
 data class PersonFullDetails(
@@ -8,7 +7,7 @@ data class PersonFullDetails(
     val name: String,
     val profileUrl: String?,
     val knownForDepartment: String,
-    val gender: Gender,
+    val gender: com.panabuntu.tmdb.core.common.model.Gender,
     val birthDate: LocalDate?,
     val deathDate: LocalDate?,
     val age: Int,

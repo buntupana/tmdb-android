@@ -17,11 +17,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.buntupana.tmdb.core.R
-import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
-import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
-import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
+import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
+import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading

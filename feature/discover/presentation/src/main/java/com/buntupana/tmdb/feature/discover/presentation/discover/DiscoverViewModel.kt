@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.buntupana.tmdb.core.presentation.util.LOADING_DELAY
+import com.buntupana.tmdb.core.ui.util.LOADING_DELAY
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.FreeToWatchFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter

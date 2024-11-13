@@ -1,9 +1,5 @@
 package com.buntupana.tmdb.feature.discover.data.api
 
-import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
-import com.buntupana.tmdb.core.data.raw.MovieItemRaw
-import com.buntupana.tmdb.core.data.raw.ResponseListRaw
-import com.buntupana.tmdb.core.data.raw.TvShowRaw
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,7 +10,7 @@ interface DiscoverApi {
     @GET("trending/all/{time_window}")
     suspend fun fetchTrending(
         @Path("time_window") timeWindow: String
-    ): Response<ResponseListRaw<AnyMediaItemRaw>>
+    ): Response<com.panabuntu.tmdb.core.common.raw.ResponseListRaw<com.panabuntu.tmdb.core.common.raw.AnyMediaItemRaw>>
 
     @GET("discover/movie")
     suspend fun fetchPopularMovies(
@@ -25,7 +21,7 @@ interface DiscoverApi {
         @Query("release_date.gte") fromReleaseDate: String? = null,
         @Query("release_date.lte") toReleaseDate: String? = null,
         @Query("sort_by") sortBy: String? = null
-    ): Response<ResponseListRaw<MovieItemRaw>>
+    ): Response<com.panabuntu.tmdb.core.common.raw.ResponseListRaw<com.panabuntu.tmdb.core.common.raw.MovieItemRaw>>
 
     @GET("discover/tv")
     suspend fun fetchPopularTvShow(
@@ -36,8 +32,8 @@ interface DiscoverApi {
         @Query("release_date.gte") fromReleaseDate: String? = null,
         @Query("release_date.lte") toReleaseDate: String? = null,
         @Query("sort_by") sortBy: String? = null
-    ): Response<ResponseListRaw<TvShowRaw>>
+    ): Response<com.panabuntu.tmdb.core.common.raw.ResponseListRaw<com.panabuntu.tmdb.core.common.raw.TvShowRaw>>
 
     @GET("tv/on_the_air")
-    suspend fun fetchTvShowsOnAir(): Response<ResponseListRaw<TvShowRaw>>
+    suspend fun fetchTvShowsOnAir(): Response<com.panabuntu.tmdb.core.common.raw.ResponseListRaw<com.panabuntu.tmdb.core.common.raw.TvShowRaw>>
 }

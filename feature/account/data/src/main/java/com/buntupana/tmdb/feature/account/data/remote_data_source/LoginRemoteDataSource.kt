@@ -1,12 +1,13 @@
 package com.buntupana.tmdb.feature.account.data.remote_data_source
 
-import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
-import com.buntupana.tmdb.core.domain.entity.NetworkError
-import com.buntupana.tmdb.core.domain.entity.Result
+
 import com.buntupana.tmdb.feature.account.data.raw.AccountDetailsRaw
 import com.buntupana.tmdb.feature.account.data.raw.CreateRequestTokenRaw
 import com.buntupana.tmdb.feature.account.data.raw.CreateSessionRaw
 import com.buntupana.tmdb.feature.account.data.request.CreateSessionRequest
+import com.panabuntu.tmdb.core.common.entity.NetworkError
+import com.panabuntu.tmdb.core.common.entity.Result
+import com.panabuntu.tmdb.core.common.remote_data_source.RemoteDataSource
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter

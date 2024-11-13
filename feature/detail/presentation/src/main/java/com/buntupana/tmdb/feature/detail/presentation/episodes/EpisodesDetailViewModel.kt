@@ -9,7 +9,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetSeasonDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetSeasonDetailsUseCaseParams
 import dagger.hilt.android.lifecycle.HiltViewModel

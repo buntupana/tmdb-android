@@ -16,10 +16,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.R
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.util.clickableIcon
-import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.clickableIcon
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 
 @Composable
 fun TopBar(

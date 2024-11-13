@@ -28,9 +28,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.buntupana.tmdb.core.presentation.spToDp
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.PlaceHolderColor
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
+import com.buntupana.tmdb.core.ui.util.spToDp
 
 private const val MAX_TITLE_LINES = 3
 

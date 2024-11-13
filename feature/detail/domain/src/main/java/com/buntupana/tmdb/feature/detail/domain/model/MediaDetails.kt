@@ -1,6 +1,5 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
-import com.buntupana.tmdb.core.domain.model.MediaItem
 import java.time.LocalDate
 
 
@@ -20,7 +19,7 @@ sealed class MediaDetails(
     open val creatorList: List<Person.Crew>,
     open val castList: List<Person.Cast>,
     open val crewList: List<Person.Crew>,
-    open val recommendationList: List<MediaItem>
+    open val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>
 )  {
 
     data class Movie(
@@ -40,7 +39,7 @@ sealed class MediaDetails(
         override val creatorList: List<Person.Crew.Movie>,
         override val castList: List<Person.Cast.Movie>,
         override val crewList: List<Person.Crew.Movie>,
-        override val recommendationList: List<MediaItem>,
+        override val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
         val localCountryCodeRelease: String
     ) : MediaDetails(
         id = id,
@@ -77,7 +76,7 @@ sealed class MediaDetails(
         override val creatorList: List<Person.Crew.TvShow>,
         override val castList: List<Person.Cast.TvShow>,
         override val crewList: List<Person.Crew.TvShow>,
-        override val recommendationList: List<MediaItem>,
+        override val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
         val seasonList: List<Season>,
         val lastEpisode: Episode?,
         val nextEpisode: Episode?,

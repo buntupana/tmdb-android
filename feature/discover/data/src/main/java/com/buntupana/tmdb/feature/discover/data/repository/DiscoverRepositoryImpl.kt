@@ -1,14 +1,14 @@
 package com.buntupana.tmdb.feature.discover.data.repository
 
-import com.buntupana.tmdb.core.data.mapper.toModel
-import com.buntupana.tmdb.core.data.networkResult
-import com.buntupana.tmdb.core.domain.entity.Resource
-import com.buntupana.tmdb.core.domain.model.MediaItem
 import com.buntupana.tmdb.feature.discover.data.remote_data_source.DiscoverRemoteDataSource
 import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
 import com.buntupana.tmdb.feature.discover.domain.repository.DiscoverRepository
+import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.mapper.toModel
+import com.panabuntu.tmdb.core.common.model.MediaItem
+import com.panabuntu.tmdb.core.common.networkResult
 import javax.inject.Inject
 
 class DiscoverRepositoryImpl @Inject constructor(
@@ -18,8 +18,8 @@ class DiscoverRepositoryImpl @Inject constructor(
     override suspend fun getMoviesPopular(monetizationType: MonetizationType): Resource<List<MediaItem>> {
         return networkResult(
             networkCall = { discoverRemoteDataSource.getMoviesPopular(monetizationType) },
-            mapResponse = {
-                    response -> response.results.map { it.toModel() }
+            mapResponse = { response ->
+                response.results.map { it.toModel() }
             }
         )
     }

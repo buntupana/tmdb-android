@@ -1,6 +1,5 @@
 package com.buntupana.tmdb.feature.search.data.raw
 
-import com.buntupana.tmdb.core.data.raw.KnownFor
 import com.squareup.moshi.Json
 
 data class PersonRaw(
@@ -8,7 +7,7 @@ data class PersonRaw(
     val adult: Boolean,
     val gender: Int,
     @Json(name = "known_for")
-    val knownFor: List<KnownFor>?,
+    val knownFor: List<com.panabuntu.tmdb.core.common.raw.KnownFor>?,
     @Json(name = "known_for_department")
     val knownForDepartment: String?,
     val name: String,

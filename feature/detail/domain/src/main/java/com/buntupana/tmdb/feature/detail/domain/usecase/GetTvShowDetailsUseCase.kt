@@ -1,10 +1,10 @@
 package com.buntupana.tmdb.feature.detail.domain.usecase
 
-import androidx.compose.ui.text.intl.Locale
-import com.buntupana.tmdb.app.domain.usecase.UseCaseResource
-import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
+import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.usecase.UseCaseResource
+import java.util.Locale
 import javax.inject.Inject
 
 class GetTvShowDetailsUseCase @Inject constructor(
@@ -18,7 +18,7 @@ class GetTvShowDetailsUseCase @Inject constructor(
             is Resource.Success -> {
 
                 val certification = resource.data.certificationList.firstOrNull {
-                    it.countryCode == Locale.current.region
+                    it.countryCode == Locale.getDefault().country
                 } ?: resource.data.certificationList.firstOrNull {
                     it.countryCode == "US"
                 } ?: resource.data.certificationList.firstOrNull()

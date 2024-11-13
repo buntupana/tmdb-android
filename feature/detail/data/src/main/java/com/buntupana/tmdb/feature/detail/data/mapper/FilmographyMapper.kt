@@ -1,12 +1,11 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.core.data.api.CoreApi
-import com.buntupana.tmdb.core.data.mapper.getMediaType
-import com.buntupana.tmdb.core.domain.entity.MediaType
-import com.buntupana.tmdb.core.presentation.util.ifNotNullOrBlank
-import com.buntupana.tmdb.core.presentation.util.ifNull
 import com.buntupana.tmdb.feature.detail.data.raw.FilmographyRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
+import com.panabuntu.tmdb.core.common.api.CoreApi
+import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
+import com.panabuntu.tmdb.core.common.ifNull
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
@@ -25,7 +24,7 @@ fun FilmographyRaw.toModel(): List<CreditPersonItem> {
             null
         }
 
-        when (getMediaType(it.mediaType)) {
+        when (com.panabuntu.tmdb.core.common.mapper.getMediaType(it.mediaType)) {
             MediaType.MOVIE -> {
                 CreditPersonItem.Movie(
                     id = it.id,
@@ -73,7 +72,7 @@ fun FilmographyRaw.toModel(): List<CreditPersonItem> {
             null
         }
 
-        when (getMediaType(it.mediaType)) {
+        when (com.panabuntu.tmdb.core.common.mapper.getMediaType(it.mediaType)) {
             MediaType.MOVIE -> {
                 CreditPersonItem.Movie(
                     id = it.id,

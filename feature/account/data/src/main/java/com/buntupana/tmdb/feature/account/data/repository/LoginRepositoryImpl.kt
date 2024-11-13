@@ -1,12 +1,12 @@
 package com.buntupana.tmdb.feature.account.data.repository
 
-import com.buntupana.tmdb.core.domain.entity.NetworkError
-import com.buntupana.tmdb.core.domain.entity.Result
-import com.buntupana.tmdb.core.domain.entity.map
 import com.buntupana.tmdb.feature.account.data.mapper.toModel
 import com.buntupana.tmdb.feature.account.data.remote_data_source.LoginRemoteDataSource
 import com.buntupana.tmdb.feature.account.domain.model.AccountDetails
 import com.buntupana.tmdb.feature.account.domain.repository.LoginRepository
+import com.panabuntu.tmdb.core.common.entity.NetworkError
+import com.panabuntu.tmdb.core.common.entity.Result
+import com.panabuntu.tmdb.core.common.entity.map
 import javax.inject.Inject
 
 class LoginRepositoryImpl @Inject constructor(

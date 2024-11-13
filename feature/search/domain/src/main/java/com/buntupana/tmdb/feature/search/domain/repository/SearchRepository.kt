@@ -1,10 +1,10 @@
 package com.buntupana.tmdb.feature.search.domain.repository
 
 import androidx.paging.PagingData
-import com.buntupana.tmdb.core.domain.entity.Resource
-import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.domain.model.PersonItem
 import com.buntupana.tmdb.feature.search.domain.model.SearchItem
+import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.model.MediaItem
+import com.panabuntu.tmdb.core.common.model.PersonItem
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {

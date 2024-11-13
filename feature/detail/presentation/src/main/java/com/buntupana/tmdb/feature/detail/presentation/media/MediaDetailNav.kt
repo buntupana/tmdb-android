@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.feature.detail.presentation.media
 
-import com.buntupana.tmdb.core.domain.entity.MediaType
-import com.buntupana.tmdb.core.presentation.navigation.Routes
+import com.buntupana.tmdb.core.ui.navigation.Routes
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import kotlinx.serialization.Serializable
 
 @Serializable

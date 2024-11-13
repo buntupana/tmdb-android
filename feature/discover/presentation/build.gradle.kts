@@ -46,7 +46,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk)
 
     // Modules
-    implementation(project(":core"))
+    implementation(project(":core:ui"))
     implementation(project(":feature:discover:domain"))
 
     // Kotlin
@@ -55,23 +55,18 @@ dependencies {
     // Dagger Hilt
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.ksp)
+    api(libs.dagger.hilt.navigation.compose)
 
     // Android
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // Compose
-    implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    debugImplementation(libs.androidx.ui.tooling)
-    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.bundles.compose)
     implementation(libs.androidx.navigation)
-    implementation(libs.androidx.paging.compose)
-    implementation(libs.androidx.compose.foundation)
+
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.icons.extended)
 
     // Accompanist
     api(libs.google.accompanist.systemuicontroller)

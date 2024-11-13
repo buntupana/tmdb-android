@@ -3,7 +3,6 @@ package com.buntupana.tmdb.feature.detail.presentation.common
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -23,14 +22,13 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
-import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.Typography
-import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
-import com.buntupana.tmdb.core.presentation.util.isNotNullOrBlank
+import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.Typography
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.panabuntu.tmdb.core.common.isNotNullOrBlank
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HeaderSimple(
     modifier: Modifier = Modifier,

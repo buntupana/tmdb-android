@@ -1,9 +1,9 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.core.presentation.util.ifNullOrBlank
 import com.buntupana.tmdb.feature.detail.data.raw.MediaVideosRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Video
 import com.buntupana.tmdb.feature.detail.domain.model.VideoType
+import com.panabuntu.tmdb.core.common.ifNullOrBlank
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 

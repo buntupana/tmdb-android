@@ -1,10 +1,11 @@
 package com.buntupana.tmdb.feature.discover.domain.repository
 
-import com.buntupana.tmdb.core.domain.entity.Resource
-import com.buntupana.tmdb.core.domain.model.MediaItem
+
 import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
+import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.model.MediaItem
 
 interface DiscoverRepository {
 

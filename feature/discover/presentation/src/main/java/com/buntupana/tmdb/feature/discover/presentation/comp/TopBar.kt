@@ -14,11 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.R
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
-import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
-import com.buntupana.tmdb.core.presentation.util.clickableIcon
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.util.clickableIcon
+import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun TopBar(
@@ -36,7 +36,7 @@ fun TopBar(
         Image(
             modifier = Modifier
                 .padding(vertical = Dimens.padding.small, horizontal = Dimens.padding.medium),
-            painter = painterResource(id = R.drawable.ic_logo_short),
+            painter = painterResource(id = RCore.drawable.ic_logo_short),
             contentDescription = null
         )
 
@@ -45,7 +45,7 @@ fun TopBar(
                 .padding(horizontal = Dimens.padding.small)
                 .clickable { clickOnSearch() }
                 .clickableIcon(),
-            painter = painterResource(id = R.drawable.ic_search),
+            painter = painterResource(id = RCore.drawable.ic_search),
             contentDescription = null,
             alignment = Alignment.CenterEnd,
             colorFilter = ColorFilter.tint(SecondaryColor)

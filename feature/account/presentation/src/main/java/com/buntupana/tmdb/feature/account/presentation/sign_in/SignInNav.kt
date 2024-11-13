@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.account.presentation.sign_in
 
-import com.buntupana.tmdb.core.presentation.navigation.Routes
+import com.buntupana.tmdb.core.ui.navigation.Routes
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

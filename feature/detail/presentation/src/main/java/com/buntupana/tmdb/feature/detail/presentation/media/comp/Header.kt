@@ -21,12 +21,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
-import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.util.isNotNullOrBlank
+import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
+import com.panabuntu.tmdb.core.common.isNotNullOrBlank
 
 @Composable
 fun Header(

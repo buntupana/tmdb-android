@@ -12,11 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.util.isNotNullOrBlank
+import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
+import com.panabuntu.tmdb.core.common.isNotNullOrBlank
 
 @Composable
 fun EpisodeHorizontal(

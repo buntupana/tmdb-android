@@ -16,18 +16,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.domain.model.PersonItem
-import com.buntupana.tmdb.core.presentation.composables.item.MediaItemHorizontal
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 
 @Composable
 fun SearchPager(
     modifier: Modifier = Modifier,
     pagingItems: LazyPagingItems<out Any>?,
     noResultMessage: String,
-    onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color) -> Unit,
+    onMediaClick: (mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem, mainPosterColor: Color) -> Unit,
     onPersonClick: (personId: Long) -> Unit
 ) {
 
@@ -81,7 +79,7 @@ fun SearchPager(
                     val item = pagingItems[index] ?: return@items
 
                     when (item) {
-                        is MediaItem -> {
+                        is com.panabuntu.tmdb.core.common.model.MediaItem -> {
                             MediaItemHorizontal(
                                 modifier = modifier.height(Dimens.imageSize.posterHeight),
                                 onMediaClick = { _, mainPosterColor ->
@@ -95,7 +93,7 @@ fun SearchPager(
                             )
                         }
 
-                        is PersonItem -> {
+                        is com.panabuntu.tmdb.core.common.model.PersonItem -> {
 
                             val description = if (item.knownForList.firstOrNull() == null) {
                                 item.knownForDepartment

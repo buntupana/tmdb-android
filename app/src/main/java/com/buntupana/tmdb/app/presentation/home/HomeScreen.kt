@@ -29,11 +29,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.buntupana.tmdb.app.R
-import com.buntupana.tmdb.core.domain.entity.MediaType
-import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
-import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
-import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
-import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
 import com.buntupana.tmdb.feature.account.presentation.account.AccountScreen
 import com.buntupana.tmdb.feature.discover.presentation.comp.TopBar
@@ -43,6 +42,7 @@ import com.buntupana.tmdb.feature.discover.presentation.movies.MoviesNav
 import com.buntupana.tmdb.feature.discover.presentation.movies.MoviesScreen
 import com.buntupana.tmdb.feature.discover.presentation.tv_shows.TvShowsNav
 import com.buntupana.tmdb.feature.discover.presentation.tv_shows.TvShowsScreen
+import com.panabuntu.tmdb.core.common.entity.MediaType
 
 
 @Composable

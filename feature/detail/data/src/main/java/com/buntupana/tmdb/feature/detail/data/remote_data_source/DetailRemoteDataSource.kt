@@ -1,7 +1,5 @@
 package com.buntupana.tmdb.feature.detail.data.remote_data_source
 
-import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
-import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.feature.detail.data.api.DetailApi
 import com.buntupana.tmdb.feature.detail.data.raw.ContentRatingsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.CreditsMovieRaw
@@ -14,6 +12,8 @@ import com.buntupana.tmdb.feature.detail.data.raw.ReleaseDatesRaw
 import com.buntupana.tmdb.feature.detail.data.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowSeasonsDetailsRaw
+import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.remote_data_source.RemoteDataSource
 import javax.inject.Inject
 
 class DetailRemoteDataSource @Inject constructor(

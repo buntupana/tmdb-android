@@ -34,19 +34,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.buntupana.tmdb.core.presentation.composables.DivisorCircle
-import com.buntupana.tmdb.core.presentation.composables.HoursMinutesText
-import com.buntupana.tmdb.core.presentation.composables.NestedVerticalLazyGrid
-import com.buntupana.tmdb.core.presentation.composables.OutlinedText
-import com.buntupana.tmdb.core.presentation.composables.widget.UserScore
-import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.composables.DivisorCircle
+import com.buntupana.tmdb.core.ui.composables.HoursMinutesText
+import com.buntupana.tmdb.core.ui.composables.NestedVerticalLazyGrid
+import com.buntupana.tmdb.core.ui.composables.OutlinedText
+import com.buntupana.tmdb.core.ui.composables.widget.UserScore
+import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
-import com.buntupana.tmdb.core.R as RCore
+import com.buntupana.tmdb.core.ui.R as RCore
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

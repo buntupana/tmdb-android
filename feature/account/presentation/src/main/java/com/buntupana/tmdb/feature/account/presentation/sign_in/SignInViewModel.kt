@@ -7,10 +7,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.buntupana.tmdb.core.domain.entity.onError
-import com.buntupana.tmdb.core.domain.entity.onSuccess
 import com.buntupana.tmdb.feature.account.domain.usecase.CreateAuthenticationUrlUseCase
 import com.buntupana.tmdb.feature.account.domain.usecase.CreateSessionUseCase
+import com.panabuntu.tmdb.core.common.entity.onError
+import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

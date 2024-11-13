@@ -1,18 +1,16 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
-import com.buntupana.tmdb.core.domain.model.Gender
-
 sealed class Person(
     open val id: Long,
     open val name: String,
-    open val gender: Gender,
+    open val gender: com.panabuntu.tmdb.core.common.model.Gender,
     open val profileUrl: String?
 ) {
 
     sealed class Cast(
         override val id: Long,
         override val name: String,
-        override val gender: Gender,
+        override val gender: com.panabuntu.tmdb.core.common.model.Gender,
         override val profileUrl: String?
     ) : Person(
         id = id,
@@ -24,7 +22,7 @@ sealed class Person(
         data class Movie(
             override val id: Long,
             override val name: String,
-            override val gender: Gender,
+            override val gender: com.panabuntu.tmdb.core.common.model.Gender,
             override val profileUrl: String?,
             val character: String
         ) : Cast(
@@ -37,7 +35,7 @@ sealed class Person(
         data class TvShow(
             override val id: Long,
             override val name: String,
-            override val gender: Gender,
+            override val gender: com.panabuntu.tmdb.core.common.model.Gender,
             override val profileUrl: String?,
             val totalEpisodeCount: Int,
             val roleList: List<Role>
@@ -52,7 +50,7 @@ sealed class Person(
     sealed class Crew(
         override val id: Long,
         override val name: String,
-        override val gender: Gender,
+        override val gender: com.panabuntu.tmdb.core.common.model.Gender,
         override val profileUrl: String?,
         open val department: String
     ) : Person(
@@ -65,7 +63,7 @@ sealed class Person(
         data class Movie(
             override val id: Long,
             override val name: String,
-            override val gender: Gender,
+            override val gender: com.panabuntu.tmdb.core.common.model.Gender,
             override val profileUrl: String?,
             override val department: String,
             val job: String
@@ -80,7 +78,7 @@ sealed class Person(
         data class TvShow(
             override val id: Long,
             override val name: String,
-            override val gender: Gender,
+            override val gender: com.panabuntu.tmdb.core.common.model.Gender,
             override val profileUrl: String?,
             override val department: String,
             val totalEpisodeCount: Int,

@@ -12,14 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.buntupana.tmdb.core.presentation.composables.ExpandableText
-import com.buntupana.tmdb.core.presentation.composables.TitleAndSubtitle
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.util.getString
-import com.buntupana.tmdb.core.presentation.util.ifNull
-import com.buntupana.tmdb.core.presentation.util.toLocalFormat
+import com.buntupana.tmdb.core.ui.composables.ExpandableText
+import com.buntupana.tmdb.core.ui.composables.TitleAndSubtitle
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.getString
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.presentation.R
+import com.panabuntu.tmdb.core.common.ifNull
+import com.panabuntu.tmdb.core.common.toLocalFormat
 
 @Composable
 fun PersonalInfo(

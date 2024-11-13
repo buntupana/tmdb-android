@@ -23,9 +23,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.feature.search.presentation.R
+import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun TrendingList(
@@ -66,7 +67,7 @@ fun TrendingList(
                     )
                     Spacer(modifier = Modifier.width(Dimens.padding.small))
                     Text(
-                        text = stringResource(id = com.buntupana.tmdb.core.R.string.text_trending),
+                        text = stringResource(id = RCore.string.text_trending),
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
                     )

@@ -170,3 +170,13 @@ ktor = [
     "io-ktor-client-logging",
     "io-ktor-serialization-kotlinx-json"
 ]
+compose = [
+    "androidx-activity-compose",
+    "androidx-ui",
+    "androidx-ui-graphics",
+    "androidx-ui-tooling-preview",
+    "androidx-compose-foundation",
+    "androidx-icons-extended",
+    "androidx-lifecycle-compose",
+    "androidx-navigation"
+]

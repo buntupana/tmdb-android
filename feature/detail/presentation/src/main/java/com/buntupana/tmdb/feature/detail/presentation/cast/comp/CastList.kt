@@ -13,12 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.R
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.Typography
-import com.buntupana.tmdb.core.presentation.util.isNotNullOrEmpty
+import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.Typography
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
+import com.panabuntu.tmdb.core.common.isNotNullOrEmpty
 
 fun LazyListScope.castList(
     modifier: Modifier = Modifier,

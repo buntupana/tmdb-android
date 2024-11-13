@@ -18,12 +18,12 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.presentation.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.seasonSample
 import java.time.LocalDate
-import com.buntupana.tmdb.core.R as RCore
+import com.buntupana.tmdb.core.ui.R as RCore
 
 
 @Composable

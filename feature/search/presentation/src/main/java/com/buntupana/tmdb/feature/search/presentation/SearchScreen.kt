@@ -14,15 +14,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.buntupana.tmdb.core.domain.entity.MediaType
-import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
-import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
+import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchBar
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchResults
 import com.buntupana.tmdb.feature.search.presentation.comp.TrendingList
+import com.panabuntu.tmdb.core.common.entity.MediaType
 
 @Composable
 fun SearchScreen(
@@ -41,7 +41,7 @@ fun SearchScreen(
         },
         onMediaClick = { mediaItem, mainPosterColor ->
             when (mediaItem) {
-                is MediaItem.Movie -> {
+                is com.panabuntu.tmdb.core.common.model.MediaItem.Movie -> {
                     onMediaClick(
                         mediaItem.id,
                         MediaType.MOVIE,
@@ -49,7 +49,7 @@ fun SearchScreen(
                     )
                 }
 
-                is MediaItem.TvShow -> {
+                is com.panabuntu.tmdb.core.common.model.MediaItem.TvShow -> {
                     onMediaClick(
                         mediaItem.id,
                         MediaType.TV_SHOW,
@@ -71,7 +71,7 @@ fun SearchScreenContent(
     state: SearchState,
     onSearchSuggestions: (searchKey: String) -> Unit,
     onSearch: (searchKey: String, searchType: SearchType?) -> Unit,
-    onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color?) -> Unit,
+    onMediaClick: (mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem, mainPosterColor: Color?) -> Unit,
     onPersonClick: (personId: Long) -> Unit,
     onDismissSuggestionsClick: () -> Unit
 ) {
@@ -100,7 +100,7 @@ fun SearchScreenContent(
                         modifier = Modifier
                             .padding(vertical = 200.dp)
                             .fillMaxSize(),
-                        errorMessage = stringResource(com.buntupana.tmdb.core.R.string.message_loading_content_error)
+                        errorMessage = stringResource(R.string.message_loading_content_error)
                     ) {
                         onSearch(state.searchKey, null)
                     }

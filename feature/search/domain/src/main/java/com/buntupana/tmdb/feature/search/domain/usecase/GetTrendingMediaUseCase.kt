@@ -1,9 +1,9 @@
 package com.buntupana.tmdb.feature.search.domain.usecase
 
-import com.buntupana.tmdb.app.domain.usecase.UseCaseResource
-import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.feature.search.domain.model.SearchItem
 import com.buntupana.tmdb.feature.search.domain.repository.SearchRepository
+import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.usecase.UseCaseResource
 import javax.inject.Inject
 
 class GetTrendingMediaUseCase @Inject constructor(

@@ -3,11 +3,10 @@ package com.buntupana.tmdb.feature.search.presentation
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.buntupana.tmdb.core.presentation.util.TYPING_DELAY
+import com.buntupana.tmdb.core.ui.util.TYPING_DELAY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -17,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
     private val getTrendingMediaUseCase: com.buntupana.tmdb.feature.search.domain.usecase.GetTrendingMediaUseCase,
     private val getSearchMediaUseCase: com.buntupana.tmdb.feature.search.domain.usecase.GetSearchMediaUseCase,
     private val getSearchMoviesUseCase: com.buntupana.tmdb.feature.search.domain.usecase.GetSearchMoviesUseCase,

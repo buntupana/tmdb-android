@@ -8,10 +8,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.buntupana.tmdb.core.presentation.composables.widget.menu_selector.ExpandableMenuSelector
-import com.buntupana.tmdb.core.presentation.composables.widget.menu_selector.ExpandableMenuSelectorAlign
-import com.buntupana.tmdb.core.presentation.composables.widget.menu_selector.ExpandableMenuSelectorItem
-import com.buntupana.tmdb.core.presentation.theme.Dimens
+import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelector
+import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelectorAlign
+import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelectorItem
+import com.buntupana.tmdb.core.ui.theme.Dimens
 
 @Composable
 fun <T : ExpandableMenuSelectorItem> TitleAndFilter(

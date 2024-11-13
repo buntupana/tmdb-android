@@ -24,10 +24,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.buntupana.tmdb.core.R
-import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.feature.search.presentation.MediaResultCount
 import com.buntupana.tmdb.feature.search.presentation.SearchState
 import com.buntupana.tmdb.feature.search.presentation.SearchType
@@ -38,7 +37,7 @@ import timber.log.Timber
 fun SearchResults(
     modifier: Modifier = Modifier,
     searchState: SearchState,
-    onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color) -> Unit,
+    onMediaClick: (mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem, mainPosterColor: Color) -> Unit,
     onPersonClick: (personId: Long) -> Unit
 ) {
 

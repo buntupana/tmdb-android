@@ -1,10 +1,9 @@
 package com.buntupana.tmdb.feature.search.domain.usecase
 
-import androidx.compose.ui.util.fastDistinctBy
-import com.buntupana.tmdb.app.domain.usecase.UseCaseResource
-import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.feature.search.domain.model.SearchItem
 import com.buntupana.tmdb.feature.search.domain.repository.SearchRepository
+import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.usecase.UseCaseResource
 import javax.inject.Inject
 
 class GetSearchMediaUseCase @Inject constructor(
@@ -30,7 +29,7 @@ class GetSearchMediaUseCase @Inject constructor(
                 resultList.add(it)
             }
 
-            val remainingItems = result.data.filterNot { it in resultList }.fastDistinctBy { it.name }
+            val remainingItems = result.data.filterNot { it in resultList }.distinctBy { it.name }
             resultList.addAll(remainingItems)
 
             return Resource.Success(resultList)

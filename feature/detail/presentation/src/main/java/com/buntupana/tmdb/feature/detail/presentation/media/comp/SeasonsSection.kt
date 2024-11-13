@@ -22,15 +22,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.util.isNotNullOrBlank
-import com.buntupana.tmdb.core.presentation.util.toFullDate
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.common.SeasonSubtitle
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
 import com.buntupana.tmdb.feature.detail.presentation.seasonSample
+import com.panabuntu.tmdb.core.common.isNotNullOrBlank
+import com.panabuntu.tmdb.core.common.toFullDate
+import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun SeasonsSection(
@@ -135,7 +136,7 @@ private fun LastEpisode(episode: Episode?) {
             modifier = Modifier
                 .size(Dimens.icon)
                 .padding(end = Dimens.padding.betweenTexts),
-            painter = painterResource(id = com.buntupana.tmdb.core.R.drawable.ic_calendar),
+            painter = painterResource(id = RCore.drawable.ic_calendar),
             contentDescription = null
         )
 

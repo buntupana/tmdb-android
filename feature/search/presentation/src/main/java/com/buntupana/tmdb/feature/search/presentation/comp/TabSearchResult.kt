@@ -12,8 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.presentation.composables.OutlinedText
-import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.composables.OutlinedText
+import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 
 @Composable
 fun TabSearchResult(

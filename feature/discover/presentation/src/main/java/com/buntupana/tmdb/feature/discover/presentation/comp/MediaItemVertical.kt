@@ -31,20 +31,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.buntupana.tmdb.core.domain.model.MediaItem
-import com.buntupana.tmdb.core.presentation.composables.ImageFromUrl
-import com.buntupana.tmdb.core.presentation.composables.widget.UserScore
-import com.buntupana.tmdb.core.presentation.spToDp
-import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.presentation.theme.Dimens
-import com.buntupana.tmdb.core.presentation.theme.HkFontFamily
+import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.composables.widget.UserScore
+import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.HkFontFamily
+import com.buntupana.tmdb.core.ui.util.spToDp
 
 private const val MAX_TITLE_LINES = 3
 
 @Composable
 fun MediaItemVertical(
     modifier: Modifier = Modifier,
-    mediaItem: MediaItem,
+    mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem,
     fontSize: TextUnit = TextUnit.Unspecified,
     onClick: (mainPosterColor: Color) -> Unit
 ) {
@@ -61,12 +60,12 @@ fun MediaItemVertical(
         val releaseDate: String
 
         when (mediaItem) {
-            is MediaItem.Movie -> {
+            is com.panabuntu.tmdb.core.common.model.MediaItem.Movie -> {
                 voteAverage = mediaItem.voteAverage
                 releaseDate = mediaItem.releaseDate
             }
 
-            is MediaItem.TvShow -> {
+            is com.panabuntu.tmdb.core.common.model.MediaItem.TvShow -> {
                 voteAverage = mediaItem.voteAverage
                 releaseDate = mediaItem.releaseDate
             }
@@ -166,7 +165,7 @@ fun MediaItemVertical(
 fun MediaItemPreview() {
     MediaItemVertical(
         modifier = Modifier.width(120.dp),
-        mediaItem = MediaItem.Movie(
+        mediaItem = com.panabuntu.tmdb.core.common.model.MediaItem.Movie(
             id = 0,
             name = "Fantastics Beasts: the Secrets of Dumbelbore",
             originalName = "",

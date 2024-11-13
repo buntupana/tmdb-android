@@ -1,7 +1,5 @@
 package com.buntupana.tmdb.feature.detail.data.repository
 
-import com.buntupana.tmdb.core.data.networkResult
-import com.buntupana.tmdb.core.domain.entity.Resource
 import com.buntupana.tmdb.feature.detail.data.mapper.toModel
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.DetailRemoteDataSource
 import com.buntupana.tmdb.feature.detail.domain.model.Certification
@@ -16,6 +14,8 @@ import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.domain.model.SeasonDetail
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
+import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.networkResult
 import javax.inject.Inject
 
 class DetailRepositoryImpl @Inject constructor(

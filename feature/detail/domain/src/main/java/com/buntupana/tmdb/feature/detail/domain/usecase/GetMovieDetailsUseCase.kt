@@ -1,14 +1,13 @@
 package com.buntupana.tmdb.feature.detail.domain.usecase
 
-import androidx.compose.ui.text.intl.Locale
-import com.buntupana.tmdb.app.domain.usecase.UseCaseResource
-import com.buntupana.tmdb.core.domain.entity.Resource
-import com.buntupana.tmdb.core.domain.model.Gender
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
+import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.usecase.UseCaseResource
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Locale
 import javax.inject.Inject
 
 class GetMovieDetailsUseCase @Inject constructor(
@@ -25,7 +24,7 @@ class GetMovieDetailsUseCase @Inject constructor(
                 // if not we can try to get the release and certification from the production country
                 val releaseAndCertification =
                     resource.data.releaseDateList.firstOrNull {
-                        it.countryCode == Locale.current.region
+                        it.countryCode == Locale.getDefault().country
                     } ?: resource.data.releaseDateList.firstOrNull {
                         it.countryCode == resource.data.productionCountryCodeList.firstOrNull()
                     } ?: resource.data.releaseDateList.firstOrNull()
@@ -39,7 +38,7 @@ class GetMovieDetailsUseCase @Inject constructor(
 
                 val localReleaseDate = releaseAndCertification?.releaseDate
                 val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(
-                    java.util.Locale.getDefault()
+                    Locale.getDefault()
                 )
 
                 val creatorJobList =
@@ -51,7 +50,7 @@ class GetMovieDetailsUseCase @Inject constructor(
                             Person.Crew.Movie(
                                 id = it.key,
                                 name = it.value.firstOrNull()?.name.orEmpty(),
-                                gender = it.value.firstOrNull()?.gender ?: Gender.NOT_SPECIFIED,
+                                gender = it.value.firstOrNull()?.gender ?: com.panabuntu.tmdb.core.common.model.Gender.NOT_SPECIFIED,
                                 profileUrl = it.value.firstOrNull()?.profileUrl.orEmpty(),
                                 department = "",
                                 job = it.value.joinToString(", ") { crewItem -> crewItem.job }

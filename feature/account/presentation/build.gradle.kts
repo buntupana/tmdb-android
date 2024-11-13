@@ -72,17 +72,16 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.icons.extended)
-
-    // Accompanist
-    api(libs.google.accompanist.systemuicontroller)
+    implementation(libs.androidx.lifecycle.compose)
 
     // Material
-    api(libs.androidx.material3)
+    implementation(libs.androidx.material3)
 
     // Tools
-    api(libs.jakewharton.timber)
-    api(libs.io.coil.kt)
-    api(libs.androidx.pallete)
+    implementation(libs.jakewharton.timber)
+    implementation(libs.io.coil.kt)
+    implementation(libs.androidx.pallete)
+
 
     // Testing
     testImplementation(libs.junit)

@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.app.presentation.home
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.buntupana.tmdb.app.presentation.navigation.Routes
+import com.buntupana.tmdb.core.presentation.navigation.Routes
 
 data class BottomNavigationItem(
     val title: String,

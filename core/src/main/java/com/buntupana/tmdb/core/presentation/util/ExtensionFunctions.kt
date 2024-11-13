@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.core.graphics.drawable.toBitmap
-import androidx.lifecycle.SavedStateHandle
 import androidx.palette.graphics.Palette
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -141,8 +140,4 @@ fun Drawable.getDominantColor(colorResult: (dominantColor: Color) -> Unit) {
             colorResult(Color(dominantColor))
         }
     }
-}
-
-fun <T>SavedStateHandle.navArgs(): T {
-    return get<T>("args")?.decodeAllStrings() ?: throw IllegalStateException("Nav args not found")
 }

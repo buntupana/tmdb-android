@@ -18,12 +18,22 @@
         <activity
             android:name="com.buntupana.tmdb.app.presentation.MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.TMDB">
+            android:theme="@style/Theme.TMDB"
+            android:launchMode="singleInstance"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="buntupana.tmdb"
+                    android:scheme="app" />
             </intent-filter>
         </activity>
     </application>

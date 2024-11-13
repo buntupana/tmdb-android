@@ -27,7 +27,8 @@ import com.buntupana.tmdb.feature.search.presentation.comp.TrendingList
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel(),
-    searchNavigator: SearchNavigator
+    onMediaClick: (mediaItemId: Long, mediaType: MediaType, mainPosterColor: Color?) -> Unit,
+    onPersonClick: (personId: Long) -> Unit,
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -41,7 +42,7 @@ fun SearchScreen(
         onMediaClick = { mediaItem, mainPosterColor ->
             when (mediaItem) {
                 is MediaItem.Movie -> {
-                    searchNavigator.navigateToMediaDetail(
+                    onMediaClick(
                         mediaItem.id,
                         MediaType.MOVIE,
                         mainPosterColor
@@ -49,7 +50,7 @@ fun SearchScreen(
                 }
 
                 is MediaItem.TvShow -> {
-                    searchNavigator.navigateToMediaDetail(
+                    onMediaClick(
                         mediaItem.id,
                         MediaType.TV_SHOW,
                         mainPosterColor
@@ -57,9 +58,7 @@ fun SearchScreen(
                 }
             }
         },
-        onPersonClick = { personId ->
-            searchNavigator.navigateToPerson(personId)
-        },
+        onPersonClick = onPersonClick,
         onDismissSuggestionsClick = {
             focusManager.clearFocus()
             viewModel.onEvent(SearchEvent.DismissSuggestions)

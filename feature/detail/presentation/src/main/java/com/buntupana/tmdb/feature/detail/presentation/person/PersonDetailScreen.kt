@@ -22,7 +22,6 @@ import com.buntupana.tmdb.core.presentation.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.presentation.theme.PersonBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
-import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.CreditsFilter
@@ -35,22 +34,21 @@ import com.buntupana.tmdb.feature.detail.presentation.personDetailsSample
 @Composable
 fun PersonDetailScreen(
     viewModel: PersonDetailViewModel = hiltViewModel(),
-    detailNavigator: DetailNavigator
+    onBackClick: () -> Unit,
+    onSearchClick: () -> Unit,
+    onMediaClick: (mediaItemId: Long, mediaType: MediaType, mainPosterColor: Color?) -> Unit,
+    onLogoClick: () -> Unit
 ) {
 
     PersonDetailContent(
         viewModel.state,
-        onBackClick = { detailNavigator.navigateBack() },
-        onSearchClick = { detailNavigator.navigateToSearch() },
+        onBackClick = onBackClick,
+        onSearchClick = onSearchClick,
         onRetryClick = {
             viewModel.onEvent(PersonDetailEvent.GetPersonDetails)
         },
-        onMediaClick = { id, mediaType, dominantColor ->
-            detailNavigator.navigateToMediaDetail(id, mediaType, dominantColor)
-        },
-        onLogoClick = {
-            detailNavigator.navigateToMainScreen()
-        }
+        onMediaClick = onMediaClick,
+        onLogoClick = onLogoClick
     )
 }
 

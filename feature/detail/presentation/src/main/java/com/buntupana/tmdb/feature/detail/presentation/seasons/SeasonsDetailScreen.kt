@@ -23,7 +23,6 @@ import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.detail.domain.model.Season
-import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
@@ -33,23 +32,26 @@ import com.buntupana.tmdb.feature.detail.presentation.seasons.comp.SeasonItem
 @Composable
 fun SeasonsDetailScreen(
     viewModel: SeasonDetailViewModel = hiltViewModel(),
-    detailNavigator: DetailNavigator
+    onBackClick: () -> Unit,
+    onSearchClick: () -> Unit,
+    onLogoClick: () -> Unit,
+    onSeasonClick: (tvShowId: Long, seasonName: String, seasonNumber: Int, posterUrl: String?, backgroundColor: Color, releaseYear: String?) -> Unit,
 ) {
 
     SeasonsContent(
         state = viewModel.state,
-        onBackClick = { detailNavigator.navigateBack() },
+        onBackClick = onBackClick,
         onRetryClick = { viewModel.onEvent(SeasonsDetailEvent.GetSeasons) },
-        onSearchClick = { detailNavigator.navigateToSearch() },
-        onLogoClick = { detailNavigator.navigateToMainScreen() },
+        onSearchClick = onSearchClick,
+        onLogoClick = onLogoClick,
         onSeasonClick = { tvShowId, season, backgroundColor ->
-            detailNavigator.navigateToEpisodes(
-                tvShowId = tvShowId,
-                seasonName = season.name,
-                seasonNumber = season.seasonNumber ?: 0,
-                posterUrl = season.posterUrl,
-                backgroundColor = backgroundColor,
-                releaseYear = season.airDate?.year.toString()
+            onSeasonClick(
+                tvShowId,
+                season.name,
+                season.seasonNumber ?: 0,
+                season.posterUrl,
+                backgroundColor,
+                season.airDate?.year.toString()
             )
         }
     )

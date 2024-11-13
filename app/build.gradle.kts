@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.kotlin.reflect)
 
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.browser)
 
     // Dagger Hilt
     implementation(libs.dagger.hilt)

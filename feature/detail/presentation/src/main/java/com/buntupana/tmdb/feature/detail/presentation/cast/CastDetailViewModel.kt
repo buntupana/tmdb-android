@@ -8,9 +8,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.presentation.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieCreditsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowCreditsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +25,7 @@ class CastDetailViewModel @Inject constructor(
     private val getTvShowCreditsUseCase: GetTvShowCreditsUseCase
 ) : ViewModel() {
 
-    private val navArgs: CastDetailNavArgs = savedStateHandle.navArgs()
+    private val navArgs: CastDetailNav = savedStateHandle.toRoute()
 
     var state by mutableStateOf(
         CastDetailState(

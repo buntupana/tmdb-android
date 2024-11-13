@@ -21,7 +21,6 @@ import com.buntupana.tmdb.core.presentation.theme.Dimens
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.isNotNullOrEmpty
 import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
-import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
@@ -33,14 +32,16 @@ import com.buntupana.tmdb.core.R as RCore
 @Composable
 fun EpisodesDetailScreen(
     viewModel: EpisodesDetailViewModel = hiltViewModel(),
-    detailNavigator: DetailNavigator
+    onBackClick: () -> Unit,
+    onSearchClick: () -> Unit,
+    onLogoClick: () -> Unit,
 ) {
     EpisodesDetailContent(
         state = viewModel.state,
-        onBackClick = { detailNavigator.navigateBack() },
+        onBackClick = onBackClick,
         onRetryClick = { viewModel.onEvent(EpisodesDetailEvent.GetEpisodesDetail) },
-        onSearchClick = { detailNavigator.navigateToSearch() },
-        onLogoClick = { detailNavigator.navigateToMainScreen() }
+        onSearchClick = onSearchClick,
+        onLogoClick = onLogoClick
     )
 }
 

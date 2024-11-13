@@ -9,6 +9,17 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.bearer
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,10 +31,41 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object CoreModule {
 
-
     @Provides
     @Named("api_key")
     fun provideApiKey(): String = BuildConfig.access_token
+
+    @Singleton
+    @Provides
+    fun provideHttpClient(
+        @Named("api_key") apiKey: String,
+    ): HttpClient {
+        return HttpClient(OkHttp) {
+            install(Logging) {
+                level = LogLevel.ALL
+            }
+            install(DefaultRequest) {
+                url(CoreApi.BASE_URL_API)
+//                header(HttpHeaders.ContentType, ContentType.Application.Json)
+//                header("X-Api-Key", apiKey)
+            }
+            install(Auth) {
+                bearer {
+                    loadTokens {
+                        BearerTokens(
+                            accessToken = apiKey,
+                            refreshToken = ""
+                        )
+                    }
+                }
+            }
+            install(ContentNegotiation) {
+                json(
+                    json = Json { ignoreUnknownKeys = true }
+                )
+            }
+        }
+    }
 
     @Singleton
     @Provides

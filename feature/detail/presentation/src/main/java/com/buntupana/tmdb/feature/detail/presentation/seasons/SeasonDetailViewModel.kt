@@ -8,8 +8,8 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.buntupana.tmdb.core.presentation.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.presentation.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowSeasonsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,7 +22,7 @@ class SeasonDetailViewModel @Inject constructor(
     private val getTvShowSeasonsUseCase: GetTvShowSeasonsUseCase
 ) : ViewModel() {
 
-    private val navArgs: SeasonsDetailNavArgs = savedStateHandle.navArgs()
+    private val navArgs: SeasonsDetailNav = savedStateHandle.toRoute()
 
     var state by mutableStateOf(
         SeasonsDetailState(

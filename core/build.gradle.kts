@@ -75,6 +75,9 @@ dependencies {
     api(libs.androidx.material3)
 
     // Networking
+    implementation(platform(libs.io.ktor.bom))
+    implementation(libs.bundles.ktor)
+
     api(libs.squareup.retrofit2.retrofit)
     api(libs.squareup.retrofit2.converter.moshi)
     api(libs.squareup.okhttp3.okhttp)
@@ -91,6 +94,7 @@ dependencies {
     api(libs.androidx.pallete)
     implementation(libs.squareup.moshi)
     ksp(libs.squareup.moshi.ksp)
+    implementation(libs.androidx.browser)
 
     // Testing
 //    testImplementation 'junit:junit:4.13.2'

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 android {
@@ -49,10 +50,8 @@ dependencies {
     implementation(libs.dagger.hilt.navigation.compose)
 
     // Networking
-    implementation(libs.squareup.retrofit2.retrofit)
-    implementation(libs.squareup.retrofit2.converter.moshi)
-    implementation(libs.squareup.okhttp3.okhttp)
-    implementation(libs.squareup.okhttp3.login.interceptor)
+    implementation(platform(libs.io.ktor.bom))
+    implementation(libs.bundles.ktor)
 
     // Tools
     api(libs.jakewharton.timber)

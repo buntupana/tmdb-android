@@ -22,41 +22,47 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.buntupana.tmdb.app.R
-import com.buntupana.tmdb.app.presentation.navigation.CommonNavigation
-import com.buntupana.tmdb.app.presentation.navigation.NavRoutesMainImpl
-import com.buntupana.tmdb.app.presentation.navigation.Routes
+import com.buntupana.tmdb.core.domain.entity.MediaType
 import com.buntupana.tmdb.core.presentation.theme.PrimaryColor
 import com.buntupana.tmdb.core.presentation.theme.SecondaryColor
 import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
-import com.buntupana.tmdb.feature.account.presentation.AccountScreen
+import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
+import com.buntupana.tmdb.feature.account.presentation.account.AccountScreen
 import com.buntupana.tmdb.feature.discover.presentation.comp.TopBar
-import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNavigator
+import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNav
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverScreen
+import com.buntupana.tmdb.feature.discover.presentation.movies.MoviesNav
 import com.buntupana.tmdb.feature.discover.presentation.movies.MoviesScreen
+import com.buntupana.tmdb.feature.discover.presentation.tv_shows.TvShowsNav
 import com.buntupana.tmdb.feature.discover.presentation.tv_shows.TvShowsScreen
 
 
 @Composable
 fun HomeScreen(
-    discoverNavigator: DiscoverNavigator
+    onSignInClicked: () -> Unit,
+    onSearchClicked: () -> Unit,
+    onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
 ) {
     HomeScreenContent(
-        discoverNavigator,
-        navigateToSearch = { discoverNavigator.navigateToSearch() }
+        onSignInClicked = onSignInClicked,
+        onSearchClicked = onSearchClicked,
+        onMediaItemClicked = onMediaItemClicked
     )
 }
 
 @Composable
 fun HomeScreenContent(
-    discoverNavigator: DiscoverNavigator,
-    navigateToSearch: () -> Unit,
+    onSignInClicked: () -> Unit,
+    onSearchClicked: () -> Unit,
+    onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
 ) {
 
     val navigationItems = listOf(
@@ -65,28 +71,28 @@ fun HomeScreenContent(
             selectedIcon = Icons.Rounded.Explore,
             unselectedIcon = Icons.Outlined.Explore,
             isSelected = true,
-            route = Routes.Discover
+            route = DiscoverNav
         ),
         BottomNavigationItem(
             title = stringResource(R.string.text_movies),
             selectedIcon = Icons.Rounded.Movie,
             unselectedIcon = Icons.Outlined.Movie,
             isSelected = false,
-            route = Routes.Movies
+            route = MoviesNav
         ),
         BottomNavigationItem(
             title = stringResource(R.string.text_tv_shows),
             selectedIcon = Icons.Rounded.Tv,
             unselectedIcon = Icons.Outlined.Tv,
             isSelected = false,
-            route = Routes.TvShows
+            route = TvShowsNav
         ),
         BottomNavigationItem(
             title = stringResource(R.string.text_account),
             selectedIcon = Icons.Rounded.Person,
             unselectedIcon = Icons.Outlined.Person,
             isSelected = false,
-            route = Routes.Account
+            route = AccountNav
         )
     )
 
@@ -100,7 +106,7 @@ fun HomeScreenContent(
         modifier = Modifier.setStatusNavigationBarColor(),
         topBar = {
             TopBar(
-                clickOnSearch = navigateToSearch
+                clickOnSearch = onSearchClicked
             )
         },
         bottomBar = {
@@ -141,19 +147,19 @@ fun HomeScreenContent(
         NavHost(
             modifier = Modifier.padding(it),
             navController = navController,
-            startDestination = Routes.Discover
+            startDestination = DiscoverNav
         ) {
-            composable<Routes.Discover> {
-                DiscoverScreen(discoverNavigator = discoverNavigator)
+            composable<DiscoverNav> {
+                DiscoverScreen(onMediaItemClicked = onMediaItemClicked)
             }
-            composable<Routes.Movies> {
+            composable<MoviesNav> {
                 MoviesScreen()
             }
-            composable<Routes.TvShows> {
+            composable<TvShowsNav> {
                 TvShowsScreen()
             }
-            composable<Routes.Account> {
-                AccountScreen()
+            composable<AccountNav> {
+                AccountScreen(onSignInClicked = onSignInClicked)
             }
         }
     }
@@ -163,7 +169,8 @@ fun HomeScreenContent(
 @Composable
 fun HomeScreenPreview() {
     HomeScreenContent(
-        discoverNavigator = CommonNavigation(NavRoutesMainImpl()),
-        navigateToSearch = {}
+        onSignInClicked = {},
+        onSearchClicked = {},
+        onMediaItemClicked = { _, _, _ -> }
     )
 }

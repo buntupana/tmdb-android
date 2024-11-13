@@ -46,10 +46,8 @@ dependencies {
     ksp(libs.dagger.hilt.ksp)
 
     // Networking
-    implementation(libs.squareup.retrofit2.retrofit)
-    implementation(libs.squareup.retrofit2.converter.moshi)
-    implementation(libs.squareup.okhttp3.okhttp)
-    implementation(libs.squareup.okhttp3.login.interceptor)
+    implementation(platform(libs.io.ktor.bom))
+    implementation(libs.bundles.ktor)
 
     // Testing
     testImplementation(libs.junit)

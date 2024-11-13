@@ -34,7 +34,7 @@ import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilt
 @Composable
 fun DiscoverScreen(
     viewModel: DiscoverViewModel = hiltViewModel(),
-    discoverNavigator: DiscoverNavigator
+    onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
 ) {
 
     DiscoverContent(
@@ -51,7 +51,7 @@ fun DiscoverScreen(
         navigateToDetail = { mediaItem, posterDominantColor ->
             when (mediaItem) {
                 is MediaItem.Movie -> {
-                    discoverNavigator.navigateToMediaDetail(
+                    onMediaItemClicked(
                         mediaItem.id,
                         MediaType.MOVIE,
                         posterDominantColor
@@ -59,7 +59,7 @@ fun DiscoverScreen(
                 }
 
                 is MediaItem.TvShow -> {
-                    discoverNavigator.navigateToMediaDetail(
+                    onMediaItemClicked(
                         mediaItem.id,
                         MediaType.TV_SHOW,
                         posterDominantColor

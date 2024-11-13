@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.app.presentation.di
 
-import com.buntupana.tmdb.app.presentation.navigation.NavRoutesMain
-import com.buntupana.tmdb.app.presentation.navigation.NavRoutesMainImpl
+import com.buntupana.tmdb.core.presentation.navigation.NavRoutesMain
+import com.buntupana.tmdb.core.presentation.navigation.NavRoutesMainImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

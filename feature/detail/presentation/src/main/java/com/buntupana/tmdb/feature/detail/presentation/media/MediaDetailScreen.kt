@@ -29,7 +29,6 @@ import com.buntupana.tmdb.core.presentation.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.presentation.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Season
-import com.buntupana.tmdb.feature.detail.presentation.DetailNavigator
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.CastHorizontalList
@@ -42,58 +41,59 @@ import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
 @Composable
 fun MediaDetailScreen(
     viewModel: MediaDetailViewModel = hiltViewModel(),
-    detailNavigator: DetailNavigator
+    onBackClick: () -> Unit,
+    onSearchClick: () -> Unit,
+    onPersonClick: (personId: Long) -> Unit,
+    onFullCastClick: (mediaId: Long, mediaType: MediaType, mediaTitle: String, mediaReleaseYear: String?, mediaPosterUrl: String?, backgroundColor: Color) -> Unit,
+    onSeasonClick: (tvShowId: Long, seasonName: String, seasonNumber: Int, posterUrl: String?, backgroundColor: Color, releaseYear: String?) -> Unit,
+    onAllSeasonsClick: (tvShowId: Long, tvShowTitle: String, releaseYear: String?, posterUrl: String?, backgroundColor: Color) -> Unit,
+    onRecommendationClick: (mediaId: Long, mediaType: MediaType, backgroundColor: Color?) -> Unit,
+    onLogoClick: () -> Unit
 ) {
 
     MediaDetailContent(
         state = viewModel.state,
-        onBackClick = { detailNavigator.navigateBack() },
-        onSearchClick = { detailNavigator.navigateToSearch() },
-        onPersonClick = { personId ->
-            detailNavigator.navigateToPerson(personId)
-        },
+        onBackClick = onBackClick,
+        onSearchClick = onSearchClick,
+        onPersonClick = onPersonClick,
         onFullCastClick = { mediaDetails, mediaType, backgroundColor ->
-            detailNavigator.navigateToFullCast(
-                mediaId = mediaDetails.id,
-                mediaType = mediaType,
-                mediaTitle = mediaDetails.title,
-                mediaReleaseYear = mediaDetails.releaseDate?.year.toString(),
-                mediaPosterUrl = mediaDetails.posterUrl,
-                backgroundColor = backgroundColor
+            onFullCastClick(
+                mediaDetails.id,
+                mediaType,
+                mediaDetails.title,
+                mediaDetails.releaseDate?.year.toString(),
+                mediaDetails.posterUrl,
+                backgroundColor
             )
         },
         onSeasonClick = { tvShowId, season, backgroundColor ->
-            detailNavigator.navigateToEpisodes(
-                tvShowId = tvShowId,
-                seasonName = season.name,
-                seasonNumber = season.seasonNumber ?: 0,
-                posterUrl = season.posterUrl,
-                backgroundColor = backgroundColor,
-                releaseYear = season.airDate?.year.toString()
+            onSeasonClick(
+                tvShowId,
+                season.name,
+                season.seasonNumber ?: 0,
+                season.posterUrl,
+                backgroundColor,
+                season.airDate?.year.toString()
             )
         },
         onAllSeasonsClick = { mediaDetails, backgroundColor ->
-            detailNavigator.navigateToSeasons(
-                tvShowId = mediaDetails.id,
-                tvShowTitle = mediaDetails.title,
-                releaseYear = mediaDetails.releaseDate?.year.toString(),
-                posterUrl = mediaDetails.posterUrl,
-                backgroundColor = backgroundColor
+            onAllSeasonsClick(
+                mediaDetails.id,
+                mediaDetails.title,
+                mediaDetails.releaseDate?.year.toString(),
+                mediaDetails.posterUrl,
+                backgroundColor
             )
         },
         onRecommendationClick = { mediaId, mediaType ->
-            detailNavigator.navigateToMediaDetail(
-                mediaId = mediaId,
-                mediaType = mediaType,
-                backgroundColor = null
+            onRecommendationClick(
+                mediaId, mediaType, null
             )
         },
         onRetryClick = {
             viewModel.onEvent(MediaDetailEvent.GetMediaDetails)
         },
-        onLogoClick = {
-            detailNavigator.navigateToMainScreen()
-        }
+        onLogoClick = onLogoClick
     )
 }
 

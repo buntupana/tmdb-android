@@ -1,15 +1,21 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
+import com.buntupana.tmdb.data.mapper.getGender
 import com.buntupana.tmdb.feature.detail.data.raw.PersonDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.PersonDetails
-import com.panabuntu.tmdb.core.common.api.CoreApi
 import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
-private const val IMDB_BASE_URL = "https://www.imdb.com/name/"
-
-fun PersonDetailsRaw.toModel(): PersonDetails {
+fun PersonDetailsRaw.toModel(
+    baseUrlPoster: String,
+    baseUrlBackdrop: String,
+    baseUrlProfile: String,
+    baseUrlImdb: String,
+    baseUrlFacebook: String,
+    baseUrlInstagram: String,
+    baseUrlX: String
+): PersonDetails {
 
     val birthDateLocal: LocalDate? = try {
         LocalDate.parse(birthday.orEmpty())
@@ -23,9 +29,9 @@ fun PersonDetailsRaw.toModel(): PersonDetails {
         null
     }
 
-    val profileUrl = profilePath.ifNotNullOrBlank{ CoreApi.BASE_URL_PROFILE + profilePath }
+    val profileUrl = profilePath.ifNotNullOrBlank { baseUrlProfile + profilePath }
 
-    val imdbLink = if (imdbId.isNullOrBlank()) imdbId else IMDB_BASE_URL + imdbId
+    val imdbLink = if (imdbId.isNullOrBlank()) imdbId else baseUrlImdb + imdbId
 
     // Getting person age
     val age = if (deathDateLocal != null && birthDateLocal != null) {
@@ -43,13 +49,20 @@ fun PersonDetailsRaw.toModel(): PersonDetails {
         homePageUrl = homepage.orEmpty(),
         imdbLink = imdbLink.orEmpty(),
         knownForDepartment = knownForDepartment.orEmpty(),
-        gender = com.panabuntu.tmdb.core.common.mapper.getGender(gender),
+        gender = getGender(gender),
         birthDate = birthDateLocal,
         deathDate = deathDateLocal,
         age = age,
         placeOfBirth = placeOfBirth.orEmpty(),
         biography = biography.orEmpty(),
-        externalLinkList = externalLinks?.toModel().orEmpty(),
-        filmography = combinedCredits?.toModel().orEmpty()
+        externalLinkList = externalLinks?.toModel(
+            baseUrlFacebook = baseUrlFacebook,
+            baseUrlInstagram = baseUrlInstagram,
+            baseUrlX = baseUrlX
+        ).orEmpty(),
+        filmography = combinedCredits?.toModel(
+            baseUrlPoster = baseUrlPoster,
+            baseUrlBackdrop = baseUrlBackdrop
+        ).orEmpty()
     )
 }

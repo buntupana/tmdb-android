@@ -2,12 +2,13 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.feature.detail.data.raw.EpisodeRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
-import com.panabuntu.tmdb.core.common.api.CoreApi
 import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
-fun EpisodeRaw.toModel(): Episode {
+fun EpisodeRaw.toModel(
+    baseUrlBackdrop : String,
+): Episode {
 
     val releaseLocalDate = try {
         LocalDate.parse(airDate)
@@ -15,7 +16,7 @@ fun EpisodeRaw.toModel(): Episode {
         null
     }
 
-    val stillUrl = stillPath.ifNotNullOrBlank { CoreApi.BASE_URL_BACKDROP + stillPath.orEmpty() }
+    val stillUrl = stillPath.ifNotNullOrBlank { baseUrlBackdrop + stillPath.orEmpty() }
 
     return Episode(
         id = id,
@@ -32,6 +33,8 @@ fun EpisodeRaw.toModel(): Episode {
     )
 }
 
-fun List<EpisodeRaw>.toModel(): List<Episode> {
-    return map { it.toModel() }
+fun List<EpisodeRaw>.toModel(
+    baseUrlBackdrop : String,
+): List<Episode> {
+    return map { it.toModel(baseUrlBackdrop) }
 }

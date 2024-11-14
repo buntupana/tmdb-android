@@ -1,11 +1,13 @@
 package com.buntupana.tmdb.feature.search.data.mapper
 
+import com.buntupana.tmdb.data.mapper.getGender
 import com.buntupana.tmdb.feature.search.data.raw.PersonRaw
-import com.panabuntu.tmdb.core.common.api.CoreApi
 import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
 import com.panabuntu.tmdb.core.common.isNotNullOrBlank
 
-fun PersonRaw.toModel(): com.panabuntu.tmdb.core.common.model.PersonItem {
+fun PersonRaw.toModel(
+    baseUrlProfile: String
+): com.panabuntu.tmdb.core.common.model.PersonItem {
 
     val knownForList = knownFor?.flatMap { knownFor ->
         when {
@@ -18,10 +20,10 @@ fun PersonRaw.toModel(): com.panabuntu.tmdb.core.common.model.PersonItem {
     return com.panabuntu.tmdb.core.common.model.PersonItem(
         id = id,
         name = name,
-        profilePath = profilePath.ifNotNullOrBlank { CoreApi.BASE_URL_PROFILE + profilePath.orEmpty() },
+        profilePath = profilePath.ifNotNullOrBlank { baseUrlProfile + profilePath.orEmpty() },
         popularity = popularity,
         adult = adult,
-        gender = com.panabuntu.tmdb.core.common.mapper.getGender(gender),
+        gender = getGender(gender),
         knownForDepartment = knownForDepartment.orEmpty(),
         knownForList = knownForList
     )

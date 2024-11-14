@@ -13,12 +13,11 @@ import com.buntupana.tmdb.feature.detail.data.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowSeasonsDetailsRaw
 import com.panabuntu.tmdb.core.common.entity.Resource
-import com.panabuntu.tmdb.core.common.remote_data_source.RemoteDataSource
 import javax.inject.Inject
 
 class DetailRemoteDataSource @Inject constructor(
     private val detailApi: DetailApi
-) : RemoteDataSource() {
+) : com.buntupana.tmdb.data.remote_data_source.RemoteDataSource() {
 
     suspend fun getMovieDetail(movieId: Long): Resource<MovieDetailsRaw> {
         return getResourceResult { detailApi.getMovieDetails(movieId) }

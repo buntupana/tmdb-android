@@ -39,6 +39,7 @@ dependencies {
     implementation(project(":feature:discover:presentation"))
     implementation(project(":feature:discover:domain"))
     implementation(project(":feature:discover:data"))
+    implementation(project(":core:di"))
 
     // Dagger Hilt
     implementation(libs.dagger.hilt)

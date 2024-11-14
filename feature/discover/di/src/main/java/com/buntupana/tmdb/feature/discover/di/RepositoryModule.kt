@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.discover.di
 
 import com.buntupana.tmdb.feature.discover.data.repository.DiscoverRepositoryImpl
+import com.buntupana.tmdb.feature.discover.domain.repository.DiscoverRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,5 +14,5 @@ abstract class RepositoryModule {
 
     @Singleton
     @Binds
-    abstract fun bindDiscoverRepository(discoverRepositoryImpl: DiscoverRepositoryImpl): com.buntupana.tmdb.feature.discover.domain.repository.DiscoverRepository
+    abstract fun bindDiscoverRepository(discoverRepositoryImpl: DiscoverRepositoryImpl): DiscoverRepository
 }

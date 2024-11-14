@@ -61,6 +61,7 @@ dependencies {
 
     implementation(project(":core:common"))
     implementation(project(":core:ui"))
+    implementation(project(":core:di"))
     implementation(project(":feature:account:presentation"))
     implementation(project(":feature:account:di"))
     implementation(project(":feature:discover:presentation"))

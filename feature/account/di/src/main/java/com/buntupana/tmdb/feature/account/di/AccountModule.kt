@@ -1,8 +1,8 @@
 package com.buntupana.tmdb.feature.account.di
 
-import com.buntupana.tmdb.feature.account.data.repository.LoginRepositoryImpl
-import com.buntupana.tmdb.feature.account.domain.repository.LoginRepository
-import com.panabuntu.tmdb.core.common.di.CoreCommonModule
+import com.buntupana.tmdb.core.di.CoreCommonModule
+import com.buntupana.tmdb.feature.account.data.repository.AccountRepositoryImpl
+import com.buntupana.tmdb.feature.account.domain.repository.AccountRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,5 +15,5 @@ abstract class AccountModule {
 
     @Singleton
     @Binds
-    abstract fun bindLoginRepository(loginRepositoryImpl: LoginRepositoryImpl): LoginRepository
+    abstract fun bindLoginRepository(accountRepositoryImpl: AccountRepositoryImpl): AccountRepository
 }

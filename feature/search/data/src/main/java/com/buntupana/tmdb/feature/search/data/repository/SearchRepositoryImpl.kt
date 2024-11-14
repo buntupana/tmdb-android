@@ -3,35 +3,41 @@ package com.buntupana.tmdb.feature.search.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.buntupana.tmdb.data.api.GenericPagingDataSource
+import com.buntupana.tmdb.data.mapper.toModel
 import com.buntupana.tmdb.feature.search.data.mapper.toModel
 import com.buntupana.tmdb.feature.search.data.mapper.toSearchModel
 import com.buntupana.tmdb.feature.search.data.remote_data_source.SearchRemoteDataSource
-import com.panabuntu.tmdb.core.common.GenericPagingDataSource
+import com.buntupana.tmdb.feature.search.domain.model.SearchItem
+import com.buntupana.tmdb.feature.search.domain.repository.SearchRepository
+import com.panabuntu.tmdb.core.common.UrlProvider
 import com.panabuntu.tmdb.core.common.entity.Resource
-import com.panabuntu.tmdb.core.common.mapper.toModel
+import com.panabuntu.tmdb.core.common.model.MediaItem
+import com.panabuntu.tmdb.core.common.model.PersonItem
 import com.panabuntu.tmdb.core.common.networkResult
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SearchRepositoryImpl @Inject constructor(
-    private val searchRemoteDataSource: SearchRemoteDataSource
-) : com.buntupana.tmdb.feature.search.domain.repository.SearchRepository {
+    private val searchRemoteDataSource: SearchRemoteDataSource,
+    private val urlProvider: UrlProvider
+) : SearchRepository {
 
-    override suspend fun getTrendingMedia(): Resource<List<com.buntupana.tmdb.feature.search.domain.model.SearchItem>> {
+    override suspend fun getTrendingMedia(): Resource<List<SearchItem>> {
         return networkResult(
             networkCall = { searchRemoteDataSource.getTrending() },
-            mapResponse = { response -> response.results.toSearchModel() }
+            mapResponse = { response -> response.results.toSearchModel(baseUrlPoster = urlProvider.BASE_URL_POSTER) }
         )
     }
 
-    override suspend fun getSearchMedia(searchKey: String): Resource<List<com.buntupana.tmdb.feature.search.domain.model.SearchItem>> {
+    override suspend fun getSearchMedia(searchKey: String): Resource<List<SearchItem>> {
         return networkResult(
             networkCall = { searchRemoteDataSource.getSearchMedia(searchKey) },
-            mapResponse = { response -> response.results.toSearchModel() }
+            mapResponse = { response -> response.results.toSearchModel(baseUrlPoster = urlProvider.BASE_URL_POSTER) }
         )
     }
 
-    override suspend fun getSearchMovies(searchKey: String): Flow<PagingData<com.panabuntu.tmdb.core.common.model.MediaItem.Movie>> {
+    override suspend fun getSearchMovies(searchKey: String): Flow<PagingData<MediaItem.Movie>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
@@ -43,7 +49,10 @@ class SearchRepositoryImpl @Inject constructor(
                         searchRemoteDataSource.getSearchMovies(searchKey, page)
                     },
                     mappItem = {
-                        it.toModel()
+                        it.toModel(
+                            baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                            baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                        )
                     }
                 )
             }
@@ -57,7 +66,7 @@ class SearchRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getSearchTvShows(searchKey: String): Flow<PagingData<com.panabuntu.tmdb.core.common.model.MediaItem.TvShow>> {
+    override suspend fun getSearchTvShows(searchKey: String): Flow<PagingData<MediaItem.TvShow>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
@@ -69,7 +78,10 @@ class SearchRepositoryImpl @Inject constructor(
                         searchRemoteDataSource.getSearchTvShows(searchKey, page)
                     },
                     mappItem = {
-                        it.toModel()
+                        it.toModel(
+                            baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                            baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                        )
                     }
                 )
             }
@@ -83,7 +95,7 @@ class SearchRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getSearchPersons(searchKey: String): Flow<PagingData<com.panabuntu.tmdb.core.common.model.PersonItem>> {
+    override suspend fun getSearchPersons(searchKey: String): Flow<PagingData<PersonItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
@@ -95,7 +107,7 @@ class SearchRepositoryImpl @Inject constructor(
                         searchRemoteDataSource.getSearchPersons(searchKey, page)
                     },
                     mappItem = {
-                        it.toModel()
+                        it.toModel(baseUrlProfile = urlProvider.BASE_URL_PROFILE)
                     }
                 )
             }

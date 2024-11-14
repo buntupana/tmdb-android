@@ -2,18 +2,19 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.feature.detail.data.raw.SeasonRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Season
-import com.panabuntu.tmdb.core.common.api.CoreApi
 import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
 import java.time.LocalDate
 
-fun SeasonRaw.toModel(): Season {
+fun SeasonRaw.toModel(
+    baseUrlPoster: String
+): Season {
     val seasonReleaseLocalDate = try {
         LocalDate.parse(airDate)
     } catch (exc: Exception) {
         null
     }
 
-    val posterUrl = posterPath.ifNotNullOrBlank { CoreApi.BASE_URL_POSTER + posterPath.orEmpty() }
+    val posterUrl = posterPath.ifNotNullOrBlank { baseUrlPoster + posterPath.orEmpty() }
 
     return Season(
         id = id,
@@ -27,6 +28,8 @@ fun SeasonRaw.toModel(): Season {
     )
 }
 
-fun List<SeasonRaw>?.toModel(): List<Season> {
-    return this?.map { it.toModel() }.orEmpty()
+fun List<SeasonRaw>?.toModel(
+    baseUrlPoster: String
+): List<Season> {
+    return this?.map { it.toModel(baseUrlPoster = baseUrlPoster) }.orEmpty()
 }

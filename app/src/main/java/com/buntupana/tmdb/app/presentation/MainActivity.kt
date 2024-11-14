@@ -28,7 +28,7 @@ import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
 import com.buntupana.tmdb.feature.search.presentation.SearchNav
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
-import com.panabuntu.tmdb.core.common.api.CoreApi
+import com.panabuntu.tmdb.core.common.UrlProvider
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -38,6 +38,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var navRoutesMain: NavRoutesMain
+
+    @Inject
+    lateinit var urlProvider: UrlProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +72,7 @@ class MainActivity : ComponentActivity() {
                     }
                     composable<SignInNav>(
                         deepLinks = listOf(
-                            navDeepLink<SignInNav>(basePath = CoreApi.SIGN_IN_DEEP_LINK_URL)
+                            navDeepLink<SignInNav>(basePath = urlProvider.SIGN_IN_DEEP_LINK_URL)
                         ),
                     ) {
                         SignInScreen(

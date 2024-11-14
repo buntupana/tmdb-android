@@ -1,22 +1,25 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
+import com.buntupana.tmdb.data.mapper.getMediaType
 import com.buntupana.tmdb.feature.detail.data.raw.FilmographyRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
-import com.panabuntu.tmdb.core.common.api.CoreApi
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
 import com.panabuntu.tmdb.core.common.ifNull
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
-fun FilmographyRaw.toModel(): List<CreditPersonItem> {
+fun FilmographyRaw.toModel(
+    baseUrlPoster : String,
+    baseUrlBackdrop : String
+): List<CreditPersonItem> {
 
     val castItemList = cast?.map {
 
         val posterUrl =
-            it.posterPath.ifNotNullOrBlank { CoreApi.BASE_URL_POSTER + it.posterPath.orEmpty() }
+            it.posterPath.ifNotNullOrBlank { baseUrlPoster+ it.posterPath.orEmpty() }
         val backdropUrl =
-            it.backdropPath.ifNotNullOrBlank { CoreApi.BASE_URL_BACKDROP + it.backdropPath.orEmpty() }
+            it.backdropPath.ifNotNullOrBlank { baseUrlBackdrop + it.backdropPath.orEmpty() }
 
         val releaseDateLocal = try {
             LocalDate.parse(it.releaseDate.ifNull { it.firstAirDate.orEmpty() })
@@ -24,7 +27,7 @@ fun FilmographyRaw.toModel(): List<CreditPersonItem> {
             null
         }
 
-        when (com.panabuntu.tmdb.core.common.mapper.getMediaType(it.mediaType)) {
+        when (getMediaType(it.mediaType)) {
             MediaType.MOVIE -> {
                 CreditPersonItem.Movie(
                     id = it.id,
@@ -62,9 +65,9 @@ fun FilmographyRaw.toModel(): List<CreditPersonItem> {
     val crewItemList = crew?.map {
 
         val posterUrl =
-            it.posterPath.ifNotNullOrBlank { CoreApi.BASE_URL_POSTER + it.posterPath.orEmpty() }
+            it.posterPath.ifNotNullOrBlank { baseUrlPoster + it.posterPath.orEmpty() }
         val backdropUrl =
-            it.backdropPath.ifNotNullOrBlank { CoreApi.BASE_URL_BACKDROP + it.backdropPath.orEmpty() }
+            it.backdropPath.ifNotNullOrBlank { baseUrlBackdrop + it.backdropPath.orEmpty() }
 
         val releaseDateLocal = try {
             LocalDate.parse(it.releaseDate.ifNull { it.firstAirDate.orEmpty() })
@@ -72,7 +75,7 @@ fun FilmographyRaw.toModel(): List<CreditPersonItem> {
             null
         }
 
-        when (com.panabuntu.tmdb.core.common.mapper.getMediaType(it.mediaType)) {
+        when (getMediaType(it.mediaType)) {
             MediaType.MOVIE -> {
                 CreditPersonItem.Movie(
                     id = it.id,

@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.feature.search.di
 
+import com.buntupana.tmdb.core.di.CoreCommonModule
 import com.buntupana.tmdb.feature.search.data.api.SearchApi
-import com.panabuntu.tmdb.core.common.di.CoreCommonModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

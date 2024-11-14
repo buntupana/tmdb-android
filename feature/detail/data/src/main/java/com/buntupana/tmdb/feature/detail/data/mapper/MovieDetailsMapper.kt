@@ -1,15 +1,18 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
+import com.buntupana.tmdb.data.mapper.toModel
 import com.buntupana.tmdb.feature.detail.data.raw.MovieDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
-import com.panabuntu.tmdb.core.common.api.CoreApi
 import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
-import com.panabuntu.tmdb.core.common.mapper.toModel
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
-fun MovieDetailsRaw.toModel(): MovieDetails {
+fun MovieDetailsRaw.toModel(
+    baseUrlPoster: String,
+    baseUrlBackdrop: String,
+    baseUrlProfile: String
+): MovieDetails {
 
     val releaseLocalDate = try {
         LocalDate.parse(releaseDate)
@@ -17,9 +20,9 @@ fun MovieDetailsRaw.toModel(): MovieDetails {
         null
     }
 
-    val posterUrl = posterPath.ifNotNullOrBlank { CoreApi.BASE_URL_POSTER + posterPath.orEmpty() }
+    val posterUrl = posterPath.ifNotNullOrBlank { baseUrlPoster + posterPath.orEmpty() }
     val backdropUrl =
-        backdropPath.ifNotNullOrBlank { CoreApi.BASE_URL_BACKDROP + backdropPath.orEmpty() }
+        backdropPath.ifNotNullOrBlank { baseUrlBackdrop + backdropPath.orEmpty() }
 
     val videoList = videos?.toModel().orEmpty()
 
@@ -38,7 +41,10 @@ fun MovieDetailsRaw.toModel(): MovieDetails {
         productionCountryCodeList = productionCountries.map { it.iso_3166_1 },
         releaseDateList = releaseDates?.results?.map { it.toModel() }.orEmpty(),
         videoList = videoList,
-        credits = credits?.toModel() ?: Credits(emptyList(), emptyList()),
-        recommendationList = recommendations.results.toModel()
+        credits = credits?.toModel(baseUrlProfile = baseUrlProfile) ?: Credits(emptyList(), emptyList()),
+        recommendationList = recommendations.results.toModel(
+            baseUrlPoster = baseUrlPoster,
+            baseUrlBackdrop = baseUrlBackdrop
+        )
     )
 }

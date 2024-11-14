@@ -2,12 +2,14 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.feature.detail.data.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.SeasonDetail
-import com.panabuntu.tmdb.core.common.api.CoreApi
 import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
-fun SeasonDetailsRaw.toModel(): SeasonDetail {
+fun SeasonDetailsRaw.toModel(
+    baseUrlPoster: String,
+    baseUrlBackdrop: String
+): SeasonDetail {
 
     val releaseLocalDate = try {
         LocalDate.parse(airDate)
@@ -15,7 +17,7 @@ fun SeasonDetailsRaw.toModel(): SeasonDetail {
         null
     }
 
-    val posterUrl = posterPath.ifNotNullOrBlank { CoreApi.BASE_URL_POSTER + posterPath.orEmpty() }
+    val posterUrl = posterPath.ifNotNullOrBlank { baseUrlPoster + posterPath.orEmpty() }
 
     return SeasonDetail(
         id = id,
@@ -23,7 +25,7 @@ fun SeasonDetailsRaw.toModel(): SeasonDetail {
         overview = overview,
         posterUrl = posterUrl,
         airDate = releaseLocalDate,
-        episodes = episodes.toModel(),
+        episodes = episodes.toModel(baseUrlBackdrop = baseUrlBackdrop),
         seasonNumber = seasonNumber,
         voteAverage = voteAverage
     )

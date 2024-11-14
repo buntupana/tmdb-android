@@ -41,6 +41,7 @@ dependencies {
 
     // Modules
     implementation(project(":feature:search:domain"))
+    implementation(project(":core:data"))
 
     // Dagger Hilt
     implementation(libs.dagger.hilt)

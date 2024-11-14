@@ -1,16 +1,20 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
+import com.buntupana.tmdb.data.mapper.getGender
+import com.buntupana.tmdb.data.mapper.toModel
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
-import com.panabuntu.tmdb.core.common.api.CoreApi
 import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
-import com.panabuntu.tmdb.core.common.mapper.toModel
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
-fun TvShowDetailsRaw.toModel(): TvShowDetails {
+fun TvShowDetailsRaw.toModel(
+    baseUrlPoster: String,
+    baseUrlBackdrop: String,
+    baseUrlProfile: String
+): TvShowDetails {
 
     val releaseLocalDate = try {
         LocalDate.parse(firstAirDate)
@@ -18,9 +22,9 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
         null
     }
 
-    val posterUrl = posterPath.ifNotNullOrBlank { CoreApi.BASE_URL_POSTER + posterPath.orEmpty() }
+    val posterUrl = posterPath.ifNotNullOrBlank { baseUrlPoster + posterPath.orEmpty() }
     val backdropUrl =
-        backdropPath.ifNotNullOrBlank { CoreApi.BASE_URL_BACKDROP + backdropPath.orEmpty() }
+        backdropPath.ifNotNullOrBlank { baseUrlBackdrop + backdropPath.orEmpty() }
 
     val videoList = videos?.toModel().orEmpty()
 
@@ -38,11 +42,11 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
         genreList = genres?.map { it.name }.orEmpty(),
         creatorList = createdBy?.map {
             val profileUrl =
-                it.profilePath.ifNotNullOrBlank { CoreApi.BASE_URL_PROFILE + it.profilePath }
+                it.profilePath.ifNotNullOrBlank { baseUrlProfile + it.profilePath }
             Person.Crew.TvShow(
                 id = it.id,
                 name = it.name.orEmpty(),
-                gender = com.panabuntu.tmdb.core.common.mapper.getGender(it.gender),
+                gender = getGender(it.gender),
                 profileUrl = profileUrl,
                 department = "",
                 totalEpisodeCount = 0,
@@ -51,11 +55,17 @@ fun TvShowDetailsRaw.toModel(): TvShowDetails {
         }.orEmpty(),
         certificationList = contentRatings?.results?.map { it.toModel() }.orEmpty(),
         videoList = videoList,
-        credits = credits?.toModel() ?: CreditsTvShow(emptyList(), emptyList()),
-        seasonList = seasons?.toModel().orEmpty(),
+        credits = credits?.toModel(baseUrlProfile = baseUrlProfile) ?: CreditsTvShow(
+            emptyList(),
+            emptyList()
+        ),
+        seasonList = seasons?.toModel(baseUrlPoster = baseUrlPoster).orEmpty(),
+        lastEpisode = lastEpisodeToAir?.toModel(baseUrlBackdrop = baseUrlBackdrop),
+        nextEpisode = nextEpisodeToAir?.toModel(baseUrlBackdrop = baseUrlBackdrop),
         isInAir = nextEpisodeToAir != null,
-        nextEpisode = nextEpisodeToAir?.toModel(),
-        lastEpisode = lastEpisodeToAir?.toModel(),
-        recommendationList = recommendations.results.toModel()
+        recommendationList = recommendations.results.toModel(
+            baseUrlPoster = baseUrlPoster,
+            baseUrlBackdrop = baseUrlBackdrop
+        )
     )
 }

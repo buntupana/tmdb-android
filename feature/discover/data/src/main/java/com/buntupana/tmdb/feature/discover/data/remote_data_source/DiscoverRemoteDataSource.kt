@@ -1,17 +1,20 @@
 package com.buntupana.tmdb.feature.discover.data.remote_data_source
 
 import androidx.compose.ui.text.intl.Locale
+import com.buntupana.tmdb.data.raw.AnyMediaItemRaw
+import com.buntupana.tmdb.data.raw.MovieItemRaw
+import com.buntupana.tmdb.data.raw.ResponseListRaw
+import com.buntupana.tmdb.data.raw.TvShowRaw
 import com.buntupana.tmdb.feature.discover.data.api.DiscoverApi
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
 import com.panabuntu.tmdb.core.common.entity.Resource
-import com.panabuntu.tmdb.core.common.remote_data_source.RemoteDataSource
 import java.time.LocalDate
 import javax.inject.Inject
 
 class DiscoverRemoteDataSource @Inject constructor(
     private val discoverApi: DiscoverApi
-) : RemoteDataSource() {
+) : com.buntupana.tmdb.data.remote_data_source.RemoteDataSource() {
 
     companion object {
         private fun getRegion(): String {
@@ -21,7 +24,7 @@ class DiscoverRemoteDataSource @Inject constructor(
 
     suspend fun getMoviesPopular(
         monetizationType: MonetizationType
-    ): Resource<com.panabuntu.tmdb.core.common.raw.ResponseListRaw<com.panabuntu.tmdb.core.common.raw.MovieItemRaw>> {
+    ): Resource<ResponseListRaw<MovieItemRaw>> {
 
         val monetizationValue = when (monetizationType) {
             MonetizationType.FREE -> "free"
@@ -39,7 +42,7 @@ class DiscoverRemoteDataSource @Inject constructor(
 
     suspend fun getTvShowPopular(
         monetizationType: MonetizationType
-    ): Resource<com.panabuntu.tmdb.core.common.raw.ResponseListRaw<com.panabuntu.tmdb.core.common.raw.TvShowRaw>> {
+    ): Resource<ResponseListRaw<TvShowRaw>> {
 
         val monetizationValue = when (monetizationType) {
             MonetizationType.FREE -> "free"
@@ -55,7 +58,7 @@ class DiscoverRemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getTrending(trendingType: TrendingType): Resource<com.panabuntu.tmdb.core.common.raw.ResponseListRaw<com.panabuntu.tmdb.core.common.raw.AnyMediaItemRaw>> {
+    suspend fun getTrending(trendingType: TrendingType): Resource<ResponseListRaw<AnyMediaItemRaw>> {
         return getResourceResult {
             when (trendingType) {
                 TrendingType.TODAY -> discoverApi.fetchTrending("day")
@@ -64,7 +67,7 @@ class DiscoverRemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getMoviesInTheatres(): Resource<com.panabuntu.tmdb.core.common.raw.ResponseListRaw<com.panabuntu.tmdb.core.common.raw.MovieItemRaw>> {
+    suspend fun getMoviesInTheatres(): Resource<ResponseListRaw<MovieItemRaw>> {
 
         val fromReleaseDate = LocalDate.now()
             .minusMonths(1)
@@ -83,7 +86,7 @@ class DiscoverRemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getTvShowsOnAir(): Resource<com.panabuntu.tmdb.core.common.raw.ResponseListRaw<com.panabuntu.tmdb.core.common.raw.TvShowRaw>> {
+    suspend fun getTvShowsOnAir(): Resource<ResponseListRaw<TvShowRaw>> {
         return getResourceResult {
             discoverApi.fetchTvShowsOnAir()
         }

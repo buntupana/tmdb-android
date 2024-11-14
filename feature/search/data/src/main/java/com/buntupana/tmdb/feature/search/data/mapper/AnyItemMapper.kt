@@ -1,15 +1,17 @@
 package com.buntupana.tmdb.feature.search.data.mapper
 
-import com.panabuntu.tmdb.core.common.api.CoreApi
+import com.buntupana.tmdb.data.raw.AnyMediaItemRaw
 import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
 
-fun List<com.panabuntu.tmdb.core.common.raw.AnyMediaItemRaw>.toSearchModel(): List<com.buntupana.tmdb.feature.search.domain.model.SearchItem> {
+fun List<AnyMediaItemRaw>.toSearchModel(
+    baseUrlPoster : String
+): List<com.buntupana.tmdb.feature.search.domain.model.SearchItem> {
     val result = mutableListOf<com.buntupana.tmdb.feature.search.domain.model.SearchItem>()
 
     forEach { item ->
 
         val posterUrl =
-            item.posterPath.ifNotNullOrBlank { CoreApi.BASE_URL_POSTER + item.posterPath.orEmpty() }
+            item.posterPath.ifNotNullOrBlank { baseUrlPoster + item.posterPath.orEmpty() }
 
         when (item.mediaType) {
             "tv" -> {

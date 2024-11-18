@@ -2,8 +2,8 @@ package com.buntupana.tmdb.core.ui.navigation
 
 import android.content.Intent
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
 import com.panabuntu.tmdb.core.common.encodeAllUrls
-import timber.log.Timber
 import kotlin.reflect.KClass
 
 class NavRoutesMainImpl : NavRoutesMain {
@@ -35,7 +35,6 @@ class NavRoutesMainImpl : NavRoutesMain {
         popUpToInclusive: Boolean
     ) {
         navController?.navigate(destination.encodeAllUrls())
-
     }
 
     override fun popBackStack() {
@@ -46,36 +45,10 @@ class NavRoutesMainImpl : NavRoutesMain {
         destination: KClass<in T>,
         inclusive: Boolean
     ) {
-        getDestinationId(destination)?.let { popUpToId ->
-            navController?.popBackStack(popUpToId, inclusive)
-        }
+        navController?.popBackStack(destination, inclusive)
     }
 
     override fun <T : Routes> isCurrentDestination(destination: KClass<T>): Boolean {
-        return navController?.currentDestination?.id == getDestinationId(destination)
-    }
-
-    override fun getCurrentDestinationId(): Int? {
-        return navController?.currentDestination?.id
-    }
-
-    override fun <T : Routes> getDestinationId(
-        destination: KClass<in T>
-    ): Int? {
-
-        return try {
-            navController?.getBackStackEntry(
-                route = destination.java.canonicalName!!
-            )?.destination?.id
-        } catch (e: Exception) {
-            try {
-                navController?.getBackStackEntry(
-                    route = destination.java.canonicalName!! + "/{args}"
-                )?.destination?.id
-            } catch (e: Exception) {
-                Timber.e(e)
-                null
-            }
-        }
+        return navController?.currentDestination?.hasRoute(destination) ?: false
     }
 }

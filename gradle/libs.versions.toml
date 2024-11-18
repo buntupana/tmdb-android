@@ -16,17 +16,17 @@ work = '2.4.0'
 ksp = "2.0.21-1.0.26"
 
 #Compose
-composeBom = "2024.10.01"
+composeBom = "2024.11.00"
 compose_activity = "1.9.3"
 compose_constraint = '1.1.0'
 compose_foundation = "1.7.5"
-compose_paging = "3.3.2"
+compose_paging = "3.3.4"
 compose_lifecycle = "2.8.7"
 
 #Android dependencies
 lifecycle = "2.8.7"
 room = '2.4.2'
-navigation = "2.8.3"
+navigation = "2.8.4"
 palette = '1.0.0'
 
 #Accompanist
@@ -48,6 +48,9 @@ ktor_bom = "3.0.1"
 #Retrofit
 retrofit = '2.11.0'
 okhttp = "4.12.0"
+
+#Storage
+datastore = "1.1.1"
 
 #Tools
 timber = '5.0.1'
@@ -74,6 +77,7 @@ uiTooling = "1.7.3"
 appcompat = "1.7.0"
 material = "1.12.0"
 jetbrainsKotlinJvm = "2.0.21"
+uiTextGoogleFonts = "1.7.5"
 
 [libraries]
 
@@ -108,8 +112,9 @@ dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref 
 dagger-hilt-ksp = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "dagger" }
 dagger-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "dagger_android" }
 
-#Material
+#Theming
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 
 #Network
 io-ktor-bom = { group = "io.ktor", name = "ktor-bom", version.ref = "ktor_bom" }
@@ -125,6 +130,9 @@ squareup-retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrof
 squareup-retrofit2-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit"}
 squareup-okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp"}
 squareup-okhttp3-login-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp"}
+
+#Storate
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore"}
 
 #Desugaring
 desugar-jdk = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar_jdk" }

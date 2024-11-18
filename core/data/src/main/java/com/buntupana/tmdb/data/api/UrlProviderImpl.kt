@@ -12,7 +12,7 @@ class UrlProviderImpl : UrlProvider {
     override val BASE_URL_POSTER = "$BASE_URL_IMAGE/w342/"
     override val BASE_URL_BACKDROP = "$BASE_URL_IMAGE/w1000_and_h450_multi_faces/"
     override val BASE_URL_PROFILE = "$BASE_URL_IMAGE/w240_and_h266_face/"
-    override val BASE_URL_AVATAR = "$BASE_URL_IMAGE/w200_and_h200_face/"
+    override val BASE_URL_AVATAR = "$BASE_URL_IMAGE/w150_and_h150_face/"
 
     private val BASE_DEEP_LINK_URL = "app://buntupana.tmdb"
     override val SIGN_IN_DEEP_LINK_URL = "$BASE_DEEP_LINK_URL/signin"

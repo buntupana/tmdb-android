@@ -59,6 +59,9 @@ dependencies {
 
     implementation(libs.androidx.paging.compose)
 
+    // Storage
+    implementation(libs.androidx.datastore)
+
     // Tools
     api(libs.jakewharton.timber)
     implementation(libs.squareup.moshi)

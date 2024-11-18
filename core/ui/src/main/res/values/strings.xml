@@ -6,6 +6,8 @@
     <string name="message_loading_content_error">Sorry, there was an error loading this content</string>
     <string name="text_retry">Retry</string>
     <string name="text_no_results">No Results</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_confirm">Confirm</string>
 
     // Time
     <string name="text_hours_minutes">%1$dh %2$dm</string>

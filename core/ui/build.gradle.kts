@@ -68,6 +68,7 @@ dependencies {
 
     // Material
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui.text.google.fonts)
 
     // Tools
     implementation(libs.jakewharton.timber)

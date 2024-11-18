@@ -1,0 +1,151 @@
+package com.buntupana.tmdb.feature.account.presentation.sign_out
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.feature.account.presentation.R
+import kotlinx.coroutines.launch
+import com.buntupana.tmdb.core.ui.R as RCore
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SignOutDialog(
+    viewModel: SignOutViewModel = hiltViewModel(),
+    showDialog: Boolean,
+    sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    onDismiss: () -> Unit
+) {
+
+    LaunchedEffect(viewModel.sideEffect) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                SignOutSideEffect.SignOutSuccess -> onDismiss()
+            }
+        }
+    }
+
+    SignOutContent(
+        state = viewModel.state,
+        showDialog = showDialog,
+        sheetState = sheetState,
+        onDismiss = onDismiss,
+        onSignOutClick = { viewModel.onEvent(SignOutEvent.SignOut) }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SignOutContent(
+    state: SignOutState,
+    showDialog: Boolean,
+    sheetState: SheetState,
+    onDismiss: () -> Unit,
+    onSignOutClick: () -> Unit
+) {
+    if (showDialog) {
+
+        val coroutineScope = rememberCoroutineScope()
+
+        ModalBottomSheet(
+            onDismissRequest = onDismiss,
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.background,
+            dragHandle = {}
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = Dimens.padding.horizontal,
+                        vertical = Dimens.padding.big
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(R.string.text_sign_out),
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(Dimens.padding.small))
+                Text(
+                    text = stringResource(R.string.message_sign_out_confirmation),
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(Dimens.padding.big))
+                if (state.isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        Button(
+//                        colors = ButtonDefaults.buttonColors(
+//                            containerColor =
+//                        ),
+                            onClick = {
+                                coroutineScope.launch {
+                                    sheetState.hide()
+                                    onDismiss()
+                                }
+                            }) {
+                            Text(
+                                text = stringResource(RCore.string.text_cancel),
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                        }
+                        Button(onClick = onSignOutClick) {
+                            Text(
+                                text = stringResource(RCore.string.text_confirm),
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@ExperimentalMaterial3Api
+@Preview
+@Composable
+fun SignOutScreenPreview() {
+    SignOutContent(
+        SignOutState(isLoading = false),
+        showDialog = true,
+        sheetState = SheetState(
+            skipPartiallyExpanded = true,
+            LocalDensity.current,
+            initialValue = SheetValue.Expanded
+        ),
+        onDismiss = {},
+        onSignOutClick = {}
+    )
+}

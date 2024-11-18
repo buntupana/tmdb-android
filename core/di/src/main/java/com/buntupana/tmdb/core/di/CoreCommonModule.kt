@@ -1,13 +1,17 @@
 package com.buntupana.tmdb.core.di
 
+import android.content.Context
 import com.buntupana.tmdb.data.api.AuthInterceptor
 import com.buntupana.tmdb.data.api.UrlProviderImpl
+import com.buntupana.tmdb.data.manager.SessionManagerImpl
+import com.panabuntu.tmdb.core.common.SessionManager
 import com.panabuntu.tmdb.core.common.UrlProvider
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -35,7 +39,7 @@ object CoreCommonModule {
     fun provideUrlProvider(): UrlProvider {
         return UrlProviderImpl()
     }
-    
+
     @Singleton
     @Provides
     fun provideHttpClient(urlProvider: UrlProvider): HttpClient {
@@ -89,5 +93,11 @@ object CoreCommonModule {
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideSessionManager(@ApplicationContext context: Context): SessionManager {
+        return SessionManagerImpl(context)
     }
 }

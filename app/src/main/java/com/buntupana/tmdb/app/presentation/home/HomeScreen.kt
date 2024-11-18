@@ -2,15 +2,6 @@ package com.buntupana.tmdb.app.presentation.home
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Explore
-import androidx.compose.material.icons.outlined.Movie
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Tv
-import androidx.compose.material.icons.rounded.Explore
-import androidx.compose.material.icons.rounded.Movie
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Tv
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -18,15 +9,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.buntupana.tmdb.app.R
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
@@ -66,39 +57,11 @@ fun HomeScreenContent(
 ) {
 
     val navigationItems = listOf(
-        BottomNavigationItem(
-            title = stringResource(R.string.text_explore),
-            selectedIcon = Icons.Rounded.Explore,
-            unselectedIcon = Icons.Outlined.Explore,
-            isSelected = true,
-            route = DiscoverNav
-        ),
-        BottomNavigationItem(
-            title = stringResource(R.string.text_movies),
-            selectedIcon = Icons.Rounded.Movie,
-            unselectedIcon = Icons.Outlined.Movie,
-            isSelected = false,
-            route = MoviesNav
-        ),
-        BottomNavigationItem(
-            title = stringResource(R.string.text_tv_shows),
-            selectedIcon = Icons.Rounded.Tv,
-            unselectedIcon = Icons.Outlined.Tv,
-            isSelected = false,
-            route = TvShowsNav
-        ),
-        BottomNavigationItem(
-            title = stringResource(R.string.text_account),
-            selectedIcon = Icons.Rounded.Person,
-            unselectedIcon = Icons.Outlined.Person,
-            isSelected = false,
-            route = AccountNav
-        )
+        TabNavigationItem.Discover(title = stringResource(R.string.text_explore)),
+        TabNavigationItem.Movies(title = stringResource(R.string.text_movies)),
+        TabNavigationItem.TVShows(title = stringResource(R.string.text_tv_shows)),
+        TabNavigationItem.Account(title = stringResource(R.string.text_account))
     )
-
-    var selectedNavigationIndex by rememberSaveable {
-        mutableIntStateOf(0)
-    }
 
     val navController = rememberNavController()
 
@@ -110,20 +73,32 @@ fun HomeScreenContent(
             )
         },
         bottomBar = {
+
+            val currentBackStackEntry by navController.currentBackStackEntryAsState()
+
             NavigationBar(
                 modifier = Modifier.fillMaxWidth(),
                 containerColor = PrimaryColor,
                 contentColor = SecondaryColor
             ) {
-                navigationItems.forEachIndexed { index, item ->
+                navigationItems.forEach { item ->
+
+                    val isSelected =
+                        currentBackStackEntry?.destination?.hasRoute(item.route::class) ?: false
+
                     NavigationBarItem(
-                        selected = index == selectedNavigationIndex,
+                        selected = isSelected,
                         onClick = {
-                            selectedNavigationIndex = index
-                            navController.navigate(item.route)
+                            navController.navigate(item.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         },
                         icon = {
-                            if (index == selectedNavigationIndex) {
+                            if (isSelected) {
                                 Icon(item.selectedIcon, contentDescription = item.title)
                             } else {
                                 Icon(

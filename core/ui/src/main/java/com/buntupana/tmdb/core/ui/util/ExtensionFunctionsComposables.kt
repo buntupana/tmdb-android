@@ -1,6 +1,10 @@
 package com.buntupana.tmdb.core.ui.util
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -21,6 +26,21 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.panabuntu.tmdb.core.common.model.Gender
 
+//@Composable
+fun getCustomTabIntent(url: String): Intent {
+    val customTabsIntent = CustomTabsIntent.Builder()
+        .setDefaultColorSchemeParams(
+            CustomTabColorSchemeParams.Builder()
+                .setToolbarColor(PrimaryColor.toArgb())
+                .build()
+        )
+        .setShowTitle(true)
+        .build()
+
+    customTabsIntent.intent.data = Uri.parse(url)
+
+    return customTabsIntent.intent
+}
 
 @Composable
 fun Gender.getString(): String {
@@ -41,7 +61,9 @@ fun Modifier.clickableTextPadding(): Modifier {
 }
 
 @Composable
-fun Modifier.setStatusNavigationBarColor(backgroundColor: Color = PrimaryColor): Modifier {
+fun Modifier.setStatusNavigationBarColor(
+    backgroundColor: Color = PrimaryColor
+): Modifier {
     val view = LocalView.current
     val window = (view.context as Activity).window
     val isLightStatus = backgroundColor.getOnBackgroundColor() != Color.White

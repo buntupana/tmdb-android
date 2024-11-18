@@ -2,12 +2,12 @@ package com.buntupana.tmdb.feature.account.data.repository
 
 import com.buntupana.tmdb.feature.account.data.mapper.toModel
 import com.buntupana.tmdb.feature.account.data.remote_data_source.AccountRemoteDataSource
-import com.buntupana.tmdb.feature.account.domain.model.AccountDetails
 import com.buntupana.tmdb.feature.account.domain.repository.AccountRepository
 import com.panabuntu.tmdb.core.common.UrlProvider
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.map
+import com.panabuntu.tmdb.core.common.model.AccountDetails
 import javax.inject.Inject
 
 class AccountRepositoryImpl @Inject constructor(

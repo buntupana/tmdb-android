@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.account.presentation.sign_out
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -83,7 +84,8 @@ fun SignOutContent(
                     .padding(
                         horizontal = Dimens.padding.horizontal,
                         vertical = Dimens.padding.big
-                    ),
+                    )
+                    .animateContentSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(

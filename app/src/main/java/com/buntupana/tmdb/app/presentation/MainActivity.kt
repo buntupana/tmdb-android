@@ -76,7 +76,11 @@ class MainActivity : ComponentActivity() {
                         ),
                     ) {
                         SignInScreen(
-                            onNavigateBack = { navRoutesMain.popBackStack() }
+                            onNavigateBack = {
+                                if (navRoutesMain.isCurrentDestination(SignInNav::class)) {
+                                    navRoutesMain.popBackStack()
+                                }
+                            }
                         )
                     }
                     composable<SearchNav> {

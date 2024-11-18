@@ -27,6 +27,7 @@ import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.getCustomTabIntent
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
+import com.buntupana.tmdb.feature.account.presentation.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -44,7 +45,8 @@ fun SignInScreen(
         ActivityResultContracts.StartActivityForResult()
     ) {
         scope.launch {
-            delay(300)
+            // delaying this to let deeplink handle the url
+            delay(200)
             onNavigateBack()
         }
     }
@@ -63,7 +65,6 @@ fun SignInScreen(
             }
         }
     }
-
 
     SignInContent(
         viewModel.state,
@@ -99,7 +100,7 @@ fun SignInContent(
         ) {
             if (state.isLoading) {
                 Text(
-                    text = stringResource(com.buntupana.tmdb.feature.account.presentation.R.string.text_signing_in),
+                    text = stringResource(R.string.text_signing_in),
                     color =  MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Spacer(
@@ -111,7 +112,7 @@ fun SignInContent(
             } else if (state.isSignInError) {
                 ErrorAndRetry(
                     textColor = PrimaryColor.getOnBackgroundColor(),
-                    errorMessage = stringResource(com.buntupana.tmdb.feature.account.presentation.R.string.text_signing_in_error),
+                    errorMessage = stringResource(R.string.text_signing_in_error),
                     onRetryClick = onRetryClicked
                 )
             }

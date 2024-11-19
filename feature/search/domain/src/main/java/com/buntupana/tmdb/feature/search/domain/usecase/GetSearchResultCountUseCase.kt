@@ -1,17 +1,18 @@
 package com.buntupana.tmdb.feature.search.domain.usecase
 
 import com.buntupana.tmdb.feature.search.domain.repository.SearchRepository
-import com.panabuntu.tmdb.core.common.entity.Resource
-import com.panabuntu.tmdb.core.common.usecase.UseCaseResource
+import com.panabuntu.tmdb.core.common.entity.NetworkError
+import com.panabuntu.tmdb.core.common.entity.Result
+import com.panabuntu.tmdb.core.common.entity.onError
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
 class GetSearchResultCountUseCase @Inject constructor(
     private val searchRepository: SearchRepository
-) : UseCaseResource<String, GetSearchResultCountUseCase.Result>() {
+) {
 
-    override suspend fun getSource(params: String): Resource<Result> {
+    suspend operator fun invoke(params: String): Result<GetSearchResultCountResult, NetworkError> {
 
         return coroutineScope {
 
@@ -20,40 +21,33 @@ class GetSearchResultCountUseCase @Inject constructor(
             val personsCountDef = async { searchRepository.getSearchPersonsCount(params) }
 
             val moviesCountRes = moviesCountDef.await()
-            if (moviesCountRes is Resource.Error) {
-                Resource.Error<Int>(moviesCountRes.message)
+            moviesCountRes.onError {
+                return@coroutineScope Result.Error(it)
             }
             val tvShowsCountRes = tvShowsCountDef.await()
-            if (tvShowsCountRes is Resource.Error) {
-                Resource.Error<Int>(tvShowsCountRes.message)
+            tvShowsCountRes.onError {
+                return@coroutineScope Result.Error(it)
             }
             val personsCountRes = personsCountDef.await()
-            if (personsCountRes is Resource.Error) {
-                Resource.Error<Int>(personsCountRes.message)
+            personsCountRes.onError {
+                return@coroutineScope Result.Error(it)
             }
 
-            if (moviesCountRes is Resource.Success
+            if (moviesCountRes is Result.Success
                 &&
-                tvShowsCountRes is Resource.Success
+                tvShowsCountRes is Result.Success
                 &&
-                personsCountRes is Resource.Success
+                personsCountRes is Result.Success
             ) {
-                Resource.Success(
-                    Result(
+                return@coroutineScope Result.Success(
+                    GetSearchResultCountResult(
                         moviesCountRes.data,
                         tvShowsCountRes.data,
                         personsCountRes.data
                     )
                 )
-            } else {
-                Resource.Error("")
             }
+            Result.Error(NetworkError.UNKNOWN)
         }
     }
-
-    data class Result(
-        val moviesCount: Int,
-        val tvShowsCount: Int,
-        val personsCount: Int
-    )
 }

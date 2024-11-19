@@ -1,51 +1,53 @@
 package com.buntupana.tmdb.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * This media item can be a Movie or Tv Show or a Person, this class is used when the api
  * returns a mix of everything
  * */
+@Serializable
 data class AnyMediaItemRaw(
     val id: Long,
-    @Json(name = "media_type")
+    @SerialName("media_type")
     val mediaType: String,
-    val overview: String?,
-    @Json(name = "poster_path")
-    val posterPath: String?,
-    @Json(name = "backdrop_path")
-    val backdropPath: String?,
-    @Json(name = "original_language")
-    val originalLanguage: String?,
-    @Json(name = "genre_ids")
-    val genreIds: List<Int>?,
-    val popularity: Float?,
-    @Json(name = "vote_average")
-    val voteAverage: Float?,
-    @Json(name = "vote_count")
-    val voteCount: Int?,
+    val overview: String? = null,
+    @SerialName("poster_path")
+    val posterPath: String? = null,
+    @SerialName("backdrop_path")
+    val backdropPath: String? = null,
+    @SerialName("original_language")
+    val originalLanguage: String? = null,
+    @SerialName("genre_ids")
+    val genreIds: List<Int>? = null,
+    val popularity: Float? = null,
+    @SerialName("vote_average")
+    val voteAverage: Float? = null,
+    @SerialName("vote_count")
+    val voteCount: Int? = null,
     // Movie fields
-    val title: String?,
-    @Json(name = "original_title")
-    val originalTitle: String?,
-    @Json(name = "release_date")
-    val releaseDate: String?,
-    val video: Boolean?,
-    val adult: Boolean?,
+    val title: String? = null,
+    @SerialName("original_title")
+    val originalTitle: String? = null,
+    @SerialName("release_date")
+    val releaseDate: String? = null,
+    val video: Boolean? = null,
+    val adult: Boolean? = null,
     // TV_Show fields
-    @Json(name = "original_name")
-    val originalName: String?,
-    @Json(name = "first_air_date")
-    val firstAirDate: String?,
-    @Json(name = "origin_country")
-    val originCountry: List<String>?,
+    @SerialName("original_name")
+    val originalName: String? = null,
+    @SerialName("first_air_date")
+    val firstAirDate: String? = null,
+    @SerialName("origin_country")
+    val originCountry: List<String>? = null,
     // Person fields
-    val name: String?,
-    @Json(name = "profile_path")
-    val profilePath: String?,
-    val gender: Int?,
-    @Json(name = "known_for_department")
-    val knownForDepartment: String?,
-    @Json(name = "known_for")
-    val knownFor: List<KnownFor>?,
+    val name: String? = null,
+    @SerialName("profile_path")
+    val profilePath: String? = null,
+    val gender: Int? = null,
+    @SerialName("known_for_department")
+    val knownForDepartment: String? = null,
+    @SerialName("known_for")
+    val knownFor: List<KnownFor>? = null,
 )

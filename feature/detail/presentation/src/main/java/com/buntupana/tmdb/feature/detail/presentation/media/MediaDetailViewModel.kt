@@ -8,11 +8,13 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
 import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.panabuntu.tmdb.core.common.entity.onError
+import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -25,7 +27,7 @@ class MediaDetailViewModel @Inject constructor(
     private val getTvShowDetailsUseCase: GetTvShowDetailsUseCase
 ) : ViewModel() {
 
-    private val navArgs: MediaDetailNav = savedStateHandle.toRoute()
+    private val navArgs: MediaDetailNav = savedStateHandle.navArgs()
 
     var state by mutableStateOf(
         MediaDetailState(
@@ -41,45 +43,40 @@ class MediaDetailViewModel @Inject constructor(
 
     fun onEvent(event: MediaDetailEvent) {
         Timber.d("onEvent() called with: event = [$event]")
-        when(event) {
-            MediaDetailEvent.GetMediaDetails -> {
-                when (navArgs.mediaType) {
-                    MediaType.MOVIE -> getMovieDetails()
-                    MediaType.TV_SHOW -> getTvShowDetails()
+        viewModelScope.launch {
+            when (event) {
+                MediaDetailEvent.GetMediaDetails -> {
+                    when (navArgs.mediaType) {
+                        MediaType.MOVIE -> getMovieDetails()
+                        MediaType.TV_SHOW -> getTvShowDetails()
+                    }
                 }
             }
         }
     }
 
-    private fun getMovieDetails() {
-        viewModelScope.launch {
-            getMovieDetailsUseCase(navArgs.mediaId) {
-                loading {
-                    state = state.copy(isLoading = true, isGetContentError = false)
-                }
-                error {
-                    state = state.copy(isLoading = false, isGetContentError = true)
-                }
-                success {
-                    state = state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
-                }
+    private suspend fun getMovieDetails() {
+        state = state.copy(isLoading = true, isGetContentError = false)
+
+        getMovieDetailsUseCase(navArgs.mediaId)
+            .onError {
+                state = state.copy(isLoading = false, isGetContentError = true)
             }
-        }
+            .onSuccess {
+                state = state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
+            }
     }
 
-    private fun getTvShowDetails() {
-        viewModelScope.launch {
-            getTvShowDetailsUseCase(navArgs.mediaId) {
-                loading {
-                    state = state.copy(isLoading = true, isGetContentError = false)
-                }
-                error {
-                    state = state.copy(isLoading = false, isGetContentError = true)
-                }
-                success {
-                    state = state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
-                }
+    private suspend fun getTvShowDetails() {
+        state = state.copy(isLoading = true, isGetContentError = false)
+
+        getTvShowDetailsUseCase(navArgs.mediaId)
+            .onError {
+                state = state.copy(isLoading = false, isGetContentError = true)
             }
-        }
+            .onSuccess {
+                state =
+                    state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
+            }
     }
 }

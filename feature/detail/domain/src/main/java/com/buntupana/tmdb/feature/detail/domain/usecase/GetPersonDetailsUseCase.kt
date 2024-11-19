@@ -4,40 +4,41 @@ import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
-import com.panabuntu.tmdb.core.common.entity.Resource
-import com.panabuntu.tmdb.core.common.usecase.UseCaseResource
+import com.panabuntu.tmdb.core.common.entity.NetworkError
+import com.panabuntu.tmdb.core.common.entity.Result
+import com.panabuntu.tmdb.core.common.entity.onError
+import com.panabuntu.tmdb.core.common.entity.onSuccess
 import java.time.LocalDate
 import javax.inject.Inject
 
 class GetPersonDetailsUseCase @Inject constructor(
     private val detailRepository: DetailRepository
-) : UseCaseResource<Long, PersonFullDetails>() {
+) {
 
     companion object {
         private const val KNOWN_FOR_SIZE = 8
     }
 
-    override suspend fun getSource(params: Long): Resource<PersonFullDetails> {
+    suspend operator fun invoke(params: Long): Result<PersonFullDetails, NetworkError> {
 
-        return when (val resource = detailRepository.getPersonDetails(params)) {
-            is Resource.Error -> Resource.Error(resource.message)
-            is Resource.Success -> {
-
+        detailRepository.getPersonDetails(params)
+            .onError { return Result.Error(it) }
+            .onSuccess { creditPersonItem ->
                 val externalLinks = mutableListOf<ExternalLink>()
 
-                externalLinks.addAll(resource.data.externalLinkList)
+                externalLinks.addAll(creditPersonItem.externalLinkList)
 
 //                if (personDetails.imdbLink.isNotBlank()) {
 //                    externalLinks.add(ExternalLink.ImdbLink(personDetails.imdbLink))
 //                }
 
-                if (resource.data.homePageUrl.isNotBlank()) {
-                    externalLinks.add(ExternalLink.HomePage(resource.data.homePageUrl))
+                if (creditPersonItem.homePageUrl.isNotBlank()) {
+                    externalLinks.add(ExternalLink.HomePage(creditPersonItem.homePageUrl))
                 }
 
-                val knownForList = resource.data.filmography
+                val knownForList = creditPersonItem.filmography
                     .distinctBy { it.title }
-                    .filter { it.department == resource.data.knownForDepartment }
+                    .filter { it.department == creditPersonItem.knownForDepartment }
                     .sortedByDescending {
 
                         val firstSortingValue = it.voteCount * it.userScore
@@ -55,29 +56,30 @@ class GetPersonDetailsUseCase @Inject constructor(
                     }.take(KNOWN_FOR_SIZE)
 
                 val creditMap =
-                    resource.data.filmography
+                    creditPersonItem.filmography
                         .sortedByDescending { it.releaseDate ?: LocalDate.now().plusYears(1) }
                         .groupBy { it.department }
 
                 val personFullDetails = PersonFullDetails(
-                    resource.data.id,
-                    resource.data.name,
-                    resource.data.profileUrl,
-                    resource.data.knownForDepartment,
-                    resource.data.gender,
-                    resource.data.birthDate,
-                    resource.data.deathDate,
-                    resource.data.age,
-                    resource.data.placeOfBirth,
-                    resource.data.biography,
-                    externalLinks,
-                    knownForList,
-                    creditMap,
-                    resource.data.filmography.size
+                    id = creditPersonItem.id,
+                    name = creditPersonItem.name,
+                    profileUrl = creditPersonItem.profileUrl,
+                    knownForDepartment = creditPersonItem.knownForDepartment,
+                    gender = creditPersonItem.gender,
+                    birthDate = creditPersonItem.birthDate,
+                    deathDate = creditPersonItem.deathDate,
+                    age = creditPersonItem.age,
+                    placeOfBirth = creditPersonItem.placeOfBirth,
+                    biography = creditPersonItem.biography,
+                    externalLinks = externalLinks,
+                    knownFor = knownForList,
+                    creditMap = creditMap,
+                    knownCredits = creditPersonItem.filmography.size
                 )
 
-                Resource.Success(personFullDetails)
+                return Result.Success(personFullDetails)
             }
-        }
+
+        return Result.Error(NetworkError.UNKNOWN)
     }
 }

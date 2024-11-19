@@ -1,17 +1,10 @@
 package com.buntupana.tmdb.data.remote_data_source
 
-import com.buntupana.tmdb.data.raw.ResponseErrorRaw
 import com.panabuntu.tmdb.core.common.entity.NetworkError
-import com.panabuntu.tmdb.core.common.entity.Resource
 import com.panabuntu.tmdb.core.common.entity.Result
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import kotlinx.serialization.SerializationException
-import okhttp3.ResponseBody
-import retrofit2.Converter
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
 import java.nio.channels.UnresolvedAddressException
 
@@ -20,42 +13,7 @@ import java.nio.channels.UnresolvedAddressException
  */
 abstract class RemoteDataSource {
 
-    private val networkErrorMessage = "Network Error"
-
-    protected suspend fun <T> getResourceResult(call: suspend () -> Response<T>): Resource<T> {
-        try {
-            val response = call()
-            if (response.isSuccessful) {
-                val body = response.body()
-                if (body != null) return Resource.Success(body)
-            }
-            return Resource.Error(getErrorMessage(response))
-        } catch (e: Exception) {
-            Timber.d(e)
-            return Resource.Error(networkErrorMessage)
-        }
-    }
-
-    private fun <T> getErrorMessage(response: Response<T>): String {
-
-        val errorMessage = try {
-            // Creating a dummy retrofit object in order to create a converter
-            val errorConverter: Converter<ResponseBody, ResponseErrorRaw> =
-                Retrofit.Builder()
-                    .baseUrl("http://www.dummy.com")
-                    .addConverterFactory(MoshiConverterFactory.create())
-                    .build().responseBodyConverter(ResponseErrorRaw::class.java, arrayOf())
-
-            val errorResponse = (errorConverter.convert(response.errorBody()!!) as ResponseErrorRaw)
-            errorResponse.statusMessage
-        } catch (e: Exception) {
-            networkErrorMessage
-        }
-
-        return errorMessage
-    }
-
-    suspend inline fun <reified D> getResult(request: () -> HttpResponse): Result<D, NetworkError> {
+    protected suspend inline fun <reified D> getResult(request: () -> HttpResponse): Result<D, NetworkError> {
         val response = try {
             request()
         } catch (e: UnresolvedAddressException) {
@@ -71,7 +29,12 @@ abstract class RemoteDataSource {
 
         return when (response.status.value) {
             in 200..299 -> {
-                Result.Success(response.body<D>())
+                try {
+                    Result.Success(response.body<D>())
+                } catch (e: Exception) {
+                    Timber.d(e)
+                    Result.Error(NetworkError.SERIALIZATION)
+                }
             }
 
             401 -> {

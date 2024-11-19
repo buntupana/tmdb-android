@@ -45,10 +45,6 @@ dependencies {
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.ksp)
 
-    // Networking
-    implementation(platform(libs.io.ktor.bom))
-    implementation(libs.bundles.ktor)
-
     // Testing
     testImplementation(libs.junit)
 }

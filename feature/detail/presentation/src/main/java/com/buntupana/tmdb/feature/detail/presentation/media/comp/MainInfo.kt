@@ -17,11 +17,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.ColorPainter
@@ -118,7 +121,7 @@ fun MainInfo(
             ) {
                 UserScore(
                     modifier = Modifier.size(50.dp),
-                    score = mediaDetails.userScore
+                    score = mediaDetails.voteAverage
                 )
                 Spacer(modifier = Modifier.width(Dimens.padding.small))
                 Text(
@@ -138,26 +141,27 @@ fun MainInfo(
                 Row(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(Dimens.padding.small)
-                        .clickable {
-                            uriHandler.openUri(mediaDetails.trailerUrl)
-                        },
+                        .padding(Dimens.padding.small),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Image(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(id = R.drawable.ic_play),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(textColor)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        text = stringResource(R.string.text_play_trailer),
-                        color = textColor,
-                        fontWeight = FontWeight(400),
-                    )
+                    TextButton(
+                        onClick = { uriHandler.openUri(mediaDetails.trailerUrl) }
+                    ) {
+                        Image(
+                            modifier = Modifier.size(24.dp),
+                            painter = painterResource(id = R.drawable.ic_play),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(textColor)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            text = stringResource(R.string.text_play_trailer),
+                            color = textColor,
+                            fontWeight = FontWeight(400),
+                        )
+                    }
                 }
             }
         }
@@ -276,6 +280,7 @@ fun MainInfo(
                 Column(
                     modifier = Modifier
                         .padding(vertical = Dimens.padding.small)
+                        .clip(RoundedCornerShape(Dimens.posterRound))
                         .clickable {
                             onItemClick(item.id)
                         }

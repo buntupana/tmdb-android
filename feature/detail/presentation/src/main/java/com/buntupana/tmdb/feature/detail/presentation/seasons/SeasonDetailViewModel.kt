@@ -8,9 +8,11 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowSeasonsUseCase
+import com.panabuntu.tmdb.core.common.entity.onError
+import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -22,7 +24,7 @@ class SeasonDetailViewModel @Inject constructor(
     private val getTvShowSeasonsUseCase: GetTvShowSeasonsUseCase
 ) : ViewModel() {
 
-    private val navArgs: SeasonsDetailNav = savedStateHandle.toRoute()
+    private val navArgs: SeasonsDetailNav = savedStateHandle.navArgs()
 
     var state by mutableStateOf(
         SeasonsDetailState(
@@ -48,17 +50,14 @@ class SeasonDetailViewModel @Inject constructor(
     }
 
     private suspend fun getSeasons() {
-        getTvShowSeasonsUseCase(
-            parameters = state.tvShowId,
-            loading = {
-                state = state.copy(isLoading = true, isGetSeasonsError = false)
-            },
-            error = {
+        state = state.copy(isLoading = true, isGetSeasonsError = false)
+
+        getTvShowSeasonsUseCase(state.tvShowId)
+            .onError {
                 state = state.copy(isLoading = false, isGetSeasonsError = true)
-            },
-            success = { seasonList ->
-                state = state.copy(isLoading = false, isGetSeasonsError = false, seasonList = seasonList)
             }
-        )
+            .onSuccess {
+                state = state.copy(isLoading = false, isGetSeasonsError = false, seasonList = it)
+            }
     }
 }

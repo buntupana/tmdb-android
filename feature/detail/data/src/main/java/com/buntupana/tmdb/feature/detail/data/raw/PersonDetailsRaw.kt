@@ -1,30 +1,32 @@
 package com.buntupana.tmdb.feature.detail.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PersonDetailsRaw(
     val id: Long,
     val name: String,
     val adult: Boolean,
-    @Json(name = "also_known_as")
+    @SerialName("also_known_as")
     val alsoKnownAs: List<String>,
-    val biography: String?,
-    val birthday: String?,
-    @Json(name = "deathday")
-    val deathDay: String?,
+    val biography: String? = null,
+    val birthday: String? = null,
+    @SerialName("deathday")
+    val deathDay: String? = null,
     val gender: Int,
-    val homepage: String?,
-    @Json(name = "imdb_id")
-    val imdbId: String?,
-    @Json(name = "known_for_department")
-    val knownForDepartment: String?,
-    @Json(name = "place_of_birth")
-    val placeOfBirth: String?,
+    val homepage: String? = null,
+    @SerialName("imdb_id")
+    val imdbId: String? = null,
+    @SerialName("known_for_department")
+    val knownForDepartment: String? = null,
+    @SerialName("place_of_birth")
+    val placeOfBirth: String? = null,
     val popularity: Double,
-    @Json(name = "profile_path")
-    val profilePath: String?,
-    @Json(name = "combined_credits")
-    val combinedCredits: FilmographyRaw?,
-    @Json(name = "external_ids")
-    val externalLinks: ExternalLinksRaw?
+    @SerialName("profile_path")
+    val profilePath: String? = null,
+    @SerialName("combined_credits")
+    val combinedCredits: FilmographyRaw? = null,
+    @SerialName("external_ids")
+    val externalLinks: ExternalLinksRaw? = null
 )

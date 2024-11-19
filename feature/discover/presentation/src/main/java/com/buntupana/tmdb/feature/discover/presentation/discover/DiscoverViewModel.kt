@@ -9,6 +9,8 @@ import com.buntupana.tmdb.core.ui.util.LOADING_DELAY
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.FreeToWatchFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
+import com.panabuntu.tmdb.core.common.entity.onError
+import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -62,31 +64,28 @@ class DiscoverViewModel @Inject constructor(
 
         getTrendingJob?.cancel()
         getTrendingJob = viewModelScope.launch {
-            getTrendingMediaListUseCase(trendingType) {
-                loading {
-                    state = state.copy(
-                        isLoading = true,
-                        isTrendingMediaLoadingError = false,
-                        trendingFilterSelected = trendingFilter,
-                        trendingMediaItemList = emptyList()
-                    )
-                }
-                error {
+            state = state.copy(
+                isLoading = true,
+                isTrendingMediaLoadingError = false,
+                trendingFilterSelected = trendingFilter,
+                trendingMediaItemList = emptyList()
+            )
+            getTrendingMediaListUseCase(trendingType)
+                .onError {
                     state = state.copy(
                         isLoading = false,
                         isTrendingMediaLoadingError = true
                     )
                 }
-                success { data ->
+                .onSuccess { mediaItemList ->
                     // Fake delay to show loading
                     delay(LOADING_DELAY)
                     state = state.copy(
                         isLoading = false,
                         isTrendingMediaLoadingError = false,
-                        trendingMediaItemList = data
+                        trendingMediaItemList = mediaItemList
                     )
                 }
-            }
         }
     }
 
@@ -105,31 +104,28 @@ class DiscoverViewModel @Inject constructor(
 
         getPopularMoviesJob?.cancel()
         getPopularMoviesJob = viewModelScope.launch {
-            getPopularMoviesListUseCase(popularType) {
-                loading {
-                    state = state.copy(
-                        isLoading = true,
-                        isPopularMediaLoadingError = false,
-                        popularFilterSelected = popularFilter,
-                        popularMediaItemList = emptyList()
-                    )
-                }
-                error {
+            state = state.copy(
+                isLoading = true,
+                isPopularMediaLoadingError = false,
+                popularFilterSelected = popularFilter,
+                popularMediaItemList = emptyList()
+            )
+            getPopularMoviesListUseCase(popularType)
+                .onError {
                     state = state.copy(
                         isLoading = false,
                         isPopularMediaLoadingError = true,
                     )
                 }
-                success { data ->
+                .onSuccess { mediaItemList ->
                     // Fake delay to show loading
                     delay(LOADING_DELAY)
                     state = state.copy(
                         isLoading = false,
                         isPopularMediaLoadingError = false,
-                        popularMediaItemList = data
+                        popularMediaItemList = mediaItemList
                     )
                 }
-            }
         }
     }
 
@@ -146,28 +142,26 @@ class DiscoverViewModel @Inject constructor(
 
         getFreeToWatchJob?.cancel()
         getFreeToWatchJob = viewModelScope.launch {
-            getFreeToWatchMediaListUseCase(freeToWatchType) {
-                loading {
-                    state =
-                        state.copy(
-                            isLoading = true,
-                            isFreeToWatchMediaLoadingError = false,
-                            freeToWatchFilterSelected = freeToWatchFilter,
-                            freeToWatchMediaItemList = emptyList()
-                        )
-                }
-                error {
+            state =
+                state.copy(
+                    isLoading = true,
+                    isFreeToWatchMediaLoadingError = false,
+                    freeToWatchFilterSelected = freeToWatchFilter,
+                    freeToWatchMediaItemList = emptyList()
+                )
+
+            getFreeToWatchMediaListUseCase(freeToWatchType)
+                .onError {
                     state = state.copy(isLoading = false, isFreeToWatchMediaLoadingError = false)
                 }
-                success { data ->// Fake delay to show loading
+                .onSuccess { mediaItemList ->
                     delay(LOADING_DELAY)
                     state = state.copy(
                         isLoading = false,
                         isFreeToWatchMediaLoadingError = false,
-                        freeToWatchMediaItemList = data
+                        freeToWatchMediaItemList = mediaItemList
                     )
                 }
-            }
         }
     }
 }

@@ -1,21 +1,23 @@
 package com.buntupana.tmdb.feature.detail.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MediaCrewMovieRaw(
     val id: Long,
     val adult: Boolean,
-    @Json(name = "credit_id")
+    @SerialName("credit_id")
     val creditId: String,
     val department: String,
     val gender: Int,
     val job: String,
-    @Json(name = "known_for_department")
+    @SerialName("known_for_department")
     val knownForDepartment: String,
     val name: String,
-    @Json(name = "original_name")
+    @SerialName("original_name")
     val originalName: String,
     val popularity: Double,
-    @Json(name = "profile_path")
-    val profilePath: String?
+    @SerialName("profile_path")
+    val profilePath: String? = null
 )

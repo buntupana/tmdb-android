@@ -2,52 +2,46 @@ package com.buntupana.tmdb.feature.detail.domain.usecase
 
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
-import com.panabuntu.tmdb.core.common.entity.Resource
-import com.panabuntu.tmdb.core.common.usecase.UseCaseResource
+import com.panabuntu.tmdb.core.common.entity.NetworkError
+import com.panabuntu.tmdb.core.common.entity.Result
+import com.panabuntu.tmdb.core.common.entity.map
 import java.util.Locale
 import javax.inject.Inject
 
 class GetTvShowDetailsUseCase @Inject constructor(
     private val detailRepository: DetailRepository
-) : UseCaseResource<Long, MediaDetails.TvShow>() {
+) {
 
-    override suspend fun getSource(params: Long): Resource<MediaDetails.TvShow> {
+    suspend operator fun invoke(params: Long): Result<MediaDetails.TvShow, NetworkError> {
+        return detailRepository.getTvShowDetails(params).map { it ->
+            val certification = it.certificationList.firstOrNull {
+                it.countryCode == Locale.getDefault().country
+            } ?: it.certificationList.firstOrNull {
+                it.countryCode == "US"
+            } ?: it.certificationList.firstOrNull()
 
-        return when (val resource = detailRepository.getTvShowDetails(params)) {
-            is Resource.Error -> Resource.Error(resource.message)
-            is Resource.Success -> {
-
-                val certification = resource.data.certificationList.firstOrNull {
-                    it.countryCode == Locale.getDefault().country
-                } ?: resource.data.certificationList.firstOrNull {
-                    it.countryCode == "US"
-                } ?: resource.data.certificationList.firstOrNull()
-
-                val tvShow = MediaDetails.TvShow(
-                    id = resource.data.id,
-                    title = resource.data.title,
-                    posterUrl = resource.data.posterUrl,
-                    backdropUrl = resource.data.backdropUrl,
-                    trailerUrl = resource.data.trailerUrl,
-                    overview = resource.data.overview,
-                    tagLine = resource.data.tagLine,
-                    releaseDate = resource.data.releaseDate,
-                    userScore = resource.data.userScore,
-                    runTime = resource.data.runTime,
-                    genreList = resource.data.genreList,
-                    ageCertification = certification?.rating.orEmpty(),
-                    creatorList = resource.data.creatorList,
-                    castList = resource.data.credits.castList,
-                    crewList = resource.data.credits.crewList,
-                    recommendationList = resource.data.recommendationList,
-                    seasonList = resource.data.seasonList,
-                    lastEpisode = resource.data.lastEpisode,
-                    nextEpisode = resource.data.nextEpisode,
-                    isInAir = resource.data.isInAir
-                )
-
-                Resource.Success(tvShow)
-            }
+            MediaDetails.TvShow(
+                id = it.id,
+                title = it.title,
+                posterUrl = it.posterUrl,
+                backdropUrl = it.backdropUrl,
+                trailerUrl = it.trailerUrl,
+                overview = it.overview,
+                tagLine = it.tagLine,
+                releaseDate = it.releaseDate,
+                voteAverage = it.userScore,
+                runTime = it.runTime,
+                genreList = it.genreList,
+                ageCertification = certification?.rating.orEmpty(),
+                creatorList = it.creatorList,
+                castList = it.credits.castList,
+                crewList = it.credits.crewList,
+                recommendationList = it.recommendationList,
+                seasonList = it.seasonList,
+                lastEpisode = it.lastEpisode,
+                nextEpisode = it.nextEpisode,
+                isInAir = it.isInAir
+            )
         }
     }
 }

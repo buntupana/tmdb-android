@@ -3,7 +3,6 @@ package com.buntupana.tmdb.feature.detail.data.raw
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreditsMovieRaw(
-    val cast: List<MediaCastMovieRaw>,
-    val crew: List<MediaCrewMovieRaw>
+data class RatedRaw(
+    val value: Double
 )

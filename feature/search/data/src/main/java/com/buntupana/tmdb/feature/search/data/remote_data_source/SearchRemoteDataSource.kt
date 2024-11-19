@@ -4,41 +4,65 @@ import com.buntupana.tmdb.data.raw.AnyMediaItemRaw
 import com.buntupana.tmdb.data.raw.MovieItemRaw
 import com.buntupana.tmdb.data.raw.ResponseListRaw
 import com.buntupana.tmdb.data.raw.TvShowRaw
-import com.buntupana.tmdb.feature.search.data.api.SearchApi
 import com.buntupana.tmdb.feature.search.data.raw.PersonRaw
-import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.entity.NetworkError
+import com.panabuntu.tmdb.core.common.entity.Result
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import javax.inject.Inject
 
 class SearchRemoteDataSource @Inject constructor(
-    private val searchApi: SearchApi
+    private val httpClient: HttpClient
 ) : com.buntupana.tmdb.data.remote_data_source.RemoteDataSource() {
 
-    suspend fun getTrending(): Resource<ResponseListRaw<AnyMediaItemRaw>> {
-        return getResourceResult { searchApi.fetchTrending() }
+    suspend fun getTrending(): Result<ResponseListRaw<AnyMediaItemRaw>, NetworkError> {
+        return getResult {
+            httpClient.get("trending/all/day")
+        }
     }
 
-    suspend fun getSearchMedia(searchKey: String): Resource<ResponseListRaw<AnyMediaItemRaw>> {
-        return getResourceResult { searchApi.fetchSearchMedia(searchKey) }
+    suspend fun getSearchMedia(searchKey: String): Result<ResponseListRaw<AnyMediaItemRaw>, NetworkError> {
+        return getResult {
+            httpClient.get("search/multi") {
+                parameter("query", searchKey)
+            }
+        }
     }
 
     suspend fun getSearchMovies(
         searchKey: String,
         page: Int
-    ): Resource<ResponseListRaw<MovieItemRaw>> {
-        return getResourceResult { searchApi.fetchSearchMovies(searchKey, page) }
+    ): Result<ResponseListRaw<MovieItemRaw>, NetworkError> {
+        return getResult {
+            httpClient.get("search/movie") {
+                parameter("query", searchKey)
+                parameter("page", page)
+            }
+        }
     }
 
     suspend fun getSearchTvShows(
         searchKey: String,
         page: Int
-    ): Resource<ResponseListRaw<TvShowRaw>> {
-        return getResourceResult { searchApi.fetchSearchTvShows(searchKey, page) }
+    ): Result<ResponseListRaw<TvShowRaw>, NetworkError> {
+        return getResult {
+            httpClient.get("search/tv") {
+                parameter("query", searchKey)
+                parameter("page", page)
+            }
+        }
     }
 
     suspend fun getSearchPersons(
         searchKey: String,
         page: Int
-    ): Resource<ResponseListRaw<PersonRaw>> {
-        return getResourceResult { searchApi.fetchSearchPersons(searchKey, page) }
+    ): Result<ResponseListRaw<PersonRaw>, NetworkError> {
+        return getResult {
+            httpClient.get("search/person") {
+                parameter("query", searchKey)
+                parameter("page", page)
+            }
+        }
     }
 }

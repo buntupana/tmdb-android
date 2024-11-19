@@ -2,14 +2,16 @@ package com.buntupana.tmdb.data.api
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.panabuntu.tmdb.core.common.entity.Resource
+import com.buntupana.tmdb.data.raw.ResponseListRaw
+import com.panabuntu.tmdb.core.common.entity.NetworkError
+import com.panabuntu.tmdb.core.common.entity.Result
 import timber.log.Timber
 import java.util.concurrent.CancellationException
 
 
-class GenericPagingDataSource<ITEM : Any, RAW_ITEM, RESPONSE : com.buntupana.tmdb.data.raw.ResponseListRaw<RAW_ITEM>>(
-    private val networkCall: suspend (Int) -> Resource<RESPONSE>,
-    private val mappItem: (RAW_ITEM) -> ITEM
+class GenericPagingDataSource<ITEM : Any, RAW_ITEM, RESPONSE : ResponseListRaw<RAW_ITEM>>(
+    private val networkCall: suspend (Int) -> Result<RESPONSE, NetworkError>,
+    private val mapItem: (RAW_ITEM) -> ITEM
 ) : PagingSource<Int, ITEM>() {
 
     private var lastCursor: Int = 1
@@ -18,10 +20,10 @@ class GenericPagingDataSource<ITEM : Any, RAW_ITEM, RESPONSE : com.buntupana.tmd
         lastCursor = params.key ?: 1
 
         return when (val response = networkCall.invoke(lastCursor)) {
-            is Resource.Success -> {
+            is Result.Success -> {
                 try {
                     val items = response.data.results.map {
-                        mappItem(it)
+                        mapItem(it)
                     }
 
                     val prevKey = response.data.page - 1
@@ -40,8 +42,8 @@ class GenericPagingDataSource<ITEM : Any, RAW_ITEM, RESPONSE : com.buntupana.tmd
                     LoadResult.Error(Exception())
                 }
             }
-            is Resource.Error -> {
-                LoadResult.Error(Exception(response.message))
+            is Result.Error -> {
+                LoadResult.Error(Exception())
             }
         }
     }

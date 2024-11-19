@@ -1,13 +1,15 @@
 package com.buntupana.tmdb.feature.detail.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class CreatedBy(
     val id: Long,
-    @Json(name = "credit_id")
-    val creditId: String?,
-    val gender: Int?,
-    val name: String?,
-    @Json(name = "profile_path")
-    val profilePath: String?
+    @SerialName("credit_id")
+    val creditId: String? = null,
+    val gender: Int? = null,
+    val name: String? = null,
+    @SerialName("profile_path")
+    val profilePath: String? = null
 )

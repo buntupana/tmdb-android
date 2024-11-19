@@ -1,48 +1,50 @@
 package com.buntupana.tmdb.feature.detail.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MovieDetailsRaw(
     val id: Long,
     val adult: Boolean,
-    @Json(name = "backdrop_path")
-    val backdropPath: String?,
-    @Json(name = "belongs_to_collection")
-    val belongsToCollection: BelongsToCollection?,
+    @SerialName("backdrop_path")
+    val backdropPath: String? = null,
+    @SerialName("belongs_to_collection")
+    val belongsToCollection: BelongsToCollection? = null,
     val budget: Long,
     val genres: List<Genre>,
     val homepage: String,
-    @Json(name = "imdb_id")
-    val imdbId: String?,
-    @Json(name = "original_language")
+    @SerialName("imdb_id")
+    val imdbId: String? = null,
+    @SerialName("original_language")
     val originalLanguage: String,
-    @Json(name = "original_title")
+    @SerialName("original_title")
     val originalTitle: String,
     val overview: String,
     val popularity: Double,
-    @Json(name = "poster_path")
-    val posterPath: String?,
-    @Json(name = "production_companies")
+    @SerialName("poster_path")
+    val posterPath: String? = null,
+    @SerialName("production_companies")
     val productionCompanies: List<ProductionCompany>,
-    @Json(name = "production_countries")
+    @SerialName("production_countries")
     val productionCountries: List<ProductionCountry>,
-    @Json(name = "release_date")
+    @SerialName("release_date")
     val releaseDate: String,
     val revenue: Long,
     val runtime: Long,
-    @Json(name = "spoken_languages")
+    @SerialName("spoken_languages")
     val spokenLanguages: List<SpokenLanguage>,
     val status: String,
     val tagline: String,
     val title: String,
-    val video: Boolean?,
-    @Json(name = "vote_average")
+    val video: Boolean? = null,
+    @SerialName("vote_average")
     val voteAverage: Double,
-    val videos: MediaVideosRaw?,
-    @Json(name = "release_dates")
-    val releaseDates: ReleaseDatesRaw?,
-    @Json(name = "vote_count")
-    val voteCount: Int?,
-    val credits: CreditsMovieRaw?,
+    val videos: MediaVideosRaw? = null,
+    @SerialName("release_dates")
+    val releaseDates: ReleaseDatesRaw? = null,
+    @SerialName("vote_count")
+    val voteCount: Int? = null,
+    val credits: CreditsMovieRaw? = null,
     val recommendations: RecommendationsRaw
 )

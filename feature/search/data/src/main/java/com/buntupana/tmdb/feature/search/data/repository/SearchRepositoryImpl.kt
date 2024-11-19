@@ -11,10 +11,11 @@ import com.buntupana.tmdb.feature.search.data.remote_data_source.SearchRemoteDat
 import com.buntupana.tmdb.feature.search.domain.model.SearchItem
 import com.buntupana.tmdb.feature.search.domain.repository.SearchRepository
 import com.panabuntu.tmdb.core.common.UrlProvider
-import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.entity.NetworkError
+import com.panabuntu.tmdb.core.common.entity.Result
+import com.panabuntu.tmdb.core.common.entity.map
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.model.PersonItem
-import com.panabuntu.tmdb.core.common.networkResult
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -23,18 +24,18 @@ class SearchRepositoryImpl @Inject constructor(
     private val urlProvider: UrlProvider
 ) : SearchRepository {
 
-    override suspend fun getTrendingMedia(): Resource<List<SearchItem>> {
-        return networkResult(
-            networkCall = { searchRemoteDataSource.getTrending() },
-            mapResponse = { response -> response.results.toSearchModel(baseUrlPoster = urlProvider.BASE_URL_POSTER) }
-        )
+    override suspend fun getTrendingMedia(): Result<List<SearchItem>, NetworkError> {
+        return searchRemoteDataSource.getTrending()
+            .map {
+                it.results.toSearchModel(baseUrlPoster = urlProvider.BASE_URL_POSTER)
+            }
     }
 
-    override suspend fun getSearchMedia(searchKey: String): Resource<List<SearchItem>> {
-        return networkResult(
-            networkCall = { searchRemoteDataSource.getSearchMedia(searchKey) },
-            mapResponse = { response -> response.results.toSearchModel(baseUrlPoster = urlProvider.BASE_URL_POSTER) }
-        )
+    override suspend fun getSearchMedia(searchKey: String): Result<List<SearchItem>, NetworkError> {
+        return searchRemoteDataSource.getSearchMedia(searchKey = searchKey)
+            .map {
+                it.results.toSearchModel(baseUrlPoster = urlProvider.BASE_URL_POSTER)
+            }
     }
 
     override suspend fun getSearchMovies(searchKey: String): Flow<PagingData<MediaItem.Movie>> {
@@ -48,7 +49,7 @@ class SearchRepositoryImpl @Inject constructor(
                     networkCall = { page ->
                         searchRemoteDataSource.getSearchMovies(searchKey, page)
                     },
-                    mappItem = {
+                    mapItem = {
                         it.toModel(
                             baseUrlPoster = urlProvider.BASE_URL_POSTER,
                             baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
@@ -59,11 +60,11 @@ class SearchRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun getSearchMoviesResultCount(searchKey: String): Resource<Int> {
-        return networkResult(
-            networkCall = { searchRemoteDataSource.getSearchMovies(searchKey, 1) },
-            mapResponse = { it.totalResults }
-        )
+    override suspend fun getSearchMoviesResultCount(searchKey: String): Result<Int, NetworkError> {
+        return searchRemoteDataSource.getSearchMovies(searchKey = searchKey, page = 1)
+            .map {
+                it.totalResults
+            }
     }
 
     override suspend fun getSearchTvShows(searchKey: String): Flow<PagingData<MediaItem.TvShow>> {
@@ -75,9 +76,9 @@ class SearchRepositoryImpl @Inject constructor(
             pagingSourceFactory = {
                 GenericPagingDataSource(
                     networkCall = { page ->
-                        searchRemoteDataSource.getSearchTvShows(searchKey, page)
+                        searchRemoteDataSource.getSearchTvShows(searchKey = searchKey, page = page)
                     },
-                    mappItem = {
+                    mapItem = {
                         it.toModel(
                             baseUrlPoster = urlProvider.BASE_URL_POSTER,
                             baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
@@ -88,11 +89,9 @@ class SearchRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun getSearchTvShowsResultCount(searchKey: String): Resource<Int> {
-        return networkResult(
-            networkCall = { searchRemoteDataSource.getSearchTvShows(searchKey, 1) },
-            mapResponse = { it.totalResults }
-        )
+    override suspend fun getSearchTvShowsResultCount(searchKey: String): Result<Int, NetworkError> {
+        return searchRemoteDataSource.getSearchTvShows(searchKey = searchKey, page = 1)
+            .map { it.totalResults }
     }
 
     override suspend fun getSearchPersons(searchKey: String): Flow<PagingData<PersonItem>> {
@@ -106,7 +105,7 @@ class SearchRepositoryImpl @Inject constructor(
                     networkCall = { page ->
                         searchRemoteDataSource.getSearchPersons(searchKey, page)
                     },
-                    mappItem = {
+                    mapItem = {
                         it.toModel(baseUrlProfile = urlProvider.BASE_URL_PROFILE)
                     }
                 )
@@ -114,10 +113,8 @@ class SearchRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun getSearchPersonsCount(searchKey: String): Resource<Int> {
-        return networkResult(
-            networkCall = { searchRemoteDataSource.getSearchPersons(searchKey, 1) },
-            mapResponse = { it.totalResults }
-        )
+    override suspend fun getSearchPersonsCount(searchKey: String): Result<Int, NetworkError> {
+        return searchRemoteDataSource.getSearchPersons(searchKey = searchKey, page = 1)
+            .map { it.totalResults }
     }
 }

@@ -9,7 +9,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import androidx.palette.graphics.Palette
+import com.buntupana.tmdb.core.ui.navigation.Routes
+import com.panabuntu.tmdb.core.common.decodeAllStrings
 
 fun Drawable.getDominantColor(colorResult: (dominantColor: Color) -> Unit) {
     Palette.Builder(toBitmap()).generate { palette ->
@@ -35,3 +39,7 @@ fun Modifier.brush(brush: Brush) = this
             drawRect(brush, blendMode = BlendMode.SrcAtop)
         }
     }
+
+inline fun <reified T : Routes> SavedStateHandle.navArgs(): T {
+    return toRoute<T>().decodeAllStrings()
+}

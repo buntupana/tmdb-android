@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import com.panabuntu.tmdb.core.common.encodeAllUrls
+import timber.log.Timber
 import kotlin.reflect.KClass
 
 class NavRoutesMainImpl : NavRoutesMain {
@@ -16,12 +17,14 @@ class NavRoutesMainImpl : NavRoutesMain {
     }
 
     override fun handleDeepLing(intent: Intent) {
+        Timber.d("handleDeepLing() called with: intent = [$intent]")
         navController?.handleDeepLink(intent)
     }
 
     override fun navigate(
         destination: Routes
     ) {
+        Timber.d("navigate() called with: destination = [$destination]")
         navigate<Routes>(
             destination = destination,
             popUpTo = null,
@@ -34,10 +37,12 @@ class NavRoutesMainImpl : NavRoutesMain {
         popUpTo: KClass<T>?,
         popUpToInclusive: Boolean
     ) {
+        Timber.d("navigate() called with: destination = [$destination], popUpTo = [$popUpTo], popUpToInclusive = [$popUpToInclusive]")
         navController?.navigate(destination.encodeAllUrls())
     }
 
     override fun popBackStack() {
+        Timber.d("popBackStack() called")
         navController?.popBackStack()
     }
 
@@ -45,10 +50,12 @@ class NavRoutesMainImpl : NavRoutesMain {
         destination: KClass<in T>,
         inclusive: Boolean
     ) {
+        Timber.d("popBackStack() called with: destination = [$destination], inclusive = [$inclusive]")
         navController?.popBackStack(destination, inclusive)
     }
 
     override fun <T : Routes> isCurrentDestination(destination: KClass<T>): Boolean {
+        Timber.d("isCurrentDestination() called with: destination = [$destination]")
         return navController?.currentDestination?.hasRoute(destination) ?: false
     }
 }

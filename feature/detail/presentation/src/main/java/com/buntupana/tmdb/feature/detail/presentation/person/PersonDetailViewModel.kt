@@ -6,8 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
+import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetPersonDetailsUseCase
+import com.panabuntu.tmdb.core.common.entity.onError
+import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -19,7 +21,7 @@ class PersonDetailViewModel @Inject constructor(
     private val getPersonDetailsUseCase: GetPersonDetailsUseCase
 ) : ViewModel() {
 
-    private val navArgs: PersonDetailNav = savedStateHandle.toRoute()
+    private val navArgs: PersonDetailNav = savedStateHandle.navArgs()
 
     var state by mutableStateOf(PersonDetailState())
 
@@ -37,20 +39,19 @@ class PersonDetailViewModel @Inject constructor(
     }
 
     private suspend fun getPersonDetails(personId: Long) {
-        getPersonDetailsUseCase(personId) {
-            loading {
-                state = state.copy(isLoading = true, isGetPersonError = false)
-            }
-            error {
+
+        state = state.copy(isLoading = true, isGetPersonError = false)
+
+        getPersonDetailsUseCase(personId)
+            .onError {
                 state = state.copy(isLoading = false, isGetPersonError = true)
             }
-            success { personDetails ->
+            .onSuccess {
                 state = state.copy(
                     isLoading = false,
                     isGetPersonError = false,
-                    personDetails = personDetails
+                    personDetails = it
                 )
             }
-        }
     }
 }

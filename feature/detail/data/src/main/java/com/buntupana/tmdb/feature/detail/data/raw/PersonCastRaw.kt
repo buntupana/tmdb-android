@@ -1,43 +1,45 @@
 package com.buntupana.tmdb.feature.detail.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PersonCastRaw(
     val id: Long,
-    val name: String?,
-    val adult: Boolean?,
-    @Json(name = "backdrop_path")
-    val backdropPath: String?,
-    val character: String?,
-    @Json(name = "credit_id")
+    val name: String? = null,
+    val adult: Boolean? = null,
+    @SerialName("backdrop_path")
+    val backdropPath: String? = null,
+    val character: String? = null,
+    @SerialName("credit_id")
     val creditId: String,
-    @Json(name = "episode_count")
-    val episodeCount: Int?,
-    @Json(name = "first_air_date")
-    val firstAirDate: String?,
-    @Json(name = "genre_ids")
-    val genreIds: List<Int>?,
-    @Json(name = "media_type")
+    @SerialName("episode_count")
+    val episodeCount: Int? = null,
+    @SerialName("first_air_date")
+    val firstAirDate: String? = null,
+    @SerialName("genre_ids")
+    val genreIds: List<Int>? = null,
+    @SerialName("media_type")
     val mediaType: String,
-    val order: Int?,
-    @Json(name = "origin_country")
-    val originCountry: List<String>?,
-    @Json(name = "original_language")
+    val order: Int? = null,
+    @SerialName("origin_country")
+    val originCountry: List<String>? = null,
+    @SerialName("original_language")
     val originalLanguage: String,
-    @Json(name = "original_name")
-    val originalName: String?,
-    @Json(name = "original_title")
-    val originalTitle: String?,
+    @SerialName("original_name")
+    val originalName: String? = null,
+    @SerialName("original_title")
+    val originalTitle: String? = null,
     val overview: String,
-    val popularity: Float?,
-    @Json(name = "poster_path")
-    val posterPath: String?,
-    @Json(name = "release_date")
-    val releaseDate: String?,
-    val title: String?,
-    val video: Boolean?,
-    @Json(name = "vote_average")
-    val voteAverage: Float?,
-    @Json(name = "vote_count")
-    val voteCount: Int?
+    val popularity: Float? = null,
+    @SerialName("poster_path")
+    val posterPath: String? = null,
+    @SerialName("release_date")
+    val releaseDate: String? = null,
+    val title: String? = null,
+    val video: Boolean? = null,
+    @SerialName("vote_average")
+    val voteAverage: Float? = null,
+    @SerialName("vote_count")
+    val voteCount: Int? = null
 )

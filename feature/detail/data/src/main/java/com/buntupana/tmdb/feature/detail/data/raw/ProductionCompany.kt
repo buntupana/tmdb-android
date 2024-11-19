@@ -1,12 +1,14 @@
 package com.buntupana.tmdb.feature.detail.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ProductionCompany(
     val id: Int,
     val name: String,
-    @Json(name = "logo_path")
-    val logoPath: String?,
-    @Json(name = "origin_country")
-    val originCountry: String?
+    @SerialName("logo_path")
+    val logoPath: String? = null,
+    @SerialName("origin_country")
+    val originCountry: String? = null
 )

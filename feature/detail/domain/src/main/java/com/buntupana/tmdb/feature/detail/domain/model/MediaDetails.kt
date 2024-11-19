@@ -12,14 +12,17 @@ sealed class MediaDetails(
     open val overview: String,
     open val tagLine: String,
     open val releaseDate: LocalDate?,
-    open val userScore: Int,
+    open val voteAverage: Int,
     open val runTime: Long,
     open val genreList: List<String>,
     open val ageCertification: String,
     open val creatorList: List<Person.Crew>,
     open val castList: List<Person.Cast>,
     open val crewList: List<Person.Crew>,
-    open val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>
+    open val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
+    open val isFavorite: Boolean = false,
+    open val isWatchlisted: Boolean = false,
+    open val userRating: Int? = null
 )  {
 
     data class Movie(
@@ -32,7 +35,7 @@ sealed class MediaDetails(
         override val tagLine: String,
         override val releaseDate: LocalDate?,
         val localReleaseDate: String?,
-        override val userScore: Int,
+        override val voteAverage: Int,
         override val runTime: Long,
         override val genreList: List<String>,
         override val ageCertification: String,
@@ -40,7 +43,10 @@ sealed class MediaDetails(
         override val castList: List<Person.Cast.Movie>,
         override val crewList: List<Person.Crew.Movie>,
         override val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
-        val localCountryCodeRelease: String
+        val localCountryCodeRelease: String,
+        override val isFavorite: Boolean = false,
+        override val isWatchlisted: Boolean = false,
+        override val userRating: Int? = null
     ) : MediaDetails(
         id = id,
         title = title,
@@ -50,7 +56,7 @@ sealed class MediaDetails(
         overview = overview,
         tagLine = tagLine,
         releaseDate = releaseDate,
-        userScore = userScore,
+        voteAverage = voteAverage,
         runTime = runTime,
         genreList = genreList,
         ageCertification = ageCertification,
@@ -69,7 +75,7 @@ sealed class MediaDetails(
         override val overview: String,
         override val tagLine: String,
         override val releaseDate: LocalDate?,
-        override val userScore: Int,
+        override val voteAverage: Int,
         override val runTime: Long,
         override val genreList: List<String>,
         override val ageCertification: String,
@@ -80,7 +86,10 @@ sealed class MediaDetails(
         val seasonList: List<Season>,
         val lastEpisode: Episode?,
         val nextEpisode: Episode?,
-        val isInAir: Boolean
+        val isInAir: Boolean,
+        override val isFavorite: Boolean = false,
+        override val isWatchlisted: Boolean = false,
+        override val userRating: Int? = null
     ) : MediaDetails(
         id = id,
         title = title,
@@ -90,7 +99,7 @@ sealed class MediaDetails(
         overview = overview,
         tagLine = tagLine,
         releaseDate = releaseDate,
-        userScore = userScore,
+        voteAverage = voteAverage,
         runTime = runTime,
         genreList = genreList,
         ageCertification = ageCertification,

@@ -1,7 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -78,17 +78,21 @@ fun CastHorizontalList(
                 }
             }
 
-            Spacer(modifier = Modifier.padding(Dimens.padding.medium))
+            Spacer(modifier = Modifier.padding(Dimens.padding.small))
 
-            Text(
-                modifier = Modifier
-                    .padding(horizontal = Dimens.padding.medium)
-                    .clickable { onFullCastClick() },
-                text = stringResource(id = R.string.text_full_cast),
-                style = MaterialTheme.typography.titleMedium
-            )
+            TextButton(
+                onClick = onFullCastClick
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = Dimens.padding.small),
+                    text = stringResource(id = R.string.text_full_cast),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
 
-            Spacer(modifier = Modifier.height(Dimens.padding.vertical))
+            Spacer(modifier = Modifier.height(Dimens.padding.small))
         }
     }
 }

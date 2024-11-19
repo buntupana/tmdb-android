@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
+import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.account.domain.usecase.CreateAuthenticationUrlUseCase
 import com.buntupana.tmdb.feature.account.domain.usecase.CreateSessionUseCase
 import com.panabuntu.tmdb.core.common.entity.onError
@@ -25,7 +25,7 @@ class SignInViewModel @Inject constructor(
     private val createSessionUseCase: CreateSessionUseCase
 ) : ViewModel() {
 
-    private val navArgs = savedStateHandle.toRoute<SignInNav>()
+    private val navArgs = savedStateHandle.navArgs<SignInNav>()
 
     var state by mutableStateOf(SignInState())
 

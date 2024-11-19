@@ -1,12 +1,14 @@
 package com.buntupana.tmdb.feature.detail.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class BelongsToCollection(
     val id: Int,
     val name: String,
-    @Json(name = "backdrop_path")
-    val backdropPath: String?,
-    @Json(name = "poster_path")
-    val posterPath: String?
+    @SerialName("backdrop_path")
+    val backdropPath: String? = null,
+    @SerialName("poster_path")
+    val posterPath: String? = null
 )

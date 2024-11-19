@@ -1,24 +1,21 @@
 package com.buntupana.tmdb.feature.detail.domain.usecase
 
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
-import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.entity.NetworkError
+import com.panabuntu.tmdb.core.common.entity.Result
+import com.panabuntu.tmdb.core.common.entity.map
 import javax.inject.Inject
 
 class GetTvShowCreditsUseCase @Inject constructor(
     private val detailRepository: DetailRepository
-) : com.panabuntu.tmdb.core.common.usecase.UseCaseResourceNew<Long, GetCreditsUseCaseResult>() {
-    override suspend fun getSource(params: Long): Resource<GetCreditsUseCaseResult> {
+) {
 
-        return when (val resource = detailRepository.getTvShowCredits(params)) {
-            is Resource.Error -> Resource.Error(resource.message)
-            is Resource.Success -> {
-                Resource.Success(
-                    GetCreditsUseCaseResult(
-                        personCastList = resource.data.castList,
-                        personCrewMap = resource.data.crewList.groupBy { it.department }.toSortedMap()
-                    )
-                )
-            }
+    suspend operator fun invoke(tvShowId: Long): Result<GetCreditsUseCaseResult, NetworkError> {
+        return detailRepository.getTvShowCredits(tvShowId).map {
+            GetCreditsUseCaseResult(
+                personCastList = it.castList,
+                personCrewMap = it.crewList.groupBy { it.department }.toSortedMap()
+            )
         }
     }
 }

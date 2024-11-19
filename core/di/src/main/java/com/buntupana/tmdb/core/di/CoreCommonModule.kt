@@ -1,13 +1,10 @@
 package com.buntupana.tmdb.core.di
 
 import android.content.Context
-import com.buntupana.tmdb.data.api.AuthInterceptor
 import com.buntupana.tmdb.data.api.UrlProviderImpl
 import com.buntupana.tmdb.data.manager.SessionManagerImpl
 import com.panabuntu.tmdb.core.common.SessionManager
 import com.panabuntu.tmdb.core.common.UrlProvider
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,13 +18,14 @@ import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.header
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import timber.log.Timber
 import javax.inject.Singleton
 
 @Module
@@ -45,12 +43,16 @@ object CoreCommonModule {
     fun provideHttpClient(urlProvider: UrlProvider): HttpClient {
         return HttpClient(OkHttp) {
             install(Logging) {
-                level = LogLevel.ALL
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Timber.d(message)
+                    }
+                }
+                level = LogLevel.INFO
             }
             install(DefaultRequest) {
                 url(urlProvider.BASE_URL_API)
-//                header(HttpHeaders.ContentType, ContentType.Application.Json)
-//                header("X-Api-Key", apiKey)
+                header(HttpHeaders.ContentType, ContentType.Application.Json)
             }
             install(Auth) {
                 bearer {
@@ -64,35 +66,13 @@ object CoreCommonModule {
             }
             install(ContentNegotiation) {
                 json(
-                    json = Json { ignoreUnknownKeys = true }
+                    json = Json {
+                        ignoreUnknownKeys = true
+                        encodeDefaults = true
+                    }
                 )
             }
         }
-    }
-
-    @Singleton
-    @Provides
-    fun provideRetrofit(urlProvider: UrlProvider): Retrofit {
-
-        val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BASIC
-
-        val authInterceptor = AuthInterceptor(urlProvider.API_KEY)
-
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .addInterceptor(authInterceptor)
-            .build()
-
-        val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(urlProvider.BASE_URL_API)
-            .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .build()
     }
 
     @Singleton

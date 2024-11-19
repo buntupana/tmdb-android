@@ -5,16 +5,20 @@ import com.buntupana.tmdb.data.raw.AnyMediaItemRaw
 import com.buntupana.tmdb.data.raw.MovieItemRaw
 import com.buntupana.tmdb.data.raw.ResponseListRaw
 import com.buntupana.tmdb.data.raw.TvShowRaw
-import com.buntupana.tmdb.feature.discover.data.api.DiscoverApi
+import com.buntupana.tmdb.data.remote_data_source.RemoteDataSource
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
-import com.panabuntu.tmdb.core.common.entity.Resource
+import com.panabuntu.tmdb.core.common.entity.NetworkError
+import com.panabuntu.tmdb.core.common.entity.Result
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import java.time.LocalDate
 import javax.inject.Inject
 
 class DiscoverRemoteDataSource @Inject constructor(
-    private val discoverApi: DiscoverApi
-) : com.buntupana.tmdb.data.remote_data_source.RemoteDataSource() {
+    private val httpClient: HttpClient
+) : RemoteDataSource() {
 
     companion object {
         private fun getRegion(): String {
@@ -24,7 +28,7 @@ class DiscoverRemoteDataSource @Inject constructor(
 
     suspend fun getMoviesPopular(
         monetizationType: MonetizationType
-    ): Resource<ResponseListRaw<MovieItemRaw>> {
+    ): Result<ResponseListRaw<MovieItemRaw>, NetworkError> {
 
         val monetizationValue = when (monetizationType) {
             MonetizationType.FREE -> "free"
@@ -32,17 +36,17 @@ class DiscoverRemoteDataSource @Inject constructor(
             MonetizationType.RENT -> "rent"
         }
 
-        return getResourceResult {
-            discoverApi.fetchPopularMovies(
-                monetizationType = monetizationValue,
-                watchRegion = getRegion()
-            )
+        return getResult {
+            httpClient.get(urlString = "discover/movie") {
+                parameter("with_watch_monetization_types", monetizationValue)
+                parameter("watch_region", getRegion())
+            }
         }
     }
 
     suspend fun getTvShowPopular(
         monetizationType: MonetizationType
-    ): Resource<ResponseListRaw<TvShowRaw>> {
+    ): Result<ResponseListRaw<TvShowRaw>, NetworkError> {
 
         val monetizationValue = when (monetizationType) {
             MonetizationType.FREE -> "free"
@@ -50,24 +54,27 @@ class DiscoverRemoteDataSource @Inject constructor(
             MonetizationType.RENT -> "rent"
         }
 
-        return getResourceResult {
-            discoverApi.fetchPopularTvShow(
-                monetizationType = monetizationValue,
-                watchRegion = getRegion()
-            )
-        }
-    }
-
-    suspend fun getTrending(trendingType: TrendingType): Resource<ResponseListRaw<AnyMediaItemRaw>> {
-        return getResourceResult {
-            when (trendingType) {
-                TrendingType.TODAY -> discoverApi.fetchTrending("day")
-                TrendingType.THIS_WEEK -> discoverApi.fetchTrending("week")
+        return getResult {
+            httpClient.get(urlString = "discover/tv") {
+                parameter("with_watch_monetization_types", monetizationValue)
+                parameter("watch_region", getRegion())
             }
         }
     }
 
-    suspend fun getMoviesInTheatres(): Resource<ResponseListRaw<MovieItemRaw>> {
+    suspend fun getTrending(trendingType: TrendingType): Result<ResponseListRaw<AnyMediaItemRaw>, NetworkError> {
+
+        val timeWindow = when (trendingType) {
+            TrendingType.TODAY -> "day"
+            TrendingType.THIS_WEEK -> "week"
+        }
+
+        return getResult {
+            httpClient.get("trending/all/$timeWindow")
+        }
+    }
+
+    suspend fun getMoviesInTheatres(): Result<ResponseListRaw<MovieItemRaw>, NetworkError> {
 
         val fromReleaseDate = LocalDate.now()
             .minusMonths(1)
@@ -75,20 +82,21 @@ class DiscoverRemoteDataSource @Inject constructor(
             .toString()
         val toReleaseDate = LocalDate.now().toString()
 
-        return getResourceResult {
-            discoverApi.fetchPopularMovies(
-                region = getRegion(),
-                releaseType = "3|2",
-                fromReleaseDate = fromReleaseDate,
-                toReleaseDate = toReleaseDate,
-                sortBy = "popularity.desc"
-            )
+        return getResult {
+            httpClient.get("discover/movie") {
+                parameter("region", getRegion())
+                parameter("with_release_type", "3|2")
+                parameter("release_date.gte", fromReleaseDate)
+                parameter("release_date.lte", toReleaseDate)
+                parameter("sort_by", "popularity.desc")
+            }
         }
     }
 
-    suspend fun getTvShowsOnAir(): Resource<ResponseListRaw<TvShowRaw>> {
-        return getResourceResult {
-            discoverApi.fetchTvShowsOnAir()
+    suspend fun getTvShowsOnAir(): Result<ResponseListRaw<TvShowRaw>, NetworkError> {
+
+        return getResult {
+            httpClient.get("tv/on_the_air")
         }
     }
 }

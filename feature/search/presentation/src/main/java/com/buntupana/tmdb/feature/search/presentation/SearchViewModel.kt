@@ -7,6 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.buntupana.tmdb.core.ui.util.TYPING_DELAY
+import com.buntupana.tmdb.feature.search.domain.usecase.GetSearchMediaUseCase
+import com.buntupana.tmdb.feature.search.domain.usecase.GetSearchMoviesUseCase
+import com.buntupana.tmdb.feature.search.domain.usecase.GetSearchPersonsUseCase
+import com.buntupana.tmdb.feature.search.domain.usecase.GetSearchResultCountUseCase
+import com.buntupana.tmdb.feature.search.domain.usecase.GetSearchTvShowsUseCase
+import com.buntupana.tmdb.feature.search.domain.usecase.GetTrendingMediaUseCase
+import com.panabuntu.tmdb.core.common.entity.onError
+import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -16,12 +24,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val getTrendingMediaUseCase: com.buntupana.tmdb.feature.search.domain.usecase.GetTrendingMediaUseCase,
-    private val getSearchMediaUseCase: com.buntupana.tmdb.feature.search.domain.usecase.GetSearchMediaUseCase,
-    private val getSearchMoviesUseCase: com.buntupana.tmdb.feature.search.domain.usecase.GetSearchMoviesUseCase,
-    private val getSearchTvShowsUseCase: com.buntupana.tmdb.feature.search.domain.usecase.GetSearchTvShowsUseCase,
-    private val getSearchPersonsUseCase: com.buntupana.tmdb.feature.search.domain.usecase.GetSearchPersonsUseCase,
-    private val getSearchResultCountUseCase: com.buntupana.tmdb.feature.search.domain.usecase.GetSearchResultCountUseCase
+    private val getTrendingMediaUseCase: GetTrendingMediaUseCase,
+    private val getSearchMediaUseCase: GetSearchMediaUseCase,
+    private val getSearchMoviesUseCase: GetSearchMoviesUseCase,
+    private val getSearchTvShowsUseCase: GetSearchTvShowsUseCase,
+    private val getSearchPersonsUseCase: GetSearchPersonsUseCase,
+    private val getSearchResultCountUseCase: GetSearchResultCountUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(SearchState())
@@ -71,14 +79,10 @@ class SearchViewModel @Inject constructor(
     private fun getTrendingList() {
         getTrendingJob?.cancel()
         getTrendingJob = viewModelScope.launch {
-
-            getTrendingMediaUseCase(Unit) {
-                loading {}
-                error {}
-                success { mediaItemList ->
+            getTrendingMediaUseCase()
+                .onSuccess { mediaItemList ->
                     state = state.copy(trendingList = mediaItemList.take(10))
                 }
-            }
         }
     }
 
@@ -97,21 +101,20 @@ class SearchViewModel @Inject constructor(
 
             state = state.copy(searchKey = searchKey)
             delay(TYPING_DELAY)
-            getSearchMediaUseCase(searchKey) {
-                loading {
-                    state = state.copy(
-                        isSearchSuggestionsLoading = true,
-                        isSearchSuggestionsError = false
-                    )
-                }
-                error {
+
+            state = state.copy(
+                isSearchSuggestionsLoading = true,
+                isSearchSuggestionsError = false
+            )
+            getSearchMediaUseCase(searchKey)
+                .onError {
                     state = state.copy(
                         isSearchSuggestionsLoading = false,
                         isSearchSuggestionsError = true,
                         searchSuggestionList = emptyList()
                     )
                 }
-                success {
+                .onSuccess {
                     state =
                         state.copy(
                             searchSuggestionList = it.take(13),
@@ -119,7 +122,6 @@ class SearchViewModel @Inject constructor(
                             isSearchSuggestionsError = false
                         )
                 }
-            }
         }
     }
 
@@ -153,14 +155,12 @@ class SearchViewModel @Inject constructor(
     private fun getSearchResultCount(searchKey: String) {
         getSearchResultCountJob?.cancel()
         getSearchResultCountJob = viewModelScope.launch {
-            getSearchResultCountUseCase(searchKey) {
-                loading {
-                    state = state.copy(isSearchLoading = true, isSearchError = false)
-                }
-                error {
+            state = state.copy(isSearchLoading = true, isSearchError = false)
+            getSearchResultCountUseCase(searchKey)
+                .onError {
                     state = state.copy(isSearchLoading = false, isSearchError = true)
                 }
-                success { result ->
+                .onSuccess { result ->
 
                     val mediaResultCountList = mutableListOf<MediaResultCount>()
 
@@ -190,7 +190,6 @@ class SearchViewModel @Inject constructor(
                         isSearchError = false
                     )
                 }
-            }
         }
     }
 }

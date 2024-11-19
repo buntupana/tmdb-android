@@ -8,10 +8,11 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetSeasonDetailsUseCase
-import com.buntupana.tmdb.feature.detail.domain.usecase.GetSeasonDetailsUseCaseParams
+import com.panabuntu.tmdb.core.common.entity.onError
+import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -23,7 +24,7 @@ class EpisodesDetailViewModel @Inject constructor(
     private val getSeasonDetailsUseCase: GetSeasonDetailsUseCase
 ) : ViewModel() {
 
-    private val navArgs: EpisodesDetailNav = savedStateHandle.toRoute()
+    private val navArgs: EpisodesDetailNav = savedStateHandle.navArgs()
 
     var state by mutableStateOf(
         EpisodesDetailState(
@@ -50,21 +51,18 @@ class EpisodesDetailViewModel @Inject constructor(
     }
 
     private suspend fun getEpisodesDetail() {
-        getSeasonDetailsUseCase(
-            parameters = GetSeasonDetailsUseCaseParams(state.tvShowId, state.seasonNumber),
-            loading = {
-                state = state.copy(isLoading = true, isGetEpisodesError = false)
-            },
-            error = {
+        state = state.copy(isLoading = true, isGetEpisodesError = false)
+
+        getSeasonDetailsUseCase(state.tvShowId, state.seasonNumber)
+            .onError {
                 state = state.copy(isLoading = false, isGetEpisodesError = true)
-            },
-            success = { response ->
+            }
+            .onSuccess {
                 state = state.copy(
                     isLoading = false,
                     isGetEpisodesError = false,
-                    episodeList = response.episodes
+                    episodeList = it.episodes
                 )
             }
-        )
     }
 }

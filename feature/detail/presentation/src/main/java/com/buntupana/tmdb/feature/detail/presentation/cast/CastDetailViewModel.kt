@@ -8,11 +8,13 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieCreditsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowCreditsUseCase
 import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.panabuntu.tmdb.core.common.entity.onError
+import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -25,7 +27,7 @@ class CastDetailViewModel @Inject constructor(
     private val getTvShowCreditsUseCase: GetTvShowCreditsUseCase
 ) : ViewModel() {
 
-    private val navArgs: CastDetailNav = savedStateHandle.toRoute()
+    private val navArgs: CastDetailNav = savedStateHandle.navArgs()
 
     var state by mutableStateOf(
         CastDetailState(
@@ -57,15 +59,13 @@ class CastDetailViewModel @Inject constructor(
     }
 
     private suspend fun getMovieCredits() {
-        getMovieCreditsUseCase(
-            parameters = state.mediaId,
-            loading = {
-                state = state.copy(isLoading = true, isGetContentError = false)
-            },
-            error = {
+        state = state.copy(isLoading = true, isGetContentError = false)
+
+        getMovieCreditsUseCase(state.mediaId)
+            .onError {
                 state = state.copy(isLoading = false, isGetContentError = true)
-            },
-            success = {
+            }
+            .onSuccess {
                 state = state.copy(
                     isLoading = false,
                     isGetContentError = false,
@@ -73,19 +73,16 @@ class CastDetailViewModel @Inject constructor(
                     personCrewMap = it.personCrewMap
                 )
             }
-        )
     }
 
     private suspend fun getTvShowCredits() {
-        getTvShowCreditsUseCase(
-            parameters = state.mediaId,
-            loading = {
-                state = state.copy(isLoading = true, isGetContentError = false)
-            },
-            error = {
+        state = state.copy(isLoading = true, isGetContentError = false)
+
+        getTvShowCreditsUseCase(state.mediaId)
+            .onError {
                 state = state.copy(isLoading = false, isGetContentError = true)
-            },
-            success = {
+            }
+            .onSuccess {
                 state = state.copy(
                     isLoading = false,
                     isGetContentError = false,
@@ -93,6 +90,5 @@ class CastDetailViewModel @Inject constructor(
                     personCrewMap = it.personCrewMap
                 )
             }
-        )
     }
 }

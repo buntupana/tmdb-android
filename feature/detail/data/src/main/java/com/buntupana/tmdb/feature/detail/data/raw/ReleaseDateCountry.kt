@@ -1,9 +1,11 @@
 package com.buntupana.tmdb.feature.detail.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ReleaseDateCountry(
     val iso_3166_1: String,
-    @Json(name = "release_dates")
+    @SerialName("release_dates")
     val releaseDates: List<ReleaseDateRaw>
 )

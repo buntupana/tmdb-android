@@ -1,9 +1,11 @@
 package com.buntupana.tmdb.feature.detail.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ProductionCountry(
-    @Json(name = "iso_3166_1")
+    @SerialName("iso_3166_1")
     val iso_3166_1: String,
     val name: String
 )

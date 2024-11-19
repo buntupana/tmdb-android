@@ -1,11 +1,13 @@
 package com.buntupana.tmdb.feature.detail.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class JobRaw(
-    @Json(name = "credit_id")
+    @SerialName("credit_id")
     val creditId: String,
-    @Json(name = "episode_count")
-    val episodeCount: Int?,
+    @SerialName("episode_count")
+    val episodeCount: Int? = null,
     val job: String
 )

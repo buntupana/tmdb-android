@@ -1,12 +1,14 @@
 package com.buntupana.tmdb.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ResponseListRaw<ITEM>(
     val page: Int,
     val results: List<ITEM>,
-    @Json(name = "total_pages")
+    @SerialName("total_pages")
     val totalPages: Int,
-    @Json(name = "total_results")
+    @SerialName("total_results")
     val totalResults: Int
 )

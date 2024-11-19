@@ -3,37 +3,60 @@ package com.buntupana.tmdb.feature.detail.domain.usecase
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
-import com.panabuntu.tmdb.core.common.entity.Resource
-import com.panabuntu.tmdb.core.common.usecase.UseCaseResource
+import com.panabuntu.tmdb.core.common.SessionManager
+import com.panabuntu.tmdb.core.common.entity.NetworkError
+import com.panabuntu.tmdb.core.common.entity.Result
+import com.panabuntu.tmdb.core.common.entity.onError
+import com.panabuntu.tmdb.core.common.entity.onSuccess
+import timber.log.Timber
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 import javax.inject.Inject
 
 class GetMovieDetailsUseCase @Inject constructor(
-    private val detailRepository: DetailRepository
-) : UseCaseResource<Long, MediaDetails.Movie>() {
+    private val detailRepository: DetailRepository,
+    private val sessionManager: SessionManager
+) {
+    suspend operator fun invoke(movieId: Long): Result<MediaDetails.Movie, NetworkError> {
 
-    override suspend fun getSource(params: Long): Resource<MediaDetails.Movie> {
+        var isFavorite = false
+        var isWatchlisted = false
+        var userRating: Int? = null
 
-        return when (val resource = detailRepository.getMovieDetails(params)) {
-            is Resource.Error -> Resource.Error(resource.message)
-            is Resource.Success -> {
+        if (sessionManager.session.value.isLogged) {
+            detailRepository.getMovieAccountState(movieId)
+                .onSuccess {
+                    Timber.d("state: $it")
+                    isFavorite = it.isFavorite
+                    isWatchlisted = it.isWatchisted
+                    userRating = it.userRating
+                }
+                .onError {
+                    return Result.Error(it)
+                }
+        }
+
+        detailRepository.getMovieDetails(movieId)
+            .onError {
+                return Result.Error(it)
+            }
+            .onSuccess { movieDetails ->
 
                 // Checking if there is a release and certification for default locale
                 // if not we can try to get the release and certification from the production country
                 val releaseAndCertification =
-                    resource.data.releaseDateList.firstOrNull {
+                    movieDetails.releaseDateList.firstOrNull {
                         it.countryCode == Locale.getDefault().country
-                    } ?: resource.data.releaseDateList.firstOrNull {
-                        it.countryCode == resource.data.productionCountryCodeList.firstOrNull()
-                    } ?: resource.data.releaseDateList.firstOrNull()
+                    } ?: movieDetails.releaseDateList.firstOrNull {
+                        it.countryCode == movieDetails.productionCountryCodeList.firstOrNull()
+                    } ?: movieDetails.releaseDateList.firstOrNull()
 
                 var certification = releaseAndCertification?.certification.orEmpty()
 
                 if (certification.isBlank()) {
                     certification =
-                        resource.data.releaseDateList.firstOrNull { it.countryCode == "US" }?.certification.orEmpty()
+                        movieDetails.releaseDateList.firstOrNull { it.countryCode == "US" }?.certification.orEmpty()
                 }
 
                 val localReleaseDate = releaseAndCertification?.releaseDate
@@ -45,41 +68,45 @@ class GetMovieDetailsUseCase @Inject constructor(
                     listOf("Director", "Writer", "Characters", "Screenplay", "Story", "Novel")
 
                 val creatorList =
-                    resource.data.credits.crewList.filter { creatorJobList.contains(it.job) }
+                    movieDetails.credits.crewList.filter { creatorJobList.contains(it.job) }
                         .groupBy { it.id }.map {
                             Person.Crew.Movie(
                                 id = it.key,
                                 name = it.value.firstOrNull()?.name.orEmpty(),
-                                gender = it.value.firstOrNull()?.gender ?: com.panabuntu.tmdb.core.common.model.Gender.NOT_SPECIFIED,
+                                gender = it.value.firstOrNull()?.gender
+                                    ?: com.panabuntu.tmdb.core.common.model.Gender.NOT_SPECIFIED,
                                 profileUrl = it.value.firstOrNull()?.profileUrl.orEmpty(),
                                 department = "",
                                 job = it.value.joinToString(", ") { crewItem -> crewItem.job }
                             )
                         }
 
-                Resource.Success(
+                return Result.Success(
                     MediaDetails.Movie(
-                        id = resource.data.id,
-                        title = resource.data.title,
-                        posterUrl = resource.data.posterUrl,
-                        backdropUrl = resource.data.backdropUrl,
-                        trailerUrl = resource.data.trailerUrl,
-                        overview = resource.data.overview,
-                        tagLine = resource.data.tagLine,
-                        releaseDate = resource.data.releaseDate,
+                        id = movieDetails.id,
+                        title = movieDetails.title,
+                        posterUrl = movieDetails.posterUrl,
+                        backdropUrl = movieDetails.backdropUrl,
+                        trailerUrl = movieDetails.trailerUrl,
+                        overview = movieDetails.overview,
+                        tagLine = movieDetails.tagLine,
+                        releaseDate = movieDetails.releaseDate,
                         localReleaseDate = localReleaseDate?.format(dateFormatter),
-                        userScore = resource.data.userScore,
-                        runTime = resource.data.runTime,
-                        genreList = resource.data.genreList,
+                        voteAverage = movieDetails.userScore,
+                        runTime = movieDetails.runTime,
+                        genreList = movieDetails.genreList,
                         ageCertification = certification,
                         creatorList = creatorList,
-                        castList = resource.data.credits.castList,
-                        crewList = resource.data.credits.crewList,
-                        recommendationList = resource.data.recommendationList,
-                        localCountryCodeRelease = releaseAndCertification?.countryCode.orEmpty()
+                        castList = movieDetails.credits.castList,
+                        crewList = movieDetails.credits.crewList,
+                        recommendationList = movieDetails.recommendationList,
+                        localCountryCodeRelease = releaseAndCertification?.countryCode.orEmpty(),
+                        isFavorite = isFavorite,
+                        isWatchlisted = isWatchlisted,
+                        userRating = userRating
                     )
                 )
             }
-        }
+        return Result.Error(NetworkError.UNKNOWN)
     }
 }

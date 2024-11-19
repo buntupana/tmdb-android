@@ -1,32 +1,34 @@
 package com.buntupana.tmdb.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class KnownFor(
     val id: Long,
     val adult: Boolean,
-    @Json(name = "backdrop_path")
-    val backdropPath: String?,
-    @Json(name = "genre_ids")
-    val genreIds: List<Int>?,
-    @Json(name = "media_type")
+    @SerialName("backdrop_path")
+    val backdropPath: String? = null,
+    @SerialName("genre_ids")
+    val genreIds: List<Int>? = null,
+    @SerialName("media_type")
     val mediaType: String,
-    @Json(name = "original_language")
+    @SerialName("original_language")
     val originalLanguage: String,
-    @Json(name = "original_title")
-    val originalTitle: String?,
-    @Json(name = "original_name")
-    val originalName: String?,
+    @SerialName("original_title")
+    val originalTitle: String? = null,
+    @SerialName("original_name")
+    val originalName: String? = null,
     val overview: String,
-    @Json(name = "poster_path")
-    val posterPath: String?,
-    @Json(name = "release_date")
-    val releaseDate: String?,
-    val title: String?,
-    val name: String?,
-    val video: Boolean?,
-    @Json(name = "vote_average")
+    @SerialName("poster_path")
+    val posterPath: String? = null,
+    @SerialName("release_date")
+    val releaseDate: String? = null,
+    val title: String? = null,
+    val name: String? = null,
+    val video: Boolean? = null,
+    @SerialName("vote_average")
     val voteAverage: Double,
-    @Json(name = "vote_count")
-    val voteCount: Int?
+    @SerialName("vote_count")
+    val voteCount: Int? = null
 )

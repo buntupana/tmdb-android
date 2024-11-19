@@ -1,19 +1,21 @@
 package com.buntupana.tmdb.feature.detail.data.raw
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class SeasonRaw(
     val id: Long,
     val name: String,
-    @Json(name = "air_date")
-    val airDate: String?,
-    @Json(name = "episode_count")
-    val episodeCount: Int?,
-    val overview: String?,
-    @Json(name = "poster_path")
-    val posterPath: String?,
-    @Json(name = "season_number")
-    val seasonNumber: Int?,
-    @Json(name = "vote_average")
+    @SerialName("air_date")
+    val airDate: String? = null,
+    @SerialName("episode_count")
+    val episodeCount: Int? = null,
+    val overview: String? = null,
+    @SerialName("poster_path")
+    val posterPath: String? = null,
+    @SerialName("season_number")
+    val seasonNumber: Int? = null,
+    @SerialName("vote_average")
     val voteAverage: Float
 )

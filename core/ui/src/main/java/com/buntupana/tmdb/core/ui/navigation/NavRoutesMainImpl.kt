@@ -1,9 +1,13 @@
 package com.buntupana.tmdb.core.ui.navigation
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.serialization.generateHashCode
 import com.panabuntu.tmdb.core.common.encodeAllUrls
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.serializer
 import timber.log.Timber
 import kotlin.reflect.KClass
 
@@ -46,12 +50,13 @@ class NavRoutesMainImpl : NavRoutesMain {
         navController?.popBackStack()
     }
 
+    @SuppressLint("RestrictedApi")
+    @OptIn(InternalSerializationApi::class)
     override fun <T : Routes> popBackStack(
         destination: KClass<in T>,
         inclusive: Boolean
     ) {
-        Timber.d("popBackStack() called with: destination = [$destination], inclusive = [$inclusive]")
-        navController?.popBackStack(destination, inclusive)
+        navController?.popBackStack(destination.serializer().generateHashCode(), inclusive)
     }
 
     override fun <T : Routes> isCurrentDestination(destination: KClass<T>): Boolean {

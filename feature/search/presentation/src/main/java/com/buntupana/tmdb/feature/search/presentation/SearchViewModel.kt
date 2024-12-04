@@ -33,6 +33,7 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     var state by mutableStateOf(SearchState())
+        private set
 
     private var getTrendingJob: Job? = null
     private var searchSuggestionsJob: Job? = null

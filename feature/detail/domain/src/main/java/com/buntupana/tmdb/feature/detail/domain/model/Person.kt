@@ -81,7 +81,7 @@ sealed class Person(
             override val gender: com.panabuntu.tmdb.core.common.model.Gender,
             override val profileUrl: String?,
             override val department: String,
-            val totalEpisodeCount: Int,
+            val totalEpisodeCount: Int?,
             val jobList: List<Job>
         ) : Crew(
             id = id,

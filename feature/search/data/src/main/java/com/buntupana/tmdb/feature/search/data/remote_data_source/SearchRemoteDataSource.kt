@@ -1,9 +1,10 @@
 package com.buntupana.tmdb.feature.search.data.remote_data_source
 
-import com.buntupana.tmdb.data.raw.AnyMediaItemRaw
-import com.buntupana.tmdb.data.raw.MovieItemRaw
-import com.buntupana.tmdb.data.raw.ResponseListRaw
-import com.buntupana.tmdb.data.raw.TvShowRaw
+import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
+import com.buntupana.tmdb.core.data.raw.MovieItemRaw
+import com.buntupana.tmdb.core.data.raw.ResponseListRaw
+import com.buntupana.tmdb.core.data.raw.TvShowRaw
+import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
 import com.buntupana.tmdb.feature.search.data.raw.PersonRaw
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
@@ -14,7 +15,7 @@ import javax.inject.Inject
 
 class SearchRemoteDataSource @Inject constructor(
     private val httpClient: HttpClient
-) : com.buntupana.tmdb.data.remote_data_source.RemoteDataSource() {
+) : RemoteDataSource() {
 
     suspend fun getTrending(): Result<ResponseListRaw<AnyMediaItemRaw>, NetworkError> {
         return getResult {

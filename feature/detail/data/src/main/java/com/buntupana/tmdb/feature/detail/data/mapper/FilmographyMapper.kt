@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.data.mapper.getMediaType
+import com.buntupana.tmdb.core.data.mapper.getMediaType
 import com.buntupana.tmdb.feature.detail.data.raw.FilmographyRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.panabuntu.tmdb.core.common.entity.MediaType

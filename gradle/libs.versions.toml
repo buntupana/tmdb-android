@@ -45,10 +45,6 @@ dagger_android = "1.2.0"
 #Ktor
 ktor_bom = "3.0.1"
 
-#Retrofit
-retrofit = '2.11.0'
-okhttp = "4.12.0"
-
 #Storage
 datastore = "1.1.1"
 
@@ -71,7 +67,7 @@ test_runner = '1.4.0'
 mockito = '4.5.0'
 
 # Plugins
-agp = "8.7.2"
+agp = "8.7.3"
 uiToolingPreviewAndroid = "1.6.7"
 uiTooling = "1.7.3"
 appcompat = "1.7.0"
@@ -126,10 +122,6 @@ io-ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging" }
 io-ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json" }
 io-ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth" }
 
-squareup-retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit"}
-squareup-retrofit2-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit"}
-squareup-okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp"}
-squareup-okhttp3-login-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp"}
 
 #Storate
 androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore"}

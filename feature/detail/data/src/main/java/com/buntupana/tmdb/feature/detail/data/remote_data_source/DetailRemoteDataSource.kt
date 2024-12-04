@@ -1,19 +1,21 @@
 package com.buntupana.tmdb.feature.detail.data.remote_data_source
 
-import com.buntupana.tmdb.data.remote_data_source.RemoteDataSource
+import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
 import com.buntupana.tmdb.feature.detail.data.raw.CreditsMovieRaw
 import com.buntupana.tmdb.feature.detail.data.raw.CreditsTvShowRaw
-import com.buntupana.tmdb.feature.detail.data.raw.MediaAccountStateRaw
 import com.buntupana.tmdb.feature.detail.data.raw.MovieDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.PersonDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowSeasonsDetailsRaw
+import com.buntupana.tmdb.feature.detail.data.request.AddRatingRequest
 import com.buntupana.tmdb.feature.detail.data.request.FavoriteRequest
+import com.buntupana.tmdb.feature.detail.data.request.WatchlistRequest
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import io.ktor.client.HttpClient
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
@@ -24,41 +26,44 @@ class DetailRemoteDataSource @Inject constructor(
     private val httpClient: HttpClient
 ) : RemoteDataSource() {
 
-    suspend fun getMovieDetail(movieId: Long): Result<MovieDetailsRaw, NetworkError> {
+    suspend fun getMovieDetail(
+        sessionId: String?,
+        movieId: Long
+    ): Result<MovieDetailsRaw, NetworkError> {
         return getResult {
-            httpClient.get("movie/$movieId?append_to_response=release_dates,videos,credits,recommendations")
-        }
-    }
-
-    suspend fun getMovieAccountState(
-        movieId: Long,
-        sessionId: String
-    ): Result<MediaAccountStateRaw, NetworkError> {
-        return getResult {
-            httpClient.get(urlString = "movie/$movieId/account_states") {
-                parameter("session_id", sessionId)
+            httpClient.get("movie/$movieId") {
+                parameter(
+                    "append_to_response",
+                    "release_dates,videos,credits,recommendations,account_states"
+                )
+                if (sessionId != null) {
+                    parameter("session_id", sessionId)
+                }
             }
         }
     }
 
-    suspend fun getTvShowDetail(tvShowId: Long): Result<TvShowDetailsRaw, NetworkError> {
+    suspend fun getTvShowDetail(
+        sessionId: String?,
+        tvShowId: Long
+    ): Result<TvShowDetailsRaw, NetworkError> {
         return getResult {
-            httpClient.get(urlString = "tv/$tvShowId?append_to_response=content_ratings,videos,aggregate_credits,recommendations")
+            httpClient.get(urlString = "tv/$tvShowId") {
+                parameter(
+                    "append_to_response",
+                    "content_ratings,videos,aggregate_credits,recommendations,account_states"
+                )
+                if (sessionId != null) {
+                    parameter("session_id", sessionId)
+                }
+            }
         }
     }
 
-    suspend fun getTvShowAccountState(
+    suspend fun getSeasonDetail(
         tvShowId: Long,
-        sessionId: String
-    ): Result<MediaAccountStateRaw, NetworkError> {
-        return getResult {
-            httpClient.get(urlString = "tv/$tvShowId/account_states") {
-                parameter("session_id", sessionId)
-            }
-        }
-    }
-
-    suspend fun getSeasonDetail(tvShowId: Long, seasonNumber: Int): Result<SeasonDetailsRaw, NetworkError> {
+        seasonNumber: Int
+    ): Result<SeasonDetailsRaw, NetworkError> {
         return getResult {
             httpClient.get(urlString = "tv/$tvShowId/season/$seasonNumber")
         }
@@ -115,22 +120,44 @@ class DetailRemoteDataSource @Inject constructor(
         accountId: Long,
         mediaId: Long,
         mediaType: MediaType,
-        favorite: Boolean
+        watchlist: Boolean
     ): Result<Unit, NetworkError> {
 
-        val mediaTypeStr = when (mediaType) {
-            MediaType.MOVIE -> "movie"
-            MediaType.TV_SHOW -> "tv"
-        }
         return getResult {
             httpClient.post("account/$accountId/watchlist") {
                 setBody(
-                    FavoriteRequest(
+                    WatchlistRequest(
                         mediaId = mediaId,
-                        mediaType = mediaTypeStr,
-                        favorite = favorite
+                        mediaType = mediaType.value,
+                        watchlist = watchlist
                     )
                 )
+            }
+        }
+    }
+
+    suspend fun addMediaRating(
+        sessionId: String?,
+        mediaType: MediaType,
+        mediaId: Long,
+        value: Int
+    ): Result<Unit, NetworkError> {
+        return getResult {
+            httpClient.post(urlString = "${mediaType.value}/$mediaId/rating") {
+                parameter("session_id", sessionId)
+                setBody(AddRatingRequest(value = (value / 10).toFloat()))
+            }
+        }
+    }
+
+    suspend fun deleteMediaRating(
+        sessionId: String?,
+        mediaType: MediaType,
+        mediaId: Long,
+    ): Result<Unit, NetworkError> {
+        return getResult {
+            httpClient.delete(urlString = "${mediaType.value}/$mediaId/rating") {
+                parameter("session_id", sessionId)
             }
         }
     }

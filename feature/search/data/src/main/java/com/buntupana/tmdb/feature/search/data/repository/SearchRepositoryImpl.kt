@@ -3,8 +3,8 @@ package com.buntupana.tmdb.feature.search.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.buntupana.tmdb.data.api.GenericPagingDataSource
-import com.buntupana.tmdb.data.mapper.toModel
+import com.buntupana.tmdb.core.data.api.GenericPagingDataSource
+import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.search.data.mapper.toModel
 import com.buntupana.tmdb.feature.search.data.mapper.toSearchModel
 import com.buntupana.tmdb.feature.search.data.remote_data_source.SearchRemoteDataSource

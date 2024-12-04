@@ -1,5 +1,6 @@
 package com.panabuntu.tmdb.core.common
 
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -78,4 +79,11 @@ fun <K, V> Map<out K, V>?.isNotNullOrEmpty(): Boolean {
         returns(true) implies (this@isNotNullOrEmpty != null)
     }
     return this.isNullOrEmpty().not()
+}
+
+suspend fun applyDelayFor(initMillis: Long, minDurationDifference: Long = 500) {
+    val difference = System.currentTimeMillis() - initMillis
+    if (difference < minDurationDifference) {
+        delay(minDurationDifference - difference)
+    }
 }

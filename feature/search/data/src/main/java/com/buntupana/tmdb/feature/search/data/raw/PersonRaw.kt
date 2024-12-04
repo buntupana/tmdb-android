@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.search.data.raw
 
-import com.buntupana.tmdb.data.raw.KnownFor
+import com.buntupana.tmdb.core.data.raw.KnownFor
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -35,6 +35,7 @@ class SeasonDetailViewModel @Inject constructor(
             backgroundColor = Color(navArgs.backgroundColor ?: DetailBackgroundColor.toArgb())
         )
     )
+        private set
 
     init {
         onEvent(SeasonsDetailEvent.GetSeasons)

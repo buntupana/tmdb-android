@@ -10,5 +10,9 @@ data class MediaDetailState(
     val isLoading: Boolean = false,
     val isGetContentError: Boolean = false,
     val mediaDetails: MediaDetails? = null,
-    val backgroundColor: Color
+    val backgroundColor: Color,
+    val isUserLoggedIn: Boolean = false,
+    val isFavoriteLoading: Boolean = false,
+    val isWatchlistLoading: Boolean = false,
+    val isRatingLoading: Boolean = false
 )

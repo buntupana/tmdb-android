@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.widget
 
+import androidx.annotation.IntRange
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,43 +25,40 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.buntupana.tmdb.core.ui.theme.HighScoreColor
 import com.buntupana.tmdb.core.ui.theme.HkFontFamily
+import com.buntupana.tmdb.core.ui.theme.LowScoreColor
+import com.buntupana.tmdb.core.ui.theme.MediumScoreColor
+import com.buntupana.tmdb.core.ui.theme.NoScoreColor
 import com.buntupana.tmdb.core.ui.theme.PrimaryDarkColor
 import com.buntupana.tmdb.core.ui.util.dpToSp
-
-private const val MAX_VALUE = 99
-private const val MIN_VALUE = 0
 
 @Composable
 fun UserScore(
     modifier: Modifier = Modifier,
-    score: Int = 50,
+    size: Dp = 50.dp,
+    @IntRange(from = 0, to = 100) score: Int?,
     backGroundColor: Color = PrimaryDarkColor,
-    noScoreColor: Color = Color(0xFF666666),
-    lowScoreColor: Color = Color(0xFFDB2360),
-    mediumScoreColor: Color = Color(0xFFD2D531),
-    highScoreColor: Color = Color(0xFF21D07A),
+    noScoreColor: Color = NoScoreColor,
+    lowScoreColor: Color = LowScoreColor,
+    mediumScoreColor: Color = MediumScoreColor,
+    highScoreColor: Color = HighScoreColor,
     fontFamily: FontFamily = HkFontFamily
 ) {
 
-    // checking that score is between valid values
-    val correctedScore = when {
-        score > MAX_VALUE -> MAX_VALUE
-        score < MIN_VALUE -> MIN_VALUE
-        else -> score
-    }
-
     // Choosing stroke color depending on score
-    val strokeColor = when (correctedScore) {
-        0 -> noScoreColor
-        in 1..39 -> lowScoreColor
+    val strokeColor = when (score) {
+        in 0..39 -> lowScoreColor
         in 40..69 -> mediumScoreColor
-        else -> highScoreColor
+        in 70..100 -> highScoreColor
+        else -> noScoreColor
     }
 
     BoxWithConstraints(
         modifier = modifier
+            .size(size)
             .clip(CircleShape)
             .background(backGroundColor),
         contentAlignment = Alignment.Center
@@ -72,19 +70,19 @@ fun UserScore(
         val strokeSize = dimensionRef * 5f / 100f
 
         Canvas(modifier = Modifier.fillMaxSize(0.82f)) {
-            val backgroundAlpha = if (correctedScore < 1) 1f else 0.3f
+            val backgroundAlpha = if (score == null) 1f else 0.3f
             drawArc(
                 color = strokeColor,
-                -90f,
-                360f,
+                startAngle = -90f,
+                sweepAngle = 360f,
                 useCenter = false,
                 alpha = backgroundAlpha,
                 style = Stroke(strokeSize.toPx())
             )
             drawArc(
                 color = strokeColor,
-                -90f,
-                correctedScore * 360f / 100f,
+                startAngle = -90f,
+                sweepAngle = (score ?: 0) * 360f / 100f,
                 useCenter = false,
                 style = Stroke(strokeSize.toPx(), cap = StrokeCap.Round)
             )
@@ -103,17 +101,22 @@ fun UserScore(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            if (correctedScore < 1) {
+            if (score == null) {
                 Text(
                     text = "NR",
                     color = Color.White,
-                    textAlign = TextAlign.End,
+                    textAlign = TextAlign.Center,
                     fontFamily = fontFamily,
-                    fontSize = textSize
+                    fontSize = textSize,
+                    style = TextStyle(
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = true
+                        )
+                    )
                 )
             } else {
                 Text(
-                    text = correctedScore.toString(),
+                    text = score.toString(),
                     color = Color.White,
                     textAlign = TextAlign.Center,
                     fontFamily = fontFamily,
@@ -144,5 +147,8 @@ fun UserScore(
 @Composable
 @Preview
 fun UserScorePreview() {
-    UserScore(Modifier.size(width = 500.dp, height = 500.dp), score = 90)
+    UserScore(
+        size = 100.dp,
+        score = null
+    )
 }

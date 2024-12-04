@@ -22,32 +22,43 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.feature.account.presentation.R
 import com.buntupana.tmdb.feature.account.presentation.account.composables.AccountInfoTop
 import com.buntupana.tmdb.feature.account.presentation.sign_out.SignOutDialog
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountScreen(
     viewModel: AccountViewModel = hiltViewModel(),
     onSignInClicked: () -> Unit
 ) {
 
+    var showBottomSheet by remember { mutableStateOf(false) }
+
     AccountContent(
         viewModel.state,
-        onSignInClick = onSignInClicked
+        onSignInClick = onSignInClicked,
+        onSignOutClick = {
+            showBottomSheet = true
+        }
+    )
+
+    SignOutDialog(
+        showDialog = showBottomSheet,
+        onDismiss = { showBottomSheet = false }
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountContent(
     state: AccountState,
-    onSignInClick: () -> Unit
+    onSignInClick: () -> Unit,
+    onSignOutClick: () -> Unit
 ) {
-
-    var showBottomSheet by remember { mutableStateOf(false) }
 
     if (state.isUserLogged) {
 
@@ -63,13 +74,11 @@ fun AccountContent(
             Spacer(Modifier.padding(vertical = Dimens.padding.vertical))
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-                onClick = {
-                    showBottomSheet = true
-                }
+                onClick = onSignOutClick
             ) {
                 Icon(Icons.AutoMirrored.Filled.Login, contentDescription = null)
                 Spacer(modifier = Modifier.padding(horizontal = Dimens.padding.tiny))
-                Text(text = "Sing Out")
+                Text(text = stringResource(R.string.text_sign_out))
             }
         }
     } else {
@@ -83,15 +92,10 @@ fun AccountContent(
             ) {
                 Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null)
                 Spacer(modifier = Modifier.padding(horizontal = Dimens.padding.tiny))
-                Text(text = "Sing In")
+                Text(text = stringResource(R.string.text_sign_in))
             }
         }
     }
-
-    SignOutDialog(
-        showDialog = showBottomSheet,
-        onDismiss = { showBottomSheet = false }
-    )
 }
 
 @Preview
@@ -103,5 +107,6 @@ fun AccountScreenPreview() {
             username = "Alvaro"
         ),
         onSignInClick = {},
+        onSignOutClick = {}
     )
 }

@@ -14,6 +14,7 @@ import javax.inject.Inject
 class MoviesViewModel @Inject constructor() : ViewModel() {
 
     var state by mutableStateOf(MoviesState())
+        private set
 
     fun onEvent(event: MoviesEvent) {
         Timber.d("onEvent() called with: event = []")

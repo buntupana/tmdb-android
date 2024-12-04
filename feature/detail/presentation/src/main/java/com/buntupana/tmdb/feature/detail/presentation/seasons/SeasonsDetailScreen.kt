@@ -2,7 +2,9 @@ package com.buntupana.tmdb.feature.detail.presentation.seasons
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
@@ -20,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.detail.domain.model.Season
@@ -134,6 +137,14 @@ private fun SeasonsContent(
                     onSeasonClick = {
                         onSeasonClick(state.tvShowId, season, backgroundColor)
                     }
+                )
+            }
+
+            item {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Dimens.padding.small)
                 )
             }
         }

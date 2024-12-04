@@ -9,7 +9,7 @@ data class MediaCrewTvShowRaw(
     val adult: Boolean,
     val department: String,
     val gender: Int,
-    val jobs: List<JobRaw>,
+    val jobs: List<JobRaw>? = null,
     @SerialName("known_for_department")
     val knownForDepartment: String,
     val name: String,
@@ -19,5 +19,5 @@ data class MediaCrewTvShowRaw(
     @SerialName("profile_path")
     val profilePath: String? = null,
     @SerialName("total_episode_count")
-    val totalEpisodeCount: Int
+    val totalEpisodeCount: Int? = null
 )

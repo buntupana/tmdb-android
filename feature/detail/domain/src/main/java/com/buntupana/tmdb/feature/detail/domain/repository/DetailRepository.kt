@@ -2,7 +2,6 @@ package com.buntupana.tmdb.feature.detail.domain.repository
 
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
-import com.buntupana.tmdb.feature.detail.domain.model.MediaAccountState
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
 import com.buntupana.tmdb.feature.detail.domain.model.PersonDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Season
@@ -20,7 +19,6 @@ interface DetailRepository {
     suspend fun getPersonDetails(personId: Long): Result<PersonDetails, NetworkError>
     suspend fun getSeasonDetails(tvShowId: Long, episodeNumber: Int): Result<SeasonDetail, NetworkError>
     suspend fun getTvShowSeasonsDetails(tvShowId: Long): Result<List<Season>, NetworkError>
-    suspend fun getMovieAccountState(movieId: Long): Result<MediaAccountState, NetworkError>
     suspend fun setMediaFavorite(
         mediaId: Long,
         mediaType: MediaType,
@@ -30,6 +28,12 @@ interface DetailRepository {
     suspend fun setMediaWatchList(
         mediaId: Long,
         mediaType: MediaType,
-        favorite: Boolean
+        watchlist: Boolean
+    ): Result<Unit, NetworkError>
+
+    suspend fun addMediaRating(
+        mediaType: MediaType,
+        mediaId: Long,
+        value: Int?
     ): Result<Unit, NetworkError>
 }

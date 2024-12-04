@@ -20,6 +20,7 @@ class AccountViewModel @Inject constructor(
     private val session = sessionManager.session
 
     var state by mutableStateOf(AccountState(isUserLogged = session.value.isLogged))
+        private set
 
     init {
         viewModelScope.launch {

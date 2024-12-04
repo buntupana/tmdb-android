@@ -12,8 +12,9 @@ class GetTvShowDetailsUseCase @Inject constructor(
     private val detailRepository: DetailRepository
 ) {
 
-    suspend operator fun invoke(params: Long): Result<MediaDetails.TvShow, NetworkError> {
-        return detailRepository.getTvShowDetails(params).map { it ->
+    suspend operator fun invoke(tvShowId: Long): Result<MediaDetails.TvShow, NetworkError> {
+
+        return detailRepository.getTvShowDetails(tvShowId).map { it ->
             val certification = it.certificationList.firstOrNull {
                 it.countryCode == Locale.getDefault().country
             } ?: it.certificationList.firstOrNull {
@@ -40,7 +41,10 @@ class GetTvShowDetailsUseCase @Inject constructor(
                 seasonList = it.seasonList,
                 lastEpisode = it.lastEpisode,
                 nextEpisode = it.nextEpisode,
-                isInAir = it.isInAir
+                isInAir = it.isInAir,
+                isFavorite = it.isFavorite,
+                isWatchlisted = it.isWatchlisted,
+                userRating = it.userRating
             )
         }
     }

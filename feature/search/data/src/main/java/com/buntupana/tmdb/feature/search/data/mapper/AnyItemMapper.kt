@@ -1,12 +1,13 @@
 package com.buntupana.tmdb.feature.search.data.mapper
 
-import com.buntupana.tmdb.data.raw.AnyMediaItemRaw
+import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
+import com.buntupana.tmdb.feature.search.domain.model.SearchItem
 import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
 
 fun List<AnyMediaItemRaw>.toSearchModel(
     baseUrlPoster : String
-): List<com.buntupana.tmdb.feature.search.domain.model.SearchItem> {
-    val result = mutableListOf<com.buntupana.tmdb.feature.search.domain.model.SearchItem>()
+): List<SearchItem> {
+    val result = mutableListOf<SearchItem>()
 
     forEach { item ->
 
@@ -16,7 +17,7 @@ fun List<AnyMediaItemRaw>.toSearchModel(
         when (item.mediaType) {
             "tv" -> {
                 result.add(
-                    com.buntupana.tmdb.feature.search.domain.model.SearchItem.TvShow(
+                    SearchItem.TvShow(
                         id = item.id,
                         name = item.name.orEmpty(),
                         originalName = item.originalName.orEmpty(),
@@ -30,7 +31,7 @@ fun List<AnyMediaItemRaw>.toSearchModel(
 
             "movie" -> {
                 result.add(
-                    com.buntupana.tmdb.feature.search.domain.model.SearchItem.Movie(
+                    SearchItem.Movie(
                         id = item.id,
                         name = item.title.orEmpty(),
                         originalName = item.originalTitle.orEmpty(),
@@ -45,7 +46,7 @@ fun List<AnyMediaItemRaw>.toSearchModel(
 
             "person" -> {
                 result.add(
-                    com.buntupana.tmdb.feature.search.domain.model.SearchItem.Person(
+                    SearchItem.Person(
                         id = item.id,
                         name = item.name.orEmpty(),
                         originalName = item.originalName.orEmpty(),

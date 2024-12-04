@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.discover.data.repository
 
-import com.buntupana.tmdb.data.mapper.toModel
+import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.discover.data.remote_data_source.DiscoverRemoteDataSource
 import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType

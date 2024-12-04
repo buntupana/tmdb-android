@@ -21,6 +21,7 @@ class SignOutViewModel @Inject constructor(
 ) : ViewModel() {
 
     var state by mutableStateOf(SignOutState())
+        private set
 
     private val _sideEffect = Channel<SignOutSideEffect>()
     val sideEffect = _sideEffect.receiveAsFlow()

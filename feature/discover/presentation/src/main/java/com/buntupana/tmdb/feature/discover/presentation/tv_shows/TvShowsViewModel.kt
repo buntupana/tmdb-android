@@ -14,6 +14,7 @@ import javax.inject.Inject
 class TvShowsViewModel @Inject constructor() : ViewModel() {
 
     var state by mutableStateOf(TvShowsState())
+        private set
 
     fun onEvent(event: TvShowsEvent) {
         Timber.d("onEvent() called with: event = []")

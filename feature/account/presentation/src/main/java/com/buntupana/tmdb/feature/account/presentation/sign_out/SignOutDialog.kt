@@ -42,6 +42,8 @@ fun SignOutDialog(
     onDismiss: () -> Unit
 ) {
 
+    if (showDialog.not()) return
+
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
@@ -52,7 +54,6 @@ fun SignOutDialog(
 
     SignOutContent(
         state = viewModel.state,
-        showDialog = showDialog,
         sheetState = sheetState,
         onDismiss = onDismiss,
         onSignOutClick = { viewModel.onEvent(SignOutEvent.SignOut) }
@@ -63,71 +64,65 @@ fun SignOutDialog(
 @Composable
 fun SignOutContent(
     state: SignOutState,
-    showDialog: Boolean,
     sheetState: SheetState,
     onDismiss: () -> Unit,
     onSignOutClick: () -> Unit
 ) {
-    if (showDialog) {
 
-        val coroutineScope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
 
-        ModalBottomSheet(
-            onDismissRequest = onDismiss,
-            sheetState = sheetState,
-            containerColor = MaterialTheme.colorScheme.background,
-            dragHandle = {}
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        containerColor = MaterialTheme.colorScheme.background,
+        dragHandle = {}
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = Dimens.padding.horizontal,
+                    vertical = Dimens.padding.big
+                )
+                .animateContentSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = Dimens.padding.horizontal,
-                        vertical = Dimens.padding.big
-                    )
-                    .animateContentSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(R.string.text_sign_out),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(Dimens.padding.small))
-                Text(
-                    text = stringResource(R.string.message_sign_out_confirmation),
-                    style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(Dimens.padding.big))
-                if (state.isLoading) {
-                    CircularProgressIndicator()
-                } else {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround
-                    ) {
-                        Button(
-//                        colors = ButtonDefaults.buttonColors(
-//                            containerColor =
-//                        ),
-                            onClick = {
-                                coroutineScope.launch {
-                                    sheetState.hide()
-                                    onDismiss()
-                                }
-                            }) {
-                            Text(
-                                text = stringResource(RCore.string.text_cancel),
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                        }
-                        Button(onClick = onSignOutClick) {
-                            Text(
-                                text = stringResource(RCore.string.text_confirm),
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                        }
+            Text(
+                text = stringResource(R.string.text_sign_out),
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(Dimens.padding.small))
+            Text(
+                text = stringResource(R.string.message_sign_out_confirmation),
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(Dimens.padding.big))
+            if (state.isLoading) {
+                CircularProgressIndicator()
+            } else {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    Button(
+                        onClick = {
+                            coroutineScope.launch {
+                                sheetState.hide()
+                                onDismiss()
+                            }
+                        }) {
+                        Text(
+                            text = stringResource(RCore.string.text_cancel),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    }
+                    Button(onClick = onSignOutClick) {
+                        Text(
+                            text = stringResource(RCore.string.text_confirm),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
                     }
                 }
             }
@@ -141,7 +136,6 @@ fun SignOutContent(
 fun SignOutScreenPreview() {
     SignOutContent(
         SignOutState(isLoading = false),
-        showDialog = true,
         sheetState = SheetState(
             skipPartiallyExpanded = true,
             LocalDensity.current,

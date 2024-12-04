@@ -37,13 +37,14 @@ import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.HkFontFamily
 import com.buntupana.tmdb.core.ui.util.spToDp
+import com.panabuntu.tmdb.core.common.model.MediaItem
 
 private const val MAX_TITLE_LINES = 3
 
 @Composable
 fun MediaItemVertical(
     modifier: Modifier = Modifier,
-    mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem,
+    mediaItem: MediaItem,
     fontSize: TextUnit = TextUnit.Unspecified,
     onClick: (mainPosterColor: Color) -> Unit
 ) {
@@ -56,16 +57,16 @@ fun MediaItemVertical(
 
         val maxWidth = maxWidth
 
-        val voteAverage: Int
+        val voteAverage: Int?
         val releaseDate: String
 
         when (mediaItem) {
-            is com.panabuntu.tmdb.core.common.model.MediaItem.Movie -> {
+            is MediaItem.Movie -> {
                 voteAverage = mediaItem.voteAverage
                 releaseDate = mediaItem.releaseDate
             }
 
-            is com.panabuntu.tmdb.core.common.model.MediaItem.TvShow -> {
+            is MediaItem.TvShow -> {
                 voteAverage = mediaItem.voteAverage
                 releaseDate = mediaItem.releaseDate
             }
@@ -77,9 +78,11 @@ fun MediaItemVertical(
         }
 
         Column(
-            modifier = Modifier.clickable {
-                onClick(mainPosterColor)
-            }
+            modifier = Modifier
+                .clip(RoundedCornerShape(Dimens.posterRound))
+                .clickable {
+                    onClick(mainPosterColor)
+                }
         ) {
 
             ConstraintLayout {
@@ -106,13 +109,11 @@ fun MediaItemVertical(
                             bottom.linkTo(posterImage.bottom)
                         }
                 ) {
-                    if (voteAverage >= 0) {
-                        UserScore(
-                            score = voteAverage,
-                            modifier = Modifier.fillMaxSize(),
-                            fontFamily = HkFontFamily
-                        )
-                    }
+                    UserScore(
+                        score = voteAverage,
+                        modifier = Modifier.fillMaxSize(),
+                        fontFamily = HkFontFamily
+                    )
                 }
                 Column(
                     horizontalAlignment = Alignment.Start,
@@ -165,7 +166,7 @@ fun MediaItemVertical(
 fun MediaItemPreview() {
     MediaItemVertical(
         modifier = Modifier.width(120.dp),
-        mediaItem = com.panabuntu.tmdb.core.common.model.MediaItem.Movie(
+        mediaItem = MediaItem.Movie(
             id = 0,
             name = "Fantastics Beasts: the Secrets of Dumbelbore",
             originalName = "",

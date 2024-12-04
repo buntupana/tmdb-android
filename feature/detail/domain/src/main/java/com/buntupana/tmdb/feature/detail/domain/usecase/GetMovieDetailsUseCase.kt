@@ -3,39 +3,19 @@ package com.buntupana.tmdb.feature.detail.domain.usecase
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
-import com.panabuntu.tmdb.core.common.SessionManager
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
-import timber.log.Timber
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 import javax.inject.Inject
 
 class GetMovieDetailsUseCase @Inject constructor(
-    private val detailRepository: DetailRepository,
-    private val sessionManager: SessionManager
+    private val detailRepository: DetailRepository
 ) {
     suspend operator fun invoke(movieId: Long): Result<MediaDetails.Movie, NetworkError> {
-
-        var isFavorite = false
-        var isWatchlisted = false
-        var userRating: Int? = null
-
-        if (sessionManager.session.value.isLogged) {
-            detailRepository.getMovieAccountState(movieId)
-                .onSuccess {
-                    Timber.d("state: $it")
-                    isFavorite = it.isFavorite
-                    isWatchlisted = it.isWatchisted
-                    userRating = it.userRating
-                }
-                .onError {
-                    return Result.Error(it)
-                }
-        }
 
         detailRepository.getMovieDetails(movieId)
             .onError {
@@ -101,9 +81,9 @@ class GetMovieDetailsUseCase @Inject constructor(
                         crewList = movieDetails.credits.crewList,
                         recommendationList = movieDetails.recommendationList,
                         localCountryCodeRelease = releaseAndCertification?.countryCode.orEmpty(),
-                        isFavorite = isFavorite,
-                        isWatchlisted = isWatchlisted,
-                        userRating = userRating
+                        isFavorite = movieDetails.isFavorite,
+                        isWatchlisted = movieDetails.isWatchlisted,
+                        userRating = movieDetails.userRating
                     )
                 )
             }

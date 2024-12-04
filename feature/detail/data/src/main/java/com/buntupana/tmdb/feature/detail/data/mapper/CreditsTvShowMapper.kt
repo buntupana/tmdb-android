@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
 
-import com.buntupana.tmdb.data.mapper.getGender
+import com.buntupana.tmdb.core.data.mapper.getGender
 import com.buntupana.tmdb.feature.detail.data.raw.CreditsTvShowRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.Job
@@ -36,7 +36,7 @@ fun CreditsTvShowRaw.toModel(
             profileUrl = profileUrl,
             department = it.department,
             totalEpisodeCount = it.totalEpisodeCount,
-            jobList = it.jobs.map { jobRaw -> Job(jobRaw.job, jobRaw.episodeCount?: 0) }
+            jobList = it.jobs?.map { jobRaw -> Job(jobRaw.job, jobRaw.episodeCount?: 0) }.orEmpty()
         )
     }
 

@@ -24,6 +24,7 @@ class PersonDetailViewModel @Inject constructor(
     private val navArgs: PersonDetailNav = savedStateHandle.navArgs()
 
     var state by mutableStateOf(PersonDetailState())
+        private set
 
     init {
         onEvent(PersonDetailEvent.GetPersonDetails)

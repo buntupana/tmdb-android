@@ -12,12 +12,16 @@ data class MovieDetails(
     val overview: String,
     val tagLine: String,
     val releaseDate: LocalDate?,
-    val userScore: Int,
+    val userScore: Int?,
+    val voteCount: Int,
     val runTime: Long,
     val genreList: List<String>,
     val productionCountryCodeList: List<String>,
     val releaseDateList: List<ReleaseDate>,
     val videoList: List<Video>,
     val credits: Credits,
-    val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>
+    val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
+    val isFavorite: Boolean,
+    val isWatchlisted: Boolean,
+    val userRating: Int?
 )

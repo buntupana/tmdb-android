@@ -51,6 +51,7 @@ dependencies {
 
     // Dagger Hilt
     implementation(libs.dagger.hilt)
+    implementation(libs.dagger.hilt.navigation.compose)
     ksp(libs.dagger.hilt.ksp)
 
     // Kotlin

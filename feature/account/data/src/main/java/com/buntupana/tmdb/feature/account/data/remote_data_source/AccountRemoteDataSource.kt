@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.account.data.remote_data_source
 
 
+import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
 import com.buntupana.tmdb.feature.account.data.raw.AccountDetailsRaw
 import com.buntupana.tmdb.feature.account.data.raw.CreateRequestTokenRaw
 import com.buntupana.tmdb.feature.account.data.raw.CreateSessionRaw
@@ -20,7 +21,7 @@ import javax.inject.Inject
 
 class AccountRemoteDataSource @Inject constructor(
     private val httpClient: HttpClient
-) : com.buntupana.tmdb.data.remote_data_source.RemoteDataSource() {
+) : RemoteDataSource() {
 
     suspend fun createRequestToken(): Result<CreateRequestTokenRaw, NetworkError> {
         return getResult<CreateRequestTokenRaw> { httpClient.get(urlString = "authentication/token/new") }

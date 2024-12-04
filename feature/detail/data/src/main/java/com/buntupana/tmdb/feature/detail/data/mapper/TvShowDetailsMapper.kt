@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.data.mapper.getGender
-import com.buntupana.tmdb.data.mapper.toModel
+import com.buntupana.tmdb.core.data.mapper.getGender
+import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.Person
@@ -37,7 +37,8 @@ fun TvShowDetailsRaw.toModel(
         overview = overview.orEmpty(),
         tagLine = tagline.orEmpty(),
         releaseDate = releaseLocalDate,
-        userScore = (((voteAverage ?: 0.0) * 10)).toInt(),
+        userScore = if ((voteCount ?: 0) == 0) null else ((voteAverage ?: 0.0) * 10).toInt(),
+        voteCount = voteCount ?: 0,
         runTime = episodeRunTime?.firstOrNull() ?: 0,
         genreList = genres?.map { it.name }.orEmpty(),
         creatorList = createdBy?.map {
@@ -66,6 +67,9 @@ fun TvShowDetailsRaw.toModel(
         recommendationList = recommendations.results.toModel(
             baseUrlPoster = baseUrlPoster,
             baseUrlBackdrop = baseUrlBackdrop
-        )
+        ),
+        isFavorite = accountStates?.favorite ?: false,
+        isWatchlisted = accountStates?.watchlist ?: false,
+        userRating = (accountStates?.rated?.value?.times(10))?.toInt(),
     )
 }

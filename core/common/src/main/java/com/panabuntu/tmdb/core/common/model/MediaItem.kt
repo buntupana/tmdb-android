@@ -24,7 +24,7 @@ sealed class MediaItem(
         val originalLanguage: String?,
         val genreIds: List<Int>?,
         override val popularity: Float,
-        val voteAverage: Int,
+        val voteAverage: Int?,
         val voteCount: Int,
         override val releaseDate: String,
         val video: Boolean,
@@ -50,7 +50,7 @@ sealed class MediaItem(
         val originalLanguage: String?,
         val genreIds: List<Int>?,
         override val popularity: Float,
-        val voteAverage: Int,
+        val voteAverage: Int?,
         val voteCount: Int,
         override val releaseDate: String,
         val originCountry: List<String>

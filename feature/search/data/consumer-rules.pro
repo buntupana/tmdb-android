@@ -1,0 +1,1 @@
+-keep class com.buntupana.tmdb.feature.search.data.raw.* { *; }

@@ -36,6 +36,7 @@ class EpisodesDetailViewModel @Inject constructor(
             backgroundColor = Color(navArgs.backgroundColor ?: DetailBackgroundColor.toArgb())
         )
     )
+        private set
 
     init {
         onEvent(EpisodesDetailEvent.GetEpisodesDetail)

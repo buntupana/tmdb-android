@@ -25,6 +25,8 @@ class DiscoverViewModel @Inject constructor(
 ) : ViewModel() {
 
     var state by mutableStateOf(DiscoverState())
+        private set
+
     private var getPopularMoviesJob: Job? = null
     private var getFreeToWatchJob: Job? = null
     private var getTrendingJob: Job? = null

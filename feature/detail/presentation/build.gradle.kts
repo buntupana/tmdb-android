@@ -55,7 +55,7 @@ dependencies {
     // Dagger Hilt
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.ksp)
-    api(libs.dagger.hilt.navigation.compose)
+    implementation(libs.dagger.hilt.navigation.compose)
 
     // Android
     implementation(libs.androidx.core.ktx)

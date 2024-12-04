@@ -154,8 +154,11 @@ val mediaDetailsMovieSample = MediaDetails.Movie(
         mediaItemMovie,
         mediaItemTvShow,
         mediaItemMovie,
-        mediaItemTvShow
-    )
+        mediaItemTvShow,
+    ),
+    isFavorite = false,
+    isWatchlisted = false,
+    userRating = null
 )
 
 val creditItemPersonSample = CreditPersonItem.Movie(
@@ -236,5 +239,8 @@ val mediaDetailsTvShowSample = MediaDetails.TvShow(
     ),
     nextEpisode = episodeSample,
     lastEpisode = episodeSample,
-    isInAir = true
+    isInAir = true,
+    isFavorite = false,
+    isWatchlisted = false,
+    userRating = null
 )

@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,14 +32,18 @@ import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
+import com.buntupana.tmdb.feature.detail.presentation.media.comp.AccountBar
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.CastHorizontalList
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.Header
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.MainInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.RecommendationsHorizontal
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.SeasonsSection
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
+import com.buntupana.tmdb.feature.detail.presentation.rating.RatingDialog
+import com.buntupana.tmdb.feature.detail.presentation.rating.RatingNav
 import com.panabuntu.tmdb.core.common.entity.MediaType
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaDetailScreen(
     viewModel: MediaDetailViewModel = hiltViewModel(),
@@ -50,6 +56,8 @@ fun MediaDetailScreen(
     onRecommendationClick: (mediaId: Long, mediaType: MediaType, backgroundColor: Color?) -> Unit,
     onLogoClick: () -> Unit
 ) {
+
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     MediaDetailContent(
         state = viewModel.state,
@@ -86,14 +94,39 @@ fun MediaDetailScreen(
             )
         },
         onRecommendationClick = { mediaId, mediaType ->
-            onRecommendationClick(
-                mediaId, mediaType, null
-            )
+            onRecommendationClick(mediaId, mediaType, null)
         },
         onRetryClick = {
             viewModel.onEvent(MediaDetailEvent.GetMediaDetails)
         },
-        onLogoClick = onLogoClick
+        onLogoClick = onLogoClick,
+        onFavoriteClick = {
+            viewModel.onEvent(MediaDetailEvent.SetFavorite)
+        },
+        onWatchlistClick = {
+            viewModel.onEvent(MediaDetailEvent.SetWatchList)
+        },
+        onRatingClick = {
+            showBottomSheet = true
+        },
+        onListClick = {
+
+        }
+    )
+
+    RatingDialog(
+        ratingNav = RatingNav(
+            mediaType = viewModel.state.mediaType,
+            mediaId = viewModel.state.mediaId,
+            mediaTitle = viewModel.state.mediaDetails?.title.orEmpty(),
+            rating = viewModel.state.mediaDetails?.userRating
+        ),
+        showDialog = showBottomSheet,
+        onRatingSuccess = { rating ->
+            showBottomSheet = false
+            viewModel.onEvent(MediaDetailEvent.OnRatingSuccess(rating))
+        },
+        onDismiss = { showBottomSheet = false }
     )
 }
 
@@ -108,7 +141,11 @@ fun MediaDetailContent(
     onAllSeasonsClick: (mediaDetails: MediaDetails.TvShow, backgroundColor: Color) -> Unit,
     onRecommendationClick: (mediaId: Long, mediaType: MediaType) -> Unit,
     onRetryClick: () -> Unit,
-    onLogoClick: () -> Unit
+    onLogoClick: () -> Unit,
+    onFavoriteClick: () -> Unit,
+    onWatchlistClick: () -> Unit,
+    onRatingClick: () -> Unit,
+    onListClick: () -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -117,21 +154,43 @@ fun MediaDetailContent(
         mutableStateOf(state.backgroundColor)
     }
 
-    Column(
+    Scaffold(
         modifier = Modifier
-            .setStatusNavigationBarColor(backgroundColor)
-    ) {
+            .setStatusNavigationBarColor(backgroundColor),
+        topBar = {
+            TopBar(
+                modifier = Modifier.background(backgroundColor),
+                textColor = backgroundColor.getOnBackgroundColor(),
+                onSearchClick = { onSearchClick() },
+                onBackClick = { onBackClick() },
+                onLogoClick = { onLogoClick() }
+            )
+        },
+        bottomBar = {
+            if (state.isLoading.not() && state.isGetContentError.not() && state.isUserLoggedIn) {
+                AccountBar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(backgroundColor),
+                    backgroundColor = backgroundColor,
+                    isFavorite = state.mediaDetails?.isFavorite ?: false,
+                    isWatchListed = state.mediaDetails?.isWatchlisted ?: false,
+                    isFavoriteLoading = state.isFavoriteLoading,
+                    isWatchlistLoading = state.isWatchlistLoading,
+                    userRating = state.mediaDetails?.userRating,
+                    isRatingLoading = state.isRatingLoading,
+                    onFavoriteClick = onFavoriteClick,
+                    onWatchlistClick = onWatchlistClick,
+                    onRatingClick = onRatingClick,
+                    onListClick = onListClick
+                )
+            }
+        }
 
-        TopBar(
-            modifier = Modifier.background(backgroundColor),
-            textColor = backgroundColor.getOnBackgroundColor(),
-            onSearchClick = { onSearchClick() },
-            onBackClick = { onBackClick() },
-            onLogoClick = { onLogoClick() }
-        )
-
+    ) { paddingValues ->
         Column(
             modifier = Modifier
+                .padding(paddingValues)
                 .verticalScroll(scrollState)
         ) {
 
@@ -235,6 +294,10 @@ fun MediaDetailScreenPreview() {
         onAllSeasonsClick = { _, _ -> },
         onRecommendationClick = { _, _ -> },
         onRetryClick = {},
-        onLogoClick = {}
+        onLogoClick = {},
+        onFavoriteClick = {},
+        onWatchlistClick = {},
+        onRatingClick = {},
+        onListClick = {}
     )
 }

@@ -46,5 +46,7 @@ data class MovieDetailsRaw(
     @SerialName("vote_count")
     val voteCount: Int? = null,
     val credits: CreditsMovieRaw? = null,
-    val recommendations: RecommendationsRaw
+    val recommendations: RecommendationsRaw,
+    @SerialName("account_states")
+    val accountStates: MediaAccountStateRaw? = null
 )

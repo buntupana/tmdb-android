@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import java.time.LocalDate
 
 
@@ -12,7 +13,7 @@ sealed class MediaDetails(
     open val overview: String,
     open val tagLine: String,
     open val releaseDate: LocalDate?,
-    open val voteAverage: Int,
+    open val voteAverage: Int?,
     open val runTime: Long,
     open val genreList: List<String>,
     open val ageCertification: String,
@@ -20,10 +21,11 @@ sealed class MediaDetails(
     open val castList: List<Person.Cast>,
     open val crewList: List<Person.Crew>,
     open val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
-    open val isFavorite: Boolean = false,
-    open val isWatchlisted: Boolean = false,
-    open val userRating: Int? = null
-)  {
+    open val isFavorite: Boolean,
+    open val isWatchlisted: Boolean,
+    open val userRating: Int?,
+    open val mediaType: MediaType
+) {
 
     data class Movie(
         override val id: Long,
@@ -35,7 +37,7 @@ sealed class MediaDetails(
         override val tagLine: String,
         override val releaseDate: LocalDate?,
         val localReleaseDate: String?,
-        override val voteAverage: Int,
+        override val voteAverage: Int?,
         override val runTime: Long,
         override val genreList: List<String>,
         override val ageCertification: String,
@@ -44,9 +46,9 @@ sealed class MediaDetails(
         override val crewList: List<Person.Crew.Movie>,
         override val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
         val localCountryCodeRelease: String,
-        override val isFavorite: Boolean = false,
-        override val isWatchlisted: Boolean = false,
-        override val userRating: Int? = null
+        override val isFavorite: Boolean,
+        override val isWatchlisted: Boolean,
+        override val userRating: Int?
     ) : MediaDetails(
         id = id,
         title = title,
@@ -63,7 +65,11 @@ sealed class MediaDetails(
         creatorList = creatorList,
         castList = castList,
         crewList = crewList,
-        recommendationList = recommendationList
+        recommendationList = recommendationList,
+        mediaType = MediaType.MOVIE,
+        userRating = userRating,
+        isFavorite = isFavorite,
+        isWatchlisted = isWatchlisted
     )
 
     data class TvShow(
@@ -75,7 +81,7 @@ sealed class MediaDetails(
         override val overview: String,
         override val tagLine: String,
         override val releaseDate: LocalDate?,
-        override val voteAverage: Int,
+        override val voteAverage: Int?,
         override val runTime: Long,
         override val genreList: List<String>,
         override val ageCertification: String,
@@ -87,9 +93,9 @@ sealed class MediaDetails(
         val lastEpisode: Episode?,
         val nextEpisode: Episode?,
         val isInAir: Boolean,
-        override val isFavorite: Boolean = false,
-        override val isWatchlisted: Boolean = false,
-        override val userRating: Int? = null
+        override val isFavorite: Boolean,
+        override val isWatchlisted: Boolean,
+        override val userRating: Int?
     ) : MediaDetails(
         id = id,
         title = title,
@@ -106,6 +112,10 @@ sealed class MediaDetails(
         creatorList = creatorList,
         castList = castList,
         crewList = crewList,
-        recommendationList = recommendationList
+        recommendationList = recommendationList,
+        mediaType = MediaType.TV_SHOW,
+        userRating = userRating,
+        isFavorite = isFavorite,
+        isWatchlisted = isWatchlisted
     )
 }

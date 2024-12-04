@@ -28,6 +28,7 @@ class SignInViewModel @Inject constructor(
     private val navArgs = savedStateHandle.navArgs<SignInNav>()
 
     var state by mutableStateOf(SignInState())
+        private set
 
     private val _sideEffect = Channel<SignInSideEffect>()
     val sideEffect = _sideEffect.receiveAsFlow()

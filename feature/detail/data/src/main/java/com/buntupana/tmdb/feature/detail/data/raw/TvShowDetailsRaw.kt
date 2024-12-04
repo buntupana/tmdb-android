@@ -60,5 +60,7 @@ data class TvShowDetailsRaw(
     val contentRatings: ContentRatingsRaw? = null,
     @SerialName("aggregate_credits")
     val credits: CreditsTvShowRaw? = null,
-    val recommendations: RecommendationsRaw
+    val recommendations: RecommendationsRaw,
+    @SerialName("account_states")
+    val accountStates: MediaAccountStateRaw? = null
 )

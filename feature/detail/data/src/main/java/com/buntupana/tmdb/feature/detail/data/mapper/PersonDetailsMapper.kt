@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.data.mapper.getGender
+import com.buntupana.tmdb.core.data.mapper.getGender
 import com.buntupana.tmdb.feature.detail.data.raw.PersonDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.PersonDetails
 import com.panabuntu.tmdb.core.common.ifNotNullOrBlank

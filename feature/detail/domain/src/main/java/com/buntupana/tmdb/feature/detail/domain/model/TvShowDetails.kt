@@ -12,7 +12,8 @@ data class TvShowDetails(
     val overview: String,
     val tagLine: String,
     val releaseDate: LocalDate?,
-    val userScore: Int,
+    val userScore: Int?,
+    val voteCount: Int,
     val runTime: Long,
     val genreList: List<String>,
     val creatorList: List<Person.Crew.TvShow>,
@@ -24,4 +25,7 @@ data class TvShowDetails(
     val nextEpisode: Episode?,
     val isInAir: Boolean,
     val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
+    val isFavorite: Boolean,
+    val isWatchlisted: Boolean,
+    val userRating: Int?
 )

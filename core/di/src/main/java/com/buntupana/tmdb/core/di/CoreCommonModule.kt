@@ -1,8 +1,8 @@
 package com.buntupana.tmdb.core.di
 
 import android.content.Context
-import com.buntupana.tmdb.data.api.UrlProviderImpl
-import com.buntupana.tmdb.data.manager.SessionManagerImpl
+import com.buntupana.tmdb.core.data.api.UrlProviderImpl
+import com.buntupana.tmdb.core.data.manager.SessionManagerImpl
 import com.panabuntu.tmdb.core.common.SessionManager
 import com.panabuntu.tmdb.core.common.UrlProvider
 import dagger.Module

@@ -27,7 +27,7 @@ import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.Typography
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
-import com.panabuntu.tmdb.core.common.isNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 @Composable
 fun HeaderSimple(

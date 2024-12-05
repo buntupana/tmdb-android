@@ -3,7 +3,7 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 import com.buntupana.tmdb.feature.detail.data.raw.MediaVideosRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Video
 import com.buntupana.tmdb.feature.detail.domain.model.VideoType
-import com.panabuntu.tmdb.core.common.ifNullOrBlank
+import com.panabuntu.tmdb.core.common.util.ifNullOrBlank
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 

@@ -21,8 +21,8 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
-import com.panabuntu.tmdb.core.common.formatTime
-import com.panabuntu.tmdb.core.common.toFullDate
+import com.panabuntu.tmdb.core.common.util.formatTime
+import com.panabuntu.tmdb.core.common.util.toFullDate
 
 
 @Composable

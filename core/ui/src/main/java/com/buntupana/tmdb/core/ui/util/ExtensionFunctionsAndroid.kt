@@ -13,7 +13,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import androidx.palette.graphics.Palette
 import com.buntupana.tmdb.core.ui.navigation.Routes
-import com.panabuntu.tmdb.core.common.decodeAllStrings
+import com.panabuntu.tmdb.core.common.util.decodeAllStrings
 
 fun Drawable.getDominantColor(colorResult: (dominantColor: Color) -> Unit) {
     Palette.Builder(toBitmap()).generate { palette ->

@@ -18,7 +18,7 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.Typography
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
-import com.panabuntu.tmdb.core.common.isNotNullOrEmpty
+import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
 
 fun LazyListScope.castList(
     modifier: Modifier = Modifier,

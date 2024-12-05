@@ -15,10 +15,10 @@ import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.SetMediaFavoriteUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.SetMediaWatchListUseCase
-import com.panabuntu.tmdb.core.common.SessionManager
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
+import com.panabuntu.tmdb.core.common.manager.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest

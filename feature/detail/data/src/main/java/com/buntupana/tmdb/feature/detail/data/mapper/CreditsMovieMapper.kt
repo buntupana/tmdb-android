@@ -4,7 +4,7 @@ import com.buntupana.tmdb.core.data.mapper.getGender
 import com.buntupana.tmdb.feature.detail.data.raw.CreditsMovieRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
 import com.buntupana.tmdb.feature.detail.domain.model.Person
-import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 
 fun CreditsMovieRaw.toModel(
     baseUrlProfile : String,

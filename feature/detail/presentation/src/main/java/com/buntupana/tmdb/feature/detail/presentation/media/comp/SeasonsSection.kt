@@ -29,8 +29,8 @@ import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.common.SeasonSubtitle
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
 import com.buntupana.tmdb.feature.detail.presentation.seasonSample
-import com.panabuntu.tmdb.core.common.isNotNullOrBlank
-import com.panabuntu.tmdb.core.common.toFullDate
+import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.toFullDate
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable

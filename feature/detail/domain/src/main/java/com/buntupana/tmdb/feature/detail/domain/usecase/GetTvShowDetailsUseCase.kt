@@ -44,7 +44,8 @@ class GetTvShowDetailsUseCase @Inject constructor(
                 isInAir = it.isInAir,
                 isFavorite = it.isFavorite,
                 isWatchlisted = it.isWatchlisted,
-                userRating = it.userRating
+                userRating = it.userRating,
+                isRateable = it.isRateable
             )
         }
     }

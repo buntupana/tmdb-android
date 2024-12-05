@@ -2,8 +2,8 @@ package com.buntupana.tmdb.feature.search.data.mapper
 
 import com.buntupana.tmdb.core.data.mapper.getGender
 import com.buntupana.tmdb.feature.search.data.raw.PersonRaw
-import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
-import com.panabuntu.tmdb.core.common.isNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 fun PersonRaw.toModel(
     baseUrlProfile: String

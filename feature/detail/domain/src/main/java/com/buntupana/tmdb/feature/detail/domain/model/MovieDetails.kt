@@ -23,5 +23,6 @@ data class MovieDetails(
     val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
     val isFavorite: Boolean,
     val isWatchlisted: Boolean,
-    val userRating: Int?
+    val userRating: Int?,
+    val isRateable: Boolean,
 )

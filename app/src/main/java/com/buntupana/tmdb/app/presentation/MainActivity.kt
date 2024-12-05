@@ -40,7 +40,7 @@ import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
 import com.buntupana.tmdb.feature.search.presentation.SearchNav
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
-import com.panabuntu.tmdb.core.common.UrlProvider
+import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber

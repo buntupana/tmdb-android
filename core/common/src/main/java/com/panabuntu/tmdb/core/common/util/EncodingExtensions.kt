@@ -1,4 +1,4 @@
-package com.panabuntu.tmdb.core.common
+package com.panabuntu.tmdb.core.common.util
 
 import java.net.URLDecoder
 import java.net.URLEncoder

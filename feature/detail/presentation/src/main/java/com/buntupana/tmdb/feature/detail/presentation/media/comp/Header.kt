@@ -26,7 +26,7 @@ import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
-import com.panabuntu.tmdb.core.common.isNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 @Composable
 fun Header(

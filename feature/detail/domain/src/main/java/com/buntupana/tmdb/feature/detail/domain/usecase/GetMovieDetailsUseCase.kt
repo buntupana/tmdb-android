@@ -83,7 +83,8 @@ class GetMovieDetailsUseCase @Inject constructor(
                         localCountryCodeRelease = releaseAndCertification?.countryCode.orEmpty(),
                         isFavorite = movieDetails.isFavorite,
                         isWatchlisted = movieDetails.isWatchlisted,
-                        userRating = movieDetails.userRating
+                        userRating = movieDetails.userRating,
+                        isRateable = movieDetails.isRateable
                     )
                 )
             }

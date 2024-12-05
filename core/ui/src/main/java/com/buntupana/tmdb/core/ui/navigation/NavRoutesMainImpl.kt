@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.serialization.generateHashCode
-import com.panabuntu.tmdb.core.common.encodeAllUrls
+import com.panabuntu.tmdb.core.common.util.encodeAllUrls
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializer
 import timber.log.Timber

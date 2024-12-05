@@ -178,6 +178,7 @@ fun MediaDetailContent(
                     isFavoriteLoading = state.isFavoriteLoading,
                     isWatchlistLoading = state.isWatchlistLoading,
                     userRating = state.mediaDetails?.userRating,
+                    isRateable = state.mediaDetails?.isRateable ?: false,
                     isRatingLoading = state.isRatingLoading,
                     onFavoriteClick = onFavoriteClick,
                     onWatchlistClick = onWatchlistClick,

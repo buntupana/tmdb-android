@@ -10,12 +10,12 @@ import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.domain.model.SeasonDetail
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
-import com.panabuntu.tmdb.core.common.SessionManager
-import com.panabuntu.tmdb.core.common.UrlProvider
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.map
+import com.panabuntu.tmdb.core.common.manager.SessionManager
+import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import javax.inject.Inject
 
 class DetailRepositoryImpl @Inject constructor(

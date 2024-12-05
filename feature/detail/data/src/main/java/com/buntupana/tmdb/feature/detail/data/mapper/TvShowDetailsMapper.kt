@@ -6,7 +6,9 @@ import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
-import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.Const.RATABLE_DAYS
+import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
+import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
@@ -27,6 +29,13 @@ fun TvShowDetailsRaw.toModel(
         backdropPath.ifNotNullOrBlank { baseUrlBackdrop + backdropPath.orEmpty() }
 
     val videoList = videos?.toModel().orEmpty()
+
+    val isRatable = when {
+        releaseLocalDate == null -> false
+        releaseLocalDate.isBefore(LocalDate.now()) -> true
+        Duration.between(releaseLocalDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < RATABLE_DAYS -> true
+        else -> false
+    }
 
     return TvShowDetails(
         id = id,
@@ -71,5 +80,6 @@ fun TvShowDetailsRaw.toModel(
         isFavorite = accountStates?.favorite ?: false,
         isWatchlisted = accountStates?.watchlist ?: false,
         userRating = (accountStates?.rated?.value?.times(10))?.toInt(),
+        isRateable = isRatable
     )
 }

@@ -15,8 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
-import com.panabuntu.tmdb.core.common.isNotNullOrBlank
 import com.panabuntu.tmdb.core.common.model.Gender
+import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 @Composable
 fun ImagePersonFromUrl(

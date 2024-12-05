@@ -1,4 +1,4 @@
-package com.panabuntu.tmdb.core.common
+package com.panabuntu.tmdb.core.common.util
 
 import kotlinx.coroutines.delay
 import java.time.LocalDate

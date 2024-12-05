@@ -4,8 +4,8 @@ import com.buntupana.tmdb.core.data.mapper.getMediaType
 import com.buntupana.tmdb.feature.detail.data.raw.FilmographyRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.panabuntu.tmdb.core.common.entity.MediaType
-import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
-import com.panabuntu.tmdb.core.common.ifNull
+import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.ifNull
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 

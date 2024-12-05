@@ -1,4 +1,4 @@
-package com.panabuntu.tmdb.core.common
+package com.panabuntu.tmdb.core.common.manager
 
 import com.panabuntu.tmdb.core.common.model.Session
 import kotlinx.coroutines.flow.StateFlow

@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.core.data.api
 
 import com.panabuntu.tmdb.core.common.BuildConfig
-import com.panabuntu.tmdb.core.common.UrlProvider
+import com.panabuntu.tmdb.core.common.provider.UrlProvider
 
 class UrlProviderImpl : UrlProvider {
 

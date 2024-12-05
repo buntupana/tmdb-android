@@ -1,7 +1,8 @@
 package com.buntupana.tmdb.core.data.mapper
 
 import com.buntupana.tmdb.core.data.raw.TvShowRaw
-import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.DateUtil
+import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -16,7 +17,7 @@ fun TvShowRaw.toModel(
         backdropPath.ifNotNullOrBlank { baseUrlBackdrop + backdropPath.orEmpty() }
 
     val releaseDate = try {
-        val formatter = DateTimeFormatter.ofPattern(com.panabuntu.tmdb.core.common.DateUtil.dateFormat)
+        val formatter = DateTimeFormatter.ofPattern(DateUtil.dateFormat)
         LocalDate.parse(firstAirDate.orEmpty()).format(formatter)
     } catch (e: DateTimeParseException) {
         ""

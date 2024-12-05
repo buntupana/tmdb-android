@@ -27,6 +27,7 @@ fun AccountBar(
     isFavorite: Boolean,
     isWatchListed: Boolean,
     userRating: Int?,
+    isRateable: Boolean,
     isFavoriteLoading: Boolean,
     isWatchlistLoading: Boolean,
     isRatingLoading: Boolean,
@@ -40,20 +41,23 @@ fun AccountBar(
             .background(backgroundColor)
             .padding(Dimens.padding.medium)
     ) {
-        Box(
-            modifier = Modifier.weight(1f),
-            contentAlignment = Alignment.Center
-        ) {
-            IconButton(
-                onClick = onRatingClick,
-                enabled = isRatingLoading.not()
+        if (isRateable) {
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.Center
             ) {
-                UserScore(
-                    modifier = Modifier,
-                    score = userRating,
-                )
+                IconButton(
+                    onClick = onRatingClick,
+                    enabled = isRatingLoading.not()
+                ) {
+                    UserScore(
+                        modifier = Modifier,
+                        score = userRating,
+                    )
+                }
             }
         }
+
         Box(
             modifier = Modifier.weight(1f),
             contentAlignment = Alignment.Center
@@ -126,6 +130,7 @@ fun AccountBarPreview() {
         isFavorite = true,
         isWatchListed = false,
         userRating = 20,
+        isRateable = false,
         isFavoriteLoading = false,
         isWatchlistLoading = false,
         isRatingLoading = false,

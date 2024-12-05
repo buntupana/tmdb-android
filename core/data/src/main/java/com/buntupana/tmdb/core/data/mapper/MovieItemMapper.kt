@@ -2,7 +2,8 @@ package com.buntupana.tmdb.core.data.mapper
 
 
 import com.buntupana.tmdb.core.data.raw.MovieItemRaw
-import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.DateUtil
+import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -17,7 +18,7 @@ fun MovieItemRaw.toModel(
         backdropPath.ifNotNullOrBlank { baseUrlBackdrop + backdropPath.orEmpty() }
 
     val releaseLocalDate = try {
-        LocalDate.parse(releaseDate.orEmpty()).format(DateTimeFormatter.ofPattern(com.panabuntu.tmdb.core.common.DateUtil.dateFormat))
+        LocalDate.parse(releaseDate.orEmpty()).format(DateTimeFormatter.ofPattern(DateUtil.dateFormat))
     } catch (e: DateTimeParseException) {
         ""
     }

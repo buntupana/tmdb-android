@@ -6,11 +6,11 @@ import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
 import com.buntupana.tmdb.feature.discover.domain.repository.DiscoverRepository
-import com.panabuntu.tmdb.core.common.UrlProvider
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.map
 import com.panabuntu.tmdb.core.common.model.MediaItem
+import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import javax.inject.Inject
 
 class DiscoverRepositoryImpl @Inject constructor(

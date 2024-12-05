@@ -1,4 +1,4 @@
-package com.panabuntu.tmdb.core.common
+package com.panabuntu.tmdb.core.common.provider
 
 interface UrlProvider {
 

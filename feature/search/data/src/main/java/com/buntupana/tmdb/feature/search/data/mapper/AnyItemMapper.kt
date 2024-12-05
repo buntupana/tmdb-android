@@ -2,7 +2,7 @@ package com.buntupana.tmdb.feature.search.data.mapper
 
 import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
 import com.buntupana.tmdb.feature.search.domain.model.SearchItem
-import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 
 fun List<AnyMediaItemRaw>.toSearchModel(
     baseUrlPoster : String

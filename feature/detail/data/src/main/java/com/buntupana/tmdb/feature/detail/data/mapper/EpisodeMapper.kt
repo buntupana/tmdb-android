@@ -2,7 +2,7 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.feature.detail.data.raw.EpisodeRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
-import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 

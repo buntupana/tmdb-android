@@ -29,7 +29,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.personDetailsSample
-import com.panabuntu.tmdb.core.common.isNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable

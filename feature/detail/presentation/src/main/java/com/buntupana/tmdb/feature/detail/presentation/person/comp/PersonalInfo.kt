@@ -18,8 +18,8 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.getString
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.presentation.R
-import com.panabuntu.tmdb.core.common.ifNull
-import com.panabuntu.tmdb.core.common.toLocalFormat
+import com.panabuntu.tmdb.core.common.util.ifNull
+import com.panabuntu.tmdb.core.common.util.toLocalFormat
 
 @Composable
 fun PersonalInfo(

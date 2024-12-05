@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.panabuntu.tmdb.core.common.SessionManager
+import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.model.AccountDetails
 import com.panabuntu.tmdb.core.common.model.Session
 import kotlinx.coroutines.CoroutineScope

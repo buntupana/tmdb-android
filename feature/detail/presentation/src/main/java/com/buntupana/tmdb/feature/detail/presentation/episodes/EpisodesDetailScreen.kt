@@ -26,7 +26,7 @@ import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
 import com.buntupana.tmdb.feature.detail.presentation.episodes.comp.EpisodeHorizontal
-import com.panabuntu.tmdb.core.common.isNotNullOrEmpty
+import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable

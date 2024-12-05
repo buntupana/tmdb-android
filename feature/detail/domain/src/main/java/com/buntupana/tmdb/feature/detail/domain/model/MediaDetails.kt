@@ -24,7 +24,8 @@ sealed class MediaDetails(
     open val isFavorite: Boolean,
     open val isWatchlisted: Boolean,
     open val userRating: Int?,
-    open val mediaType: MediaType
+    open val mediaType: MediaType,
+    open val isRateable: Boolean,
 ) {
 
     data class Movie(
@@ -48,7 +49,8 @@ sealed class MediaDetails(
         val localCountryCodeRelease: String,
         override val isFavorite: Boolean,
         override val isWatchlisted: Boolean,
-        override val userRating: Int?
+        override val userRating: Int?,
+        override val isRateable: Boolean
     ) : MediaDetails(
         id = id,
         title = title,
@@ -69,7 +71,8 @@ sealed class MediaDetails(
         mediaType = MediaType.MOVIE,
         userRating = userRating,
         isFavorite = isFavorite,
-        isWatchlisted = isWatchlisted
+        isWatchlisted = isWatchlisted,
+        isRateable = isRateable
     )
 
     data class TvShow(
@@ -95,7 +98,8 @@ sealed class MediaDetails(
         val isInAir: Boolean,
         override val isFavorite: Boolean,
         override val isWatchlisted: Boolean,
-        override val userRating: Int?
+        override val userRating: Int?,
+        override val isRateable: Boolean
     ) : MediaDetails(
         id = id,
         title = title,
@@ -116,6 +120,7 @@ sealed class MediaDetails(
         mediaType = MediaType.TV_SHOW,
         userRating = userRating,
         isFavorite = isFavorite,
-        isWatchlisted = isWatchlisted
+        isWatchlisted = isWatchlisted,
+        isRateable = isRateable
     )
 }

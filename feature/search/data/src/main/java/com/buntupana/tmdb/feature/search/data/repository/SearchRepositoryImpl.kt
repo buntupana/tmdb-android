@@ -10,12 +10,12 @@ import com.buntupana.tmdb.feature.search.data.mapper.toSearchModel
 import com.buntupana.tmdb.feature.search.data.remote_data_source.SearchRemoteDataSource
 import com.buntupana.tmdb.feature.search.domain.model.SearchItem
 import com.buntupana.tmdb.feature.search.domain.repository.SearchRepository
-import com.panabuntu.tmdb.core.common.UrlProvider
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.map
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.model.PersonItem
+import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

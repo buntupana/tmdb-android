@@ -1,10 +1,10 @@
 package com.buntupana.tmdb.feature.account.domain.usecase
 
 import com.buntupana.tmdb.feature.account.domain.repository.AccountRepository
-import com.panabuntu.tmdb.core.common.SessionManager
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.asEmptyDataResult
+import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.model.AccountDetails
 import com.panabuntu.tmdb.core.common.model.Session
 import javax.inject.Inject

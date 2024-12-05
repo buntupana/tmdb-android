@@ -22,8 +22,8 @@ import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.common.SeasonSubtitle
 import com.buntupana.tmdb.feature.detail.presentation.seasonSample
-import com.panabuntu.tmdb.core.common.isNotNullOrBlank
-import com.panabuntu.tmdb.core.common.toFullDate
+import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.toFullDate
 
 @Composable
 fun SeasonItem(

@@ -20,7 +20,7 @@ import coil.request.ImageRequest
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
 import com.buntupana.tmdb.core.ui.util.getDominantColor
-import com.panabuntu.tmdb.core.common.isNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 @Composable
 fun ImageFromUrl(

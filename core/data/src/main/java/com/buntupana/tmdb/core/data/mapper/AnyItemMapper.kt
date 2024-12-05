@@ -1,8 +1,9 @@
 package com.buntupana.tmdb.core.data.mapper
 
 import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
-import com.panabuntu.tmdb.core.common.ifNotNullOrBlank
 import com.panabuntu.tmdb.core.common.model.MediaItem
+import com.panabuntu.tmdb.core.common.util.DateUtil
+import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -16,7 +17,7 @@ fun List<AnyMediaItemRaw>.toModel(
 
     forEach { item ->
 
-        val formatter = DateTimeFormatter.ofPattern(com.panabuntu.tmdb.core.common.DateUtil.dateFormat)
+        val formatter = DateTimeFormatter.ofPattern(DateUtil.dateFormat)
 
         val posterUrl =
             item.posterPath.ifNotNullOrBlank { baseUrlPoster + item.posterPath.orEmpty() }

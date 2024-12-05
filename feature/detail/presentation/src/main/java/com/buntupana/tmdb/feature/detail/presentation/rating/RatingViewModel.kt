@@ -10,10 +10,10 @@ import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.feature.detail.domain.usecase.AddMediaRatingUseCase
 import com.buntupana.tmdb.feature.detail.presentation.R
-import com.panabuntu.tmdb.core.common.applyDelayFor
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
+import com.panabuntu.tmdb.core.common.util.applyDelayFor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay

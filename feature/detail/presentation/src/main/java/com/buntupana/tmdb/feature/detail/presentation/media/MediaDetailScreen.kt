@@ -11,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -130,6 +132,7 @@ fun MediaDetailScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaDetailContent(
     state: MediaDetailState,
@@ -154,15 +157,18 @@ fun MediaDetailContent(
         mutableStateOf(state.backgroundColor)
     }
 
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
     Scaffold(
         modifier = Modifier
-            .setStatusNavigationBarColor(backgroundColor),
+            .setStatusNavigationBarColor(backgroundColor)
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBar(
-                modifier = Modifier.background(backgroundColor),
-                textColor = backgroundColor.getOnBackgroundColor(),
-                onSearchClick = { onSearchClick() },
+                backgroundColor = backgroundColor,
+                scrollBehavior = scrollBehavior,
                 onBackClick = { onBackClick() },
+                onSearchClick = { onSearchClick() },
                 onLogoClick = { onLogoClick() }
             )
         },

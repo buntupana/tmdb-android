@@ -1,18 +1,21 @@
 package com.buntupana.tmdb.feature.detail.presentation.cast
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,7 +23,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.detail.presentation.cast.comp.castList
 import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
@@ -48,6 +50,7 @@ fun CastDetailScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CastDetailContent(
     state: CastDetailState,
@@ -64,21 +67,28 @@ fun CastDetailContent(
 
     val systemBackground = MaterialTheme.colorScheme.background
 
-    Column(
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+    Scaffold(
         modifier = Modifier
-            .fillMaxSize()
             .setStatusNavigationBarColor(backgroundColor)
-    ) {
-        TopBar(
-            modifier = Modifier.background(backgroundColor),
-            textColor = backgroundColor.getOnBackgroundColor(),
-            onSearchClick = { onSearchClick() },
-            onBackClick = { onBackClick() },
-            onLogoClick = { onLogoClick() }
-        )
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            TopBar(
+                modifier = Modifier.background(backgroundColor),
+                backgroundColor = backgroundColor,
+                onBackClick = { onBackClick() },
+                onSearchClick = { onSearchClick() },
+                onLogoClick = { onLogoClick() },
+                scrollBehavior = scrollBehavior
+            )
+        }
+    ) { paddingValues ->
+
         LazyColumn(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
 
             item {

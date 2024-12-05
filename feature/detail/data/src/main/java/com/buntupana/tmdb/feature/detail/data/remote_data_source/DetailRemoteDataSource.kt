@@ -77,7 +77,7 @@ class DetailRemoteDataSource @Inject constructor(
 
     suspend fun getTvCredits(tvShowId: Long): Result<CreditsTvShowRaw, NetworkError> {
         return getResult {
-            httpClient.get("tv/$tvShowId/credits")
+            httpClient.get("tv/$tvShowId/aggregate_credits")
         }
     }
 

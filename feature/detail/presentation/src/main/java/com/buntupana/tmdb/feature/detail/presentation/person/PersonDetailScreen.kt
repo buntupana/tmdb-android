@@ -8,10 +8,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -49,7 +45,10 @@ fun PersonDetailScreen(
             viewModel.onEvent(PersonDetailEvent.GetPersonDetails)
         },
         onMediaClick = onMediaClick,
-        onLogoClick = onLogoClick
+        onLogoClick = onLogoClick,
+        mediaTypeAndDepartmentSelected = { mediaType, department ->
+            viewModel.onEvent(PersonDetailEvent.SelectMediaTypeAndDepartment(mediaType, department))
+        }
     )
 }
 
@@ -61,16 +60,9 @@ fun PersonDetailContent(
     onSearchClick: () -> Unit,
     onRetryClick: () -> Unit,
     onMediaClick: (id: Long, mediaType: MediaType, dominantColor: Color?) -> Unit,
-    onLogoClick: () -> Unit
+    onLogoClick: () -> Unit,
+    mediaTypeAndDepartmentSelected: (mediaType: Int?, department: String?) -> Unit
 ) {
-
-    var mediaTypeSelected by remember {
-        mutableStateOf<Int?>(null)
-    }
-
-    var departmentSelected by remember {
-        mutableStateOf<String?>(null)
-    }
 
     val mediaTypeMap = mapOf(
         R.string.text_movies to stringResource(id = R.string.text_movies),
@@ -143,11 +135,10 @@ fun PersonDetailContent(
                             mainDepartment = state.personDetails.knownForDepartment,
                             mediaTypeMap = mediaTypeMap,
                             departmentMap = departmentMap,
-                            mediaTypeSelected = mediaTypeSelected,
-                            departmentSelected = departmentSelected
+                            mediaTypeSelected = state.mediaTypeSelected,
+                            departmentSelected = state.departmentSelected
                         ) { mediaType, department ->
-                            mediaTypeSelected = mediaType
-                            departmentSelected = department
+                            mediaTypeAndDepartmentSelected(mediaType, department)
                         }
                     }
 
@@ -155,8 +146,8 @@ fun PersonDetailContent(
                         personName = state.personDetails.name,
                         creditMap = state.personDetails.creditMap,
                         mainDepartment = state.personDetails.knownForDepartment,
-                        mediaTypeSelected = mediaTypeSelected,
-                        departmentSelected = departmentSelected,
+                        mediaTypeSelected = state.mediaTypeSelected,
+                        departmentSelected = state.departmentSelected,
                         onItemClick = onMediaClick
                     )
                 }
@@ -179,6 +170,7 @@ fun PersonDetailsContentPreview() {
         onSearchClick = {},
         onRetryClick = {},
         onMediaClick = { _, _, _ -> },
-        onLogoClick = {}
+        onLogoClick = {},
+        mediaTypeAndDepartmentSelected = { _, _ -> }
     )
 }

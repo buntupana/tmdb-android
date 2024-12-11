@@ -5,5 +5,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 data class PersonDetailState(
     val isLoading: Boolean = false,
     val isGetPersonError: Boolean = false,
-    val personDetails: PersonFullDetails? = null
+    val personDetails: PersonFullDetails? = null,
+    val mediaTypeSelected: Int? = null,
+    val departmentSelected: String? = null
 )

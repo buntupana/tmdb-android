@@ -35,6 +35,12 @@ class PersonDetailViewModel @Inject constructor(
         viewModelScope.launch {
             when (event) {
                 PersonDetailEvent.GetPersonDetails -> getPersonDetails(navArgs.personId)
+                is PersonDetailEvent.SelectMediaTypeAndDepartment -> {
+                    state = state.copy(
+                        mediaTypeSelected = event.mediaType,
+                        departmentSelected = event.department
+                    )
+                }
             }
         }
     }

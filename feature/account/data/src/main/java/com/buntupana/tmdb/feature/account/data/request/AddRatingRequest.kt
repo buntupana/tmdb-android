@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.detail.data.request
+package com.buntupana.tmdb.feature.account.data.request
 
 import kotlinx.serialization.Serializable
 

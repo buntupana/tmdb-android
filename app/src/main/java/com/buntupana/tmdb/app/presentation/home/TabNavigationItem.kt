@@ -11,7 +11,7 @@ import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Tv
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.buntupana.tmdb.core.ui.navigation.Routes
-import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
+import com.buntupana.tmdb.feature.account.presentation.account.account.AccountNav
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNav
 import com.buntupana.tmdb.feature.discover.presentation.movies.MoviesNav
 import com.buntupana.tmdb.feature.discover.presentation.tv_shows.TvShowsNav

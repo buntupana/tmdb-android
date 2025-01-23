@@ -1,16 +1,14 @@
-package com.buntupana.tmdb.feature.detail.presentation.common
+package com.buntupana.tmdb.core.ui.composables
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -18,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.R
@@ -27,11 +24,11 @@ import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(
+fun TopBarTitle(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onLogoClick: () -> Unit,
+    title: String = "",
     backgroundColor: Color,
     scrollBehavior: TopAppBarScrollBehavior? = null
 ) {
@@ -79,15 +76,9 @@ fun TopBar(
                 horizontalArrangement = Arrangement.Center
             ) {
 
-                Image(
-                    modifier = Modifier
-                        .size(Dimens.topBarIconSize)
-                        .clickable {
-                            onLogoClick()
-                        },
-                    painter = painterResource(id = R.drawable.img_logo),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(backgroundColor.getOnBackgroundColor())
+                Text(
+                    text = title,
+                    color = backgroundColor.getOnBackgroundColor()
                 )
             }
         }
@@ -97,12 +88,12 @@ fun TopBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun TopBarPreview() {
-    TopBar(
+private fun TopBarTitlePreview() {
+    TopBarTitle(
         Modifier.background(Color.Blue),
+        title = "Watchlist",
         backgroundColor = Color.Blue,
         onSearchClick = {},
-        onBackClick = {},
-        onLogoClick = {}
+        onBackClick = {}
     )
 }

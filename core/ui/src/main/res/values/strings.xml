@@ -45,4 +45,10 @@
     <string name="text_cast">Cast</string>
     <string name="text_crew">Crew</string>
 
+    // WatchList
+    <string name="text_watchlist">Watchlist</string>
+
+    // Favorites
+    <string name="text_favorites">Favorites</string>
+
 </resources>

@@ -26,6 +26,8 @@ import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.theme.TMDBTheme
 import com.buntupana.tmdb.core.ui.util.ObserveAsEvents
+import com.buntupana.tmdb.feature.account.presentation.account.watchlist.WatchListNav
+import com.buntupana.tmdb.feature.account.presentation.account.watchlist.WatchlistScreen
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInNav
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInScreen
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNav
@@ -115,6 +117,9 @@ class MainActivity : ComponentActivity() {
                                             backgroundColor = posterDominantColor.toArgb()
                                         )
                                     )
+                                },
+                                onWatchListClick = {
+                                    navRoutesMain.navigate(WatchListNav)
                                 }
                             )
                         }
@@ -266,6 +271,21 @@ class MainActivity : ComponentActivity() {
                                 onSearchClick = { navRoutesMain.navigate(SearchNav) },
                                 onLogoClick = {
                                     navRoutesMain.popBackStack(HomeNav::class)
+                                }
+                            )
+                        }
+                        composable<WatchListNav> {
+                            WatchlistScreen(
+                                onBackClick = { navRoutesMain.popBackStack() },
+                                onSearchClick = { navRoutesMain.navigate(SearchNav) },
+                                onMediaClick = { mediaId, mediaType, mainPosterColor ->
+                                    navRoutesMain.navigate(
+                                        MediaDetailNav(
+                                            mediaId = mediaId,
+                                            mediaType = mediaType,
+                                            backgroundColor = mainPosterColor?.toArgb()
+                                        )
+                                    )
                                 }
                             )
                         }

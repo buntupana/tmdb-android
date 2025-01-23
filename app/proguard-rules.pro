@@ -25,3 +25,5 @@
 -keep class * extends java.lang.Enum { *; }
 -keepclassmembers enum * { *; }
 -keep class * extends android.os.Parcelable { *; }
+
+-keep @kotlinx.serialization.Serializable class * { *; }

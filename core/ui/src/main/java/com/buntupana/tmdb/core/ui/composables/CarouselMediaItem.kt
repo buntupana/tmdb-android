@@ -1,6 +1,7 @@
-package com.buntupana.tmdb.feature.discover.presentation.comp
+package com.buntupana.tmdb.core.ui.composables
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -19,12 +20,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.R as RCore
 
 private const val PLACE_HOLDER_ITEM_NUMBER = 6
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CarouselMediaItem(
     modifier: Modifier = Modifier,
@@ -76,6 +77,7 @@ fun CarouselMediaItem(
                     mediaItemList[index].let { mediaItem ->
                         MediaItemVertical(
                             modifier = Modifier
+                                .animateItem()
                                 .width(itemWidth)
                                 .clip(RoundedCornerShape(Dimens.posterRound)),
                             mediaItem = mediaItem,

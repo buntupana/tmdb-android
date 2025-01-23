@@ -10,7 +10,6 @@ import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.domain.model.SeasonDetail
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
-import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.map
@@ -94,53 +93,5 @@ class DetailRepositoryImpl @Inject constructor(
             .map {
                 it.seasons.toModel(baseUrlPoster = urlProvider.BASE_URL_POSTER)
             }
-    }
-
-    override suspend fun setMediaFavorite(
-        mediaId: Long,
-        mediaType: MediaType,
-        favorite: Boolean
-    ): Result<Unit, NetworkError> {
-        return detailRemoteDataSource.setMediaFavorite(
-            accountId = sessionManager.session.value.accountDetails?.id ?: 0,
-            mediaId = mediaId,
-            mediaType = mediaType,
-            favorite = favorite
-        )
-    }
-
-    override suspend fun setMediaWatchList(
-        mediaId: Long,
-        mediaType: MediaType,
-        watchlist: Boolean
-    ): Result<Unit, NetworkError> {
-        return detailRemoteDataSource.setMediaWatchlist(
-            accountId = sessionManager.session.value.accountDetails?.id ?: 0,
-            mediaId = mediaId,
-            mediaType = mediaType,
-            watchlist = watchlist
-        )
-    }
-
-    override suspend fun addMediaRating(
-        mediaType: MediaType,
-        mediaId: Long,
-        value: Int?
-    ): Result<Unit, NetworkError> {
-
-        return if (value == null) {
-            detailRemoteDataSource.deleteMediaRating(
-                sessionId = sessionManager.session.value.sessionId,
-                mediaType = mediaType,
-                mediaId = mediaId
-            )
-        } else {
-            detailRemoteDataSource.addMediaRating(
-                sessionId = sessionManager.session.value.sessionId,
-                mediaType = mediaType,
-                mediaId = mediaId,
-                value = value
-            )
-        }
     }
 }

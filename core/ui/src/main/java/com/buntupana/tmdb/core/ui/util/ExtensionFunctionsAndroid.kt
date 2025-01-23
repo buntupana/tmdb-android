@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.core.ui.util
 
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.BlendMode
@@ -10,10 +11,17 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.NavType
 import androidx.navigation.toRoute
 import androidx.palette.graphics.Palette
+import com.buntupana.tmdb.core.ui.navigation.NavTypeMap
 import com.buntupana.tmdb.core.ui.navigation.Routes
 import com.panabuntu.tmdb.core.common.util.decodeAllStrings
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlin.reflect.KType
+import kotlin.reflect.full.companionObjectInstance
+import kotlin.reflect.typeOf
 
 fun Drawable.getDominantColor(colorResult: (dominantColor: Color) -> Unit) {
     Palette.Builder(toBitmap()).generate { palette ->
@@ -41,5 +49,26 @@ fun Modifier.brush(brush: Brush) = this
     }
 
 inline fun <reified T : Routes> SavedStateHandle.navArgs(): T {
-    return toRoute<T>().decodeAllStrings()
+    val companion = T::class.companionObjectInstance as? NavTypeMap
+    return toRoute<T>(typeMap = companion?.typeMap ?: emptyMap()).decodeAllStrings()
+}
+
+inline fun <reified T : Any> serializableType(
+    isNullableAllowed: Boolean = false,
+    json: Json = Json,
+) = object : NavType<T>(isNullableAllowed = isNullableAllowed) {
+    override fun get(bundle: Bundle, key: String) =
+        bundle.getString(key)?.let<String, T>(json::decodeFromString)
+
+    override fun parseValue(value: String): T = json.decodeFromString(value)
+
+    override fun serializeAsValue(value: T): String = json.encodeToString(value)
+
+    override fun put(bundle: Bundle, key: String, value: T) {
+        bundle.putString(key, json.encodeToString(value))
+    }
+}
+
+inline fun <reified T : Any> navType(): Pair<KType, NavType<*>> {
+    return typeOf<T>() to serializableType<T>()
 }

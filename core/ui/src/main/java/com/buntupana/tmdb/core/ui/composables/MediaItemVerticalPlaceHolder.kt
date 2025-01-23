@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.discover.presentation.comp
+package com.buntupana.tmdb.core.ui.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

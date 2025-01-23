@@ -6,6 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.util.LOADING_DELAY
+import com.buntupana.tmdb.feature.discover.domain.usecase.GetFreeToWatchMediaListUseCase
+import com.buntupana.tmdb.feature.discover.domain.usecase.GetPopularMoviesListUseCase
+import com.buntupana.tmdb.feature.discover.domain.usecase.GetTrendingMediaListUseCase
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.FreeToWatchFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
@@ -19,9 +22,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
-    private val getPopularMoviesListUseCase: com.buntupana.tmdb.feature.discover.domain.usecase.GetPopularMoviesListUseCase,
-    private val getFreeToWatchMediaListUseCase: com.buntupana.tmdb.feature.discover.domain.usecase.GetFreeToWatchMediaListUseCase,
-    private val getTrendingMediaListUseCase: com.buntupana.tmdb.feature.discover.domain.usecase.GetTrendingMediaListUseCase
+    private val getPopularMoviesListUseCase: GetPopularMoviesListUseCase,
+    private val getFreeToWatchMediaListUseCase: GetFreeToWatchMediaListUseCase,
+    private val getTrendingMediaListUseCase: GetTrendingMediaListUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(DiscoverState())

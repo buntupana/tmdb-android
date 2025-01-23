@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.UiText
-import com.buntupana.tmdb.feature.detail.domain.usecase.AddMediaRatingUseCase
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
@@ -25,7 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RatingViewModel @Inject constructor(
-    private val addMediaRatingUseCase: AddMediaRatingUseCase
+    private val addMediaRatingUseCase: com.buntupana.tmdb.feature.account.domain.usecase.AddMediaRatingUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(RatingState(mediaTitle = "", rating = 0))

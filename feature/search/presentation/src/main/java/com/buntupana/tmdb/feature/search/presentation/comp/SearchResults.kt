@@ -13,7 +13,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +30,7 @@ import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.feature.search.presentation.MediaResultCount
 import com.buntupana.tmdb.feature.search.presentation.SearchState
 import com.buntupana.tmdb.feature.search.presentation.SearchType
+import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -37,7 +38,7 @@ import timber.log.Timber
 fun SearchResults(
     modifier: Modifier = Modifier,
     searchState: SearchState,
-    onMediaClick: (mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem, mainPosterColor: Color) -> Unit,
+    onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color) -> Unit,
     onPersonClick: (personId: Long) -> Unit
 ) {
 
@@ -48,13 +49,11 @@ fun SearchResults(
 
         var defaultPageSelector by remember { mutableStateOf(true) }
 
-        SideEffect {
-            if (defaultPageSelector) {
-                val defaultIndex =
-                    searchState.resultCountList.indexOfFirst { it.searchType == searchState.defaultSearchType }
-                pagerState.requestScrollToPage(defaultIndex)
-            }
+        LaunchedEffect(defaultPageSelector) {
             defaultPageSelector = false
+            val defaultIndex =
+                searchState.resultCountList.indexOfFirst { it.searchType == searchState.defaultSearchType }
+            pagerState.requestScrollToPage(defaultIndex)
         }
 
         // Adding a tab bar with result titles

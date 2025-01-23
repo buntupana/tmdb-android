@@ -4,7 +4,7 @@ import androidx.compose.ui.text.intl.Locale
 import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
 import com.buntupana.tmdb.core.data.raw.MovieItemRaw
 import com.buntupana.tmdb.core.data.raw.ResponseListRaw
-import com.buntupana.tmdb.core.data.raw.TvShowRaw
+import com.buntupana.tmdb.core.data.raw.TvShowItemRaw
 import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
@@ -46,7 +46,7 @@ class DiscoverRemoteDataSource @Inject constructor(
 
     suspend fun getTvShowPopular(
         monetizationType: MonetizationType
-    ): Result<ResponseListRaw<TvShowRaw>, NetworkError> {
+    ): Result<ResponseListRaw<TvShowItemRaw>, NetworkError> {
 
         val monetizationValue = when (monetizationType) {
             MonetizationType.FREE -> "free"
@@ -93,7 +93,7 @@ class DiscoverRemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getTvShowsOnAir(): Result<ResponseListRaw<TvShowRaw>, NetworkError> {
+    suspend fun getTvShowsOnAir(): Result<ResponseListRaw<TvShowItemRaw>, NetworkError> {
 
         return getResult {
             httpClient.get("tv/on_the_air")

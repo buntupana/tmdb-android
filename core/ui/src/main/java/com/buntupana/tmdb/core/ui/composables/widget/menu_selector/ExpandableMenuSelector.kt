@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -63,7 +62,6 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
             .horizontalScroll(scrollState)
             .padding(
                 start = if (menuAlign == ExpandableMenuSelectorAlign.START) horizontalPadding else  0.dp,
@@ -86,8 +84,14 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
             label = "collapsingBackground"
         )
 
+        val paddedModifier = if (menuAlign == ExpandableMenuSelectorAlign.END) {
+            Modifier.padding(start = 32.dp)
+        } else {
+            Modifier.padding(end = 32.dp)
+        }
+
         Box(
-            modifier = Modifier
+            modifier = paddedModifier
                 .width(width = offsetXBackground.pxToDp())
                 .clip(RoundedCornerShape(ROUNDED_CORNER_RADIUS))
                 .border(BorderStroke(2.dp, PrimaryColor), RoundedCornerShape(ROUNDED_CORNER_RADIUS))
@@ -177,7 +181,7 @@ fun ExpandableMenuSelectorPreview() {
             ExpandableMenuSelectorItemSample.ForRent,
             ExpandableMenuSelectorItemSample.InTheatres
         ),
-        menuAlign = ExpandableMenuSelectorAlign.END,
+        menuAlign = ExpandableMenuSelectorAlign.START,
         defaultCollapsed = true
     )
 }

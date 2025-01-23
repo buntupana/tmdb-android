@@ -19,13 +19,15 @@ import androidx.paging.compose.LazyPagingItems
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.panabuntu.tmdb.core.common.model.MediaItem
+import com.panabuntu.tmdb.core.common.model.PersonItem
 
 @Composable
 fun SearchPager(
     modifier: Modifier = Modifier,
     pagingItems: LazyPagingItems<out Any>?,
     noResultMessage: String,
-    onMediaClick: (mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem, mainPosterColor: Color) -> Unit,
+    onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color) -> Unit,
     onPersonClick: (personId: Long) -> Unit
 ) {
 
@@ -79,7 +81,7 @@ fun SearchPager(
                     val item = pagingItems[index] ?: return@items
 
                     when (item) {
-                        is com.panabuntu.tmdb.core.common.model.MediaItem -> {
+                        is MediaItem -> {
                             MediaItemHorizontal(
                                 modifier = modifier.height(Dimens.imageSize.posterHeight),
                                 onMediaClick = { _, mainPosterColor ->
@@ -93,7 +95,7 @@ fun SearchPager(
                             )
                         }
 
-                        is com.panabuntu.tmdb.core.common.model.PersonItem -> {
+                        is PersonItem -> {
 
                             val description = if (item.knownForList.firstOrNull() == null) {
                                 item.knownForDepartment
@@ -113,33 +115,32 @@ fun SearchPager(
                         }
                     }
                 }
-
-                // Appending result strategy
-                when (pagingItems.loadState.append) {
-                    LoadState.Loading -> {
-                        item {
-                            Column(
-                                Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Spacer(modifier = Modifier.height(Dimens.padding.medium))
-                                CircularProgressIndicator(
-                                    color = PrimaryColor
-                                )
-                            }
-                        }
-                    }
-
-                    is LoadState.Error -> {
-                        // TODO: item to show when append paging fails
-                    }
-
-                    else -> {}
-                }
+            }
+        }
+        // Appending result strategy
+        when (pagingItems.loadState.append) {
+            LoadState.Loading -> {
                 item {
-                    Spacer(modifier = Modifier.height(Dimens.padding.tiny))
+                    Column(
+                        Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(modifier = Modifier.height(Dimens.padding.medium))
+                        CircularProgressIndicator(
+                            color = PrimaryColor
+                        )
+                    }
                 }
             }
+
+            is LoadState.Error -> {
+                // TODO: item to show when append paging fails
+            }
+
+            else -> {}
+        }
+        item {
+            Spacer(modifier = Modifier.height(Dimens.padding.tiny))
         }
     }
 }

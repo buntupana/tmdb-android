@@ -1,20 +1,20 @@
-package com.buntupana.tmdb.feature.detail.domain.usecase
+package com.buntupana.tmdb.feature.account.domain.usecase
 
-import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
+import com.buntupana.tmdb.feature.account.domain.repository.AccountRepository
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import javax.inject.Inject
 
 class AddMediaRatingUseCase @Inject constructor(
-    private val detailRepository: DetailRepository
+    private val accountRepository: AccountRepository
 ) {
     suspend operator fun invoke(
         mediaType: MediaType,
         mediaId: Long,
         value: Int?
     ): Result<Unit, NetworkError> {
-        return detailRepository.addMediaRating(
+        return accountRepository.addMediaRating(
             mediaType = mediaType,
             mediaId = mediaId,
             value = value

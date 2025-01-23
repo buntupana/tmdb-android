@@ -66,8 +66,6 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.androidx.navigation)
 
-    implementation(libs.androidx.constraintlayout)
-
     // Accompanist
     api(libs.google.accompanist.systemuicontroller)
 

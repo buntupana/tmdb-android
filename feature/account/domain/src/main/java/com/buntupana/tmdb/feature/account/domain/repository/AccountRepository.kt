@@ -1,9 +1,14 @@
 package com.buntupana.tmdb.feature.account.domain.repository
 
 
+import androidx.paging.PagingData
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.model.AccountDetails
+import com.panabuntu.tmdb.core.common.model.MediaItem
+import com.panabuntu.tmdb.core.common.model.Order
+import kotlinx.coroutines.flow.Flow
 
 interface AccountRepository {
 
@@ -12,5 +17,32 @@ interface AccountRepository {
     suspend fun createSession(requestToken: String): Result<String, NetworkError>
 
     suspend fun getAccountDetails(sessionId: String): Result<AccountDetails, NetworkError>
+
     suspend fun deleteSession(sessionId: String): Result<Unit, NetworkError>
+
+    suspend fun getWatchlistMoviePaging(order: Order): Flow<PagingData<MediaItem.Movie>>
+
+    suspend fun getWatchlistTvShowPaging(order: Order): Flow<PagingData<MediaItem.TvShow>>
+
+    suspend fun getWatchlistMovies(): Result<List<MediaItem>, NetworkError>
+
+    suspend fun getWatchlistTvShows(): Result<List<MediaItem>, NetworkError>
+
+    suspend fun setMediaFavorite(
+        mediaId: Long,
+        mediaType: MediaType,
+        favorite: Boolean
+    ): Result<Unit, NetworkError>
+
+    suspend fun setMediaWatchList(
+        mediaId: Long,
+        mediaType: MediaType,
+        watchlist: Boolean
+    ): Result<Unit, NetworkError>
+
+    suspend fun addMediaRating(
+        mediaType: MediaType,
+        mediaId: Long,
+        value: Int?
+    ): Result<Unit, NetworkError>
 }

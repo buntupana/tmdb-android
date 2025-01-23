@@ -3,7 +3,7 @@ package com.buntupana.tmdb.feature.search.data.remote_data_source
 import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
 import com.buntupana.tmdb.core.data.raw.MovieItemRaw
 import com.buntupana.tmdb.core.data.raw.ResponseListRaw
-import com.buntupana.tmdb.core.data.raw.TvShowRaw
+import com.buntupana.tmdb.core.data.raw.TvShowItemRaw
 import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
 import com.buntupana.tmdb.feature.search.data.raw.PersonRaw
 import com.panabuntu.tmdb.core.common.entity.NetworkError
@@ -46,7 +46,7 @@ class SearchRemoteDataSource @Inject constructor(
     suspend fun getSearchTvShows(
         searchKey: String,
         page: Int
-    ): Result<ResponseListRaw<TvShowRaw>, NetworkError> {
+    ): Result<ResponseListRaw<TvShowItemRaw>, NetworkError> {
         return getResult {
             httpClient.get("search/tv") {
                 parameter("query", searchKey)

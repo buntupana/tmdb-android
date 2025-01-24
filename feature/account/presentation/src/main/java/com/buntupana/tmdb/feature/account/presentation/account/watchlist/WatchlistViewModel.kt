@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
+import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.account.domain.usecase.GetMovieWatchlistPagingUseCase
 import com.buntupana.tmdb.feature.account.domain.usecase.GetTvShowWatchlistPagingUseCase
 import com.buntupana.tmdb.feature.account.domain.usecase.SetMediaWatchListUseCase
@@ -21,13 +22,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WatchlistViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val getMovieWatchlistPagingUseCase: GetMovieWatchlistPagingUseCase,
     private val getTvShowWatchlistPagingUseCase: GetTvShowWatchlistPagingUseCase,
     private val setMediaWatchListUseCase: SetMediaWatchListUseCase,
 ) : ViewModel() {
 
-    var state by mutableStateOf(WatchlistState())
+    private val args = savedStateHandle.navArgs<WatchListNav>()
+
+    var state by mutableStateOf(WatchlistState(selectedMediaType = args.mediaTypeSelected))
         private set
 
     private var _sideEffect = Channel<WatchlistSideEffect>()

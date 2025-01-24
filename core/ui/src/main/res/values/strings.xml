@@ -9,6 +9,9 @@
     <string name="text_cancel">Cancel</string>
     <string name="text_confirm">Confirm</string>
 
+    // Filter
+    <string name="text_last_added">Last Added</string>
+
     // Time
     <string name="text_hours_minutes">%1$dh %2$dm</string>
     <string name="text_minutes">%1$dm</string>

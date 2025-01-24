@@ -18,5 +18,6 @@ data class WatchlistState(
     val isWatchlistLoadingError: Boolean = false,
     val movieItems: Flow<PagingData<MediaItem.Movie>>? = null,
     val tvShowItems: Flow<PagingData<MediaItem.TvShow>>? = null,
-    val order: Order = Order.DESC
+    val order: Order = Order.DESC,
+    val selectedMediaType: MediaType = MediaType.MOVIE
 )

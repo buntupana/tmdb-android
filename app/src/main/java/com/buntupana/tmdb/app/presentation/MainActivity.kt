@@ -118,8 +118,8 @@ class MainActivity : ComponentActivity() {
                                         )
                                     )
                                 },
-                                onWatchListClick = {
-                                    navRoutesMain.navigate(WatchListNav)
+                                onWatchListClick = { mediaType ->
+                                    navRoutesMain.navigate(WatchListNav(mediaType))
                                 }
                             )
                         }

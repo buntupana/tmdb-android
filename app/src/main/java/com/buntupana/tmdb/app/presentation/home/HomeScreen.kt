@@ -40,7 +40,7 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 fun HomeScreen(
     onSignInClicked: () -> Unit,
     onSearchClicked: () -> Unit,
-    onWatchListClick: () -> Unit,
+    onWatchListClick: (mediaType: MediaType) -> Unit,
     onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
 ) {
     HomeScreenContent(
@@ -55,7 +55,7 @@ fun HomeScreen(
 fun HomeScreenContent(
     onSignInClicked: () -> Unit,
     onSearchClicked: () -> Unit,
-    onWatchListClick: () -> Unit,
+    onWatchListClick: (mediaType: MediaType) -> Unit,
     onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
 ) {
 

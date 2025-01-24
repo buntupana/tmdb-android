@@ -19,7 +19,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,6 +45,7 @@ import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.launch
+import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun WatchlistScreen(
@@ -116,6 +121,14 @@ fun WatchlistContent(
         val pagerState = rememberPagerState { MediaType.entries.size }
         val coroutineScope = rememberCoroutineScope()
 
+        var defaultPageSelector by remember { mutableStateOf(true) }
+
+        LaunchedEffect(defaultPageSelector) {
+            defaultPageSelector = false
+            val defaultIndex = MediaType.entries.indexOf(state.selectedMediaType)
+            pagerState.requestScrollToPage(defaultIndex)
+        }
+
         Column(
             modifier = Modifier.padding(paddingValues)
         ) {
@@ -160,7 +173,7 @@ fun WatchlistContent(
                             selected = pagerState.currentPage == index,
                             onClick = {
                                 coroutineScope.launch {
-                                    pagerState.scrollToPage(index)
+                                    pagerState.animateScrollToPage(index)
                                 }
                             },
                         )
@@ -170,7 +183,7 @@ fun WatchlistContent(
                 OrderButtonAnimation(
                     modifier = Modifier,
                     textColor = PrimaryColor.getOnBackgroundColor(),
-                    text = "Last Added",
+                    text = stringResource(RCore.string.text_last_added),
                     order = state.order,
                     onClick = onOrderClick
                 )
@@ -182,7 +195,6 @@ fun WatchlistContent(
                     .background(MaterialTheme.colorScheme.background),
                 state = pagerState,
                 beyondViewportPageCount = 1,
-                userScrollEnabled = false
             ) { currentPage ->
 
                 val pagingItems = when (currentPage) {

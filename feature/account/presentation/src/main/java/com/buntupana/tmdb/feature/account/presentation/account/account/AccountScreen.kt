@@ -49,7 +49,7 @@ import com.buntupana.tmdb.core.ui.R as RCore
 fun AccountScreen(
     viewModel: AccountViewModel = hiltViewModel(),
     onSignInClick: () -> Unit,
-    onWatchListClick: () -> Unit,
+    onWatchListClick: (mediaType: MediaType) -> Unit,
     onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
 ) {
 
@@ -105,7 +105,7 @@ fun AccountContent(
     state: AccountState,
     onSignInClick: () -> Unit,
     onSignOutClick: () -> Unit,
-    onWatchListClick: () -> Unit,
+    onWatchListClick: (mediaType: MediaType) -> Unit,
     changeWatchlistType: (mediaFilter: MediaFilter) -> Unit,
     navigateToDetail: (mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem, posterDominantColor: Color) -> Unit
 ) {
@@ -132,7 +132,13 @@ fun AccountContent(
                 title = stringResource(id = RCore.string.text_watchlist),
                 filterSet = state.watchlistFilterSet,
                 indexSelected = state.watchlistFilterSet.indexOf(state.watchlistFilterSelected),
-                titleClicked = onWatchListClick,
+                titleClicked = {
+                    val mediaType = when(state.watchlistFilterSelected) {
+                        MediaFilter.Movies -> MediaType.MOVIE
+                        MediaFilter.TvShows -> MediaType.TV_SHOW
+                    }
+                    onWatchListClick(mediaType)
+                },
                 filterClicked = { item, _ ->
                     changeWatchlistType(item)
                     lazyListStateWatchlist.requestScrollToItem(index = 0)

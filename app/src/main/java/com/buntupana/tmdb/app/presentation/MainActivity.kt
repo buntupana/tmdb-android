@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import com.buntupana.tmdb.app.presentation.home.HomeNav
 import com.buntupana.tmdb.app.presentation.home.HomeScreen
+import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.theme.TMDBTheme
@@ -42,6 +43,7 @@ import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
 import com.buntupana.tmdb.feature.search.presentation.SearchNav
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -119,7 +121,11 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 onWatchListClick = { mediaType ->
-                                    navRoutesMain.navigate(WatchListNav(mediaType))
+                                    val mediaFilter = when(mediaType) {
+                                        MediaType.MOVIE -> MediaFilter.MOVIE
+                                        MediaType.TV_SHOW -> MediaFilter.TV_SHOW
+                                    }
+                                    navRoutesMain.navigate(WatchListNav(mediaFilter))
                                 }
                             )
                         }

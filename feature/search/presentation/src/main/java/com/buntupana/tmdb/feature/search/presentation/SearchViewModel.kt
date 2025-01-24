@@ -59,7 +59,7 @@ class SearchViewModel @Inject constructor(
                     isSearchSuggestionsLoading = false,
                     searchSuggestionList = null,
                     isSearchSuggestionsError = false,
-                    defaultSearchType = event.searchType ?: SearchType.MOVIE
+                    defaultPage = SearchType.entries.indexOf(event.searchType)
                 )
                 searchMovies(event.searchKey)
                 searchTvShows(event.searchKey)

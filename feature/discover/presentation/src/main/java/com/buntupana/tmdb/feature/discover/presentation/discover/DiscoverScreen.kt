@@ -22,9 +22,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.composables.CarouselMediaItem
 import com.buntupana.tmdb.core.ui.composables.TitleAndFilter
+import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.discover.presentation.R
-import com.buntupana.tmdb.feature.discover.presentation.filter_type.FreeToWatchFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -73,7 +73,7 @@ fun DiscoverContent(
     state: DiscoverState,
     changeTrendingType: (trendingFilter: TrendingFilter) -> Unit,
     changePopularType: (popularFilter: PopularFilter) -> Unit,
-    changeFreeToWatchType: (freeToWatchFilter: FreeToWatchFilter) -> Unit,
+    changeFreeToWatchType: (freeToWatchFilter: MediaFilter) -> Unit,
     navigateToDetail: (mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem, posterDominantColor: Color) -> Unit
 ) {
 

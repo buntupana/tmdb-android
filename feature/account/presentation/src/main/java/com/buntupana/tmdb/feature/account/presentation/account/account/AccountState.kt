@@ -7,11 +7,7 @@ data class AccountState(
     val isUserLogged: Boolean = false,
     val username: String? = null,
     val avatarUrl: String? = null,
-    val watchlistFilterSet: Set<MediaFilter> = setOf(
-        MediaFilter.Movies,
-        MediaFilter.TvShows,
-    ),
-    val watchlistFilterSelected: MediaFilter = MediaFilter.Movies,
+    val watchlistFilterSelected: MediaFilter = MediaFilter.MOVIE,
     val watchlistMediaItemList: List<MediaItem> = emptyList(),
     val isWatchlistLoadingError: Boolean = false
 )

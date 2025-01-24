@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.discover.presentation.discover
 
-import com.buntupana.tmdb.feature.discover.presentation.filter_type.FreeToWatchFilter
+import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
 
@@ -12,22 +12,11 @@ data class DiscoverState(
     val isFreeToWatchMediaLoadingError: Boolean = false,
     val trendingMediaItemList: List<com.panabuntu.tmdb.core.common.model.MediaItem> = emptyList(),
     val isTrendingMediaLoadingError: Boolean = false,
-    val trendingFilterSelected: TrendingFilter = TrendingFilter.Today,
-    val popularFilterSelected: PopularFilter = PopularFilter.Streaming,
-    val freeToWatchFilterSelected: FreeToWatchFilter = FreeToWatchFilter.Movies,
+    val trendingFilterSelected: TrendingFilter = TrendingFilter.TODAY,
+    val popularFilterSelected: PopularFilter = PopularFilter.STREAMING,
+    val freeToWatchFilterSelected: MediaFilter = MediaFilter.MOVIE,
 
-    val popularFilterSet: Set<PopularFilter> = setOf(
-        PopularFilter.Streaming,
-        PopularFilter.OnTv,
-        PopularFilter.ForRent,
-        PopularFilter.InTheatres,
-    ),
-    val trendingFilterSet: Set<TrendingFilter> = setOf(
-        TrendingFilter.Today,
-        TrendingFilter.ThisWeek
-    ),
-    val freeToWatchFilterSet: Set<FreeToWatchFilter> = setOf(
-        FreeToWatchFilter.Movies,
-        FreeToWatchFilter.TvShows
-    )
+    val popularFilterSet: Set<PopularFilter> = PopularFilter.entries.toSet(),
+    val trendingFilterSet: Set<TrendingFilter> = TrendingFilter.entries.toSet(),
+    val freeToWatchFilterSet: Set<MediaFilter> = MediaFilter.entries.toSet()
 )

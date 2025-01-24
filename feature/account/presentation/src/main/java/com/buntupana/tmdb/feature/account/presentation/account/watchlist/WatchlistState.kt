@@ -10,14 +10,10 @@ import kotlinx.coroutines.flow.Flow
 data class WatchlistState(
     val isLoading: Boolean = false,
     val mediaType: MediaType = MediaType.MOVIE,
-    val watchlistFilterSet: Set<MediaFilter> = setOf(
-        MediaFilter.Movies,
-        MediaFilter.TvShows,
-    ),
-    val watchlistFilterSelected: MediaFilter = MediaFilter.Movies,
+    val watchlistFilterSelected: MediaFilter = MediaFilter.MOVIE,
     val isWatchlistLoadingError: Boolean = false,
     val movieItems: Flow<PagingData<MediaItem.Movie>>? = null,
     val tvShowItems: Flow<PagingData<MediaItem.TvShow>>? = null,
     val order: Order = Order.DESC,
-    val selectedMediaType: MediaType = MediaType.MOVIE
+    val defaultPage: Int = MediaFilter.entries.indexOf(MediaFilter.MOVIE)
 )

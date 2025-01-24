@@ -5,11 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.util.LOADING_DELAY
+import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
+import com.buntupana.tmdb.feature.discover.domain.entity.PopularType
 import com.buntupana.tmdb.feature.discover.domain.usecase.GetFreeToWatchMediaListUseCase
 import com.buntupana.tmdb.feature.discover.domain.usecase.GetPopularMoviesListUseCase
 import com.buntupana.tmdb.feature.discover.domain.usecase.GetTrendingMediaListUseCase
-import com.buntupana.tmdb.feature.discover.presentation.filter_type.FreeToWatchFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
 import com.panabuntu.tmdb.core.common.entity.onError
@@ -63,8 +65,8 @@ class DiscoverViewModel @Inject constructor(
         }
 
         val trendingType = when (trendingFilter) {
-            TrendingFilter.ThisWeek -> com.buntupana.tmdb.feature.discover.domain.entity.TrendingType.THIS_WEEK
-            TrendingFilter.Today -> com.buntupana.tmdb.feature.discover.domain.entity.TrendingType.TODAY
+            TrendingFilter.THIS_WEEK -> com.buntupana.tmdb.feature.discover.domain.entity.TrendingType.THIS_WEEK
+            TrendingFilter.TODAY -> com.buntupana.tmdb.feature.discover.domain.entity.TrendingType.TODAY
         }
 
         getTrendingJob?.cancel()
@@ -101,10 +103,10 @@ class DiscoverViewModel @Inject constructor(
         }
 
         val popularType = when (popularFilter) {
-            PopularFilter.ForRent -> com.buntupana.tmdb.feature.discover.domain.entity.PopularType.FOR_RENT
-            PopularFilter.InTheatres -> com.buntupana.tmdb.feature.discover.domain.entity.PopularType.IN_THEATRES
-            PopularFilter.OnTv -> com.buntupana.tmdb.feature.discover.domain.entity.PopularType.ON_TV
-            PopularFilter.Streaming -> com.buntupana.tmdb.feature.discover.domain.entity.PopularType.STREAMING
+            PopularFilter.FOR_RENT -> PopularType.FOR_RENT
+            PopularFilter.IN_THEATRES -> PopularType.IN_THEATRES
+            PopularFilter.ON_TV -> PopularType.ON_TV
+            PopularFilter.STREAMING -> PopularType.STREAMING
         }
 
         getPopularMoviesJob?.cancel()
@@ -134,15 +136,15 @@ class DiscoverViewModel @Inject constructor(
         }
     }
 
-    private fun getFreeToWatchList(freeToWatchFilter: FreeToWatchFilter) {
+    private fun getFreeToWatchList(freeToWatchFilter: MediaFilter) {
 
         if (freeToWatchFilter == state.freeToWatchFilterSelected && state.freeToWatchMediaItemList.isNotEmpty()) {
             return
         }
 
         val freeToWatchType = when (freeToWatchFilter) {
-            FreeToWatchFilter.Movies -> com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType.MOVIES
-            FreeToWatchFilter.TvShows -> com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType.TV_SHOWS
+            MediaFilter.MOVIE -> FreeToWatchType.MOVIES
+            MediaFilter.TV_SHOW -> FreeToWatchType.TV_SHOWS
         }
 
         getFreeToWatchJob?.cancel()

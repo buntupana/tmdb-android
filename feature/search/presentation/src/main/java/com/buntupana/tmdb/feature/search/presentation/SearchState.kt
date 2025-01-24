@@ -19,5 +19,5 @@ data class SearchState(
     val tvShowItems: Flow<PagingData<MediaItem.TvShow>> = flowOf(PagingData.empty()),
     val personItems: Flow<PagingData<PersonItem>> = flowOf(PagingData.empty()),
     val resultCountList: List<MediaResultCount> = emptyList(),
-    val defaultSearchType: SearchType = SearchType.MOVIE
+    val defaultPage: Int = SearchType.entries.indexOf(SearchType.MOVIE)
 )

@@ -19,11 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +34,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.composables.OrderButtonAnimation
 import com.buntupana.tmdb.core.ui.composables.TopBarTitle
+import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -118,16 +115,11 @@ fun WatchlistContent(
         }
     ) { paddingValues ->
 
-        val pagerState = rememberPagerState { MediaType.entries.size }
-        val coroutineScope = rememberCoroutineScope()
+        val pagerState = rememberPagerState(
+            initialPage = state.defaultPage
+        ) { MediaType.entries.size }
 
-        var defaultPageSelector by remember { mutableStateOf(true) }
-
-        LaunchedEffect(defaultPageSelector) {
-            defaultPageSelector = false
-            val defaultIndex = MediaType.entries.indexOf(state.selectedMediaType)
-            pagerState.requestScrollToPage(defaultIndex)
-        }
+        val scope = rememberCoroutineScope()
 
         Column(
             modifier = Modifier.padding(paddingValues)
@@ -153,17 +145,11 @@ fun WatchlistContent(
                         )
                     }
                 ) {
-
-                    MediaType.entries.forEachIndexed { index, mediaType ->
-
-                        val title = when (mediaType) {
-                            MediaType.MOVIE -> com.buntupana.tmdb.core.ui.R.string.text_movies
-                            MediaType.TV_SHOW -> com.buntupana.tmdb.core.ui.R.string.text_tv_shows
-                        }
+                    MediaFilter.entries.forEachIndexed { index, mediaType ->
 
                         Tab(
                             text = {
-                                Text(text = stringResource(title))
+                                Text(text = stringResource(mediaType.strRes))
 //                            TabSearchResult(
 //                                titleResId = titleResId,
 //                                resultCount = resultCount.resultCount,
@@ -172,7 +158,7 @@ fun WatchlistContent(
                             },
                             selected = pagerState.currentPage == index,
                             onClick = {
-                                coroutineScope.launch {
+                                scope.launch {
                                     pagerState.animateScrollToPage(index)
                                 }
                             },
@@ -196,7 +182,6 @@ fun WatchlistContent(
                 state = pagerState,
                 beyondViewportPageCount = 1,
             ) { currentPage ->
-
                 val pagingItems = when (currentPage) {
                     MediaType.entries.indexOf(MediaType.MOVIE) -> state.movieItems?.collectAsLazyPagingItems()
                     MediaType.entries.indexOf(MediaType.TV_SHOW) -> state.tvShowItems?.collectAsLazyPagingItems()

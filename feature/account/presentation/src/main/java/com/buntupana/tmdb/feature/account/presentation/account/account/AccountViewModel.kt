@@ -61,8 +61,8 @@ class AccountViewModel @Inject constructor(
         getWatchlistJob?.cancel()
 
         val mediaType = when (mediaFilter) {
-            MediaFilter.Movies -> MediaType.MOVIE
-            MediaFilter.TvShows -> MediaType.TV_SHOW
+            MediaFilter.MOVIE -> MediaType.MOVIE
+            MediaFilter.TV_SHOW -> MediaType.TV_SHOW
         }
 
         getWatchlistJob = viewModelScope.launch {

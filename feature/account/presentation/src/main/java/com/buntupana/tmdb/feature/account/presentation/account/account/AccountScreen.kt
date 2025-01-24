@@ -130,12 +130,12 @@ fun AccountContent(
             TitleAndFilter(
                 modifier = Modifier.padding(vertical = Dimens.padding.medium),
                 title = stringResource(id = RCore.string.text_watchlist),
-                filterSet = state.watchlistFilterSet,
-                indexSelected = state.watchlistFilterSet.indexOf(state.watchlistFilterSelected),
+                filterSet = MediaFilter.entries.toSet(),
+                indexSelected = MediaFilter.entries.toSet().indexOf(state.watchlistFilterSelected),
                 titleClicked = {
                     val mediaType = when(state.watchlistFilterSelected) {
-                        MediaFilter.Movies -> MediaType.MOVIE
-                        MediaFilter.TvShows -> MediaType.TV_SHOW
+                        MediaFilter.MOVIE -> MediaType.MOVIE
+                        MediaFilter.TV_SHOW -> MediaType.TV_SHOW
                     }
                     onWatchListClick(mediaType)
                 },

@@ -30,7 +30,9 @@ class WatchlistViewModel @Inject constructor(
 
     private val args = savedStateHandle.navArgs<WatchListNav>()
 
-    var state by mutableStateOf(WatchlistState(selectedMediaType = args.mediaTypeSelected))
+    var state by mutableStateOf(
+        WatchlistState(defaultPage = MediaFilter.entries.indexOf(args.mediaFilterSelected))
+    )
         private set
 
     private var _sideEffect = Channel<WatchlistSideEffect>()
@@ -51,23 +53,23 @@ class WatchlistViewModel @Inject constructor(
 
     private suspend fun getWatchlist() {
         if (state.movieItems == null || state.tvShowItems == null) {
-            onEvent(WatchlistEvent.GetWatchlist(MediaFilter.Movies))
-            onEvent(WatchlistEvent.GetWatchlist(MediaFilter.TvShows))
+            onEvent(WatchlistEvent.GetWatchlist(MediaFilter.MOVIE))
+            onEvent(WatchlistEvent.GetWatchlist(MediaFilter.TV_SHOW))
         } else {
             _sideEffect.send(WatchlistSideEffect.GetWatchlist)
         }
     }
 
-    private suspend fun getWatchlist(mediaType: MediaFilter) {
+    private suspend fun getWatchlist(mediaFilter: MediaFilter) {
 
-        when (mediaType) {
-            MediaFilter.Movies -> {
+        when (mediaFilter) {
+            MediaFilter.MOVIE -> {
                 getMovieWatchlistPagingUseCase(order = state.order).let {
                     state = state.copy(movieItems = it.cachedIn(viewModelScope))
                 }
             }
 
-            MediaFilter.TvShows -> {
+            MediaFilter.TV_SHOW -> {
                 getTvShowWatchlistPagingUseCase(order = state.order).let {
                     state = state.copy(tvShowItems = it.cachedIn(viewModelScope))
                 }

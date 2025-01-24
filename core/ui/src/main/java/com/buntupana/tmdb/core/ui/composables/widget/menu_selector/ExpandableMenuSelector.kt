@@ -175,20 +175,23 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
 @Composable
 fun ExpandableMenuSelectorPreview() {
     ExpandableMenuSelector(
-        menuItemSet = setOf(
-            ExpandableMenuSelectorItemSample.Streaming,
-            ExpandableMenuSelectorItemSample.OnTv,
-            ExpandableMenuSelectorItemSample.ForRent,
-            ExpandableMenuSelectorItemSample.InTheatres
-        ),
+        menuItemSet = ExpandableMenuSelectorItemSample.entries.toSet(),
         menuAlign = ExpandableMenuSelectorAlign.START,
         defaultCollapsed = true
     )
 }
 
-sealed class ExpandableMenuSelectorItemSample(strRes: Int) : ExpandableMenuSelectorItem(strRes) {
-    data object Streaming : ExpandableMenuSelectorItemSample(R.string.text_menu_selector_sample_streaming)
-    data object OnTv : ExpandableMenuSelectorItemSample(R.string.text_menu_selector_sample_on_tv)
-    data object ForRent : ExpandableMenuSelectorItemSample(R.string.text_menu_selector_sample_for_rent)
-    data object InTheatres : ExpandableMenuSelectorItemSample(R.string.text_menu_selector_sample_in_theatres)
+enum class ExpandableMenuSelectorItemSample : ExpandableMenuSelectorItem {
+    STREAMING{
+        override val strRes: Int = R.string.text_menu_selector_sample_streaming
+    },
+    ON_TV{
+        override val strRes: Int = R.string.text_menu_selector_sample_on_tv
+    },
+    FOR_RENT{
+        override val strRes: Int = R.string.text_menu_selector_sample_for_rent
+    },
+    IN_THEATRES{
+        override val strRes: Int = R.string.text_menu_selector_sample_in_theatres
+    }
 }

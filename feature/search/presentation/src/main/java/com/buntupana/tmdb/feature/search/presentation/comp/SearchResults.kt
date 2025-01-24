@@ -13,12 +13,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -42,19 +37,13 @@ fun SearchResults(
     onPersonClick: (personId: Long) -> Unit
 ) {
 
+    val scope = rememberCoroutineScope()
+
     Column(modifier = modifier) {
 
-        val coroutineScope = rememberCoroutineScope()
-        val pagerState = rememberPagerState { searchState.resultCountList.size }
-
-        var defaultPageSelector by remember { mutableStateOf(true) }
-
-        LaunchedEffect(defaultPageSelector) {
-            defaultPageSelector = false
-            val defaultIndex =
-                searchState.resultCountList.indexOfFirst { it.searchType == searchState.defaultSearchType }
-            pagerState.requestScrollToPage(defaultIndex)
-        }
+        val pagerState = rememberPagerState(
+            initialPage = searchState.defaultPage
+        ) { searchState.resultCountList.size }
 
         // Adding a tab bar with result titles
         ScrollableTabRow(
@@ -86,7 +75,7 @@ fun SearchResults(
                     },
                     selected = pagerState.currentPage == index,
                     onClick = {
-                        coroutineScope.launch {
+                        scope.launch {
                             pagerState.animateScrollToPage(index)
                         }
                     },
@@ -148,6 +137,6 @@ fun SearchResultsPreview() {
             )
         ),
         onMediaClick = { _, _ -> },
-        onPersonClick = {}
+        onPersonClick = {},
     )
 }

@@ -77,7 +77,7 @@ class WatchlistViewModel @Inject constructor(
             Order.ASC -> Order.DESC
             Order.DESC -> Order.ASC
         }
-        state = state.copy(order = order)
+        state = state.copy(order = order, movieItems = null, tvShowItems = null)
         getWatchlist()
     }
 }

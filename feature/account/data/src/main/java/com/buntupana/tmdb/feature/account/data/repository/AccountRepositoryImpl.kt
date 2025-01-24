@@ -69,7 +69,8 @@ class AccountRepositoryImpl @Inject constructor(
                     networkCall = { page ->
                         accountRemoteDataSource.getWatchlistMovie(
                             accountId = session.value.accountDetails?.id ?: 0,
-                            page = page
+                            page = page,
+                            order = order
                         )
                     },
                     mapItem = {
@@ -106,7 +107,8 @@ class AccountRepositoryImpl @Inject constructor(
                     networkCall = { page ->
                         accountRemoteDataSource.getWatchlistTvShow(
                             accountId = session.value.accountDetails?.id ?: 0,
-                            page = page
+                            page = page,
+                            order = order
                         )
                     },
                     mapItem = {

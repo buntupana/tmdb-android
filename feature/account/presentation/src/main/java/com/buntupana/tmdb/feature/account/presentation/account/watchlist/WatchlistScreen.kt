@@ -32,9 +32,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.buntupana.tmdb.core.ui.composables.OrderButtonAnimation
 import com.buntupana.tmdb.core.ui.composables.TopBarTitle
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
@@ -77,6 +79,9 @@ fun WatchlistScreen(
         onSearchClick = onSearchClick,
         onMediaClick = { mediaItem, mainPosterColor ->
             onMediaClick(mediaItem.id, mediaItem.mediaType, mainPosterColor)
+        },
+        onOrderClick = {
+            viewModel.onEvent(WatchlistEvent.ChangeOrder)
         }
     )
 }
@@ -88,6 +93,7 @@ fun WatchlistContent(
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color) -> Unit,
+    onOrderClick: () -> Unit
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -115,13 +121,15 @@ fun WatchlistContent(
         ) {
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(PrimaryColor),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
 
                 ScrollableTabRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentColor = Color.White,
+                    modifier = Modifier.weight(1f),
+                    contentColor = PrimaryColor.getOnBackgroundColor(),
                     edgePadding = 0.dp,
                     containerColor = PrimaryColor,
                     selectedTabIndex = pagerState.currentPage,
@@ -159,33 +167,14 @@ fun WatchlistContent(
                     }
                 }
 
-//                Text(
-//                    text = "Last Added",
-//                    color = PrimaryColor.getOnBackgroundColor()
-//                )
-//
-//                TextButton(
-//                    modifier = Modifier.background(Color.Red),
-//                    onClick = {}
-//                ) {
-//                    Row(
-//                        verticalAlignment = Alignment.CenterVertically
-//                    ) {
-//                        Text(
-//                            text = "Last Added",
-//                            color = PrimaryColor.getOnBackgroundColor()
-//                        )
-//                        Icon(
-//                            modifier = Modifier.padding(start = Dimens.padding.tiny),
-//                            painter = painterResource(com.buntupana.tmdb.core.ui.R.drawable.ic_watchlist),
-//                            contentDescription = null,
-//                            tint = PrimaryColor.getOnBackgroundColor()
-//                        )
-//                    }
-//                }
+                OrderButtonAnimation(
+                    modifier = Modifier,
+                    textColor = PrimaryColor.getOnBackgroundColor(),
+                    text = "Last Added",
+                    order = state.order,
+                    onClick = onOrderClick
+                )
             }
-
-
 
             HorizontalPager(
                 modifier = Modifier
@@ -215,11 +204,12 @@ fun WatchlistContent(
 
 @Preview
 @Composable
-fun WatchlistScreenPreview() {
+private fun WatchlistScreenPreview() {
     WatchlistContent(
         WatchlistState(),
         onBackClick = {},
         onSearchClick = {},
-        onMediaClick = { _, _ -> }
+        onMediaClick = { _, _ -> },
+        onOrderClick = {}
     )
 }

@@ -4,10 +4,10 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelectorItem
 
 enum class MediaFilter : ExpandableMenuSelectorItem {
-    MOVIE {
+    MOVIES {
         override val strRes: Int = R.string.text_movies
     },
-    TV_SHOW {
+    TV_SHOWS {
         override val strRes: Int = R.string.text_tv_shows
     },
 }

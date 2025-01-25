@@ -61,7 +61,7 @@ class AccountRemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getWatchlistMovie(
+    suspend fun getWatchlistMovies(
         accountId: Long,
         order: Order = Order.DESC,
         page: Int = 1
@@ -74,13 +74,39 @@ class AccountRemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getWatchlistTvShow(
+    suspend fun getWatchlistTvShows(
         accountId: Long,
         order: Order = Order.DESC,
         page: Int = 1
     ): Result<ResponseListRaw<TvShowItemRaw>, NetworkError> {
         return getResult<ResponseListRaw<TvShowItemRaw>> {
             httpClient.get(urlString = "account/$accountId/watchlist/tv") {
+                parameter("page", page)
+                parameter("sort_by", "created_at.${order.toApi()}")
+            }
+        }
+    }
+
+    suspend fun getFavoriteMovies(
+        accountId: Long,
+        order: Order = Order.DESC,
+        page: Int = 1
+    ): Result<ResponseListRaw<MovieItemRaw>, NetworkError> {
+        return getResult<ResponseListRaw<MovieItemRaw>> {
+            httpClient.get(urlString = "account/$accountId/favorite/movies") {
+                parameter("page", page)
+                parameter("sort_by", "created_at.${order.toApi()}")
+            }
+        }
+    }
+
+    suspend fun getFavoriteTvShows(
+        accountId: Long,
+        order: Order = Order.DESC,
+        page: Int = 1
+    ): Result<ResponseListRaw<TvShowItemRaw>, NetworkError> {
+        return getResult<ResponseListRaw<TvShowItemRaw>> {
+            httpClient.get(urlString = "account/$accountId/favorite/tv") {
                 parameter("page", page)
                 parameter("sort_by", "created_at.${order.toApi()}")
             }

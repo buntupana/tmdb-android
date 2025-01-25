@@ -45,4 +45,20 @@ interface AccountRepository {
         mediaId: Long,
         value: Int?
     ): Result<Unit, NetworkError>
+
+    suspend fun getWatchlistMoviesTotalCount(): Result<Int, NetworkError>
+
+    suspend fun getWatchlistTvShowsTotalCount(): Result<Int, NetworkError>
+
+    suspend fun getFavoriteMoviesTotalCount(): Result<Int, NetworkError>
+
+    suspend fun getFavoriteMovies(): Result<List<MediaItem>, NetworkError>
+
+    suspend fun getFavoriteMoviePaging(order: Order): Flow<PagingData<MediaItem.Movie>>
+
+    suspend fun getFavoriteTvShowsTotalCount(): Result<Int, NetworkError>
+
+    suspend fun getFavoriteTvShows(): Result<List<MediaItem>, NetworkError>
+
+    suspend fun getFavoriteTvShowPaging(order: Order): Flow<PagingData<MediaItem.TvShow>>
 }

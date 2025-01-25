@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.util.LOADING_DELAY
+import com.buntupana.tmdb.feature.account.domain.usecase.GetFavoritesUseCase
 import com.buntupana.tmdb.feature.account.domain.usecase.GetWatchlistUseCase
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
@@ -23,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AccountViewModel @Inject constructor(
     sessionManager: SessionManager,
-    private val getWatchlistUseCase: GetWatchlistUseCase
+    private val getWatchlistUseCase: GetWatchlistUseCase,
+    private val getFavoritesUseCase: GetFavoritesUseCase
 ) : ViewModel() {
 
     private val session = sessionManager.session
@@ -32,6 +34,7 @@ class AccountViewModel @Inject constructor(
         private set
 
     private var getWatchlistJob: Job? = null
+    private var getFavoritesJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -50,6 +53,7 @@ class AccountViewModel @Inject constructor(
         viewModelScope.launch {
             when (event) {
                 is AccountEvent.GetWatchlist -> getWatchlist(event.mediaFilter)
+                is AccountEvent.GetFavorites -> getFavorites(event.mediaFilter)
             }
         }
     }
@@ -61,8 +65,8 @@ class AccountViewModel @Inject constructor(
         getWatchlistJob?.cancel()
 
         val mediaType = when (mediaFilter) {
-            MediaFilter.MOVIE -> MediaType.MOVIE
-            MediaFilter.TV_SHOW -> MediaType.TV_SHOW
+            MediaFilter.MOVIES -> MediaType.MOVIE
+            MediaFilter.TV_SHOWS -> MediaType.TV_SHOW
         }
 
         getWatchlistJob = viewModelScope.launch {
@@ -79,9 +83,7 @@ class AccountViewModel @Inject constructor(
 
             getWatchlistUseCase(mediaType)
                 .onError {
-                    state = state.copy(
-                        isWatchlistLoadingError = true
-                    )
+                    state = state.copy(isWatchlistLoadingError = true)
                 }
                 .onSuccess { mediaItemList ->
                     // Fake delay to show loading
@@ -89,6 +91,44 @@ class AccountViewModel @Inject constructor(
                     state = state.copy(
                         isWatchlistLoadingError = false,
                         watchlistMediaItemList = mediaItemList
+                    )
+                }
+        }
+    }
+
+    private fun getFavorites(mediaFilter: MediaFilter) {
+
+        if (session.value.isLogged.not()) return
+
+        getFavoritesJob?.cancel()
+
+        val mediaType = when (mediaFilter) {
+            MediaFilter.MOVIES -> MediaType.MOVIE
+            MediaFilter.TV_SHOWS -> MediaType.TV_SHOW
+        }
+
+        getFavoritesJob = viewModelScope.launch {
+
+            state = state.copy(
+                isFavoritesLoadingError = false,
+                favoritesFilterSelected = mediaFilter,
+                favoritesMediaItemList = if (mediaFilter == state.favoritesFilterSelected) {
+                    state.favoritesMediaItemList
+                } else {
+                    emptyList()
+                }
+            )
+
+            getFavoritesUseCase(mediaType)
+                .onError {
+                    state = state.copy(isFavoritesLoadingError = true)
+                }
+                .onSuccess { mediaItemList ->
+                    // Fake delay to show loading
+                    delay(LOADING_DELAY)
+                    state = state.copy(
+                        isFavoritesLoadingError = false,
+                        favoritesMediaItemList = mediaItemList
                     )
                 }
         }

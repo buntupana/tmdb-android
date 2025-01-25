@@ -41,12 +41,14 @@ fun HomeScreen(
     onSignInClicked: () -> Unit,
     onSearchClicked: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
+    onFavoritesClick: (mediaType: MediaType) -> Unit,
     onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
 ) {
     HomeScreenContent(
         onSignInClicked = onSignInClicked,
         onSearchClicked = onSearchClicked,
         onWatchListClick = onWatchListClick,
+        onFavoritesClick = onFavoritesClick,
         onMediaItemClicked = onMediaItemClicked
     )
 }
@@ -56,6 +58,7 @@ fun HomeScreenContent(
     onSignInClicked: () -> Unit,
     onSearchClicked: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
+    onFavoritesClick: (mediaType: MediaType) -> Unit,
     onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
 ) {
 
@@ -140,7 +143,8 @@ fun HomeScreenContent(
                 AccountScreen(
                     onSignInClick = onSignInClicked,
                     onWatchListClick = onWatchListClick,
-                    onMediaItemClicked = onMediaItemClicked
+                    onFavoritesClick = onFavoritesClick,
+                    onMediaItemClicked = onMediaItemClicked,
                 )
             }
         }
@@ -154,6 +158,7 @@ fun HomeScreenPreview() {
         onSignInClicked = {},
         onSearchClicked = {},
         onWatchListClick = {},
+        onFavoritesClick = {},
         onMediaItemClicked = { _, _, _ -> }
     )
 }

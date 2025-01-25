@@ -14,7 +14,7 @@ data class DiscoverState(
     val isTrendingMediaLoadingError: Boolean = false,
     val trendingFilterSelected: TrendingFilter = TrendingFilter.TODAY,
     val popularFilterSelected: PopularFilter = PopularFilter.STREAMING,
-    val freeToWatchFilterSelected: MediaFilter = MediaFilter.MOVIE,
+    val freeToWatchFilterSelected: MediaFilter = MediaFilter.MOVIES,
 
     val popularFilterSet: Set<PopularFilter> = PopularFilter.entries.toSet(),
     val trendingFilterSet: Set<TrendingFilter> = TrendingFilter.entries.toSet(),

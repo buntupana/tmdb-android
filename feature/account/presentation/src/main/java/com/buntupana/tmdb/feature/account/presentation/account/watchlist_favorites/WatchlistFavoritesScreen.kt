@@ -1,6 +1,7 @@
-package com.buntupana.tmdb.feature.account.presentation.account.watchlist
+package com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -32,13 +34,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.OrderButtonAnimation
 import com.buntupana.tmdb.core.ui.composables.TopBarTitle
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
+import com.buntupana.tmdb.feature.account.presentation.R
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.launch
@@ -46,7 +51,7 @@ import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun WatchlistScreen(
-    viewModel: WatchlistViewModel = hiltViewModel(),
+    viewModel: WatchlistFavoritesViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onMediaClick: (mediaItemId: Long, mediaType: MediaType, mainPosterColor: Color?) -> Unit,
@@ -60,12 +65,12 @@ fun WatchlistScreen(
     LaunchedEffect(lifecycleOwner.lifecycle) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
-            viewModel.onEvent(WatchlistEvent.GetWatchLists)
+            viewModel.onEvent(WatchlistFavoritesEvent.GetMediaItemList)
 
             launch {
                 viewModel.sideEffect.collect { sideEffect ->
                     when (sideEffect) {
-                        WatchlistSideEffect.GetWatchlist -> {
+                        WatchlistFavoritesSideEffect.RefreshMediaItemList -> {
                             movieItems?.refresh()
                             tvShowItems?.refresh()
                         }
@@ -83,7 +88,10 @@ fun WatchlistScreen(
             onMediaClick(mediaItem.id, mediaItem.mediaType, mainPosterColor)
         },
         onOrderClick = {
-            viewModel.onEvent(WatchlistEvent.ChangeOrder)
+            viewModel.onEvent(WatchlistFavoritesEvent.ChangeOrder)
+        },
+        onRetryClick = {
+            viewModel.onEvent(WatchlistFavoritesEvent.GetMediaItemList)
         }
     )
 }
@@ -91,11 +99,12 @@ fun WatchlistScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WatchlistContent(
-    state: WatchlistState,
+    state: WatchlistFavoritesState,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color) -> Unit,
-    onOrderClick: () -> Unit
+    onOrderClick: () -> Unit,
+    onRetryClick: () -> Unit
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -106,7 +115,7 @@ fun WatchlistContent(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBarTitle(
-                title = stringResource(com.buntupana.tmdb.core.ui.R.string.text_watchlist),
+                title = stringResource(state.screenType.titleResId),
                 backgroundColor = PrimaryColor,
                 onBackClick = onBackClick,
                 onSearchClick = onSearchClick,
@@ -114,6 +123,29 @@ fun WatchlistContent(
             )
         }
     ) { paddingValues ->
+
+        if (state.isLoading) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+            return@Scaffold
+        }
+
+        if (state.isError) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                ErrorAndRetry(
+                    modifier = Modifier.align(Alignment.Center),
+                    textColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
+                    errorMessage = stringResource(id = com.buntupana.tmdb.core.ui.R.string.message_loading_content_error),
+                    onRetryClick = onRetryClick
+                )
+            }
+
+            return@Scaffold
+        }
+
 
         val pagerState = rememberPagerState(
             initialPage = state.defaultPage
@@ -149,12 +181,18 @@ fun WatchlistContent(
 
                         Tab(
                             text = {
-                                Text(text = stringResource(mediaType.strRes))
-//                            TabSearchResult(
-//                                titleResId = titleResId,
-//                                resultCount = resultCount.resultCount,
-//                                isSelected = pagerState.currentPage == index
-//                            )
+                                Row {
+                                    val itemsCount = when (mediaType) {
+                                        MediaFilter.MOVIES -> state.movieItemsTotalCount
+                                        MediaFilter.TV_SHOWS -> state.tvShowItemsTotalCount
+                                    }
+                                    Text(text = stringResource(mediaType.strRes))
+
+                                    Text(
+                                        modifier = Modifier.padding(start = Dimens.padding.small),
+                                        text = itemsCount?.toString() ?: ""
+                                    )
+                                }
                             },
                             selected = pagerState.currentPage == index,
                             onClick = {
@@ -182,16 +220,25 @@ fun WatchlistContent(
                 state = pagerState,
                 beyondViewportPageCount = 1,
             ) { currentPage ->
-                val pagingItems = when (currentPage) {
-                    MediaType.entries.indexOf(MediaType.MOVIE) -> state.movieItems?.collectAsLazyPagingItems()
-                    MediaType.entries.indexOf(MediaType.TV_SHOW) -> state.tvShowItems?.collectAsLazyPagingItems()
-                    else -> state.movieItems?.collectAsLazyPagingItems()
+                val (mediaNameResId, pagingItems) = when (currentPage) {
+                    MediaFilter.entries.indexOf(MediaFilter.MOVIES) -> {
+                        MediaFilter.MOVIES.strRes to state.movieItems?.collectAsLazyPagingItems()
+                    }
+
+                    MediaFilter.entries.indexOf(MediaFilter.TV_SHOWS) -> {
+                        MediaFilter.TV_SHOWS.strRes to state.tvShowItems?.collectAsLazyPagingItems()
+                    }
+
+                    else -> MediaFilter.MOVIES.strRes to state.movieItems?.collectAsLazyPagingItems()
                 }
 
                 WatchlistPager(
                     modifier = Modifier.fillMaxSize(),
                     pagingItems = pagingItems,
-                    "",
+                    noResultMessage = stringResource(
+                        R.string.message_watchlist_no_results,
+                        stringResource(mediaNameResId)
+                    ),
                     onMediaClick = onMediaClick
                 )
             }
@@ -203,10 +250,17 @@ fun WatchlistContent(
 @Composable
 private fun WatchlistScreenPreview() {
     WatchlistContent(
-        WatchlistState(),
+        WatchlistFavoritesState(
+            isLoading = true,
+            screenType = ScreenType.FAVORITES,
+            isError = false,
+            movieItemsTotalCount = 15,
+            tvShowItemsTotalCount = null
+        ),
         onBackClick = {},
         onSearchClick = {},
         onMediaClick = { _, _ -> },
-        onOrderClick = {}
+        onOrderClick = {},
+        onRetryClick = {}
     )
 }

@@ -42,6 +42,8 @@ import com.buntupana.tmdb.feature.account.presentation.R
 import com.buntupana.tmdb.feature.account.presentation.account.composables.AccountInfoTop
 import com.buntupana.tmdb.feature.account.presentation.sign_out.SignOutDialog
 import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.panabuntu.tmdb.core.common.model.MediaItem
+import kotlinx.coroutines.launch
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +52,7 @@ fun AccountScreen(
     viewModel: AccountViewModel = hiltViewModel(),
     onSignInClick: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
+    onFavoritesClick: (mediaType: MediaType) -> Unit,
     onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
 ) {
 
@@ -57,7 +60,10 @@ fun AccountScreen(
 
     LaunchedEffect(lifecycleOwner.lifecycle) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.onEvent(AccountEvent.GetWatchlist(viewModel.state.watchlistFilterSelected))
+            launch {
+                viewModel.onEvent(AccountEvent.GetWatchlist(viewModel.state.watchlistFilterSelected))
+                viewModel.onEvent(AccountEvent.GetFavorites(viewModel.state.favoritesFilterSelected))
+            }
         }
     }
 
@@ -70,12 +76,16 @@ fun AccountScreen(
             showBottomSheet = true
         },
         onWatchListClick = onWatchListClick,
+        onFavoritesClick = onFavoritesClick,
         changeWatchlistType = { mediaFilter ->
             viewModel.onEvent(AccountEvent.GetWatchlist(mediaFilter))
         },
+        changeFavoritesType = { mediaFilter ->
+            viewModel.onEvent(AccountEvent.GetFavorites(mediaFilter))
+        },
         navigateToDetail = { mediaItem, posterDominantColor ->
             when (mediaItem) {
-                is com.panabuntu.tmdb.core.common.model.MediaItem.Movie -> {
+                is MediaItem.Movie -> {
                     onMediaItemClicked(
                         mediaItem.id,
                         MediaType.MOVIE,
@@ -83,7 +93,7 @@ fun AccountScreen(
                     )
                 }
 
-                is com.panabuntu.tmdb.core.common.model.MediaItem.TvShow -> {
+                is MediaItem.TvShow -> {
                     onMediaItemClicked(
                         mediaItem.id,
                         MediaType.TV_SHOW,
@@ -106,8 +116,10 @@ fun AccountContent(
     onSignInClick: () -> Unit,
     onSignOutClick: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
+    onFavoritesClick: (mediaType: MediaType) -> Unit,
     changeWatchlistType: (mediaFilter: MediaFilter) -> Unit,
-    navigateToDetail: (mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem, posterDominantColor: Color) -> Unit
+    changeFavoritesType: (mediaFilter: MediaFilter) -> Unit,
+    navigateToDetail: (mediaItem: MediaItem, posterDominantColor: Color) -> Unit
 ) {
 
     if (state.isUserLogged) {
@@ -134,8 +146,8 @@ fun AccountContent(
                 indexSelected = MediaFilter.entries.toSet().indexOf(state.watchlistFilterSelected),
                 titleClicked = {
                     val mediaType = when(state.watchlistFilterSelected) {
-                        MediaFilter.MOVIE -> MediaType.MOVIE
-                        MediaFilter.TV_SHOW -> MediaType.TV_SHOW
+                        MediaFilter.MOVIES -> MediaType.MOVIE
+                        MediaFilter.TV_SHOWS -> MediaType.TV_SHOW
                     }
                     onWatchListClick(mediaType)
                 },
@@ -159,32 +171,36 @@ fun AccountContent(
                 }
             )
 
-            Spacer(Modifier.padding(vertical = Dimens.padding.small))
+            TitleAndFilter(
+                modifier = Modifier.padding(vertical = Dimens.padding.medium),
+                title = stringResource(id = RCore.string.text_favorites),
+                filterSet = MediaFilter.entries.toSet(),
+                indexSelected = MediaFilter.entries.toSet().indexOf(state.favoritesFilterSelected),
+                titleClicked = {
+                    val mediaType = when(state.favoritesFilterSelected) {
+                        MediaFilter.MOVIES -> MediaType.MOVIE
+                        MediaFilter.TV_SHOWS -> MediaType.TV_SHOW
+                    }
+                    onFavoritesClick(mediaType)
+                },
+                filterClicked = { item, _ ->
+                    changeFavoritesType(item)
+                    lazyListStateFavorites.requestScrollToItem(index = 0)
+                }
+            )
 
-//            TitleAndFilter(
-//                modifier = Modifier.padding(vertical = Dimens.padding.medium),
-//                title = stringResource(id = RCore.string.text_favorites),
-//                filterSet = state.watchlistFilterSet,
-//                indexSelected = state.watchlistFilterSet.indexOf(state.watchlistFilterSelected),
-//                titleClicked = onWatchListClick,
-//                filterClicked = { item, _ ->
-//                    changeWatchlistType(item)
-//                    lazyListStateFavorites.requestScrollToItem(index = 0)
-//                }
-//            )
-//
-//            CarouselMediaItem(
-//                modifier = Modifier.fillMaxWidth(),
-//                mediaItemList = state.watchlistMediaItemList,
-//                isLoadingError = state.isWatchlistLoadingError,
-//                lazyListState = lazyListStateFavorites,
-//                onItemClicked = { mediaItem, mainPosterColor ->
-//                    navigateToDetail(mediaItem, mainPosterColor)
-//                },
-//                onRetryClicked = {
-//                    changeWatchlistType(state.watchlistFilterSelected)
-//                }
-//            )
+            CarouselMediaItem(
+                modifier = Modifier.fillMaxWidth(),
+                mediaItemList = state.favoritesMediaItemList,
+                isLoadingError = state.isFavoritesLoadingError,
+                lazyListState = lazyListStateFavorites,
+                onItemClicked = { mediaItem, mainPosterColor ->
+                    navigateToDetail(mediaItem, mainPosterColor)
+                },
+                onRetryClicked = {
+                    changeFavoritesType(state.favoritesFilterSelected)
+                }
+            )
 
             Spacer(Modifier.padding(vertical = Dimens.padding.vertical))
 
@@ -227,7 +243,9 @@ fun AccountScreenPreview() {
         onSignInClick = {},
         onSignOutClick = {},
         onWatchListClick = {},
+        onFavoritesClick = {},
         changeWatchlistType = {},
+        changeFavoritesType = {},
         navigateToDetail = { _, _ -> }
     )
 }

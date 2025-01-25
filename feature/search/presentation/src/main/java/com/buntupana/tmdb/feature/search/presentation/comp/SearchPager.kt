@@ -9,18 +9,29 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.paging.LoadState
+import androidx.paging.LoadStates
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.model.PersonItem
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun SearchPager(
@@ -134,7 +145,14 @@ fun SearchPager(
             }
 
             is LoadState.Error -> {
-                // TODO: item to show when append paging fails
+                item {
+                    ErrorAndRetry(
+                        modifier = Modifier.fillMaxWidth(),
+                        textColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
+                        errorMessage = stringResource(R.string.message_loading_content_error),
+                        onRetryClick = { pagingItems.retry() }
+                    )
+                }
             }
 
             else -> {}
@@ -143,4 +161,26 @@ fun SearchPager(
             Spacer(modifier = Modifier.height(Dimens.padding.tiny))
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SearchPagerPreview() {
+
+    val itemsList = PagingData.from(
+        data = listOf(mediaItemMovie, mediaItemMovie),
+        sourceLoadStates = LoadStates(
+            refresh = LoadState.NotLoading(true),
+            prepend = LoadState.NotLoading(true),
+            append = LoadState.Error(Throwable())
+        )
+    )
+
+    SearchPager(
+        modifier = Modifier.fillMaxSize(),
+        pagingItems = flowOf(itemsList).collectAsLazyPagingItems(),
+        noResultMessage = "no results",
+        onMediaClick = { _, _ -> },
+        onPersonClick = {}
+    )
 }

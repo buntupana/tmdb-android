@@ -27,8 +27,9 @@ import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.theme.TMDBTheme
 import com.buntupana.tmdb.core.ui.util.ObserveAsEvents
-import com.buntupana.tmdb.feature.account.presentation.account.watchlist.WatchListNav
-import com.buntupana.tmdb.feature.account.presentation.account.watchlist.WatchlistScreen
+import com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites.ScreenType
+import com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites.WatchListFavoritesNav
+import com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites.WatchlistScreen
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInNav
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInScreen
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNav
@@ -122,10 +123,17 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onWatchListClick = { mediaType ->
                                     val mediaFilter = when(mediaType) {
-                                        MediaType.MOVIE -> MediaFilter.MOVIE
-                                        MediaType.TV_SHOW -> MediaFilter.TV_SHOW
+                                        MediaType.MOVIE -> MediaFilter.MOVIES
+                                        MediaType.TV_SHOW -> MediaFilter.TV_SHOWS
                                     }
-                                    navRoutesMain.navigate(WatchListNav(mediaFilter))
+                                    navRoutesMain.navigate(WatchListFavoritesNav(ScreenType.WATCHLIST, mediaFilter))
+                                },
+                                onFavoritesClick = { mediaType ->
+                                    val mediaFilter = when(mediaType) {
+                                        MediaType.MOVIE -> MediaFilter.MOVIES
+                                        MediaType.TV_SHOW -> MediaFilter.TV_SHOWS
+                                    }
+                                    navRoutesMain.navigate(WatchListFavoritesNav(ScreenType.FAVORITES, mediaFilter))
                                 }
                             )
                         }
@@ -280,7 +288,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
-                        composable<WatchListNav> {
+                        composable<WatchListFavoritesNav> {
                             WatchlistScreen(
                                 onBackClick = { navRoutesMain.popBackStack() },
                                 onSearchClick = { navRoutesMain.navigate(SearchNav) },

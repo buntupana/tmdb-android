@@ -143,8 +143,8 @@ class DiscoverViewModel @Inject constructor(
         }
 
         val freeToWatchType = when (freeToWatchFilter) {
-            MediaFilter.MOVIE -> FreeToWatchType.MOVIES
-            MediaFilter.TV_SHOW -> FreeToWatchType.TV_SHOWS
+            MediaFilter.MOVIES -> FreeToWatchType.MOVIES
+            MediaFilter.TV_SHOWS -> FreeToWatchType.TV_SHOWS
         }
 
         getFreeToWatchJob?.cancel()

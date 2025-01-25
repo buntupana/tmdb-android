@@ -10,11 +10,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.util.navArgs
+import com.buntupana.tmdb.feature.account.domain.usecase.SetMediaFavoriteUseCase
+import com.buntupana.tmdb.feature.account.domain.usecase.SetMediaWatchListUseCase
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
-import com.buntupana.tmdb.feature.detail.domain.usecase.SetMediaFavoriteUseCase
-import com.buntupana.tmdb.feature.detail.domain.usecase.SetMediaWatchListUseCase
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess

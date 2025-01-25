@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TvShowRaw(
+data class TvShowItemRaw(
     val id: Long,
     val name: String,
     @SerialName("original_name")

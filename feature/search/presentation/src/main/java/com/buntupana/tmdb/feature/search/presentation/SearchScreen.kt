@@ -37,7 +37,7 @@ fun SearchScreen(
         state = viewModel.state,
         onSearchSuggestions = { viewModel.onEvent(SearchEvent.OnSearchSuggestions(it)) },
         onSearch = { searchKey, searchType ->
-            viewModel.onEvent(SearchEvent.OnSearch(searchKey, searchType))
+            viewModel.onEvent(SearchEvent.OnSearch(searchKey, searchType ?: SearchType.MOVIE))
         },
         onMediaClick = { mediaItem, mainPosterColor ->
             when (mediaItem) {

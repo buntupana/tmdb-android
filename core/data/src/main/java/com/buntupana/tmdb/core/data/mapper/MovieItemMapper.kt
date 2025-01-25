@@ -9,8 +9,8 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 fun MovieItemRaw.toModel(
-    baseUrlPoster : String,
-    baseUrlBackdrop : String
+    baseUrlPoster: String,
+    baseUrlBackdrop: String
 ): com.panabuntu.tmdb.core.common.model.MediaItem.Movie {
 
     val posterUrl = posterPath.ifNotNullOrBlank { baseUrlPoster + posterPath.orEmpty() }
@@ -18,7 +18,8 @@ fun MovieItemRaw.toModel(
         backdropPath.ifNotNullOrBlank { baseUrlBackdrop + backdropPath.orEmpty() }
 
     val releaseLocalDate = try {
-        LocalDate.parse(releaseDate.orEmpty()).format(DateTimeFormatter.ofPattern(DateUtil.dateFormat))
+        LocalDate.parse(releaseDate.orEmpty())
+            .format(DateTimeFormatter.ofPattern(DateUtil.dateFormat))
     } catch (e: DateTimeParseException) {
         ""
     }
@@ -39,4 +40,11 @@ fun MovieItemRaw.toModel(
         video = video ?: false,
         adult = adult
     )
+}
+
+fun List<MovieItemRaw>.toModel(
+    baseUrlPoster: String,
+    baseUrlBackdrop: String
+): List<com.panabuntu.tmdb.core.common.model.MediaItem.Movie> {
+    return map { it.toModel(baseUrlPoster = baseUrlPoster, baseUrlBackdrop = baseUrlBackdrop) }
 }

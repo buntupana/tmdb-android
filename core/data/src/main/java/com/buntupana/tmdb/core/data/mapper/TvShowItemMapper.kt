@@ -1,13 +1,13 @@
 package com.buntupana.tmdb.core.data.mapper
 
-import com.buntupana.tmdb.core.data.raw.TvShowRaw
+import com.buntupana.tmdb.core.data.raw.TvShowItemRaw
 import com.panabuntu.tmdb.core.common.util.DateUtil
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-fun TvShowRaw.toModel(
+fun TvShowItemRaw.toModel(
     baseUrlPoster : String,
     baseUrlBackdrop : String
 ): com.panabuntu.tmdb.core.common.model.MediaItem.TvShow {
@@ -38,4 +38,11 @@ fun TvShowRaw.toModel(
         releaseDate = releaseDate,
         originCountry = originCountry
     )
+}
+
+fun List<TvShowItemRaw>.toModel(
+    baseUrlPoster: String,
+    baseUrlBackdrop: String
+): List<com.panabuntu.tmdb.core.common.model.MediaItem.TvShow> {
+    return map { it.toModel(baseUrlPoster = baseUrlPoster, baseUrlBackdrop = baseUrlBackdrop) }
 }

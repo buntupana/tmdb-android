@@ -48,6 +48,7 @@ dependencies {
     // Modules
     implementation(project(":core:ui"))
     implementation(project(":feature:detail:domain"))
+    implementation(project(":feature:account:domain"))
 
     // Kotlin
     implementation(libs.kotlinx.serialization.json)

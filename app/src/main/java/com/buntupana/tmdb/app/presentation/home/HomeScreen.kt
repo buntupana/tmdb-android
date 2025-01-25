@@ -24,8 +24,8 @@ import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
-import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
-import com.buntupana.tmdb.feature.account.presentation.account.AccountScreen
+import com.buntupana.tmdb.feature.account.presentation.account.account.AccountNav
+import com.buntupana.tmdb.feature.account.presentation.account.account.AccountScreen
 import com.buntupana.tmdb.feature.discover.presentation.comp.TopBar
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNav
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverScreen
@@ -40,11 +40,15 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 fun HomeScreen(
     onSignInClicked: () -> Unit,
     onSearchClicked: () -> Unit,
+    onWatchListClick: (mediaType: MediaType) -> Unit,
+    onFavoritesClick: (mediaType: MediaType) -> Unit,
     onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
 ) {
     HomeScreenContent(
         onSignInClicked = onSignInClicked,
         onSearchClicked = onSearchClicked,
+        onWatchListClick = onWatchListClick,
+        onFavoritesClick = onFavoritesClick,
         onMediaItemClicked = onMediaItemClicked
     )
 }
@@ -53,6 +57,8 @@ fun HomeScreen(
 fun HomeScreenContent(
     onSignInClicked: () -> Unit,
     onSearchClicked: () -> Unit,
+    onWatchListClick: (mediaType: MediaType) -> Unit,
+    onFavoritesClick: (mediaType: MediaType) -> Unit,
     onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
 ) {
 
@@ -134,7 +140,12 @@ fun HomeScreenContent(
                 TvShowsScreen()
             }
             composable<AccountNav> {
-                AccountScreen(onSignInClicked = onSignInClicked)
+                AccountScreen(
+                    onSignInClick = onSignInClicked,
+                    onWatchListClick = onWatchListClick,
+                    onFavoritesClick = onFavoritesClick,
+                    onMediaItemClicked = onMediaItemClicked,
+                )
             }
         }
     }
@@ -146,6 +157,8 @@ fun HomeScreenPreview() {
     HomeScreenContent(
         onSignInClicked = {},
         onSearchClicked = {},
+        onWatchListClick = {},
+        onFavoritesClick = {},
         onMediaItemClicked = { _, _, _ -> }
     )
 }

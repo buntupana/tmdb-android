@@ -1,6 +1,8 @@
 package com.buntupana.tmdb.feature.detail.presentation
 
 
+import com.buntupana.tmdb.core.ui.util.mediaItemMovie
+import com.buntupana.tmdb.core.ui.util.mediaItemTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.domain.model.Job
@@ -10,7 +12,6 @@ import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Role
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.panabuntu.tmdb.core.common.model.Gender
-import com.panabuntu.tmdb.core.common.model.MediaItem
 import java.time.LocalDate
 
 
@@ -85,39 +86,6 @@ val crewTvShowPersonSample = Person.Crew.TvShow(
         Job("Director", 9)
     ),
     totalEpisodeCount = 102
-)
-
-val mediaItemMovie = MediaItem.Movie(
-    id = 0L,
-    name = "The Dark Knight",
-    originalName = "The Dark Knight",
-    overview = "Batman raises the stakes in his war on crime. With the help of Lt. Jim Gordon and District Attorney Harvey Dent, Batman sets out to dismantle the remaining criminal organizations that plague the streets. The partnership proves to be effective, but they soon find themselves prey to a reign of chaos unleashed by a rising criminal mastermind known to the terrified citizens of Gotham as the Joker.",
-    posterUrl = null,
-    backdropUrl = null,
-    originalLanguage = "en",
-    genreIds = listOf(),
-    popularity = 0f,
-    voteAverage = 90,
-    voteCount = 0,
-    releaseDate = "",
-    video = true,
-    adult = false
-)
-
-val mediaItemTvShow = MediaItem.TvShow(
-    id = 0L,
-    name = "Rick and Morty",
-    originalName = "Rick and Morty",
-    overview = "Rick is a mentally-unbalanced but scientifically gifted old man who has recently reconnected with his family. He spends most of his time involving his young grandson Morty in dangerous, outlandish adventures throughout space and alternate universes. Compounded with Morty's already unstable family life, these events cause Morty much distress at home and school.",
-    posterUrl = null,
-    backdropUrl = null,
-    originalLanguage = "en",
-    genreIds = listOf(),
-    popularity = 0f,
-    voteAverage = 90,
-    voteCount = 0,
-    releaseDate = "",
-    listOf()
 )
 
 val mediaDetailsMovieSample = MediaDetails.Movie(

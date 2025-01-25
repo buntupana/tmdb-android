@@ -34,3 +34,5 @@ val MediumScoreColor: Color = Color(0xFFD2D531)
 val HighScoreColor: Color = Color(0xFF21D07A)
 
 val SliderThumbColor: Color = Color(0xFF032541)
+
+val GrayColor: Color = Color(0xFF8F8F8F)

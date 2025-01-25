@@ -41,9 +41,9 @@ class GetSearchResultCountUseCase @Inject constructor(
             ) {
                 return@coroutineScope Result.Success(
                     GetSearchResultCountResult(
-                        moviesCountRes.data,
-                        tvShowsCountRes.data,
-                        personsCountRes.data
+                        moviesCount = moviesCountRes.data,
+                        tvShowsCount = tvShowsCountRes.data,
+                        personsCount = personsCountRes.data
                     )
                 )
             }

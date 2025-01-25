@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
+import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
-import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.CreditsFilter
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.HeaderContent
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.KnownFor
@@ -76,7 +76,7 @@ fun PersonDetailContent(
             .setStatusNavigationBarColor(MaterialTheme.colorScheme.background)
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopBar(
+            TopBarLogo(
                 backgroundColor = MaterialTheme.colorScheme.background,
                 onBackClick = { onBackClick() },
                 onSearchClick = { onSearchClick() },

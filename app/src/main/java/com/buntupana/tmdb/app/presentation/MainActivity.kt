@@ -22,10 +22,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import com.buntupana.tmdb.app.presentation.home.HomeNav
 import com.buntupana.tmdb.app.presentation.home.HomeScreen
+import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.theme.TMDBTheme
 import com.buntupana.tmdb.core.ui.util.ObserveAsEvents
+import com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites.ScreenType
+import com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites.WatchListFavoritesNav
+import com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites.WatchlistScreen
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInNav
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInScreen
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNav
@@ -40,6 +44,7 @@ import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
 import com.buntupana.tmdb.feature.search.presentation.SearchNav
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -115,6 +120,20 @@ class MainActivity : ComponentActivity() {
                                             backgroundColor = posterDominantColor.toArgb()
                                         )
                                     )
+                                },
+                                onWatchListClick = { mediaType ->
+                                    val mediaFilter = when(mediaType) {
+                                        MediaType.MOVIE -> MediaFilter.MOVIES
+                                        MediaType.TV_SHOW -> MediaFilter.TV_SHOWS
+                                    }
+                                    navRoutesMain.navigate(WatchListFavoritesNav(ScreenType.WATCHLIST, mediaFilter))
+                                },
+                                onFavoritesClick = { mediaType ->
+                                    val mediaFilter = when(mediaType) {
+                                        MediaType.MOVIE -> MediaFilter.MOVIES
+                                        MediaType.TV_SHOW -> MediaFilter.TV_SHOWS
+                                    }
+                                    navRoutesMain.navigate(WatchListFavoritesNav(ScreenType.FAVORITES, mediaFilter))
                                 }
                             )
                         }
@@ -266,6 +285,21 @@ class MainActivity : ComponentActivity() {
                                 onSearchClick = { navRoutesMain.navigate(SearchNav) },
                                 onLogoClick = {
                                     navRoutesMain.popBackStack(HomeNav::class)
+                                }
+                            )
+                        }
+                        composable<WatchListFavoritesNav> {
+                            WatchlistScreen(
+                                onBackClick = { navRoutesMain.popBackStack() },
+                                onSearchClick = { navRoutesMain.navigate(SearchNav) },
+                                onMediaClick = { mediaId, mediaType, mainPosterColor ->
+                                    navRoutesMain.navigate(
+                                        MediaDetailNav(
+                                            mediaId = mediaId,
+                                            mediaType = mediaType,
+                                            backgroundColor = mainPosterColor?.toArgb()
+                                        )
+                                    )
                                 }
                             )
                         }

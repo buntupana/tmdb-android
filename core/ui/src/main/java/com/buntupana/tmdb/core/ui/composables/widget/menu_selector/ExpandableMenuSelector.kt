@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -63,7 +62,6 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
             .horizontalScroll(scrollState)
             .padding(
                 start = if (menuAlign == ExpandableMenuSelectorAlign.START) horizontalPadding else  0.dp,
@@ -86,8 +84,14 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
             label = "collapsingBackground"
         )
 
+        val paddedModifier = if (menuAlign == ExpandableMenuSelectorAlign.END) {
+            Modifier.padding(start = 32.dp)
+        } else {
+            Modifier.padding(end = 32.dp)
+        }
+
         Box(
-            modifier = Modifier
+            modifier = paddedModifier
                 .width(width = offsetXBackground.pxToDp())
                 .clip(RoundedCornerShape(ROUNDED_CORNER_RADIUS))
                 .border(BorderStroke(2.dp, PrimaryColor), RoundedCornerShape(ROUNDED_CORNER_RADIUS))
@@ -171,20 +175,23 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
 @Composable
 fun ExpandableMenuSelectorPreview() {
     ExpandableMenuSelector(
-        menuItemSet = setOf(
-            ExpandableMenuSelectorItemSample.Streaming,
-            ExpandableMenuSelectorItemSample.OnTv,
-            ExpandableMenuSelectorItemSample.ForRent,
-            ExpandableMenuSelectorItemSample.InTheatres
-        ),
-        menuAlign = ExpandableMenuSelectorAlign.END,
+        menuItemSet = ExpandableMenuSelectorItemSample.entries.toSet(),
+        menuAlign = ExpandableMenuSelectorAlign.START,
         defaultCollapsed = true
     )
 }
 
-sealed class ExpandableMenuSelectorItemSample(strRes: Int) : ExpandableMenuSelectorItem(strRes) {
-    data object Streaming : ExpandableMenuSelectorItemSample(R.string.text_menu_selector_sample_streaming)
-    data object OnTv : ExpandableMenuSelectorItemSample(R.string.text_menu_selector_sample_on_tv)
-    data object ForRent : ExpandableMenuSelectorItemSample(R.string.text_menu_selector_sample_for_rent)
-    data object InTheatres : ExpandableMenuSelectorItemSample(R.string.text_menu_selector_sample_in_theatres)
+enum class ExpandableMenuSelectorItemSample : ExpandableMenuSelectorItem {
+    STREAMING{
+        override val strRes: Int = R.string.text_menu_selector_sample_streaming
+    },
+    ON_TV{
+        override val strRes: Int = R.string.text_menu_selector_sample_on_tv
+    },
+    FOR_RENT{
+        override val strRes: Int = R.string.text_menu_selector_sample_for_rent
+    },
+    IN_THEATRES{
+        override val strRes: Int = R.string.text_menu_selector_sample_in_theatres
+    }
 }

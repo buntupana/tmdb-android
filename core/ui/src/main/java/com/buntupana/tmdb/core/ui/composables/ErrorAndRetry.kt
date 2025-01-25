@@ -56,7 +56,7 @@ fun ErrorAndRetry(
 
 @Preview
 @Composable
-fun ErrorAndRetryPreview() {
+private fun ErrorAndRetryPreview() {
     ErrorAndRetry(
         modifier = Modifier.background(Color.White),
         textColor = Color.Black,

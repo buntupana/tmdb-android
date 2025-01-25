@@ -9,6 +9,9 @@
     <string name="text_cancel">Cancel</string>
     <string name="text_confirm">Confirm</string>
 
+    // Filter
+    <string name="text_last_added">Last Added</string>
+
     // Time
     <string name="text_hours_minutes">%1$dh %2$dm</string>
     <string name="text_minutes">%1$dm</string>
@@ -44,5 +47,11 @@
     // Cast Detail
     <string name="text_cast">Cast</string>
     <string name="text_crew">Crew</string>
+
+    // WatchList
+    <string name="text_watchlist">Watchlist</string>
+
+    // Favorites
+    <string name="text_favorites">Favorites</string>
 
 </resources>

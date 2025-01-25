@@ -18,13 +18,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
+import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
-import com.buntupana.tmdb.feature.detail.presentation.common.TopBar
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
 import com.buntupana.tmdb.feature.detail.presentation.episodes.comp.EpisodeHorizontal
 import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
@@ -65,7 +65,7 @@ private fun EpisodesDetailContent(
             .setStatusNavigationBarColor(state.backgroundColor)
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopBar(
+            TopBarLogo(
                 backgroundColor = state.backgroundColor,
                 onBackClick = { onBackClick() },
                 onSearchClick = { onSearchClick() },

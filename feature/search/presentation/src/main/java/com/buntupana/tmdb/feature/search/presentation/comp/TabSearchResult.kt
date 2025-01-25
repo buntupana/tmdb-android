@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.OutlinedText
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
@@ -52,4 +53,15 @@ fun TabSearchResult(
             outlineColor = outLineColor
         )
     }
+}
+
+
+@Preview
+@Composable
+private fun TabSearchResultPreview() {
+    TabSearchResult(
+        titleResId = com.buntupana.tmdb.core.ui.R.string.text_movies,
+        resultCount = 3,
+        isSelected = true
+    )
 }

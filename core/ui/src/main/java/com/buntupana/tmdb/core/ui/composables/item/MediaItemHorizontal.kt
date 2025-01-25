@@ -1,27 +1,14 @@
 package com.buntupana.tmdb.core.ui.composables.item
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 
 
@@ -44,58 +31,21 @@ fun MediaItemHorizontal(
         shape = RoundedCornerShape(Dimens.posterRound),
         shadowElevation = Dimens.cardElevation
     ) {
-
-        var mainPosterColor: Color = DetailBackgroundColor
-
-        Row(
-            modifier = Modifier
-                .clickable { onMediaClick(mediaId, mainPosterColor) }
-        ) {
-
-            ImageFromUrl(
-                modifier = Modifier
-                    .aspectRatio(2f / 3f),
-                imageUrl = posterUrl,
-                setDominantColor = { mainPosterColor = it }
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(Dimens.padding.small),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = title,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                if (releaseDate.isNotBlank()) {
-                    Text(
-                        modifier = Modifier.alpha(0.7f),
-                        text = releaseDate,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-
-                if (overview.isNotBlank()) {
-                    Spacer(modifier = Modifier.height(Dimens.padding.small))
-                    Text(
-                        text = overview,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
-        }
+        MediaItemHorizontalBase(
+            modifier = modifier,
+            onMediaClick = onMediaClick,
+            mediaId = mediaId,
+            title = title,
+            posterUrl = posterUrl,
+            overview = overview,
+            releaseDate = releaseDate
+        )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun MovieOrTvShowItemHorizontalPreview() {
+private fun MediaItemHorizontalPreview() {
     MediaItemHorizontal(
         modifier = Modifier
             .fillMaxWidth()

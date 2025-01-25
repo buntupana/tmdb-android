@@ -8,18 +8,11 @@ import com.buntupana.tmdb.feature.detail.data.raw.PersonDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.raw.TvShowSeasonsDetailsRaw
-import com.buntupana.tmdb.feature.detail.data.request.AddRatingRequest
-import com.buntupana.tmdb.feature.detail.data.request.FavoriteRequest
-import com.buntupana.tmdb.feature.detail.data.request.WatchlistRequest
-import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import io.ktor.client.HttpClient
-import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
 import javax.inject.Inject
 
 class DetailRemoteDataSource @Inject constructor(
@@ -90,75 +83,6 @@ class DetailRemoteDataSource @Inject constructor(
     suspend fun getTvShowSeasonsDetails(tvShowId: Long): Result<TvShowSeasonsDetailsRaw, NetworkError> {
         return getResult {
             httpClient.get("tv/$tvShowId")
-        }
-    }
-
-    suspend fun setMediaFavorite(
-        accountId: Long,
-        mediaId: Long,
-        mediaType: MediaType,
-        favorite: Boolean
-    ): Result<Unit, NetworkError> {
-        val mediaTypeStr = when (mediaType) {
-            MediaType.MOVIE -> "movie"
-            MediaType.TV_SHOW -> "tv"
-        }
-        return getResult {
-            httpClient.post("account/$accountId/favorite") {
-                setBody(
-                    FavoriteRequest(
-                        mediaId = mediaId,
-                        mediaType = mediaTypeStr,
-                        favorite = favorite
-                    )
-                )
-            }
-        }
-    }
-
-    suspend fun setMediaWatchlist(
-        accountId: Long,
-        mediaId: Long,
-        mediaType: MediaType,
-        watchlist: Boolean
-    ): Result<Unit, NetworkError> {
-
-        return getResult {
-            httpClient.post("account/$accountId/watchlist") {
-                setBody(
-                    WatchlistRequest(
-                        mediaId = mediaId,
-                        mediaType = mediaType.value,
-                        watchlist = watchlist
-                    )
-                )
-            }
-        }
-    }
-
-    suspend fun addMediaRating(
-        sessionId: String?,
-        mediaType: MediaType,
-        mediaId: Long,
-        value: Int
-    ): Result<Unit, NetworkError> {
-        return getResult {
-            httpClient.post(urlString = "${mediaType.value}/$mediaId/rating") {
-                parameter("session_id", sessionId)
-                setBody(AddRatingRequest(value = (value / 10).toFloat()))
-            }
-        }
-    }
-
-    suspend fun deleteMediaRating(
-        sessionId: String?,
-        mediaType: MediaType,
-        mediaId: Long,
-    ): Result<Unit, NetworkError> {
-        return getResult {
-            httpClient.delete(urlString = "${mediaType.value}/$mediaId/rating") {
-                parameter("session_id", sessionId)
-            }
         }
     }
 }

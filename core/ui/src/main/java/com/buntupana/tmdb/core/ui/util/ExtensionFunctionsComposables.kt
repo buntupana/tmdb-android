@@ -64,18 +64,19 @@ fun Modifier.clickableTextPadding(): Modifier {
 fun Modifier.setStatusNavigationBarColor(
     backgroundColor: Color = PrimaryColor
 ): Modifier {
-    val view = LocalView.current
-    val window = (view.context as Activity).window
-    val isLightStatus = backgroundColor.getOnBackgroundColor() != Color.White
-    WindowCompat.getInsetsController(
-        window,
-        view
-    ).isAppearanceLightStatusBars = isLightStatus
 
-    WindowCompat.getInsetsController(
-        window,
-        view
-    ).isAppearanceLightNavigationBars = isLightStatus
+    val view = LocalView.current
+    val isLightStatus = backgroundColor.getOnBackgroundColor() != Color.White
+
+    (view.context as? Activity)?.run {
+        WindowCompat.getInsetsController(
+            window,
+            view
+        ).run {
+            isAppearanceLightStatusBars = isLightStatus
+            isAppearanceLightNavigationBars = isLightStatus
+        }
+    }
 
     return fillMaxSize()
         .background(backgroundColor)

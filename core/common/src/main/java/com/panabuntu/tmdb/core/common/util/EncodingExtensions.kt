@@ -8,11 +8,11 @@ import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.isAccessible
 
 
-private fun String.encodeUrl(): String {
+private fun String.encode(): String {
     return URLEncoder.encode(this, StandardCharsets.UTF_8.toString())
 }
 
-private fun String.decodeUrl(): String {
+private fun String.decode(): String {
     return URLDecoder.decode(this, StandardCharsets.UTF_8.toString())
 }
 
@@ -32,17 +32,13 @@ fun <T : Any> T.encodeAllUrls(): T {
         val encodedValue = when {
             // Encode URLs in String directly
             property.returnType.classifier == String::class && value is String -> {
-                navigationRegex.replace(value) { matchResult ->
-                    matchResult.value.encodeUrl()
-                }
+                value.encode()
             }
             // Recursively encode each element in a List
             value is List<*> -> {
                 value.map { item ->
                     when (item) {
-                        is String -> navigationRegex.replace(item) { matchResult ->
-                            matchResult.value.encodeUrl()
-                        }
+                        is String -> item.encode()
                         is Any -> item.encodeAllUrls() // Recursively encode nested objects in lists
                         else -> item // Keep non-String, non-object items as-is
                     }
@@ -52,9 +48,7 @@ fun <T : Any> T.encodeAllUrls(): T {
             value is Set<*> -> {
                 value.map { item ->
                     when (item) {
-                        is String -> navigationRegex.replace(item) { matchResult ->
-                            matchResult.value.encodeUrl()
-                        }
+                        is String -> item.encode()
                         is Any -> item.encodeAllUrls() // Recursively encode nested objects in lists
                         else -> item // Keep non-String, non-object items as-is
                     }
@@ -64,9 +58,7 @@ fun <T : Any> T.encodeAllUrls(): T {
             value is Map<*, *> -> {
                 value.mapValues { (_, mapValue) ->
                     when (mapValue) {
-                        is String -> navigationRegex.replace(mapValue) { matchResult ->
-                            matchResult.value.encodeUrl() // Encode URLs in maps
-                        }
+                        is String -> mapValue.encode()
                         is Any -> mapValue.encodeAllUrls() // Recursively encode nested objects in maps
                         else -> mapValue // Keep non-String, non-object items as-is
                     }
@@ -99,13 +91,13 @@ fun <T : Any> T.decodeAllStrings(): T {
         val decodedValue = when {
             // Decode String directly
             property.returnType.classifier == String::class && value is String -> {
-                value.decodeUrl()
+                value.decode()
             }
             // Recursively decode each element in a List
             value is List<*> -> {
                 value.map { item ->
                     when (item) {
-                        is String -> item.decodeUrl() // Decode strings in lists
+                        is String -> item.decode() // Decode strings in lists
                         is Any -> item.decodeAllStrings() // Recursively decode nested objects in lists
                         else -> item // Keep non-String, non-object items as-is
                     }
@@ -115,7 +107,7 @@ fun <T : Any> T.decodeAllStrings(): T {
             value is Set<*> -> {
                 value.map { item ->
                     when (item) {
-                        is String -> item.decodeUrl() // Decode strings in lists
+                        is String -> item.decode() // Decode strings in lists
                         is Any -> item.decodeAllStrings() // Recursively decode nested objects in lists
                         else -> item // Keep non-String, non-object items as-is
                     }
@@ -125,7 +117,7 @@ fun <T : Any> T.decodeAllStrings(): T {
             value is Map<*, *> -> {
                 value.mapValues { (_, mapValue) ->
                     when (mapValue) {
-                        is String -> mapValue.decodeUrl() // Decode strings in maps
+                        is String -> mapValue.decode() // Decode strings in maps
                         is Any -> mapValue.decodeAllStrings() // Recursively decode nested objects in maps
                         else -> mapValue // Keep non-String, non-object items as-is
                     }

@@ -16,11 +16,11 @@ work = '2.4.0'
 ksp = "2.0.21-1.0.26"
 
 #Compose
-composeBom = "2024.11.00"
-compose_activity = "1.9.3"
+composeBom = "2025.01.00"
+compose_activity = "1.10.0"
 compose_constraint = '1.1.0'
-compose_foundation = "1.7.5"
-compose_paging = "3.3.4"
+compose_foundation = "1.7.6"
+compose_paging = "3.3.5"
 compose_lifecycle = "2.8.7"
 
 #Android dependencies
@@ -46,7 +46,7 @@ dagger_android = "1.2.0"
 ktor_bom = "3.0.1"
 
 #Storage
-datastore = "1.1.1"
+datastore = "1.1.2"
 
 #Tools
 timber = '5.0.1'
@@ -67,13 +67,13 @@ test_runner = '1.4.0'
 mockito = '4.5.0'
 
 # Plugins
-agp = "8.7.3"
+agp = "8.8.0"
 uiToolingPreviewAndroid = "1.6.7"
 uiTooling = "1.7.3"
 appcompat = "1.7.0"
 material = "1.12.0"
 jetbrainsKotlinJvm = "2.0.21"
-uiTextGoogleFonts = "1.7.5"
+uiTextGoogleFonts = "1.7.6"
 
 [libraries]
 

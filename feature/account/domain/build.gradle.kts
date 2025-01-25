@@ -47,6 +47,8 @@ dependencies {
     ksp(libs.dagger.hilt.ksp)
     api(libs.dagger.hilt.navigation.compose)
 
+    api(libs.androidx.paging.compose)
+
     // Testing
     testImplementation(libs.junit)
 }

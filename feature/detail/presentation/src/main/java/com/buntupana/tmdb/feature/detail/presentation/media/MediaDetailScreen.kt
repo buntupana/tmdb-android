@@ -1,11 +1,15 @@
 package com.buntupana.tmdb.feature.detail.presentation.media
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,9 +33,9 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.fadeIn
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
-import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
+import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
@@ -157,11 +162,18 @@ fun MediaDetailContent(
         mutableStateOf(state.backgroundColor)
     }
 
+    setStatusBarLightStatusFromBackground(
+        LocalView.current,
+        backgroundColor
+    )
+
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+    val fadeInEnabled = remember { state.isLoading }
+
     Scaffold(
+        containerColor = backgroundColor,
         modifier = Modifier
-            .setStatusNavigationBarColor(backgroundColor)
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBarLogo(
@@ -174,124 +186,159 @@ fun MediaDetailContent(
         },
         bottomBar = {
             if (state.isLoading.not() && state.isGetContentError.not() && state.isUserLoggedIn) {
-                AccountBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(backgroundColor),
-                    backgroundColor = backgroundColor,
-                    isFavorite = state.mediaDetails?.isFavorite ?: false,
-                    isWatchListed = state.mediaDetails?.isWatchlisted ?: false,
-                    isFavoriteLoading = state.isFavoriteLoading,
-                    isWatchlistLoading = state.isWatchlistLoading,
-                    userRating = state.mediaDetails?.userRating,
-                    isRateable = state.mediaDetails?.isRateable ?: false,
-                    isRatingLoading = state.isRatingLoading,
-                    onFavoriteClick = onFavoriteClick,
-                    onWatchlistClick = onWatchlistClick,
-                    onRatingClick = onRatingClick,
-                    onListClick = onListClick
-                )
+                Column(
+                    Modifier.background(backgroundColor)
+                ) {
+                    AccountBar(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fadeIn(fadeInEnabled),
+                        backgroundColor = backgroundColor,
+                        isFavorite = state.mediaDetails?.isFavorite ?: false,
+                        isWatchListed = state.mediaDetails?.isWatchlisted ?: false,
+                        isFavoriteLoading = state.isFavoriteLoading,
+                        isWatchlistLoading = state.isWatchlistLoading,
+                        userRating = state.mediaDetails?.userRating,
+                        isRateable = state.mediaDetails?.isRateable ?: false,
+                        isRatingLoading = state.isRatingLoading,
+                        onFavoriteClick = onFavoriteClick,
+                        onWatchlistClick = onWatchlistClick,
+                        onRatingClick = onRatingClick,
+                        onListClick = onListClick
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .windowInsetsBottomHeight(
+                                WindowInsets.systemBars
+                            )
+                    )
+                }
             }
         }
 
     ) { paddingValues ->
+
+        if (state.isLoading) {
+
+            MediaDetailsLoading(
+                modifier = Modifier.fillMaxSize(),
+                backgroundColor = backgroundColor
+            )
+
+            return@Scaffold
+        }
+
+        if (state.isGetContentError) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(backgroundColor)
+            ) {
+
+                ErrorAndRetry(
+                    modifier = Modifier
+                        .padding(vertical = 200.dp)
+                        .fillMaxSize(),
+                    errorMessage = stringResource(id = R.string.message_loading_content_error),
+                    textColor = backgroundColor.getOnBackgroundColor(),
+                    onRetryClick = onRetryClick
+                )
+            }
+
+            return@Scaffold
+        }
+
+        if (state.mediaDetails == null) {
+            return@Scaffold
+        }
+
         Column(
             modifier = Modifier
-                .padding(paddingValues)
+                .padding(top = paddingValues.calculateTopPadding())
                 .verticalScroll(scrollState)
+                .fadeIn(fadeInEnabled)
         ) {
 
-            when {
-                state.isLoading -> {
-                    MediaDetailsLoading()
+            Column(
+                Modifier.background(backgroundColor)
+            ) {
+
+                Header(
+                    mediaDetails = state.mediaDetails,
+                    backgroundColor = backgroundColor
+                ) { dominantColor ->
+                    if (dominantColor != backgroundColor) {
+                        backgroundColor = dominantColor
+                    }
                 }
 
-                state.isGetContentError -> {
-                    ErrorAndRetry(
-                        modifier = Modifier
-                            .padding(vertical = 200.dp)
-                            .fillMaxSize(),
-                        errorMessage = stringResource(id = R.string.message_loading_content_error),
-                        onRetryClick = onRetryClick
-                    )
-                }
+                MainInfo(
+                    mediaDetails = state.mediaDetails,
+                    textColor = backgroundColor.getOnBackgroundColor(),
+                    onItemClick = onPersonClick
+                )
+            }
 
-                state.mediaDetails != null -> {
-                    Column(
-                        Modifier.background(backgroundColor)
-                    ) {
+            Column(
+                Modifier.background(MaterialTheme.colorScheme.background)
+            ) {
 
-                        Header(
-                            mediaDetails = state.mediaDetails,
-                            backgroundColor = backgroundColor
-                        ) { dominantColor ->
-                            if (dominantColor != backgroundColor) {
-                                backgroundColor = dominantColor
-                            }
-                        }
-
-                        MainInfo(
-                            mediaDetails = state.mediaDetails,
-                            textColor = backgroundColor.getOnBackgroundColor(),
-                            onItemClick = onPersonClick
+                CastHorizontalList(
+                    modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                    mediaDetails = state.mediaDetails,
+                    onItemClick = onPersonClick,
+                    onFullCastClick = {
+                        onFullCastClick(
+                            state.mediaDetails,
+                            state.mediaType,
+                            state.backgroundColor
                         )
                     }
+                )
 
-                    CastHorizontalList(
-                        modifier = Modifier.background(MaterialTheme.colorScheme.background),
-                        mediaDetails = state.mediaDetails,
-                        onItemClick = onPersonClick,
-                        onFullCastClick = {
-                            onFullCastClick(
+                if (state.mediaDetails is MediaDetails.TvShow) {
+                    SeasonsSection(
+                        seasonList = state.mediaDetails.seasonList,
+                        isInAir = state.mediaDetails.isInAir,
+                        lastEpisode = state.mediaDetails.lastEpisode,
+                        nextEpisode = state.mediaDetails.nextEpisode,
+                        onLastSeasonClick = { season ->
+                            onSeasonClick(state.mediaId, season, state.backgroundColor)
+                        },
+                        onAllSeasonsClick = {
+                            onAllSeasonsClick(
                                 state.mediaDetails,
-                                state.mediaType,
                                 state.backgroundColor
                             )
                         }
                     )
-
-                    if (state.mediaDetails is MediaDetails.TvShow) {
-                        SeasonsSection(
-                            seasonList = state.mediaDetails.seasonList,
-                            isInAir = state.mediaDetails.isInAir,
-                            lastEpisode = state.mediaDetails.lastEpisode,
-                            nextEpisode = state.mediaDetails.nextEpisode,
-                            onLastSeasonClick = { season ->
-                                onSeasonClick(state.mediaId, season, state.backgroundColor)
-                            },
-                            onAllSeasonsClick = {
-                                onAllSeasonsClick(
-                                    state.mediaDetails,
-                                    state.backgroundColor
-                                )
-                            }
-                        )
-                    }
-
-                    RecommendationsHorizontal(
-                        modifier = Modifier.fillMaxWidth(),
-                        mediaItemList = state.mediaDetails.recommendationList,
-                        onItemClick = onRecommendationClick
-                    )
-
-                    Spacer(modifier = Modifier.padding(Dimens.padding.vertical))
                 }
+
+                RecommendationsHorizontal(
+                    modifier = Modifier.fillMaxWidth(),
+                    mediaItemList = state.mediaDetails.recommendationList,
+                    onItemClick = onRecommendationClick
+                )
+
+                Spacer(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()))
             }
         }
     }
 }
 
-@Preview(heightDp = 2000)
+@Preview(showBackground = true, heightDp = 2000)
 @Composable
 fun MediaDetailScreenPreview() {
 
     MediaDetailContent(
         state = MediaDetailState(
+            isUserLoggedIn = true,
+            isLoading = false,
+            isGetContentError = false,
             mediaId = 0L,
             mediaType = MediaType.MOVIE,
             mediaDetails = mediaDetailsTvShowSample,
-            backgroundColor = DetailBackgroundColor,
-            isGetContentError = false
+            backgroundColor = DetailBackgroundColor
         ),
         onBackClick = {},
         onSearchClick = {},

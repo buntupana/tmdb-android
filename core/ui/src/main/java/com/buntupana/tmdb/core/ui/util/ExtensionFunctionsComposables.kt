@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -12,7 +14,12 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
@@ -74,7 +81,7 @@ fun Modifier.setStatusNavigationBarColor(
             view
         ).run {
             isAppearanceLightStatusBars = isLightStatus
-            isAppearanceLightNavigationBars = isLightStatus
+//            isAppearanceLightNavigationBars = isLightStatus
         }
     }
 
@@ -82,6 +89,28 @@ fun Modifier.setStatusNavigationBarColor(
         .background(backgroundColor)
         .safeDrawingPadding()
         .background(MaterialTheme.colorScheme.background)
+}
+
+
+
+
+fun Modifier.isInvisible(isInvisible: Boolean): Modifier {
+    return alpha(if (isInvisible) 0f else 1f)
+}
+
+@Composable
+fun Modifier.fadeIn(enabled : Boolean, durationMillis: Int = 400): Modifier {
+
+    var triggerAnimation by remember { mutableStateOf(enabled) }
+
+    val alpha by animateFloatAsState(
+        targetValue = if (triggerAnimation) 0f else 1f,
+        animationSpec = tween(durationMillis = durationMillis)
+    )
+
+    triggerAnimation = false
+
+    return alpha(alpha)
 }
 
 @Composable

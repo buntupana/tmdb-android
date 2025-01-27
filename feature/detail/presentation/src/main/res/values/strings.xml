@@ -38,4 +38,16 @@
 
     <string name="message_rating_error">Sorry there was an error rating %s</string>
 
+    // Rating titles
+    <string name="text_rating_10">Absolute Trash</string>
+    <string name="text_rating_20">Garbage</string>
+    <string name="text_rating_30">Truly Bad</string>
+    <string name="text_rating_40">Not Good</string>
+    <string name="text_rating_50">Passable</string>
+    <string name="text_rating_60">It\'s Alright</string>
+    <string name="text_rating_70">Pretty Decent</string>
+    <string name="text_rating_80">Really Good</string>
+    <string name="text_rating_90">Greatness</string>
+    <string name="text_rating_100">Champion</string>
+
 </resources>

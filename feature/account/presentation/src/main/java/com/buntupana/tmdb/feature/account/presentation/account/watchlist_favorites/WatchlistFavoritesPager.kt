@@ -176,8 +176,9 @@ private fun WatchlistPagerPreview() {
         modifier = Modifier.fillMaxSize(),
         pagingItems = flowOf(itemsList).collectAsLazyPagingItems(),
         noResultMessage = stringResource(
-            com.buntupana.tmdb.feature.account.presentation.R.string.message_watchlist_no_results,
-            "movies"
+            com.buntupana.tmdb.feature.account.presentation.R.string.message_no_results,
+            "movies",
+            "favorites"
         ),
         onMediaClick = { _, _ -> }
     )

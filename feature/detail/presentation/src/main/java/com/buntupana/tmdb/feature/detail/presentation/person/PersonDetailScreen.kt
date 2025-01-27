@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.person
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,9 +9,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,7 +21,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.TopBarLogo
-import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
+import com.buntupana.tmdb.core.ui.util.fadeIn
+import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.CreditsFilter
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.HeaderContent
@@ -64,6 +68,11 @@ fun PersonDetailContent(
     mediaTypeAndDepartmentSelected: (mediaType: Int?, department: String?) -> Unit
 ) {
 
+    setStatusBarLightStatusFromBackground(
+        LocalView.current,
+        MaterialTheme.colorScheme.background
+    )
+
     val mediaTypeMap = mapOf(
         R.string.text_movies to stringResource(id = R.string.text_movies),
         R.string.text_tv_shows to stringResource(id = R.string.text_tv_shows)
@@ -71,9 +80,10 @@ fun PersonDetailContent(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+    val fadeInEnabled = remember { state.isLoading }
+
     Scaffold(
         modifier = Modifier
-            .setStatusNavigationBarColor(MaterialTheme.colorScheme.background)
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBarLogo(
@@ -86,71 +96,78 @@ fun PersonDetailContent(
         }
     ) { paddingValues ->
 
+        if (state.isLoading) {
+            MediaDetailsLoading(
+                modifier = Modifier.fillMaxSize(),
+                backgroundColor = MaterialTheme.colorScheme.background
+            )
+            return@Scaffold
+        }
+
+        if (state.isGetPersonError) {
+
+            ErrorAndRetry(
+                modifier = Modifier
+                    .padding(vertical = 200.dp)
+                    .fillMaxSize(),
+                errorMessage = stringResource(id = R.string.message_loading_content_error),
+                onRetryClick = onRetryClick
+            )
+
+            return@Scaffold
+        }
+
+        if (state.personDetails == null) {
+            return@Scaffold
+        }
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(top = paddingValues.calculateTopPadding())
+                .fadeIn(fadeInEnabled)
         ) {
 
-            when {
-                state.isLoading -> {
-                    item {
-                        MediaDetailsLoading(backgroundColor = MaterialTheme.colorScheme.background)
-                    }
+            val departmentMap = state.personDetails.creditMap.keys.associateWith { it }
+
+            item {
+                HeaderContent(personDetails = state.personDetails)
+            }
+
+            item {
+                PersonalInfo(personDetails = state.personDetails)
+            }
+
+            item {
+                KnownFor(
+                    itemList = state.personDetails.knownFor,
+                    onItemClick = onMediaClick
+                )
+            }
+
+            item {
+                CreditsFilter(
+                    mainDepartment = state.personDetails.knownForDepartment,
+                    mediaTypeMap = mediaTypeMap,
+                    departmentMap = departmentMap,
+                    mediaTypeSelected = state.mediaTypeSelected,
+                    departmentSelected = state.departmentSelected
+                ) { mediaType, department ->
+                    mediaTypeAndDepartmentSelected(mediaType, department)
                 }
+            }
 
-                state.isGetPersonError -> {
-                    item {
-                        ErrorAndRetry(
-                            modifier = Modifier
-                                .padding(vertical = 200.dp)
-                                .fillMaxSize(),
-                            errorMessage = stringResource(id = R.string.message_loading_content_error),
-                            onRetryClick = onRetryClick
-                        )
-                    }
-                }
+            credits(
+                personName = state.personDetails.name,
+                creditMap = state.personDetails.creditMap,
+                mainDepartment = state.personDetails.knownForDepartment,
+                mediaTypeSelected = state.mediaTypeSelected,
+                departmentSelected = state.departmentSelected,
+                onItemClick = onMediaClick
+            )
 
-                state.personDetails != null -> {
-
-                    val departmentMap = state.personDetails.creditMap.keys.associateWith { it }
-
-                    item {
-                        HeaderContent(personDetails = state.personDetails)
-                    }
-
-                    item {
-                        PersonalInfo(personDetails = state.personDetails)
-                    }
-
-                    item {
-                        KnownFor(
-                            itemList = state.personDetails.knownFor,
-                            onItemClick = onMediaClick
-                        )
-                    }
-
-                    item {
-                        CreditsFilter(
-                            mainDepartment = state.personDetails.knownForDepartment,
-                            mediaTypeMap = mediaTypeMap,
-                            departmentMap = departmentMap,
-                            mediaTypeSelected = state.mediaTypeSelected,
-                            departmentSelected = state.departmentSelected
-                        ) { mediaType, department ->
-                            mediaTypeAndDepartmentSelected(mediaType, department)
-                        }
-                    }
-
-                    credits(
-                        personName = state.personDetails.name,
-                        creditMap = state.personDetails.creditMap,
-                        mainDepartment = state.personDetails.knownForDepartment,
-                        mediaTypeSelected = state.mediaTypeSelected,
-                        departmentSelected = state.departmentSelected,
-                        onItemClick = onMediaClick
-                    )
-                }
+            item {
+                Spacer(modifier = Modifier.padding(vertical = paddingValues.calculateBottomPadding()))
             }
         }
     }

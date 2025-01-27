@@ -8,6 +8,7 @@
     <string name="text_no_results">No Results</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_confirm">Confirm</string>
+    <string name="empty"></string>
 
     // Filter
     <string name="text_last_added">Last Added</string>

@@ -79,7 +79,7 @@ class WatchlistFavoritesViewModel @Inject constructor(
 
         state = state.copy(
             isError = false,
-            isLoading = state.movieItems == null || state.tvShowItems == null
+            isLoading = state.movieItemsTotalCount == null || state.tvShowItemsTotalCount == null
         )
 
         getItemsUseCase()

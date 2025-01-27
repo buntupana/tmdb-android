@@ -30,11 +30,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.ui.theme.HighScoreColor
-import com.buntupana.tmdb.core.ui.theme.LowScoreColor
-import com.buntupana.tmdb.core.ui.theme.MediumScoreColor
-import com.buntupana.tmdb.core.ui.theme.NoScoreColor
 import com.buntupana.tmdb.core.ui.theme.SliderThumbColor
+import com.buntupana.tmdb.feature.detail.presentation.getRatingColor
 
 private const val MAX_VALUE = 100
 private const val MAX_VALUE_SLIDER = 100f
@@ -98,8 +95,8 @@ fun RatingSlider(
                         .background(
                             Brush.horizontalGradient(
                                 listOf(
-                                    getActiveColor(value).copy(alpha = 0.3f),
-                                    getActiveColor(value)
+                                    getRatingColor(value).copy(alpha = 0.3f),
+                                    getRatingColor(value)
                                 )
                             )
                         ),
@@ -146,18 +143,9 @@ fun RatingSlider(
             }
         },
         colors = SliderDefaults.colors(
-            activeTrackColor = getActiveColor(value),
+            activeTrackColor = getRatingColor(value),
         )
     )
-}
-
-private fun getActiveColor(value: Int): Color {
-    return when (value) {
-        in 0..30 -> LowScoreColor
-        in 4..60 -> MediumScoreColor
-        in 7..100 -> HighScoreColor
-        else -> NoScoreColor
-    }
 }
 
 @Preview(showBackground = true)

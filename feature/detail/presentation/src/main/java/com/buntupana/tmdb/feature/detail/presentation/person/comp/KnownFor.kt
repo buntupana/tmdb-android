@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -43,82 +44,87 @@ fun KnownFor(
         return
     }
 
-    Text(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Dimens.padding.medium),
-        text = stringResource(id = R.string.text_known_for),
-        style = MaterialTheme.typography.titleLarge
-    )
-
-    Spacer(modifier = Modifier.height(Dimens.padding.medium))
-
-    LazyRow(
-        modifier = Modifier.fillMaxWidth()
+    Column(
+        modifier = modifier
     ) {
 
-        item {
-            Spacer(modifier = Modifier.width(Dimens.padding.horizontal))
-        }
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = Dimens.padding.medium),
+            text = stringResource(id = R.string.text_known_for),
+            style = MaterialTheme.typography.titleLarge
+        )
 
-        items(itemList.size) { index ->
+        Spacer(modifier = Modifier.height(Dimens.padding.medium))
 
-            var dominantColoAux: Color? = null
+        LazyRow(
+            modifier = Modifier.fillMaxWidth()
+        ) {
 
-            val item = itemList[index]
+            item {
+                Spacer(modifier = Modifier.width(Dimens.padding.horizontal))
+            }
 
-            Column(
-                modifier = Modifier
-                    .width(Dimens.carouselMediaItemWidth)
-                    .clip(RoundedCornerShape(Dimens.posterRound))
-                    .clickable {
-                        when (item) {
-                            is CreditPersonItem.Movie -> MediaType.MOVIE
-                            is CreditPersonItem.TvShow -> MediaType.TV_SHOW
-                        }.let { mediaType ->
-                            onItemClick(item.id, mediaType, dominantColoAux)
-                        }
-                    }
-            ) {
-                ImageFromUrl(
+            items(itemList.size) { index ->
+
+                var dominantColoAux: Color? by remember { mutableStateOf(null) }
+
+                val item = itemList[index]
+
+                Column(
                     modifier = Modifier
+                        .width(Dimens.carouselMediaItemWidth)
                         .clip(RoundedCornerShape(Dimens.posterRound))
-                        .fillMaxWidth()
-                        .aspectRatio(Dimens.aspectRatioMediaPoster),
-                    imageUrl = item.posterUrl,
-                ) { dominantColor ->
-                    dominantColoAux = dominantColor
-                }
-                var nameExtraLinesCount by remember {
-                    mutableIntStateOf(0)
-                }
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp),
-                    text = item.title,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    onTextLayout = {
-                        if (it.lineCount < 2) {
-                            nameExtraLinesCount = 2 - it.lineCount
+                        .clickable {
+                            when (item) {
+                                is CreditPersonItem.Movie -> MediaType.MOVIE
+                                is CreditPersonItem.TvShow -> MediaType.TV_SHOW
+                            }.let { mediaType ->
+                                onItemClick(item.id, mediaType, dominantColoAux)
+                            }
                         }
+                ) {
+                    ImageFromUrl(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(Dimens.posterRound))
+                            .fillMaxWidth()
+                            .aspectRatio(Dimens.aspectRatioMediaPoster),
+                        imageUrl = item.posterUrl,
+                    ) { dominantColor ->
+                        dominantColoAux = dominantColor
                     }
-                )
-                // Height we need to fill the view
-                val lineHeight =
-                    MaterialTheme.typography.bodyLarge.lineHeight * nameExtraLinesCount
-                Spacer(
-                    modifier = Modifier.height(spToDp(lineHeight))
-                )
+                    var nameExtraLinesCount by remember {
+                        mutableIntStateOf(0)
+                    }
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp),
+                        text = item.title,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        onTextLayout = {
+                            if (it.lineCount < 2) {
+                                nameExtraLinesCount = 2 - it.lineCount
+                            }
+                        }
+                    )
+                    // Height we need to fill the view
+                    val lineHeight =
+                        MaterialTheme.typography.bodyLarge.lineHeight * nameExtraLinesCount
+                    Spacer(
+                        modifier = Modifier.height(spToDp(lineHeight))
+                    )
+                }
+                if (index < itemList.size - 1) {
+                    Spacer(modifier = Modifier.width(Dimens.padding.small))
+                }
             }
-            if (index < itemList.size - 1) {
-                Spacer(modifier = Modifier.width(Dimens.padding.small))
-            }
-        }
 
-        item {
-            Spacer(modifier = Modifier.width(Dimens.padding.horizontal))
+            item {
+                Spacer(modifier = Modifier.width(Dimens.padding.horizontal))
+            }
         }
     }
 }

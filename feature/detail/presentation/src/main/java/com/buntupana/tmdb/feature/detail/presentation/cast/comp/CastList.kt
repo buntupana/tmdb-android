@@ -115,6 +115,9 @@ fun LazyListScope.castList(
         }
     }
 
+    item {
+        Spacer(modifier = Modifier.padding(vertical = Dimens.padding.small))
+    }
 }
 
 @Preview(showBackground = true)

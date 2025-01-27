@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -7,15 +8,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.composables.widget.UserScore
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.FavoriteColor
+import com.buntupana.tmdb.core.ui.theme.RatingColor
 import com.buntupana.tmdb.core.ui.theme.WatchListColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.R as RCore
@@ -41,22 +44,6 @@ fun AccountBar(
             .background(backgroundColor)
             .padding(Dimens.padding.medium)
     ) {
-        if (isRateable) {
-            Box(
-                modifier = Modifier.weight(1f),
-                contentAlignment = Alignment.Center
-            ) {
-                IconButton(
-                    onClick = onRatingClick,
-                    enabled = isRatingLoading.not()
-                ) {
-                    UserScore(
-                        modifier = Modifier,
-                        score = userRating,
-                    )
-                }
-            }
-        }
 
         Box(
             modifier = Modifier.weight(1f),
@@ -118,6 +105,60 @@ fun AccountBar(
                 )
             }
         }
+
+        if (isRateable) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .animateContentSize(),
+                contentAlignment = Alignment.Center
+            ) {
+
+                val rateTint = if (userRating != null) {
+                    RatingColor
+                } else {
+                    backgroundColor.getOnBackgroundColor()
+                }
+
+                if (userRating != null) {
+                    TextButton(
+                        onClick = onRatingClick,
+                        enabled = isRatingLoading.not()
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            Icon(
+                                modifier = Modifier,
+                                painter = painterResource(RCore.drawable.ic_star_solid),
+                                contentDescription = null,
+                                tint = rateTint
+                            )
+
+                            Text(
+                                modifier = Modifier.padding(start = Dimens.padding.tiny),
+                                text = "$userRating%",
+                                color = rateTint
+                            )
+                        }
+                    }
+                } else {
+
+                    IconButton(
+                        onClick = onRatingClick,
+                        enabled = isRatingLoading.not()
+                    ) {
+                        Icon(
+                            modifier = Modifier,
+                            painter = painterResource(RCore.drawable.ic_star_solid),
+                            contentDescription = null,
+                            tint = rateTint
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -126,11 +167,11 @@ fun AccountBar(
 fun AccountBarPreview() {
     AccountBar(
         modifier = Modifier.fillMaxWidth(),
-        backgroundColor = Color.White,
+        backgroundColor = Color.Blue,
         isFavorite = true,
         isWatchListed = false,
         userRating = 20,
-        isRateable = false,
+        isRateable = true,
         isFavoriteLoading = false,
         isWatchlistLoading = false,
         isRatingLoading = false,

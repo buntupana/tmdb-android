@@ -236,8 +236,9 @@ fun WatchlistContent(
                     modifier = Modifier.fillMaxSize(),
                     pagingItems = pagingItems,
                     noResultMessage = stringResource(
-                        R.string.message_watchlist_no_results,
-                        stringResource(mediaNameResId)
+                        R.string.message_no_results,
+                        stringResource(mediaNameResId),
+                        stringResource(state.screenType.titleResId).lowercase()
                     ),
                     onMediaClick = onMediaClick
                 )

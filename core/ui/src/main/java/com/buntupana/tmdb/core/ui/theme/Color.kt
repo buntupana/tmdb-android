@@ -27,6 +27,7 @@ val Pink40 = Color(0xFF7D5260)
 
 val FavoriteColor = Color(0xFFee48b7)
 val WatchListColor = Color(0xFFcf3031)
+val RatingColor = Color(0xFFeec405)
 
 val NoScoreColor: Color = Color(0xFF666666)
 val LowScoreColor: Color = Color(0xFFDB2360)

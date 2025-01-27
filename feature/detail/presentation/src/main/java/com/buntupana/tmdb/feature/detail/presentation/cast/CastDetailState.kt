@@ -5,7 +5,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.panabuntu.tmdb.core.common.entity.MediaType
 
 data class CastDetailState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isGetContentError: Boolean = false,
     val mediaId: Long,
     val mediaType: MediaType,

@@ -7,7 +7,7 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 data class MediaDetailState(
     val mediaId: Long,
     val mediaType: MediaType,
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isGetContentError: Boolean = false,
     val mediaDetails: MediaDetails? = null,
     val backgroundColor: Color,

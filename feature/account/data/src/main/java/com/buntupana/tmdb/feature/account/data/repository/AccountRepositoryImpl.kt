@@ -262,7 +262,7 @@ class AccountRepositoryImpl @Inject constructor(
         value: Int?
     ): Result<Unit, NetworkError> {
 
-        return if (value == null) {
+        return if (value == null || value == 0) {
             accountRemoteDataSource.deleteMediaRating(
                 sessionId = sessionManager.session.value.sessionId,
                 mediaType = mediaType,

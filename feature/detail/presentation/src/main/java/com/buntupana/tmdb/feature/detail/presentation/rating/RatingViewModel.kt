@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.UiText
+import com.buntupana.tmdb.feature.account.domain.usecase.AddMediaRatingUseCase
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
@@ -24,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RatingViewModel @Inject constructor(
-    private val addMediaRatingUseCase: com.buntupana.tmdb.feature.account.domain.usecase.AddMediaRatingUseCase
+    private val addMediaRatingUseCase: AddMediaRatingUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(RatingState(mediaTitle = "", rating = 0))
@@ -39,7 +40,8 @@ class RatingViewModel @Inject constructor(
     fun init(navArgs: RatingNav) {
         state = RatingState(
             mediaTitle = navArgs.mediaTitle,
-            rating = navArgs.rating ?: 0
+            rating = navArgs.rating ?: 0,
+            ratingTitle = getRatingTitle(navArgs.rating)
         )
         mediaId = navArgs.mediaId
         mediaType = navArgs.mediaType
@@ -50,10 +52,14 @@ class RatingViewModel @Inject constructor(
         viewModelScope.launch {
             when (event) {
                 is RatingEvent.SetRating -> {
-                    state = state.copy(rating = event.rating)
+                    state = state.copy(
+                        rating = event.rating,
+                        ratingTitle = getRatingTitle(event.rating)
+                    )
                 }
 
                 RatingEvent.AddRating -> addRating(rating = state.rating)
+
                 RatingEvent.ClearRating -> addRating(rating = null)
             }
         }
@@ -84,5 +90,34 @@ class RatingViewModel @Inject constructor(
                 delay(500)
                 state = state.copy(isLoading = false)
             }
+    }
+
+    private fun getRatingTitle(rating: Int?): UiText {
+
+        val ratingTitle = when (rating) {
+            10 -> R.string.text_rating_10
+
+            20 -> R.string.text_rating_20
+
+            30 -> R.string.text_rating_30
+
+            40 -> R.string.text_rating_40
+
+            50 -> R.string.text_rating_50
+
+            60 -> R.string.text_rating_60
+
+            70 -> R.string.text_rating_70
+
+            80 -> R.string.text_rating_80
+
+            90 -> R.string.text_rating_90
+
+            100 -> R.string.text_rating_100
+
+            else -> com.buntupana.tmdb.core.ui.R.string.empty
+        }
+
+        return UiText.StringResource(ratingTitle)
     }
 }

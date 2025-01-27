@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.episodes
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,8 +11,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,7 +24,8 @@ import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
+import com.buntupana.tmdb.core.ui.util.fadeIn
+import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
@@ -60,28 +64,27 @@ private fun EpisodesDetailContent(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+    val fadeInEnabled = remember { state.isLoading }
+
+    setStatusBarLightStatusFromBackground(
+        LocalView.current,
+        state.backgroundColor
+    )
+
     Scaffold(
         modifier = Modifier
-            .setStatusNavigationBarColor(state.backgroundColor)
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopBarLogo(
-                backgroundColor = state.backgroundColor,
-                onBackClick = { onBackClick() },
-                onSearchClick = { onSearchClick() },
-                onLogoClick = { onLogoClick() },
-                scrollBehavior = scrollBehavior
-            )
-        }
-    ) { paddingValues ->
+            Column {
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(paddingValues)
-        ) {
+                TopBarLogo(
+                    backgroundColor = state.backgroundColor,
+                    onBackClick = { onBackClick() },
+                    onSearchClick = { onSearchClick() },
+                    onLogoClick = { onLogoClick() },
+                    scrollBehavior = scrollBehavior
+                )
 
-            item {
                 val subtitle = if (state.episodeList.isNotNullOrEmpty()) {
                     pluralStringResource(
                         id = R.plurals.text_episodes_count,
@@ -100,26 +103,38 @@ private fun EpisodesDetailContent(
                     releaseYear = state.releaseYear,
                 )
             }
+        }
+    ) { paddingValues ->
 
-            item {
-                when {
-                    state.isLoading -> {
-                        MediaDetailsLoading(
-                            backgroundColor = systemBackground
-                        )
-                    }
 
-                    state.isGetEpisodesError -> {
-                        ErrorAndRetry(
-                            modifier = Modifier
-                                .padding(vertical = 200.dp)
-                                .fillMaxSize(),
-                            errorMessage = stringResource(id = RCore.string.message_loading_content_error),
-                            onRetryClick = onRetryClick
-                        )
-                    }
-                }
-            }
+        if (state.isLoading) {
+
+            MediaDetailsLoading(
+                modifier = Modifier.fillMaxSize(),
+                backgroundColor = systemBackground
+            )
+
+            return@Scaffold
+        }
+
+        if (state.isGetEpisodesError) {
+            ErrorAndRetry(
+                modifier = Modifier
+                    .padding(vertical = 200.dp)
+                    .fillMaxSize(),
+                errorMessage = stringResource(id = RCore.string.message_loading_content_error),
+                onRetryClick = onRetryClick
+            )
+
+            return@Scaffold
+        }
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = paddingValues.calculateTopPadding())
+                .fadeIn(fadeInEnabled)
+        ) {
 
             if (state.episodeList.isNullOrEmpty()) return@LazyColumn
 
@@ -140,7 +155,7 @@ private fun EpisodesDetailContent(
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(Dimens.padding.small)
+                        .padding(bottom = Dimens.padding.small + paddingValues.calculateBottomPadding())
                 )
             }
         }
@@ -152,7 +167,7 @@ private fun EpisodesDetailContent(
 fun EpisodesDetailScreenPreview() {
     EpisodesDetailContent(
         state = EpisodesDetailState(
-            isLoading = false,
+            isLoading = true,
             tvShowId = 0L,
             sessionName = "Jack Reacher",
             posterUrl = null,

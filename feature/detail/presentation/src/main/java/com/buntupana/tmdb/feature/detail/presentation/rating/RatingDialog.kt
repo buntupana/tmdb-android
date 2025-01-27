@@ -1,13 +1,19 @@
 package com.buntupana.tmdb.feature.detail.presentation.rating
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,14 +33,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.util.UiText
+import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.common.RatingSlider
+import com.buntupana.tmdb.feature.detail.presentation.getRatingColor
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import com.buntupana.tmdb.core.ui.R as RCore
@@ -135,11 +147,37 @@ fun RatingContent(
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
+
             Spacer(modifier = Modifier.height(Dimens.padding.big))
+
             Text(
                 text = "What do you think of ${state.mediaTitle}?"
             )
+
+            Spacer(modifier = Modifier.height(Dimens.padding.huge))
+
+            if (state.isLoading.not()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .isInvisible(state.rating == 0)
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .clip(RoundedCornerShape(100.dp))
+                            .background(PrimaryColor)
+                            .padding(horizontal = 12.dp, vertical = 8.dp)
+                        ,
+                        text = state.ratingTitle.asString(),
+                        fontWeight = FontWeight.Bold,
+                        color = getRatingColor(state.rating)
+                    )
+                }
+            }
+
             Spacer(modifier = Modifier.height(Dimens.padding.big))
+
             if (state.isLoading) {
                 CircularProgressIndicator()
             } else {
@@ -164,7 +202,8 @@ fun RatingContent(
                         )
                     }
                     Button(
-                        onClick = addRatingClick
+                        onClick = addRatingClick,
+                        enabled = state.rating > 0
                     ) {
                         Text(
                             text = stringResource(RCore.string.text_confirm),
@@ -173,6 +212,13 @@ fun RatingContent(
                     }
                 }
             }
+
+            Spacer(
+                modifier = Modifier
+                    .windowInsetsBottomHeight(
+                        WindowInsets.systemBars
+                    )
+            )
         }
     }
 }
@@ -186,8 +232,9 @@ fun RatingScreenPreview() {
         mutableStateOf(
             RatingState(
                 isLoading = false,
-                rating = 40,
-                mediaTitle = "The Office"
+                rating = 20,
+                mediaTitle = "The Office",
+                ratingTitle = UiText.DynamicString("Champion")
             )
         )
     }

@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.seasons
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,7 +28,8 @@ import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
+import com.buntupana.tmdb.core.ui.util.fadeIn
+import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
@@ -80,29 +83,29 @@ private fun SeasonsContent(
         mutableStateOf(state.backgroundColor)
     }
 
+    setStatusBarLightStatusFromBackground(
+        LocalView.current,
+        backgroundColor
+    )
+
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+    val fadeInEnabled = remember { state.isLoading }
 
     Scaffold(
         modifier = Modifier
-            .setStatusNavigationBarColor(backgroundColor)
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopBarLogo(
-                backgroundColor = backgroundColor,
-                onBackClick = { onBackClick() },
-                onSearchClick = { onSearchClick() },
-                onLogoClick = { onLogoClick() },
-                scrollBehavior = scrollBehavior
-            )
-        }
-    ) { paddingValues ->
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            item {
+            Column {
+                TopBarLogo(
+                    backgroundColor = backgroundColor,
+                    onBackClick = { onBackClick() },
+                    onSearchClick = { onSearchClick() },
+                    onLogoClick = { onLogoClick() },
+                    scrollBehavior = scrollBehavior
+                )
+
                 HeaderSimple(
                     backgroundColor = backgroundColor,
                     posterUrl = state.posterUrl,
@@ -111,24 +114,38 @@ private fun SeasonsContent(
                     setDominantColor = { backgroundColor = it }
                 )
             }
+        }
+    ) { paddingValues ->
 
-            item {
-                when {
-                    state.isLoading -> {
-                        MediaDetailsLoading()
-                    }
 
-                    state.isGetSeasonsError -> {
-                        ErrorAndRetry(
-                            modifier = Modifier
-                                .padding(vertical = 200.dp)
-                                .fillMaxSize(),
-                            errorMessage = stringResource(id = R.string.message_loading_content_error),
-                            onRetryClick = onRetryClick
-                        )
-                    }
-                }
-            }
+        if (state.isLoading) {
+
+            MediaDetailsLoading(
+                modifier = Modifier.fillMaxSize()
+            )
+
+            return@Scaffold
+        }
+
+        if (state.isGetSeasonsError) {
+
+            ErrorAndRetry(
+                modifier = Modifier
+                    .padding(vertical = 200.dp)
+                    .fillMaxSize(),
+                errorMessage = stringResource(id = R.string.message_loading_content_error),
+                onRetryClick = onRetryClick
+            )
+
+            return@Scaffold
+        }
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = paddingValues.calculateTopPadding())
+                .fadeIn(fadeInEnabled)
+        ) {
 
             if (state.seasonList.isNullOrEmpty()) return@LazyColumn
 
@@ -152,7 +169,7 @@ private fun SeasonsContent(
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(Dimens.padding.small)
+                        .padding(bottom = Dimens.padding.small + paddingValues.calculateBottomPadding())
                 )
             }
         }
@@ -164,6 +181,8 @@ private fun SeasonsContent(
 private fun SeasonsScreenPreview() {
     SeasonsContent(
         state = SeasonsDetailState(
+            isLoading = true,
+            isGetSeasonsError = true,
             tvShowId = 0L,
             tvShowName = "Jack Reacher",
             posterUrl = null,

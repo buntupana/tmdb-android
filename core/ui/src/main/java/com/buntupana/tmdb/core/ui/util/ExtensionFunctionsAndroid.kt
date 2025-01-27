@@ -1,7 +1,9 @@
 package com.buntupana.tmdb.core.ui.util
 
+import android.app.Activity
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.View
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.BlendMode
@@ -10,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavType
 import androidx.navigation.toRoute
@@ -71,4 +74,20 @@ inline fun <reified T : Any> serializableType(
 
 inline fun <reified T : Any> navType(): Pair<KType, NavType<*>> {
     return typeOf<T>() to serializableType<T>()
+}
+
+fun setStatusBarLightStatusFromBackground(
+    view: View,
+    backgroundColor: Color
+) {
+    val isLightStatus = backgroundColor.getOnBackgroundColor() != Color.White
+
+    (view.context as? Activity)?.run {
+        WindowCompat.getInsetsController(
+            window,
+            view
+        ).run {
+            isAppearanceLightStatusBars = isLightStatus
+        }
+    }
 }

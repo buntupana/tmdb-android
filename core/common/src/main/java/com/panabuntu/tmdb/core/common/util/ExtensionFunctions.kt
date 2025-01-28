@@ -1,9 +1,11 @@
 package com.panabuntu.tmdb.core.common.util
 
 import kotlinx.coroutines.delay
+import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Locale
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -85,5 +87,18 @@ suspend fun applyDelayFor(initMillis: Long, minDurationDifference: Long = 500) {
     val difference = System.currentTimeMillis() - initMillis
     if (difference < minDurationDifference) {
         delay(minDurationDifference - difference)
+    }
+}
+
+fun Int.toLocalizedString(locale: Locale = Locale.getDefault()): String {
+    val numberFormat = NumberFormat.getNumberInstance(locale)
+    return numberFormat.format(this)
+}
+
+fun getLanguageName(languageCode: String?): String {
+    return try {
+        Locale(languageCode!!).displayLanguage
+    } catch (e: Exception) {
+        " - "
     }
 }

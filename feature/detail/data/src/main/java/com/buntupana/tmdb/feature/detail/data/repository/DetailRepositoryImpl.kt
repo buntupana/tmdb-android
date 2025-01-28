@@ -31,7 +31,12 @@ class DetailRepositoryImpl @Inject constructor(
             it.toModel(
                 baseUrlPoster = urlProvider.BASE_URL_POSTER,
                 baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
-                baseUrlProfile = urlProvider.BASE_URL_PROFILE
+                baseUrlProfile = urlProvider.BASE_URL_PROFILE,
+                baseUrlImdb = urlProvider.BASE_URL_IMDB_MEDIA,
+                baseUrlFacebook = urlProvider.BASE_URL_FACEBOOK,
+                baseUrlInstagram = urlProvider.BASE_URL_INSTAGRAM,
+                baseUrlX = urlProvider.BASE_URL_X,
+                baseUrlTiktok = urlProvider.BASE_URL_TIKTOK
             )
         }
     }
@@ -45,7 +50,12 @@ class DetailRepositoryImpl @Inject constructor(
             it.toModel(
                 baseUrlPoster = urlProvider.BASE_URL_POSTER,
                 baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
-                baseUrlProfile = urlProvider.BASE_URL_PROFILE
+                baseUrlProfile = urlProvider.BASE_URL_PROFILE,
+                baseUrlImdb = urlProvider.BASE_URL_IMDB_MEDIA,
+                baseUrlFacebook = urlProvider.BASE_URL_FACEBOOK,
+                baseUrlInstagram = urlProvider.BASE_URL_INSTAGRAM,
+                baseUrlX = urlProvider.BASE_URL_X,
+                baseUrlTiktok = urlProvider.BASE_URL_TIKTOK
             )
         }
     }
@@ -70,10 +80,11 @@ class DetailRepositoryImpl @Inject constructor(
                 baseUrlPoster = urlProvider.BASE_URL_POSTER,
                 baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
                 baseUrlProfile = urlProvider.BASE_URL_PROFILE,
-                baseUrlImdb = urlProvider.BASE_URL_IMDB,
+                baseUrlImdb = urlProvider.BASE_URL_IMDB_PERSON,
                 baseUrlFacebook = urlProvider.BASE_URL_FACEBOOK,
                 baseUrlInstagram = urlProvider.BASE_URL_INSTAGRAM,
-                baseUrlX = urlProvider.BASE_URL_X
+                baseUrlX = urlProvider.BASE_URL_X,
+                baseUrlTiktok = urlProvider.BASE_URL_TIKTOK
             )
         }
     }

@@ -20,7 +20,9 @@ class UrlProviderImpl : UrlProvider {
     override val BASE_URL_FACEBOOK = "https://www.facebook.com/"
     override val BASE_URL_INSTAGRAM = "https://instagram.com/"
     override val BASE_URL_X = "https://x.com/"
-    override val BASE_URL_IMDB = "https://www.imdb.com/name/"
+    override val BASE_URL_IMDB_PERSON = "https://www.imdb.com/name/"
+    override val BASE_URL_IMDB_MEDIA = "https://www.imdb.com/title/"
+    override val BASE_URL_TIKTOK = "https://www.tiktok.com/@"
 
     override fun getSignInUrl(requestToken: String): String {
         return "https://www.themoviedb.org/authenticate/$requestToken?redirect_to=$SIGN_IN_DEEP_LINK_URL"

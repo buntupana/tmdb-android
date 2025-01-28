@@ -1,7 +1,6 @@
 package com.buntupana.tmdb.feature.detail.domain.usecase
 
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
-import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
 import com.panabuntu.tmdb.core.common.entity.NetworkError
@@ -24,17 +23,6 @@ class GetPersonDetailsUseCase @Inject constructor(
         detailRepository.getPersonDetails(params)
             .onError { return Result.Error(it) }
             .onSuccess { creditPersonItem ->
-                val externalLinks = mutableListOf<ExternalLink>()
-
-                externalLinks.addAll(creditPersonItem.externalLinkList)
-
-//                if (personDetails.imdbLink.isNotBlank()) {
-//                    externalLinks.add(ExternalLink.ImdbLink(personDetails.imdbLink))
-//                }
-
-                if (creditPersonItem.homePageUrl.isNotBlank()) {
-                    externalLinks.add(ExternalLink.HomePage(creditPersonItem.homePageUrl))
-                }
 
                 val knownForList = creditPersonItem.filmography
                     .distinctBy { it.title }
@@ -71,7 +59,7 @@ class GetPersonDetailsUseCase @Inject constructor(
                     age = creditPersonItem.age,
                     placeOfBirth = creditPersonItem.placeOfBirth,
                     biography = creditPersonItem.biography,
-                    externalLinks = externalLinks,
+                    externalLinks = creditPersonItem.externalLinkList,
                     knownFor = knownForList,
                     creditMap = creditMap,
                     knownCredits = creditPersonItem.filmography.size

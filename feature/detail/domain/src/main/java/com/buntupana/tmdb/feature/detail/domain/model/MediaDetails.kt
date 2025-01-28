@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
 import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.panabuntu.tmdb.core.common.model.MediaItem
 import java.time.LocalDate
 
 
@@ -21,12 +22,15 @@ sealed class MediaDetails(
     open val creatorList: List<Person.Crew>,
     open val castList: List<Person.Cast>,
     open val crewList: List<Person.Crew>,
-    open val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
+    open val recommendationList: List<MediaItem>,
     open val isFavorite: Boolean,
     open val isWatchlisted: Boolean,
     open val userRating: Int?,
     open val mediaType: MediaType,
     open val isRateable: Boolean,
+    open val status: String?,
+    open val originalLanguage: String? = null,
+    open val externalLinkList: List<ExternalLink>
 ) {
 
     data class Movie(
@@ -47,12 +51,17 @@ sealed class MediaDetails(
         override val creatorList: List<Person.Crew.Movie>,
         override val castList: List<Person.Cast.Movie>,
         override val crewList: List<Person.Crew.Movie>,
-        override val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
+        override val recommendationList: List<MediaItem>,
         val localCountryCodeRelease: String,
         override val isFavorite: Boolean,
         override val isWatchlisted: Boolean,
         override val userRating: Int?,
-        override val isRateable: Boolean
+        override val isRateable: Boolean,
+        override val status: String?,
+        override val originalLanguage: String?,
+        val budget: Int,
+        val revenue: Int,
+        override val externalLinkList: List<ExternalLink>
     ) : MediaDetails(
         id = id,
         title = title,
@@ -75,7 +84,10 @@ sealed class MediaDetails(
         userRating = userRating,
         isFavorite = isFavorite,
         isWatchlisted = isWatchlisted,
-        isRateable = isRateable
+        isRateable = isRateable,
+        status = status,
+        originalLanguage = originalLanguage,
+        externalLinkList = externalLinkList
     )
 
     data class TvShow(
@@ -95,7 +107,7 @@ sealed class MediaDetails(
         override val creatorList: List<Person.Crew.TvShow>,
         override val castList: List<Person.Cast.TvShow>,
         override val crewList: List<Person.Crew.TvShow>,
-        override val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
+        override val recommendationList: List<MediaItem>,
         val seasonList: List<Season>,
         val lastEpisode: Episode?,
         val nextEpisode: Episode?,
@@ -103,7 +115,11 @@ sealed class MediaDetails(
         override val isFavorite: Boolean,
         override val isWatchlisted: Boolean,
         override val userRating: Int?,
-        override val isRateable: Boolean
+        override val isRateable: Boolean,
+        override val status: String?,
+        val type: String?,
+        override val originalLanguage: String?,
+        override val externalLinkList: List<ExternalLink>
     ) : MediaDetails(
         id = id,
         title = title,
@@ -126,6 +142,9 @@ sealed class MediaDetails(
         userRating = userRating,
         isFavorite = isFavorite,
         isWatchlisted = isWatchlisted,
-        isRateable = isRateable
+        isRateable = isRateable,
+        status = status,
+        originalLanguage = originalLanguage,
+        externalLinkList = externalLinkList
     )
 }

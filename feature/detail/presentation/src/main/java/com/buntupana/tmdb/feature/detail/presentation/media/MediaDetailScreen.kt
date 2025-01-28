@@ -34,6 +34,7 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.fadeIn
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
@@ -41,6 +42,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.AccountBar
+import com.buntupana.tmdb.feature.detail.presentation.media.comp.AdditionalInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.CastHorizontalList
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.Header
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.MainInfo
@@ -322,6 +324,15 @@ fun MediaDetailContent(
                     modifier = Modifier.fillMaxWidth(),
                     mediaItemList = state.mediaDetails.recommendationList,
                     onItemClick = onRecommendationClick
+                )
+
+                AdditionalInfo(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = Dimens.padding.big)
+                        .padding(horizontal = Dimens.padding.horizontal)
+                    ,
+                    mediaDetails = state.mediaDetails
                 )
 
                 Spacer(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()))

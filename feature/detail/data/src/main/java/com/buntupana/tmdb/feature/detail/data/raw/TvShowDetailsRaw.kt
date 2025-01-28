@@ -38,7 +38,7 @@ data class TvShowDetailsRaw(
     @SerialName("origin_country")
     val originCountry: List<String>? = null,
     @SerialName("original_language")
-    val originalLanguage: String? = null,
+    val originalLanguageCode: String? = null,
     @SerialName("original_name")
     val originalName: String? = null,
     val popularity: Double? = null,
@@ -62,5 +62,7 @@ data class TvShowDetailsRaw(
     val credits: CreditsTvShowRaw? = null,
     val recommendations: RecommendationsRaw,
     @SerialName("account_states")
-    val accountStates: MediaAccountStateRaw? = null
+    val accountStates: MediaAccountStateRaw? = null,
+    @SerialName("external_ids")
+    val externalLinks: ExternalLinksRaw? = null
 )

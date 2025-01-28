@@ -130,7 +130,7 @@ class MediaDetailViewModel @Inject constructor(
         setMediaFavoriteUseCase(
             mediaType = state.mediaDetails?.mediaType!!,
             mediaId = state.mediaDetails?.id!!,
-            favorite = state.mediaDetails?.isFavorite!!.not()
+            favorite = state.mediaDetails?.isFavorite!!
         ).onError {
             setFavoriteInternal(
                 isFavorite = state.mediaDetails?.isFavorite?.not() ?: false,
@@ -160,7 +160,7 @@ class MediaDetailViewModel @Inject constructor(
         setMediaWatchListUseCase(
             mediaType = state.mediaDetails?.mediaType!!,
             mediaId = state.mediaDetails?.id!!,
-            watchlist = state.mediaDetails?.isWatchlisted!!.not()
+            watchlist = state.mediaDetails?.isWatchlisted!!
         ).onError {
             setWatchlistInternal(
                 isWatchlist = state.mediaDetails?.isWatchlisted?.not() ?: false,

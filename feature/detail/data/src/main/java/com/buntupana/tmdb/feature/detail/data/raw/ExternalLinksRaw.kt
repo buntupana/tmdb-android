@@ -18,5 +18,11 @@ data class ExternalLinksRaw(
     @SerialName("tvrage_id")
     val tvrageId: Int? = null,
     @SerialName("twitter_id")
-    val twitterId: String? = null
+    val twitterId: String? = null,
+    @SerialName("tiktok_id")
+    val tiktokId: String? = null,
+    @SerialName("wikidata_id")
+    val wikiDataId: String? = null,
+    @SerialName("youtube_id")
+    val youtubeId: String? = null
 )

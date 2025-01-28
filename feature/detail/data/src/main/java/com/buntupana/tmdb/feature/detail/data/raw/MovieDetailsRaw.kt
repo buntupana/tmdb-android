@@ -11,13 +11,13 @@ data class MovieDetailsRaw(
     val backdropPath: String? = null,
     @SerialName("belongs_to_collection")
     val belongsToCollection: BelongsToCollection? = null,
-    val budget: Long,
+    val budget: Int,
     val genres: List<Genre>,
     val homepage: String,
     @SerialName("imdb_id")
     val imdbId: String? = null,
     @SerialName("original_language")
-    val originalLanguage: String,
+    val originalLanguageCode: String,
     @SerialName("original_title")
     val originalTitle: String,
     val overview: String,
@@ -30,7 +30,7 @@ data class MovieDetailsRaw(
     val productionCountries: List<ProductionCountry>,
     @SerialName("release_date")
     val releaseDate: String,
-    val revenue: Long,
+    val revenue: Int,
     val runtime: Long,
     @SerialName("spoken_languages")
     val spokenLanguages: List<SpokenLanguage>,
@@ -48,5 +48,7 @@ data class MovieDetailsRaw(
     val credits: CreditsMovieRaw? = null,
     val recommendations: RecommendationsRaw,
     @SerialName("account_states")
-    val accountStates: MediaAccountStateRaw? = null
+    val accountStates: MediaAccountStateRaw? = null,
+    @SerialName("external_ids")
+    val externalLinks: ExternalLinksRaw? = null
 )

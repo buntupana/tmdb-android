@@ -27,7 +27,7 @@ class DetailRemoteDataSource @Inject constructor(
             httpClient.get("movie/$movieId") {
                 parameter(
                     "append_to_response",
-                    "release_dates,videos,credits,recommendations,account_states"
+                    "release_dates,videos,credits,recommendations,account_states,external_ids"
                 )
                 if (sessionId != null) {
                     parameter("session_id", sessionId)
@@ -44,7 +44,7 @@ class DetailRemoteDataSource @Inject constructor(
             httpClient.get(urlString = "tv/$tvShowId") {
                 parameter(
                     "append_to_response",
-                    "content_ratings,videos,aggregate_credits,recommendations,account_states"
+                    "content_ratings,videos,aggregate_credits,recommendations,account_states,external_ids"
                 )
                 if (sessionId != null) {
                     parameter("session_id", sessionId)

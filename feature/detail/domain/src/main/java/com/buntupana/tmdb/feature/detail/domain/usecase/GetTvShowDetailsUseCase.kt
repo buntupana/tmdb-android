@@ -46,7 +46,11 @@ class GetTvShowDetailsUseCase @Inject constructor(
                 isFavorite = it.isFavorite,
                 isWatchlisted = it.isWatchlisted,
                 userRating = it.userRating,
-                isRateable = it.isRateable
+                isRateable = it.isRateable,
+                status = it.status,
+                originalLanguage = it.originalLanguage,
+                type = it.type,
+                externalLinkList = it.externalLinkList
             )
         }
     }

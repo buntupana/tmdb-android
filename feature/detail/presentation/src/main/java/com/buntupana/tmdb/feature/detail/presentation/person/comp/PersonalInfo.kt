@@ -12,12 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.ExpandableText
 import com.buntupana.tmdb.core.ui.composables.TitleAndSubtitle
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.getString
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.presentation.R
+import com.buntupana.tmdb.feature.detail.presentation.personDetailsSample
 import com.panabuntu.tmdb.core.common.util.ifNull
 import com.panabuntu.tmdb.core.common.util.toLocalFormat
 
@@ -109,4 +111,10 @@ fun PersonalInfo(
 
         Spacer(Modifier.height(Dimens.padding.small))
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PersonalInfoPreview() {
+    PersonalInfo(personDetails = personDetailsSample)
 }

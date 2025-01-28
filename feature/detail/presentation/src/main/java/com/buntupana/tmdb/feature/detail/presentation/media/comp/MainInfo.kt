@@ -226,7 +226,8 @@ fun MainInfo(
                         .padding(horizontal = Dimens.padding.tiny)
                         .alpha(0.6f),
                     text = mediaDetails.ageCertification,
-                    color = textColor
+                    color = textColor,
+                    cornerRound = 5.dp
                 )
 
                 var isReleaseDateAndCountryCodeInfo = false

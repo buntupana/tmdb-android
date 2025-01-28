@@ -29,4 +29,8 @@ data class TvShowDetails(
     val isWatchlisted: Boolean,
     val userRating: Int?,
     val isRateable: Boolean,
+    val status: String?,
+    val originalLanguage: String?,
+    val type: String?,
+    val externalLinkList: List<ExternalLink>
 )

@@ -85,7 +85,12 @@ class GetMovieDetailsUseCase @Inject constructor(
                         isFavorite = movieDetails.isFavorite,
                         isWatchlisted = movieDetails.isWatchlisted,
                         userRating = movieDetails.userRating,
-                        isRateable = movieDetails.isRateable
+                        isRateable = movieDetails.isRateable,
+                        status = movieDetails.status,
+                        originalLanguage = movieDetails.originalLanguage,
+                        budget = movieDetails.budget,
+                        revenue = movieDetails.revenue,
+                        externalLinkList = movieDetails.externalLinkList
                     )
                 )
             }

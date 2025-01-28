@@ -55,4 +55,11 @@
     <string name="text_rating_90">Greatness</string>
     <string name="text_rating_100">Champion</string>
 
+    // Additional Info
+    <string name="text_status">Status</string>
+    <string name="text_original_language">Original Language</string>
+    <string name="text_budget">Budget</string>
+    <string name="text_revenue">Revenue</string>
+    <string name="text_type">Type</string>
+
 </resources>

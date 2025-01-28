@@ -14,7 +14,8 @@ fun PersonDetailsRaw.toModel(
     baseUrlImdb: String,
     baseUrlFacebook: String,
     baseUrlInstagram: String,
-    baseUrlX: String
+    baseUrlX: String,
+    baseUrlTiktok: String
 ): PersonDetails {
 
     val birthDateLocal: LocalDate? = try {
@@ -31,8 +32,6 @@ fun PersonDetailsRaw.toModel(
 
     val profileUrl = profilePath.ifNotNullOrBlank { baseUrlProfile + profilePath }
 
-    val imdbLink = if (imdbId.isNullOrBlank()) imdbId else baseUrlImdb + imdbId
-
     // Getting person age
     val age = if (deathDateLocal != null && birthDateLocal != null) {
         deathDateLocal.year - birthDateLocal.year
@@ -46,8 +45,7 @@ fun PersonDetailsRaw.toModel(
         id = id,
         name = name,
         profileUrl = profileUrl.orEmpty(),
-        homePageUrl = homepage.orEmpty(),
-        imdbLink = imdbLink.orEmpty(),
+        homePageUrl = homepage,
         knownForDepartment = knownForDepartment.orEmpty(),
         gender = getGender(gender),
         birthDate = birthDateLocal,
@@ -56,9 +54,12 @@ fun PersonDetailsRaw.toModel(
         placeOfBirth = placeOfBirth.orEmpty(),
         biography = biography.orEmpty(),
         externalLinkList = externalLinks?.toModel(
+            homepage = homepage,
             baseUrlFacebook = baseUrlFacebook,
             baseUrlInstagram = baseUrlInstagram,
-            baseUrlX = baseUrlX
+            baseUrlX = baseUrlX,
+            baseUrlTiktok = baseUrlTiktok,
+            baseUrlImdb = baseUrlImdb
         ).orEmpty(),
         filmography = combinedCredits?.toModel(
             baseUrlPoster = baseUrlPoster,

@@ -5,6 +5,7 @@ import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import com.buntupana.tmdb.core.ui.util.mediaItemTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
+import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
 import com.buntupana.tmdb.feature.detail.domain.model.Job
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
@@ -14,6 +15,13 @@ import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.panabuntu.tmdb.core.common.model.Gender
 import java.time.LocalDate
 
+val externalLinkListSample = listOf(
+    ExternalLink.XLink(""),
+    ExternalLink.FacebookLink(""),
+    ExternalLink.InstagramLink(""),
+    ExternalLink.TiktokLink(""),
+    ExternalLink.ImdbLink("")
+)
 
 val personDetailsSample = PersonFullDetails(
     id = 0L,
@@ -34,7 +42,7 @@ val personDetailsSample = PersonFullDetails(
             "On 31 October 2020, it was announced that Connery had died at the age of 90.\n" +
             "\n" +
             "Description above from the Wikipedia article Sean Connery, licensed under CC-BY-SA, full list of contributors on Wikipedia",
-    externalLinks = emptyList(),
+    externalLinks = externalLinkListSample,
     knownFor = emptyList(),
     creditMap = emptyMap(),
     knownCredits = 60,
@@ -128,7 +136,12 @@ val mediaDetailsMovieSample = MediaDetails.Movie(
     isFavorite = false,
     isWatchlisted = false,
     userRating = null,
-    isRateable = true
+    isRateable = true,
+    status = "Released",
+    originalLanguage = "en",
+    budget = 200_000_000,
+    revenue = 250_000_000,
+    externalLinkList = externalLinkListSample
 )
 
 val creditItemPersonSample = CreditPersonItem.Movie(
@@ -214,5 +227,9 @@ val mediaDetailsTvShowSample = MediaDetails.TvShow(
     isFavorite = false,
     isWatchlisted = false,
     userRating = null,
-    isRateable = true
+    isRateable = true,
+    status = "Ended",
+    originalLanguage = "ja",
+    type = "Scripted",
+    externalLinkList = externalLinkListSample
 )

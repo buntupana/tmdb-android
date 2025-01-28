@@ -2,7 +2,7 @@ package com.buntupana.tmdb.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val BackgroundColor = Color(0xFFE3E3E3)
+val BackgroundColor = Color(0xFFFFFFFF)
 val PrimaryColor = Color(0xFF0D253F)
 val PrimaryDarkColor = Color(0xFF032541)
 

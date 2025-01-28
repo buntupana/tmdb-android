@@ -5,6 +5,7 @@ import com.buntupana.tmdb.feature.detail.data.raw.MovieDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
 import com.panabuntu.tmdb.core.common.util.Const.RATABLE_DAYS
+import com.panabuntu.tmdb.core.common.util.getLanguageName
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 import java.time.Duration
 import java.time.LocalDate
@@ -13,7 +14,12 @@ import java.time.format.DateTimeParseException
 fun MovieDetailsRaw.toModel(
     baseUrlPoster: String,
     baseUrlBackdrop: String,
-    baseUrlProfile: String
+    baseUrlProfile: String,
+    baseUrlImdb: String,
+    baseUrlFacebook: String,
+    baseUrlInstagram: String,
+    baseUrlX: String,
+    baseUrlTiktok: String
 ): MovieDetails {
 
     val releaseLocalDate = try {
@@ -61,6 +67,18 @@ fun MovieDetailsRaw.toModel(
         isFavorite = accountStates?.favorite ?: false,
         isWatchlisted = accountStates?.watchlist ?: false,
         userRating = (accountStates?.rated?.value?.times(10))?.toInt(),
-        isRateable = isRatable
+        isRateable = isRatable,
+        status = status,
+        originalLanguage = getLanguageName(originalLanguageCode),
+        budget = budget,
+        revenue = revenue,
+        externalLinkList = externalLinks?.toModel(
+            homepage = homepage,
+            baseUrlFacebook = baseUrlFacebook,
+            baseUrlInstagram = baseUrlInstagram,
+            baseUrlX = baseUrlX,
+            baseUrlTiktok = baseUrlTiktok,
+            baseUrlImdb = baseUrlImdb
+        ).orEmpty()
     )
 }

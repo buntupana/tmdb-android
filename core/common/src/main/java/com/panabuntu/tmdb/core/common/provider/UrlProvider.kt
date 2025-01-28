@@ -16,5 +16,7 @@ interface UrlProvider {
     val BASE_URL_FACEBOOK: String
     val BASE_URL_INSTAGRAM: String
     val BASE_URL_X: String
-    val BASE_URL_IMDB: String
+    val BASE_URL_IMDB_PERSON: String
+    val BASE_URL_TIKTOK: String
+    val BASE_URL_IMDB_MEDIA: String
 }

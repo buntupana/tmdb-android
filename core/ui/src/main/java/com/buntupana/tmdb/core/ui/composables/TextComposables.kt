@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -38,7 +39,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
@@ -64,26 +65,47 @@ import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 @Composable
 fun OutlinedText(
     modifier: Modifier = Modifier,
+    backgroundColor: Color = Color.Unspecified,
     text: String = "",
-    color: Color = Color.Gray,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    fontWeight: FontWeight = FontWeight.Normal,
+    color: Color = Color.Unspecified,
     outlineColor: Color = color,
-    cornerRound: Dp = 2.dp,
-    padding: Dp = 0.dp,
-    horizontalPadding: Dp = 4.dp,
-    verticalPadding: Dp = 0.dp
+    cornerRound: Dp = 100.dp,
+    padding: PaddingValues = PaddingValues(0.dp),
+    internalHorizontalPadding: Dp = 4.dp,
+    internalVerticalPadding: Dp = 0.dp
 ) {
 
     if (text.isNotEmpty()) {
         Text(
             modifier = modifier
-                .alpha(0.6f)
+                .padding(padding)
+                .clip(RoundedCornerShape(cornerRound))
+                .background(backgroundColor)
                 .border(BorderStroke(1.dp, outlineColor), RoundedCornerShape(cornerRound))
-                .padding(horizontal = horizontalPadding, vertical = verticalPadding)
-                .padding(padding),
+                .padding(horizontal = internalHorizontalPadding, vertical = internalVerticalPadding),
             text = text,
-            color = color
+            color = color,
+            fontWeight = fontWeight,
+            fontSize = fontSize
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun OutlinedTextPreview() {
+    OutlinedText(
+        text = "Hola",
+        fontWeight = FontWeight.Bold,
+        backgroundColor = Color.Yellow,
+        cornerRound = 100.dp,
+        outlineColor = Color.Red,
+        internalVerticalPadding = 4.dp,
+        internalHorizontalPadding = 8.dp,
+        padding = PaddingValues(20.dp)
+    )
 }
 
 @Composable
@@ -287,7 +309,6 @@ fun ExpandableText(
 fun TextWithIcon(
     modifier: Modifier = Modifier,
     text: String,
-    clickable: (() -> Unit) = {},
     @DrawableRes iconRes: Int
 ) {
 

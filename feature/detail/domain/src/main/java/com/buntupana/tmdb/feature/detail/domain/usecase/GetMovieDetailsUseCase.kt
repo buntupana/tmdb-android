@@ -73,6 +73,7 @@ class GetMovieDetailsUseCase @Inject constructor(
                         releaseDate = movieDetails.releaseDate,
                         localReleaseDate = localReleaseDate?.format(dateFormatter),
                         voteAverage = movieDetails.userScore,
+                        voteCount = movieDetails.voteCount,
                         runTime = movieDetails.runTime,
                         genreList = movieDetails.genreList,
                         ageCertification = certification,

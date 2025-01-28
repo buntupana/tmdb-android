@@ -36,7 +36,12 @@
 
     <string name="text_clear_rating">Clear Rating</string>
 
+    <string name="message_set_favorite_error">Sorry there was an error setting favorite</string>
+    <string name="message_set_watchlist_error">Sorry there was an error setting watchlist</string>
     <string name="message_rating_error">Sorry there was an error rating %s</string>
+
+    <string name="text_votes">%s votes</string>
+    <string name="text_your_rating_is">Your Rating is %s\%%</string>
 
     // Rating titles
     <string name="text_rating_10">Absolute Trash</string>

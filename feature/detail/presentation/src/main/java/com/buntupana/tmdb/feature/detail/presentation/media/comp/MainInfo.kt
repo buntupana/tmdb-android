@@ -1,11 +1,13 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -44,6 +46,8 @@ import com.buntupana.tmdb.core.ui.composables.OutlinedText
 import com.buntupana.tmdb.core.ui.composables.widget.UserScore
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.theme.RatingColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
@@ -124,11 +128,21 @@ fun MainInfo(
                     score = mediaDetails.voteAverage
                 )
                 Spacer(modifier = Modifier.width(Dimens.padding.small))
-                Text(
-                    text = stringResource(id = RCore.string.text_user_score),
-                    color = textColor,
-                    fontWeight = FontWeight(700)
-                )
+                Column {
+                    Text(
+                        text = stringResource(id = RCore.string.text_user_score),
+                        color = textColor,
+                        fontWeight = FontWeight(700)
+                    )
+                    Text(
+                        text = stringResource(
+                            R.string.text_votes,
+                            mediaDetails.voteCount.toString()
+                        ),
+                        color = textColor,
+                        fontSize = 14.sp
+                    )
+                }
             }
             if (mediaDetails.trailerUrl.isNotBlank()) {
                 Image(
@@ -166,11 +180,37 @@ fun MainInfo(
             }
         }
 
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateContentSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            if (mediaDetails.userRating != null) {
+
+                OutlinedText(
+                    modifier = Modifier
+                        .padding(top = Dimens.padding.small, bottom = Dimens.padding.vertical),
+                    backgroundColor = PrimaryColor,
+                    text = stringResource(
+                        R.string.text_your_rating_is,
+                        mediaDetails.userRating.toString()
+                    ),
+                    fontWeight = FontWeight.Bold,
+                    color = RatingColor,
+                    cornerRound = 100.dp,
+                    outlineColor = textColor,
+                    internalVerticalPadding = Dimens.padding.small,
+                    internalHorizontalPadding = Dimens.padding.medium
+                )
+            }
+        }
+
         // Certification, duration and genres
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0x1A000000))
+                .background(textColor.copy(alpha = 0.05f))
                 .border(BorderStroke(1.dp, Color(0x40000000)))
                 .padding(vertical = Dimens.padding.small, horizontal = Dimens.padding.medium),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -182,7 +222,9 @@ fun MainInfo(
             ) {
 
                 OutlinedText(
-                    modifier = Modifier.padding(horizontal = Dimens.padding.tiny),
+                    modifier = Modifier
+                        .padding(horizontal = Dimens.padding.tiny)
+                        .alpha(0.6f),
                     text = mediaDetails.ageCertification,
                     color = textColor
                 )

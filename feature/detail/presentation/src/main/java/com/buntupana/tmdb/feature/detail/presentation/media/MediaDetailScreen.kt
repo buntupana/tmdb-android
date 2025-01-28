@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -254,6 +255,7 @@ fun MediaDetailContent(
 
         Column(
             modifier = Modifier
+                .fillMaxHeight()
                 .padding(top = paddingValues.calculateTopPadding())
                 .verticalScroll(scrollState)
                 .fadeIn(fadeInEnabled)
@@ -280,7 +282,9 @@ fun MediaDetailContent(
             }
 
             Column(
-                Modifier.background(MaterialTheme.colorScheme.background)
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .background(MaterialTheme.colorScheme.background)
             ) {
 
                 CastHorizontalList(

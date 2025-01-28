@@ -74,6 +74,7 @@ appcompat = "1.7.0"
 material = "1.12.0"
 jetbrainsKotlinJvm = "2.0.21"
 uiTextGoogleFonts = "1.7.6"
+uiGraphicsAndroid = "1.5.0"
 
 [libraries]
 
@@ -95,6 +96,7 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-icons-extended = {  group = "androidx.compose.material", name = "material-icons-extended"}
+androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
 
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "compose_constraint" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "compose_paging" }

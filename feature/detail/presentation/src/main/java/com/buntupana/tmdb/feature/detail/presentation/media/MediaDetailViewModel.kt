@@ -8,19 +8,22 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
+import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.account.domain.usecase.SetMediaFavoriteUseCase
 import com.buntupana.tmdb.feature.account.domain.usecase.SetMediaWatchListUseCase
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
+import com.buntupana.tmdb.feature.detail.presentation.R
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -77,9 +80,6 @@ class MediaDetailViewModel @Inject constructor(
 
                 is MediaDetailEvent.OnRatingSuccess -> {
                     onRatingSuccess(event.rating)
-                    // delay to gives the server time to update the rating
-                    delay(800)
-                    onEvent(MediaDetailEvent.GetMediaDetails)
                 }
             }
         }
@@ -122,22 +122,29 @@ class MediaDetailViewModel @Inject constructor(
 
         state = state.copy(isFavoriteLoading = true)
 
+        setFavoriteInternal(
+            isFavorite = state.mediaDetails?.isFavorite?.not() ?: false,
+            isFavoriteLoading = true
+        )
+
         setMediaFavoriteUseCase(
             mediaType = state.mediaDetails?.mediaType!!,
             mediaId = state.mediaDetails?.id!!,
             favorite = state.mediaDetails?.isFavorite!!.not()
         ).onError {
-            state = state.copy(isFavoriteLoading = false)
-        }.onSuccess {
-            when (val mediaDetails = state.mediaDetails!!) {
-                is MediaDetails.Movie -> mediaDetails.copy(isFavorite = mediaDetails.isFavorite.not())
-                is MediaDetails.TvShow -> mediaDetails.copy(isFavorite = mediaDetails.isFavorite.not())
-            }.let {
-                state = state.copy(
-                    mediaDetails = it,
-                    isFavoriteLoading = false
+            setFavoriteInternal(
+                isFavorite = state.mediaDetails?.isFavorite?.not() ?: false,
+                isFavoriteLoading = false
+            )
+            SnackbarController.sendEvent(
+                SnackbarEvent(
+                    message = UiText.StringResource(
+                        R.string.message_set_favorite_error
+                    )
                 )
-            }
+            )
+        }.onSuccess {
+            state = state.copy(isFavoriteLoading = false)
         }
     }
 
@@ -145,24 +152,29 @@ class MediaDetailViewModel @Inject constructor(
 
         if (state.mediaDetails == null || state.isWatchlistLoading) return
 
-        state = state.copy(isWatchlistLoading = true)
+        setWatchlistInternal(
+            isWatchlist = state.mediaDetails?.isWatchlisted?.not() ?: false,
+            isWatchlistLoading = true
+        )
 
         setMediaWatchListUseCase(
             mediaType = state.mediaDetails?.mediaType!!,
             mediaId = state.mediaDetails?.id!!,
             watchlist = state.mediaDetails?.isWatchlisted!!.not()
         ).onError {
-            state = state.copy(isWatchlistLoading = false)
-        }.onSuccess {
-            when (val mediaDetails = state.mediaDetails!!) {
-                is MediaDetails.Movie -> mediaDetails.copy(isWatchlisted = mediaDetails.isWatchlisted.not())
-                is MediaDetails.TvShow -> mediaDetails.copy(isWatchlisted = mediaDetails.isWatchlisted.not())
-            }.let {
-                state = state.copy(
-                    mediaDetails = it,
-                    isWatchlistLoading = false
+            setWatchlistInternal(
+                isWatchlist = state.mediaDetails?.isWatchlisted?.not() ?: false,
+                isWatchlistLoading = false
+            )
+            SnackbarController.sendEvent(
+                SnackbarEvent(
+                    message = UiText.StringResource(
+                        R.string.message_set_watchlist_error
+                    )
                 )
-            }
+            )
+        }.onSuccess {
+            state = state.copy(isWatchlistLoading = false)
         }
     }
 
@@ -185,6 +197,30 @@ class MediaDetailViewModel @Inject constructor(
             )
         }.let {
             state = state.copy(mediaDetails = it)
+        }
+    }
+
+    private fun setWatchlistInternal(isWatchlist: Boolean, isWatchlistLoading: Boolean) {
+        when (val mediaDetails = state.mediaDetails!!) {
+            is MediaDetails.Movie -> mediaDetails.copy(isWatchlisted = isWatchlist)
+            is MediaDetails.TvShow -> mediaDetails.copy(isWatchlisted = isWatchlist)
+        }.let {
+            state = state.copy(
+                mediaDetails = it,
+                isWatchlistLoading = isWatchlistLoading
+            )
+        }
+    }
+
+    private fun setFavoriteInternal(isFavorite: Boolean, isFavoriteLoading: Boolean) {
+        when (val mediaDetails = state.mediaDetails!!) {
+            is MediaDetails.Movie -> mediaDetails.copy(isFavorite = isFavorite)
+            is MediaDetails.TvShow -> mediaDetails.copy(isFavorite = isFavorite)
+        }.let {
+            state = state.copy(
+                mediaDetails = it,
+                isFavoriteLoading = isFavoriteLoading
+            )
         }
     }
 }

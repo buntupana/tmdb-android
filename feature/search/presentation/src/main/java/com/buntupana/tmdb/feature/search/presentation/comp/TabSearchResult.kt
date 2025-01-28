@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,9 +48,10 @@ fun TabSearchResult(
         )
         Spacer(modifier = Modifier.width(4.dp))
         OutlinedText(
+            modifier = Modifier.alpha(0.6f),
             text = resultCount.toString(),
             cornerRound = 6.dp,
-            horizontalPadding = 8.dp,
+            internalHorizontalPadding = 8.dp,
             outlineColor = outLineColor
         )
     }

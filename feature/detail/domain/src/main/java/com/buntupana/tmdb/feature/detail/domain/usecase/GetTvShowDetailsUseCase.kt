@@ -31,6 +31,7 @@ class GetTvShowDetailsUseCase @Inject constructor(
                 tagLine = it.tagLine,
                 releaseDate = it.releaseDate,
                 voteAverage = it.userScore,
+                voteCount = it.voteCount,
                 runTime = it.runTime,
                 genreList = it.genreList,
                 ageCertification = certification?.rating.orEmpty(),

@@ -58,7 +58,7 @@ fun WatchlistPager(
         }
 
         // Drawing result items
-        items(pagingItems.itemCount) { index ->
+        items(pagingItems.itemCount, key = {index -> pagingItems[index]?.id ?: index }) { index ->
 
             val item = pagingItems[index] ?: return@items
 

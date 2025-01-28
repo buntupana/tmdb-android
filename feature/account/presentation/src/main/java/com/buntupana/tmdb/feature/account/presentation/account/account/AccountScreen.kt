@@ -232,7 +232,7 @@ fun AccountContent(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun AccountScreenPreview() {
     AccountContent(

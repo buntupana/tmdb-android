@@ -66,7 +66,8 @@ fun CarouselMediaItem(
                     }
                 }
             } else {
-                items(mediaItemList.size) { index ->
+                items(mediaItemList.size, key = { index -> mediaItemList[index].id }) { index ->
+
 
                     // Adding some padding at the start
                     if (index == 0) {

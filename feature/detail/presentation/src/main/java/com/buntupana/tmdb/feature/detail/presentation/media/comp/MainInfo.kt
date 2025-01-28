@@ -47,11 +47,11 @@ import com.buntupana.tmdb.core.ui.composables.widget.UserScore
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.RatingColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.presentation.R
+import com.buntupana.tmdb.feature.detail.presentation.getRatingColor
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
 import com.buntupana.tmdb.core.ui.R as RCore
 
@@ -188,21 +188,42 @@ fun MainInfo(
         ) {
             if (mediaDetails.userRating != null) {
 
-                OutlinedText(
+                Box(
                     modifier = Modifier
-                        .padding(top = Dimens.padding.small, bottom = Dimens.padding.vertical),
-                    backgroundColor = PrimaryColor,
-                    text = stringResource(
-                        R.string.text_your_rating_is,
-                        mediaDetails.userRating.toString()
-                    ),
-                    fontWeight = FontWeight.Bold,
-                    color = RatingColor,
-                    cornerRound = 100.dp,
-                    outlineColor = textColor,
-                    internalVerticalPadding = Dimens.padding.small,
-                    internalHorizontalPadding = Dimens.padding.medium
-                )
+                        .padding(top = Dimens.padding.small, bottom = Dimens.padding.medium)
+                        .clip(RoundedCornerShape(100.dp))
+                        .background(PrimaryColor)
+                        .border(
+                            width = 1.dp,
+                            color = PrimaryColor.getOnBackgroundColor(),
+                            shape = RoundedCornerShape(100.dp)
+                        )
+                        .padding(
+                            vertical = Dimens.padding.small,
+                            horizontal = Dimens.padding.medium
+                        )
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Bottom
+                    ) {
+                        Text(
+                            text = stringResource(R.string.text_your_rating_is),
+                            color = PrimaryColor.getOnBackgroundColor(),
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = " ${mediaDetails.userRating}",
+                            color = getRatingColor(mediaDetails.userRating!!),
+                            fontWeight = FontWeight.Bold,
+                        )
+                        Text(
+                            text = "%",
+                            color = PrimaryColor.getOnBackgroundColor(),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 10.sp
+                        )
+                    }
+                }
             }
         }
 

@@ -3,7 +3,7 @@ package com.buntupana.tmdb.core.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val BackgroundColor = Color(0xFFFFFFFF)
-val PrimaryColor = Color(0xFF0D253F)
+val PrimaryColor = Color(0xFF032541)
 val PrimaryDarkColor = Color(0xFF032541)
 
 val SecondaryColor = Color(0xFF01B4E4)
@@ -30,7 +30,7 @@ val WatchListColor = Color(0xFFcf3031)
 val RatingColor = Color(0xFFeec405)
 
 val NoScoreColor: Color = Color(0xFF666666)
-val LowScoreColor: Color = Color(0xFFDB2360)
+val LowScoreColor: Color = Color(0xFFF3135B)
 val MediumScoreColor: Color = Color(0xFFD2D531)
 val HighScoreColor: Color = Color(0xFF21D07A)
 

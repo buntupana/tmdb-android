@@ -149,6 +149,6 @@ fun UserScore(
 fun UserScorePreview() {
     UserScore(
         size = 100.dp,
-        score = null
+        score = 20
     )
 }

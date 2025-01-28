@@ -41,7 +41,7 @@
     <string name="message_rating_error">Sorry there was an error rating %s</string>
 
     <string name="text_votes">%s votes</string>
-    <string name="text_your_rating_is">Your Rating is %s\%%</string>
+    <string name="text_your_rating_is">Your Rating is</string>
 
     // Rating titles
     <string name="text_rating_10">Absolute Trash</string>

@@ -26,7 +26,9 @@ inline fun <T, E : Error> Result<T, E>.onSuccess(action: (data: T) -> Unit): Res
             this
         }
     }
-}inline fun <T, E : Error> Result<T, E>.onError(action: (error: E) -> Unit): Result<T, E> {
+}
+
+inline fun <T, E : Error> Result<T, E>.onError(action: (error: E) -> Unit): Result<T, E> {
     return when (this) {
         is Result.Error -> {
             action(error)

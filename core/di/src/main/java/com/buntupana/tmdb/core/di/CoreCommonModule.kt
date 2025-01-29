@@ -26,6 +26,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import timber.log.Timber
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -40,7 +41,18 @@ object CoreCommonModule {
 
     @Singleton
     @Provides
-    fun provideHttpClient(urlProvider: UrlProvider): HttpClient {
+    fun provideHttpClientV3(urlProvider: UrlProvider): HttpClient {
+        return provideHttpClient(urlProvider.BASE_URL_API_V3, urlProvider.API_KEY)
+    }
+
+    @Singleton
+    @Provides
+    @Named("ApiV4")
+    fun provideHttpClientV4(urlProvider: UrlProvider): HttpClient {
+        return provideHttpClient(urlProvider.BASE_URL_API_V4, urlProvider.API_KEY)
+    }
+
+    private fun provideHttpClient(baseUrl: String, apiKey: String): HttpClient {
         return HttpClient(OkHttp) {
             install(Logging) {
                 logger = object : Logger {
@@ -51,14 +63,14 @@ object CoreCommonModule {
                 level = LogLevel.INFO
             }
             install(DefaultRequest) {
-                url(urlProvider.BASE_URL_API)
+                url(baseUrl)
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
             }
             install(Auth) {
                 bearer {
                     loadTokens {
                         BearerTokens(
-                            accessToken = urlProvider.API_KEY,
+                            accessToken = apiKey,
                             refreshToken = ""
                         )
                     }

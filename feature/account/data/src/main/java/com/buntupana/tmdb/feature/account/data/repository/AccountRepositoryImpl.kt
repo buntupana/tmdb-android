@@ -7,6 +7,7 @@ import com.buntupana.tmdb.core.data.api.GenericPagingDataSource
 import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.account.data.mapper.toModel
 import com.buntupana.tmdb.feature.account.data.remote_data_source.AccountRemoteDataSource
+import com.buntupana.tmdb.feature.account.domain.model.UserCredentials
 import com.buntupana.tmdb.feature.account.domain.repository.AccountRepository
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
@@ -33,12 +34,18 @@ class AccountRepositoryImpl @Inject constructor(
         return accountRemoteDataSource.createRequestToken().map { it.requestToken }
     }
 
-    override suspend fun createSession(requestToken: String): Result<String, NetworkError> {
-        return accountRemoteDataSource.createSession(requestToken).map { it.sessionId }
+    override suspend fun requestAccessToken(requestToken: String): Result<UserCredentials, NetworkError> {
+        return accountRemoteDataSource.requestAccessToken(requestToken).map {
+            UserCredentials(accessToken = it.accessToken, accountId = it.accountId)
+        }
     }
 
-    override suspend fun deleteSession(sessionId: String): Result<Unit, NetworkError> {
-        return accountRemoteDataSource.deleteSession(sessionId)
+    override suspend fun getSessionId(accessToken: String): Result<String, NetworkError> {
+        return accountRemoteDataSource.getSessionId(accessToken).map { it.sessionId }
+    }
+
+    override suspend fun deleteSession(accessToken: String): Result<Unit, NetworkError> {
+        return accountRemoteDataSource.deleteSession(accessToken)
     }
 
     override suspend fun getAccountDetails(sessionId: String): Result<AccountDetails, NetworkError> {
@@ -48,7 +55,7 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun getWatchlistMoviesTotalCount(): Result<Int, NetworkError> {
         return accountRemoteDataSource.getWatchlistMovies(
-            session.value.accountDetails?.id ?: 0
+            session.value.accountDetails?.accountObjectId.orEmpty()
         ).map { result ->
             result.totalResults
         }
@@ -56,7 +63,7 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun getFavoriteMoviesTotalCount(): Result<Int, NetworkError> {
         return accountRemoteDataSource.getFavoriteMovies(
-            session.value.accountDetails?.id ?: 0
+            session.value.accountDetails?.accountObjectId.orEmpty()
         ).map { result ->
             result.totalResults
         }
@@ -64,7 +71,7 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun getWatchlistMovies(): Result<List<MediaItem>, NetworkError> {
         return accountRemoteDataSource.getWatchlistMovies(
-            session.value.accountDetails?.id ?: 0
+            session.value.accountDetails?.accountObjectId.orEmpty()
         ).map { result ->
 
             result.results.toModel(
@@ -76,7 +83,7 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun getFavoriteMovies(): Result<List<MediaItem>, NetworkError> {
         return accountRemoteDataSource.getFavoriteMovies(
-            session.value.accountDetails?.id ?: 0
+            session.value.accountDetails?.accountObjectId.orEmpty()
         ).map { result ->
 
             result.results.toModel(
@@ -96,7 +103,7 @@ class AccountRepositoryImpl @Inject constructor(
                 GenericPagingDataSource(
                     networkCall = { page ->
                         accountRemoteDataSource.getWatchlistMovies(
-                            accountId = session.value.accountDetails?.id ?: 0,
+                            accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
                             page = page,
                             order = order
                         )
@@ -122,7 +129,7 @@ class AccountRepositoryImpl @Inject constructor(
                 GenericPagingDataSource(
                     networkCall = { page ->
                         accountRemoteDataSource.getFavoriteMovies(
-                            accountId = session.value.accountDetails?.id ?: 0,
+                            accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
                             page = page,
                             order = order
                         )
@@ -140,7 +147,7 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun getWatchlistTvShowsTotalCount(): Result<Int, NetworkError> {
         return accountRemoteDataSource.getWatchlistTvShows(
-            session.value.accountDetails?.id ?: 0
+            session.value.accountDetails?.accountObjectId.orEmpty()
         ).map { result ->
             result.totalResults
         }
@@ -148,7 +155,7 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun getFavoriteTvShowsTotalCount(): Result<Int, NetworkError> {
         return accountRemoteDataSource.getFavoriteTvShows(
-            session.value.accountDetails?.id ?: 0
+            session.value.accountDetails?.accountObjectId.orEmpty()
         ).map { result ->
             result.totalResults
         }
@@ -156,7 +163,7 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun getWatchlistTvShows(): Result<List<MediaItem>, NetworkError> {
         return accountRemoteDataSource.getWatchlistTvShows(
-            session.value.accountDetails?.id ?: 0
+            session.value.accountDetails?.accountObjectId.orEmpty()
         ).map { result ->
 
             result.results.toModel(
@@ -168,7 +175,7 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun getFavoriteTvShows(): Result<List<MediaItem>, NetworkError> {
         return accountRemoteDataSource.getFavoriteTvShows(
-            session.value.accountDetails?.id ?: 0
+            session.value.accountDetails?.accountObjectId.orEmpty()
         ).map { result ->
 
             result.results.toModel(
@@ -188,7 +195,7 @@ class AccountRepositoryImpl @Inject constructor(
                 GenericPagingDataSource(
                     networkCall = { page ->
                         accountRemoteDataSource.getWatchlistTvShows(
-                            accountId = session.value.accountDetails?.id ?: 0,
+                            accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
                             page = page,
                             order = order
                         )
@@ -214,7 +221,7 @@ class AccountRepositoryImpl @Inject constructor(
                 GenericPagingDataSource(
                     networkCall = { page ->
                         accountRemoteDataSource.getFavoriteTvShows(
-                            accountId = session.value.accountDetails?.id ?: 0,
+                            accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
                             page = page,
                             order = order
                         )

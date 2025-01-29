@@ -6,7 +6,8 @@ import com.panabuntu.tmdb.core.common.provider.UrlProvider
 class UrlProviderImpl : UrlProvider {
 
     override val API_KEY = BuildConfig.tmdb_api_key
-    override val BASE_URL_API = "https://api.themoviedb.org/3/"
+    override val BASE_URL_API_V3 = "https://api.themoviedb.org/3/"
+    override val BASE_URL_API_V4 = "https://api.themoviedb.org/4/"
 
     private val BASE_URL_IMAGE = "https://image.tmdb.org/t/p"
     override val BASE_URL_POSTER = "$BASE_URL_IMAGE/w342/"
@@ -16,6 +17,7 @@ class UrlProviderImpl : UrlProvider {
 
     private val BASE_DEEP_LINK_URL = "app://buntupana.tmdb"
     override val SIGN_IN_DEEP_LINK_URL = "$BASE_DEEP_LINK_URL/signin"
+    override val SIGN_IN_DEEP_LINK_REDIRECT = "$SIGN_IN_DEEP_LINK_URL?approved=true"
 
     override val BASE_URL_FACEBOOK = "https://www.facebook.com/"
     override val BASE_URL_INSTAGRAM = "https://instagram.com/"
@@ -25,6 +27,6 @@ class UrlProviderImpl : UrlProvider {
     override val BASE_URL_TIKTOK = "https://www.tiktok.com/@"
 
     override fun getSignInUrl(requestToken: String): String {
-        return "https://www.themoviedb.org/authenticate/$requestToken?redirect_to=$SIGN_IN_DEEP_LINK_URL"
+        return "https://www.themoviedb.org/auth/access?request_token=$requestToken"
     }
 }

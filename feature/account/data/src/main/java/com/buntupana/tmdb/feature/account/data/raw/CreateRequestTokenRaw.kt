@@ -8,6 +8,6 @@ data class CreateRequestTokenRaw(
     val success: Boolean,
     @SerialName("request_token")
     val requestToken: String,
-    @SerialName("expires_at")
-    val expiresAt: String
+    @SerialName("status_code")
+    val statusCode: Int
 )

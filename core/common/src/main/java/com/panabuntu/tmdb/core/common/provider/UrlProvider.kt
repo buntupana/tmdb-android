@@ -3,7 +3,8 @@ package com.panabuntu.tmdb.core.common.provider
 interface UrlProvider {
 
     val API_KEY: String
-    val BASE_URL_API: String
+    val BASE_URL_API_V3: String
+    val BASE_URL_API_V4: String
 
     val BASE_URL_POSTER: String
     val BASE_URL_BACKDROP: String
@@ -19,4 +20,5 @@ interface UrlProvider {
     val BASE_URL_IMDB_PERSON: String
     val BASE_URL_TIKTOK: String
     val BASE_URL_IMDB_MEDIA: String
+    val SIGN_IN_DEEP_LINK_REDIRECT: String
 }

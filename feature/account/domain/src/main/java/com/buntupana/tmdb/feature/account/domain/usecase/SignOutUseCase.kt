@@ -13,16 +13,14 @@ class SignOutUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(): Result<Unit, NetworkError> {
+
         if (sessionManager.session.value.isLogged.not()) {
             return Result.Success(Unit)
         }
 
-        val result = accountRepository.deleteSession(sessionManager.session.value.sessionId!!)
-
-        result.onSuccess {
-            sessionManager.clearSession()
-        }
-
-        return result
+        return accountRepository.deleteSession(sessionManager.session.value.accessToken!!)
+            .onSuccess {
+                sessionManager.clearSession()
+            }
     }
 }

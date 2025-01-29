@@ -12,6 +12,7 @@ fun AccountDetailsRaw.toModel(
 
     return AccountDetails(
         id = id,
+        accountObjectId = "",
         username = username,
         name = name,
         avatarUrl = avatarUrl

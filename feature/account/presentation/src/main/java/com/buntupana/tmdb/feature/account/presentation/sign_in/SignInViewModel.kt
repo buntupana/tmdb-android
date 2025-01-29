@@ -34,16 +34,15 @@ class SignInViewModel @Inject constructor(
     val sideEffect = _sideEffect.receiveAsFlow()
 
     init {
-        when {
-            navArgs.requestToken == null -> {
-                onEvent(SignInEvent.CreateRequestToken)
-            }
-            navArgs.approved == true -> {
+        when(navArgs.approved) {
+            true -> {
                 onEvent(SignInEvent.CreateSession)
             }
-            navArgs.approved == false -> {
-                state = state.copy(isSignInError = true)
+            false -> {
+                onEvent(SignInEvent.CreateRequestToken)
             }
+
+            null -> {}
         }
     }
 
@@ -73,7 +72,7 @@ class SignInViewModel @Inject constructor(
     private suspend fun createSession() {
         state = state.copy(isLoading = true, isSignInError = false)
 
-        createSessionUseCase(navArgs.requestToken!!)
+        createSessionUseCase()
             .onError {
                 state = state.copy(isLoading = false, isSignInError = true)
                 Timber.d("createSession: error = $it")

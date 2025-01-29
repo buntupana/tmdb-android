@@ -9,5 +9,11 @@ interface SessionManager {
 
     suspend fun saveSession(session: Session)
 
+    suspend fun saveRequestToken(requestToken: String)
+
+    suspend fun removeRequestToken()
+
     suspend fun clearSession()
+
+    suspend fun getRequestToken(): String?
 }

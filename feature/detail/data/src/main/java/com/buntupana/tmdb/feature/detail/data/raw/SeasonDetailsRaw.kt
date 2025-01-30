@@ -8,7 +8,7 @@ data class SeasonDetailsRaw(
     val id: Int,
     val _id: String,
     @SerialName("air_date")
-    val airDate: String,
+    val airDate: String?,
     val episodes: List<EpisodeRaw>,
     val name: String,
     val overview: String? = null,

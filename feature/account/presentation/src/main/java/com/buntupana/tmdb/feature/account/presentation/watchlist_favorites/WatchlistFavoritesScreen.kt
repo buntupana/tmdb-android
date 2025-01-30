@@ -1,9 +1,8 @@
-package com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites
+package com.buntupana.tmdb.feature.account.presentation.watchlist_favorites
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,41 +12,36 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScrollableTabRow
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
+import androidx.paging.LoadStates
+import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
-import com.buntupana.tmdb.core.ui.composables.OrderButtonAnimation
 import com.buntupana.tmdb.core.ui.composables.TopBarTitle
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
-import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
-import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
+import com.buntupana.tmdb.core.ui.util.mediaItemMovie
+import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.account.presentation.R
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun WatchlistScreen(
@@ -109,9 +103,13 @@ fun WatchlistContent(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+    setStatusBarLightStatusFromBackground(
+        LocalView.current,
+        PrimaryColor
+    )
+
     Scaffold(
         modifier = Modifier
-            .setStatusNavigationBarColor(PrimaryColor)
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBarTitle(
@@ -130,7 +128,6 @@ fun WatchlistContent(
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
-            return@Scaffold
         }
 
         if (state.isError) {
@@ -142,75 +139,29 @@ fun WatchlistContent(
                     onRetryClick = onRetryClick
                 )
             }
-
-            return@Scaffold
         }
-
 
         val pagerState = rememberPagerState(
             initialPage = state.defaultPage
         ) { MediaType.entries.size }
 
-        val scope = rememberCoroutineScope()
-
         Column(
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         ) {
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(PrimaryColor),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+            WatchlistFavoriteTabRow(
+                modifier = Modifier.fillMaxWidth(),
+                pagerState = pagerState,
+                order = state.order,
+                isLoading = state.isLoading,
+                isError = state.isError,
+                movieItemsTotalCount = state.movieItemsTotalCount,
+                tvShowItemsTotalCount = state.tvShowItemsTotalCount,
+                onOrderClick = onOrderClick
+            )
 
-                ScrollableTabRow(
-                    modifier = Modifier.weight(1f),
-                    contentColor = PrimaryColor.getOnBackgroundColor(),
-                    edgePadding = 0.dp,
-                    containerColor = PrimaryColor,
-                    selectedTabIndex = pagerState.currentPage,
-                    indicator = { tabPositions ->
-                        SecondaryIndicator(
-                            modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
-                            color = SecondaryColor,
-                        )
-                    }
-                ) {
-                    MediaFilter.entries.forEachIndexed { index, mediaType ->
-
-                        Tab(
-                            text = {
-                                Row {
-                                    val itemsCount = when (mediaType) {
-                                        MediaFilter.MOVIES -> state.movieItemsTotalCount
-                                        MediaFilter.TV_SHOWS -> state.tvShowItemsTotalCount
-                                    }
-                                    Text(text = stringResource(mediaType.strRes))
-
-                                    Text(
-                                        modifier = Modifier.padding(start = Dimens.padding.small),
-                                        text = itemsCount?.toString() ?: ""
-                                    )
-                                }
-                            },
-                            selected = pagerState.currentPage == index,
-                            onClick = {
-                                scope.launch {
-                                    pagerState.animateScrollToPage(index)
-                                }
-                            },
-                        )
-                    }
-                }
-
-                OrderButtonAnimation(
-                    modifier = Modifier,
-                    textColor = PrimaryColor.getOnBackgroundColor(),
-                    text = stringResource(RCore.string.text_last_added),
-                    order = state.order,
-                    onClick = onOrderClick
-                )
+            if (state.isError || state.isLoading) {
+                return@Scaffold
             }
 
             HorizontalPager(
@@ -233,7 +184,8 @@ fun WatchlistContent(
                 }
 
                 WatchlistPager(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier,
+                    navigationBarPadding = paddingValues.calculateBottomPadding(),
                     pagingItems = pagingItems,
                     noResultMessage = stringResource(
                         R.string.message_no_results,
@@ -252,11 +204,21 @@ fun WatchlistContent(
 private fun WatchlistScreenPreview() {
     WatchlistContent(
         WatchlistFavoritesState(
-            isLoading = true,
+            isLoading = false,
             screenType = ScreenType.FAVORITES,
             isError = false,
             movieItemsTotalCount = 15,
-            tvShowItemsTotalCount = null
+            tvShowItemsTotalCount = null,
+            movieItems = flow {
+                PagingData.from(
+                    listOf(mediaItemMovie, mediaItemMovie),
+                    sourceLoadStates = LoadStates(
+                        refresh = LoadState.NotLoading(true),
+                        prepend = LoadState.NotLoading(true),
+                        append = LoadState.NotLoading(true)
+                    )
+                )
+            }
         ),
         onBackClick = {},
         onSearchClick = {},

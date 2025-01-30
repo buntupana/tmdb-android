@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites
+package com.buntupana.tmdb.feature.account.presentation.watchlist_favorites
 
 import androidx.paging.PagingData
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 data class WatchlistFavoritesState(
     val screenType: ScreenType,
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isError: Boolean = false,
     val mediaType: MediaType = MediaType.MOVIE,
     val watchlistFilterSelected: MediaFilter = MediaFilter.MOVIES,

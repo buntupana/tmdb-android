@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.account.presentation.account.account
+package com.buntupana.tmdb.feature.account.presentation.account
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.util.LOADING_DELAY
 import com.buntupana.tmdb.feature.account.domain.usecase.GetFavoritesUseCase
+import com.buntupana.tmdb.feature.account.domain.usecase.GetListsUseCase
 import com.buntupana.tmdb.feature.account.domain.usecase.GetWatchlistUseCase
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
@@ -25,7 +26,8 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(
     sessionManager: SessionManager,
     private val getWatchlistUseCase: GetWatchlistUseCase,
-    private val getFavoritesUseCase: GetFavoritesUseCase
+    private val getFavoritesUseCase: GetFavoritesUseCase,
+    private val getListsUseCase: GetListsUseCase
 ) : ViewModel() {
 
     private val session = sessionManager.session
@@ -35,6 +37,7 @@ class AccountViewModel @Inject constructor(
 
     private var getWatchlistJob: Job? = null
     private var getFavoritesJob: Job? = null
+    private var getListsJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -54,6 +57,7 @@ class AccountViewModel @Inject constructor(
             when (event) {
                 is AccountEvent.GetWatchlist -> getWatchlist(event.mediaFilter)
                 is AccountEvent.GetFavorites -> getFavorites(event.mediaFilter)
+                AccountEvent.GetLists -> getLists()
             }
         }
     }
@@ -77,7 +81,7 @@ class AccountViewModel @Inject constructor(
                 watchlistMediaItemList = if (mediaFilter == state.watchlistFilterSelected) {
                     state.watchlistMediaItemList
                 } else {
-                    emptyList()
+                    null
                 }
             )
 
@@ -115,7 +119,7 @@ class AccountViewModel @Inject constructor(
                 favoritesMediaItemList = if (mediaFilter == state.favoritesFilterSelected) {
                     state.favoritesMediaItemList
                 } else {
-                    emptyList()
+                    null
                 }
             )
 
@@ -130,6 +134,28 @@ class AccountViewModel @Inject constructor(
                         isFavoritesLoadingError = false,
                         favoritesMediaItemList = mediaItemList
                     )
+                }
+        }
+    }
+
+    private fun getLists() {
+
+        if (session.value.isLogged.not()) return
+
+        getListsJob?.cancel()
+
+        getListsJob = viewModelScope.launch {
+
+            state = state.copy(isListsLoadingError = false)
+
+            getListsUseCase()
+                .onError {
+                    state = state.copy(isListsLoadingError = true)
+                }
+                .onSuccess { listItemList ->
+                    // Fake delay to show loading
+                    delay(LOADING_DELAY)
+                    state = state.copy(listsMediaItemList = listItemList)
                 }
         }
     }

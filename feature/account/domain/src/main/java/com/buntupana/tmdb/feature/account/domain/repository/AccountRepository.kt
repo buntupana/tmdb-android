@@ -2,6 +2,7 @@ package com.buntupana.tmdb.feature.account.domain.repository
 
 
 import androidx.paging.PagingData
+import com.buntupana.tmdb.feature.account.domain.model.ListItem
 import com.buntupana.tmdb.feature.account.domain.model.UserCredentials
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
@@ -64,4 +65,8 @@ interface AccountRepository {
     suspend fun getFavoriteTvShows(): Result<List<MediaItem>, NetworkError>
 
     suspend fun getFavoriteTvShowPaging(order: Order): Flow<PagingData<MediaItem.TvShow>>
+
+    suspend fun getLists(): Result<List<ListItem>, NetworkError>
+
+    suspend fun getListsPaging(): Flow<PagingData<ListItem>>
 }

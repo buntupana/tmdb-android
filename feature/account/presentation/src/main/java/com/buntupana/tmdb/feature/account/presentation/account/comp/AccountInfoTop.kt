@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.account.presentation.account.composables
+package com.buntupana.tmdb.feature.account.presentation.account.comp
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

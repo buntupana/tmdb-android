@@ -12,14 +12,14 @@ import kotlin.contracts.contract
 
 fun LocalDate.toLocalFormat(): String {
     val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(
-        java.util.Locale.getDefault()
+        Locale.getDefault()
     )
     return this.format(dateFormatter)
 }
 
 fun LocalDate.toFullDate(): String {
     val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(
-        java.util.Locale.getDefault()
+        Locale.getDefault()
     )
     return this.format(dateFormatter)
 }
@@ -34,7 +34,7 @@ fun CharSequence?.isNotNullOrBlank(): Boolean {
 
 fun <T> T?.ifNull(block: () -> T) = this ?: block()
 
-fun <T> Any?.ifNotNull(block: () -> T?) = if (this != null) block() else null
+fun <T, R> R?.ifNotNull(block: (R) -> T?) = if (this != null) block(this) else null
 
 fun String?.ifNullOrBlank(block: () -> String): String {
     return if (this.isNullOrBlank()) {

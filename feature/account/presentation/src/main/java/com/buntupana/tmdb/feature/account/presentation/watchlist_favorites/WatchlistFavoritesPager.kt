@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites
+package com.buntupana.tmdb.feature.account.presentation.watchlist_favorites
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
@@ -29,6 +31,7 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.mediaItemMovie
+import com.buntupana.tmdb.feature.account.presentation.R
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.flow.flowOf
 import com.buntupana.tmdb.core.ui.R as RCore
@@ -36,6 +39,7 @@ import com.buntupana.tmdb.core.ui.R as RCore
 @Composable
 fun WatchlistPager(
     modifier: Modifier = Modifier,
+    navigationBarPadding: Dp,
     pagingItems: LazyPagingItems<out MediaItem>?,
     noResultMessage: String,
     onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color) -> Unit,
@@ -47,8 +51,7 @@ fun WatchlistPager(
     val listState = rememberLazyListState()
 
     LazyColumn(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier,
         state = listState
     ) {
 
@@ -58,26 +61,23 @@ fun WatchlistPager(
         }
 
         // Drawing result items
-        items(pagingItems.itemCount, key = {index -> pagingItems[index]?.id ?: index }) { index ->
+        items(pagingItems.itemCount, key = { index -> pagingItems[index]?.id ?: index }) { index ->
 
             val item = pagingItems[index] ?: return@items
 
-            Box(
-                modifier = Modifier.animateItem()
-            ) {
-                MediaItemHorizontal(
-                    modifier = modifier
-                        .height(Dimens.imageSize.posterHeight),
-                    onMediaClick = { _, mainPosterColor ->
-                        onMediaClick(item, mainPosterColor)
-                    },
-                    mediaId = item.id,
-                    title = item.name,
-                    posterUrl = item.posterUrl,
-                    overview = item.overview.orEmpty(),
-                    releaseDate = item.releaseDate
-                )
-            }
+            MediaItemHorizontal(
+                modifier = modifier
+                    .animateItem()
+                    .height(Dimens.imageSize.posterHeight),
+                onMediaClick = { _, mainPosterColor ->
+                    onMediaClick(item, mainPosterColor)
+                },
+                mediaId = item.id,
+                title = item.name,
+                posterUrl = item.posterUrl,
+                overview = item.overview.orEmpty(),
+                releaseDate = item.releaseDate
+            )
         }
 
         when (pagingItems.loadState.refresh) {
@@ -154,7 +154,7 @@ fun WatchlistPager(
             else -> {}
         }
         item {
-            Spacer(modifier = Modifier.height(Dimens.padding.medium))
+            Spacer(modifier = Modifier.height(Dimens.padding.medium + navigationBarPadding))
         }
     }
 }
@@ -175,8 +175,9 @@ private fun WatchlistPagerPreview() {
     WatchlistPager(
         modifier = Modifier.fillMaxSize(),
         pagingItems = flowOf(itemsList).collectAsLazyPagingItems(),
+        navigationBarPadding = 0.dp,
         noResultMessage = stringResource(
-            com.buntupana.tmdb.feature.account.presentation.R.string.message_no_results,
+            R.string.message_no_results,
             "movies",
             "favorites"
         ),

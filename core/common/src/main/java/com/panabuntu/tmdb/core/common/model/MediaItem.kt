@@ -11,7 +11,8 @@ sealed class MediaItem(
     open val popularity: Float?,
     open val overview: String?,
     open val releaseDate: String,
-    open val mediaType: MediaType
+    open val mediaType: MediaType,
+    open val voteAverage: Int?
 ) {
 
     data class Movie(
@@ -24,7 +25,7 @@ sealed class MediaItem(
         val originalLanguage: String?,
         val genreIds: List<Int>?,
         override val popularity: Float,
-        val voteAverage: Int?,
+        override val voteAverage: Int?,
         val voteCount: Int,
         override val releaseDate: String,
         val video: Boolean,
@@ -37,7 +38,8 @@ sealed class MediaItem(
         popularity = popularity,
         overview = overview,
         releaseDate = releaseDate,
-        mediaType = MediaType.MOVIE
+        mediaType = MediaType.MOVIE,
+        voteAverage =voteAverage
     )
 
     data class TvShow(
@@ -50,7 +52,7 @@ sealed class MediaItem(
         val originalLanguage: String?,
         val genreIds: List<Int>?,
         override val popularity: Float,
-        val voteAverage: Int?,
+        override val voteAverage: Int?,
         val voteCount: Int,
         override val releaseDate: String,
         val originCountry: List<String>
@@ -62,6 +64,7 @@ sealed class MediaItem(
         popularity = popularity,
         overview = overview,
         releaseDate = releaseDate,
-        mediaType = MediaType.TV_SHOW
+        mediaType = MediaType.TV_SHOW,
+        voteAverage =voteAverage
     )
 }

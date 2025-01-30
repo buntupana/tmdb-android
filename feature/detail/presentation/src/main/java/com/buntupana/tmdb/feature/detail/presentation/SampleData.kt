@@ -16,8 +16,9 @@ import com.panabuntu.tmdb.core.common.model.Gender
 import java.time.LocalDate
 
 val externalLinkListSample = listOf(
-    ExternalLink.XLink(""),
+    ExternalLink.HomePage(""),
     ExternalLink.FacebookLink(""),
+    ExternalLink.XLink(""),
     ExternalLink.InstagramLink(""),
     ExternalLink.TiktokLink(""),
     ExternalLink.ImdbLink("")

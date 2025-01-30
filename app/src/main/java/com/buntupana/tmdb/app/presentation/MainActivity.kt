@@ -27,11 +27,13 @@ import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.theme.TMDBTheme
 import com.buntupana.tmdb.core.ui.util.ObserveAsEvents
-import com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites.ScreenType
-import com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites.WatchListFavoritesNav
-import com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites.WatchlistScreen
+import com.buntupana.tmdb.feature.account.presentation.lists.ListsNav
+import com.buntupana.tmdb.feature.account.presentation.lists.ListsScreen
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInNav
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInScreen
+import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.ScreenType
+import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.WatchListFavoritesNav
+import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.WatchlistScreen
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailScreen
 import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailNav
@@ -122,18 +124,34 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 onWatchListClick = { mediaType ->
-                                    val mediaFilter = when(mediaType) {
+                                    val mediaFilter = when (mediaType) {
                                         MediaType.MOVIE -> MediaFilter.MOVIES
                                         MediaType.TV_SHOW -> MediaFilter.TV_SHOWS
                                     }
-                                    navRoutesMain.navigate(WatchListFavoritesNav(ScreenType.WATCHLIST, mediaFilter))
+                                    navRoutesMain.navigate(
+                                        WatchListFavoritesNav(
+                                            ScreenType.WATCHLIST,
+                                            mediaFilter
+                                        )
+                                    )
                                 },
                                 onFavoritesClick = { mediaType ->
-                                    val mediaFilter = when(mediaType) {
+                                    val mediaFilter = when (mediaType) {
                                         MediaType.MOVIE -> MediaFilter.MOVIES
                                         MediaType.TV_SHOW -> MediaFilter.TV_SHOWS
                                     }
-                                    navRoutesMain.navigate(WatchListFavoritesNav(ScreenType.FAVORITES, mediaFilter))
+                                    navRoutesMain.navigate(
+                                        WatchListFavoritesNav(
+                                            ScreenType.FAVORITES,
+                                            mediaFilter
+                                        )
+                                    )
+                                },
+                                onListsClick = {
+                                    navRoutesMain.navigate(ListsNav)
+                                },
+                                onListDetailClicked = { listId, dominantColor ->
+
                                 }
                             )
                         }
@@ -302,6 +320,9 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             )
+                        }
+                        composable<ListsNav> {
+                            ListsScreen()
                         }
                     }
                 }

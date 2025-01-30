@@ -60,7 +60,7 @@ class DiscoverViewModel @Inject constructor(
 
     private fun getTrendingList(trendingFilter: TrendingFilter) {
 
-        if (trendingFilter == state.trendingFilterSelected && state.trendingMediaItemList.isNotEmpty()) {
+        if (trendingFilter == state.trendingFilterSelected && state.trendingMediaItemList?.isNotEmpty() == true) {
             return
         }
 
@@ -75,7 +75,7 @@ class DiscoverViewModel @Inject constructor(
                 isLoading = true,
                 isTrendingMediaLoadingError = false,
                 trendingFilterSelected = trendingFilter,
-                trendingMediaItemList = emptyList()
+                trendingMediaItemList = null
             )
             getTrendingMediaListUseCase(trendingType)
                 .onError {
@@ -98,7 +98,7 @@ class DiscoverViewModel @Inject constructor(
 
     private fun getPopularMovies(popularFilter: PopularFilter) {
 
-        if (popularFilter == state.popularFilterSelected && state.popularMediaItemList.isNotEmpty()) {
+        if (popularFilter == state.popularFilterSelected && state.popularMediaItemList?.isNotEmpty() == true) {
             return
         }
 
@@ -115,7 +115,7 @@ class DiscoverViewModel @Inject constructor(
                 isLoading = true,
                 isPopularMediaLoadingError = false,
                 popularFilterSelected = popularFilter,
-                popularMediaItemList = emptyList()
+                popularMediaItemList = null
             )
             getPopularMoviesListUseCase(popularType)
                 .onError {
@@ -138,7 +138,7 @@ class DiscoverViewModel @Inject constructor(
 
     private fun getFreeToWatchList(freeToWatchFilter: MediaFilter) {
 
-        if (freeToWatchFilter == state.freeToWatchFilterSelected && state.freeToWatchMediaItemList.isNotEmpty()) {
+        if (freeToWatchFilter == state.freeToWatchFilterSelected && state.freeToWatchMediaItemList?.isNotEmpty() == true) {
             return
         }
 
@@ -154,7 +154,7 @@ class DiscoverViewModel @Inject constructor(
                     isLoading = true,
                     isFreeToWatchMediaLoadingError = false,
                     freeToWatchFilterSelected = freeToWatchFilter,
-                    freeToWatchMediaItemList = emptyList()
+                    freeToWatchMediaItemList = null
                 )
 
             getFreeToWatchMediaListUseCase(freeToWatchType)

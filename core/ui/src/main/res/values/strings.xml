@@ -4,11 +4,13 @@
     // Common
     <string name="text_trending">Trending</string>
     <string name="message_loading_content_error">Sorry, there was an error loading this content</string>
+    <string name="message_no_results_found">No results found</string>
     <string name="text_retry">Retry</string>
     <string name="text_no_results">No Results</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_confirm">Confirm</string>
-    <string name="empty"></string>
+    <string name="empty"/>
+    <string name="text_show_more">Show More</string>
 
     // Filter
     <string name="text_last_added">Last Added</string>

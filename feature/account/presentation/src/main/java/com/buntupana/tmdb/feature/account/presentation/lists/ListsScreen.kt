@@ -12,6 +12,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,10 +34,12 @@ import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isVisible
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
+import com.buntupana.tmdb.feature.account.presentation.create_list.CreateListDialog
 import com.buntupana.tmdb.feature.account.presentation.lists.comp.ListItemVertical
 import com.buntupana.tmdb.feature.account.presentation.lists.comp.ListSubBar
 import timber.log.Timber
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListsScreen(
     viewModel: ListsViewModel = hiltViewModel(),
@@ -41,6 +47,9 @@ fun ListsScreen(
     onSearchClick: () -> Unit,
     onListDetailClick: (listItemId: Long, mainPosterColor: Color?) -> Unit,
 ) {
+
+    var showCreateListBottomSheet by remember { mutableStateOf(false) }
+
     ListsContent(
         state = viewModel.state,
         onBackClick = onBackClick,
@@ -48,7 +57,15 @@ fun ListsScreen(
         onListDetailClick = onListDetailClick,
         onRetryClick = {
             viewModel.onEvent(ListsEvent.GetLists)
+        },
+        onCreateListClick = {
+            showCreateListBottomSheet = true
         }
+    )
+
+    CreateListDialog(
+        showDialog = showCreateListBottomSheet,
+        onDismiss = { showCreateListBottomSheet = false },
     )
 }
 
@@ -59,7 +76,8 @@ fun ListsContent(
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onListDetailClick: (listItemId: Long, mainPosterColor: Color?) -> Unit,
-    onRetryClick: () -> Unit
+    onRetryClick: () -> Unit,
+    onCreateListClick: () -> Unit
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -121,7 +139,7 @@ fun ListsContent(
                         animateSize = true
                     ),
                 listItemTotalCount = state.listItemTotalCount,
-                onCreateListClick = {}
+                onCreateListClick = onCreateListClick
             )
 
             listItems ?: return@Scaffold
@@ -161,11 +179,12 @@ fun ListsScreenPreview() {
     ListsContent(
         ListsState(
             isLoading = false,
-            isError = true,
+            isError = false,
         ),
         onBackClick = {},
         onSearchClick = {},
         onListDetailClick = { _, _ -> },
-        onRetryClick = {}
+        onRetryClick = {},
+        onCreateListClick = {}
     )
 }

@@ -47,7 +47,7 @@ class ListRemoteDataSource @Inject constructor(
                     CreateUpdateListRequest(
                         name = name,
                         description = description,
-                        public = isPublic
+                        public = if (isPublic) "1" else "0"
                     )
                 )
             }
@@ -66,7 +66,7 @@ class ListRemoteDataSource @Inject constructor(
                     CreateUpdateListRequest(
                         name = name,
                         description = description,
-                        public = isPublic
+                        public = if (isPublic) "1" else "0"
                     )
                 )
             }

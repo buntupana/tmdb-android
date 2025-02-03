@@ -11,9 +11,9 @@ data class CreateUpdateListRequest(
     @SerialName("description")
     val description: String,
     @SerialName("public")
-    val public: Boolean,
+    val public: String,
     @SerialName("iso_3166_1")
     val iso31661: String? = null,
     @SerialName("iso_639_1")
-    val iso6391: String? = null
+    val iso6391: String = "en"
 )

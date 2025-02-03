@@ -42,14 +42,20 @@ object CoreCommonModule {
     @Singleton
     @Provides
     fun provideHttpClientV3(urlProvider: UrlProvider): HttpClient {
-        return provideHttpClient(urlProvider.BASE_URL_API_V3, urlProvider.API_KEY)
+        return provideHttpClient(
+            baseUrl = urlProvider.BASE_URL_API_V3,
+            apiKey = urlProvider.API_KEY
+        )
     }
 
     @Singleton
     @Provides
     @Named("ApiV4")
-    fun provideHttpClientV4(urlProvider: UrlProvider): HttpClient {
-        return provideHttpClient(urlProvider.BASE_URL_API_V4, urlProvider.API_KEY)
+    fun provideHttpClientV4(urlProvider: UrlProvider, sessionManager: SessionManager): HttpClient {
+        return provideHttpClient(
+            baseUrl = urlProvider.BASE_URL_API_V4,
+            apiKey = sessionManager.session.value.accessToken.orEmpty()
+        )
     }
 
     private fun provideHttpClient(baseUrl: String, apiKey: String): HttpClient {
@@ -69,10 +75,10 @@ object CoreCommonModule {
             install(Auth) {
                 bearer {
                     loadTokens {
-                        BearerTokens(
-                            accessToken = apiKey,
-                            refreshToken = ""
-                        )
+                        BearerTokens(accessToken = apiKey, refreshToken = "")
+                    }
+                    refreshTokens {
+                        BearerTokens(accessToken = apiKey, refreshToken = "")
                     }
                 }
             }

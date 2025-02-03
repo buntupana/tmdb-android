@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.buntupana.tmdb.feature.detail.presentation.R
@@ -167,8 +169,7 @@ fun RatingContent(
                             .align(Alignment.Center)
                             .clip(RoundedCornerShape(100.dp))
                             .background(PrimaryColor)
-                            .padding(horizontal = 12.dp, vertical = 8.dp)
-                        ,
+                            .padding(horizontal = 12.dp, vertical = 8.dp),
                         text = state.ratingTitle.asString(),
                         fontWeight = FontWeight.Bold,
                         color = getRatingColor(state.rating)
@@ -203,7 +204,8 @@ fun RatingContent(
                     }
                     Button(
                         onClick = addRatingClick,
-                        enabled = state.rating > 0
+                        enabled = state.rating > 0,
+                        colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor)
                     ) {
                         Text(
                             text = stringResource(RCore.string.text_confirm),

@@ -12,6 +12,8 @@
     <string name="empty"/>
     <string name="text_show_more">Show More</string>
     <string name="text_num_items">%d items</string>
+    <string name="text_description">Description</string>
+    <string name="text_name">Name</string>
 
     // Filter
     <string name="text_last_added">Last Added</string>

@@ -12,4 +12,5 @@
     <string name="text_create_list">Create List</string>
     <string name="text_public">Public</string>
     <string name="text_private">Private</string>
+    <string name="message_error_create_list">There was an error creating the list.</string>
 </resources>

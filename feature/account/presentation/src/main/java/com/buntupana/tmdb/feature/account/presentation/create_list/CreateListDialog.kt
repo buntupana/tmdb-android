@@ -1,14 +1,12 @@
-package com.buntupana.tmdb.feature.account.presentation.sign_out
+package com.buntupana.tmdb.feature.account.presentation.create_list
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -25,65 +23,92 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.buntupana.tmdb.feature.account.presentation.R
+import com.buntupana.tmdb.feature.account.presentation.create_list.comp.CreateListForm
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import com.buntupana.tmdb.core.ui.R as RCore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignOutDialog(
-    viewModel: SignOutViewModel = hiltViewModel(),
+fun CreateListDialog(
+    viewModel: CreateListViewModel = hiltViewModel(),
     showDialog: Boolean,
-    sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    sheetState: SheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+        confirmValueChange = { viewModel.state.isLoading.not() }
+    ),
     onDismiss: () -> Unit
 ) {
 
     if (showDialog.not()) return
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    
+    val scope = rememberCoroutineScope()
+
     LaunchedEffect(lifecycleOwner.lifecycle) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+            viewModel.onEvent(CreateListEvent.ClearListInfo)
+
             launch {
                 viewModel.sideEffect.collect { sideEffect ->
-                    Timber.d("SignOutDialog: sideEffect = $sideEffect")
+                    Timber.d("CreateListDialog: sideEffect = $sideEffect")
                     when (sideEffect) {
-                        SignOutSideEffect.SignOutSuccess -> onDismiss()
+                        CreateListSideEffect.CreateListSuccess -> {
+                            sheetState.hide()
+                            onDismiss()
+                        }
                     }
                 }
             }
         }
     }
 
-    SignOutContent(
+    CreateListContent(
         state = viewModel.state,
         sheetState = sheetState,
-        onDismiss = onDismiss,
-        onSignOutClick = { viewModel.onEvent(SignOutEvent.SignOut) }
+        onDismiss = {
+            scope.launch {
+                sheetState.hide()
+                onDismiss()
+            }
+        },
+        onCreateListClick = { viewModel.onEvent(CreateListEvent.CreateList) },
+        updateForm = { listName, listDescription, isPublic ->
+
+            viewModel.onEvent(
+                CreateListEvent.UpdateForm(
+                    listName = listName,
+                    description = listDescription,
+                    isPublic = isPublic
+                )
+            )
+        }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignOutContent(
-    state: SignOutState,
+fun CreateListContent(
+    state: CreateListState,
     sheetState: SheetState,
     onDismiss: () -> Unit,
-    onSignOutClick: () -> Unit
+    onCreateListClick: () -> Unit,
+    updateForm: (listName: String, listDescription: String, isPublic: Boolean) -> Unit
 ) {
-
-    val coroutineScope = rememberCoroutineScope()
-
     ModalBottomSheet(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {
+            if (state.isLoading.not()) {
+                onDismiss()
+            }
+        },
         sheetState = sheetState,
         containerColor = MaterialTheme.colorScheme.background,
         dragHandle = {}
@@ -99,60 +124,51 @@ fun SignOutContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.text_sign_out),
+                text = stringResource(R.string.text_create_list),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(Dimens.padding.small))
-            Text(
-                text = stringResource(R.string.message_sign_out_confirmation),
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(Dimens.padding.big))
-            if (state.isLoading) {
-                CircularProgressIndicator()
-            } else {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-                    Button(
-                        onClick = {
-                            coroutineScope.launch {
-                                sheetState.hide()
-                                onDismiss()
-                            }
-                        }) {
-                        Text(
-                            text = stringResource(RCore.string.text_cancel),
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    }
-                    Button(onClick = onSignOutClick) {
-                        Text(
-                            text = stringResource(RCore.string.text_confirm),
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    }
+
+            Spacer(modifier = Modifier.height(Dimens.padding.huge))
+
+            Box {
+
+                if (state.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                    )
                 }
+
+                CreateListForm(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .isInvisible(state.isLoading),
+                    listName = state.listName,
+                    description = state.description,
+                    isPublic = state.isPublic,
+                    updateForm = updateForm,
+                    onCreateListClick = onCreateListClick
+                )
             }
         }
     }
 }
 
-@ExperimentalMaterial3Api
-@Preview
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
 @Composable
-fun SignOutScreenPreview() {
-    SignOutContent(
-        SignOutState(isLoading = false),
+fun CreateListScreenPreview() {
+    CreateListContent(
+        state = CreateListState(
+            listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars"
+        ),
         sheetState = SheetState(
             skipPartiallyExpanded = true,
             LocalDensity.current,
             initialValue = SheetValue.Expanded
         ),
         onDismiss = {},
-        onSignOutClick = {}
+        onCreateListClick = {},
+        updateForm = { _, _, _ -> }
     )
 }

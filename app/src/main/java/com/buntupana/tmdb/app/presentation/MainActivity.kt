@@ -322,7 +322,13 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable<ListsNav> {
-                            ListsScreen()
+                            ListsScreen(
+                                onBackClick = { navRoutesMain.popBackStack() },
+                                onListDetailClick = { listItemId, mainPosterColor ->
+
+                                },
+                                onSearchClick = { navRoutesMain.navigate(SearchNav) }
+                            )
                         }
                     }
                 }

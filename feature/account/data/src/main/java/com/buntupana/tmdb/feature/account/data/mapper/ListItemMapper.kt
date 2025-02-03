@@ -38,7 +38,7 @@ fun ListItemRaw.toModel(
         averageRating = averageRating.ifNotNull { (it * 10).toInt() } ,
         description = description,
         itemCount = numberOfItems,
-        public = public == 1,
+        isPublic = public == 1,
         revenue = revenue,
         runtime = runtime?.toInt(),
         updatedAt = updatedAt

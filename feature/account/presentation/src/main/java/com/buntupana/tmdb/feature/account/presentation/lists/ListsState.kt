@@ -6,5 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 data class ListsState(
     val isLoading: Boolean = true,
+    val isError: Boolean = false,
+    val listItemTotalCount: Int? = 0,
     val listItems: Flow<PagingData<ListItem>>? = null
 )

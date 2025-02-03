@@ -11,6 +11,7 @@
     <string name="text_confirm">Confirm</string>
     <string name="empty"/>
     <string name="text_show_more">Show More</string>
+    <string name="text_num_items">%d items</string>
 
     // Filter
     <string name="text_last_added">Last Added</string>

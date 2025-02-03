@@ -59,12 +59,12 @@ class WatchlistFavoritesViewModel @Inject constructor(
 
                 WatchlistFavoritesEvent.ChangeOrder -> changeOrder()
 
-                WatchlistFavoritesEvent.GetMediaItemList -> getTotalItemCount()
+                WatchlistFavoritesEvent.GetMediaItemList -> getWathlistData()
             }
         }
     }
 
-    private suspend fun getTotalItemCount() {
+    private suspend fun getWathlistData() {
 
         val getItemsUseCase: suspend () -> Result<GetMediaItemTotalCountResult, NetworkError> =
             when (state.screenType) {
@@ -92,18 +92,17 @@ class WatchlistFavoritesViewModel @Inject constructor(
                     movieItemsTotalCount = it.movieTotalCount,
                     tvShowItemsTotalCount = it.tvShowTotalCount
                 )
+                if (state.movieItems == null || state.tvShowItems == null) {
+                    getMediaItems(MediaFilter.MOVIES)
+                    getMediaItems(MediaFilter.TV_SHOWS)
+                } else {
+                    _sideEffect.send(WatchlistFavoritesSideEffect.RefreshMediaItemList)
+                }
             }
-
-        if (state.movieItems == null || state.tvShowItems == null) {
-            getMediaItems(MediaFilter.MOVIES)
-            getMediaItems(MediaFilter.TV_SHOWS)
-        } else {
-            _sideEffect.send(WatchlistFavoritesSideEffect.RefreshMediaItemList)
-        }
     }
 
     private suspend fun getMediaItems(mediaFilter: MediaFilter) {
-
+        Timber.d("getMediaItems() called with: mediaFilter = [$mediaFilter]")
         when {
             mediaFilter == MediaFilter.MOVIES && state.screenType == ScreenType.WATCHLIST -> {
                 getMovieWatchlistPagingUseCase(order = state.order).let {
@@ -137,6 +136,6 @@ class WatchlistFavoritesViewModel @Inject constructor(
             Order.DESC -> Order.ASC
         }
         state = state.copy(order = order, movieItems = null, tvShowItems = null)
-        getTotalItemCount()
+        getWathlistData()
     }
 }

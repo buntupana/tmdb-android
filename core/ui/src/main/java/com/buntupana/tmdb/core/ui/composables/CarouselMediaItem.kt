@@ -25,7 +25,6 @@ import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.util.Const.PLACE_HOLDER_ITEM_NUMBER
 import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
-import timber.log.Timber
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
@@ -42,8 +41,6 @@ fun CarouselMediaItem(
     onRetryClicked: () -> Unit,
     onShowMoreClick: (() -> Unit)? = null
 ) {
-
-    Timber.d("CarouselMediaItem: mediaCount = ${mediaItemList?.size}")
 
     Box(
         modifier = modifier,

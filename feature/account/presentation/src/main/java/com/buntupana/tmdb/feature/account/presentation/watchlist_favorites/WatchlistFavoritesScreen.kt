@@ -35,13 +35,17 @@ import com.buntupana.tmdb.core.ui.composables.TopBarTitle
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.util.isVisible
 import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.account.presentation.R
+import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.comp.WatchlistFavoriteTabRow
+import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.comp.WatchlistPager
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun WatchlistScreen(
@@ -63,6 +67,7 @@ fun WatchlistScreen(
 
             launch {
                 viewModel.sideEffect.collect { sideEffect ->
+                    Timber.d("WatchlistScreen: sideEffect = $sideEffect")
                     when (sideEffect) {
                         WatchlistFavoritesSideEffect.RefreshMediaItemList -> {
                             movieItems?.refresh()
@@ -100,7 +105,6 @@ fun WatchlistContent(
     onOrderClick: () -> Unit,
     onRetryClick: () -> Unit
 ) {
-
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     setStatusBarLightStatusFromBackground(
@@ -122,7 +126,14 @@ fun WatchlistContent(
         }
     ) { paddingValues ->
 
-        if (state.isLoading) {
+        val movieItems = state.movieItems?.collectAsLazyPagingItems()
+        val tvShowItems = state.tvShowItems?.collectAsLazyPagingItems()
+
+        if (
+            state.isLoading ||
+            movieItems?.loadState?.refresh is LoadState.Loading ||
+            tvShowItems?.loadState?.refresh is LoadState.Loading
+        ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
@@ -150,11 +161,14 @@ fun WatchlistContent(
         ) {
 
             WatchlistFavoriteTabRow(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .isVisible(
+                        isVisible = state.movieItemsTotalCount != null && state.tvShowItemsTotalCount != null,
+                        animateSize = true
+                    ),
                 pagerState = pagerState,
                 order = state.order,
-                isLoading = state.isLoading,
-                isError = state.isError,
                 movieItemsTotalCount = state.movieItemsTotalCount,
                 tvShowItemsTotalCount = state.tvShowItemsTotalCount,
                 onOrderClick = onOrderClick
@@ -171,16 +185,17 @@ fun WatchlistContent(
                 state = pagerState,
                 beyondViewportPageCount = 1,
             ) { currentPage ->
+
                 val (mediaNameResId, pagingItems) = when (currentPage) {
                     MediaFilter.entries.indexOf(MediaFilter.MOVIES) -> {
-                        MediaFilter.MOVIES.strRes to state.movieItems?.collectAsLazyPagingItems()
+                        MediaFilter.MOVIES.strRes to movieItems
                     }
 
                     MediaFilter.entries.indexOf(MediaFilter.TV_SHOWS) -> {
-                        MediaFilter.TV_SHOWS.strRes to state.tvShowItems?.collectAsLazyPagingItems()
+                        MediaFilter.TV_SHOWS.strRes to tvShowItems
                     }
 
-                    else -> MediaFilter.MOVIES.strRes to state.movieItems?.collectAsLazyPagingItems()
+                    else -> MediaFilter.MOVIES.strRes to movieItems
                 }
 
                 WatchlistPager(
@@ -208,7 +223,7 @@ private fun WatchlistScreenPreview() {
             screenType = ScreenType.FAVORITES,
             isError = false,
             movieItemsTotalCount = 15,
-            tvShowItemsTotalCount = null,
+            tvShowItemsTotalCount = 40,
             movieItems = flow {
                 PagingData.from(
                     listOf(mediaItemMovie, mediaItemMovie),

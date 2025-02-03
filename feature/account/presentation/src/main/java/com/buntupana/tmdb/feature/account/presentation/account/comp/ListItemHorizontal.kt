@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.feature.account.domain.model.ListItem
 import com.buntupana.tmdb.feature.account.presentation.util.listItemList
 
@@ -61,7 +63,7 @@ fun ListItemHorizontal(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.6f))
+                .background(PrimaryColor.copy(alpha = 0.8f))
         )
 
         Column(
@@ -75,10 +77,10 @@ fun ListItemHorizontal(
             BasicText(
                 text = listItem.name,
                 autoSize = TextAutoSize.StepBased(minFontSize = 18.sp, stepSize = 10.sp),
-                maxLines = 2,
+                maxLines = 3,
                 color = { Color.White },
-                style = MaterialTheme.typography.titleLarge,
-                overflow = TextOverflow.Ellipsis
+                style = MaterialTheme.typography.titleLarge.merge(textAlign = TextAlign.Center),
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
@@ -89,7 +91,7 @@ fun ListItemHorizontal(
 private fun ListItemHorizontalPreview() {
     ListItemHorizontal(
         listItem = listItemList.first()
-            .copy(name = "asdf ad adj ljljlj  lkj ad klj adkj a lkjd a lkajd  alkdj lakjd "),
+            .copy(name = "asdf ad adj ljljlj  lkj ad klj adkj a  asd asdf "),
         onListClick = { _, _ -> }
     )
 }

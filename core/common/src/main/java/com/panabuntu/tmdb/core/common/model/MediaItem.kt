@@ -4,7 +4,7 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 
 
 sealed class MediaItem(
-    open val id: Long,
+    override val id: Long,
     open val name: String,
     open val posterUrl: String?,
     open val backdropUrl: String?,
@@ -13,7 +13,7 @@ sealed class MediaItem(
     open val releaseDate: String,
     open val mediaType: MediaType,
     open val voteAverage: Int?
-) {
+) : DefaultItem {
 
     data class Movie(
         override val id: Long,

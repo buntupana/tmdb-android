@@ -7,7 +7,6 @@ import com.buntupana.tmdb.core.data.api.GenericPagingDataSource
 import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.account.data.mapper.toModel
 import com.buntupana.tmdb.feature.account.data.remote_data_source.AccountRemoteDataSource
-import com.buntupana.tmdb.feature.account.domain.model.ListItem
 import com.buntupana.tmdb.feature.account.domain.model.UserCredentials
 import com.buntupana.tmdb.feature.account.domain.repository.AccountRepository
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -284,41 +283,5 @@ class AccountRepositoryImpl @Inject constructor(
                 value = value
             )
         }
-    }
-
-    override suspend fun getLists(): Result<List<ListItem>, NetworkError> {
-        return accountRemoteDataSource.getLists(
-            session.value.accountDetails?.accountObjectId.orEmpty()
-        ).map { result ->
-            result.results.toModel(
-                baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-            )
-        }
-    }
-
-    override suspend fun getListsPaging(): Flow<PagingData<ListItem>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = PAGINATION_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                GenericPagingDataSource(
-                    networkCall = { page ->
-                        accountRemoteDataSource.getLists(
-                            accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
-                            page = page
-                        )
-                    },
-                    mapItem = {
-                        it.toModel(
-                            baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                            baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-                        )
-                    }
-                )
-            }
-        ).flow
     }
 }

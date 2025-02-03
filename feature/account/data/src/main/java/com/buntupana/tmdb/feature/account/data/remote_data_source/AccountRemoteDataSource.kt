@@ -10,7 +10,6 @@ import com.buntupana.tmdb.feature.account.data.raw.AccountDetailsRaw
 import com.buntupana.tmdb.feature.account.data.raw.CreateAccessTokenRaw
 import com.buntupana.tmdb.feature.account.data.raw.CreateRequestTokenRaw
 import com.buntupana.tmdb.feature.account.data.raw.CreateSessionRaw
-import com.buntupana.tmdb.feature.account.data.raw.ListItemRaw
 import com.buntupana.tmdb.feature.account.data.request.AddRatingRequest
 import com.buntupana.tmdb.feature.account.data.request.CreateRequestTokenRequest
 import com.buntupana.tmdb.feature.account.data.request.CreateSessionRequest
@@ -202,15 +201,5 @@ class AccountRemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getLists(
-        accountObjectId: String,
-        page: Int = 1
-    ): Result<ResponseListRaw<ListItemRaw>, NetworkError> {
-        return getResult<ResponseListRaw<ListItemRaw>> {
-            httpClient.get(urlString = "account/$accountObjectId/lists") {
-                parameter("page", page)
-            }
-        }
-    }
 }
 

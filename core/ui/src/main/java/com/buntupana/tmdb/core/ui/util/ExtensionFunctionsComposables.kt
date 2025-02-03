@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -27,6 +28,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.Dimens
@@ -91,15 +93,28 @@ fun Modifier.setStatusNavigationBarColor(
         .background(MaterialTheme.colorScheme.background)
 }
 
+fun Modifier.isVisible(isVisible: Boolean, animateSize: Boolean = false): Modifier {
 
-
+    val (alpha, modifier) = if (isVisible) {
+        1f to Modifier
+    } else {
+        0f to Modifier.size(0.dp)
+    }
+    return alpha(alpha)
+        .then(
+            if (animateSize) Modifier.animateContentSize() else Modifier
+        )
+        .then(
+            modifier
+        )
+}
 
 fun Modifier.isInvisible(isInvisible: Boolean): Modifier {
     return alpha(if (isInvisible) 0f else 1f)
 }
 
 @Composable
-fun Modifier.fadeIn(enabled : Boolean, durationMillis: Int = 400): Modifier {
+fun Modifier.fadeIn(enabled: Boolean, durationMillis: Int = 400): Modifier {
 
     var triggerAnimation by remember { mutableStateOf(enabled) }
 

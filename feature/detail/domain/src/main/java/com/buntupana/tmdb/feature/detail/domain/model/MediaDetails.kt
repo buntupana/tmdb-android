@@ -30,7 +30,8 @@ sealed class MediaDetails(
     open val isRateable: Boolean,
     open val status: String?,
     open val originalLanguage: String? = null,
-    open val externalLinkList: List<ExternalLink>
+    open val externalLinkList: List<ExternalLink>,
+    open val shareLink: String
 ) {
 
     data class Movie(
@@ -61,7 +62,8 @@ sealed class MediaDetails(
         override val originalLanguage: String?,
         val budget: Int,
         val revenue: Int,
-        override val externalLinkList: List<ExternalLink>
+        override val externalLinkList: List<ExternalLink>,
+        override val shareLink: String
     ) : MediaDetails(
         id = id,
         title = title,
@@ -87,7 +89,8 @@ sealed class MediaDetails(
         isRateable = isRateable,
         status = status,
         originalLanguage = originalLanguage,
-        externalLinkList = externalLinkList
+        externalLinkList = externalLinkList,
+        shareLink = shareLink
     )
 
     data class TvShow(
@@ -119,7 +122,8 @@ sealed class MediaDetails(
         override val status: String?,
         val type: String?,
         override val originalLanguage: String?,
-        override val externalLinkList: List<ExternalLink>
+        override val externalLinkList: List<ExternalLink>,
+        override val shareLink: String
     ) : MediaDetails(
         id = id,
         title = title,
@@ -145,6 +149,7 @@ sealed class MediaDetails(
         isRateable = isRateable,
         status = status,
         originalLanguage = originalLanguage,
-        externalLinkList = externalLinkList
+        externalLinkList = externalLinkList,
+        shareLink = shareLink
     )
 }

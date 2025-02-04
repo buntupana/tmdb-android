@@ -7,20 +7,22 @@ import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
+import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import java.time.LocalDate
 import javax.inject.Inject
 
 class GetPersonDetailsUseCase @Inject constructor(
-    private val detailRepository: DetailRepository
+    private val detailRepository: DetailRepository,
+    private val urlProvider: UrlProvider
 ) {
 
     companion object {
         private const val KNOWN_FOR_SIZE = 8
     }
 
-    suspend operator fun invoke(params: Long): Result<PersonFullDetails, NetworkError> {
+    suspend operator fun invoke(personId: Long): Result<PersonFullDetails, NetworkError> {
 
-        detailRepository.getPersonDetails(params)
+        detailRepository.getPersonDetails(personId)
             .onError { return Result.Error(it) }
             .onSuccess { creditPersonItem ->
 
@@ -62,7 +64,8 @@ class GetPersonDetailsUseCase @Inject constructor(
                     externalLinks = creditPersonItem.externalLinkList,
                     knownFor = knownForList,
                     creditMap = creditMap,
-                    knownCredits = creditPersonItem.filmography.size
+                    knownCredits = creditPersonItem.filmography.size,
+                    shareLink = urlProvider.getPersonShareLink(personId)
                 )
 
                 return Result.Success(personFullDetails)

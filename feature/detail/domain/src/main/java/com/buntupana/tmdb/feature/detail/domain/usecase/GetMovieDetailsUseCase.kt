@@ -3,17 +3,20 @@ package com.buntupana.tmdb.feature.detail.domain.usecase
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
+import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 import javax.inject.Inject
 
 class GetMovieDetailsUseCase @Inject constructor(
-    private val detailRepository: DetailRepository
+    private val detailRepository: DetailRepository,
+    private val urlProvider: UrlProvider
 ) {
     suspend operator fun invoke(movieId: Long): Result<MediaDetails.Movie, NetworkError> {
 
@@ -90,7 +93,11 @@ class GetMovieDetailsUseCase @Inject constructor(
                         originalLanguage = movieDetails.originalLanguage,
                         budget = movieDetails.budget,
                         revenue = movieDetails.revenue,
-                        externalLinkList = movieDetails.externalLinkList
+                        externalLinkList = movieDetails.externalLinkList,
+                        shareLink = urlProvider.getMediaShareLink(
+                            mediaType = MediaType.MOVIE,
+                            mediaId = movieId
+                        )
                     )
                 )
             }

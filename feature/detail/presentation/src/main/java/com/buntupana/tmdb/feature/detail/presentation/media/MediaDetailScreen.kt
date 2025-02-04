@@ -184,7 +184,8 @@ fun MediaDetailContent(
                 scrollBehavior = scrollBehavior,
                 onBackClick = { onBackClick() },
                 onSearchClick = { onSearchClick() },
-                onLogoClick = { onLogoClick() }
+                onLogoClick = { onLogoClick() },
+                shareLink = state.mediaDetails?.shareLink
             )
         },
         bottomBar = {

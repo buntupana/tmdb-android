@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.core.data.api
 
 import com.panabuntu.tmdb.core.common.BuildConfig
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 
 class UrlProviderImpl : UrlProvider {
@@ -15,6 +16,8 @@ class UrlProviderImpl : UrlProvider {
     override val BASE_URL_PROFILE = "$BASE_URL_IMAGE/w240_and_h266_face/"
     override val BASE_URL_AVATAR = "$BASE_URL_IMAGE/w150_and_h150_face/"
 
+    private val BASE_URL_WEB = "https://www.themoviedb.org"
+
     private val BASE_DEEP_LINK_URL = "app://buntupana.tmdb"
     override val SIGN_IN_DEEP_LINK_URL = "$BASE_DEEP_LINK_URL/signin"
     override val SIGN_IN_DEEP_LINK_REDIRECT = "$SIGN_IN_DEEP_LINK_URL?approved=true"
@@ -27,6 +30,14 @@ class UrlProviderImpl : UrlProvider {
     override val BASE_URL_TIKTOK = "https://www.tiktok.com/@"
 
     override fun getSignInUrl(requestToken: String): String {
-        return "https://www.themoviedb.org/auth/access?request_token=$requestToken"
+        return "$BASE_URL_WEB/auth/access?request_token=$requestToken"
+    }
+
+    override fun getMediaShareLink(mediaType: MediaType, mediaId: Long): String {
+        return "$BASE_URL_WEB/${mediaType.value.lowercase()}/$mediaId"
+    }
+
+    override fun getPersonShareLink(personId: Long): String {
+        return "$BASE_URL_WEB/person/$personId"
     }
 }

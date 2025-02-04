@@ -2,14 +2,17 @@ package com.buntupana.tmdb.feature.detail.domain.usecase
 
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.map
+import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import java.util.Locale
 import javax.inject.Inject
 
 class GetTvShowDetailsUseCase @Inject constructor(
-    private val detailRepository: DetailRepository
+    private val detailRepository: DetailRepository,
+    private val urlProvider: UrlProvider
 ) {
 
     suspend operator fun invoke(tvShowId: Long): Result<MediaDetails.TvShow, NetworkError> {
@@ -50,7 +53,11 @@ class GetTvShowDetailsUseCase @Inject constructor(
                 status = it.status,
                 originalLanguage = it.originalLanguage,
                 type = it.type,
-                externalLinkList = it.externalLinkList
+                externalLinkList = it.externalLinkList,
+                shareLink = urlProvider.getMediaShareLink(
+                    mediaType = MediaType.TV_SHOW,
+                    mediaId = tvShowId
+                )
             )
         }
     }

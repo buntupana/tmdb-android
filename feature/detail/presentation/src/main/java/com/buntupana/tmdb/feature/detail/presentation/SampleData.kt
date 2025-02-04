@@ -46,6 +46,7 @@ val personDetailsSample = PersonFullDetails(
     knownFor = emptyList(),
     creditMap = emptyMap(),
     knownCredits = 60,
+    shareLink = "asdf"
 )
 
 val castMoviePersonSample = Person.Cast.Movie(
@@ -141,7 +142,8 @@ val mediaDetailsMovieSample = MediaDetails.Movie(
     originalLanguage = "en",
     budget = 200_000_000,
     revenue = 250_000_000,
-    externalLinkList = externalLinkListSample
+    externalLinkList = externalLinkListSample,
+    shareLink = "shareLink"
 )
 
 val creditItemPersonSample = CreditPersonItem.Movie(
@@ -231,5 +233,6 @@ val mediaDetailsTvShowSample = MediaDetails.TvShow(
     status = "Ended",
     originalLanguage = "ja",
     type = "Scripted",
-    externalLinkList = externalLinkListSample
+    externalLinkList = externalLinkListSample,
+    shareLink = "shareLink"
 )

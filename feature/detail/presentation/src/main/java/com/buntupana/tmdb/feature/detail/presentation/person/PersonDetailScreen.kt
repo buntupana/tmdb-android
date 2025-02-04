@@ -91,7 +91,8 @@ fun PersonDetailContent(
                 onBackClick = { onBackClick() },
                 onSearchClick = { onSearchClick() },
                 onLogoClick = { onLogoClick() },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                shareLink = state.personDetails?.shareLink
             )
         }
     ) { paddingValues ->

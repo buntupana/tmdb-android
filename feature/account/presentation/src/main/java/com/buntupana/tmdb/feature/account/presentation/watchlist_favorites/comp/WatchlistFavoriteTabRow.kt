@@ -2,7 +2,6 @@ package com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.comp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ScrollableTabRow
@@ -19,8 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.OrderButtonAnimation
+import com.buntupana.tmdb.core.ui.composables.VerticalNumberRoulette
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
-import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -67,11 +66,11 @@ fun WatchlistFavoriteTabRow(
                                 MediaFilter.MOVIES -> movieItemsTotalCount
                                 MediaFilter.TV_SHOWS -> tvShowItemsTotalCount
                             }
+
                             Text(text = stringResource(mediaType.strRes))
 
-                            Text(
-                                modifier = Modifier.padding(start = Dimens.padding.small),
-                                text = itemsCount?.toString() ?: ""
+                            VerticalNumberRoulette(
+                                number = itemsCount
                             )
                         }
                     },

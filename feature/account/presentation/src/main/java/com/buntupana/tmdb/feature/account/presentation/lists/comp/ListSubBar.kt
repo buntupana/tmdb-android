@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.buntupana.tmdb.core.ui.composables.VerticalNumberRoulette
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
@@ -43,14 +44,27 @@ fun ListSubBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        Text(
-            text = stringResource(
-                R.string.text_you_have_lists,
-                listItemTotalCount ?: 0
-            ),
-            color = PrimaryColor.getOnBackgroundColor(),
-            fontWeight = FontWeight.Bold
-        )
+        listItemTotalCount ?: return
+
+        Row {
+            Text(
+                text = stringResource(R.string.text_you_have),
+                color = PrimaryColor.getOnBackgroundColor(),
+                fontWeight = FontWeight.Bold
+            )
+
+            VerticalNumberRoulette(
+                number = listItemTotalCount,
+                color = PrimaryColor.getOnBackgroundColor(),
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                text = stringResource(R.string.text_lists).lowercase(),
+                color = PrimaryColor.getOnBackgroundColor(),
+                fontWeight = FontWeight.Bold
+            )
+        }
 
         Button(
             colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),

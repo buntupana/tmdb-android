@@ -19,13 +19,13 @@ class SearchRemoteDataSource @Inject constructor(
 
     suspend fun getTrending(): Result<ResponseListRaw<AnyMediaItemRaw>, NetworkError> {
         return getResult {
-            httpClient.get("trending/all/day")
+            httpClient.get("/3/trending/all/day")
         }
     }
 
     suspend fun getSearchMedia(searchKey: String): Result<ResponseListRaw<AnyMediaItemRaw>, NetworkError> {
         return getResult {
-            httpClient.get("search/multi") {
+            httpClient.get("/3/search/multi") {
                 parameter("query", searchKey)
             }
         }
@@ -36,7 +36,7 @@ class SearchRemoteDataSource @Inject constructor(
         page: Int
     ): Result<ResponseListRaw<MovieItemRaw>, NetworkError> {
         return getResult {
-            httpClient.get("search/movie") {
+            httpClient.get("/3/search/movie") {
                 parameter("query", searchKey)
                 parameter("page", page)
             }
@@ -48,7 +48,7 @@ class SearchRemoteDataSource @Inject constructor(
         page: Int
     ): Result<ResponseListRaw<TvShowItemRaw>, NetworkError> {
         return getResult {
-            httpClient.get("search/tv") {
+            httpClient.get("/3/search/tv") {
                 parameter("query", searchKey)
                 parameter("page", page)
             }
@@ -60,7 +60,7 @@ class SearchRemoteDataSource @Inject constructor(
         page: Int
     ): Result<ResponseListRaw<PersonRaw>, NetworkError> {
         return getResult {
-            httpClient.get("search/person") {
+            httpClient.get("/3/search/person") {
                 parameter("query", searchKey)
                 parameter("page", page)
             }

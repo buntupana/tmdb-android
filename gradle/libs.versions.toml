@@ -25,7 +25,7 @@ compose_lifecycle = "2.8.7"
 
 #Android dependencies
 lifecycle = "2.8.7"
-room = '2.4.2'
+room = '2.6.1'
 navigation = "2.8.6"
 palette = '1.0.0'
 
@@ -80,7 +80,7 @@ uiGraphicsAndroid = "1.7.7"
 
 #Kotlin
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 
 #Android
@@ -95,7 +95,7 @@ androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-icons-extended = {  group = "androidx.compose.material", name = "material-icons-extended"}
+androidx-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
 
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "compose_constraint" }
@@ -124,22 +124,28 @@ io-ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging" }
 io-ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json" }
 io-ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth" }
 
+#Room
+androidx-room = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "room" }
+androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 
 #Storate
-androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore"}
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 #Desugaring
 desugar-jdk = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar_jdk" }
 
 #Accompanist
-google-accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist"}
+google-accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
 
 #Tools
 jakewharton-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
-io-coil-kt = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil"}
-androidx-pallete = { group = "androidx.palette", name = "palette-ktx", version.ref = "palette"}
-squareup-moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi"}
-squareup-moshi-ksp = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi"}
+io-coil-kt = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+androidx-pallete = { group = "androidx.palette", name = "palette-ktx", version.ref = "palette" }
+squareup-moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
+squareup-moshi-ksp = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 
 #Testing

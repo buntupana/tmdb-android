@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
@@ -36,7 +37,8 @@ import com.buntupana.tmdb.feature.account.presentation.util.listItemList
 
 @Composable
 fun ListItemHorizontal(
-    modifier: Modifier = Modifier.width(200.dp),
+    modifier: Modifier = Modifier,
+    width: Dp = 200.dp,
     listItem: ListItem,
     onListClick: (listId: Long, dominantColor: Color?) -> Unit
 ) {
@@ -45,6 +47,7 @@ fun ListItemHorizontal(
 
     Box(
         modifier = modifier
+            .width(width)
             .aspectRatio(16f / 10f)
             .clip(RoundedCornerShape(Dimens.posterRound))
             .background(PlaceHolderColor)
@@ -90,6 +93,7 @@ fun ListItemHorizontal(
 @Composable
 private fun ListItemHorizontalPreview() {
     ListItemHorizontal(
+        width = 200.dp,
         listItem = listItemList.first()
             .copy(name = "asdf ad adj ljljlj  lkj ad klj adkj a  asd asdf "),
         onListClick = { _, _ -> }
@@ -98,10 +102,12 @@ private fun ListItemHorizontalPreview() {
 
 @Composable
 fun ListItemHorizontalPlaceHolder(
-    modifier: Modifier = Modifier.width(200.dp)
+    modifier: Modifier = Modifier,
+    width: Dp = 200.dp
 ) {
     Box(
         modifier = modifier
+            .width(width)
             .aspectRatio(16f / 10f)
             .clip(RoundedCornerShape(Dimens.posterRound))
             .background(PlaceHolderColor)

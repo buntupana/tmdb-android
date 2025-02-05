@@ -5,10 +5,10 @@ import com.buntupana.tmdb.core.data.raw.StandardRaw
 import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
 import com.buntupana.tmdb.feature.account.data.raw.AddRemoveListItemListRaw
 import com.buntupana.tmdb.feature.account.data.raw.CreateListRaw
-import com.buntupana.tmdb.feature.account.data.raw.ListItemRaw
+import com.buntupana.tmdb.feature.account.data.remote_data_source.raw.ListItemRaw
+import com.buntupana.tmdb.feature.account.data.remote_data_source.request.CreateUpdateListRequest
 import com.buntupana.tmdb.feature.account.data.request.AddItem
 import com.buntupana.tmdb.feature.account.data.request.AddRemoveListItemListRequest
-import com.buntupana.tmdb.feature.account.data.request.CreateUpdateListRequest
 import com.buntupana.tmdb.feature.account.domain.model.MediaItemBasic
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
@@ -20,17 +20,16 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import javax.inject.Inject
-import javax.inject.Named
 
 class ListRemoteDataSource @Inject constructor(
-    @Named("ApiV4") private val httpClient: HttpClient
+    private val httpClient: HttpClient
 ) : RemoteDataSource() {
     suspend fun getLists(
         accountObjectId: String,
         page: Int = 1
     ): Result<ResponseListRaw<ListItemRaw>, NetworkError> {
         return getResult<ResponseListRaw<ListItemRaw>> {
-            httpClient.get(urlString = "account/$accountObjectId/lists") {
+            httpClient.get(urlString = "4/account/$accountObjectId/lists") {
                 parameter("page", page)
             }
         }
@@ -42,7 +41,7 @@ class ListRemoteDataSource @Inject constructor(
         isPublic: Boolean
     ): Result<CreateListRaw, NetworkError> {
         return getResult {
-            httpClient.post(urlString = "list") {
+            httpClient.post(urlString = "4/list") {
                 setBody(
                     CreateUpdateListRequest(
                         name = name,
@@ -61,7 +60,7 @@ class ListRemoteDataSource @Inject constructor(
         isPublic: Boolean,
     ): Result<StandardRaw, NetworkError> {
         return getResult {
-            httpClient.put(urlString = "list/$listId") {
+            httpClient.put(urlString = "4/list/$listId") {
                 setBody(
                     CreateUpdateListRequest(
                         name = name,
@@ -75,7 +74,7 @@ class ListRemoteDataSource @Inject constructor(
 
     suspend fun removeList(listId: Long): Result<StandardRaw, NetworkError> {
         return getResult {
-            httpClient.delete(urlString = "list/$listId")
+            httpClient.delete(urlString = "4/list/$listId")
         }
     }
 
@@ -85,7 +84,7 @@ class ListRemoteDataSource @Inject constructor(
     ): Result<AddRemoveListItemListRaw, NetworkError> {
 
         return getResult {
-            httpClient.post(urlString = "list/$listId/items") {
+            httpClient.post(urlString = "4/list/$listId/items") {
                 setBody(
                     AddRemoveListItemListRequest(
                         addItemList = mediaItemList.map {
@@ -106,7 +105,7 @@ class ListRemoteDataSource @Inject constructor(
     ): Result<AddRemoveListItemListRaw, NetworkError> {
 
         return getResult {
-            httpClient.delete(urlString = "list/$listId/items") {
+            httpClient.delete(urlString = "4/list/$listId/items") {
                 setBody(
                     AddRemoveListItemListRequest(
                         addItemList = mediaItemList.map {

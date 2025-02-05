@@ -48,7 +48,10 @@ class GenericPagingDataSource<ITEM : Any, RAW_ITEM, RESPONSE : ResponseListRaw<R
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, ITEM>): Int {
-        return lastCursor
+    override fun getRefreshKey(state: PagingState<Int, ITEM>): Int? {
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+        }
     }
 }

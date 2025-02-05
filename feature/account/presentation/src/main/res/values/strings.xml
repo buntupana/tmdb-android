@@ -6,8 +6,9 @@
     <string name="text_sign_in">Sign In</string>
     <string name="message_sign_out_confirmation">Are you sure you want to sign out?</string>
 
-    <string name="message_no_results">There are no %s in your %s.</string>
+    <string name="message_no_results_in">There are no %s in your %s.</string>
 
+    <string name="text_lists">Lists</string>
     <string name="text_you_have_lists">You have %d lists</string>
     <string name="text_create_list">Create List</string>
     <string name="text_public">Public</string>

@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CreateListRaw(
     @SerialName("id")
-    val id: Int,
+    val id: Long,
     @SerialName("status_code")
     val statusCode: Int,
     @SerialName("status_message")

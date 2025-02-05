@@ -1,13 +1,15 @@
-package com.buntupana.tmdb.feature.account.data.request
+package com.buntupana.tmdb.feature.account.data.remote_data_source.raw
+
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class WatchlistRequest(
+data class Result(
     @SerialName("media_id")
-    val mediaId: Long,
+    val mediaId: Int,
     @SerialName("media_type")
     val mediaType: String,
-    val watchlist: Boolean
+    @SerialName("success")
+    val success: Boolean
 )

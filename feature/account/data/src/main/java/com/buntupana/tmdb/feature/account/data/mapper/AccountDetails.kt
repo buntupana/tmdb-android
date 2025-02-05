@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.account.data.mapper
 
-import com.buntupana.tmdb.feature.account.data.raw.AccountDetailsRaw
+import com.buntupana.tmdb.feature.account.data.remote_data_source.raw.AccountDetailsRaw
 import com.panabuntu.tmdb.core.common.model.AccountDetails
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 

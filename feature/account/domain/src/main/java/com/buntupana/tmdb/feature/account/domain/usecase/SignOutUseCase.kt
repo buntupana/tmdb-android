@@ -19,8 +19,6 @@ class SignOutUseCase @Inject constructor(
         }
 
         return accountRepository.deleteSession(sessionManager.session.value.accessToken!!)
-            .onSuccess {
-                sessionManager.clearSession()
-            }
+            .onSuccess { sessionManager.clearSession() }
     }
 }

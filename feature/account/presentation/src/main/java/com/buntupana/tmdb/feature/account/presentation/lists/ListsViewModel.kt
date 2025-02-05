@@ -11,6 +11,8 @@ import com.buntupana.tmdb.feature.account.domain.usecase.GetListsPagingUseCase
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -24,9 +26,8 @@ class ListsViewModel @Inject constructor(
     var state by mutableStateOf(ListsState())
         private set
 
-    init {
-        onEvent(ListsEvent.GetLists)
-    }
+    private var _sideEffect = Channel<ListsSideEffect>()
+    val sideEffect = _sideEffect.receiveAsFlow()
 
     fun onEvent(event: ListsEvent) {
         Timber.d("onEvent() called with: event = [$event]")
@@ -39,7 +40,10 @@ class ListsViewModel @Inject constructor(
 
     private suspend fun getListTotalCount() {
 
-        state = state.copy(isLoading = true, isError = false)
+        state = state.copy(
+            isLoading = state.listItemTotalCount == null,
+            isError = false
+        )
 
         getListsTotalCountUseCase()
             .onError {
@@ -47,7 +51,11 @@ class ListsViewModel @Inject constructor(
             }
             .onSuccess { totalCount ->
                 state = state.copy(listItemTotalCount = totalCount, isLoading = false)
-                getLists()
+                if (state.listItems == null) {
+                    getLists()
+                } else {
+                    _sideEffect.send(ListsSideEffect.RefreshListItemList)
+                }
             }
     }
 

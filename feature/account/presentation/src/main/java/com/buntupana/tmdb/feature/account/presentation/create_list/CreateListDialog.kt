@@ -44,7 +44,8 @@ fun CreateListDialog(
         skipPartiallyExpanded = true,
         confirmValueChange = { viewModel.state.isLoading.not() }
     ),
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onCreateListSuccess: () -> Unit
 ) {
 
     if (showDialog.not()) return
@@ -62,6 +63,7 @@ fun CreateListDialog(
                     Timber.d("CreateListDialog: sideEffect = $sideEffect")
                     when (sideEffect) {
                         CreateListSideEffect.CreateListSuccess -> {
+                            onCreateListSuccess()
                             sheetState.hide()
                             onDismiss()
                         }

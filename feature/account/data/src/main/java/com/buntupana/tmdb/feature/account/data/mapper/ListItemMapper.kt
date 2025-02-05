@@ -1,9 +1,10 @@
 package com.buntupana.tmdb.feature.account.data.mapper
 
-import com.buntupana.tmdb.feature.account.data.raw.ListItemRaw
+import com.buntupana.tmdb.feature.account.data.remote_data_source.raw.ListItemRaw
 import com.buntupana.tmdb.feature.account.domain.model.ListItem
 import com.panabuntu.tmdb.core.common.util.ifNotNull
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
@@ -35,12 +36,12 @@ fun ListItemRaw.toModel(
         name = name,
         backdropUrl = backdropUrl,
         posterUrl = posterUrl,
-        averageRating = averageRating.ifNotNull { (it * 10).toInt() } ,
+        averageRating = averageRating.ifNotNull { (it * 10).toInt() },
         description = description,
         itemCount = numberOfItems,
         isPublic = public == 1,
         revenue = revenue,
-        runtime = runtime?.toInt(),
+        runtime = if (runtime.isNotNullOrBlank()) null else runtime?.toInt(),
         updatedAt = updatedAt
     )
 }

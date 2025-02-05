@@ -18,13 +18,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.ShowMoreButton
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.account.domain.model.ListItem
+import com.buntupana.tmdb.feature.account.presentation.R
 import com.buntupana.tmdb.feature.account.presentation.util.listItemList
 import com.panabuntu.tmdb.core.common.util.Const.PLACE_HOLDER_ITEM_NUMBER
+import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun ListItemsSection(
@@ -46,7 +47,7 @@ fun ListItemsSection(
             onClick = titleClicked
         ) {
             Text(
-                text = "Lists",
+                text = stringResource(R.string.text_lists),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 22.sp,
                 color = MaterialTheme.colorScheme.onBackground
@@ -83,6 +84,7 @@ fun ListItemsSection(
                     val listItem = listItemList[index]
 
                     ListItemHorizontal(
+                        modifier = Modifier.animateItem(),
                         listItem = listItem,
                         onListClick = onItemClicked
                     )
@@ -116,7 +118,7 @@ fun ListItemsSection(
                         modifier = Modifier
                             .align(Alignment.TopCenter)
                             .padding(top = Dimens.padding.huge),
-                        text = stringResource(R.string.message_no_results_found),
+                        text = stringResource(RCore.string.message_no_results_found),
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -128,7 +130,7 @@ fun ListItemsSection(
                         .matchParentSize()
                         .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
                     textColor = MaterialTheme.colorScheme.onBackground,
-                    errorMessage = stringResource(R.string.message_loading_content_error),
+                    errorMessage = stringResource(RCore.string.message_loading_content_error),
                     onRetryClick = onRetryClicked
                 )
             }

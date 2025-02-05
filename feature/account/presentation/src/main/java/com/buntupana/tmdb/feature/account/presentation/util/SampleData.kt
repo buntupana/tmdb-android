@@ -13,7 +13,7 @@ val listItemList = listOf(
         itemCount = 7,
         isPublic = false,
         revenue = 1,
-        runtime = 1,
+        runtime = 10000,
         updatedAt = null
     ),
     ListItem(
@@ -26,7 +26,7 @@ val listItemList = listOf(
         itemCount = 7,
         isPublic = false,
         revenue = 1,
-        runtime = 1,
+        runtime = 20000,
         updatedAt = null
     )
 )

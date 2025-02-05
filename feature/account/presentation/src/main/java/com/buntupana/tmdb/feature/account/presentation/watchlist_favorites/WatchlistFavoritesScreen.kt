@@ -15,6 +15,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +33,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.TopBarTitle
@@ -57,8 +62,11 @@ fun WatchlistScreen(
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val movieItems = viewModel.state.movieItems?.collectAsLazyPagingItems()
-    val tvShowItems = viewModel.state.tvShowItems?.collectAsLazyPagingItems()
+    var movieItems by remember { mutableStateOf<LazyPagingItems<MediaItem.Movie>?>(null) }
+    var tvShowItems by remember { mutableStateOf<LazyPagingItems<MediaItem.TvShow>?>(null) }
+
+    movieItems = viewModel.state.movieItems?.collectAsLazyPagingItems()
+    tvShowItems = viewModel.state.tvShowItems?.collectAsLazyPagingItems()
 
     LaunchedEffect(lifecycleOwner.lifecycle) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -203,7 +211,7 @@ fun WatchlistContent(
                     navigationBarPadding = paddingValues.calculateBottomPadding(),
                     pagingItems = pagingItems,
                     noResultMessage = stringResource(
-                        R.string.message_no_results,
+                        R.string.message_no_results_in,
                         stringResource(mediaNameResId),
                         stringResource(state.screenType.titleResId).lowercase()
                     ),

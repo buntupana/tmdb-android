@@ -47,6 +47,7 @@ class ListRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getListsPaging(): Flow<PagingData<ListItem>> {
+
         return Pager(
             config = PagingConfig(
                 pageSize = PAGINATION_SIZE,

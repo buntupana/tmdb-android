@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.core.data.api
+package com.buntupana.tmdb.core.data.provider
 
 import com.panabuntu.tmdb.core.common.BuildConfig
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -7,8 +7,7 @@ import com.panabuntu.tmdb.core.common.provider.UrlProvider
 class UrlProviderImpl : UrlProvider {
 
     override val API_KEY = BuildConfig.tmdb_api_key
-    override val BASE_URL_API_V3 = "https://api.themoviedb.org/3/"
-    override val BASE_URL_API_V4 = "https://api.themoviedb.org/4/"
+    override val BASE_URL_API = "https://api.themoviedb.org"
 
     private val BASE_URL_IMAGE = "https://image.tmdb.org/t/p"
     override val BASE_URL_POSTER = "$BASE_URL_IMAGE/w342/"

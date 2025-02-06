@@ -3,6 +3,8 @@ package com.buntupana.tmdb.core.ui.util
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.text.Spanned
+import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.animateContentSize
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,12 +26,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.core.text.HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL
+import androidx.core.text.htmlEncode
+import androidx.core.text.toHtml
 import androidx.core.view.WindowCompat
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.Dimens
@@ -139,4 +148,34 @@ fun dpToSp(dp: Dp) = with(LocalDensity.current) { dp.toSp() }
 
 @Composable
 fun spToDp(sp: TextUnit) = with(LocalDensity.current) { sp.toDp() }
+
+@Composable
+@ReadOnlyComposable
+fun annotatedStringResource(
+    @StringRes id: Int,
+): AnnotatedString {
+    val text = LocalContext.current.resources.getText(id)
+    val html = if (text is Spanned) {
+        text.toHtml(TO_HTML_PARAGRAPH_LINES_INDIVIDUAL)
+    } else {
+        text.toString()
+    }
+    return AnnotatedString.fromHtml(html)
+}
+
+@Composable
+@ReadOnlyComposable
+fun annotatedStringResource(
+    @StringRes id: Int,
+    vararg formatArgs: Any,
+): AnnotatedString {
+    val text = LocalContext.current.resources.getText(id)
+    val html = if (text is Spanned) {
+        text.toHtml(TO_HTML_PARAGRAPH_LINES_INDIVIDUAL)
+    } else {
+        text.toString()
+    }
+    val encodedArgs = formatArgs.map { if (it is String) it.htmlEncode() else it }.toTypedArray()
+    return AnnotatedString.fromHtml(html.format(*encodedArgs))
+}
 

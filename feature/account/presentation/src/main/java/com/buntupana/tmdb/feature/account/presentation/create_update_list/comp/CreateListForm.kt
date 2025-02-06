@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.account.presentation.create_list.comp
+package com.buntupana.tmdb.feature.account.presentation.create_update_list.comp
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

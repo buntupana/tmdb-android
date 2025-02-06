@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -28,7 +27,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
@@ -40,7 +38,7 @@ import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isVisible
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.account.domain.model.ListItem
-import com.buntupana.tmdb.feature.account.presentation.create_list.CreateListDialog
+import com.buntupana.tmdb.feature.account.presentation.create_update_list.CreateUpdateListDialog
 import com.buntupana.tmdb.feature.account.presentation.lists.comp.ListItemVertical
 import com.buntupana.tmdb.feature.account.presentation.lists.comp.ListSubBar
 import kotlinx.coroutines.launch
@@ -53,7 +51,7 @@ fun ListsScreen(
     viewModel: ListsViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onListDetailClick: (listItemId: Long, mainPosterColor: Color?) -> Unit,
+    onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -94,10 +92,10 @@ fun ListsScreen(
         }
     )
 
-    CreateListDialog(
+    CreateUpdateListDialog(
         showDialog = showCreateListBottomSheet,
         onDismiss = { showCreateListBottomSheet = false },
-        onCreateListSuccess = {
+        onCreateUpdateListSuccess = {
             viewModel.onEvent(ListsEvent.GetLists)
         }
     )
@@ -109,7 +107,7 @@ fun ListsContent(
     state: ListsState,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onListDetailClick: (listItemId: Long, mainPosterColor: Color?) -> Unit,
+    onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
     onRetryClick: () -> Unit,
     onCreateListClick: () -> Unit
 ) {
@@ -138,7 +136,7 @@ fun ListsContent(
 
         val listItems = state.listItems?.collectAsLazyPagingItems()
 
-        if (state.isLoading || listItems?.loadState?.refresh == LoadState.Loading) {
+        if (state.isLoading) {
             Box(modifier = Modifier.fillMaxSize()) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
@@ -216,7 +214,7 @@ fun ListsScreenPreview() {
         ),
         onBackClick = {},
         onSearchClick = {},
-        onListDetailClick = { _, _ -> },
+        onListDetailClick = { _, _, _, _ -> },
         onRetryClick = {},
         onCreateListClick = {}
     )

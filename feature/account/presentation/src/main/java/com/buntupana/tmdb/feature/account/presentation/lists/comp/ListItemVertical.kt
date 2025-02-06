@@ -32,18 +32,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.feature.account.domain.model.ListItem
 import com.buntupana.tmdb.feature.account.presentation.R
 import com.buntupana.tmdb.feature.account.presentation.util.listItemList
+import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun ListItemVertical(
     modifier: Modifier,
     listItem: ListItem,
-    onItemClick: (itemId: Long, dominantColor: Color?) -> Unit
+    onItemClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
     var dominantColor by remember { mutableStateOf<Color?>(null) }
 
@@ -55,7 +55,7 @@ fun ListItemVertical(
                 vertical = Dimens.padding.verticalItem
             )
             .clickable {
-                onItemClick(listItem.id, dominantColor)
+                onItemClick(listItem.id, listItem.name, listItem.description, listItem.backdropUrl)
             },
         shape = RoundedCornerShape(Dimens.posterRound),
         shadowElevation = Dimens.cardElevation
@@ -69,21 +69,26 @@ fun ListItemVertical(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(16f / 10f)
-                    .background(PlaceHolderColor)
             ) {
 
-                ImageFromUrl(
-                    modifier = Modifier.fillMaxSize(),
-                    imageUrl = listItem.backdropUrl,
-                    showPlaceHolder = true
-                ) { extractedColor ->
-                    dominantColor = extractedColor
+                var backgroundColor = PrimaryColor
+
+                if (listItem.backdropUrl.isNotNullOrBlank()) {
+                    backgroundColor = backgroundColor.copy(alpha = 0.8f)
+                    ImageFromUrl(
+                        modifier = Modifier.fillMaxSize(),
+                        imageUrl = listItem.backdropUrl,
+                        showPlaceHolder = true
+                    ) { extractedColor ->
+                        dominantColor = extractedColor
+                    }
                 }
+
 
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(PrimaryColor.copy(alpha = 0.8f))
+                        .background(backgroundColor)
                 )
 
                 Column(
@@ -154,6 +159,6 @@ private fun ListItemVerticalPreview() {
     ListItemVertical(
         modifier = Modifier,
         listItem = listItemList.first().copy(name = "adsf asdf asdf asdf adf asf"),
-        onItemClick = { _, _ -> }
+        onItemClick = { _, _, _, _ -> }
     )
 }

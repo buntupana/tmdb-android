@@ -11,7 +11,7 @@ import java.util.concurrent.CancellationException
 
 class GenericPagingDataSource<ITEM : Any, RAW_ITEM, RESPONSE : ResponseListRaw<RAW_ITEM>>(
     private val networkCall: suspend (Int) -> Result<RESPONSE, NetworkError>,
-    private val mapItem: (RAW_ITEM) -> ITEM
+    private val mapItemList: (List<RAW_ITEM>) -> List<ITEM>
 ) : PagingSource<Int, ITEM>() {
 
     private var lastCursor: Int = 1
@@ -22,9 +22,8 @@ class GenericPagingDataSource<ITEM : Any, RAW_ITEM, RESPONSE : ResponseListRaw<R
         return when (val response = networkCall.invoke(lastCursor)) {
             is Result.Success -> {
                 try {
-                    val items = response.data.results.map {
-                        mapItem(it)
-                    }
+
+                    val items = mapItemList(response.data.results)
 
                     val prevKey = response.data.page - 1
                     val nextKey = response.data.page + 1

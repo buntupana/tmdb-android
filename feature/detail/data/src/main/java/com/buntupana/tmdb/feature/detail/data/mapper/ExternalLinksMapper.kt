@@ -2,6 +2,7 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.feature.detail.data.raw.ExternalLinksRaw
 import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
+import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 
 fun ExternalLinksRaw.toModel(
@@ -14,22 +15,22 @@ fun ExternalLinksRaw.toModel(
 ): List<ExternalLink> {
 
     return mutableListOf<ExternalLink>().apply {
-        homepage?.let {
+        if (homepage.isNotNullOrBlank()) {
             add(ExternalLink.HomePage(homepage))
         }
-        facebookId?.let {
+        if (facebookId.isNotNullOrBlank()) {
             add(ExternalLink.FacebookLink(baseUrlFacebook + facebookId))
         }
-        twitterId?.let {
+        if (twitterId.isNotNullOrBlank()) {
             add(ExternalLink.XLink(baseUrlX + twitterId))
         }
-        instagramId?.let {
+        if (instagramId.isNotNullOrBlank()) {
             add(ExternalLink.InstagramLink(baseUrlInstagram + instagramId))
         }
-        tiktokId?.let {
+        if (tiktokId.isNotNullOrBlank()) {
             add(ExternalLink.TiktokLink(baseUrlTiktok + tiktokId))
         }
-        imdbId?.let {
+        if (imdbId.isNotNullOrBlank()) {
             add(ExternalLink.ImdbLink(baseUrlImdb + imdbId))
         }
     }

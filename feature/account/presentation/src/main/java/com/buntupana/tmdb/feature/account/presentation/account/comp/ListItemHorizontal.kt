@@ -34,13 +34,14 @@ import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.feature.account.domain.model.ListItem
 import com.buntupana.tmdb.feature.account.presentation.util.listItemList
+import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 @Composable
 fun ListItemHorizontal(
     modifier: Modifier = Modifier,
     width: Dp = 200.dp,
     listItem: ListItem,
-    onListClick: (listId: Long, dominantColor: Color?) -> Unit
+    onListClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
 
     var dominantColor by remember { mutableStateOf<Color?>(null) }
@@ -52,21 +53,27 @@ fun ListItemHorizontal(
             .clip(RoundedCornerShape(Dimens.posterRound))
             .background(PlaceHolderColor)
             .clickable {
-                onListClick(listItem.id, dominantColor)
+                onListClick(listItem.id, listItem.name, listItem.description, listItem.backdropUrl)
             }
     ) {
-        ImageFromUrl(
-            modifier = Modifier.fillMaxSize(),
-            imageUrl = listItem.backdropUrl,
-            showPlaceHolder = true
-        ) { extractedColor ->
-            dominantColor = extractedColor
+
+        var backgroundColor = PrimaryColor
+
+        if (listItem.backdropUrl.isNotNullOrBlank()) {
+            backgroundColor = backgroundColor.copy(alpha = 0.8f)
+            ImageFromUrl(
+                modifier = Modifier.fillMaxSize(),
+                imageUrl = listItem.backdropUrl,
+                showPlaceHolder = true
+            ) { extractedColor ->
+                dominantColor = extractedColor
+            }
         }
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(PrimaryColor.copy(alpha = 0.8f))
+                .background(backgroundColor)
         )
 
         Column(
@@ -96,7 +103,7 @@ private fun ListItemHorizontalPreview() {
         width = 200.dp,
         listItem = listItemList.first()
             .copy(name = "asdf ad adj ljljlj  lkj ad klj adkj a  asd asdf "),
-        onListClick = { _, _ -> }
+        onListClick = { _, _, _, _ -> }
     )
 }
 

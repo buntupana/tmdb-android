@@ -44,7 +44,7 @@ fun HomeScreen(
     onFavoritesClick: (mediaType: MediaType) -> Unit,
     onListsClick: () -> Unit,
     onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit,
-    onListDetailClicked: (listId: Long, dominantColor: Color?) -> Unit
+    onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
     HomeScreenContent(
         onSignInClicked = onSignInClicked,
@@ -53,7 +53,7 @@ fun HomeScreen(
         onFavoritesClick = onFavoritesClick,
         onListsClick = onListsClick,
         onMediaItemClicked = onMediaItemClicked,
-        onListDetailClick = onListDetailClicked
+        onListDetailClick = onListDetailClick
     )
 }
 
@@ -65,7 +65,7 @@ fun HomeScreenContent(
     onFavoritesClick: (mediaType: MediaType) -> Unit,
     onListsClick: () -> Unit,
     onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit,
-    onListDetailClick: (listId: Long, dominantColor: Color?) -> Unit
+    onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
 
     val navigationItems = listOf(
@@ -152,7 +152,7 @@ fun HomeScreenContent(
                     onFavoritesClick = onFavoritesClick,
                     onMediaItemClicked = onMediaItemClicked,
                     onListsClick = onListsClick,
-                    onListDetailClicked = onListDetailClick
+                    onListDetailClick = onListDetailClick
                 )
             }
         }
@@ -169,6 +169,6 @@ fun HomeScreenPreview() {
         onFavoritesClick = {},
         onListsClick = {},
         onMediaItemClicked = { _, _, _ -> },
-        onListDetailClick = { _, _ -> }
+        onListDetailClick = { _, _, _, _ -> }
     )
 }

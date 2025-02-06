@@ -108,7 +108,7 @@ class AccountRepositoryImpl @Inject constructor(
                             order = order
                         )
                     },
-                    mapItem = {
+                    mapItemList = {
                         it.toModel(
                             baseUrlPoster = urlProvider.BASE_URL_POSTER,
                             baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
@@ -134,7 +134,7 @@ class AccountRepositoryImpl @Inject constructor(
                             order = order
                         )
                     },
-                    mapItem = {
+                    mapItemList = {
                         it.toModel(
                             baseUrlPoster = urlProvider.BASE_URL_POSTER,
                             baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
@@ -200,7 +200,7 @@ class AccountRepositoryImpl @Inject constructor(
                             order = order
                         )
                     },
-                    mapItem = {
+                    mapItemList = {
                         it.toModel(
                             baseUrlPoster = urlProvider.BASE_URL_POSTER,
                             baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
@@ -226,7 +226,7 @@ class AccountRepositoryImpl @Inject constructor(
                             order = order
                         )
                     },
-                    mapItem = {
+                    mapItemList = {
                         it.toModel(
                             baseUrlPoster = urlProvider.BASE_URL_POSTER,
                             baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP

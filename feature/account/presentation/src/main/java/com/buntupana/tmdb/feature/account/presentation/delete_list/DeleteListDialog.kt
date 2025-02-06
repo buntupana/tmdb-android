@@ -1,7 +1,8 @@
-package com.buntupana.tmdb.feature.account.presentation.sign_out
+package com.buntupana.tmdb.feature.account.presentation.delete_list
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
@@ -33,62 +35,80 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.util.annotatedStringResource
+import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.buntupana.tmdb.feature.account.presentation.R
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import com.buntupana.tmdb.core.ui.R as RCore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignOutDialog(
-    viewModel: SignOutViewModel = hiltViewModel(),
+fun DeleteListDialog(
+    viewModel: DeleteListViewModel = hiltViewModel(),
+    deleteListNav: DeleteListNav,
     showDialog: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onDeleteSuccess: () -> Unit
 ) {
 
     if (showDialog.not()) return
 
+    LaunchedEffect(deleteListNav) {
+        viewModel.onEvent(DeleteListEvent.Init(deleteListNav))
+    }
+
+    val scope = rememberCoroutineScope()
     val lifecycleOwner = LocalLifecycleOwner.current
-    
+
     LaunchedEffect(lifecycleOwner.lifecycle) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             launch {
                 viewModel.sideEffect.collect { sideEffect ->
                     Timber.d("SignOutDialog: sideEffect = $sideEffect")
                     when (sideEffect) {
-                        SignOutSideEffect.SignOutSuccess -> onDismiss()
+                        DeleteListSideEffect.DeleteListSuccess -> {
+                            sheetState.hide()
+                            onDismiss()
+                            onDeleteSuccess()
+                        }
                     }
                 }
             }
         }
     }
 
-    SignOutContent(
+    DeleteListContent(
         state = viewModel.state,
         sheetState = sheetState,
-        onDismiss = onDismiss,
-        onSignOutClick = { viewModel.onEvent(SignOutEvent.SignOut) }
+        onDeleteListClick = {
+            viewModel.onEvent(DeleteListEvent.ConfirmDeleteList)
+        },
+        onDismiss = {
+            scope.launch {
+                sheetState.hide()
+                onDismiss()
+            }
+        }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignOutContent(
-    state: SignOutState,
+fun DeleteListContent(
+    state: DeleteListState,
     sheetState: SheetState,
+    onDeleteListClick: () -> Unit,
     onDismiss: () -> Unit,
-    onSignOutClick: () -> Unit
 ) {
-
-    val coroutineScope = rememberCoroutineScope()
-
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
         containerColor = MaterialTheme.colorScheme.background,
-        dragHandle = {}
+        dragHandle = {},
+        properties = ModalBottomSheetProperties(
+            shouldDismissOnBackPress = false
+        )
     ) {
         Column(
             modifier = Modifier
@@ -100,45 +120,61 @@ fun SignOutContent(
                 .animateContentSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Text(
-                text = stringResource(R.string.text_sign_out),
+                text = stringResource(R.string.text_delete_list),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(Dimens.padding.small))
-            Text(
-                text = stringResource(R.string.message_sign_out_confirmation),
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center
-            )
+
             Spacer(modifier = Modifier.height(Dimens.padding.big))
-            if (state.isLoading) {
-                CircularProgressIndicator()
-            } else {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
+
+
+            Box {
+
+                if (state.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+
+                Column(
+                    modifier = Modifier.isInvisible(state.isLoading),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Button(
-                        onClick = {
-                            coroutineScope.launch {
-                                sheetState.hide()
-                                onDismiss()
-                            }
-                        }) {
-                        Text(
-                            text = stringResource(RCore.string.text_cancel),
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    }
-                    Button(
-                        onClick = onSignOutClick,
-                        colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor)
+
+                    Text(
+                        text =  annotatedStringResource(
+                            R.string.message_delete_list_confirmation,
+                            state.listName
+                        ),
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(modifier = Modifier.height(Dimens.padding.huge))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceAround
                     ) {
-                        Text(
-                            text = stringResource(RCore.string.text_confirm),
-                            style = MaterialTheme.typography.titleMedium,
-                        )
+                        Button(
+                            onClick = onDismiss
+                        ) {
+                            Text(
+                                text = stringResource(com.buntupana.tmdb.core.ui.R.string.text_cancel),
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                        }
+                        Button(
+                            onClick = onDeleteListClick,
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                        ) {
+                            Text(
+                                text = stringResource(com.buntupana.tmdb.core.ui.R.string.text_confirm),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
                     }
                 }
             }
@@ -146,18 +182,18 @@ fun SignOutContent(
     }
 }
 
-@ExperimentalMaterial3Api
-@Preview
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
 @Composable
-fun SignOutScreenPreview() {
-    SignOutContent(
-        SignOutState(isLoading = false),
+fun DeleteListScreenPreview() {
+    DeleteListContent(
+        state = DeleteListState(),
         sheetState = SheetState(
             skipPartiallyExpanded = true,
             LocalDensity.current,
             initialValue = SheetValue.Expanded
         ),
-        onDismiss = {},
-        onSignOutClick = {}
+        onDeleteListClick = {},
+        onDismiss = {}
     )
 }

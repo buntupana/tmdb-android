@@ -13,7 +13,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,7 +31,7 @@ fun ListItemsSection(
     modifier: Modifier = Modifier,
     listItemList: List<ListItem>?,
     isLoadingError: Boolean,
-    onItemClicked: (listItemId: Long, dominantColor: Color?) -> Unit,
+    onItemClicked: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
     titleClicked: () -> Unit,
     onRetryClicked: () -> Unit,
     onShowMoreClick: (() -> Unit)? = null
@@ -144,7 +143,7 @@ private fun ListItemsSectionPreview() {
     ListItemsSection(
         listItemList = listItemList,
         isLoadingError = false,
-        onItemClicked = { _, _ -> },
+        onItemClicked = { _, _, _, _ -> },
         titleClicked = {},
         onRetryClicked = {}
     )

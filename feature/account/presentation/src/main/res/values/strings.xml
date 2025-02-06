@@ -8,10 +8,14 @@
 
     <string name="message_no_results_in">There are no %s in your %s.</string>
 
+    <string name="text_delete_list">Delete List</string>
+    <string name="message_delete_list_confirmation">Are you sure you want to delete <b>%s</b>?</string>
     <string name="text_lists">Lists</string>
-    <string name="text_you_have_lists">You have %d lists</string>
+    <string name="text_you_have">You have</string>
     <string name="text_create_list">Create List</string>
+    <string name="text_edit_list">Edit List</string>"
     <string name="text_public">Public</string>
     <string name="text_private">Private</string>
     <string name="message_error_create_list">There was an error creating the list.</string>
+    <string name="message_error_delete_list">There was an error deleting the list.</string>
 </resources>

@@ -35,8 +35,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import com.buntupana.tmdb.core.ui.composables.CarouselMediaItem
 import com.buntupana.tmdb.core.ui.composables.TitleAndFilter
+import com.buntupana.tmdb.core.ui.composables.item.CarouselMediaItem
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.account.presentation.R
@@ -58,7 +58,7 @@ fun AccountScreen(
     onFavoritesClick: (mediaType: MediaType) -> Unit,
     onListsClick: () -> Unit,
     onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit,
-    onListDetailClicked: (listId: Long, dominantColor: Color?) -> Unit
+    onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -121,8 +121,8 @@ fun AccountScreen(
                 }
             }
         },
-        navigateToListDetail = { listItemId, dominantColor ->
-            onListDetailClicked(listItemId, dominantColor)
+        navigateToListDetail = { listItemId, listName, description, backdropUrl ->
+            onListDetailClick(listItemId, listName, description, backdropUrl)
         },
         listLoadItems = {
             viewModel.onEvent(AccountEvent.GetLists)
@@ -147,7 +147,7 @@ fun AccountContent(
     changeFavoritesType: (mediaFilter: MediaFilter) -> Unit,
     listLoadItems: () -> Unit,
     navigateToMediaDetail: (mediaItem: MediaItem, posterDominantColor: Color) -> Unit,
-    navigateToListDetail: (listItemId: Long, dominantColor: Color?) -> Unit
+    navigateToListDetail: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
 
     if (state.isUserLogged) {
@@ -282,7 +282,7 @@ fun AccountScreenPreview() {
         changeWatchlistType = {},
         changeFavoritesType = {},
         navigateToMediaDetail = { _, _ -> },
-        navigateToListDetail = { _, _ -> },
+        navigateToListDetail = { _, _, _, _ -> },
         listLoadItems = {}
     )
 }

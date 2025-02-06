@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -57,6 +58,7 @@ fun <L : DefaultItem> LazyColumnGeneric(
     bottomPadding: Dp = 0.dp,
     animateItem: Boolean = false,
     itemList: LazyPagingItems<L>?,
+    headerContent: @Composable () -> Unit = {},
     noResultContent: @Composable () -> Unit = {},
     itemContent: @Composable LazyItemScope.(item: L) -> Unit,
 ) {
@@ -64,13 +66,20 @@ fun <L : DefaultItem> LazyColumnGeneric(
     itemList ?: return
 
     if (itemList.itemCount == 0 && itemList.loadState.refresh is LoadState.NotLoading) {
-        noResultContent()
+        Column {
+            headerContent()
+            noResultContent()
+        }
     }
 
     LazyColumn(
         modifier = modifier,
         state = state
     ) {
+        item {
+            headerContent()
+        }
+
         lazyContentGeneric(
             itemList = itemList,
             initialPadding = topPadding,

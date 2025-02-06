@@ -9,21 +9,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import com.buntupana.tmdb.core.ui.theme.Dimens
 
 
 @Composable
 fun MediaItemHorizontal(
     modifier: Modifier = Modifier,
-    onMediaClick: ((mediaId: Long, mainPosterColor: Color) -> Unit),
+    height : Dp = Dimens.imageSize.posterHeight,
+    onMediaClick: (mediaId: Long, mainPosterColor: Color) -> Unit,
     mediaId: Long,
     title: String,
     posterUrl: String?,
-    overview: String,
+    overview: String?,
     releaseDate: String
 ) {
     Surface(
         modifier = modifier
+            .height(height)
             .padding(
                 horizontal = Dimens.padding.horizontal,
                 vertical = Dimens.padding.verticalItem
@@ -37,7 +40,7 @@ fun MediaItemHorizontal(
             mediaId = mediaId,
             title = title,
             posterUrl = posterUrl,
-            overview = overview,
+            overview = overview.orEmpty(),
             releaseDate = releaseDate
         )
     }
@@ -48,8 +51,7 @@ fun MediaItemHorizontal(
 private fun MediaItemHorizontalPreview() {
     MediaItemHorizontal(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(Dimens.imageSize.posterHeight),
+            .fillMaxWidth(),
         mediaId = 0L,
         title = "Thor: Love and Thunder",
         posterUrl = null,

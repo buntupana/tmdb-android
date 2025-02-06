@@ -80,10 +80,8 @@ fun RatingDialog(
             Timber.d("sideEffect = [$sideEffect]")
             when (sideEffect) {
                 is RatingSideEffect.AddRatingSuccess -> {
-                    scope.launch {
-                        sheetState.hide()
-                        onRatingSuccess(sideEffect.rating)
-                    }
+                    sheetState.hide()
+                    onRatingSuccess(sideEffect.rating)
                 }
             }
         }

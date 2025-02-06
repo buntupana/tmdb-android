@@ -1,10 +1,12 @@
 package com.buntupana.tmdb.feature.account.domain.repository
 
 import androidx.paging.PagingData
+import com.buntupana.tmdb.feature.account.domain.model.ListDetail
 import com.buntupana.tmdb.feature.account.domain.model.ListItem
 import com.buntupana.tmdb.feature.account.domain.model.MediaItemBasic
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
+import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.flow.Flow
 
 interface ListRepository {
@@ -21,7 +23,15 @@ interface ListRepository {
         isPublic: Boolean
     ): Result<Unit, NetworkError>
 
-    suspend fun removeList(listId: Long): Result<Unit, NetworkError>
+    suspend fun updateList(
+        listId: Long,
+        name: String,
+        description: String,
+        isPublic: Boolean
+    ): Result<Unit, NetworkError>
+
+    suspend fun deleteList(listId: Long): Result<Unit, NetworkError>
+
     suspend fun addMediaItemList(
         listId: Long,
         mediaItem: MediaItemBasic
@@ -31,4 +41,8 @@ interface ListRepository {
         listId: Long,
         mediaItem: MediaItemBasic
     ): Result<Unit, NetworkError>
+
+    suspend fun getListDetails(listId: Long): Result<ListDetail, NetworkError>
+
+    fun getListItems(listId: Long): Flow<PagingData<MediaItem>>
 }

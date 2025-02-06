@@ -1,12 +1,15 @@
 package com.buntupana.tmdb.feature.account.data.remote_data_source
 
+import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
 import com.buntupana.tmdb.core.data.raw.ResponseListRaw
 import com.buntupana.tmdb.core.data.raw.StandardRaw
 import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
 import com.buntupana.tmdb.feature.account.data.raw.AddRemoveListItemListRaw
 import com.buntupana.tmdb.feature.account.data.raw.CreateListRaw
+import com.buntupana.tmdb.feature.account.data.remote_data_source.raw.ListDetailRaw
 import com.buntupana.tmdb.feature.account.data.remote_data_source.raw.ListItemRaw
-import com.buntupana.tmdb.feature.account.data.remote_data_source.request.CreateUpdateListRequest
+import com.buntupana.tmdb.feature.account.data.remote_data_source.request.CreateListRequest
+import com.buntupana.tmdb.feature.account.data.remote_data_source.request.UpdateListRequest
 import com.buntupana.tmdb.feature.account.data.request.AddItem
 import com.buntupana.tmdb.feature.account.data.request.AddRemoveListItemListRequest
 import com.buntupana.tmdb.feature.account.domain.model.MediaItemBasic
@@ -24,6 +27,7 @@ import javax.inject.Inject
 class ListRemoteDataSource @Inject constructor(
     private val httpClient: HttpClient
 ) : RemoteDataSource() {
+
     suspend fun getLists(
         accountObjectId: String,
         page: Int = 1
@@ -43,7 +47,7 @@ class ListRemoteDataSource @Inject constructor(
         return getResult {
             httpClient.post(urlString = "4/list") {
                 setBody(
-                    CreateUpdateListRequest(
+                    CreateListRequest(
                         name = name,
                         description = description,
                         public = if (isPublic) "1" else "0"
@@ -62,17 +66,17 @@ class ListRemoteDataSource @Inject constructor(
         return getResult {
             httpClient.put(urlString = "4/list/$listId") {
                 setBody(
-                    CreateUpdateListRequest(
+                    UpdateListRequest(
                         name = name,
                         description = description,
-                        public = if (isPublic) "1" else "0"
+                        public = isPublic
                     )
                 )
             }
         }
     }
 
-    suspend fun removeList(listId: Long): Result<StandardRaw, NetworkError> {
+    suspend fun deleteList(listId: Long): Result<StandardRaw, NetworkError> {
         return getResult {
             httpClient.delete(urlString = "4/list/$listId")
         }
@@ -116,6 +120,25 @@ class ListRemoteDataSource @Inject constructor(
                         }
                     )
                 )
+            }
+        }
+    }
+
+    suspend fun getListDetail(
+        listId: Long,
+    ): Result<ListDetailRaw, NetworkError> {
+        return getResult {
+            httpClient.get(urlString = "/4/list/$listId")
+        }
+    }
+
+    suspend fun getListItems(
+        listId: Long,
+        page: Int = 1
+    ): Result<ResponseListRaw<AnyMediaItemRaw>, NetworkError> {
+        return getResult {
+            httpClient.get(urlString = "/4/list/$listId") {
+                parameter("page", page)
             }
         }
     }

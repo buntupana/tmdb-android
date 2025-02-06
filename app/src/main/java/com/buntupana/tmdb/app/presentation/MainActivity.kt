@@ -27,6 +27,8 @@ import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.theme.TMDBTheme
 import com.buntupana.tmdb.core.ui.util.ObserveAsEvents
+import com.buntupana.tmdb.feature.account.presentation.list_detail.ListDetailNav
+import com.buntupana.tmdb.feature.account.presentation.list_detail.ListDetailScreen
 import com.buntupana.tmdb.feature.account.presentation.lists.ListsNav
 import com.buntupana.tmdb.feature.account.presentation.lists.ListsScreen
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInNav
@@ -150,8 +152,15 @@ class MainActivity : ComponentActivity() {
                                 onListsClick = {
                                     navRoutesMain.navigate(ListsNav)
                                 },
-                                onListDetailClicked = { listId, dominantColor ->
-
+                                onListDetailClick = { listId, listName, description, backdropUrl ->
+                                    navRoutesMain.navigate(
+                                        ListDetailNav(
+                                            listId = listId,
+                                            listName = listName,
+                                            description = description,
+                                            backdropUrl = backdropUrl
+                                        )
+                                    )
                                 }
                             )
                         }
@@ -301,9 +310,7 @@ class MainActivity : ComponentActivity() {
                             EpisodesDetailScreen(
                                 onBackClick = { navRoutesMain.popBackStack() },
                                 onSearchClick = { navRoutesMain.navigate(SearchNav) },
-                                onLogoClick = {
-                                    navRoutesMain.popBackStack(HomeNav::class)
-                                }
+                                onLogoClick = { navRoutesMain.popBackStack(HomeNav::class) }
                             )
                         }
                         composable<WatchListFavoritesNav> {
@@ -324,10 +331,33 @@ class MainActivity : ComponentActivity() {
                         composable<ListsNav> {
                             ListsScreen(
                                 onBackClick = { navRoutesMain.popBackStack() },
-                                onListDetailClick = { listItemId, mainPosterColor ->
-
+                                onListDetailClick = { listId, listName, description, backdropUrl ->
+                                    navRoutesMain.navigate(
+                                        ListDetailNav(
+                                            listId = listId,
+                                            listName = listName,
+                                            description = description,
+                                            backdropUrl = backdropUrl
+                                        )
+                                    )
                                 },
                                 onSearchClick = { navRoutesMain.navigate(SearchNav) }
+                            )
+                        }
+                        composable<ListDetailNav> {
+                            ListDetailScreen(
+                                onBackClick = { navRoutesMain.popBackStack() },
+                                onLogoClick = { navRoutesMain.popBackStack(HomeNav::class) },
+                                onSearchClick = { navRoutesMain.navigate(SearchNav) },
+                                onMediaClick = { mediaId, mediaType, mainPosterColor ->
+                                    navRoutesMain.navigate(
+                                        MediaDetailNav(
+                                            mediaId = mediaId,
+                                            mediaType = mediaType,
+                                            backgroundColor = mainPosterColor?.toArgb()
+                                        )
+                                    )
+                                }
                             )
                         }
                     }

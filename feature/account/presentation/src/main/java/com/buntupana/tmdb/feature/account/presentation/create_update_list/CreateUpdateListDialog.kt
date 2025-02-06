@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.account.presentation.create_list
+package com.buntupana.tmdb.feature.account.presentation.create_update_list
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
@@ -11,6 +11,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
@@ -31,21 +32,25 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.buntupana.tmdb.feature.account.presentation.R
-import com.buntupana.tmdb.feature.account.presentation.create_list.comp.CreateListForm
+import com.buntupana.tmdb.feature.account.presentation.create_update_list.comp.CreateListForm
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateListDialog(
-    viewModel: CreateListViewModel = hiltViewModel(),
+fun CreateUpdateListDialog(
+    viewModel: CreateUpdateListViewModel = hiltViewModel(),
     showDialog: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { viewModel.state.isLoading.not() }
     ),
     onDismiss: () -> Unit,
-    onCreateListSuccess: () -> Unit
+    onCreateUpdateListSuccess: () -> Unit,
+    listId: Long? = null,
+    listName: String = "",
+    listDescription: String? = null,
+    isPublic: Boolean = true
 ) {
 
     if (showDialog.not()) return
@@ -56,14 +61,14 @@ fun CreateListDialog(
     LaunchedEffect(lifecycleOwner.lifecycle) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
-            viewModel.onEvent(CreateListEvent.ClearListInfo)
+            viewModel.onEvent(CreateListEvent.InitList(listId, listName, listDescription, isPublic))
 
             launch {
                 viewModel.sideEffect.collect { sideEffect ->
                     Timber.d("CreateListDialog: sideEffect = $sideEffect")
                     when (sideEffect) {
                         CreateListSideEffect.CreateListSuccess -> {
-                            onCreateListSuccess()
+                            onCreateUpdateListSuccess()
                             sheetState.hide()
                             onDismiss()
                         }
@@ -113,7 +118,10 @@ fun CreateListContent(
         },
         sheetState = sheetState,
         containerColor = MaterialTheme.colorScheme.background,
-        dragHandle = {}
+        dragHandle = {},
+        properties = ModalBottomSheetProperties(
+            shouldDismissOnBackPress = false
+        )
     ) {
         Column(
             modifier = Modifier
@@ -125,8 +133,15 @@ fun CreateListContent(
                 .animateContentSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            val titleStrResId = if (state.isNewList) {
+                R.string.text_create_list
+            } else {
+                R.string.text_edit_list
+            }
+
             Text(
-                text = stringResource(R.string.text_create_list),
+                text = stringResource(titleStrResId),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )

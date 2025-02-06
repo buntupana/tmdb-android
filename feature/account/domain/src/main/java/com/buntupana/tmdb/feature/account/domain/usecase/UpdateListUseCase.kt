@@ -5,16 +5,18 @@ import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import javax.inject.Inject
 
-class CreateListUseCase @Inject constructor(
+class UpdateListUseCase @Inject constructor(
     private val listRepository: ListRepository
 ) {
 
     suspend operator fun invoke(
+        listId: Long,
         name: String,
         description: String,
         isPublic: Boolean
     ): Result<Unit, NetworkError> {
-        return listRepository.createList(
+        return listRepository.updateList(
+            listId = listId,
             name = name,
             description = description,
             isPublic = isPublic

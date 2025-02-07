@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -31,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
@@ -40,7 +42,6 @@ import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Season
-import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.AccountBar
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.AdditionalInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.CastHorizontalList
@@ -224,10 +225,14 @@ fun MediaDetailContent(
 
         if (state.isLoading) {
 
-            MediaDetailsLoading(
+            Box(
                 modifier = Modifier.fillMaxSize(),
-                backgroundColor = backgroundColor
-            )
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicatorDelayed(
+                    color = backgroundColor.getOnBackgroundColor()
+                )
+            }
 
             return@Scaffold
         }
@@ -331,8 +336,7 @@ fun MediaDetailContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = Dimens.padding.big)
-                        .padding(horizontal = Dimens.padding.horizontal)
-                    ,
+                        .padding(horizontal = Dimens.padding.horizontal),
                     mediaDetails = state.mediaDetails
                 )
 

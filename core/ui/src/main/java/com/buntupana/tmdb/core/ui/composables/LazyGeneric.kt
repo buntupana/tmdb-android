@@ -30,6 +30,11 @@ fun <L : DefaultItem> LazyListScope.lazyContentGeneric(
         Spacer(modifier = Modifier.height(initialPadding))
     }
 
+    lazyListLoadStateGeneric(
+        loadState = itemList.loadState.prepend,
+        retry = { itemList.retry() }
+    )
+
     items(
         count = itemList.itemCount,
         key = { index ->
@@ -40,8 +45,8 @@ fun <L : DefaultItem> LazyListScope.lazyContentGeneric(
         itemContent(item)
     }
 
-    LazyListAppendGeneric(
-        loadStates = itemList.loadState,
+    lazyListLoadStateGeneric(
+        loadState = itemList.loadState.append,
         retry = { itemList.retry() }
     )
 

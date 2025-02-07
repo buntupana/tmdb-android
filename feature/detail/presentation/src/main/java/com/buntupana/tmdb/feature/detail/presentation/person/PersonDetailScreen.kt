@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.person
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -19,11 +21,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.util.fadeIn
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
-import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.CreditsFilter
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.HeaderContent
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.KnownFor
@@ -98,10 +100,12 @@ fun PersonDetailContent(
     ) { paddingValues ->
 
         if (state.isLoading) {
-            MediaDetailsLoading(
+            Box(
                 modifier = Modifier.fillMaxSize(),
-                backgroundColor = MaterialTheme.colorScheme.background
-            )
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicatorDelayed()
+            }
             return@Scaffold
         }
 
@@ -180,7 +184,7 @@ fun PersonDetailsContentPreview() {
 
     PersonDetailContent(
         state = PersonDetailState(
-            isLoading = false,
+            isLoading = true,
             isGetPersonError = false,
             personDetails = personDetailsSample
         ),

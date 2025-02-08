@@ -32,9 +32,10 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
-import com.buntupana.tmdb.core.ui.composables.LazyColumnGeneric
 import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
+import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontalPlaceHolder
+import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -214,12 +215,18 @@ fun ListDetailContent(
                             text = stringResource(R.string.message_no_results_found)
                         )
                     }
+                },
+                placeHolder = {
+                    MediaItemHorizontalPlaceHolder(
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             ) { mediaItem ->
 
                 MediaItemHorizontal(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .animateItem(),
                     mediaId = mediaItem.id,
                     title = mediaItem.name,
                     posterUrl = mediaItem.posterUrl,

@@ -7,6 +7,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
+import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
+import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.account.domain.usecase.GetListDetailsUseCase
 import com.buntupana.tmdb.feature.account.domain.usecase.GetListItemsPagingUseCase
@@ -56,7 +60,15 @@ class ListDetailViewModel @Inject constructor(
 
         getListDetailsUseCase(navArgs.listId)
             .onError {
-                state = state.copy(isLoading = false, isError = true)
+                if (state.itemTotalCount == null) {
+                    state = state.copy(isLoading = false, isError = true)
+                } else {
+                    SnackbarController.sendEvent(
+                        SnackbarEvent(
+                            UiText.StringResource(R.string.message_refresh_content_error)
+                        )
+                    )
+                }
             }.onSuccess { listDetails ->
                 state = state.copy(
                     isLoading = false,
@@ -74,7 +86,7 @@ class ListDetailViewModel @Inject constructor(
             }
     }
 
-    private suspend fun getListItems() {
+    private fun getListItems() {
 
         getListItemsPagingUseCase(navArgs.listId).let {
             state = state.copy(mediaItemList = it.cachedIn(viewModelScope))

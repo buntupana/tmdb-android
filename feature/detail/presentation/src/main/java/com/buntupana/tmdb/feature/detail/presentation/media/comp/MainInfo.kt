@@ -40,8 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.DivisorCircle
 import com.buntupana.tmdb.core.ui.composables.HoursMinutesText
-import com.buntupana.tmdb.core.ui.composables.NestedVerticalLazyGrid
 import com.buntupana.tmdb.core.ui.composables.OutlinedText
+import com.buntupana.tmdb.core.ui.composables.list.NestedVerticalLazyGrid
 import com.buntupana.tmdb.core.ui.composables.widget.UserScore
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens

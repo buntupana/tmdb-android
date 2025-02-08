@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.item
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -27,6 +28,7 @@ import com.buntupana.tmdb.core.ui.composables.widget.UserScore
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.HkFontFamily
+import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
 import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import com.panabuntu.tmdb.core.common.model.MediaItem
@@ -141,5 +143,80 @@ private fun MediaItemPreview() {
         modifier = Modifier.width(Dimens.carouselMediaItemWidth),
         mediaItem = mediaItemMovie,
         onClick = { }
+    )
+}
+
+@Composable
+fun MediaItemVerticalPlaceHolder(
+    modifier: Modifier = Modifier,
+    fontSize: TextUnit = TextUnit.Unspecified
+) {
+
+    BoxWithConstraints(
+        modifier = modifier
+            .padding(4.dp)
+    ) {
+
+        val maxWidth = maxWidth
+
+        Column {
+
+            val userScoreSize = (36f * maxWidth.value / 120f).dp
+
+            Box(
+                modifier = Modifier
+                    .padding(bottom = userScoreSize / 2)
+                    .clip(RoundedCornerShape(Dimens.posterRound))
+                    .aspectRatio(2f / 3f)
+                    .background(PlaceHolderColor)
+            ) {
+            }
+
+            Box(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+            ) {
+                Column(
+                    modifier = Modifier.isInvisible(true)
+                ) {
+
+                    Text(
+                        text = "This a dummy text just for draw max size of this composable, it has be long to cover the min 3 lines",
+                        maxLines = MAX_TITLE_LINES,
+                        fontWeight = FontWeight.Bold,
+                        overflow = TextOverflow.Ellipsis,
+                        fontSize = fontSize
+                    )
+
+                    Text(
+                        text = "This a dummy text just for draw max size of this composable, it has be long to cover the min 3 lines",
+                        fontWeight = FontWeight.Normal,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        fontSize = fontSize
+                    )
+                }
+
+                Text(
+                    text = "Movie Title",
+                    maxLines = MAX_TITLE_LINES,
+                    fontWeight = FontWeight.Bold,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = fontSize,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(PlaceHolderColor),
+                    color = PlaceHolderColor
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MediaItemPlaceHolderPreview() {
+    MediaItemVerticalPlaceHolder(
+        modifier = Modifier.width(120.dp)
     )
 }

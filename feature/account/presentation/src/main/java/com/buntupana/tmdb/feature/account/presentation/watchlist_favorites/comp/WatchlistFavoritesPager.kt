@@ -19,8 +19,8 @@ import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.buntupana.tmdb.core.ui.composables.LazyColumnGeneric
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
+import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import com.buntupana.tmdb.feature.account.presentation.R

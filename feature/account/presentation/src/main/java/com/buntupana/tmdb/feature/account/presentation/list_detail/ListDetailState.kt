@@ -1,7 +1,6 @@
 package com.buntupana.tmdb.feature.account.presentation.list_detail
 
 import androidx.paging.PagingData
-import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.flow.Flow
 
 data class ListDetailState(
@@ -13,5 +12,5 @@ data class ListDetailState(
     val backdropUrl: String? = null,
     val isPublic: Boolean = true,
     val itemTotalCount: Int? = null,
-    val mediaItemList: Flow<PagingData<MediaItem>>? = null
+    val mediaItemList: Flow<PagingData<ItemListViewEntity>>? = null
 )

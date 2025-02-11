@@ -18,4 +18,6 @@
     <string name="text_private">Private</string>
     <string name="message_error_create_list">There was an error creating the list.</string>
     <string name="message_error_delete_list">There was an error deleting the list.</string>
+    <string name="message_delete_item_list_confirmation">Are you sure you want to delete <b>%s</b> from the list?</string>
+    <string name="message_error_delete_item_list">There was an error deleting %s from the list.</string>
 </resources>

@@ -43,6 +43,7 @@ fun MediaItemHorizontal(
     overview: String?,
     releaseDate: String?
 ) {
+
     Surface(
         modifier = modifier
             .height(height)
@@ -51,7 +52,7 @@ fun MediaItemHorizontal(
                 vertical = Dimens.padding.verticalItem
             ),
         shape = RoundedCornerShape(Dimens.posterRound),
-        shadowElevation = Dimens.cardElevation
+        shadowElevation = Dimens.cardElevation,
     ) {
         var mainPosterColor: Color = DetailBackgroundColor
 
@@ -92,7 +93,7 @@ fun MediaItemHorizontal(
                     Spacer(modifier = Modifier.height(Dimens.padding.small))
                     Text(
                         text = overview,
-                        maxLines = 2,
+                        maxLines = 3,
                         overflow = TextOverflow.Ellipsis
                     )
                 }

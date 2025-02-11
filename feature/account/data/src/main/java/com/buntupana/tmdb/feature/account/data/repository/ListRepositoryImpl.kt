@@ -11,6 +11,7 @@ import com.buntupana.tmdb.feature.account.domain.model.ListDetail
 import com.buntupana.tmdb.feature.account.domain.model.ListItem
 import com.buntupana.tmdb.feature.account.domain.model.MediaItemBasic
 import com.buntupana.tmdb.feature.account.domain.repository.ListRepository
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.asEmptyDataResult
@@ -107,21 +108,23 @@ class ListRepositoryImpl @Inject constructor(
 
     override suspend fun addMediaItemList(
         listId: Long,
-        mediaItem: MediaItemBasic
+        mediaId: Long,
+        mediaType: MediaType
     ): Result<Unit, NetworkError> {
         return listRemoteDataSource.addMediaItemList(
             listId = listId,
-            mediaItemList = listOf(mediaItem)
+            mediaItemList = listOf(MediaItemBasic(mediaId, mediaType))
         ).asEmptyDataResult()
     }
 
-    override suspend fun removeMediaItemList(
+    override suspend fun deleteMediaItemList(
         listId: Long,
-        mediaItem: MediaItemBasic
+        mediaId: Long,
+        mediaType: MediaType
     ): Result<Unit, NetworkError> {
         return listRemoteDataSource.removeMediaItemList(
             listId = listId,
-            mediaItemList = listOf(mediaItem)
+            mediaItemList = listOf(MediaItemBasic(mediaId, mediaType))
         ).asEmptyDataResult()
     }
 

@@ -7,6 +7,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import androidx.paging.filter
+import androidx.paging.map
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
@@ -18,6 +20,7 @@ import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -50,6 +53,14 @@ class ListDetailViewModel @Inject constructor(
         viewModelScope.launch {
             when (event) {
                 ListDetailEvent.GetDetails -> getListDetails()
+
+                is ListDetailEvent.CancelDeleteItemList -> {
+                    cancelDeleteItemList(event.itemId)
+                }
+
+                is ListDetailEvent.SuccessDeleteItemList -> deleteItemList(
+                    itemId = event.itemId
+                )
             }
         }
     }
@@ -89,7 +100,40 @@ class ListDetailViewModel @Inject constructor(
     private fun getListItems() {
 
         getListItemsPagingUseCase(navArgs.listId).let {
-            state = state.copy(mediaItemList = it.cachedIn(viewModelScope))
+            state = state.copy(
+                mediaItemList = it.map { pagingData ->
+                    pagingData.map { mediaItem ->
+                        ItemListViewEntity(
+                            id = "${mediaItem.id}_${mediaItem.mediaType}",
+                            mediaItem = mediaItem
+                        )
+                    }
+                }.cachedIn(viewModelScope)
+            )
         }
+    }
+
+    private fun deleteItemList(itemId: String) {
+        val pagingList = state.mediaItemList?.map { pagingData ->
+            pagingData.filter { item ->
+                (itemId == item.id).not()
+            }
+        }
+        state = state.copy(
+            mediaItemList = pagingList?.cachedIn(viewModelScope),
+            itemTotalCount = (state.itemTotalCount ?: 0) - 1
+        )
+    }
+
+    private fun cancelDeleteItemList(itemId: String) {
+        val pagingList = state.mediaItemList?.map { pagingData ->
+            pagingData.map { item ->
+                if (itemId == item.id) {
+                    item.isDeleteRevealed = false
+                }
+                item
+            }
+        }
+        state = state.copy(mediaItemList = pagingList?.cachedIn(viewModelScope))
     }
 }

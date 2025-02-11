@@ -1,14 +1,12 @@
-package com.buntupana.tmdb.feature.account.presentation.delete_list
+package com.buntupana.tmdb.feature.account.presentation.delete_item_list
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,19 +21,19 @@ import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeleteListDialog(
-    viewModel: DeleteListViewModel = hiltViewModel(),
-    deleteListNav: DeleteListNav,
+fun DeleteItemListDialog(
+    viewModel: DeleteItemListViewModel = hiltViewModel(),
+    deleteItemListNav: DeleteItemListNav?,
     showDialog: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onDismiss: () -> Unit,
+    onCancelClick:(itemId: String) -> Unit = {},
     onDeleteSuccess: () -> Unit
 ) {
+    if (showDialog.not() || deleteItemListNav == null) return
 
-    if (showDialog.not()) return
-
-    LaunchedEffect(deleteListNav) {
-        viewModel.onEvent(DeleteListEvent.Init(deleteListNav))
+    LaunchedEffect(deleteItemListNav) {
+        viewModel.onEvent(DeleteItemListEvent.Init(deleteItemListNav))
     }
 
     val scope = rememberCoroutineScope()
@@ -47,7 +45,7 @@ fun DeleteListDialog(
                 viewModel.sideEffect.collect { sideEffect ->
                     Timber.d("SignOutDialog: sideEffect = $sideEffect")
                     when (sideEffect) {
-                        DeleteListSideEffect.DeleteListSuccess -> {
+                        DeleteItemListSideEffect.DeleteSuccess -> {
                             sheetState.hide()
                             onDismiss()
                             onDeleteSuccess()
@@ -58,17 +56,20 @@ fun DeleteListDialog(
         }
     }
 
-    ConfirmationDialog (
+    ConfirmationDialog(
         sheetState = sheetState,
         title = stringResource(R.string.text_delete_list),
         description = annotatedStringResource(
-            R.string.message_delete_list_confirmation,
-            viewModel.state.listName
+            R.string.message_delete_item_list_confirmation,
+            viewModel.state.mediaName
         ),
         isLoading = viewModel.state.isLoading,
         confirmButtonColor = MaterialTheme.colorScheme.error,
+        onCancelClick = {
+            onCancelClick(deleteItemListNav.itemId)
+        },
         onConfirmClick = {
-            viewModel.onEvent(DeleteListEvent.ConfirmDeleteList)
+            viewModel.onEvent(DeleteItemListEvent.ConfirmDelete)
         },
         onDismiss = {
             scope.launch {
@@ -79,24 +80,9 @@ fun DeleteListDialog(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Preview(showBackground = true)
 @Composable
-fun DeleteListScreenPreview() {
-    ConfirmationDialog(
-        title = "Dialog Title",
-        description = annotatedStringResource(
-            R.string.message_delete_list_confirmation,
-            "list name"
-        ),
-        isLoading = false,
-        sheetState = SheetState(
-            skipPartiallyExpanded = true,
-            LocalDensity.current,
-            initialValue = SheetValue.Expanded
-        ),
-        confirmButtonColor = MaterialTheme.colorScheme.error,
-        onConfirmClick = {},
-        onDismiss = {}
-    )
+fun DeleteItemListScreenPreview() {
+
 }

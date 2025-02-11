@@ -54,7 +54,7 @@ fun WatchlistPager(
                 )
             }
         }
-    ) { item ->
+    ) { _, item ->
         MediaItemHorizontal(
             modifier = modifier
                 .animateItem()

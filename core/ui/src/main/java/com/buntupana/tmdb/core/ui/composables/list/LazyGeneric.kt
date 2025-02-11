@@ -28,7 +28,7 @@ fun <L : DefaultItem> LazyColumnGeneric(
     headerContent: @Composable () -> Unit = {},
     noResultContent: @Composable () -> Unit = {},
     placeHolder: (@Composable () -> Unit)? = null,
-    itemContent: @Composable LazyItemScope.(item: L) -> Unit
+    itemContent: @Composable LazyItemScope.(index: Int, item: L) -> Unit
 ) {
 
     itemList ?: return
@@ -55,8 +55,8 @@ fun <L : DefaultItem> LazyColumnGeneric(
             finalPadding = bottomPadding,
             animateItem = animateItem,
             placeHolder = placeHolder
-        ) { item ->
-            itemContent(item)
+        ) { index, item ->
+            itemContent(index, item)
         }
     }
 }
@@ -71,7 +71,7 @@ fun <L : DefaultItem> LazyRowGeneric(
     itemList: LazyPagingItems<L>,
     noResultContent: @Composable () -> Unit = {},
     placeHolder: (@Composable () -> Unit)? = null,
-    itemContent: @Composable LazyItemScope.(item: L) -> Unit,
+    itemContent: @Composable LazyItemScope.(index: Int, item: L) -> Unit
 ) {
 
     if (itemList.itemCount == 0 && itemList.loadState.refresh is LoadState.NotLoading) {
@@ -90,8 +90,8 @@ fun <L : DefaultItem> LazyRowGeneric(
             finalPadding = endPadding,
             animateItem = animateItem,
             placeHolder = placeHolder
-        ) { item ->
-            itemContent(item)
+        ) { index, item ->
+            itemContent(index, item)
         }
     }
 }
@@ -102,7 +102,7 @@ fun <L : DefaultItem> LazyListScope.lazyContentGeneric(
     finalPadding: Dp,
     animateItem: Boolean = false,
     placeHolder: (@Composable () -> Unit)?,
-    itemContent: @Composable LazyItemScope.(item: L) -> Unit
+    itemContent: @Composable LazyItemScope.(index: Int, item: L) -> Unit
 ) {
 
     item {
@@ -131,7 +131,7 @@ fun <L : DefaultItem> LazyListScope.lazyContentGeneric(
         }
     ) { index ->
         val item = itemList[index] ?: return@items
-        itemContent(item)
+        itemContent(index, item)
     }
 
     lazyListLoadStateGeneric(

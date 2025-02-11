@@ -194,7 +194,7 @@ fun ListsContent(
                         )
                     }
                 }
-            ) { item ->
+            ) { _, item ->
                 ListItemVertical(
                     modifier = Modifier.animateItem(),
                     listItem = item,

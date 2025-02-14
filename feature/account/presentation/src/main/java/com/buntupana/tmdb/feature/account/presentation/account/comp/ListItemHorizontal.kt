@@ -32,8 +32,7 @@ import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.feature.account.domain.model.ListItem
-import com.buntupana.tmdb.feature.account.presentation.util.listItemList
+import com.buntupana.tmdb.feature.lists.domain.model.ListItem
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 @Composable
@@ -101,8 +100,19 @@ fun ListItemHorizontal(
 private fun ListItemHorizontalPreview() {
     ListItemHorizontal(
         width = 200.dp,
-        listItem = listItemList.first()
-            .copy(name = "asdf ad adj ljljlj  lkj ad klj adkj a  asd asdf "),
+        listItem = ListItem(
+            id = 1,
+            name = "List Name",
+            description = "List Description",
+            backdropUrl = null,
+            posterUrl = null,
+            itemCount = 0,
+            isPublic = false,
+            revenue = 0L,
+            runtime = null,
+            averageRating = null,
+            updatedAt = null
+        ),
         onListClick = { _, _, _, _ -> }
     )
 }

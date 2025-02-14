@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.feature.account.presentation.account
 
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
-import com.buntupana.tmdb.feature.account.domain.model.ListItem
+import com.buntupana.tmdb.feature.lists.domain.model.ListItem
 import com.panabuntu.tmdb.core.common.model.MediaItem
 
 data class AccountState(

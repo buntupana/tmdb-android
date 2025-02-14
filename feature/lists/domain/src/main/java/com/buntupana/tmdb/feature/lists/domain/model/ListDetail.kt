@@ -1,0 +1,13 @@
+package com.buntupana.tmdb.feature.lists.domain.model
+
+data class ListDetail(
+    val id: Int,
+    val name: String,
+    val description: String?,
+    val itemCount: Int,
+    val averageRating: Int?,
+    val backdropUrl: String?,
+    val isPublic: Boolean,
+    val revenue: Long?,
+    val runtime: Int?,
+)

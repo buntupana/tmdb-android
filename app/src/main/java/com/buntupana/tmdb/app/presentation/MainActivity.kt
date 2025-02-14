@@ -29,12 +29,6 @@ import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.theme.TMDBTheme
 import com.buntupana.tmdb.core.ui.util.ObserveAsEvents
 import com.buntupana.tmdb.core.ui.util.bottomSheet
-import com.buntupana.tmdb.feature.account.presentation.list_detail.ListDetailNav
-import com.buntupana.tmdb.feature.account.presentation.list_detail.ListDetailScreen
-import com.buntupana.tmdb.feature.account.presentation.lists.ListsNav
-import com.buntupana.tmdb.feature.account.presentation.lists.ListsScreen
-import com.buntupana.tmdb.feature.account.presentation.manage_lists.ManageListsDialog
-import com.buntupana.tmdb.feature.account.presentation.manage_lists.ManageListsNav
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInNav
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInScreen
 import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.ScreenType
@@ -52,6 +46,12 @@ import com.buntupana.tmdb.feature.detail.presentation.rating.RatingDialog
 import com.buntupana.tmdb.feature.detail.presentation.rating.RatingNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
+import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailNav
+import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailScreen
+import com.buntupana.tmdb.feature.lists.presentation.lists.ListsNav
+import com.buntupana.tmdb.feature.lists.presentation.lists.ListsScreen
+import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsDialog
+import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsNav
 import com.buntupana.tmdb.feature.search.presentation.SearchNav
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
 import com.panabuntu.tmdb.core.common.entity.MediaType

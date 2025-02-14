@@ -20,9 +20,8 @@ import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.ShowMoreButton
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.feature.account.domain.model.ListItem
 import com.buntupana.tmdb.feature.account.presentation.R
-import com.buntupana.tmdb.feature.account.presentation.util.listItemList
+import com.buntupana.tmdb.feature.lists.domain.model.ListItem
 import com.panabuntu.tmdb.core.common.util.Const.PLACE_HOLDER_ITEM_NUMBER
 import com.buntupana.tmdb.core.ui.R as RCore
 
@@ -141,7 +140,7 @@ fun ListItemsSection(
 @Composable
 private fun ListItemsSectionPreview() {
     ListItemsSection(
-        listItemList = listItemList,
+        listItemList = null,
         isLoadingError = false,
         onItemClicked = { _, _, _, _ -> },
         titleClicked = {},

@@ -43,7 +43,6 @@ import com.buntupana.tmdb.feature.account.presentation.R
 import com.buntupana.tmdb.feature.account.presentation.account.comp.AccountInfoTop
 import com.buntupana.tmdb.feature.account.presentation.account.comp.ListItemsSection
 import com.buntupana.tmdb.feature.account.presentation.sign_out.SignOutDialog
-import com.buntupana.tmdb.feature.account.presentation.util.listItemList
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.launch
@@ -272,7 +271,7 @@ fun AccountScreenPreview() {
         AccountState(
             isUserLogged = true,
             username = "Alvaro",
-            listsMediaItemList = listItemList
+            listsMediaItemList = null
         ),
         onSignInClick = {},
         onSignOutClick = {},

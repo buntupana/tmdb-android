@@ -8,8 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.util.LOADING_DELAY
 import com.buntupana.tmdb.feature.account.domain.usecase.GetFavoritesUseCase
-import com.buntupana.tmdb.feature.account.domain.usecase.GetListsUseCase
 import com.buntupana.tmdb.feature.account.domain.usecase.GetWatchlistUseCase
+import com.buntupana.tmdb.feature.lists.domain.usecase.GetListsUseCase
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess

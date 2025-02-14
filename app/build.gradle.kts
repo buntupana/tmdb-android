@@ -70,6 +70,8 @@ dependencies {
     implementation(project(":feature:detail:di"))
     implementation(project(":feature:search:presentation"))
     implementation(project(":feature:search:di"))
+    implementation(project(":feature:lists:presentation"))
+    implementation(project(":feature:lists:di"))
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlin.reflect)

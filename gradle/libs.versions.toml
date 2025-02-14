@@ -16,17 +16,17 @@ work = '2.4.0'
 ksp = "2.0.21-1.0.26"
 
 #Compose
-composeBom = "2025.01.01"
+composeBom = "2025.02.00"
 compose_activity = "1.10.0"
 compose_constraint = '1.1.0'
-compose_foundation = "1.8.0-beta01"
-compose_paging = "3.3.5"
+compose_foundation = "1.8.0-beta02"
+compose_paging = "3.3.6"
 compose_lifecycle = "2.8.7"
 
 #Android dependencies
 lifecycle = "2.8.7"
 room = '2.6.1'
-navigation = "2.8.6"
+navigation = "2.8.7"
 palette = '1.0.0'
 
 #Accompanist
@@ -73,8 +73,8 @@ uiTooling = "1.7.3"
 appcompat = "1.7.0"
 material = "1.12.0"
 jetbrainsKotlinJvm = "2.0.21"
-uiTextGoogleFonts = "1.7.7"
-uiGraphicsAndroid = "1.7.7"
+uiTextGoogleFonts = "1.7.8"
+uiGraphicsAndroid = "1.7.8"
 
 [libraries]
 

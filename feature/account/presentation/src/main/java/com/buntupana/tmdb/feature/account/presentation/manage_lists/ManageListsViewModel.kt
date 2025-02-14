@@ -1,17 +1,19 @@
-package com.buntupana.tmdb.feature.detail.presentation.add_to_list
+package com.buntupana.tmdb.feature.account.presentation.manage_lists
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.UiText
+import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.account.domain.model.ListItem
 import com.buntupana.tmdb.feature.account.domain.usecase.GetListsFromMediaUseCase
 import com.buntupana.tmdb.feature.account.domain.usecase.SetListsForMediaUseCase
-import com.buntupana.tmdb.feature.detail.presentation.R
+import com.buntupana.tmdb.feature.account.presentation.R
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,36 +26,33 @@ import com.buntupana.tmdb.core.ui.R as RCore
 
 @HiltViewModel
 class ManageListsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val getListsFromMediaPagingUseCase: GetListsFromMediaUseCase,
     private val setListsForMediaUseCase: SetListsForMediaUseCase
 ) : ViewModel() {
 
-    var state by mutableStateOf(ManageListsState())
+    private val navArgs: ManageListsNav = savedStateHandle.navArgs()
+
+    var state by mutableStateOf(
+        ManageListsState(mediaType = navArgs.mediaType)
+    )
         private set
 
     private val _sideEffect = Channel<ManageListsSideEffect>()
     val sideEffect = _sideEffect.receiveAsFlow()
 
-    private lateinit var navArgs: ManageListsNav
-
     private var listMediaListsOri = listOf<ListItem>()
     private var listAllListsOri = listOf<ListItem>()
+
+    init {
+        onEvent(ManageListsEvent.GetLists)
+    }
 
     fun onEvent(event: ManageListsEvent) {
         Timber.d("onEvent() called with: event = [$event]")
         viewModelScope.launch {
             when (event) {
-                is ManageListsEvent.Init -> {
-                    navArgs = event.navArgs
-                    state = state.copy(
-                        isLoading = true,
-                        searchKey = "",
-                        mediaType = navArgs.mediaType,
-                        listMediaLists = null,
-                        listAllLists = null
-                    )
-                    getListFromMedia()
-                }
+                is ManageListsEvent.GetLists -> getListFromMedia()
 
                 is ManageListsEvent.AddToList -> addToList(event.listItem)
 

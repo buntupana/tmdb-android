@@ -3,14 +3,15 @@ package com.buntupana.tmdb.feature.detail.presentation.rating
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.UiText
+import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.account.domain.usecase.AddMediaRatingUseCase
 import com.buntupana.tmdb.feature.detail.presentation.R
-import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.util.applyDelayFor
@@ -25,27 +26,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RatingViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val addMediaRatingUseCase: AddMediaRatingUseCase
 ) : ViewModel() {
 
-    var state by mutableStateOf(RatingState(mediaTitle = "", rating = 0))
-        private set
+    private val navArgs = savedStateHandle.navArgs<RatingNav>()
 
-    private val _sideEffect = Channel<RatingSideEffect>()
-    val sideEffect = _sideEffect.receiveAsFlow()
-
-    private var mediaId = 0L
-    private var mediaType = MediaType.MOVIE
-
-    fun init(navArgs: RatingNav) {
-        state = RatingState(
+    var state by mutableStateOf(
+        RatingState(
             mediaTitle = navArgs.mediaTitle,
             rating = navArgs.rating ?: 0,
             ratingTitle = getRatingTitle(navArgs.rating)
         )
-        mediaId = navArgs.mediaId
-        mediaType = navArgs.mediaType
-    }
+    )
+        private set
+
+    private val _sideEffect = Channel<RatingSideEffect>()
+    val sideEffect = _sideEffect.receiveAsFlow()
 
     fun onEvent(event: RatingEvent) {
         Timber.d("onEvent() called with: event = []")
@@ -71,7 +68,7 @@ class RatingViewModel @Inject constructor(
 
         state = state.copy(isLoading = true)
 
-        addMediaRatingUseCase(mediaType, mediaId, rating)
+        addMediaRatingUseCase(navArgs.mediaType, navArgs.mediaId, rating)
             .onError {
                 state = state.copy(isLoading = false)
                 SnackbarController.sendEvent(

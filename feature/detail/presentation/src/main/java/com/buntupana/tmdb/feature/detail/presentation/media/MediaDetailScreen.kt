@@ -42,8 +42,6 @@ import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Season
-import com.buntupana.tmdb.feature.detail.presentation.add_to_list.ManageListsDialog
-import com.buntupana.tmdb.feature.detail.presentation.add_to_list.ManageListsNav
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.AccountBar
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.AdditionalInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.CastHorizontalList
@@ -52,11 +50,8 @@ import com.buntupana.tmdb.feature.detail.presentation.media.comp.MainInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.RecommendationsHorizontal
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.SeasonsSection
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
-import com.buntupana.tmdb.feature.detail.presentation.rating.RatingDialog
-import com.buntupana.tmdb.feature.detail.presentation.rating.RatingNav
 import com.panabuntu.tmdb.core.common.entity.MediaType
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaDetailScreen(
     viewModel: MediaDetailViewModel = hiltViewModel(),
@@ -67,11 +62,10 @@ fun MediaDetailScreen(
     onSeasonClick: (tvShowId: Long, seasonName: String, seasonNumber: Int, posterUrl: String?, backgroundColor: Color, releaseYear: String?) -> Unit,
     onAllSeasonsClick: (tvShowId: Long, tvShowTitle: String, releaseYear: String?, posterUrl: String?, backgroundColor: Color) -> Unit,
     onRecommendationClick: (mediaId: Long, mediaType: MediaType, backgroundColor: Color?) -> Unit,
-    onLogoClick: () -> Unit
+    onLogoClick: () -> Unit,
+    onRatingClick: (mediaId: Long, mediaType: MediaType, mediaTitle: String, rating: Int?) -> Unit,
+    onManageListClick: (mediaId: Long, mediaType: MediaType) -> Unit
 ) {
-
-    var showRatingDialog by remember { mutableStateOf(false) }
-    var showAddToListDialog by remember { mutableStateOf(false) }
 
     MediaDetailContent(
         state = viewModel.state,
@@ -121,36 +115,16 @@ fun MediaDetailScreen(
             viewModel.onEvent(MediaDetailEvent.SetWatchList)
         },
         onRatingClick = {
-            showRatingDialog = true
+            onRatingClick(
+                viewModel.state.mediaId,
+                viewModel.state.mediaType,
+                viewModel.state.mediaDetails?.title.orEmpty(),
+                viewModel.state.mediaDetails?.userRating
+            )
         },
         onListClick = {
-            showAddToListDialog = true
+            onManageListClick(viewModel.state.mediaId, viewModel.state.mediaType)
         }
-    )
-
-    RatingDialog(
-        ratingNav = RatingNav(
-            mediaType = viewModel.state.mediaType,
-            mediaId = viewModel.state.mediaId,
-            mediaTitle = viewModel.state.mediaDetails?.title.orEmpty(),
-            rating = viewModel.state.mediaDetails?.userRating
-        ),
-        showDialog = showRatingDialog,
-        onRatingSuccess = { rating ->
-            showRatingDialog = false
-            viewModel.onEvent(MediaDetailEvent.OnRatingSuccess(rating))
-        },
-        onDismiss = { showRatingDialog = false }
-    )
-
-    ManageListsDialog(
-        manageListsNav =
-        ManageListsNav(
-            mediaId = viewModel.state.mediaId,
-            mediaType = viewModel.state.mediaType
-        ),
-        showDialog = showAddToListDialog,
-        onDismiss = { showAddToListDialog = false }
     )
 }
 

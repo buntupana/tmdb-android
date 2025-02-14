@@ -20,4 +20,12 @@
     <string name="message_error_delete_list">There was an error deleting the list.</string>
     <string name="message_delete_item_list_confirmation">Are you sure you want to delete <b>%s</b> from the list?</string>
     <string name="message_error_delete_item_list">There was an error deleting %s from the list.</string>
+
+    // Manage Lists
+    <string name="text_manage_lists">Manage Lists</string>
+    <string name="message_set_lists_error">There was an error setting your lists</string>
+    <string name="text_media_belongs_to">The %s belongs to</string>
+    <string name="text_rest_of_the_lists">Rest of the Lists</string>
+    <string name="message_it_does_no_belongs_to_lists">It doesn\'t belong to any list</string>
+    <string name="message_no_list_to_show">No lists to show</string>
 </resources>

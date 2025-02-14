@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -27,10 +28,13 @@ import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.theme.TMDBTheme
 import com.buntupana.tmdb.core.ui.util.ObserveAsEvents
+import com.buntupana.tmdb.core.ui.util.bottomSheet
 import com.buntupana.tmdb.feature.account.presentation.list_detail.ListDetailNav
 import com.buntupana.tmdb.feature.account.presentation.list_detail.ListDetailScreen
 import com.buntupana.tmdb.feature.account.presentation.lists.ListsNav
 import com.buntupana.tmdb.feature.account.presentation.lists.ListsScreen
+import com.buntupana.tmdb.feature.account.presentation.manage_lists.ManageListsDialog
+import com.buntupana.tmdb.feature.account.presentation.manage_lists.ManageListsNav
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInNav
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInScreen
 import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.ScreenType
@@ -44,6 +48,8 @@ import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailScreen
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailScreen
+import com.buntupana.tmdb.feature.detail.presentation.rating.RatingDialog
+import com.buntupana.tmdb.feature.detail.presentation.rating.RatingNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
 import com.buntupana.tmdb.feature.search.presentation.SearchNav
@@ -65,6 +71,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var urlProvider: UrlProvider
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -250,6 +257,24 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onLogoClick = {
                                     navController.popBackStack(HomeNav, false)
+                                },
+                                onRatingClick = { mediaId, mediaType, mediaTitle, rating ->
+                                    navRoutesMain.navigate(
+                                        RatingNav(
+                                            mediaId = mediaId,
+                                            mediaType = mediaType,
+                                            mediaTitle = mediaTitle,
+                                            rating = rating
+                                        )
+                                    )
+                                },
+                                onManageListClick = { mediaId, mediaType ->
+                                    navRoutesMain.navigate(
+                                        ManageListsNav(
+                                            mediaId = mediaId,
+                                            mediaType = mediaType
+                                        )
+                                    )
                                 }
                             )
                         }
@@ -358,6 +383,21 @@ class MainActivity : ComponentActivity() {
                                         )
                                     )
                                 }
+                            )
+                        }
+                        bottomSheet<RatingNav> {
+                            RatingDialog(
+                                onRatingSuccess = { rating ->
+//                                    navRoutesMain.setResult("rating", rating)
+                                },
+                                onDismiss = {
+                                    navRoutesMain.popBackStack()
+                                }
+                            )
+                        }
+                        bottomSheet<ManageListsNav> {
+                            ManageListsDialog(
+                                onDismiss = { navRoutesMain.popBackStack() }
                             )
                         }
                     }

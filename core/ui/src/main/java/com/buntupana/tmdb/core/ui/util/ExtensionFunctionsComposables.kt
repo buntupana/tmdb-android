@@ -35,14 +35,23 @@ import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.text.HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL
 import androidx.core.text.htmlEncode
 import androidx.core.text.toHtml
 import androidx.core.view.WindowCompat
+import androidx.navigation.NavDeepLink
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.compose.DialogNavigator
+import androidx.navigation.compose.DialogNavigatorDestinationBuilder
+import androidx.navigation.get
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.panabuntu.tmdb.core.common.model.Gender
+import kotlin.reflect.KType
 
 //@Composable
 fun getCustomTabIntent(url: String): Intent {
@@ -177,5 +186,27 @@ fun annotatedStringResource(
     }
     val encodedArgs = formatArgs.map { if (it is String) it.htmlEncode() else it }.toTypedArray()
     return AnnotatedString.fromHtml(html.format(*encodedArgs))
+}
+
+
+inline fun <reified T : Any> NavGraphBuilder.bottomSheet(
+    typeMap: Map<KType, @JvmSuppressWildcards NavType<*>> = emptyMap(),
+    deepLinks: List<NavDeepLink> = emptyList(),
+    dialogProperties: DialogProperties = DialogProperties(),
+    noinline content: @Composable () -> Unit
+) {
+    destination(
+        DialogNavigatorDestinationBuilder(
+            provider[DialogNavigator::class],
+            T::class,
+            typeMap,
+            dialogProperties,
+            {
+                (LocalView.current.parent as DialogWindowProvider).window.setDimAmount(0f)
+                content()
+            }
+        )
+            .apply { deepLinks.forEach { deepLink -> deepLink(deepLink) } }
+    )
 }
 

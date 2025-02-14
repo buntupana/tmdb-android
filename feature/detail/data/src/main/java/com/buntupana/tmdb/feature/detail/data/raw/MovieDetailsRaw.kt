@@ -39,7 +39,7 @@ data class MovieDetailsRaw(
     val title: String,
     val video: Boolean? = null,
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Float,
     val videos: MediaVideosRaw? = null,
     @SerialName("release_dates")
     val releaseDates: ReleaseDatesRaw? = null,

@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.detail.presentation.add_to_list
+package com.buntupana.tmdb.feature.account.presentation.manage_lists
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
@@ -32,8 +32,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.account.domain.model.ListItem
-import com.buntupana.tmdb.feature.detail.presentation.add_to_list.comp.ManageListsHeader
-import com.buntupana.tmdb.feature.detail.presentation.add_to_list.comp.ManageListsLists
+import com.buntupana.tmdb.feature.account.presentation.manage_lists.comp.ManageListsHeader
+import com.buntupana.tmdb.feature.account.presentation.manage_lists.comp.ManageListsLists
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -41,8 +42,6 @@ import timber.log.Timber
 @Composable
 fun ManageListsDialog(
     viewModel: ManageListsViewModel = hiltViewModel(),
-    manageListsNav: ManageListsNav,
-    showDialog: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { newState ->
@@ -51,12 +50,6 @@ fun ManageListsDialog(
     ),
     onDismiss: () -> Unit,
 ) {
-
-    if (showDialog.not()) return
-
-    LaunchedEffect(manageListsNav) {
-        viewModel.onEvent(ManageListsEvent.Init(manageListsNav))
-    }
 
     val scope = rememberCoroutineScope()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -191,6 +184,7 @@ private fun ManageListsPreview() {
     ManageListsContent(
         ManageListsState(
             isLoading = false,
+            mediaType = MediaType.MOVIE,
             searchKey = "",
             listMediaLists = listOf(
                 ListItem(

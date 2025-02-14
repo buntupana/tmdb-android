@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.detail.presentation.add_to_list.comp
+package com.buntupana.tmdb.feature.account.presentation.manage_lists.comp
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
-import com.buntupana.tmdb.feature.detail.presentation.R
+import com.buntupana.tmdb.feature.account.presentation.R
 
 @Composable
 fun ManageListsHeader(

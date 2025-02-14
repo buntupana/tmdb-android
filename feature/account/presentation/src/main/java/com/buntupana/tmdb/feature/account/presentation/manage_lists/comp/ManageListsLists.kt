@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.detail.presentation.add_to_list.comp
+package com.buntupana.tmdb.feature.account.presentation.manage_lists.comp
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
@@ -18,8 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.account.domain.model.ListItem
-import com.buntupana.tmdb.feature.detail.presentation.R
-import com.buntupana.tmdb.feature.detail.presentation.add_to_list.ManageListsState
+import com.buntupana.tmdb.feature.account.presentation.R
+import com.buntupana.tmdb.feature.account.presentation.manage_lists.ManageListsState
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.buntupana.tmdb.core.ui.R as RCore
 
@@ -152,6 +152,7 @@ private fun ManageListsListsPreview() {
             .fillMaxSize(),
         state = ManageListsState(
             isLoading = false,
+            mediaType = MediaType.MOVIE,
             searchKey = "",
             listMediaLists = listOf(
                 ListItem(

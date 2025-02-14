@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.detail.presentation.add_to_list
+package com.buntupana.tmdb.feature.account.presentation.manage_lists
 
 import com.buntupana.tmdb.core.ui.navigation.Routes
 import com.panabuntu.tmdb.core.common.entity.MediaType

@@ -57,36 +57,28 @@ import com.buntupana.tmdb.core.ui.R as RCore
 @Composable
 fun RatingDialog(
     viewModel: RatingViewModel = hiltViewModel(),
-    ratingNav: RatingNav,
-    showDialog: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { viewModel.state.isLoading.not() }
     ),
-    onDismiss: () -> Unit,
-    onRatingSuccess: suspend (rating: Int?) -> Unit
+    onDismiss: () -> Unit = {},
+    onRatingSuccess: suspend (rating: Int?) -> Unit = {}
 ) {
 
-    if (showDialog.not()) return
-
     val scope = rememberCoroutineScope()
-
-    LaunchedEffect(ratingNav) {
-        viewModel.init(ratingNav)
-    }
 
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collect { sideEffect ->
             Timber.d("sideEffect = [$sideEffect]")
             when (sideEffect) {
                 is RatingSideEffect.AddRatingSuccess -> {
-                    sheetState.hide()
                     onRatingSuccess(sideEffect.rating)
+                    sheetState.hide()
+                    onDismiss()
                 }
             }
         }
     }
-
     RatingContent(
         state = viewModel.state,
         sheetState = sheetState,

@@ -69,7 +69,7 @@ fun MediaItemVertical(
                     showPlaceHolder = true,
                     setDominantColor = { dominantColor ->
                         mainPosterColor = dominantColor
-                    }
+                    },
                 )
 
                 Box(

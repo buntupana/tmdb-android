@@ -1,10 +1,10 @@
-package com.buntupana.tmdb.feature.detail.presentation.add_to_list
+package com.buntupana.tmdb.feature.account.presentation.manage_lists
 
 import com.buntupana.tmdb.feature.account.domain.model.ListItem
 
 sealed class ManageListsEvent {
 
-    data class Init(val navArgs: ManageListsNav) : ManageListsEvent()
+    data object GetLists : ManageListsEvent()
 
     data class AddToList(val listItem: ListItem): ManageListsEvent()
 

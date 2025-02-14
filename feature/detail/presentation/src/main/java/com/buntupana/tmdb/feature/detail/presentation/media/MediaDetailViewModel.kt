@@ -31,7 +31,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MediaDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    val savedStateHandle: SavedStateHandle,
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     private val getTvShowDetailsUseCase: GetTvShowDetailsUseCase,
     private val setMediaFavoriteUseCase: SetMediaFavoriteUseCase,
@@ -213,6 +213,9 @@ class MediaDetailViewModel @Inject constructor(
     }
 
     private fun setFavoriteInternal(isFavorite: Boolean, isFavoriteLoading: Boolean) {
+
+        state.mediaDetails ?: return
+
         when (val mediaDetails = state.mediaDetails!!) {
             is MediaDetails.Movie -> mediaDetails.copy(isFavorite = isFavorite)
             is MediaDetails.TvShow -> mediaDetails.copy(isFavorite = isFavorite)

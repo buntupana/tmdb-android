@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.detail.presentation.add_to_list.comp
+package com.buntupana.tmdb.feature.account.presentation.manage_lists.comp
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement

@@ -20,8 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.buntupana.tmdb.core.ui.composables.CarouselMediaItem
 import com.buntupana.tmdb.core.ui.composables.TitleAndFilter
+import com.buntupana.tmdb.core.ui.composables.item.CarouselMediaItem
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.discover.presentation.R

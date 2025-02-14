@@ -28,6 +28,7 @@ abstract class RemoteDataSource {
         }
 
         return when (response.status.value) {
+
             in 200..299 -> {
                 try {
                     Result.Success(response.body<D>())
@@ -37,29 +38,20 @@ abstract class RemoteDataSource {
                 }
             }
 
-            401 -> {
-                Result.Error(NetworkError.UNAUTHORIZED)
-            }
+            401 -> Result.Error(NetworkError.UNAUTHORIZED)
 
-            409 -> {
-                Result.Error(NetworkError.CONFLICT)
-            }
+            404 -> Result.Error(NetworkError.NOT_FOUND)
 
-            408 -> {
-                Result.Error(NetworkError.REQUEST_TIMEOUT)
-            }
+            409 -> Result.Error(NetworkError.CONFLICT)
 
-            413 -> {
-                Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
-            }
+            408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
 
-            in 500..599 -> {
-                Result.Error(NetworkError.SERVER_ERROR)
-            }
+            413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
 
-            else -> {
-                Result.Error(NetworkError.UNKNOWN)
-            }
+            in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
+
+            else -> Result.Error(NetworkError.UNKNOWN)
+
         }
     }
 }

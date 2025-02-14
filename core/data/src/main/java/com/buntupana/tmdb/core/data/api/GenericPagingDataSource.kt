@@ -11,20 +11,19 @@ import java.util.concurrent.CancellationException
 
 class GenericPagingDataSource<ITEM : Any, RAW_ITEM, RESPONSE : ResponseListRaw<RAW_ITEM>>(
     private val networkCall: suspend (Int) -> Result<RESPONSE, NetworkError>,
-    private val mapItem: (RAW_ITEM) -> ITEM
+    private val mapItemList: (List<RAW_ITEM>) -> List<ITEM>
 ) : PagingSource<Int, ITEM>() {
 
-    private var lastCursor: Int = 1
+    private var nextPageNumber: Int = 1
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ITEM> {
-        lastCursor = params.key ?: 1
+        nextPageNumber = params.key ?: 1
 
-        return when (val response = networkCall.invoke(lastCursor)) {
+        return when (val response = networkCall.invoke(nextPageNumber)) {
             is Result.Success -> {
                 try {
-                    val items = response.data.results.map {
-                        mapItem(it)
-                    }
+
+                    val items = mapItemList(response.data.results)
 
                     val prevKey = response.data.page - 1
                     val nextKey = response.data.page + 1
@@ -48,7 +47,10 @@ class GenericPagingDataSource<ITEM : Any, RAW_ITEM, RESPONSE : ResponseListRaw<R
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, ITEM>): Int {
-        return lastCursor
+    override fun getRefreshKey(state: PagingState<Int, ITEM>): Int? {
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+        }
     }
 }

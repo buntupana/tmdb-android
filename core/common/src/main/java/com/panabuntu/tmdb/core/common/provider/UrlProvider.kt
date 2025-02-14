@@ -5,8 +5,7 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 interface UrlProvider {
 
     val API_KEY: String
-    val BASE_URL_API_V3: String
-    val BASE_URL_API_V4: String
+    val BASE_URL_API: String
 
     val BASE_URL_POSTER: String
     val BASE_URL_BACKDROP: String

@@ -24,7 +24,7 @@ class DetailRemoteDataSource @Inject constructor(
         movieId: Long
     ): Result<MovieDetailsRaw, NetworkError> {
         return getResult {
-            httpClient.get("movie/$movieId") {
+            httpClient.get("/3/movie/$movieId") {
                 parameter(
                     "append_to_response",
                     "release_dates,videos,credits,recommendations,account_states,external_ids"
@@ -41,7 +41,7 @@ class DetailRemoteDataSource @Inject constructor(
         tvShowId: Long
     ): Result<TvShowDetailsRaw, NetworkError> {
         return getResult {
-            httpClient.get(urlString = "tv/$tvShowId") {
+            httpClient.get(urlString = "/3/tv/$tvShowId") {
                 parameter(
                     "append_to_response",
                     "content_ratings,videos,aggregate_credits,recommendations,account_states,external_ids"
@@ -58,31 +58,31 @@ class DetailRemoteDataSource @Inject constructor(
         seasonNumber: Int
     ): Result<SeasonDetailsRaw, NetworkError> {
         return getResult {
-            httpClient.get(urlString = "tv/$tvShowId/season/$seasonNumber")
+            httpClient.get(urlString = "/3/tv/$tvShowId/season/$seasonNumber")
         }
     }
 
     suspend fun getMovieCredits(movieId: Long): Result<CreditsMovieRaw, NetworkError> {
         return getResult {
-            httpClient.get("movie/$movieId/credits")
+            httpClient.get("/3/movie/$movieId/credits")
         }
     }
 
     suspend fun getTvCredits(tvShowId: Long): Result<CreditsTvShowRaw, NetworkError> {
         return getResult {
-            httpClient.get("tv/$tvShowId/aggregate_credits")
+            httpClient.get("/3/tv/$tvShowId/aggregate_credits")
         }
     }
 
     suspend fun getPersonDetails(personId: Long): Result<PersonDetailsRaw, NetworkError> {
         return getResult {
-            httpClient.get("person/$personId?append_to_response=external_ids,combined_credits")
+            httpClient.get("/3/person/$personId?append_to_response=external_ids,combined_credits")
         }
     }
 
     suspend fun getTvShowSeasonsDetails(tvShowId: Long): Result<TvShowSeasonsDetailsRaw, NetworkError> {
         return getResult {
-            httpClient.get("tv/$tvShowId")
+            httpClient.get("/3/tv/$tvShowId")
         }
     }
 }

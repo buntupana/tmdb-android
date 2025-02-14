@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -27,11 +28,12 @@ import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.theme.TMDBTheme
 import com.buntupana.tmdb.core.ui.util.ObserveAsEvents
-import com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites.ScreenType
-import com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites.WatchListFavoritesNav
-import com.buntupana.tmdb.feature.account.presentation.account.watchlist_favorites.WatchlistScreen
+import com.buntupana.tmdb.core.ui.util.bottomSheet
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInNav
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInScreen
+import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.ScreenType
+import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.WatchListFavoritesNav
+import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.WatchlistScreen
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailScreen
 import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailNav
@@ -40,8 +42,16 @@ import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailScreen
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailScreen
+import com.buntupana.tmdb.feature.detail.presentation.rating.RatingDialog
+import com.buntupana.tmdb.feature.detail.presentation.rating.RatingNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
+import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailNav
+import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailScreen
+import com.buntupana.tmdb.feature.lists.presentation.lists.ListsNav
+import com.buntupana.tmdb.feature.lists.presentation.lists.ListsScreen
+import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsDialog
+import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsNav
 import com.buntupana.tmdb.feature.search.presentation.SearchNav
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -61,6 +71,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var urlProvider: UrlProvider
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -122,18 +133,41 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 onWatchListClick = { mediaType ->
-                                    val mediaFilter = when(mediaType) {
+                                    val mediaFilter = when (mediaType) {
                                         MediaType.MOVIE -> MediaFilter.MOVIES
                                         MediaType.TV_SHOW -> MediaFilter.TV_SHOWS
                                     }
-                                    navRoutesMain.navigate(WatchListFavoritesNav(ScreenType.WATCHLIST, mediaFilter))
+                                    navRoutesMain.navigate(
+                                        WatchListFavoritesNav(
+                                            ScreenType.WATCHLIST,
+                                            mediaFilter
+                                        )
+                                    )
                                 },
                                 onFavoritesClick = { mediaType ->
-                                    val mediaFilter = when(mediaType) {
+                                    val mediaFilter = when (mediaType) {
                                         MediaType.MOVIE -> MediaFilter.MOVIES
                                         MediaType.TV_SHOW -> MediaFilter.TV_SHOWS
                                     }
-                                    navRoutesMain.navigate(WatchListFavoritesNav(ScreenType.FAVORITES, mediaFilter))
+                                    navRoutesMain.navigate(
+                                        WatchListFavoritesNav(
+                                            ScreenType.FAVORITES,
+                                            mediaFilter
+                                        )
+                                    )
+                                },
+                                onListsClick = {
+                                    navRoutesMain.navigate(ListsNav)
+                                },
+                                onListDetailClick = { listId, listName, description, backdropUrl ->
+                                    navRoutesMain.navigate(
+                                        ListDetailNav(
+                                            listId = listId,
+                                            listName = listName,
+                                            description = description,
+                                            backdropUrl = backdropUrl
+                                        )
+                                    )
                                 }
                             )
                         }
@@ -223,6 +257,24 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onLogoClick = {
                                     navController.popBackStack(HomeNav, false)
+                                },
+                                onRatingClick = { mediaId, mediaType, mediaTitle, rating ->
+                                    navRoutesMain.navigate(
+                                        RatingNav(
+                                            mediaId = mediaId,
+                                            mediaType = mediaType,
+                                            mediaTitle = mediaTitle,
+                                            rating = rating
+                                        )
+                                    )
+                                },
+                                onManageListClick = { mediaId, mediaType ->
+                                    navRoutesMain.navigate(
+                                        ManageListsNav(
+                                            mediaId = mediaId,
+                                            mediaType = mediaType
+                                        )
+                                    )
                                 }
                             )
                         }
@@ -283,9 +335,7 @@ class MainActivity : ComponentActivity() {
                             EpisodesDetailScreen(
                                 onBackClick = { navRoutesMain.popBackStack() },
                                 onSearchClick = { navRoutesMain.navigate(SearchNav) },
-                                onLogoClick = {
-                                    navRoutesMain.popBackStack(HomeNav::class)
-                                }
+                                onLogoClick = { navRoutesMain.popBackStack(HomeNav::class) }
                             )
                         }
                         composable<WatchListFavoritesNav> {
@@ -301,6 +351,53 @@ class MainActivity : ComponentActivity() {
                                         )
                                     )
                                 }
+                            )
+                        }
+                        composable<ListsNav> {
+                            ListsScreen(
+                                onBackClick = { navRoutesMain.popBackStack() },
+                                onListDetailClick = { listId, listName, description, backdropUrl ->
+                                    navRoutesMain.navigate(
+                                        ListDetailNav(
+                                            listId = listId,
+                                            listName = listName,
+                                            description = description,
+                                            backdropUrl = backdropUrl
+                                        )
+                                    )
+                                },
+                                onSearchClick = { navRoutesMain.navigate(SearchNav) }
+                            )
+                        }
+                        composable<ListDetailNav> {
+                            ListDetailScreen(
+                                onBackClick = { navRoutesMain.popBackStack() },
+                                onLogoClick = { navRoutesMain.popBackStack(HomeNav::class) },
+                                onSearchClick = { navRoutesMain.navigate(SearchNav) },
+                                onMediaClick = { mediaId, mediaType, mainPosterColor ->
+                                    navRoutesMain.navigate(
+                                        MediaDetailNav(
+                                            mediaId = mediaId,
+                                            mediaType = mediaType,
+                                            backgroundColor = mainPosterColor?.toArgb()
+                                        )
+                                    )
+                                }
+                            )
+                        }
+                        bottomSheet<RatingNav> {
+                            RatingDialog(
+                                onRatingSuccess = { rating ->
+//                                    navRoutesMain.setResult("rating", rating)
+                                },
+                                onDismiss = {
+                                    navRoutesMain.popBackStack()
+                                }
+                            )
+                        }
+                        bottomSheet<ManageListsNav> {
+                            ManageListsDialog(
+                                onDismiss = { navRoutesMain.popBackStack() }
                             )
                         }
                     }

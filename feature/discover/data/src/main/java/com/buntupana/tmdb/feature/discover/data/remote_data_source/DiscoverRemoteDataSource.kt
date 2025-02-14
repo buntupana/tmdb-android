@@ -37,7 +37,7 @@ class DiscoverRemoteDataSource @Inject constructor(
         }
 
         return getResult {
-            httpClient.get(urlString = "discover/movie") {
+            httpClient.get(urlString = "/3/discover/movie") {
                 parameter("with_watch_monetization_types", monetizationValue)
                 parameter("watch_region", getRegion())
             }
@@ -55,7 +55,7 @@ class DiscoverRemoteDataSource @Inject constructor(
         }
 
         return getResult {
-            httpClient.get(urlString = "discover/tv") {
+            httpClient.get(urlString = "/3/discover/tv") {
                 parameter("with_watch_monetization_types", monetizationValue)
                 parameter("watch_region", getRegion())
             }
@@ -70,7 +70,7 @@ class DiscoverRemoteDataSource @Inject constructor(
         }
 
         return getResult {
-            httpClient.get("trending/all/$timeWindow")
+            httpClient.get("/3/trending/all/$timeWindow")
         }
     }
 
@@ -83,7 +83,7 @@ class DiscoverRemoteDataSource @Inject constructor(
         val toReleaseDate = LocalDate.now().toString()
 
         return getResult {
-            httpClient.get("discover/movie") {
+            httpClient.get("/3/discover/movie") {
                 parameter("region", getRegion())
                 parameter("with_release_type", "3|2")
                 parameter("release_date.gte", fromReleaseDate)
@@ -96,7 +96,7 @@ class DiscoverRemoteDataSource @Inject constructor(
     suspend fun getTvShowsOnAir(): Result<ResponseListRaw<TvShowItemRaw>, NetworkError> {
 
         return getResult {
-            httpClient.get("tv/on_the_air")
+            httpClient.get("/3/tv/on_the_air")
         }
     }
 }

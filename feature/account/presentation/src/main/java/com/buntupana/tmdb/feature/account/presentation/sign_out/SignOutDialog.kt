@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -28,9 +29,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.feature.account.presentation.R
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,10 +50,17 @@ fun SignOutDialog(
 
     if (showDialog.not()) return
 
-    LaunchedEffect(viewModel.sideEffect) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
-                SignOutSideEffect.SignOutSuccess -> onDismiss()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    
+    LaunchedEffect(lifecycleOwner.lifecycle) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            launch {
+                viewModel.sideEffect.collect { sideEffect ->
+                    Timber.d("SignOutDialog: sideEffect = $sideEffect")
+                    when (sideEffect) {
+                        SignOutSideEffect.SignOutSuccess -> onDismiss()
+                    }
+                }
             }
         }
     }
@@ -118,7 +131,10 @@ fun SignOutContent(
                             style = MaterialTheme.typography.titleMedium,
                         )
                     }
-                    Button(onClick = onSignOutClick) {
+                    Button(
+                        onClick = onSignOutClick,
+                        colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor)
+                    ) {
                         Text(
                             text = stringResource(RCore.string.text_confirm),
                             style = MaterialTheme.typography.titleMedium,

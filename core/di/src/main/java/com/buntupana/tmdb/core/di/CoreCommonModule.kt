@@ -1,10 +1,11 @@
 package com.buntupana.tmdb.core.di
 
 import android.content.Context
-import com.buntupana.tmdb.core.data.api.UrlProviderImpl
 import com.buntupana.tmdb.core.data.manager.SessionManagerImpl
+import com.buntupana.tmdb.core.data.provider.UrlProviderImpl
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
+import com.panabuntu.tmdb.core.common.util.ifNullOrBlank
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +27,6 @@ import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import timber.log.Timber
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -41,18 +41,7 @@ object CoreCommonModule {
 
     @Singleton
     @Provides
-    fun provideHttpClientV3(urlProvider: UrlProvider): HttpClient {
-        return provideHttpClient(urlProvider.BASE_URL_API_V3, urlProvider.API_KEY)
-    }
-
-    @Singleton
-    @Provides
-    @Named("ApiV4")
-    fun provideHttpClientV4(urlProvider: UrlProvider): HttpClient {
-        return provideHttpClient(urlProvider.BASE_URL_API_V4, urlProvider.API_KEY)
-    }
-
-    private fun provideHttpClient(baseUrl: String, apiKey: String): HttpClient {
+    fun provideHttpClient(sessionManager: SessionManager, urlProvider: UrlProvider): HttpClient {
         return HttpClient(OkHttp) {
             install(Logging) {
                 logger = object : Logger {
@@ -63,14 +52,21 @@ object CoreCommonModule {
                 level = LogLevel.INFO
             }
             install(DefaultRequest) {
-                url(baseUrl)
+                url(urlProvider.BASE_URL_API)
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
             }
             install(Auth) {
+
                 bearer {
                     loadTokens {
                         BearerTokens(
-                            accessToken = apiKey,
+                            accessToken = sessionManager.session.value.accessToken.ifNullOrBlank { urlProvider.API_KEY },
+                            refreshToken = ""
+                        )
+                    }
+                    refreshTokens {
+                        BearerTokens(
+                            accessToken = sessionManager.session.value.accessToken.ifNullOrBlank { urlProvider.API_KEY },
                             refreshToken = ""
                         )
                     }

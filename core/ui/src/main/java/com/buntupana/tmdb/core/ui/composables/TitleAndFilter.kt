@@ -3,6 +3,7 @@ package com.buntupana.tmdb.core.ui.composables
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelector
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelectorAlign
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelectorItem
+import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.Dimens
 
 @Composable
@@ -29,28 +31,19 @@ fun <T : ExpandableMenuSelectorItem> TitleAndFilter(
         modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-        if (titleClicked == null) {
+        TextButton(
+            modifier = Modifier
+                .padding(start = Dimens.padding.tiny)
+                .align(Alignment.CenterStart),
+            onClick = { titleClicked?.invoke() },
+            enabled = titleClicked != null
+        ) {
             Text(
-                modifier = Modifier
-                    .padding(start = Dimens.padding.medium)
-                    .align(Alignment.CenterStart),
                 text = title,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 22.sp,
+                color = MaterialTheme.colorScheme.onBackground
             )
-        } else {
-            TextButton(
-                modifier = Modifier
-                    .padding(start = Dimens.padding.small)
-                    .align(Alignment.CenterStart),
-                onClick = titleClicked
-            ) {
-                Text(
-                    text = title,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 22.sp,
-                )
-            }
         }
         ExpandableMenuSelector(
             modifier = Modifier.align(Alignment.CenterEnd),
@@ -70,6 +63,7 @@ fun <T : ExpandableMenuSelectorItem> TitleAndFilter(
 fun TitleAndFilterPreview() {
     TitleAndFilter(
         title = "Title",
-        filterSet = emptySet()
+        filterSet = MediaFilter.entries.toSet(),
+        titleClicked = {}
     )
 }

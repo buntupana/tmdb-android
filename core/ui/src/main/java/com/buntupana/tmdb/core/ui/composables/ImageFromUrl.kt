@@ -29,10 +29,18 @@ fun ImageFromUrl(
     contentDescription: String? = null,
     crossFade: Boolean = true,
     contentScale: ContentScale = ContentScale.Crop,
+    placeHolderColor: Color = PlaceHolderColor,
+    showPlaceHolder: Boolean = false,
     setDominantColor: ((dominantColor: Color) -> Unit)? = null
 ) {
 
     if (imageUrl.isNotNullOrBlank()) {
+
+        if (showPlaceHolder) {
+            Box(
+                modifier = modifier.background(placeHolderColor)
+            ) { }
+        }
 
         val allowHardware = setDominantColor == null
 
@@ -78,5 +86,5 @@ fun ImageFromUrl(
 @Preview
 @Composable
 private fun ImageFromUrlPreview() {
-    ImageFromUrl(modifier = Modifier.size(100.dp), imageUrl = "")
+    ImageFromUrl(modifier = Modifier.size(100.dp), imageUrl = null)
 }

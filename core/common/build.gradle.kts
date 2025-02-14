@@ -52,7 +52,7 @@ dependencies {
     ksp(libs.dagger.hilt.ksp)
 
     // Networking
-    implementation(libs.androidx.paging.compose)
+    api(libs.androidx.paging.compose)
 
     // Tools
     api(libs.jakewharton.timber)

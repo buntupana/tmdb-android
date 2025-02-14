@@ -49,7 +49,7 @@ class SearchRepositoryImpl @Inject constructor(
                     networkCall = { page ->
                         searchRemoteDataSource.getSearchMovies(searchKey, page)
                     },
-                    mapItem = {
+                    mapItemList = {
                         it.toModel(
                             baseUrlPoster = urlProvider.BASE_URL_POSTER,
                             baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
@@ -78,7 +78,7 @@ class SearchRepositoryImpl @Inject constructor(
                     networkCall = { page ->
                         searchRemoteDataSource.getSearchTvShows(searchKey = searchKey, page = page)
                     },
-                    mapItem = {
+                    mapItemList = {
                         it.toModel(
                             baseUrlPoster = urlProvider.BASE_URL_POSTER,
                             baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
@@ -105,7 +105,7 @@ class SearchRepositoryImpl @Inject constructor(
                     networkCall = { page ->
                         searchRemoteDataSource.getSearchPersons(searchKey, page)
                     },
-                    mapItem = {
+                    mapItemList = {
                         it.toModel(baseUrlProfile = urlProvider.BASE_URL_PROFILE)
                     }
                 )

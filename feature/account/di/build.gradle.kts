@@ -45,6 +45,12 @@ dependencies {
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.ksp)
 
+    // Room
+    implementation(libs.androidx.room)
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+
     // Testing
     testImplementation(libs.junit)
 }

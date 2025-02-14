@@ -11,7 +11,7 @@ data class MovieDetailsRaw(
     val backdropPath: String? = null,
     @SerialName("belongs_to_collection")
     val belongsToCollection: BelongsToCollection? = null,
-    val budget: Int,
+    val budget: Long,
     val genres: List<Genre>,
     val homepage: String,
     @SerialName("imdb_id")
@@ -30,7 +30,7 @@ data class MovieDetailsRaw(
     val productionCountries: List<ProductionCountry>,
     @SerialName("release_date")
     val releaseDate: String,
-    val revenue: Int,
+    val revenue: Long,
     val runtime: Long,
     @SerialName("spoken_languages")
     val spokenLanguages: List<SpokenLanguage>,
@@ -39,7 +39,7 @@ data class MovieDetailsRaw(
     val title: String,
     val video: Boolean? = null,
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Float,
     val videos: MediaVideosRaw? = null,
     @SerialName("release_dates")
     val releaseDates: ReleaseDatesRaw? = null,

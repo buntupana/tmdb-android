@@ -4,7 +4,6 @@ import com.buntupana.tmdb.feature.detail.data.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.SeasonDetail
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 import java.time.LocalDate
-import java.time.format.DateTimeParseException
 
 fun SeasonDetailsRaw.toModel(
     baseUrlPoster: String,
@@ -13,7 +12,7 @@ fun SeasonDetailsRaw.toModel(
 
     val releaseLocalDate = try {
         LocalDate.parse(airDate)
-    } catch (exc: DateTimeParseException) {
+    } catch (exc: Exception) {
         null
     }
 

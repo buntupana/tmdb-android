@@ -6,17 +6,17 @@ import com.buntupana.tmdb.core.data.raw.MovieItemRaw
 import com.buntupana.tmdb.core.data.raw.ResponseListRaw
 import com.buntupana.tmdb.core.data.raw.TvShowItemRaw
 import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
-import com.buntupana.tmdb.feature.account.data.raw.AccountDetailsRaw
-import com.buntupana.tmdb.feature.account.data.raw.CreateAccessTokenRaw
-import com.buntupana.tmdb.feature.account.data.raw.CreateRequestTokenRaw
-import com.buntupana.tmdb.feature.account.data.raw.CreateSessionRaw
-import com.buntupana.tmdb.feature.account.data.request.AddRatingRequest
-import com.buntupana.tmdb.feature.account.data.request.CreateRequestTokenRequest
-import com.buntupana.tmdb.feature.account.data.request.CreateSessionRequest
-import com.buntupana.tmdb.feature.account.data.request.DeleteSessionRequest
-import com.buntupana.tmdb.feature.account.data.request.FavoriteRequest
-import com.buntupana.tmdb.feature.account.data.request.RequestAccessTokenRequest
-import com.buntupana.tmdb.feature.account.data.request.WatchlistRequest
+import com.buntupana.tmdb.feature.account.data.remote_data_source.raw.AccountDetailsRaw
+import com.buntupana.tmdb.feature.account.data.remote_data_source.raw.CreateAccessTokenRaw
+import com.buntupana.tmdb.feature.account.data.remote_data_source.raw.CreateRequestTokenRaw
+import com.buntupana.tmdb.feature.account.data.remote_data_source.raw.CreateSessionRaw
+import com.buntupana.tmdb.feature.account.data.remote_data_source.request.AddRatingRequest
+import com.buntupana.tmdb.feature.account.data.remote_data_source.request.CreateRequestTokenRequest
+import com.buntupana.tmdb.feature.account.data.remote_data_source.request.CreateSessionRequest
+import com.buntupana.tmdb.feature.account.data.remote_data_source.request.DeleteSessionRequest
+import com.buntupana.tmdb.feature.account.data.remote_data_source.request.FavoriteRequest
+import com.buntupana.tmdb.feature.account.data.remote_data_source.request.RequestAccessTokenRequest
+import com.buntupana.tmdb.feature.account.data.remote_data_source.request.WatchlistRequest
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
@@ -31,17 +31,15 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import javax.inject.Inject
-import javax.inject.Named
 
 class AccountRemoteDataSource @Inject constructor(
-    @Named("ApiV4") private val httpClient: HttpClient,
-    private val httpClientApi3: HttpClient,
+    private val httpClient: HttpClient,
     private val urlProvider: UrlProvider
 ) : RemoteDataSource() {
 
     suspend fun createRequestToken(): Result<CreateRequestTokenRaw, NetworkError> {
         return getResult<CreateRequestTokenRaw> {
-            httpClient.post(urlString = "auth/request_token") {
+            httpClient.post(urlString = "/4/auth/request_token") {
                 setBody(CreateRequestTokenRequest(redirectTo = urlProvider.SIGN_IN_DEEP_LINK_REDIRECT))
             }
         }
@@ -49,7 +47,7 @@ class AccountRemoteDataSource @Inject constructor(
 
     suspend fun requestAccessToken(requestToken: String): Result<CreateAccessTokenRaw, NetworkError> {
         return getResult<CreateAccessTokenRaw> {
-            httpClient.post(urlString = "auth/access_token") {
+            httpClient.post(urlString = "/4/auth/access_token") {
                 setBody(RequestAccessTokenRequest(requestToken))
             }
         }
@@ -57,7 +55,7 @@ class AccountRemoteDataSource @Inject constructor(
 
     suspend fun deleteSession(accessToken: String): Result<Unit, NetworkError> {
         return getResult {
-            httpClient.delete(urlString = "auth/access_token") {
+            httpClient.delete(urlString = "/4/auth/access_token") {
                 contentType(ContentType.Application.Json)
                 setBody(DeleteSessionRequest(accessToken))
             }
@@ -66,7 +64,7 @@ class AccountRemoteDataSource @Inject constructor(
 
     suspend fun getSessionId(accessToken: String): Result<CreateSessionRaw, NetworkError> {
         return getResult<CreateSessionRaw> {
-            httpClientApi3.post(urlString = "authentication/session/convert/4") {
+            httpClient.post(urlString = "/3/authentication/session/convert/4") {
                 setBody(CreateSessionRequest(accessToken))
             }
         }
@@ -74,7 +72,7 @@ class AccountRemoteDataSource @Inject constructor(
 
     suspend fun getAccountDetails(sessionId: String): Result<AccountDetailsRaw, NetworkError> {
         return getResult<AccountDetailsRaw> {
-            httpClientApi3.get(urlString = "account") {
+            httpClient.get(urlString = "/3/account") {
                 parameter("session_id", sessionId)
             }
         }
@@ -86,7 +84,7 @@ class AccountRemoteDataSource @Inject constructor(
         page: Int = 1
     ): Result<ResponseListRaw<MovieItemRaw>, NetworkError> {
         return getResult<ResponseListRaw<MovieItemRaw>> {
-            httpClient.get(urlString = "account/$accountObjectId/movie/watchlist") {
+            httpClient.get(urlString = "/4/account/$accountObjectId/movie/watchlist") {
                 parameter("page", page)
                 parameter("sort_by", "created_at.${order.toApi()}")
             }
@@ -99,7 +97,7 @@ class AccountRemoteDataSource @Inject constructor(
         page: Int = 1
     ): Result<ResponseListRaw<TvShowItemRaw>, NetworkError> {
         return getResult<ResponseListRaw<TvShowItemRaw>> {
-            httpClient.get(urlString = "account/$accountObjectId/tv/watchlist") {
+            httpClient.get(urlString = "/4/account/$accountObjectId/tv/watchlist") {
                 parameter("page", page)
                 parameter("sort_by", "created_at.${order.toApi()}")
             }
@@ -112,7 +110,7 @@ class AccountRemoteDataSource @Inject constructor(
         page: Int = 1
     ): Result<ResponseListRaw<MovieItemRaw>, NetworkError> {
         return getResult<ResponseListRaw<MovieItemRaw>> {
-            httpClient.get(urlString = "account/$accountObjectId/movie/favorites") {
+            httpClient.get(urlString = "/4/account/$accountObjectId/movie/favorites") {
                 parameter("page", page)
                 parameter("sort_by", "created_at.${order.toApi()}")
             }
@@ -125,7 +123,7 @@ class AccountRemoteDataSource @Inject constructor(
         page: Int = 1
     ): Result<ResponseListRaw<TvShowItemRaw>, NetworkError> {
         return getResult<ResponseListRaw<TvShowItemRaw>> {
-            httpClient.get(urlString = "account/$accountObjectId/tv/favorites") {
+            httpClient.get(urlString = "/4/account/$accountObjectId/tv/favorites") {
                 parameter("page", page)
                 parameter("sort_by", "created_at.${order.toApi()}")
             }
@@ -143,7 +141,7 @@ class AccountRemoteDataSource @Inject constructor(
             MediaType.TV_SHOW -> "tv"
         }
         return getResult {
-            httpClientApi3.post("account/$accountId/favorite") {
+            httpClient.post("/3/account/$accountId/favorite") {
                 setBody(
                     FavoriteRequest(
                         mediaId = mediaId,
@@ -163,7 +161,7 @@ class AccountRemoteDataSource @Inject constructor(
     ): Result<Unit, NetworkError> {
 
         return getResult {
-            httpClientApi3.post("account/$accountId/watchlist") {
+            httpClient.post("/3/account/$accountId/watchlist") {
                 setBody(
                     WatchlistRequest(
                         mediaId = mediaId,
@@ -182,7 +180,7 @@ class AccountRemoteDataSource @Inject constructor(
         value: Int
     ): Result<Unit, NetworkError> {
         return getResult {
-            httpClientApi3.post(urlString = "${mediaType.value}/$mediaId/rating") {
+            httpClient.post(urlString = "/3/${mediaType.value}/$mediaId/rating") {
                 parameter("session_id", sessionId)
                 setBody(AddRatingRequest(value = (value / 10).toFloat()))
             }
@@ -195,23 +193,11 @@ class AccountRemoteDataSource @Inject constructor(
         mediaId: Long,
     ): Result<Unit, NetworkError> {
         return getResult {
-            httpClientApi3.delete(urlString = "${mediaType.value}/$mediaId/rating") {
+            httpClient.delete(urlString = "/3/${mediaType.value}/$mediaId/rating") {
                 parameter("session_id", sessionId)
             }
         }
     }
 
-//    suspend fun getLists(
-//        accountId: Long,
-//        order: Order = Order.DESC,
-//        page: Int = 1
-//    ): Result<ResponseListRaw<ListItemRaw>, NetworkError> {
-//        return getResult<ResponseListRaw<ListItemRaw>> {
-//            httpClient.get(urlString = "account/$accountId/watchlist/tv") {
-//                parameter("page", page)
-//                parameter("sort_by", "created_at.${order.toApi()}")
-//            }
-//        }
-//    }
 }
 

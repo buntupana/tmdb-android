@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -41,8 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.DivisorCircle
 import com.buntupana.tmdb.core.ui.composables.HoursMinutesText
-import com.buntupana.tmdb.core.ui.composables.NestedVerticalLazyGrid
 import com.buntupana.tmdb.core.ui.composables.OutlinedText
+import com.buntupana.tmdb.core.ui.composables.list.NestedVerticalLazyGrid
 import com.buntupana.tmdb.core.ui.composables.widget.UserScore
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
@@ -53,6 +52,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.getRatingColor
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
+import com.panabuntu.tmdb.core.common.util.toLocalizedString
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -116,17 +116,20 @@ fun MainInfo(
             verticalAlignment = Alignment.CenterVertically,
         ) {
 
-            Row(
+             Row(
                 modifier = Modifier
                     .weight(1f)
                     .padding(vertical = Dimens.padding.small, horizontal = Dimens.padding.medium),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
-            ) {
+            ) { // Outer Row
                 UserScore(
                     modifier = Modifier.size(50.dp),
                     score = mediaDetails.voteAverage
                 )
+
+                if (mediaDetails.voteCount == 0) return@Row
+
                 Spacer(modifier = Modifier.width(Dimens.padding.small))
                 Column {
                     Text(
@@ -137,7 +140,7 @@ fun MainInfo(
                     Text(
                         text = stringResource(
                             R.string.text_votes,
-                            mediaDetails.voteCount.toString()
+                            mediaDetails.voteCount.toLocalizedString()
                         ),
                         color = textColor,
                         fontSize = 14.sp
@@ -296,74 +299,74 @@ fun MainInfo(
                 color = textColor
             )
         }
-    }
 
-    // Tagline and overview
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Dimens.padding.medium, vertical = Dimens.padding.medium)
-    ) {
+        // Tagline and overview
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = Dimens.padding.medium, vertical = Dimens.padding.medium)
+        ) {
 
-        if (mediaDetails.tagLine.isNotBlank()) {
-            Text(
-                modifier = Modifier.alpha(0.7f),
-                text = mediaDetails.tagLine,
-                color = textColor,
-                fontStyle = FontStyle.Italic,
-                fontSize = Dimens.textSize.title
-            )
-            Spacer(modifier = Modifier.height(Dimens.padding.small))
-        }
-        if (mediaDetails.overview.isNotBlank()) {
-            Text(
-                text = stringResource(id = R.string.text_overview),
-                color = textColor,
-                fontWeight = FontWeight(600),
-                fontSize = 18.sp
-            )
-            Spacer(modifier = Modifier.height(Dimens.padding.small))
-            Text(
-                text = mediaDetails.overview,
-                color = textColor
-            )
-        }
+            if (mediaDetails.tagLine.isNotBlank()) {
+                Text(
+                    modifier = Modifier.alpha(0.7f),
+                    text = mediaDetails.tagLine,
+                    color = textColor,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = Dimens.textSize.title
+                )
+                Spacer(modifier = Modifier.height(Dimens.padding.small))
+            }
+            if (mediaDetails.overview.isNotBlank()) {
+                Text(
+                    text = stringResource(id = R.string.text_overview),
+                    color = textColor,
+                    fontWeight = FontWeight(600),
+                    fontSize = 18.sp
+                )
+                Spacer(modifier = Modifier.height(Dimens.padding.small))
+                Text(
+                    text = mediaDetails.overview,
+                    color = textColor
+                )
+            }
 
-        // Creators
-        if (mediaDetails.creatorList.isNotEmpty()) {
+            // Creators
+            if (mediaDetails.creatorList.isNotEmpty()) {
 
-            Spacer(modifier = Modifier.height(Dimens.padding.medium))
+                Spacer(modifier = Modifier.height(Dimens.padding.medium))
 
-            NestedVerticalLazyGrid(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                columns = 2,
-                columnSeparation = 8.dp,
-                itemList = mediaDetails.creatorList
-            ) { item ->
-                Column(
+                NestedVerticalLazyGrid(
                     modifier = Modifier
-                        .padding(vertical = Dimens.padding.small)
-                        .clip(RoundedCornerShape(Dimens.posterRound))
-                        .clickable {
-                            onItemClick(item.id)
+                        .fillMaxWidth(),
+                    columns = 2,
+                    columnSeparation = 8.dp,
+                    itemList = mediaDetails.creatorList
+                ) { item ->
+                    Column(
+                        modifier = Modifier
+                            .padding(vertical = Dimens.padding.small)
+                            .clip(RoundedCornerShape(Dimens.posterRound))
+                            .clickable {
+                                onItemClick(item.id)
+                            }
+                    ) {
+                        Text(
+                            text = item.name,
+                            color = textColor,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        val job = when (item) {
+                            is Person.Crew.Movie -> item.job
+                            is Person.Crew.TvShow -> item.jobList.joinToString("/") { it.job }
                         }
-                ) {
-                    Text(
-                        text = item.name,
-                        color = textColor,
-                        fontWeight = FontWeight.Bold
-                    )
 
-                    val job = when (item) {
-                        is Person.Crew.Movie -> item.job
-                        is Person.Crew.TvShow -> item.jobList.joinToString("/") { it.job }
+                        Text(
+                            text = job.ifBlank { stringResource(R.string.text_creator) },
+                            color = textColor
+                        )
                     }
-
-                    Text(
-                        text = job.ifBlank { stringResource(R.string.text_creator) },
-                        color = textColor
-                    )
                 }
             }
         }
@@ -376,7 +379,6 @@ fun MainInfoPreview() {
 
     MainInfo(
         modifier = Modifier
-            .fillMaxHeight()
             .background(DetailBackgroundColor),
         mediaDetails = mediaDetailsMovieSample,
         onItemClick = {},

@@ -24,8 +24,8 @@ import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
-import com.buntupana.tmdb.feature.account.presentation.account.account.AccountNav
-import com.buntupana.tmdb.feature.account.presentation.account.account.AccountScreen
+import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
+import com.buntupana.tmdb.feature.account.presentation.account.AccountScreen
 import com.buntupana.tmdb.feature.discover.presentation.comp.TopBar
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNav
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverScreen
@@ -42,14 +42,18 @@ fun HomeScreen(
     onSearchClicked: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
     onFavoritesClick: (mediaType: MediaType) -> Unit,
-    onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
+    onListsClick: () -> Unit,
+    onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit,
+    onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
     HomeScreenContent(
         onSignInClicked = onSignInClicked,
         onSearchClicked = onSearchClicked,
         onWatchListClick = onWatchListClick,
         onFavoritesClick = onFavoritesClick,
-        onMediaItemClicked = onMediaItemClicked
+        onListsClick = onListsClick,
+        onMediaItemClicked = onMediaItemClicked,
+        onListDetailClick = onListDetailClick
     )
 }
 
@@ -59,7 +63,9 @@ fun HomeScreenContent(
     onSearchClicked: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
     onFavoritesClick: (mediaType: MediaType) -> Unit,
-    onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
+    onListsClick: () -> Unit,
+    onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit,
+    onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
 
     val navigationItems = listOf(
@@ -145,6 +151,8 @@ fun HomeScreenContent(
                     onWatchListClick = onWatchListClick,
                     onFavoritesClick = onFavoritesClick,
                     onMediaItemClicked = onMediaItemClicked,
+                    onListsClick = onListsClick,
+                    onListDetailClick = onListDetailClick
                 )
             }
         }
@@ -159,6 +167,8 @@ fun HomeScreenPreview() {
         onSearchClicked = {},
         onWatchListClick = {},
         onFavoritesClick = {},
-        onMediaItemClicked = { _, _, _ -> }
+        onListsClick = {},
+        onMediaItemClicked = { _, _, _ -> },
+        onListDetailClick = { _, _, _, _ -> }
     )
 }

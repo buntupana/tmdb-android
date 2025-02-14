@@ -7,4 +7,6 @@ object Const {
     const val PAGINATION_SIZE = 20
 
     const val CHANGE_COLOR_ANIM_DURATION = 300
+
+    const val PLACE_HOLDER_ITEM_NUMBER = 6
 }

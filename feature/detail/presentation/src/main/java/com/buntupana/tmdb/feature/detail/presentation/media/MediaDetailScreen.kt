@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -31,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
@@ -40,7 +42,6 @@ import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Season
-import com.buntupana.tmdb.feature.detail.presentation.common.MediaDetailsLoading
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.AccountBar
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.AdditionalInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.CastHorizontalList
@@ -49,11 +50,8 @@ import com.buntupana.tmdb.feature.detail.presentation.media.comp.MainInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.RecommendationsHorizontal
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.SeasonsSection
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
-import com.buntupana.tmdb.feature.detail.presentation.rating.RatingDialog
-import com.buntupana.tmdb.feature.detail.presentation.rating.RatingNav
 import com.panabuntu.tmdb.core.common.entity.MediaType
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaDetailScreen(
     viewModel: MediaDetailViewModel = hiltViewModel(),
@@ -64,10 +62,10 @@ fun MediaDetailScreen(
     onSeasonClick: (tvShowId: Long, seasonName: String, seasonNumber: Int, posterUrl: String?, backgroundColor: Color, releaseYear: String?) -> Unit,
     onAllSeasonsClick: (tvShowId: Long, tvShowTitle: String, releaseYear: String?, posterUrl: String?, backgroundColor: Color) -> Unit,
     onRecommendationClick: (mediaId: Long, mediaType: MediaType, backgroundColor: Color?) -> Unit,
-    onLogoClick: () -> Unit
+    onLogoClick: () -> Unit,
+    onRatingClick: (mediaId: Long, mediaType: MediaType, mediaTitle: String, rating: Int?) -> Unit,
+    onManageListClick: (mediaId: Long, mediaType: MediaType) -> Unit
 ) {
-
-    var showBottomSheet by remember { mutableStateOf(false) }
 
     MediaDetailContent(
         state = viewModel.state,
@@ -117,26 +115,16 @@ fun MediaDetailScreen(
             viewModel.onEvent(MediaDetailEvent.SetWatchList)
         },
         onRatingClick = {
-            showBottomSheet = true
+            onRatingClick(
+                viewModel.state.mediaId,
+                viewModel.state.mediaType,
+                viewModel.state.mediaDetails?.title.orEmpty(),
+                viewModel.state.mediaDetails?.userRating
+            )
         },
         onListClick = {
-
+            onManageListClick(viewModel.state.mediaId, viewModel.state.mediaType)
         }
-    )
-
-    RatingDialog(
-        ratingNav = RatingNav(
-            mediaType = viewModel.state.mediaType,
-            mediaId = viewModel.state.mediaId,
-            mediaTitle = viewModel.state.mediaDetails?.title.orEmpty(),
-            rating = viewModel.state.mediaDetails?.userRating
-        ),
-        showDialog = showBottomSheet,
-        onRatingSuccess = { rating ->
-            showBottomSheet = false
-            viewModel.onEvent(MediaDetailEvent.OnRatingSuccess(rating))
-        },
-        onDismiss = { showBottomSheet = false }
     )
 }
 
@@ -224,10 +212,14 @@ fun MediaDetailContent(
 
         if (state.isLoading) {
 
-            MediaDetailsLoading(
+            Box(
                 modifier = Modifier.fillMaxSize(),
-                backgroundColor = backgroundColor
-            )
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicatorDelayed(
+                    color = backgroundColor.getOnBackgroundColor()
+                )
+            }
 
             return@Scaffold
         }
@@ -331,8 +323,7 @@ fun MediaDetailContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = Dimens.padding.big)
-                        .padding(horizontal = Dimens.padding.horizontal)
-                    ,
+                        .padding(horizontal = Dimens.padding.horizontal),
                     mediaDetails = state.mediaDetails
                 )
 

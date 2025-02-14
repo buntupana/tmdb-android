@@ -30,7 +30,7 @@ data class ListDetailRaw(
     @SerialName("public")
     val public: Boolean,
     @SerialName("revenue")
-    val revenue: Int?,
+    val revenue: Long?,
     @SerialName("runtime")
     val runtime: Int,
     @SerialName("sort_by")

@@ -143,7 +143,7 @@ fun RatingContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Rating",
+                text = stringResource(R.string.text_rating),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )

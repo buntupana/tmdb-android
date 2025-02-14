@@ -25,7 +25,7 @@ data class ListItemRaw(
     @SerialName("poster_path")
     val posterPath: String?,
     val public: Int?,
-    val revenue: Int?,
+    val revenue: Long?,
     val runtime: String?,
     @SerialName("sort_by")
     val sortBy: Int,

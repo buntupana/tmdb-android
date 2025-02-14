@@ -11,6 +11,6 @@ class GetListsUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(): Result<List<ListItem>, NetworkError> {
-        return listRepository.getLists()
+        return listRepository.getLists(justFirstPage = true)
     }
 }

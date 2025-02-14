@@ -42,6 +42,8 @@ import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Season
+import com.buntupana.tmdb.feature.detail.presentation.add_to_list.ManageListsDialog
+import com.buntupana.tmdb.feature.detail.presentation.add_to_list.ManageListsNav
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.AccountBar
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.AdditionalInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.CastHorizontalList
@@ -68,7 +70,8 @@ fun MediaDetailScreen(
     onLogoClick: () -> Unit
 ) {
 
-    var showBottomSheet by remember { mutableStateOf(false) }
+    var showRatingDialog by remember { mutableStateOf(false) }
+    var showAddToListDialog by remember { mutableStateOf(false) }
 
     MediaDetailContent(
         state = viewModel.state,
@@ -118,10 +121,10 @@ fun MediaDetailScreen(
             viewModel.onEvent(MediaDetailEvent.SetWatchList)
         },
         onRatingClick = {
-            showBottomSheet = true
+            showRatingDialog = true
         },
         onListClick = {
-
+            showAddToListDialog = true
         }
     )
 
@@ -132,12 +135,22 @@ fun MediaDetailScreen(
             mediaTitle = viewModel.state.mediaDetails?.title.orEmpty(),
             rating = viewModel.state.mediaDetails?.userRating
         ),
-        showDialog = showBottomSheet,
+        showDialog = showRatingDialog,
         onRatingSuccess = { rating ->
-            showBottomSheet = false
+            showRatingDialog = false
             viewModel.onEvent(MediaDetailEvent.OnRatingSuccess(rating))
         },
-        onDismiss = { showBottomSheet = false }
+        onDismiss = { showRatingDialog = false }
+    )
+
+    ManageListsDialog(
+        manageListsNav =
+        ManageListsNav(
+            mediaId = viewModel.state.mediaId,
+            mediaType = viewModel.state.mediaType
+        ),
+        showDialog = showAddToListDialog,
+        onDismiss = { showAddToListDialog = false }
     )
 }
 

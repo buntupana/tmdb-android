@@ -13,6 +13,7 @@ import com.buntupana.tmdb.feature.account.data.remote_data_source.request.Update
 import com.buntupana.tmdb.feature.account.data.request.AddItem
 import com.buntupana.tmdb.feature.account.data.request.AddRemoveListItemListRequest
 import com.buntupana.tmdb.feature.account.domain.model.MediaItemBasic
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import io.ktor.client.HttpClient
@@ -35,6 +36,20 @@ class ListRemoteDataSource @Inject constructor(
         return getResult<ResponseListRaw<ListItemRaw>> {
             httpClient.get(urlString = "4/account/$accountObjectId/lists") {
                 parameter("page", page)
+            }
+        }
+    }
+
+    suspend fun checkItemInList(
+        listId: Long,
+        mediaId: Long,
+        mediaType: MediaType
+    ): Result<Unit, NetworkError> {
+
+        return getResult {
+            httpClient.get(urlString = "/4/list/$listId/item_status") {
+                parameter("media_id", mediaId)
+                parameter("media_type", mediaType.value)
             }
         }
     }

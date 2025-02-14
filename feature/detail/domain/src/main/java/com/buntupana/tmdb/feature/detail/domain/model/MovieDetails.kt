@@ -27,7 +27,7 @@ data class MovieDetails(
     val isRateable: Boolean,
     val status: String?,
     val originalLanguage: String?,
-    val budget: Int,
-    val revenue: Int,
+    val budget: Long,
+    val revenue: Long,
     val externalLinkList: List<ExternalLink>
 )

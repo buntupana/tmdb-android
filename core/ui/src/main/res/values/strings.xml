@@ -16,6 +16,8 @@
     <string name="text_items">Items</string>
     <string name="text_description">Description</string>
     <string name="text_name">Name</string>
+    <string name="text_movie">Movie</string>
+    <string name="text_tv_show">Tv Show</string>
 
     // Filter
     <string name="text_last_added">Last Added</string>

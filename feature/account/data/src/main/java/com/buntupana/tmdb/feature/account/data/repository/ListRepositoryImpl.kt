@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.buntupana.tmdb.core.data.api.GenericPagingDataSource
 import com.buntupana.tmdb.core.data.mapper.toModel
+import com.buntupana.tmdb.core.data.repository.getAllItemsFromPaging
 import com.buntupana.tmdb.feature.account.data.mapper.toModel
 import com.buntupana.tmdb.feature.account.data.remote_data_source.ListRemoteDataSource
 import com.buntupana.tmdb.feature.account.domain.model.ListDetail
@@ -33,19 +34,37 @@ class ListRepositoryImpl @Inject constructor(
 
     override suspend fun getListTotalCount(): Result<Int, NetworkError> {
         return listRemoteDataSource.getLists(
-            session.value.accountDetails?.accountObjectId.orEmpty()
+            accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty()
         ).map { result ->
             result.totalResults
         }
     }
 
-    override suspend fun getLists(): Result<List<ListItem>, NetworkError> {
-        return listRemoteDataSource.getLists(
-            session.value.accountDetails?.accountObjectId.orEmpty()
-        ).map { result ->
-            result.results.toModel(
-                baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+    override suspend fun getLists(justFirstPage: Boolean): Result<List<ListItem>, NetworkError> {
+
+        return if (justFirstPage) {
+            listRemoteDataSource.getLists(
+                accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty()
+            ).map { result ->
+                result.results.toModel(
+                    baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                )
+            }
+        } else {
+            getAllItemsFromPaging(
+                networkCall = { page ->
+                    listRemoteDataSource.getLists(
+                        accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
+                        page = page
+                    )
+                },
+                mapItemList = {
+                    it.toModel(
+                        baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                        baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                    )
+                }
             )
         }
     }
@@ -74,6 +93,18 @@ class ListRepositoryImpl @Inject constructor(
                 )
             }
         ).flow
+    }
+
+    override suspend fun checkIfitemInList(
+        listId: Long,
+        mediaId: Long,
+        mediaType: MediaType
+    ): Result<Unit, NetworkError> {
+        return listRemoteDataSource.checkItemInList(
+            listId = listId,
+            mediaId = mediaId,
+            mediaType = mediaType
+        )
     }
 
     override suspend fun createList(

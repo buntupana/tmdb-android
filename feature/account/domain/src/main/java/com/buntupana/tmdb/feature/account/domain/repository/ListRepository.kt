@@ -13,9 +13,15 @@ interface ListRepository {
 
     suspend fun getListTotalCount(): Result<Int, NetworkError>
 
-    suspend fun getLists(): Result<List<ListItem>, NetworkError>
+    suspend fun getLists(justFirstPage: Boolean = false): Result<List<ListItem>, NetworkError>
 
     suspend fun getListsPaging(): Flow<PagingData<ListItem>>
+
+    suspend fun checkIfitemInList(
+        listId: Long,
+        mediaId: Long,
+        mediaType: MediaType
+    ): Result<Unit, NetworkError>
 
     suspend fun createList(
         name: String,

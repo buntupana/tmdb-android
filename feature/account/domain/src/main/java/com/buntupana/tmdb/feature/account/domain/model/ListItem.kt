@@ -12,7 +12,7 @@ data class ListItem(
     val description: String?,
     val itemCount: Int,
     val isPublic: Boolean,
-    val revenue: Int?,
+    val revenue: Long?,
     val runtime: Int?,
     val updatedAt: LocalDate?
 ) : DefaultItem

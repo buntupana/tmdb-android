@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -56,13 +55,9 @@ fun SwipeableItem(
 
     var contextMenuWidth by remember { mutableFloatStateOf(0f) }
 
-    Timber.d("SwipeableItem: menuWidth: = $contextMenuWidth")
-
     val offset = remember {
         Animatable(initialValue = 0f)
     }
-
-    Timber.d("SwipeableItem: offset: = ${offset.value}")
 
     val scope = rememberCoroutineScope()
 

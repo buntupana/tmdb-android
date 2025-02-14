@@ -60,8 +60,8 @@ sealed class MediaDetails(
         override val isRateable: Boolean,
         override val status: String?,
         override val originalLanguage: String?,
-        val budget: Int,
-        val revenue: Int,
+        val budget: Long,
+        val revenue: Long,
         override val externalLinkList: List<ExternalLink>,
         override val shareLink: String
     ) : MediaDetails(

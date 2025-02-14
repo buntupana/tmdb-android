@@ -40,8 +40,17 @@
     <string name="message_set_watchlist_error">Sorry there was an error setting watchlist</string>
     <string name="message_rating_error">Sorry there was an error rating %s</string>
 
+    <string name="text_rating">Rating</string>
     <string name="text_votes">%s votes</string>
     <string name="text_your_rating_is">Your Rating is</string>
+
+    // Manage Lists
+    <string name="text_manage_lists">Manage Lists</string>
+    <string name="message_set_lists_error">There was an error setting your lists</string>
+    <string name="text_media_belongs_to">The %s belongs to</string>
+    <string name="text_rest_of_the_lists">Rest of the Lists</string>
+    <string name="message_it_does_no_belongs_to_lists">It doesn\'t belong to any list</string>
+    <string name="message_no_list_to_show">No lists to show</string>
 
     // Rating titles
     <string name="text_rating_10">Absolute Trash</string>

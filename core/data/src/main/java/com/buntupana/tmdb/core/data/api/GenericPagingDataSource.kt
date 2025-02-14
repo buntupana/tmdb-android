@@ -14,12 +14,12 @@ class GenericPagingDataSource<ITEM : Any, RAW_ITEM, RESPONSE : ResponseListRaw<R
     private val mapItemList: (List<RAW_ITEM>) -> List<ITEM>
 ) : PagingSource<Int, ITEM>() {
 
-    private var lastCursor: Int = 1
+    private var nextPageNumber: Int = 1
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ITEM> {
-        lastCursor = params.key ?: 1
+        nextPageNumber = params.key ?: 1
 
-        return when (val response = networkCall.invoke(lastCursor)) {
+        return when (val response = networkCall.invoke(nextPageNumber)) {
             is Result.Success -> {
                 try {
 

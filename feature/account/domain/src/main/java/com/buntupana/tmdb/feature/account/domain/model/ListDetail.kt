@@ -8,6 +8,6 @@ data class ListDetail(
     val averageRating: Int?,
     val backdropUrl: String?,
     val isPublic: Boolean,
-    val revenue: Int?,
+    val revenue: Long?,
     val runtime: Int?,
 )

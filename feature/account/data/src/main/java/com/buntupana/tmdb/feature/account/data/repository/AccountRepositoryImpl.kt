@@ -73,7 +73,6 @@ class AccountRepositoryImpl @Inject constructor(
         return accountRemoteDataSource.getWatchlistMovies(
             session.value.accountDetails?.accountObjectId.orEmpty()
         ).map { result ->
-
             result.results.toModel(
                 baseUrlPoster = urlProvider.BASE_URL_POSTER,
                 baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
@@ -85,7 +84,6 @@ class AccountRepositoryImpl @Inject constructor(
         return accountRemoteDataSource.getFavoriteMovies(
             session.value.accountDetails?.accountObjectId.orEmpty()
         ).map { result ->
-
             result.results.toModel(
                 baseUrlPoster = urlProvider.BASE_URL_POSTER,
                 baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP

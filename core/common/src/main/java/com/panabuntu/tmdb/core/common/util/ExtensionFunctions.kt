@@ -91,6 +91,10 @@ suspend fun applyDelayFor(initMillis: Long, minDurationDifference: Long = 500) {
 }
 
 fun Int.toLocalizedString(locale: Locale = Locale.getDefault()): String {
+    return this.toLong().toLocalizedString(locale)
+}
+
+fun Long.toLocalizedString(locale: Locale = Locale.getDefault()): String {
     val numberFormat = NumberFormat.getNumberInstance(locale)
     return numberFormat.format(this)
 }

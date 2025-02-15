@@ -1,6 +1,12 @@
 package com.panabuntu.tmdb.core.common.util
 
 import kotlinx.coroutines.delay
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.StringFormat
+import kotlinx.serialization.json.Json.Default.decodeFromString
+import kotlinx.serialization.json.Json.Default.serializersModule
+import kotlinx.serialization.json.internal.FormatLanguage
+import kotlinx.serialization.serializer
 import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -105,4 +111,15 @@ fun getLanguageName(languageCode: String?): String {
     } catch (e: Exception) {
         " - "
     }
+}
+
+inline fun <reified T> StringFormat.encodeToStringSafe(value: T?): String? {
+    value ?: return null
+    return encodeToString(serializersModule.serializer(), value)
+}
+
+@OptIn(InternalSerializationApi::class)
+inline fun <reified T> decodeFromStringSafe(@FormatLanguage("json", "", "") string: String?): T? {
+    string ?: return null
+    return decodeFromString(serializersModule.serializer(), string)
 }

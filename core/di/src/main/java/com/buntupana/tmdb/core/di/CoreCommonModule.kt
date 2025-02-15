@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.core.di
 
 import android.content.Context
+import com.buntupana.tmdb.core.data.database.TmdbDataBase
 import com.buntupana.tmdb.core.data.manager.SessionManagerImpl
 import com.buntupana.tmdb.core.data.provider.UrlProviderImpl
 import com.panabuntu.tmdb.core.common.manager.SessionManager
@@ -82,6 +83,20 @@ object CoreCommonModule {
             }
         }
     }
+
+    @Singleton
+    @Provides
+    fun provideDatabase(@ApplicationContext app: Context): TmdbDataBase {
+        return TmdbDataBase.newInstance(context = app)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMovieDetailsDao(db: TmdbDataBase) = db.movieDetailsDao
+
+    @Singleton
+    @Provides
+    fun provideTvShowDetailsDao(db: TmdbDataBase) = db.tvShowDetailsDao
 
     @Singleton
     @Provides

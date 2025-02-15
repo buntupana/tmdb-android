@@ -21,7 +21,7 @@ data class MovieDetailsRaw(
     @SerialName("original_title")
     val originalTitle: String,
     val overview: String,
-    val popularity: Double,
+    val popularity: Float,
     @SerialName("poster_path")
     val posterPath: String? = null,
     @SerialName("production_companies")

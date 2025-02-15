@@ -4,6 +4,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.buntupana.tmdb.core.data.api.GenericPagingDataSource
+import com.buntupana.tmdb.core.data.database.dao.MovieDetailsDao
+import com.buntupana.tmdb.core.data.database.dao.TvShowDetailsDao
 import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.account.data.mapper.toModel
 import com.buntupana.tmdb.feature.account.data.remote_data_source.AccountRemoteDataSource
@@ -13,6 +15,7 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.map
+import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.model.AccountDetails
 import com.panabuntu.tmdb.core.common.model.MediaItem
@@ -24,6 +27,8 @@ import javax.inject.Inject
 
 class AccountRepositoryImpl @Inject constructor(
     private val accountRemoteDataSource: AccountRemoteDataSource,
+    private val movieDetailsDao: MovieDetailsDao,
+    private val tvShowDetailsDao: TvShowDetailsDao,
     private val urlProvider: UrlProvider,
     private val sessionManager: SessionManager
 ) : AccountRepository {
@@ -245,7 +250,12 @@ class AccountRepositoryImpl @Inject constructor(
             mediaId = mediaId,
             mediaType = mediaType,
             favorite = favorite
-        )
+        ).onSuccess {
+            when (mediaType) {
+                MediaType.MOVIE -> movieDetailsDao.updateFavorite(mediaId, favorite)
+                MediaType.TV_SHOW -> tvShowDetailsDao.updateFavorite(mediaId, favorite)
+            }
+        }
     }
 
     override suspend fun setMediaWatchList(
@@ -258,7 +268,12 @@ class AccountRepositoryImpl @Inject constructor(
             mediaId = mediaId,
             mediaType = mediaType,
             watchlist = watchlist
-        )
+        ).onSuccess {
+            when (mediaType) {
+                MediaType.MOVIE -> movieDetailsDao.updateWatchList(mediaId, watchlist)
+                MediaType.TV_SHOW -> tvShowDetailsDao.updateWatchList(mediaId, watchlist)
+            }
+        }
     }
 
     override suspend fun addMediaRating(
@@ -267,19 +282,31 @@ class AccountRepositoryImpl @Inject constructor(
         value: Int?
     ): Result<Unit, NetworkError> {
 
-        return if (value == null || value == 0) {
+        val result = if (value == null || value == 0) {
             accountRemoteDataSource.deleteMediaRating(
                 sessionId = sessionManager.session.value.sessionId,
                 mediaType = mediaType,
                 mediaId = mediaId
-            )
+            ).onSuccess {
+                when (mediaType) {
+                    MediaType.MOVIE -> movieDetailsDao.updateRatingAndWatchlist(mediaId, value)
+                    MediaType.TV_SHOW -> tvShowDetailsDao.updateRatingAndWatchlist(mediaId, value)
+                }
+            }
         } else {
             accountRemoteDataSource.addMediaRating(
                 sessionId = sessionManager.session.value.sessionId,
                 mediaType = mediaType,
                 mediaId = mediaId,
                 value = value
-            )
+            ).onSuccess {
+                when (mediaType) {
+                    MediaType.MOVIE -> movieDetailsDao.updateRatingAndWatchlist(mediaId, value)
+                    MediaType.TV_SHOW -> tvShowDetailsDao.updateRatingAndWatchlist(mediaId, value)
+                }
+            }
         }
+
+        return result
     }
 }

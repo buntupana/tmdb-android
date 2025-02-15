@@ -91,13 +91,14 @@ class MediaDetailViewModel @Inject constructor(
 
         state = state.copy(isLoading = isLoading, isGetContentError = false)
 
-        getMovieDetailsUseCase(navArgs.mediaId)
-            .onError {
+        getMovieDetailsUseCase(navArgs.mediaId).collectLatest { result ->
+            result.onError {
                 state = state.copy(isLoading = false, isGetContentError = true)
+            }.onSuccess {
+                state =
+                    state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
             }
-            .onSuccess {
-                state = state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
-            }
+        }
     }
 
     private suspend fun getTvShowDetails() {
@@ -106,14 +107,14 @@ class MediaDetailViewModel @Inject constructor(
 
         state = state.copy(isLoading = isLoading, isGetContentError = false)
 
-        getTvShowDetailsUseCase(navArgs.mediaId)
-            .onError {
+        getTvShowDetailsUseCase(navArgs.mediaId).collectLatest { result ->
+            result.onError {
                 state = state.copy(isLoading = false, isGetContentError = true)
-            }
-            .onSuccess {
+            }.onSuccess {
                 state =
                     state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
             }
+        }
     }
 
     private suspend fun setFavorite() {

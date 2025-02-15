@@ -5,8 +5,9 @@ import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
-import com.panabuntu.tmdb.core.common.entity.map
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.util.Locale
 import javax.inject.Inject
 
@@ -15,50 +16,60 @@ class GetTvShowDetailsUseCase @Inject constructor(
     private val urlProvider: UrlProvider
 ) {
 
-    suspend operator fun invoke(tvShowId: Long): Result<MediaDetails.TvShow, NetworkError> {
+    suspend operator fun invoke(tvShowId: Long): Flow<Result<MediaDetails.TvShow, NetworkError>> {
 
-        return detailRepository.getTvShowDetails(tvShowId).map { it ->
-            val certification = it.certificationList.firstOrNull {
-                it.countryCode == Locale.getDefault().country
-            } ?: it.certificationList.firstOrNull {
-                it.countryCode == "US"
-            } ?: it.certificationList.firstOrNull()
+        return detailRepository.getTvShowDetails(tvShowId).map { result ->
+            when (result) {
+                is Result.Error -> result
+                is Result.Success -> {
 
-            MediaDetails.TvShow(
-                id = it.id,
-                title = it.title,
-                posterUrl = it.posterUrl,
-                backdropUrl = it.backdropUrl,
-                trailerUrl = it.trailerUrl,
-                overview = it.overview,
-                tagLine = it.tagLine,
-                releaseDate = it.releaseDate,
-                voteAverage = it.userScore,
-                voteCount = it.voteCount,
-                runTime = it.runTime,
-                genreList = it.genreList,
-                ageCertification = certification?.rating.orEmpty(),
-                creatorList = it.creatorList,
-                castList = it.credits.castList,
-                crewList = it.credits.crewList,
-                recommendationList = it.recommendationList,
-                seasonList = it.seasonList,
-                lastEpisode = it.lastEpisode,
-                nextEpisode = it.nextEpisode,
-                isInAir = it.isInAir,
-                isFavorite = it.isFavorite,
-                isWatchlisted = it.isWatchlisted,
-                userRating = it.userRating,
-                isRateable = it.isRateable,
-                status = it.status,
-                originalLanguage = it.originalLanguage,
-                type = it.type,
-                externalLinkList = it.externalLinkList,
-                shareLink = urlProvider.getMediaShareLink(
-                    mediaType = MediaType.TV_SHOW,
-                    mediaId = tvShowId
-                )
-            )
+                    val tvShowDetails = result.data
+
+                    val certification = tvShowDetails.certificationList.firstOrNull {
+                        it.countryCode == Locale.getDefault().country
+                    } ?: tvShowDetails.certificationList.firstOrNull {
+                        it.countryCode == "US"
+                    } ?: tvShowDetails.certificationList.firstOrNull()
+
+                    Result.Success(
+                        MediaDetails.TvShow(
+                            id = tvShowDetails.id,
+                            title = tvShowDetails.title,
+                            posterUrl = tvShowDetails.posterUrl,
+                            backdropUrl = tvShowDetails.backdropUrl,
+                            trailerUrl = tvShowDetails.trailerUrl,
+                            overview = tvShowDetails.overview,
+                            tagLine = tvShowDetails.tagLine,
+                            releaseDate = tvShowDetails.releaseDate,
+                            voteAverage = tvShowDetails.userScore,
+                            voteCount = tvShowDetails.voteCount,
+                            runTime = tvShowDetails.runTime,
+                            genreList = tvShowDetails.genreList,
+                            ageCertification = certification?.rating.orEmpty(),
+                            creatorList = tvShowDetails.creatorList,
+                            castList = tvShowDetails.credits.castList,
+                            crewList = tvShowDetails.credits.crewList,
+                            recommendationList = tvShowDetails.recommendationList,
+                            seasonList = tvShowDetails.seasonList,
+                            lastEpisode = tvShowDetails.lastEpisode,
+                            nextEpisode = tvShowDetails.nextEpisode,
+                            isInAir = tvShowDetails.isInAir,
+                            isFavorite = tvShowDetails.isFavorite,
+                            isWatchlisted = tvShowDetails.isWatchlisted,
+                            userRating = tvShowDetails.userRating,
+                            isRateable = tvShowDetails.isRateable,
+                            status = tvShowDetails.status,
+                            originalLanguage = tvShowDetails.originalLanguage,
+                            type = tvShowDetails.type,
+                            externalLinkList = tvShowDetails.externalLinkList,
+                            shareLink = urlProvider.getMediaShareLink(
+                                mediaType = MediaType.TV_SHOW,
+                                mediaId = tvShowId
+                            )
+                        )
+                    )
+                }
+            }
         }
     }
 }

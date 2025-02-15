@@ -47,6 +47,9 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk)
     implementation(kotlin("reflect"))
 
+    // Kotlin
+    implementation(libs.kotlinx.serialization.json)
+
     // Dagger Hilt
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.ksp)

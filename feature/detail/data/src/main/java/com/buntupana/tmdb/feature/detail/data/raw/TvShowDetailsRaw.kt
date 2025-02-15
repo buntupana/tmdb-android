@@ -41,7 +41,7 @@ data class TvShowDetailsRaw(
     val originalLanguageCode: String? = null,
     @SerialName("original_name")
     val originalName: String? = null,
-    val popularity: Double? = null,
+    val popularity: Float? = null,
     @SerialName("production_companies")
     val productionCompanies: List<ProductionCompany>? = null,
     @SerialName("production_countries")
@@ -52,7 +52,7 @@ data class TvShowDetailsRaw(
     val status: String? = null,
     val type: String? = null,
     @SerialName("vote_average")
-    val voteAverage: Double? = null,
+    val voteAverage: Float? = null,
     @SerialName("vote_count")
     val voteCount: Int? = null,
     val videos: MediaVideosRaw? = null,

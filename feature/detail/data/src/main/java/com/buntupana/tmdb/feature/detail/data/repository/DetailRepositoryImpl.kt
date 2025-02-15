@@ -1,5 +1,9 @@
 package com.buntupana.tmdb.feature.detail.data.repository
 
+import com.buntupana.tmdb.core.data.database.dao.MovieDetailsDao
+import com.buntupana.tmdb.core.data.database.dao.TvShowDetailsDao
+import com.buntupana.tmdb.core.data.util.getFlowResult
+import com.buntupana.tmdb.feature.detail.data.mapper.toEntity
 import com.buntupana.tmdb.feature.detail.data.mapper.toModel
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.DetailRemoteDataSource
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
@@ -15,49 +19,87 @@ import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.map
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class DetailRepositoryImpl @Inject constructor(
     private val detailRemoteDataSource: DetailRemoteDataSource,
+    private val movieDetailsDao: MovieDetailsDao,
+    private val tvShowDetailsDao: TvShowDetailsDao,
     private val urlProvider: UrlProvider,
     private val sessionManager: SessionManager
 ) : DetailRepository {
 
-    override suspend fun getMovieDetails(movieId: Long): Result<MovieDetails, NetworkError> {
-        return detailRemoteDataSource.getMovieDetail(
-            sessionId = sessionManager.session.value.sessionId,
-            movieId = movieId
-        ).map {
-            it.toModel(
-                baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
-                baseUrlProfile = urlProvider.BASE_URL_PROFILE,
-                baseUrlImdb = urlProvider.BASE_URL_IMDB_MEDIA,
-                baseUrlFacebook = urlProvider.BASE_URL_FACEBOOK,
-                baseUrlInstagram = urlProvider.BASE_URL_INSTAGRAM,
-                baseUrlX = urlProvider.BASE_URL_X,
-                baseUrlTiktok = urlProvider.BASE_URL_TIKTOK
-            )
-        }
+    override suspend fun getMovieDetails(movieId: Long): Flow<Result<MovieDetails, NetworkError>> {
+
+        return getFlowResult(
+            prevDataBaseQuery = {
+                movieDetailsDao.deleteMovieDetails(movieId)
+            },
+            networkCall = {
+                detailRemoteDataSource.getMovieDetail(
+                    sessionId = sessionManager.session.value.sessionId,
+                    movieId = movieId
+                )
+            },
+            mapToEntity = {
+                it.toEntity()
+            },
+            updateDataBaseQuery = {
+                movieDetailsDao.upsertMovieDetails(it)
+            },
+            dataBaseQuery = {
+                movieDetailsDao.getMovieDetails(movieId)
+            },
+            mapToModel = {
+                it.toModel(
+                    baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
+                    baseUrlProfile = urlProvider.BASE_URL_PROFILE,
+                    baseUrlImdb = urlProvider.BASE_URL_IMDB_MEDIA,
+                    baseUrlFacebook = urlProvider.BASE_URL_FACEBOOK,
+                    baseUrlInstagram = urlProvider.BASE_URL_INSTAGRAM,
+                    baseUrlX = urlProvider.BASE_URL_X,
+                    baseUrlTiktok = urlProvider.BASE_URL_TIKTOK
+                )
+            }
+        )
     }
 
-    override suspend fun getTvShowDetails(tvShowId: Long): Result<TvShowDetails, NetworkError> {
+    override suspend fun getTvShowDetails(tvShowId: Long): Flow<Result<TvShowDetails, NetworkError>> {
 
-        return detailRemoteDataSource.getTvShowDetail(
-            sessionId = sessionManager.session.value.sessionId,
-            tvShowId = tvShowId
-        ).map {
-            it.toModel(
-                baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
-                baseUrlProfile = urlProvider.BASE_URL_PROFILE,
-                baseUrlImdb = urlProvider.BASE_URL_IMDB_MEDIA,
-                baseUrlFacebook = urlProvider.BASE_URL_FACEBOOK,
-                baseUrlInstagram = urlProvider.BASE_URL_INSTAGRAM,
-                baseUrlX = urlProvider.BASE_URL_X,
-                baseUrlTiktok = urlProvider.BASE_URL_TIKTOK
-            )
-        }
+        return getFlowResult(
+            prevDataBaseQuery = {
+                tvShowDetailsDao.deleteTvShowDetails(tvShowId)
+            },
+            networkCall = {
+                detailRemoteDataSource.getTvShowDetail(
+                    sessionId = sessionManager.session.value.sessionId,
+                    tvShowId = tvShowId
+                )
+            },
+            mapToEntity = {
+                it.toEntity()
+            },
+            updateDataBaseQuery = {
+                tvShowDetailsDao.upsertTvShowDetails(it)
+            },
+            dataBaseQuery = {
+                tvShowDetailsDao.getTvShowDetails(tvShowId)
+            },
+            mapToModel = {
+                it.toModel(
+                    baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
+                    baseUrlProfile = urlProvider.BASE_URL_PROFILE,
+                    baseUrlImdb = urlProvider.BASE_URL_IMDB_MEDIA,
+                    baseUrlFacebook = urlProvider.BASE_URL_FACEBOOK,
+                    baseUrlInstagram = urlProvider.BASE_URL_INSTAGRAM,
+                    baseUrlX = urlProvider.BASE_URL_X,
+                    baseUrlTiktok = urlProvider.BASE_URL_TIKTOK
+                )
+            }
+        )
     }
 
     override suspend fun getSeasonDetails(

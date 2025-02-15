@@ -43,7 +43,7 @@ object MediaAccountStateRawSerializer : KSerializer<MediaAccountStateRaw> {
                                 descriptor,
                                 2,
                                 RatedRaw.serializer(),
-                                RatedRaw(0.0)
+                                RatedRaw(0.0f)
                             )
                         }
                     }

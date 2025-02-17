@@ -33,9 +33,6 @@ class DetailRepositoryImpl @Inject constructor(
     override suspend fun getMovieDetails(movieId: Long): Flow<Result<MovieDetails, NetworkError>> {
 
         return getFlowResult(
-            prevDataBaseQuery = {
-                movieDetailsDao.deleteMovieDetails(movieId)
-            },
             networkCall = {
                 detailRemoteDataSource.getMovieDetail(
                     sessionId = sessionManager.session.value.sessionId,
@@ -69,9 +66,6 @@ class DetailRepositoryImpl @Inject constructor(
     override suspend fun getTvShowDetails(tvShowId: Long): Flow<Result<TvShowDetails, NetworkError>> {
 
         return getFlowResult(
-            prevDataBaseQuery = {
-                tvShowDetailsDao.deleteTvShowDetails(tvShowId)
-            },
             networkCall = {
                 detailRemoteDataSource.getTvShowDetail(
                     sessionId = sessionManager.session.value.sessionId,

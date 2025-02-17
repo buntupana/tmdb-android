@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.DivisorCircle
 import com.buntupana.tmdb.core.ui.composables.HoursMinutesText
 import com.buntupana.tmdb.core.ui.composables.OutlinedText
+import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
 import com.buntupana.tmdb.core.ui.composables.list.NestedVerticalLazyGrid
 import com.buntupana.tmdb.core.ui.composables.widget.UserScore
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
@@ -214,7 +215,7 @@ fun MainInfo(
                             color = PrimaryColor.getOnBackgroundColor(),
                             fontWeight = FontWeight.Bold
                         )
-                        Text(
+                        VerticalTextRoulette(
                             text = " ${mediaDetails.userRating}",
                             color = getRatingColor(mediaDetails.userRating!!),
                             fontWeight = FontWeight.Bold,

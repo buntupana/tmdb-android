@@ -35,8 +35,8 @@ fun MovieDetailsRaw.toEntity(): MovieDetailsEntity {
         voteAverage = voteAverage,
         voteCount = voteCount,
         runtime = runtime,
-        genreList = Json.encodeToStringSafe(genres),
-        productionCompanyList = Json.encodeToStringSafe(productionCountries),
+        genreList = Json.encodeToString(genres),
+        productionCompanyList = Json.encodeToString(productionCountries),
         productionCountryList = Json.encodeToString(productionCountries),
         videos = Json.encodeToStringSafe(videos),
         credits = Json.encodeToStringSafe(credits),
@@ -54,7 +54,7 @@ fun MovieDetailsRaw.toEntity(): MovieDetailsEntity {
         originalTitle = originalTitle,
         popularity = popularity,
         video = video,
-        spokenLanguageList = Json.encodeToStringSafe(spokenLanguages),
+        spokenLanguageList = Json.encodeToString(spokenLanguages),
         isFavorite = accountStates?.favorite ?: false,
         isWatchListed = accountStates?.watchlist ?: false,
         userRating = (accountStates?.rated?.value?.times(10))?.toInt()
@@ -84,9 +84,9 @@ fun MovieDetailsEntity.toModel(
 
     val videoList = videos?.let { Json.decodeFromString<MediaVideosRaw>(it).toModel() }.orEmpty()
 
-    val genreList = genreList?.let { Json.decodeFromString<List<Genre>>(it) }.orEmpty()
+    val genreList = genreList.let { Json.decodeFromString<List<Genre>>(it) }
 
-    val productionCountryCodeList = productionCountryList?.let {
+    val productionCountryCodeList = productionCountryList.let {
         Json.decodeFromString<List<ProductionCountry>>(it)
     }.orEmpty()
 

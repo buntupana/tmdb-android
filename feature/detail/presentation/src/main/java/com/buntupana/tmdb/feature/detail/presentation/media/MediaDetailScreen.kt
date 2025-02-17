@@ -1,5 +1,8 @@
 package com.buntupana.tmdb.feature.detail.presentation.media
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -220,8 +223,6 @@ fun MediaDetailContent(
                     color = backgroundColor.getOnBackgroundColor()
                 )
             }
-
-            return@Scaffold
         }
 
         if (state.isGetContentError) {
@@ -248,86 +249,92 @@ fun MediaDetailContent(
             return@Scaffold
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(top = paddingValues.calculateTopPadding())
-                .verticalScroll(scrollState)
-                .fadeIn(fadeInEnabled)
+        AnimatedVisibility(
+            visible = state.isLoading.not(),
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
-
-            Column(
-                Modifier.background(backgroundColor)
-            ) {
-
-                Header(
-                    mediaDetails = state.mediaDetails,
-                    backgroundColor = backgroundColor
-                ) { dominantColor ->
-                    if (dominantColor != backgroundColor) {
-                        backgroundColor = dominantColor
-                    }
-                }
-
-                MainInfo(
-                    mediaDetails = state.mediaDetails,
-                    textColor = backgroundColor.getOnBackgroundColor(),
-                    onItemClick = onPersonClick
-                )
-            }
 
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .background(MaterialTheme.colorScheme.background)
+                    .padding(top = paddingValues.calculateTopPadding())
+                    .verticalScroll(scrollState)
             ) {
 
-                CastHorizontalList(
-                    modifier = Modifier.background(MaterialTheme.colorScheme.background),
-                    mediaDetails = state.mediaDetails,
-                    onItemClick = onPersonClick,
-                    onFullCastClick = {
-                        onFullCastClick(
-                            state.mediaDetails,
-                            state.mediaType,
-                            state.backgroundColor
-                        )
-                    }
-                )
+                Column(
+                    Modifier.background(backgroundColor)
+                ) {
 
-                if (state.mediaDetails is MediaDetails.TvShow) {
-                    SeasonsSection(
-                        seasonList = state.mediaDetails.seasonList,
-                        isInAir = state.mediaDetails.isInAir,
-                        lastEpisode = state.mediaDetails.lastEpisode,
-                        nextEpisode = state.mediaDetails.nextEpisode,
-                        onLastSeasonClick = { season ->
-                            onSeasonClick(state.mediaId, season, state.backgroundColor)
-                        },
-                        onAllSeasonsClick = {
-                            onAllSeasonsClick(
+                    Header(
+                        mediaDetails = state.mediaDetails,
+                        backgroundColor = backgroundColor
+                    ) { dominantColor ->
+                        if (dominantColor != backgroundColor) {
+                            backgroundColor = dominantColor
+                        }
+                    }
+
+                    MainInfo(
+                        mediaDetails = state.mediaDetails,
+                        textColor = backgroundColor.getOnBackgroundColor(),
+                        onItemClick = onPersonClick
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .background(MaterialTheme.colorScheme.background)
+                ) {
+
+                    CastHorizontalList(
+                        modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                        mediaDetails = state.mediaDetails,
+                        onItemClick = onPersonClick,
+                        onFullCastClick = {
+                            onFullCastClick(
                                 state.mediaDetails,
+                                state.mediaType,
                                 state.backgroundColor
                             )
                         }
                     )
+
+                    if (state.mediaDetails is MediaDetails.TvShow) {
+                        SeasonsSection(
+                            seasonList = state.mediaDetails.seasonList,
+                            isInAir = state.mediaDetails.isInAir,
+                            lastEpisode = state.mediaDetails.lastEpisode,
+                            nextEpisode = state.mediaDetails.nextEpisode,
+                            onLastSeasonClick = { season ->
+                                onSeasonClick(state.mediaId, season, state.backgroundColor)
+                            },
+                            onAllSeasonsClick = {
+                                onAllSeasonsClick(
+                                    state.mediaDetails,
+                                    state.backgroundColor
+                                )
+                            }
+                        )
+                    }
+
+                    RecommendationsHorizontal(
+                        modifier = Modifier.fillMaxWidth(),
+                        mediaItemList = state.mediaDetails.recommendationList,
+                        onItemClick = onRecommendationClick
+                    )
+
+                    AdditionalInfo(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = Dimens.padding.big)
+                            .padding(horizontal = Dimens.padding.horizontal),
+                        mediaDetails = state.mediaDetails
+                    )
+
+                    Spacer(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()))
                 }
-
-                RecommendationsHorizontal(
-                    modifier = Modifier.fillMaxWidth(),
-                    mediaItemList = state.mediaDetails.recommendationList,
-                    onItemClick = onRecommendationClick
-                )
-
-                AdditionalInfo(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = Dimens.padding.big)
-                        .padding(horizontal = Dimens.padding.horizontal),
-                    mediaDetails = state.mediaDetails
-                )
-
-                Spacer(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()))
             }
         }
     }

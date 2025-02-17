@@ -17,6 +17,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
 import com.panabuntu.tmdb.core.common.util.Const.RATABLE_DAYS
+import com.panabuntu.tmdb.core.common.util.encodeToStringSafe
 import com.panabuntu.tmdb.core.common.util.getLanguageName
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 import kotlinx.serialization.encodeToString
@@ -34,20 +35,20 @@ fun TvShowDetailsRaw.toEntity(): TvShowDetailsEntity {
         backdropPath = backdropPath,
         overview = overview,
         voteCount = voteCount ?: 0,
-        genreList = Json.encodeToString(genres),
-        credits = Json.encodeToString(credits),
-        seasonList = Json.encodeToString(seasons),
+        genreList = Json.encodeToStringSafe(genres),
+        credits = Json.encodeToStringSafe(credits),
+        seasonList = Json.encodeToStringSafe(seasons),
         isFavorite = accountStates?.favorite ?: false,
         isWatchListed = accountStates?.watchlist ?: false,
         userRating = (accountStates?.rated?.value?.times(10))?.toInt(),
         status = status,
         type = type,
         tagline = tagline,
-        nextEpisodeToAir = Json.encodeToString(nextEpisodeToAir),
+        nextEpisodeToAir = Json.encodeToStringSafe(nextEpisodeToAir),
         networkList = Json.encodeToString(networks),
-        lastEpisodeToAir = Json.encodeToString(lastEpisodeToAir),
+        lastEpisodeToAir = Json.encodeToStringSafe(lastEpisodeToAir),
         lastAirDate = lastAirDate,
-        languageList = Json.encodeToString(languages),
+        languageList = Json.encodeToStringSafe(languages),
         inProduction = inProduction,
         homepage = homepage,
         episodeRunTimeList = Json.encodeToString(episodeRunTime),
@@ -64,10 +65,10 @@ fun TvShowDetailsRaw.toEntity(): TvShowDetailsEntity {
         originCountryList = Json.encodeToString(originCountry),
         numberOfSeasons = numberOfSeasons,
         numberOfEpisodes = numberOfEpisodes,
-        videos = Json.encodeToString(videos),
-        contentRatings = Json.encodeToString(contentRatings),
-        recommendations = Json.encodeToString(recommendations),
-        externalLinks = Json.encodeToString(externalLinks)
+        videos = Json.encodeToStringSafe(videos),
+        contentRatings = Json.encodeToStringSafe(contentRatings),
+        recommendations = Json.encodeToStringSafe(recommendations),
+        externalLinks = Json.encodeToStringSafe(externalLinks)
     )
 }
 
@@ -109,7 +110,9 @@ fun TvShowDetailsEntity.toModel(
 
     val lastEpisodeToAir = lastEpisodeToAir?.let { Json.decodeFromString<EpisodeRaw>(it) }
 
-    val nextEpisodeToAir = nextEpisodeToAir?.let { Json.decodeFromString<EpisodeRaw>(it) }
+    val nextEpisodeToAir = nextEpisodeToAir?.let {
+        Json.decodeFromString<EpisodeRaw>(it)
+    }
 
     val recommendations = recommendations?.let { Json.decodeFromString<RecommendationsRaw>(it) }
 

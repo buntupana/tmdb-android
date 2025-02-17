@@ -114,8 +114,12 @@ fun getLanguageName(languageCode: String?): String {
 }
 
 inline fun <reified T> StringFormat.encodeToStringSafe(value: T?): String? {
-    value ?: return null
-    return encodeToString(serializersModule.serializer(), value)
+
+    return if (value == null && T::class !is List<*>) {
+        null
+    } else {
+        encodeToString(serializersModule.serializer(), value)
+    }
 }
 
 @OptIn(InternalSerializationApi::class)

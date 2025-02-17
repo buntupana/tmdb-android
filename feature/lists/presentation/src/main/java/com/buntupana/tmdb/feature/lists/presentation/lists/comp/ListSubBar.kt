@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.composables.VerticalNumberRoulette
+import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
@@ -53,8 +53,8 @@ fun ListSubBar(
                 fontWeight = FontWeight.Bold
             )
 
-            VerticalNumberRoulette(
-                number = listItemTotalCount,
+            VerticalTextRoulette(
+                text = " $listItemTotalCount ",
                 color = PrimaryColor.getOnBackgroundColor(),
                 fontWeight = FontWeight.Bold
             )

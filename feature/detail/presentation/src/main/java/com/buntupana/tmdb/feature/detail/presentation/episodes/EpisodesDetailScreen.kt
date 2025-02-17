@@ -41,13 +41,15 @@ fun EpisodesDetailScreen(
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onLogoClick: () -> Unit,
+    onRateEpisodeClick: (tvShowId: Long, episodeName: String, seasonNumber: Int, episodeNumber: Int, currentRating: Int?) -> Unit
 ) {
     EpisodesDetailContent(
         state = viewModel.state,
         onBackClick = onBackClick,
         onRetryClick = { viewModel.onEvent(EpisodesDetailEvent.GetEpisodesDetail) },
         onSearchClick = onSearchClick,
-        onLogoClick = onLogoClick
+        onLogoClick = onLogoClick,
+        onRateEpisodeClick = onRateEpisodeClick
     )
 }
 
@@ -58,7 +60,8 @@ private fun EpisodesDetailContent(
     onBackClick: () -> Unit,
     onRetryClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onLogoClick: () -> Unit
+    onLogoClick: () -> Unit,
+    onRateEpisodeClick: (tvShowId: Long, episodeName: String, seasonNumber: Int, episodeNumber: Int, currentRating: Int?) -> Unit = { _, _, _, _, _ -> }
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -140,6 +143,9 @@ private fun EpisodesDetailContent(
             if (state.episodeList.isNullOrEmpty()) return@LazyColumn
 
             items(state.episodeList.size) { index ->
+
+                val episode = state.episodeList[index]
+
                 EpisodeHorizontal(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -147,8 +153,18 @@ private fun EpisodesDetailContent(
                             horizontal = Dimens.padding.horizontal,
                             vertical = Dimens.padding.vertical
                         ),
-                    episode = state.episodeList[index],
-                    onItemClick = {}
+                    episode = episode,
+                    isLogged = state.isLogged,
+                    onItemClick = {},
+                    onRateClick = {
+                        onRateEpisodeClick(
+                            state.tvShowId,
+                            episode.name,
+                            state.seasonNumber,
+                            episode.episodeNumber,
+                            episode.userRating
+                        )
+                    }
                 )
             }
 

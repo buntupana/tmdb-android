@@ -21,7 +21,9 @@ import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 @Composable
 fun EpisodeHorizontal(
     modifier: Modifier = Modifier,
+    isLogged: Boolean,
     episode: Episode,
+    onRateClick: () -> Unit = {},
     onItemClick: () -> Unit
 ) {
 
@@ -56,10 +58,18 @@ fun EpisodeHorizontal(
                         modifier = Modifier.padding(start = Dimens.padding.horizontal)
                     ) {
                         Text(
-                            text = episode.name.orEmpty(),
+                            text = episode.name,
                             style = MaterialTheme.typography.titleLarge
                         )
-                        EpisodeSubtitle(episode = episode)
+                        EpisodeSubtitle(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = Dimens.padding.small)
+                            ,
+                            isLogged = isLogged,
+                            episode = episode,
+                            onRateClick = onRateClick
+                        )
                     }
                 }
 
@@ -80,6 +90,7 @@ fun EpisodeHorizontal(
 fun EpisodeHorizontalPreview() {
     EpisodeHorizontal(
         episode = episodeSample,
+        isLogged = true,
         onItemClick = {}
     )
 }

@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.feature.detail.data.raw.ReleaseDateCountry
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ReleaseDateCountry
 import com.buntupana.tmdb.feature.detail.domain.model.ReleaseDate
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.feature.detail.data.raw.SeasonRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.SeasonRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 import java.time.LocalDate

@@ -30,38 +30,41 @@ fun ImageFromUrl(
     crossFade: Boolean = true,
     contentScale: ContentScale = ContentScale.Crop,
     placeHolderColor: Color = PlaceHolderColor,
-    showPlaceHolder: Boolean = false,
+    showPlaceHolder: Boolean = true,
     setDominantColor: ((dominantColor: Color) -> Unit)? = null
 ) {
 
     if (imageUrl.isNotNullOrBlank()) {
 
-        if (showPlaceHolder) {
-            Box(
-                modifier = modifier.background(placeHolderColor)
-            ) { }
+        Box(
+            modifier = modifier
+        ) {
+
+            if (showPlaceHolder) {
+                Box(modifier = modifier.background(placeHolderColor))
+            }
+
+            val allowHardware = setDominantColor == null
+
+            AsyncImage(
+                modifier = modifier,
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(imageUrl)
+                    .crossfade(crossFade)
+                    .allowHardware(allowHardware)
+                    .listener { _, result ->
+                        if (setDominantColor == null) {
+                            return@listener
+                        }
+                        result.drawable.getDominantColor { dominantColor ->
+                            setDominantColor(dominantColor)
+                        }
+                    }
+                    .build(),
+                contentScale = contentScale,
+                contentDescription = contentDescription
+            )
         }
-
-        val allowHardware = setDominantColor == null
-
-        AsyncImage(
-            modifier = modifier,
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(imageUrl)
-                .crossfade(crossFade)
-                .allowHardware(allowHardware)
-                .listener { _, result ->
-                    if (setDominantColor == null) {
-                        return@listener
-                    }
-                    result.drawable.getDominantColor { dominantColor ->
-                        setDominantColor(dominantColor)
-                    }
-                }
-                .build(),
-            contentScale = contentScale,
-            contentDescription = contentDescription
-        )
     } else {
         Surface(
             modifier = modifier,

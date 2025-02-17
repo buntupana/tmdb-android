@@ -43,6 +43,7 @@ import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailScreen
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailScreen
 import com.buntupana.tmdb.feature.detail.presentation.rating.RatingDialog
+import com.buntupana.tmdb.feature.detail.presentation.rating.RatingMediaType
 import com.buntupana.tmdb.feature.detail.presentation.rating.RatingNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
@@ -259,14 +260,29 @@ class MainActivity : ComponentActivity() {
                                     navController.popBackStack(HomeNav, false)
                                 },
                                 onRatingClick = { mediaId, mediaType, mediaTitle, rating ->
-                                    navRoutesMain.navigate(
-                                        RatingNav(
-                                            mediaId = mediaId,
-                                            mediaType = mediaType,
-                                            mediaTitle = mediaTitle,
-                                            rating = rating
+
+                                    when (mediaType) {
+                                        MediaType.MOVIE -> {
+                                            RatingMediaType.Movie(
+                                                movieId = mediaId,
+                                                _title = mediaTitle,
+                                                _rating = rating
+                                            )
+                                        }
+
+                                        MediaType.TV_SHOW -> {
+                                            RatingMediaType.TvShow(
+                                                tvShowId = mediaId,
+                                                _title = mediaTitle,
+                                                _rating = rating
+                                            )
+                                        }
+                                    }.let {
+                                        navRoutesMain.navigate(
+                                            RatingNav(it)
                                         )
-                                    )
+                                    }
+
                                 },
                                 onManageListClick = { mediaId, mediaType ->
                                     navRoutesMain.navigate(
@@ -335,7 +351,20 @@ class MainActivity : ComponentActivity() {
                             EpisodesDetailScreen(
                                 onBackClick = { navRoutesMain.popBackStack() },
                                 onSearchClick = { navRoutesMain.navigate(SearchNav) },
-                                onLogoClick = { navRoutesMain.popBackStack(HomeNav::class) }
+                                onLogoClick = { navRoutesMain.popBackStack(HomeNav::class) },
+                                onRateEpisodeClick = { tvShowId, episodeName: String, seasonNumber, episodeNumber, currentRating ->
+                                    navRoutesMain.navigate(
+                                        RatingNav(
+                                            RatingMediaType.Episode(
+                                                tvShowId = tvShowId,
+                                                _title = episodeName,
+                                                seasonNumber = seasonNumber,
+                                                episodeNumber = episodeNumber,
+                                                _rating = currentRating
+                                            )
+                                        )
+                                    )
+                                }
                             )
                         }
                         composable<WatchListFavoritesNav> {
@@ -385,11 +414,10 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
-                        bottomSheet<RatingNav> {
+                        bottomSheet<RatingNav>(
+                            typeMap = RatingNav.typeMap
+                        ) {
                             RatingDialog(
-                                onRatingSuccess = { rating ->
-//                                    navRoutesMain.setResult("rating", rating)
-                                },
                                 onDismiss = {
                                     navRoutesMain.popBackStack()
                                 }

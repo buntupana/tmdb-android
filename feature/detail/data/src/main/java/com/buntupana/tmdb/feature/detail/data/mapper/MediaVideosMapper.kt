@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.feature.detail.data.raw.MediaVideosRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.MediaVideosRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Video
 import com.buntupana.tmdb.feature.detail.domain.model.VideoType
 import com.panabuntu.tmdb.core.common.util.ifNullOrBlank

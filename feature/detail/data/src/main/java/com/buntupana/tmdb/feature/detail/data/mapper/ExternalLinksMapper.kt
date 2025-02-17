@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.feature.detail.data.raw.ExternalLinksRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ExternalLinksRaw
 import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 

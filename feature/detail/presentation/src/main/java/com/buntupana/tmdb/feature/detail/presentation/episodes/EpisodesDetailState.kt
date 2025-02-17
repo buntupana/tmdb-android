@@ -5,6 +5,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.Episode
 
 data class EpisodesDetailState(
     val isLoading: Boolean = false,
+    val isLogged: Boolean = false,
     val isGetEpisodesError: Boolean = false,
     val tvShowId: Long,
     val sessionName: String = "",

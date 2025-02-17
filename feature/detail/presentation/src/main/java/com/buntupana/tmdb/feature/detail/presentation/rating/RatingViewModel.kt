@@ -11,7 +11,11 @@ import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.account.domain.usecase.AddMediaRatingUseCase
+import com.buntupana.tmdb.feature.detail.domain.usecase.AddEpisodeRatingUseCase
 import com.buntupana.tmdb.feature.detail.presentation.R
+import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.panabuntu.tmdb.core.common.entity.NetworkError
+import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.util.applyDelayFor
@@ -27,16 +31,17 @@ import javax.inject.Inject
 @HiltViewModel
 class RatingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val addMediaRatingUseCase: AddMediaRatingUseCase
+    private val addMediaRatingUseCase: AddMediaRatingUseCase,
+    private val addEpisodeRatingUseCase: AddEpisodeRatingUseCase
 ) : ViewModel() {
 
-    private val navArgs = savedStateHandle.navArgs<RatingNav>()
+    private val navArgs = savedStateHandle.navArgs<RatingNav>(RatingNav.typeMap)
 
     var state by mutableStateOf(
         RatingState(
-            mediaTitle = navArgs.mediaTitle,
-            rating = navArgs.rating ?: 0,
-            ratingTitle = getRatingTitle(navArgs.rating)
+            mediaTitle = navArgs.ratingMediaType.title,
+            rating = navArgs.ratingMediaType.rating ?: 0,
+            ratingTitle = getRatingTitle(navArgs.ratingMediaType.rating)
         )
     )
         private set
@@ -61,14 +66,13 @@ class RatingViewModel @Inject constructor(
             }
         }
     }
-
     private suspend fun addRating(rating: Int?) {
-
-        val initMillis = System.currentTimeMillis()
 
         state = state.copy(isLoading = true)
 
-        addMediaRatingUseCase(navArgs.mediaType, navArgs.mediaId, rating)
+        val initMillis = System.currentTimeMillis()
+
+        getAddRatingFunction(rating).invoke()
             .onError {
                 state = state.copy(isLoading = false)
                 SnackbarController.sendEvent(
@@ -88,6 +92,7 @@ class RatingViewModel @Inject constructor(
                 state = state.copy(isLoading = false)
             }
     }
+
 
     private fun getRatingTitle(rating: Int?): UiText {
 
@@ -116,5 +121,40 @@ class RatingViewModel @Inject constructor(
         }
 
         return UiText.StringResource(ratingTitle)
+    }
+
+    private fun getAddRatingFunction(rating: Int?): suspend () -> Result<Unit, NetworkError> {
+        return when (navArgs.ratingMediaType) {
+            is RatingMediaType.Episode -> {
+                {
+                    addEpisodeRatingUseCase(
+                        tvShowId = navArgs.ratingMediaType.tvShowId,
+                        seasonNumber = navArgs.ratingMediaType.seasonNumber,
+                        episodeNumber = navArgs.ratingMediaType.episodeNumber,
+                        rating = rating
+                    )
+                }
+            }
+
+            is RatingMediaType.Movie -> {
+                {
+                    addMediaRatingUseCase(
+                        mediaType = MediaType.MOVIE,
+                        mediaId = navArgs.ratingMediaType.movieId,
+                        value = rating
+                    )
+                }
+            }
+
+            is RatingMediaType.TvShow -> {
+                {
+                    addMediaRatingUseCase(
+                        mediaType = MediaType.MOVIE,
+                        mediaId = navArgs.ratingMediaType.tvShowId,
+                        value = rating
+                    )
+                }
+            }
+        }
     }
 }

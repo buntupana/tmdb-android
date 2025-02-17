@@ -1,18 +1,21 @@
 package com.buntupana.tmdb.feature.detail.data.remote_data_source
 
 import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
-import com.buntupana.tmdb.feature.detail.data.raw.CreditsMovieRaw
-import com.buntupana.tmdb.feature.detail.data.raw.CreditsTvShowRaw
-import com.buntupana.tmdb.feature.detail.data.raw.MovieDetailsRaw
-import com.buntupana.tmdb.feature.detail.data.raw.PersonDetailsRaw
-import com.buntupana.tmdb.feature.detail.data.raw.SeasonDetailsRaw
-import com.buntupana.tmdb.feature.detail.data.raw.TvShowDetailsRaw
-import com.buntupana.tmdb.feature.detail.data.raw.TvShowSeasonsDetailsRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsMovieRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsTvShowRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.PersonDetailsRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.SeasonDetailsRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.TvShowDetailsRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.TvShowSeasonsDetailsRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.request.AddRatingRequest
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import io.ktor.client.HttpClient
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import javax.inject.Inject
 
 class DetailRemoteDataSource @Inject constructor(
@@ -22,7 +25,7 @@ class DetailRemoteDataSource @Inject constructor(
     suspend fun getMovieDetail(
         sessionId: String?,
         movieId: Long
-    ): Result<MovieDetailsRaw, NetworkError> {
+    ): Result<com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.MovieDetailsRaw, NetworkError> {
         return getResult {
             httpClient.get("/3/movie/$movieId") {
                 parameter(
@@ -54,11 +57,48 @@ class DetailRemoteDataSource @Inject constructor(
     }
 
     suspend fun getSeasonDetail(
+        sessionId: String?,
         tvShowId: Long,
         seasonNumber: Int
     ): Result<SeasonDetailsRaw, NetworkError> {
         return getResult {
-            httpClient.get(urlString = "/3/tv/$tvShowId/season/$seasonNumber")
+            httpClient.get(urlString = "/3/tv/$tvShowId/season/$seasonNumber") {
+                parameter(
+                    "append_to_response",
+                    "account_states"
+                )
+                if (sessionId != null) {
+                    parameter("session_id", sessionId)
+                }
+            }
+        }
+    }
+
+    suspend fun addEpisodeRating(
+        sessionId: String?,
+        tvShowId: Long,
+        seasonNumber: Int,
+        episodeNumber: Int,
+        rating: Int
+    ): Result<Unit, NetworkError> {
+        return getResult {
+            httpClient.post(urlString = "/3/tv/$tvShowId/season/$seasonNumber/episode/$episodeNumber/rating") {
+                parameter("session_id", sessionId)
+                setBody(AddRatingRequest(value = (rating / 10).toFloat()))
+            }
+        }
+    }
+
+    suspend fun deleteMediaRating(
+        sessionId: String?,
+        tvShowId: Long,
+        seasonNumber: Int,
+        episodeNumber: Int,
+    ): Result<Unit, NetworkError> {
+        return getResult {
+            httpClient.delete(urlString = "/3/tv/$tvShowId/season/$seasonNumber/episode/$episodeNumber/rating") {
+                parameter("session_id", sessionId)
+            }
         }
     }
 

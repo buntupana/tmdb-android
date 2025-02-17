@@ -22,7 +22,14 @@ interface DetailRepository {
 
     suspend fun getPersonDetails(personId: Long): Result<PersonDetails, NetworkError>
 
-    suspend fun getSeasonDetails(tvShowId: Long, episodeNumber: Int): Result<SeasonDetail, NetworkError>
+    suspend fun getSeasonDetails(tvShowId: Long, seasonNumber: Int): Flow<Result<SeasonDetail, NetworkError>>
 
     suspend fun getTvShowSeasonsDetails(tvShowId: Long): Result<List<Season>, NetworkError>
+
+    suspend fun addEpisodeRating(
+        tvShowId: Long,
+        seasonNumber: Int,
+        episodeNumber: Int,
+        rating: Int?
+    ): Result<Unit, NetworkError>
 }

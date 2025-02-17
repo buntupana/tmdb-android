@@ -1,11 +1,13 @@
 package com.buntupana.tmdb.feature.detail.data.repository
 
+import com.buntupana.tmdb.core.data.database.dao.EpisodesDao
 import com.buntupana.tmdb.core.data.database.dao.MovieDetailsDao
 import com.buntupana.tmdb.core.data.database.dao.TvShowDetailsDao
 import com.buntupana.tmdb.core.data.util.getFlowResult
 import com.buntupana.tmdb.feature.detail.data.mapper.toEntity
 import com.buntupana.tmdb.feature.detail.data.mapper.toModel
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.DetailRemoteDataSource
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
@@ -17,6 +19,7 @@ import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.map
+import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import kotlinx.coroutines.flow.Flow
@@ -26,6 +29,7 @@ class DetailRepositoryImpl @Inject constructor(
     private val detailRemoteDataSource: DetailRemoteDataSource,
     private val movieDetailsDao: MovieDetailsDao,
     private val tvShowDetailsDao: TvShowDetailsDao,
+    private val episodesDao: EpisodesDao,
     private val urlProvider: UrlProvider,
     private val sessionManager: SessionManager
 ) : DetailRepository {
@@ -98,15 +102,77 @@ class DetailRepositoryImpl @Inject constructor(
 
     override suspend fun getSeasonDetails(
         tvShowId: Long,
-        episodeNumber: Int
-    ): Result<SeasonDetail, NetworkError> {
-        return detailRemoteDataSource.getSeasonDetail(tvShowId, episodeNumber)
-            .map {
-                it.toModel(
+        seasonNumber: Int
+    ): Flow<Result<SeasonDetail, NetworkError>> {
+
+        var seasonDetailsRaw: SeasonDetailsRaw? =
+            null
+
+        return getFlowResult(
+            networkCall = {
+                detailRemoteDataSource.getSeasonDetail(
+                    sessionId = sessionManager.session.value.sessionId,
+                    tvShowId = tvShowId,
+                    seasonNumber = seasonNumber
+                )
+            },
+            mapToEntity = {
+                seasonDetailsRaw = it
+                it.episodes.toEntity(it.accountStates?.results)
+            },
+            updateDataBaseQuery = {
+                episodesDao.upsertEpisodes(it)
+            },
+            dataBaseQuery = {
+                episodesDao.getEpisodes(tvShowId, seasonNumber)
+            },
+            mapToModel = {
+                seasonDetailsRaw!!.toModel(
                     baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
+                    episodeEntityList = it
                 )
             }
+        )
+    }
+
+    override suspend fun addEpisodeRating(
+        tvShowId: Long,
+        seasonNumber: Int,
+        episodeNumber: Int,
+        rating: Int?
+    ): Result<Unit, NetworkError> {
+
+        return if (rating == null || rating == 0) {
+            detailRemoteDataSource.deleteMediaRating(
+                sessionId = sessionManager.session.value.sessionId,
+                tvShowId = tvShowId,
+                seasonNumber = seasonNumber,
+                episodeNumber = episodeNumber
+            ).onSuccess {
+                episodesDao.updateRating(
+                    tvShowId = tvShowId,
+                    seasonNumber = seasonNumber,
+                    episodeNumber = episodeNumber,
+                    rating = null
+                )
+            }
+        } else {
+            detailRemoteDataSource.addEpisodeRating(
+                sessionId = sessionManager.session.value.sessionId,
+                tvShowId = tvShowId,
+                seasonNumber = seasonNumber,
+                episodeNumber = episodeNumber,
+                rating = rating
+            ).onSuccess {
+                episodesDao.updateRating(
+                    tvShowId = tvShowId,
+                    seasonNumber = seasonNumber,
+                    episodeNumber = episodeNumber,
+                    rating = rating
+                )
+            }
+        }
     }
 
     override suspend fun getPersonDetails(personId: Long): Result<PersonDetails, NetworkError> {

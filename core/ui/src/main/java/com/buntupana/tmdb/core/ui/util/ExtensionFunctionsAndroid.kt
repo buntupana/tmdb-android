@@ -17,13 +17,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavType
 import androidx.navigation.toRoute
 import androidx.palette.graphics.Palette
-import com.buntupana.tmdb.core.ui.navigation.NavTypeMap
 import com.buntupana.tmdb.core.ui.navigation.Routes
 import com.panabuntu.tmdb.core.common.util.decodeAllStrings
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.reflect.KType
-import kotlin.reflect.full.companionObjectInstance
 import kotlin.reflect.typeOf
 
 fun Drawable.getDominantColor(colorResult: (dominantColor: Color) -> Unit) {
@@ -51,9 +49,10 @@ fun Modifier.brush(brush: Brush) = this
         }
     }
 
-inline fun <reified T : Routes> SavedStateHandle.navArgs(): T {
-    val companion = T::class.companionObjectInstance as? NavTypeMap
-    return toRoute<T>(typeMap = companion?.typeMap ?: emptyMap()).decodeAllStrings()
+inline fun <reified T : Routes> SavedStateHandle.navArgs(
+    typeMap: Map<KType, NavType<*>> = emptyMap()
+): T {
+    return toRoute<T>(typeMap).decodeAllStrings()
 }
 
 inline fun <reified T : Any> serializableType(

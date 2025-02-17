@@ -62,7 +62,8 @@ fun Header(
                 if (mediaDetails.backdropUrl.isNotNullOrBlank()) {
                     ImageFromUrl(
                         modifier = Modifier.fillMaxSize(),
-                        imageUrl = mediaDetails.backdropUrl
+                        imageUrl = mediaDetails.backdropUrl,
+                        showPlaceHolder = false
                     )
                 }
                 Box(
@@ -102,7 +103,8 @@ fun Header(
                     .clip(RoundedCornerShape(Dimens.posterRound))
                     .aspectRatio(Dimens.aspectRatioMediaPoster),
                 imageUrl = mediaDetails.posterUrl,
-                setDominantColor = { setDominantColor(it) }
+                setDominantColor = { setDominantColor(it) },
+                showPlaceHolder = false
             )
         }
     }

@@ -172,7 +172,8 @@ val episodeSample = Episode(
     seasonNumber = 2,
     stillUrl = "",
     voteAverage = 7.2f,
-    voteCount = 24
+    voteCount = 24,
+    userRating = 20
 )
 
 val seasonSample = Season(

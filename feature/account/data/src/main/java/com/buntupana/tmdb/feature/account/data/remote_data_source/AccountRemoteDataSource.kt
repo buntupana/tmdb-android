@@ -177,12 +177,12 @@ class AccountRemoteDataSource @Inject constructor(
         sessionId: String?,
         mediaType: MediaType,
         mediaId: Long,
-        value: Int
+        rating: Int
     ): Result<Unit, NetworkError> {
         return getResult {
             httpClient.post(urlString = "/3/${mediaType.value}/$mediaId/rating") {
                 parameter("session_id", sessionId)
-                setBody(AddRatingRequest(value = (value / 10).toFloat()))
+                setBody(AddRatingRequest(value = (rating / 10).toFloat()))
             }
         }
     }
@@ -198,6 +198,5 @@ class AccountRemoteDataSource @Inject constructor(
             }
         }
     }
-
 }
 

@@ -2,14 +2,14 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.core.data.database.entity.MovieDetailsEntity
 import com.buntupana.tmdb.core.data.mapper.toModel
-import com.buntupana.tmdb.feature.detail.data.raw.CreditsMovieRaw
-import com.buntupana.tmdb.feature.detail.data.raw.ExternalLinksRaw
-import com.buntupana.tmdb.feature.detail.data.raw.Genre
-import com.buntupana.tmdb.feature.detail.data.raw.MediaVideosRaw
-import com.buntupana.tmdb.feature.detail.data.raw.MovieDetailsRaw
-import com.buntupana.tmdb.feature.detail.data.raw.ProductionCountry
-import com.buntupana.tmdb.feature.detail.data.raw.RecommendationsRaw
-import com.buntupana.tmdb.feature.detail.data.raw.ReleaseDatesRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsMovieRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ExternalLinksRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.Genre
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.MediaVideosRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.MovieDetailsRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ProductionCountry
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.RecommendationsRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ReleaseDatesRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
 import com.panabuntu.tmdb.core.common.util.Const.RATABLE_DAYS
@@ -88,7 +88,7 @@ fun MovieDetailsEntity.toModel(
 
     val productionCountryCodeList = productionCountryList.let {
         Json.decodeFromString<List<ProductionCountry>>(it)
-    }.orEmpty()
+    }
 
     val releaseDateList = releaseDates?.let { Json.decodeFromString<ReleaseDatesRaw>(it) }
 

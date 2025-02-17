@@ -100,6 +100,10 @@ object CoreCommonModule {
 
     @Singleton
     @Provides
+    fun provideEpisodesDao(db: TmdbDataBase) = db.episodesDao
+
+    @Singleton
+    @Provides
     fun provideSessionManager(@ApplicationContext context: Context): SessionManager {
         return SessionManagerImpl(context)
     }

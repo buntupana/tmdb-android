@@ -298,7 +298,7 @@ class AccountRepositoryImpl @Inject constructor(
                 sessionId = sessionManager.session.value.sessionId,
                 mediaType = mediaType,
                 mediaId = mediaId,
-                value = value
+                rating = value
             ).onSuccess {
                 when (mediaType) {
                     MediaType.MOVIE -> movieDetailsDao.updateRatingAndWatchlist(mediaId, value)

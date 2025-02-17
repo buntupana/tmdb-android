@@ -13,7 +13,9 @@ import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetSeasonDetailsUseCase
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
+import com.panabuntu.tmdb.core.common.manager.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -21,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EpisodesDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    sessionManager: SessionManager,
     private val getSeasonDetailsUseCase: GetSeasonDetailsUseCase
 ) : ViewModel() {
 
@@ -40,6 +43,11 @@ class EpisodesDetailViewModel @Inject constructor(
 
     init {
         onEvent(EpisodesDetailEvent.GetEpisodesDetail)
+        viewModelScope.launch {
+            sessionManager.session.collectLatest {
+                state = state.copy(isLogged = it.isLogged)
+            }
+        }
     }
 
     fun onEvent(event: EpisodesDetailEvent) {
@@ -54,16 +62,16 @@ class EpisodesDetailViewModel @Inject constructor(
     private suspend fun getEpisodesDetail() {
         state = state.copy(isLoading = true, isGetEpisodesError = false)
 
-        getSeasonDetailsUseCase(state.tvShowId, state.seasonNumber)
-            .onError {
+        getSeasonDetailsUseCase(state.tvShowId, state.seasonNumber).collectLatest {
+            it.onError {
                 state = state.copy(isLoading = false, isGetEpisodesError = true)
-            }
-            .onSuccess {
+            }.onSuccess {
                 state = state.copy(
                     isLoading = false,
                     isGetEpisodesError = false,
                     episodeList = it.episodes
                 )
             }
+        }
     }
 }

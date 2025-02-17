@@ -2,14 +2,13 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 
 import com.buntupana.tmdb.core.data.mapper.getGender
-import com.buntupana.tmdb.feature.detail.data.raw.CreditsTvShowRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.Job
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.model.Role
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 
-fun CreditsTvShowRaw.toModel(
+fun com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsTvShowRaw.toModel(
     baseUrlProfile : String,
 ): CreditsTvShow {
 

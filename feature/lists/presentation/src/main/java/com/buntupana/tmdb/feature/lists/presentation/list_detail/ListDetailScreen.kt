@@ -283,7 +283,6 @@ fun ListDetailContent(
                     },
                     isRevealed = itemListViewEntity.isDeleteRevealed,
                     actions = { revealedPercent ->
-                        Timber.d("ListDetailContent: percent = $revealedPercent")
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()

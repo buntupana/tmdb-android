@@ -4,7 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,10 +41,33 @@ fun EpisodeSubtitle(
     episode: Episode,
     onRateClick: () -> Unit = {},
 ) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+    Column(
+        modifier = modifier
     ) {
+
+        Row {
+            if (episode.airDate != null) {
+                Text(
+                    text = episode.airDate!!.toFullDate(),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            if (episode.runtime != null) {
+                Text(
+                    text = " • ",
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = formatTime(episode.runtime!!),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(Dimens.padding.small))
+
         when {
             episode.voteAverage == null || episode.voteCount == 0 -> {}
 
@@ -82,8 +108,8 @@ fun EpisodeSubtitle(
                         Row(
                             modifier = Modifier
                                 .background(SecondaryColor)
-                                .padding(horizontal = 8.dp, vertical = 2.dp)
-                                .clickable { onRateClick() },
+                                .clickable { onRateClick() }
+                                .padding(horizontal = 8.dp, vertical = 2.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             if (episode.userRating == null) {
@@ -93,37 +119,17 @@ fun EpisodeSubtitle(
                                 )
                             } else {
                                 Text(
-                                    text = stringResource(R.string.text_yours_is, episode.userRating!!),
+                                    text = stringResource(
+                                        R.string.text_yours_is,
+                                        episode.userRating!!
+                                    ),
                                     color = MaterialTheme.colorScheme.background
                                 )
                             }
                         }
                     }
                 }
-                Text(
-                    text = "  ",
-                    fontWeight = FontWeight.Bold
-                )
             }
-        }
-
-        if (episode.airDate != null) {
-            Text(
-                text = episode.airDate!!.toFullDate(),
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        if (episode.runtime != null) {
-            Text(
-                text = " • ",
-                fontWeight = FontWeight.Bold
-            )
-
-            Text(
-                text = formatTime(episode.runtime!!),
-                fontWeight = FontWeight.Bold
-            )
         }
     }
 }

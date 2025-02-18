@@ -134,6 +134,7 @@ class ListDetailViewModel @Inject constructor(
                 item
             }
         }
+        state.mediaItemList
         state = state.copy(mediaItemList = pagingList?.cachedIn(viewModelScope))
     }
 }

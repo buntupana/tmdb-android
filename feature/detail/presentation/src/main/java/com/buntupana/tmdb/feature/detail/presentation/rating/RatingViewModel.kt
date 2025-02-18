@@ -149,7 +149,7 @@ class RatingViewModel @Inject constructor(
             is RatingMediaType.TvShow -> {
                 {
                     addMediaRatingUseCase(
-                        mediaType = MediaType.MOVIE,
+                        mediaType = MediaType.TV_SHOW,
                         mediaId = navArgs.ratingMediaType.tvShowId,
                         value = rating
                     )

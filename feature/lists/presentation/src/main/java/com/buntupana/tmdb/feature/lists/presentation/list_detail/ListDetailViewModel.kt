@@ -54,10 +54,6 @@ class ListDetailViewModel @Inject constructor(
             when (event) {
                 ListDetailEvent.GetDetails -> getListDetails()
 
-                is ListDetailEvent.CancelDeleteItemList -> {
-                    cancelDeleteItemList(event.itemId)
-                }
-
                 is ListDetailEvent.SuccessDeleteItemList -> deleteItemList(
                     itemId = event.itemId
                 )
@@ -123,18 +119,5 @@ class ListDetailViewModel @Inject constructor(
             mediaItemList = pagingList?.cachedIn(viewModelScope),
             itemTotalCount = (state.itemTotalCount ?: 0) - 1
         )
-    }
-
-    private fun cancelDeleteItemList(itemId: String) {
-        val pagingList = state.mediaItemList?.map { pagingData ->
-            pagingData.map { item ->
-                if (itemId == item.id) {
-                    item.isDeleteRevealed = false
-                }
-                item
-            }
-        }
-        state.mediaItemList
-        state = state.copy(mediaItemList = pagingList?.cachedIn(viewModelScope))
     }
 }

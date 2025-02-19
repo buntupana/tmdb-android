@@ -2,6 +2,7 @@
 <resources>
 
     <string name="text_delete_list">Delete List</string>
+    <string name="text_delete_from_list">Delete From List</string>
     <string name="message_delete_list_confirmation">Are you sure you want to delete <b>%s</b>?</string>
     <string name="text_lists">Lists</string>
     <string name="text_you_have">You have</string>

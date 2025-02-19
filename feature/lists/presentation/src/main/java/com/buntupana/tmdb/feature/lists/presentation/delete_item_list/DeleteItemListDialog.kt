@@ -3,10 +3,12 @@ package com.buntupana.tmdb.feature.lists.presentation.delete_item_list
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -16,6 +18,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.composables.dialog.ConfirmationDialog
 import com.buntupana.tmdb.core.ui.util.annotatedStringResource
 import com.buntupana.tmdb.feature.presentation.R
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -27,7 +30,7 @@ fun DeleteItemListDialog(
     showDialog: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onDismiss: () -> Unit,
-    onCancelClick:(itemId: String) -> Unit = {},
+    onCancelClick: (itemId: String) -> Unit = {},
     onDeleteSuccess: () -> Unit
 ) {
     if (showDialog.not() || deleteItemListNav == null) return
@@ -58,7 +61,7 @@ fun DeleteItemListDialog(
 
     ConfirmationDialog(
         sheetState = sheetState,
-        title = stringResource(R.string.text_delete_list),
+        title = stringResource(R.string.text_delete_from_list),
         description = annotatedStringResource(
             R.string.message_delete_item_list_confirmation,
             viewModel.state.mediaName
@@ -81,8 +84,25 @@ fun DeleteItemListDialog(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun DeleteItemListScreenPreview() {
-
+    DeleteItemListDialog(
+        deleteItemListNav = DeleteItemListNav(
+            itemId = "",
+            listId = 0,
+            mediaId = 0,
+            mediaName = "The incredible Hulk",
+            mediaType = MediaType.MOVIE
+        ),
+        showDialog = true,
+        sheetState = SheetState(
+            skipPartiallyExpanded = true,
+            LocalDensity.current,
+            initialValue = SheetValue.Expanded
+        ),
+        onDismiss = {},
+        onDeleteSuccess = {}
+    )
 }

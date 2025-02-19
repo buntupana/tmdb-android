@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.LifecycleStartEffect
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.isInvisible
@@ -46,6 +47,7 @@ fun ConfirmationDialog(
     onConfirmClick: () -> Unit,
     onDismiss: () -> Unit,
 ) {
+
     ConfirmationDialog(
         sheetState = sheetState,
         title = title,
@@ -71,8 +73,20 @@ fun ConfirmationDialog(
     onDismiss: () -> Unit,
 ) {
 
+    LifecycleStartEffect(Unit) {
+        onStopOrDispose {
+            onCancelClick()
+            onDismiss()
+        }
+    }
+
     ModalBottomSheet(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {
+            if (isLoading.not()) {
+                onCancelClick()
+                onDismiss()
+            }
+        },
         sheetState = sheetState,
         containerColor = MaterialTheme.colorScheme.background,
         dragHandle = {},

@@ -1,5 +1,7 @@
 package com.buntupana.tmdb.feature.lists.presentation.list_detail
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +20,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -25,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -93,6 +97,14 @@ fun ListDetailScreen(
                         is ListDetailSideEffect.RefreshMediaItemList -> {
                             mediaItemList?.refresh()
                         }
+
+                        is ListDetailSideEffect.UpdateItemRevealed -> {
+                            mediaItemList?.itemSnapshotList?.find {
+                                it?.id == sideEffect.itemId
+                            }?.let { itemListViewEntity ->
+                                itemListViewEntity.isDeleteRevealed.value = sideEffect.isRevealed
+                            }
+                        }
                     }
                 }
             }
@@ -159,13 +171,12 @@ fun ListDetailScreen(
         onDismiss = {
             showRemoveItemListConfirmDialog = false
         },
-        onCancelClick = {
-            viewModel.onEvent(
-                ListDetailEvent.CancelDeleteItemList(
-                    itemId = deleteItemListNav?.itemId.orEmpty(),
-                    mediaType = deleteItemListNav?.mediaType ?: MediaType.MOVIE
-                )
-            )
+        onCancelClick = { itemId ->
+            mediaItemList?.itemSnapshotList?.find {
+                it?.id == itemId
+            }?.let { itemListViewEntity ->
+                itemListViewEntity.isDeleteRevealed.value = false
+            }
         },
         onDeleteSuccess = {
             showRemoveItemListConfirmDialog = false
@@ -190,7 +201,7 @@ fun ListDetailContent(
     onRetryClick: () -> Unit,
     onEditClick: () -> Unit = {},
     onDeleteClick: () -> Unit = {},
-    onItemDeleteClick: (itemId: String, mediaItem: MediaItem) -> Unit = {_, _ ->}
+    onItemDeleteClick: (itemId: String, mediaItem: MediaItem) -> Unit = { _, _ -> }
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -271,54 +282,69 @@ fun ListDetailContent(
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-            ) { index, itemListViewEntity ->
+            ) { _, itemListViewEntity ->
 
-                SwipeableItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateItem(),
-                    actionsAlign = ActionsAlign.END,
-                    onExpanded = {
-                        onItemDeleteClick(itemListViewEntity.id, itemListViewEntity.mediaItem)
-                    },
-                    isRevealed = itemListViewEntity.isDeleteRevealed,
-                    actions = { revealedPercent ->
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(
-                                    horizontal = Dimens.padding.horizontal,
-                                    vertical = Dimens.padding.verticalItem
-                                )
-                                .clip(RoundedCornerShape(Dimens.posterRound))
-                                .background(MaterialTheme.colorScheme.error),
-                        ) {
-                            Icon(
+                val isRevealed = itemListViewEntity.isDeleteRevealed
+
+                // key is need it to recomposite when isRevealed
+                key(isRevealed) {
+                    SwipeableItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
+                        actionsAlign = ActionsAlign.END,
+                        onExpanded = {
+                            onItemDeleteClick(itemListViewEntity.id, itemListViewEntity.mediaItem)
+                            itemListViewEntity.isDeleteRevealed.value = true
+                        },
+                        isRevealed = isRevealed.value,
+                        actions = { progressProvider ->
+
+                            val backgroundColor = animateColorAsState(
+                                targetValue = lerp(
+                                    start = MaterialTheme.colorScheme.background,
+                                    stop = MaterialTheme.colorScheme.error,
+                                    fraction = progressProvider() * 2
+                                ),
+                                animationSpec = tween(0)
+                            )
+                            Box(
                                 modifier = Modifier
-                                    .align(Alignment.CenterEnd)
-                                    .padding(horizontal = Dimens.padding.huge),
-                                imageVector = Icons.Rounded.Delete,
-                                contentDescription = null,
-                                tint = Color.White,
+                                    .fillMaxSize()
+                                    .padding(
+                                        horizontal = Dimens.padding.horizontal,
+                                        vertical = Dimens.padding.verticalItem
+                                    )
+                                    .clip(RoundedCornerShape(Dimens.posterRound))
+                                    .background(backgroundColor.value),
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .align(Alignment.CenterEnd)
+                                        .padding(horizontal = Dimens.padding.huge),
+                                    imageVector = Icons.Rounded.Delete,
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                )
+                            }
+                        },
+                        content = {
+                            MediaItemHorizontal(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .animateItem(),
+                                mediaId = itemListViewEntity.mediaItem.id,
+                                title = itemListViewEntity.mediaItem.name,
+                                posterUrl = itemListViewEntity.mediaItem.posterUrl,
+                                overview = itemListViewEntity.mediaItem.overview,
+                                releaseDate = itemListViewEntity.mediaItem.releaseDate,
+                                onMediaClick = { _, mainPosterColor ->
+                                    onMediaClick(itemListViewEntity.mediaItem, mainPosterColor)
+                                }
                             )
                         }
-                    },
-                    content = {
-                        MediaItemHorizontal(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .animateItem(),
-                            mediaId = itemListViewEntity.mediaItem.id,
-                            title = itemListViewEntity.mediaItem.name,
-                            posterUrl = itemListViewEntity.mediaItem.posterUrl,
-                            overview = itemListViewEntity.mediaItem.overview,
-                            releaseDate = itemListViewEntity.mediaItem.releaseDate,
-                            onMediaClick = { _, mainPosterColor ->
-                                onMediaClick(itemListViewEntity.mediaItem, mainPosterColor)
-                            }
-                        )
-                    }
-                )
+                    )
+                }
             }
         }
     }

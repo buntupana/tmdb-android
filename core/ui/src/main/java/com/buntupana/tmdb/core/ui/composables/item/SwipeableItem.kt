@@ -49,7 +49,7 @@ fun SwipeableItem(
     isRevealed: Boolean = false,
     onExpanded: () -> Unit = {},
     onCollapsed: () -> Unit = {},
-    actions: @Composable (revealPercent: Float) -> Unit,
+    actions: @Composable (progressProvider: () -> Float) -> Unit,
     content: @Composable () -> Unit
 ) {
 
@@ -64,7 +64,7 @@ fun SwipeableItem(
     LaunchedEffect(isRevealed, contextMenuWidth) {
 
         if (isRevealed) {
-            when(actionsAlign) {
+            when (actionsAlign) {
                 ActionsAlign.START -> offset.animateTo(contextMenuWidth)
                 ActionsAlign.END -> offset.animateTo(-contextMenuWidth)
             }
@@ -90,7 +90,7 @@ fun SwipeableItem(
                     contextMenuWidth = it.width.toFloat()
                 },
         ) {
-            actions(abs( offset.value / contextMenuWidth))
+            actions({ abs(offset.value / contextMenuWidth) })
         }
 
         Surface(

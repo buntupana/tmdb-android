@@ -10,9 +10,4 @@ sealed class ListDetailEvent {
         val itemId: String,
         val mediaType: MediaType
     ): ListDetailEvent()
-
-    data class CancelDeleteItemList(
-        val itemId: String,
-        val mediaType: MediaType
-    ): ListDetailEvent()
 }

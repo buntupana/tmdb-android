@@ -48,7 +48,8 @@ fun ExternalLinksRow(
             Icon(
                 modifier = Modifier
                     .size(iconSize)
-                    .clickable { uriHandler.openUri(externalLink.link) },
+                    .clickable { uriHandler.openUri(externalLink.link) }
+                    .then(if (iconResId == R.drawable.ic_x) Modifier.padding(4.dp) else Modifier),
                 painter = painterResource(id = iconResId),
                 contentDescription = null,
             )

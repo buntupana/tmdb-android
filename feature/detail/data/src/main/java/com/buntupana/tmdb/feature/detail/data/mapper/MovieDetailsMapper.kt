@@ -98,7 +98,7 @@ fun MovieDetailsEntity.toModel(
 
     val externalLinks = externalLinks?.let { Json.decodeFromString<ExternalLinksRaw>(it) }
 
-    val isRatable = when {
+    val isRateable = when {
         releaseLocalDate == null -> false
         Duration.between(LocalDate.now().atStartOfDay(), releaseLocalDate.atStartOfDay())
             .toDays() < RATABLE_DAYS -> true
@@ -133,7 +133,7 @@ fun MovieDetailsEntity.toModel(
         isFavorite = isFavorite,
         isWatchListed = isWatchListed,
         userRating = userRating,
-        isRateable = isRatable,
+        isRateable = isRateable,
         status = status,
         originalLanguage = getLanguageName(originalLanguageCode),
         budget = budget,

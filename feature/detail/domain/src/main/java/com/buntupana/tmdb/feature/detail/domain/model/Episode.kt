@@ -14,5 +14,6 @@ data class Episode(
     val stillUrl: String?,
     val voteAverage: Float?,
     val voteCount: Int?,
-    val userRating: Int?
+    val userRating: Int?,
+    val isRateable: Boolean
 )

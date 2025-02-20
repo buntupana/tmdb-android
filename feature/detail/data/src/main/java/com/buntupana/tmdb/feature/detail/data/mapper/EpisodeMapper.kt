@@ -49,6 +49,8 @@ fun EpisodeRaw.toModel(
 
     val stillUrl = stillPath.ifNotNullOrBlank { baseUrlBackdrop + stillPath.orEmpty() }
 
+    val isRateable = releaseLocalDate != null && releaseLocalDate.isAfter(LocalDate.now())
+
     return Episode(
         id = id,
         showId = showId,
@@ -61,7 +63,8 @@ fun EpisodeRaw.toModel(
         stillUrl = stillUrl,
         voteAverage = voteAverage,
         voteCount = voteCount,
-        userRating = null
+        userRating = null,
+        isRateable = isRateable
     )
 }
 
@@ -73,12 +76,14 @@ fun List<EpisodeEntity>.toModel(
 
         val releaseLocalDate = try {
             LocalDate.parse(episodeEntity.airDate)
-        } catch (exc: DateTimeParseException) {
+        } catch (exc: Exception) {
             null
         }
 
         val stillUrl =
             episodeEntity.stillPath.ifNotNullOrBlank { baseUrlBackdrop + episodeEntity.stillPath.orEmpty() }
+
+        val isRateable = releaseLocalDate != null && releaseLocalDate.isBefore(LocalDate.now())
 
         Episode(
             id = episodeEntity.id,
@@ -92,7 +97,8 @@ fun List<EpisodeEntity>.toModel(
             stillUrl = stillUrl,
             voteAverage = episodeEntity.voteAverage,
             voteCount = episodeEntity.voteCount,
-            userRating = episodeEntity.userRating
+            userRating = episodeEntity.userRating,
+            isRateable = isRateable
         )
     }
 }

@@ -55,7 +55,7 @@ fun EpisodeSubtitle(
                 )
             }
 
-            if (episode.runtime != null) {
+            if (episode.runtime != null && episode.airDate != null) {
                 Text(
                     text = " • ",
                     fontWeight = FontWeight.Bold
@@ -70,71 +70,68 @@ fun EpisodeSubtitle(
 
         Spacer(modifier = Modifier.height(Dimens.padding.small))
 
-        when {
-            episode.voteAverage == null || episode.voteCount == 0 -> {}
+        // The web allows to rate any episode besides it's release date, so for now it's this line is disabled
+//        if (episode.isRateable.not()) return@Column
 
-            episode.voteAverage != 0f -> {
+        Row(
+            modifier = Modifier
+                .clip(RoundedCornerShape(Dimens.posterRound))
+                .border(
+                    width = 1.dp,
+                    shape = RoundedCornerShape(Dimens.posterRound),
+                    color = PrimaryColor
+                ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Row(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.onBackground)
+                    .padding(horizontal = 8.dp, vertical = 2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Image(
+                    modifier = Modifier
+                        .size(16.dp)
+                        .padding(end = 2.dp),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.background),
+                    painter = painterResource(id = RCore.drawable.ic_star_solid),
+                    contentDescription = null,
+                )
+                Text(
+                    text = "${(episode.voteAverage!! * 10).toInt()}%",
+                    color = MaterialTheme.colorScheme.background
+                )
+            }
+
+            if (isLogged) {
                 Row(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(Dimens.posterRound))
-                        .border(
-                            width = 1.dp,
-                            shape = RoundedCornerShape(Dimens.posterRound),
-                            color = PrimaryColor
-                        ),
+                        .background(SecondaryColor)
+                        .animateContentSize()
+                        .clickable { onRateClick() }
+                        .padding(horizontal = 8.dp, vertical = 2.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
-                    Row(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.onBackground)
-                            .padding(horizontal = 8.dp, vertical = 2.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-
-                        Image(
-                            modifier = Modifier
-                                .size(16.dp)
-                                .padding(end = 2.dp),
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.background),
-                            painter = painterResource(id = RCore.drawable.ic_star_solid),
-                            contentDescription = null,
-                        )
+                    if (episode.userRating == null) {
                         Text(
-                            text = "${(episode.voteAverage!! * 10).toInt()}%",
+                            text = stringResource(R.string.text_rate_it),
                             color = MaterialTheme.colorScheme.background
                         )
-                    }
-
-                    if (isLogged) {
-                        Row(
-                            modifier = Modifier
-                                .background(SecondaryColor)
-                                .animateContentSize()
-                                .clickable { onRateClick() }
-                                .padding(horizontal = 8.dp, vertical = 2.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            if (episode.userRating == null) {
-                                Text(
-                                    text = stringResource(R.string.text_rate_it),
-                                    color = MaterialTheme.colorScheme.background
-                                )
-                            } else {
-                                Text(
-                                    text = stringResource(R.string.text_yours_is),
-                                    color = MaterialTheme.colorScheme.background
-                                )
-                                VerticalTextRoulette(
-                                    text = " ${episode.userRating}",
-                                    color = MaterialTheme.colorScheme.background
-                                )
-                                Text(
-                                    text = "%",
-                                    color = MaterialTheme.colorScheme.background
-                                )
-                            }
-                        }
+                    } else {
+                        Text(
+                            text = stringResource(R.string.text_yours_is),
+                            color = MaterialTheme.colorScheme.background
+                        )
+                        VerticalTextRoulette(
+                            text = " ${episode.userRating}",
+                            color = MaterialTheme.colorScheme.background
+                        )
+                        Text(
+                            text = "%",
+                            color = MaterialTheme.colorScheme.background
+                        )
                     }
                 }
             }

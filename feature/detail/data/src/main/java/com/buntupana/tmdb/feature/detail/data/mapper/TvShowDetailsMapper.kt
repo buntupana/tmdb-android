@@ -28,6 +28,8 @@ import java.time.format.DateTimeParseException
 
 fun TvShowDetailsRaw.toEntity(): TvShowDetailsEntity {
 
+    val credits = credits?.copy(cast = credits.cast.take(9), crew = credits.crew.take(9))
+
     return TvShowDetailsEntity(
         id = id,
         name = name.orEmpty(),

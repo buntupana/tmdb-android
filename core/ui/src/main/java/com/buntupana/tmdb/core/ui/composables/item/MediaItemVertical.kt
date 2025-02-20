@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
@@ -38,6 +40,7 @@ private const val MAX_TITLE_LINES = 3
 @Composable
 fun MediaItemVertical(
     modifier: Modifier = Modifier,
+    width: Dp = Dimens.carouselMediaItemWidth,
     mediaItem: MediaItem,
     fontSize: TextUnit = TextUnit.Unspecified,
     onClick: (mainPosterColor: Color) -> Unit
@@ -47,6 +50,7 @@ fun MediaItemVertical(
 
     BoxWithConstraints(
         modifier = modifier
+            .width(width)
             .padding(4.dp)
             .clip(RoundedCornerShape(Dimens.posterRound))
             .clickable {
@@ -60,21 +64,27 @@ fun MediaItemVertical(
             Box {
                 val userScoreSize = (36f * maxWidth.value / 120f).dp
 
-                ImageFromUrl(
-                    modifier = Modifier
-                        .padding(bottom = userScoreSize / 2)
-                        .clip(RoundedCornerShape(Dimens.posterRound))
-                        .aspectRatio(Dimens.aspectRatioMediaPoster),
-                    imageUrl = mediaItem.posterUrl,
-                    showPlaceHolder = true,
-                    setDominantColor = { dominantColor ->
-                        mainPosterColor = dominantColor
-                    },
-                )
+                Box(
+                    modifier = Modifier.padding(bottom = userScoreSize/ 2)
+                ) {
+                    ImageFromUrl(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(Dimens.posterRound))
+                            .aspectRatio(Dimens.aspectRatioMediaPoster),
+                        imageUrl = mediaItem.posterUrl,
+                        showPlaceHolder = true,
+                        setDominantColor = { dominantColor ->
+                            mainPosterColor = dominantColor
+                        },
+                    )
+                }
 
                 Box(
                     modifier = Modifier
-                        .padding(start = Dimens.padding.tiny)
+                        .padding(
+                            start = Dimens.padding.tiny
+                        )
                         .align(Alignment.BottomStart)
                         .size(userScoreSize)
                 ) {
@@ -90,49 +100,50 @@ fun MediaItemVertical(
                 modifier = Modifier
                     .padding(top = 8.dp)
             ) {
+                TitleAndDate(
+                    modifier = Modifier.isInvisible(true),
+                    fontSize = fontSize,
+                    title = "This a dummy text just for draw max size of this composable, it has be long to cover the min 3 lines",
+                    date = "This a dummy text just for draw max size of this composable, it has be long to cover the min 3 lines"
+                )
 
-                Column(
-                    modifier = Modifier.isInvisible(true)
-                ) {
-
-                    Text(
-                        text = "This a dummy text just for draw max size of this composable, it has be long to cover the min 3 lines",
-                        maxLines = MAX_TITLE_LINES,
-                        fontWeight = FontWeight.Bold,
-                        overflow = TextOverflow.Ellipsis,
-                        fontSize = fontSize
-                    )
-
-                    Text(
-                        text = "This a dummy text just for draw max size of this composable, it has be long to cover the min 3 lines",
-                        fontWeight = FontWeight.Normal,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                        fontSize = fontSize
-                    )
-                }
-
-                Column {
-
-                    Text(
-                        text = mediaItem.name,
-                        maxLines = MAX_TITLE_LINES,
-                        fontWeight = FontWeight.Bold,
-                        overflow = TextOverflow.Ellipsis,
-                        fontSize = fontSize
-                    )
-
-                    Text(
-                        text = mediaItem.releaseDate,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.alpha(0.6f),
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                        fontSize = fontSize
-                    )
-                }
+                TitleAndDate(
+                    fontSize = fontSize,
+                    title = mediaItem.name,
+                    date = mediaItem.releaseDate
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun TitleAndDate(
+    modifier: Modifier = Modifier,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    title: String,
+    date: String
+) {
+    Column(
+        modifier = modifier
+    ) {
+
+        Text(
+            text = title,
+            maxLines = MAX_TITLE_LINES,
+            fontWeight = FontWeight.Bold,
+            overflow = TextOverflow.Ellipsis,
+            fontSize = fontSize
+        )
+
+        Text(
+            text = date,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.alpha(0.6f),
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+            fontSize = fontSize
+        )
     }
 }
 
@@ -149,11 +160,13 @@ private fun MediaItemPreview() {
 @Composable
 fun MediaItemVerticalPlaceHolder(
     modifier: Modifier = Modifier,
+    width: Dp = Dimens.carouselMediaItemWidth,
     fontSize: TextUnit = TextUnit.Unspecified
 ) {
 
     BoxWithConstraints(
         modifier = modifier
+            .width(width)
             .padding(4.dp)
     ) {
 
@@ -217,6 +230,6 @@ fun MediaItemVerticalPlaceHolder(
 @Composable
 fun MediaItemPlaceHolderPreview() {
     MediaItemVerticalPlaceHolder(
-        modifier = Modifier.width(120.dp)
+        modifier = Modifier
     )
 }

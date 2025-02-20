@@ -147,7 +147,10 @@ fun Modifier.fadeIn(enabled: Boolean, durationMillis: Int = 400): Modifier {
 }
 
 @Composable
-fun Int.pxToDp() = with(LocalDensity.current) { this@pxToDp.toDp() }
+fun Int.toDp() = with(LocalDensity.current) { this@toDp.toDp() }
+
+@Composable
+fun Float.toDp() = with(LocalDensity.current) { this@toDp.toDp() }
 
 @Composable
 fun Dp.dpToPx() = with(LocalDensity.current) { this@dpToPx.toPx() }

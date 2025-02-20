@@ -84,8 +84,8 @@ fun CarouselMediaItem(
 
                         MediaItemVertical(
                             modifier = Modifier
-                                .animateItem()
-                                .width(itemWidth),
+                                .animateItem(),
+                            width = itemWidth,
                             mediaItem = mediaItem,
                             fontSize = fontSize,
                             onClick = { mainPosterColor ->

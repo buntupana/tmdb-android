@@ -36,7 +36,7 @@ import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.TertiaryDarkColor
 import com.buntupana.tmdb.core.ui.theme.TertiaryLightColor
 import com.buntupana.tmdb.core.ui.util.dpToPx
-import com.buntupana.tmdb.core.ui.util.pxToDp
+import com.buntupana.tmdb.core.ui.util.toDp
 
 
 @Composable
@@ -92,7 +92,7 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
 
         Box(
             modifier = paddedModifier
-                .width(width = offsetXBackground.pxToDp())
+                .width(width = offsetXBackground.toDp())
                 .clip(RoundedCornerShape(ROUNDED_CORNER_RADIUS))
                 .border(BorderStroke(2.dp, PrimaryColor), RoundedCornerShape(ROUNDED_CORNER_RADIUS))
                 .background(
@@ -138,7 +138,7 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
 
             val auxModifier = if (isSelected.not()) {
                 Modifier
-                    .width(widthAnimation.pxToDp())
+                    .width(widthAnimation.toDp())
                 Modifier
             } else {
                 Modifier

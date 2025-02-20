@@ -26,7 +26,6 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleStartEffect
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
@@ -68,17 +68,21 @@ fun RatingDialog(
 
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(viewModel.sideEffect) {
-        viewModel.sideEffect.collect { sideEffect ->
-            Timber.d("sideEffect = [$sideEffect]")
-            when (sideEffect) {
-                is RatingSideEffect.AddRatingSuccess -> {
-                    sheetState.hide()
-                    onDismiss()
+    LifecycleStartEffect(Unit) {
+        scope.launch {
+            viewModel.sideEffect.collect { sideEffect ->
+                Timber.d("sideEffect = [$sideEffect]")
+                when (sideEffect) {
+                    is RatingSideEffect.AddRatingSuccess -> {
+                        sheetState.hide()
+                        onDismiss()
+                    }
                 }
             }
         }
+        onStopOrDispose {}
     }
+
     RatingContent(
         state = viewModel.state,
         sheetState = sheetState,

@@ -250,6 +250,9 @@ fun MediaDetailContent(
         }
 
         AnimatedVisibility(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = paddingValues.calculateTopPadding()),
             visible = state.isLoading.not(),
             enter = fadeIn(),
             exit = fadeOut()
@@ -258,7 +261,6 @@ fun MediaDetailContent(
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .padding(top = paddingValues.calculateTopPadding())
                     .verticalScroll(scrollState)
             ) {
 

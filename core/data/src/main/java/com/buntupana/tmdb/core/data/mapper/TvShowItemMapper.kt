@@ -33,7 +33,7 @@ fun TvShowItemRaw.toModel(
         originalLanguage = originalLanguage,
         genreIds = genreIds,
         popularity = popularity ?: 0f,
-        voteAverage = ((voteAverage ?: 0f) * 10).toInt(),
+        voteAverage = if ((voteCount ?: 0) == 0) null else ((voteAverage ?: 0f) * 10).toInt(),
         voteCount = voteCount ?: 0,
         releaseDate = releaseDate,
         originCountry = originCountry

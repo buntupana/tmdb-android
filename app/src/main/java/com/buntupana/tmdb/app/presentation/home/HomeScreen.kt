@@ -81,7 +81,7 @@ fun HomeScreenContent(
         modifier = Modifier.setStatusNavigationBarColor(),
         topBar = {
             TopBar(
-                clickOnSearch = onSearchClicked
+                onSearchClick = onSearchClicked
             )
         },
         bottomBar = {

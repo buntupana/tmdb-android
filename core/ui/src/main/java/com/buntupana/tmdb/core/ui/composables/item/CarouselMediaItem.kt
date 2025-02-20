@@ -73,7 +73,6 @@ fun CarouselMediaItem(
                     key = { index -> if (animationEnabled) mediaItemList[index].id else index }
                 ) { index ->
 
-
                     // Adding some padding at the start
                     if (index == 0) {
                         Spacer(modifier = Modifier.width(paddingHorizontal))

@@ -65,6 +65,33 @@ fun TopBarLogo(
             }
 
         },
+        title = {
+
+            val startMargin = if (shareLink.isNotNullOrBlank()) {
+                LocalMinimumInteractiveComponentSize.current
+            } else {
+                0.dp
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = startMargin),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+
+                Image(
+                    modifier = Modifier
+                        .size(Dimens.topBarIconSize)
+                        .clickable {
+                            onLogoClick()
+                        },
+                    painter = painterResource(id = R.drawable.img_logo),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(backgroundColor.getOnBackgroundColor())
+                )
+            }
+        },
         actions = {
 
             if (shareLink.isNotNullOrBlank()) {
@@ -107,33 +134,6 @@ fun TopBarLogo(
                 )
             }
         },
-        title = {
-
-            val startMargin = if (shareLink.isNotNullOrBlank()) {
-                LocalMinimumInteractiveComponentSize.current
-            } else {
-                0.dp
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = startMargin),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-
-                Image(
-                    modifier = Modifier
-                        .size(Dimens.topBarIconSize)
-                        .clickable {
-                            onLogoClick()
-                        },
-                    painter = painterResource(id = R.drawable.img_logo),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(backgroundColor.getOnBackgroundColor())
-                )
-            }
-        }
     )
 }
 

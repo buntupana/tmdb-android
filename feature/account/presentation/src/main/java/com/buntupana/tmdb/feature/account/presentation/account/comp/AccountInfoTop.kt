@@ -13,9 +13,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.account.presentation.R
 
@@ -37,6 +43,9 @@ fun AccountInfoTop(
         modifier = modifier
             .background(PrimaryColor)
     ) {
+
+        var avatarDominantColor by remember { mutableStateOf(SecondaryColor) }
+
         Image(
             modifier = Modifier
                 .matchParentSize()
@@ -45,7 +54,8 @@ fun AccountInfoTop(
                 .background(PrimaryColor),
             painter = painterResource(R.drawable.img_account_background),
             contentDescription = null,
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            colorFilter = ColorFilter.tint(avatarDominantColor)
         )
         Row(
             modifier = Modifier
@@ -55,9 +65,12 @@ fun AccountInfoTop(
             ImageFromUrl(
                 modifier = Modifier
                     .size(100.dp)
-                    .clip(CircleShape),
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.background),
                 imageUrl = avatarUrl
-            )
+            ) { dominantColor ->
+                avatarDominantColor = dominantColor
+            }
             Spacer(Modifier.padding(horizontal = Dimens.padding.vertical))
             Text(
                 text = username.orEmpty(),

@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.episodes.comp
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
@@ -108,6 +110,7 @@ fun EpisodeSubtitle(
                         Row(
                             modifier = Modifier
                                 .background(SecondaryColor)
+                                .animateContentSize()
                                 .clickable { onRateClick() }
                                 .padding(horizontal = 8.dp, vertical = 2.dp),
                             verticalAlignment = Alignment.CenterVertically
@@ -119,10 +122,15 @@ fun EpisodeSubtitle(
                                 )
                             } else {
                                 Text(
-                                    text = stringResource(
-                                        R.string.text_yours_is,
-                                        episode.userRating!!
-                                    ),
+                                    text = stringResource(R.string.text_yours_is),
+                                    color = MaterialTheme.colorScheme.background
+                                )
+                                VerticalTextRoulette(
+                                    text = " ${episode.userRating}",
+                                    color = MaterialTheme.colorScheme.background
+                                )
+                                Text(
+                                    text = "%",
                                     color = MaterialTheme.colorScheme.background
                                 )
                             }

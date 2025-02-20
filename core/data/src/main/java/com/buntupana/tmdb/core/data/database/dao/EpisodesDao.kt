@@ -13,7 +13,7 @@ abstract class EpisodesDao {
     @Upsert
     abstract suspend fun upsertEpisodes(episodesEntityList: List<EpisodeEntity>)
 
-    @Query("SELECT * FROM episodeentity WHERE showId = :showId AND seasonNumber = :seasonNumber")
+    @Query("SELECT * FROM episodeentity WHERE showId = :showId AND seasonNumber = :seasonNumber ORDER BY episodeNumber ASC")
     abstract fun getEpisodes(showId: Long, seasonNumber: Int): Flow<List<EpisodeEntity>>
 
     @Query("DELETE FROM episodeentity WHERE showId = :showId AND seasonNumber = :seasonNumber")

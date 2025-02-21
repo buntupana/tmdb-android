@@ -109,6 +109,7 @@ fun MovieDetailsEntity.toModel(
     return MovieDetails(
         id = id,
         title = title,
+        originalTitle = originalTitle,
         posterUrl = posterUrl,
         backdropUrl = backdropUrl,
         trailerUrl = getVideoTrailerUrl(videoList),

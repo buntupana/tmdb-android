@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +29,8 @@ import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.util.IconButton
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 import com.buntupana.tmdb.core.ui.R as RCore
@@ -147,7 +148,8 @@ fun ListDetailHeader(
                     Row {
 
                         IconButton(
-                            onClick = onEditClick
+                            onClick = onEditClick,
+                            rippleColor = PrimaryColor.getOnBackgroundColor()
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Edit,
@@ -157,7 +159,8 @@ fun ListDetailHeader(
                         }
 
                         IconButton(
-                            onClick = onDeleteClick
+                            onClick = onDeleteClick,
+                            rippleColor = PrimaryColor.getOnBackgroundColor()
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Delete,

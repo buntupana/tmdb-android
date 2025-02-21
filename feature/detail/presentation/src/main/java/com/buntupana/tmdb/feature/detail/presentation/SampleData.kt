@@ -101,6 +101,7 @@ val crewTvShowPersonSample = Person.Crew.TvShow(
 val mediaDetailsMovieSample = MediaDetails.Movie(
     id = 0L,
     title = "Thor: Love and Thunder",
+    originalTitle = "Thor: Thunder and Love",
     posterUrl = "test",
     backdropUrl = "test",
     trailerUrl = "test",
@@ -190,7 +191,8 @@ val seasonSample = Season(
 
 val mediaDetailsTvShowSample = MediaDetails.TvShow(
     id = 0L,
-    title = "Thor: Love and Thunder",
+    title = "Generation Kill",
+    originalTitle = "Kill Generation",
     posterUrl = "test",
     backdropUrl = "test",
     trailerUrl = "test",

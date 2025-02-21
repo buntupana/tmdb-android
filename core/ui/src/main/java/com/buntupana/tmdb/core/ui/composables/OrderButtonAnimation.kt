@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +22,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.TextButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.panabuntu.tmdb.core.common.model.Order
 
@@ -46,6 +46,7 @@ fun OrderButtonAnimation(
 
     TextButton(
         modifier = modifier,
+        rippleColor = textColor,
         onClick = {
             initialOrder = when (initialOrder) {
                 Order.ASC -> Order.DESC

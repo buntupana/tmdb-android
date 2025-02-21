@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
@@ -53,6 +54,7 @@ import com.buntupana.tmdb.feature.detail.presentation.media.comp.MainInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.RecommendationsHorizontal
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.SeasonsSection
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
+import com.buntupana.tmdb.feature.detail.presentation.person.comp.ExternalLinksRow
 import com.panabuntu.tmdb.core.common.entity.MediaType
 
 @Composable
@@ -252,7 +254,10 @@ fun MediaDetailContent(
         AnimatedVisibility(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding()),
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding()
+                ),
             visible = state.isLoading.not(),
             enter = fadeIn(),
             exit = fadeOut()
@@ -280,7 +285,8 @@ fun MediaDetailContent(
                     MainInfo(
                         mediaDetails = state.mediaDetails,
                         textColor = backgroundColor.getOnBackgroundColor(),
-                        onItemClick = onPersonClick
+                        onCreatorClick = onPersonClick,
+                        onRatingClick = onRatingClick
                     )
                 }
 
@@ -327,15 +333,23 @@ fun MediaDetailContent(
                         onItemClick = onRecommendationClick
                     )
 
+                    Spacer(modifier = Modifier.height(Dimens.padding.medium))
+
+                    ExternalLinksRow(
+                        modifier = Modifier.padding(start = Dimens.padding.small),
+                        externalLinkList = state.mediaDetails.externalLinkList
+                    )
+
+                    Spacer(modifier = Modifier.height(Dimens.padding.big))
+
                     AdditionalInfo(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = Dimens.padding.big)
                             .padding(horizontal = Dimens.padding.horizontal),
                         mediaDetails = state.mediaDetails
                     )
 
-                    Spacer(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()))
+                    Spacer(modifier = Modifier.height(Dimens.padding.big))
                 }
             }
         }

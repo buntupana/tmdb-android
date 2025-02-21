@@ -31,7 +31,8 @@ fun RecommendationItem(
         modifier = modifier
             .width(itemWidth)
             .padding(Dimens.padding.verticalItem)
-            .clickable { onItemClick(mediaItem.id, mediaItem.mediaType) },
+            .clip(RoundedCornerShape(Dimens.posterRound))
+            .clickable { onItemClick(mediaItem.id, mediaItem.mediaType) }
     ) {
         ImageFromUrl(
             modifier = Modifier

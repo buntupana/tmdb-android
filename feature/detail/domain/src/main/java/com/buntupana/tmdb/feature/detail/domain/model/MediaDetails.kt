@@ -8,6 +8,7 @@ import java.time.LocalDate
 sealed class MediaDetails(
     open val id: Long,
     open val title: String,
+    open val originalTitle: String,
     open val posterUrl: String?,
     open val backdropUrl: String?,
     open val trailerUrl: String,
@@ -37,6 +38,7 @@ sealed class MediaDetails(
     data class Movie(
         override val id: Long,
         override val title: String,
+        override val originalTitle: String,
         override val posterUrl: String?,
         override val backdropUrl: String?,
         override val trailerUrl: String,
@@ -67,6 +69,7 @@ sealed class MediaDetails(
     ) : MediaDetails(
         id = id,
         title = title,
+        originalTitle = originalTitle,
         posterUrl = posterUrl,
         backdropUrl = backdropUrl,
         trailerUrl = trailerUrl,
@@ -96,6 +99,7 @@ sealed class MediaDetails(
     data class TvShow(
         override val id: Long,
         override val title: String,
+        override val originalTitle: String,
         override val posterUrl: String?,
         override val backdropUrl: String?,
         override val trailerUrl: String,
@@ -127,6 +131,7 @@ sealed class MediaDetails(
     ) : MediaDetails(
         id = id,
         title = title,
+        originalTitle = originalTitle,
         posterUrl = posterUrl,
         backdropUrl = backdropUrl,
         trailerUrl = trailerUrl,

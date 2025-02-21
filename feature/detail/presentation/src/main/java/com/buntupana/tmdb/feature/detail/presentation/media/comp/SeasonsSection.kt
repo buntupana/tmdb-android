@@ -14,6 +14,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -107,18 +108,17 @@ fun SeasonsSection(
             }
         }
 
-        Text(
-            modifier = Modifier
-                .clickable {
-                    onAllSeasonsClick()
-                }
-                .padding(
-                    horizontal = Dimens.padding.horizontal,
-                    vertical = Dimens.padding.vertical
-                ),
-            text = stringResource(id = R.string.text_view_all_seasons),
-            style = MaterialTheme.typography.titleMedium
-        )
+        TextButton(
+            onClick = onAllSeasonsClick
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = Dimens.padding.small),
+                text = stringResource(id = R.string.text_view_all_seasons),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
     }
 }
 
@@ -142,7 +142,7 @@ private fun LastEpisode(episode: Episode?) {
 
         Text(buildAnnotatedString {
 
-            append(episode.name.orEmpty())
+            append(episode.name)
 
             append(" (")
 

@@ -35,6 +35,7 @@ class GetTvShowDetailsUseCase @Inject constructor(
                         MediaDetails.TvShow(
                             id = tvShowDetails.id,
                             title = tvShowDetails.title,
+                            originalTitle = tvShowDetails.originalTitle,
                             posterUrl = tvShowDetails.posterUrl,
                             backdropUrl = tvShowDetails.backdropUrl,
                             trailerUrl = tvShowDetails.trailerUrl,

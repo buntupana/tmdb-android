@@ -5,16 +5,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -22,6 +23,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
@@ -30,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.IconButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
@@ -55,6 +58,7 @@ fun TopBarLogo(
         navigationIcon = {
             IconButton(
                 modifier = Modifier,
+                rippleColor = backgroundColor.getOnBackgroundColor(),
                 onClick = onBackClick,
             ) {
                 Icon(
@@ -75,21 +79,26 @@ fun TopBarLogo(
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = startMargin),
+                    .padding(start = startMargin)
+                    .padding(horizontal = Dimens.padding.small),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
 
-                Image(
+                Box(
                     modifier = Modifier
-                        .size(Dimens.topBarIconSize)
-                        .clickable {
-                            onLogoClick()
-                        },
-                    painter = painterResource(id = R.drawable.img_logo),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(backgroundColor.getOnBackgroundColor())
-                )
+                        .clip(RoundedCornerShape(Dimens.posterRound))
+                        .clickable { onLogoClick() }
+                        .padding(horizontal = Dimens.padding.medium)
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .size(Dimens.topBarIconSize),
+                        painter = painterResource(id = R.drawable.img_logo),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(backgroundColor.getOnBackgroundColor())
+                    )
+                }
             }
         },
         actions = {
@@ -107,6 +116,7 @@ fun TopBarLogo(
 
                 IconButton(
                     modifier = Modifier,
+                    rippleColor = backgroundColor.getOnBackgroundColor(),
                     onClick = {
                         context.startActivity(shareIntent)
                     },
@@ -124,6 +134,7 @@ fun TopBarLogo(
             IconButton(
                 modifier = Modifier,
                 onClick = onSearchClick,
+                rippleColor = backgroundColor.getOnBackgroundColor()
             ) {
                 Icon(
                     modifier = Modifier
@@ -136,7 +147,6 @@ fun TopBarLogo(
         },
     )
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable

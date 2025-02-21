@@ -1,13 +1,11 @@
 package com.buntupana.tmdb.feature.detail.presentation.person.comp
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -45,17 +43,17 @@ fun ExternalLinksRow(
                 is ExternalLink.TiktokLink -> R.drawable.ic_tiktok
             }
 
-            Icon(
-                modifier = Modifier
-                    .size(iconSize)
-                    .clickable { uriHandler.openUri(externalLink.link) }
-                    .then(if (iconResId == R.drawable.ic_x) Modifier.padding(4.dp) else Modifier),
-                painter = painterResource(id = iconResId),
-                contentDescription = null,
-            )
+            IconButton(
+                onClick = { uriHandler.openUri(externalLink.link) }
+            ) {
 
-            if (index < externalLinkList.size - 1) {
-                Spacer(modifier = Modifier.width(Dimens.padding.small))
+                Icon(
+                    modifier = Modifier
+                        .size(iconSize)
+                        .then(if (iconResId == R.drawable.ic_x) Modifier.padding(4.dp) else Modifier),
+                    painter = painterResource(id = iconResId),
+                    contentDescription = null,
+                )
             }
         }
 
@@ -72,17 +70,14 @@ fun ExternalLinksRow(
                             )
                     )
                 }
-
-                Icon(
-                    modifier = Modifier
-                        .size(iconSize)
-                        .clickable { uriHandler.openUri(externalLink.link) },
-                    painter = painterResource(id = RCore.drawable.ic_link),
-                    contentDescription = null,
-                )
-
-                if (index < externalLinkList.size - 1) {
-                    Spacer(modifier = Modifier.width(Dimens.padding.small))
+                IconButton(
+                    onClick = { uriHandler.openUri(externalLink.link) }
+                ) {
+                    Icon(
+                        modifier = Modifier,
+                        painter = painterResource(id = RCore.drawable.ic_link),
+                        contentDescription = null,
+                    )
                 }
             }
     }

@@ -62,6 +62,7 @@
 
     // Additional Info
     <string name="text_status">Status</string>
+    <string name="text_original_title">Original Title</string>
     <string name="text_original_language">Original Language</string>
     <string name="text_budget">Budget</string>
     <string name="text_revenue">Revenue</string>

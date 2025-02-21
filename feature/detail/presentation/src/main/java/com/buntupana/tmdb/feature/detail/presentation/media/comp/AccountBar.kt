@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +24,7 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.FavoriteColor
 import com.buntupana.tmdb.core.ui.theme.RatingColor
 import com.buntupana.tmdb.core.ui.theme.WatchListColor
+import com.buntupana.tmdb.core.ui.util.IconButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.panabuntu.tmdb.core.common.util.Const.CHANGE_COLOR_ANIM_DURATION
 import com.buntupana.tmdb.core.ui.R as RCore
@@ -94,7 +94,8 @@ fun AccountBar(
         ) {
 
             IconButton(
-                onClick = onListClick
+                onClick = onListClick,
+                rippleColor = backgroundColor.getOnBackgroundColor(),
             ) {
                 Icon(
                     modifier = Modifier,
@@ -110,6 +111,7 @@ fun AccountBar(
             contentAlignment = Alignment.Center
         ) {
             IconButton(
+                rippleColor = backgroundColor.getOnBackgroundColor(),
                 onClick = onFavoriteClick,
                 enabled = isFavoriteLoading.not()
             ) {
@@ -126,6 +128,7 @@ fun AccountBar(
             contentAlignment = Alignment.Center
         ) {
             IconButton(
+                rippleColor = backgroundColor.getOnBackgroundColor(),
                 onClick = onWatchlistClick,
                 enabled = isWatchlistLoading.not()
             ) {
@@ -146,6 +149,7 @@ fun AccountBar(
                 contentAlignment = Alignment.Center
             ) {
                 IconButton(
+                    rippleColor = backgroundColor.getOnBackgroundColor(),
                     onClick = onRatingClick,
                     enabled = isRatingLoading.not()
                 ) {

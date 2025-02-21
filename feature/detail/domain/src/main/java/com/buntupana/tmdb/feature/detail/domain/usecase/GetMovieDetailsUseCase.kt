@@ -68,6 +68,7 @@ class GetMovieDetailsUseCase @Inject constructor(
                         MediaDetails.Movie(
                             id = movieDetails.id,
                             title = movieDetails.title,
+                            originalTitle = movieDetails.originalTitle,
                             posterUrl = movieDetails.posterUrl,
                             backdropUrl = movieDetails.backdropUrl,
                             trailerUrl = movieDetails.trailerUrl,

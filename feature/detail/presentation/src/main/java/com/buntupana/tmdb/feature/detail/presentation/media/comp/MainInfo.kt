@@ -5,7 +5,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +45,8 @@ import com.buntupana.tmdb.core.ui.composables.widget.UserScore
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.util.TextButton
+import com.buntupana.tmdb.core.ui.util.clickableWithRipple
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
@@ -62,7 +62,8 @@ fun MainInfo(
     modifier: Modifier = Modifier,
     mediaDetails: MediaDetails,
     textColor: Color,
-    onItemClick: (personId: Long) -> Unit
+    onRatingClick: () -> Unit,
+    onCreatorClick: (personId: Long) -> Unit
 ) {
 
     val uriHandler = LocalUriHandler.current
@@ -117,7 +118,7 @@ fun MainInfo(
             verticalAlignment = Alignment.CenterVertically,
         ) {
 
-             Row(
+            Row(
                 modifier = Modifier
                     .weight(1f)
                     .padding(vertical = Dimens.padding.small, horizontal = Dimens.padding.medium),
@@ -164,6 +165,7 @@ fun MainInfo(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     TextButton(
+                        rippleColor = textColor,
                         onClick = { uriHandler.openUri(mediaDetails.trailerUrl) }
                     ) {
                         Image(
@@ -196,6 +198,10 @@ fun MainInfo(
                     modifier = Modifier
                         .padding(top = Dimens.padding.small, bottom = Dimens.padding.medium)
                         .clip(RoundedCornerShape(100.dp))
+                        .clickableWithRipple(
+                            color = PrimaryColor.getOnBackgroundColor(),
+                            onClick = onRatingClick
+                        )
                         .background(PrimaryColor)
                         .border(
                             width = 1.dp,
@@ -348,9 +354,10 @@ fun MainInfo(
                         modifier = Modifier
                             .padding(vertical = Dimens.padding.small)
                             .clip(RoundedCornerShape(Dimens.posterRound))
-                            .clickable {
-                                onItemClick(item.id)
-                            }
+                            .clickableWithRipple(
+                                color = textColor,
+                                onClick = { onCreatorClick(item.id) }
+                            )
                     ) {
                         Text(
                             text = item.name,
@@ -382,7 +389,8 @@ fun MainInfoPreview() {
         modifier = Modifier
             .background(DetailBackgroundColor),
         mediaDetails = mediaDetailsMovieSample,
-        onItemClick = {},
+        onCreatorClick = {},
+        onRatingClick = {},
         textColor = DetailBackgroundColor.getOnBackgroundColor()
     )
 }

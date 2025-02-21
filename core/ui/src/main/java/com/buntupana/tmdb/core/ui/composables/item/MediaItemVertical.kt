@@ -65,7 +65,7 @@ fun MediaItemVertical(
                 val userScoreSize = (36f * maxWidth.value / 120f).dp
 
                 Box(
-                    modifier = Modifier.padding(bottom = userScoreSize/ 2)
+                    modifier = Modifier.padding(bottom = userScoreSize / 2)
                 ) {
                     ImageFromUrl(
                         modifier = Modifier

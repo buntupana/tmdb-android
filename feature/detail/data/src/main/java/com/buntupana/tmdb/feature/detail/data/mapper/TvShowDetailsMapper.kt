@@ -132,6 +132,7 @@ fun TvShowDetailsEntity.toModel(
     return TvShowDetails(
         id = id,
         title = name,
+        originalTitle = originalName.orEmpty(),
         posterUrl = posterUrl,
         backdropUrl = backdropUrl,
         trailerUrl = getVideoTrailerUrl(videoList),

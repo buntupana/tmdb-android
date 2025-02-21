@@ -6,6 +6,7 @@ import java.time.LocalDate
 data class TvShowDetails(
     val id: Long,
     val title: String,
+    val originalTitle: String,
     val posterUrl: String?,
     val backdropUrl: String?,
     val trailerUrl: String,

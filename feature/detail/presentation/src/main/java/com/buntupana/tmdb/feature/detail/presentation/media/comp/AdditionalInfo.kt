@@ -15,7 +15,6 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
-import com.buntupana.tmdb.feature.detail.presentation.person.comp.ExternalLinksRow
 import com.panabuntu.tmdb.core.common.util.toLocalizedString
 
 @Composable
@@ -25,14 +24,6 @@ fun AdditionalInfo(
 ) {
 
     Column(modifier = modifier) {
-
-        ExternalLinksRow(
-            externalLinkList = mediaDetails.externalLinkList
-        )
-
-        if (mediaDetails.externalLinkList.isNotEmpty()) {
-            Spacer(modifier = Modifier.padding(vertical = Dimens.padding.medium))
-        }
 
         val verticalItemPadding = Dimens.padding.small
 
@@ -63,6 +54,16 @@ private fun MovieAdditionalInfo(
             title = stringResource(R.string.text_status),
             value = movieDetails.status
         )
+
+        if (movieDetails.title != movieDetails.originalTitle) {
+
+            Spacer(modifier = Modifier.padding(vertical = verticalItemPadding))
+
+            AdditionalInfoItem(
+                title = stringResource(R.string.text_original_title),
+                value = movieDetails.originalTitle
+            )
+        }
 
         Spacer(modifier = Modifier.padding(vertical = verticalItemPadding))
 
@@ -107,6 +108,16 @@ private fun TvShowAdditionalInfo(
             title = stringResource(R.string.text_type),
             value = tvShowDetails.type
         )
+
+        if (tvShowDetails.title != tvShowDetails.originalTitle) {
+
+            Spacer(modifier = Modifier.padding(vertical = verticalItemPadding))
+
+            AdditionalInfoItem(
+                title = stringResource(R.string.text_original_title),
+                value = tvShowDetails.originalTitle
+            )
+        }
 
         Spacer(modifier = Modifier.padding(vertical = verticalItemPadding))
 

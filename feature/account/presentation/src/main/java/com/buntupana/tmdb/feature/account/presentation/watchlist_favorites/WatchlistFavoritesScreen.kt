@@ -1,6 +1,5 @@
 package com.buntupana.tmdb.feature.account.presentation.watchlist_favorites
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -35,6 +33,7 @@ import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.TopBarTitle
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
@@ -143,7 +142,7 @@ fun WatchlistContent(
             tvShowItems?.loadState?.refresh is LoadState.Loading
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
-                CircularProgressIndicator(
+                CircularProgressIndicatorDelayed(
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
@@ -188,8 +187,7 @@ fun WatchlistContent(
 
             HorizontalPager(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background),
+                    .fillMaxSize(),
                 state = pagerState,
                 beyondViewportPageCount = 1,
             ) { currentPage ->

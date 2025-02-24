@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.common
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -63,7 +64,9 @@ fun HeaderSimple(
             Arrangement.Center
         }
 
-        Column {
+        Column(
+            modifier = Modifier.animateContentSize()
+        ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = buildAnnotatedString {
@@ -96,7 +99,7 @@ private fun CastHeaderPreview() {
         backgroundColor = DetailBackgroundColor,
         posterUrl = null,
         mediaName = "Pain Hustlers",
-        subtitle = "asdf",
+        subtitle = "7 episodes",
         releaseYear = "2023",
         setDominantColor = {}
     )

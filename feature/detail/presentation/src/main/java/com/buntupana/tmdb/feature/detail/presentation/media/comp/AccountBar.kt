@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,7 +33,7 @@ import com.buntupana.tmdb.core.ui.R as RCore
 @Composable
 fun AccountBar(
     modifier: Modifier = Modifier,
-    backgroundColor: Color,
+    iconColor: Color = MaterialTheme.colorScheme.onBackground,
     isFavorite: Boolean,
     isWatchListed: Boolean,
     userRating: Int?,
@@ -49,7 +50,7 @@ fun AccountBar(
     val favoriteTint = getColor(
         isActive = isFavorite,
         activeColor = FavoriteColor,
-        inactiveColor = backgroundColor.getOnBackgroundColor()
+        inactiveColor = iconColor
     )
 
     val animateFavoriteColor by animateColorAsState(
@@ -60,7 +61,7 @@ fun AccountBar(
     val watchListTint = getColor(
         isActive = isWatchListed,
         activeColor = WatchListColor,
-        inactiveColor = backgroundColor.getOnBackgroundColor()
+        inactiveColor = iconColor
     )
 
     val animateWatchlistColor by animateColorAsState(
@@ -72,7 +73,7 @@ fun AccountBar(
         getColor(
             isActive = userRating != null,
             activeColor = RatingColor,
-            inactiveColor = backgroundColor.getOnBackgroundColor()
+            inactiveColor = iconColor
         )
 
     val animateRatingColor by animateColorAsState(
@@ -83,7 +84,6 @@ fun AccountBar(
     Row(
         modifier = modifier
             .clickable(enabled = false) {}
-            .background(backgroundColor)
             .padding(Dimens.padding.medium),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -95,13 +95,13 @@ fun AccountBar(
 
             IconButton(
                 onClick = onListClick,
-                rippleColor = backgroundColor.getOnBackgroundColor(),
+                rippleColor = iconColor,
             ) {
                 Icon(
                     modifier = Modifier,
                     painter = painterResource(RCore.drawable.ic_list),
                     contentDescription = null,
-                    tint = backgroundColor.getOnBackgroundColor()
+                    tint = iconColor
                 )
             }
         }
@@ -111,7 +111,7 @@ fun AccountBar(
             contentAlignment = Alignment.Center
         ) {
             IconButton(
-                rippleColor = backgroundColor.getOnBackgroundColor(),
+                rippleColor = iconColor,
                 onClick = onFavoriteClick,
                 enabled = isFavoriteLoading.not()
             ) {
@@ -128,7 +128,7 @@ fun AccountBar(
             contentAlignment = Alignment.Center
         ) {
             IconButton(
-                rippleColor = backgroundColor.getOnBackgroundColor(),
+                rippleColor = iconColor,
                 onClick = onWatchlistClick,
                 enabled = isWatchlistLoading.not()
             ) {
@@ -149,7 +149,7 @@ fun AccountBar(
                 contentAlignment = Alignment.Center
             ) {
                 IconButton(
-                    rippleColor = backgroundColor.getOnBackgroundColor(),
+                    rippleColor = iconColor,
                     onClick = onRatingClick,
                     enabled = isRatingLoading.not()
                 ) {
@@ -180,9 +180,14 @@ fun AccountBarPreview() {
     var isWatchListed by remember { mutableStateOf(true) }
     var userRating by remember { mutableStateOf<Int?>(20) }
 
+    val backgroundColor = Color.Gray
+
     AccountBar(
-        modifier = Modifier.fillMaxWidth(),
-        backgroundColor = Color.Blue,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(backgroundColor)
+        ,
+        iconColor = backgroundColor.getOnBackgroundColor(),
         isFavorite = isFavorite,
         isWatchListed = isWatchListed,
         userRating = userRating,

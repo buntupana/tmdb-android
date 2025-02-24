@@ -1,5 +1,8 @@
 package com.buntupana.tmdb.feature.detail.presentation.cast
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,7 +33,6 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.ui.util.fadeIn
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.presentation.cast.comp.castList
 import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
@@ -80,8 +82,6 @@ fun CastDetailContent(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    val fadeInEnabled = remember { state.isLoading }
-
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -114,7 +114,6 @@ fun CastDetailContent(
             ) {
                 CircularProgressIndicatorDelayed()
             }
-            return@Scaffold
         }
 
         if (state.isGetContentError) {
@@ -125,26 +124,30 @@ fun CastDetailContent(
                 errorMessage = stringResource(id = R.string.message_loading_content_error),
                 onRetryClick = onRetryClick
             )
-            return@Scaffold
         }
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding())
-                .fadeIn(fadeInEnabled)
+        AnimatedVisibility(
+            visible = state.isLoading.not() && state.isGetContentError.not(),
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
-            castList(
+            LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(systemBackground),
-                personCastList = state.personCastList,
-                personCrewMap = state.personCrewMap,
-                onPersonClick = { onPersonClick(it) }
-            )
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding())
+            ) {
+                castList(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(systemBackground),
+                    personCastList = state.personCastList,
+                    personCrewMap = state.personCrewMap,
+                    onPersonClick = { onPersonClick(it) }
+                )
 
-            item {
-                Spacer(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()))
+                item {
+                    Spacer(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()))
+                }
             }
         }
     }

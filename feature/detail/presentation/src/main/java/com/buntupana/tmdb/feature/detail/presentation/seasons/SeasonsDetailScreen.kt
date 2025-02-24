@@ -1,5 +1,8 @@
 package com.buntupana.tmdb.feature.detail.presentation.seasons
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,7 +34,6 @@ import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.fadeIn
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
@@ -92,8 +94,6 @@ private fun SeasonsContent(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    val fadeInEnabled = remember { state.isLoading }
-
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -128,8 +128,6 @@ private fun SeasonsContent(
             ) {
                 CircularProgressIndicatorDelayed()
             }
-
-            return@Scaffold
         }
 
         if (state.isGetSeasonsError) {
@@ -141,41 +139,44 @@ private fun SeasonsContent(
                 errorMessage = stringResource(id = R.string.message_loading_content_error),
                 onRetryClick = onRetryClick
             )
-
-            return@Scaffold
         }
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding())
-                .fadeIn(fadeInEnabled)
+        AnimatedVisibility(
+            visible = state.isLoading.not() && state.isGetSeasonsError.not(),
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding())
+            ) {
 
-            if (state.seasonList.isNullOrEmpty()) return@LazyColumn
+                if (state.seasonList.isNullOrEmpty()) return@LazyColumn
 
-            items(state.seasonList.size) { index ->
-                val season = state.seasonList[index]
+                items(state.seasonList.size) { index ->
+                    val season = state.seasonList[index]
 
-                if (index != 0) {
-                    HorizontalDivider()
+                    if (index != 0) {
+                        HorizontalDivider()
+                    }
+
+                    SeasonItem(
+                        tvShowName = state.tvShowName,
+                        season = season,
+                        onSeasonClick = {
+                            onSeasonClick(state.tvShowId, season, backgroundColor)
+                        }
+                    )
                 }
 
-                SeasonItem(
-                    tvShowName = state.tvShowName,
-                    season = season,
-                    onSeasonClick = {
-                        onSeasonClick(state.tvShowId, season, backgroundColor)
-                    }
-                )
-            }
-
-            item {
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = Dimens.padding.small + paddingValues.calculateBottomPadding())
-                )
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = Dimens.padding.small + paddingValues.calculateBottomPadding())
+                    )
+                }
             }
         }
     }

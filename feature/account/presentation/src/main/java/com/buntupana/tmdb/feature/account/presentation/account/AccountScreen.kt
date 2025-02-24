@@ -88,7 +88,7 @@ fun AccountScreen(
             onWatchListClick(mediaType)
         },
         onFavoritesClick = {
-                val mediaType = when (viewModel.state.watchlistFilterSelected) {
+                val mediaType = when (viewModel.state.favoritesFilterSelected) {
                     MediaFilter.MOVIES -> MediaType.MOVIE
                     MediaFilter.TV_SHOWS -> MediaType.TV_SHOW
                 }

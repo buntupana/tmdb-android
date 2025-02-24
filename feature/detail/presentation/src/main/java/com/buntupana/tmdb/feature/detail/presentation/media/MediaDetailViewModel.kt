@@ -23,11 +23,15 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.manager.SessionManager
+import com.panabuntu.tmdb.core.common.util.applyDelayFor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+
+// to smooth transitions a delay it's applied
+private const val FIRST_LOAD_DELAY = 300L
 
 @HiltViewModel
 class MediaDetailViewModel @Inject constructor(
@@ -91,10 +95,14 @@ class MediaDetailViewModel @Inject constructor(
 
         state = state.copy(isLoading = isLoading, isGetContentError = false)
 
+        val startRequestMillis = System.currentTimeMillis()
         getMovieDetailsUseCase(navArgs.mediaId).collectLatest { result ->
             result.onError {
                 state = state.copy(isLoading = false, isGetContentError = true)
             }.onSuccess {
+                if (state.mediaDetails == null) {
+                    applyDelayFor(initMillis = startRequestMillis, minDurationDifference = FIRST_LOAD_DELAY)
+                }
                 state =
                     state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
             }
@@ -107,10 +115,14 @@ class MediaDetailViewModel @Inject constructor(
 
         state = state.copy(isLoading = isLoading, isGetContentError = false)
 
+        val startRequestMillis = System.currentTimeMillis()
         getTvShowDetailsUseCase(navArgs.mediaId).collectLatest { result ->
             result.onError {
                 state = state.copy(isLoading = false, isGetContentError = true)
             }.onSuccess {
+                if (state.mediaDetails == null) {
+                    applyDelayFor(initMillis = startRequestMillis, minDurationDifference = FIRST_LOAD_DELAY)
+                }
                 state =
                     state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
             }

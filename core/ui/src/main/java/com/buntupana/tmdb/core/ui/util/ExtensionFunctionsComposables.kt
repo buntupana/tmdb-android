@@ -8,8 +8,6 @@ import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,10 +31,7 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -142,21 +137,6 @@ fun Modifier.isVisible(isVisible: Boolean, animateSize: Boolean = false): Modifi
 
 fun Modifier.isInvisible(isInvisible: Boolean): Modifier {
     return alpha(if (isInvisible) 0f else 1f)
-}
-
-@Composable
-fun Modifier.fadeIn(enabled: Boolean, durationMillis: Int = 400): Modifier {
-
-    var triggerAnimation by remember { mutableStateOf(enabled) }
-
-    val alpha by animateFloatAsState(
-        targetValue = if (triggerAnimation) 0f else 1f,
-        animationSpec = tween(durationMillis = durationMillis)
-    )
-
-    triggerAnimation = false
-
-    return alpha(alpha)
 }
 
 @Composable

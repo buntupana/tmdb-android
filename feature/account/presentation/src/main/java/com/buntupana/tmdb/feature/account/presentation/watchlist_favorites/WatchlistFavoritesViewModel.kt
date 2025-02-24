@@ -22,6 +22,7 @@ import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.model.Order
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -52,6 +53,8 @@ class WatchlistFavoritesViewModel @Inject constructor(
     private var _sideEffect = Channel<WatchlistFavoritesSideEffect>()
     val sideEffect = _sideEffect.receiveAsFlow()
 
+    private var getWatchListData: Job? = null
+
     fun onEvent(event: WatchlistFavoritesEvent) {
         Timber.d("onEvent() called with: event = $event")
         viewModelScope.launch {
@@ -59,70 +62,79 @@ class WatchlistFavoritesViewModel @Inject constructor(
 
                 WatchlistFavoritesEvent.ChangeOrder -> changeOrder()
 
-                WatchlistFavoritesEvent.GetMediaItemList -> getWathlistData()
+                WatchlistFavoritesEvent.GetMediaItemList -> getWatchlistData()
             }
         }
     }
 
-    private suspend fun getWathlistData() {
+    private fun getWatchlistData() {
 
-        val getItemsUseCase: suspend () -> Result<GetMediaItemTotalCountResult, NetworkError> =
-            when (state.screenType) {
-                ScreenType.WATCHLIST -> {
-                    { getWatchlistTotalCountUseCase() }
+        getWatchListData?.cancel()
+
+        getWatchListData = viewModelScope.launch {
+
+            val getItemsUseCase: suspend () -> Result<GetMediaItemTotalCountResult, NetworkError> =
+                when (state.screenType) {
+                    ScreenType.WATCHLIST -> {
+                        { getWatchlistTotalCountUseCase() }
+                    }
+
+                    ScreenType.FAVORITES -> {
+                        { getFavoriteTotalCountUseCase() }
+                    }
                 }
 
-                ScreenType.FAVORITES -> {
-                    { getFavoriteTotalCountUseCase() }
-                }
-            }
+            state = state.copy(
+                isError = false,
+                isLoading = state.movieItemsTotalCount == null || state.tvShowItemsTotalCount == null
+            )
 
-        state = state.copy(
-            isError = false,
-            isLoading = state.movieItemsTotalCount == null || state.tvShowItemsTotalCount == null
-        )
-
-        getItemsUseCase()
-            .onError {
-                state = state.copy(isLoading = false, isError = true)
-            }
-            .onSuccess {
-                state = state.copy(
-                    isLoading = false,
-                    movieItemsTotalCount = it.movieTotalCount,
-                    tvShowItemsTotalCount = it.tvShowTotalCount
-                )
-                if (state.movieItems == null || state.tvShowItems == null) {
-                    getMediaItems(MediaFilter.MOVIES)
-                    getMediaItems(MediaFilter.TV_SHOWS)
-                } else {
-                    _sideEffect.send(WatchlistFavoritesSideEffect.RefreshMediaItemList)
+            getItemsUseCase()
+                .onError {
+                    state = state.copy(isLoading = false, isError = true)
                 }
-            }
+                .onSuccess {
+                    state = state.copy(
+                        isLoading = false,
+                        movieItemsTotalCount = it.movieTotalCount,
+                        tvShowItemsTotalCount = it.tvShowTotalCount
+                    )
+                    if (state.movieItems == null || state.tvShowItems == null) {
+                        getMediaItems(MediaFilter.MOVIES)
+                        getMediaItems(MediaFilter.TV_SHOWS)
+                    } else {
+                        _sideEffect.send(WatchlistFavoritesSideEffect.RefreshMediaItemList)
+                    }
+                }
+        }
     }
 
     private suspend fun getMediaItems(mediaFilter: MediaFilter) {
         Timber.d("getMediaItems() called with: mediaFilter = [$mediaFilter]")
         when {
             mediaFilter == MediaFilter.MOVIES && state.screenType == ScreenType.WATCHLIST -> {
+                state = state.copy(movieItems = null, tvShowItems = null)
                 getMovieWatchlistPagingUseCase(order = state.order).let {
                     state = state.copy(movieItems = it.cachedIn(viewModelScope))
                 }
             }
 
             mediaFilter == MediaFilter.TV_SHOWS && state.screenType == ScreenType.WATCHLIST -> {
+                state = state.copy(tvShowItems = null)
                 getTvShowWatchlistPagingUseCase(order = state.order).let {
                     state = state.copy(tvShowItems = it.cachedIn(viewModelScope))
                 }
             }
 
             mediaFilter == MediaFilter.MOVIES && state.screenType == ScreenType.FAVORITES -> {
+                state = state.copy(movieItems = null)
                 getMovieFavoritesPagingUseCase(order = state.order).let {
                     state = state.copy(movieItems = it.cachedIn(viewModelScope))
                 }
             }
 
             mediaFilter == MediaFilter.TV_SHOWS && state.screenType == ScreenType.FAVORITES -> {
+                state = state.copy(tvShowItems = null)
                 getTvShowFavoritesPagingUseCase(order = state.order).let {
                     state = state.copy(tvShowItems = it.cachedIn(viewModelScope))
                 }
@@ -130,12 +142,12 @@ class WatchlistFavoritesViewModel @Inject constructor(
         }
     }
 
-    private suspend fun changeOrder() {
+    private fun changeOrder() {
         val order = when (state.order) {
             Order.ASC -> Order.DESC
             Order.DESC -> Order.ASC
         }
         state = state.copy(order = order, movieItems = null, tvShowItems = null)
-        getWathlistData()
+        getWatchlistData()
     }
 }

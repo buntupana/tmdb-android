@@ -41,7 +41,6 @@ import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.fadeIn
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
@@ -165,8 +164,6 @@ fun MediaDetailContent(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    val fadeInEnabled = remember { state.isLoading }
-
     Scaffold(
         containerColor = backgroundColor,
         modifier = Modifier
@@ -182,15 +179,24 @@ fun MediaDetailContent(
             )
         },
         bottomBar = {
-            if (state.isLoading.not() && state.isGetContentError.not() && state.isUserLoggedIn) {
-                Column(
-                    Modifier.background(backgroundColor)
-                ) {
+
+            if (state.isUserLoggedIn.not() || state.isLoading || state.isGetContentError) return@Scaffold
+
+            Box(
+                modifier = Modifier.background(backgroundColor)
+            ) {
+
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .background(backgroundColor.getOnBackgroundColor().copy(alpha = 0.05f))
+                ) { }
+
+                Column {
                     AccountBar(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .fadeIn(fadeInEnabled),
-                        backgroundColor = backgroundColor,
+                            .fillMaxWidth(),
+                        iconColor = backgroundColor.getOnBackgroundColor(),
                         isFavorite = state.mediaDetails?.isFavorite ?: false,
                         isWatchListed = state.mediaDetails?.isWatchlisted ?: false,
                         isFavoriteLoading = state.isFavoriteLoading,
@@ -247,21 +253,18 @@ fun MediaDetailContent(
             return@Scaffold
         }
 
-        if (state.mediaDetails == null) {
-            return@Scaffold
-        }
-
         AnimatedVisibility(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    top = paddingValues.calculateTopPadding(),
-                    bottom = paddingValues.calculateBottomPadding()
-                ),
+                .padding(top = paddingValues.calculateTopPadding()),
             visible = state.isLoading.not(),
             enter = fadeIn(),
             exit = fadeOut()
         ) {
+
+            if (state.mediaDetails == null) {
+                return@AnimatedVisibility
+            }
 
             Column(
                 modifier = Modifier
@@ -336,7 +339,7 @@ fun MediaDetailContent(
                     Spacer(modifier = Modifier.height(Dimens.padding.medium))
 
                     ExternalLinksRow(
-                        modifier = Modifier.padding(start = Dimens.padding.small),
+                        modifier = Modifier.padding(start = 10.dp),
                         externalLinkList = state.mediaDetails.externalLinkList
                     )
 
@@ -349,7 +352,12 @@ fun MediaDetailContent(
                         mediaDetails = state.mediaDetails
                     )
 
-                    Spacer(modifier = Modifier.height(Dimens.padding.big))
+                    Spacer(
+                        modifier = Modifier
+                            .height(
+                                paddingValues.calculateBottomPadding() + Dimens.padding.big
+                            )
+                    )
                 }
             }
         }

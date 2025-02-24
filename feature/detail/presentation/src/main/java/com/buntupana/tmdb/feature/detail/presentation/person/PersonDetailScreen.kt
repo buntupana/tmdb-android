@@ -185,7 +185,7 @@ fun PersonDetailsContentPreview() {
 
     PersonDetailContent(
         state = PersonDetailState(
-            isLoading = true,
+            isLoading = false,
             isGetPersonError = false,
             personDetails = personDetailsSample
         ),

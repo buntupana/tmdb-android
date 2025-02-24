@@ -5,6 +5,7 @@ import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.PersonDetai
 import com.buntupana.tmdb.feature.detail.domain.model.PersonDetails
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 import java.time.LocalDate
+import java.time.Period
 import java.time.format.DateTimeParseException
 
 fun PersonDetailsRaw.toModel(
@@ -34,9 +35,9 @@ fun PersonDetailsRaw.toModel(
 
     // Getting person age
     val age = if (deathDateLocal != null && birthDateLocal != null) {
-        deathDateLocal.year - birthDateLocal.year
+        Period.between(birthDateLocal, deathDateLocal).years
     } else if (birthDateLocal != null) {
-        LocalDate.now().year - birthDateLocal.year
+        Period.between(birthDateLocal, LocalDate.now()).years
     } else {
         0
     }

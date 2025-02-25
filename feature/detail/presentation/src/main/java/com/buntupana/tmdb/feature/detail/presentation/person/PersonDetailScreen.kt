@@ -179,7 +179,7 @@ fun PersonDetailContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, heightDp = 1000)
 @Composable
 fun PersonDetailsContentPreview() {
 

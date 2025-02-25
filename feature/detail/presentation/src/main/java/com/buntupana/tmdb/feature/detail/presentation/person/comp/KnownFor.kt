@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.spToDp
+import com.buntupana.tmdb.core.ui.util.toDp
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.creditItemPersonSample
@@ -114,7 +114,7 @@ fun KnownFor(
                     val lineHeight =
                         MaterialTheme.typography.bodyLarge.lineHeight * nameExtraLinesCount
                     Spacer(
-                        modifier = Modifier.height(spToDp(lineHeight))
+                        modifier = Modifier.height(toDp(lineHeight))
                     )
                 }
                 if (index < itemList.size - 1) {

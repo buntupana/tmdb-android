@@ -35,8 +35,8 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.TertiaryDarkColor
 import com.buntupana.tmdb.core.ui.theme.TertiaryLightColor
-import com.buntupana.tmdb.core.ui.util.dpToPx
 import com.buntupana.tmdb.core.ui.util.toDp
+import com.buntupana.tmdb.core.ui.util.toPx
 
 
 @Composable
@@ -71,7 +71,7 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
     ) {
 
         val backGroundCollapsedWidth = if (textWidths[selectedIndex] == 0) {
-            MIN_UNSELECTED_ITEM_WIDTH.dpToPx().toInt()
+            MIN_UNSELECTED_ITEM_WIDTH.toPx().toInt()
         } else {
             textWidths[selectedIndex]
         }

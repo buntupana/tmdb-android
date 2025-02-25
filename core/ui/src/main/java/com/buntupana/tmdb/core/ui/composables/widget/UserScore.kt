@@ -33,7 +33,7 @@ import com.buntupana.tmdb.core.ui.theme.LowScoreColor
 import com.buntupana.tmdb.core.ui.theme.MediumScoreColor
 import com.buntupana.tmdb.core.ui.theme.NoScoreColor
 import com.buntupana.tmdb.core.ui.theme.PrimaryDarkColor
-import com.buntupana.tmdb.core.ui.util.dpToSp
+import com.buntupana.tmdb.core.ui.util.toSp
 
 @Composable
 fun UserScore(
@@ -90,8 +90,8 @@ fun UserScore(
 
         // Calc dimension values for texts
         val textPadding = dimensionRef * 17f / 100f
-        val textSize = dpToSp(dp = dimensionRef * 34f / 100f)
-        val symbolSize = dpToSp(dp = dimensionRef * 10f / 100f)
+        val textSize = toSp(dp = dimensionRef * 34f / 100f)
+        val symbolSize = toSp(dp = dimensionRef * 10f / 100f)
 
         Row(
             modifier = Modifier

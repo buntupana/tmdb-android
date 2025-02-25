@@ -6,18 +6,13 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -42,11 +37,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,6 +58,8 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.util.TextButton
+import com.buntupana.tmdb.core.ui.util.toPx
 
 @Composable
 fun OutlinedText(
@@ -84,7 +83,10 @@ fun OutlinedText(
                 .clip(RoundedCornerShape(cornerRound))
                 .background(backgroundColor)
                 .border(BorderStroke(1.dp, outlineColor), RoundedCornerShape(cornerRound))
-                .padding(horizontal = internalHorizontalPadding, vertical = internalVerticalPadding),
+                .padding(
+                    horizontal = internalHorizontalPadding,
+                    vertical = internalVerticalPadding
+                ),
             text = text,
             color = color,
             fontWeight = fontWeight,
@@ -245,64 +247,120 @@ fun ExpandableText(
 
         Text(
             modifier = Modifier
-                .fillMaxSize()
                 .animateContentSize(),
             text = text,
             fontSize = fontSize,
             fontWeight = fontWeight,
-            maxLines = if (textExpanded) 999999999 else collapsedVisibleLines,
+            maxLines = if (textExpanded) Int.MAX_VALUE else collapsedVisibleLines,
             onTextLayout = {
                 if (!textExpanded) {
                     textExpanded = it.lineCount < collapsedVisibleLines && textExpanded == false
                 }
             }
         )
-        if (textExpanded.not()) {
+
+        if (textExpanded) return@Box
+
+        Box(
+            Modifier
+                .align(Alignment.BottomEnd),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+
+            val gradientMargin = 32.dp
+            var buttonHeight by remember { mutableStateOf(0.dp) }
+            var buttonWidth by remember { mutableStateOf(0.dp) }
+
             Row(
-                modifier = Modifier
-                    .height(IntrinsicSize.Min)
-                    .align(Alignment.BottomEnd),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.size(
+                    width = buttonWidth + buttonHeight,
+                    height = buttonHeight + gradientMargin
+                )
             ) {
-                Spacer(
+
+                Box(
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxHeight()
+                        .width(buttonHeight + gradientMargin)
                         .background(
-                            Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    MaterialTheme.colorScheme.background
+                            Brush.radialGradient(
+                                colorStops = arrayOf(
+                                    0f to MaterialTheme.colorScheme.background,
+                                    0.5f to MaterialTheme.colorScheme.background,
+                                    1f to Color.Transparent
                                 ),
-                                tileMode = TileMode.Mirror
+                                center = Offset(
+                                    x = (buttonHeight + gradientMargin).toPx(),
+                                    y = (buttonHeight + gradientMargin).toPx()
+                                ),
+                                radius = (buttonHeight + gradientMargin).toPx()
                             )
                         )
-                )
-                Row(
+
+                ) {}
+
+                Box(
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.background)
-                        .padding(Dimens.padding.small)
-                        .clickable {
-                            textExpanded = true
-                        },
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.text_read_more),
-                        color = SecondaryColor,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Image(
-                        modifier = Modifier.size(16.dp),
-                        painter = painterResource(id = R.drawable.ic_arrow_right),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(SecondaryColor)
-                    )
-                }
+                        .fillMaxHeight()
+                        .weight(1f)
+                        .background(
+                            Brush.verticalGradient(
+                                colorStops = arrayOf(
+                                    0f to Color.Transparent,
+                                    0.5f to MaterialTheme.colorScheme.background,
+                                    1f to MaterialTheme.colorScheme.background
+                                ),
+                            )
+                        )
+                ) {}
+            }
+
+            val density = LocalDensity.current
+
+            TextButton(
+                modifier = Modifier
+                    .onGloballyPositioned {
+                        with(density) {
+                            buttonHeight = it.size.height.toDp()
+                            buttonWidth = it.size.width.toDp()
+                        }
+                    },
+                onClick = { textExpanded = true },
+                rippleColor = MaterialTheme.colorScheme.onBackground,
+            ) {
+                Text(
+                    text = stringResource(id = R.string.text_read_more),
+                    color = SecondaryColor,
+                    fontWeight = FontWeight.Bold
+                )
+                Image(
+                    modifier = Modifier.size(16.dp),
+                    painter = painterResource(id = R.drawable.ic_arrow_right),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(SecondaryColor)
+                )
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ExpandableTextPreview() {
+    ExpandableText(
+        text = """
+            111111111111111111111111111111111111111111111111111
+            222222222222222222222222222222222222222222222222222
+            333333333333333333333333333333333333333333333333333
+            444444444444444444444444444444444444444444444444444
+            555555555555555555555555555555555555555555555555555
+            666666666666666666666666666666666666666666666666666
+            777777777777777777777777777777777777777777777777777
+            888888888888888888888888888888888888888888888888888
+            999999999999999999999999999999999999999999999999999
+            """.trimIndent(),
+        collapsedVisibleLines = 8
+    )
 }
 
 @Composable
@@ -326,23 +384,6 @@ fun TextWithIcon(
         )
     }
 
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ExpandableTextPreview() {
-    ExpandableText(
-        text = """
-            1111111111111111111111111111111111
-            2222222222222222222222222222222222
-            3333333333333333333333333333333333
-            4444444444444444444444444444444444
-            5555555555555555555555555555555555
-            6666666666666666666666666666666666
-            7777777777777777777777777777777777
-            """.trimIndent(),
-        collapsedVisibleLines = 8
-    )
 }
 
 @Preview(showBackground = true)

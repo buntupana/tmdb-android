@@ -146,13 +146,13 @@ fun Int.toDp() = with(LocalDensity.current) { this@toDp.toDp() }
 fun Float.toDp() = with(LocalDensity.current) { this@toDp.toDp() }
 
 @Composable
-fun Dp.dpToPx() = with(LocalDensity.current) { this@dpToPx.toPx() }
+fun Dp.toPx() = with(LocalDensity.current) { this@toPx.toPx() }
 
 @Composable
-fun dpToSp(dp: Dp) = with(LocalDensity.current) { dp.toSp() }
+fun toSp(dp: Dp) = with(LocalDensity.current) { dp.toSp() }
 
 @Composable
-fun spToDp(sp: TextUnit) = with(LocalDensity.current) { sp.toDp() }
+fun toDp(sp: TextUnit) = with(LocalDensity.current) { sp.toDp() }
 
 @Composable
 @ReadOnlyComposable

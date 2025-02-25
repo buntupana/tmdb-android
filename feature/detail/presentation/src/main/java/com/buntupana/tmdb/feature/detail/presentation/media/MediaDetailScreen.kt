@@ -319,12 +319,12 @@ fun MediaDetailContent(
                             lastEpisode = state.mediaDetails.lastEpisode,
                             nextEpisode = state.mediaDetails.nextEpisode,
                             onLastSeasonClick = { season ->
-                                onSeasonClick(state.mediaId, season, state.backgroundColor)
+                                onSeasonClick(state.mediaId, season, backgroundColor)
                             },
                             onAllSeasonsClick = {
                                 onAllSeasonsClick(
                                     state.mediaDetails,
-                                    state.backgroundColor
+                                    backgroundColor
                                 )
                             }
                         )

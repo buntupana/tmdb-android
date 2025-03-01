@@ -16,7 +16,7 @@ data class TvShowDetailsRaw(
     val genres: List<Genre>,
     @SerialName("first_air_date")
     val firstAirDate: String? = null,
-    val adult: Boolean? = null,
+    val adult: Boolean = false,
     @SerialName("created_by")
     val createdBy: List<CreatedBy>,
     @SerialName("episode_run_time")

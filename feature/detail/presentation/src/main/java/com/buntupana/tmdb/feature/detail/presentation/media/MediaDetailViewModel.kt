@@ -143,7 +143,7 @@ class MediaDetailViewModel @Inject constructor(
         setMediaFavoriteUseCase(
             mediaType = state.mediaDetails?.mediaType!!,
             mediaId = state.mediaDetails?.id!!,
-            favorite = state.mediaDetails?.isFavorite!!
+            isFavorite = state.mediaDetails?.isFavorite!!
         ).onError {
             setFavoriteInternal(
                 isFavorite = state.mediaDetails?.isFavorite?.not() ?: false,

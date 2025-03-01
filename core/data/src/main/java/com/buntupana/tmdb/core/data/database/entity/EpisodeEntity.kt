@@ -3,7 +3,7 @@ package com.buntupana.tmdb.core.data.database.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "episode")
 data class EpisodeEntity(
     @PrimaryKey
     val id: Long,

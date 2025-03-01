@@ -40,6 +40,8 @@ fun <L : DefaultItem> LazyColumnGeneric(
         }
     }
 
+    if (itemList.itemCount == 0) return
+
     LazyColumn(
         modifier = modifier,
         state = state,
@@ -76,8 +78,9 @@ fun <L : DefaultItem> LazyRowGeneric(
 
     if (itemList.itemCount == 0 && itemList.loadState.refresh is LoadState.NotLoading) {
         noResultContent()
-        return
     }
+
+    if (itemList.itemCount == 0) return
 
     LazyRow(
         modifier = modifier,

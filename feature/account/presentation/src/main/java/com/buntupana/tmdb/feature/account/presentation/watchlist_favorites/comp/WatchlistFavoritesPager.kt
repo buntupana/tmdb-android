@@ -28,7 +28,7 @@ import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
-fun WatchlistPager(
+fun WatchlistFavoritePager(
     modifier: Modifier = Modifier,
     state: LazyListState = rememberLazyListState(),
     navigationBarPadding: Dp,
@@ -84,7 +84,7 @@ private fun WatchlistPagerPreview() {
         )
     )
 
-    WatchlistPager(
+    WatchlistFavoritePager(
         modifier = Modifier.fillMaxSize(),
         pagingItems = flowOf(itemsList).collectAsLazyPagingItems(),
         navigationBarPadding = 0.dp,

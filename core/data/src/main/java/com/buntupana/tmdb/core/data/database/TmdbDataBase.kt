@@ -4,20 +4,32 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.buntupana.tmdb.core.data.database.dao.AnyMediaDao
 import com.buntupana.tmdb.core.data.database.dao.EpisodesDao
-import com.buntupana.tmdb.core.data.database.dao.MovieDetailsDao
-import com.buntupana.tmdb.core.data.database.dao.TvShowDetailsDao
+import com.buntupana.tmdb.core.data.database.dao.FavoriteDao
+import com.buntupana.tmdb.core.data.database.dao.MovieDao
+import com.buntupana.tmdb.core.data.database.dao.RemoteKeyDao
+import com.buntupana.tmdb.core.data.database.dao.TvShowDao
+import com.buntupana.tmdb.core.data.database.dao.WatchlistDao
+import com.buntupana.tmdb.core.data.database.entity.AnyMediaEntity
 import com.buntupana.tmdb.core.data.database.entity.EpisodeEntity
-import com.buntupana.tmdb.core.data.database.entity.MovieDetailsEntity
-import com.buntupana.tmdb.core.data.database.entity.TvShowDetailsEntity
+import com.buntupana.tmdb.core.data.database.entity.FavoriteEntity
+import com.buntupana.tmdb.core.data.database.entity.MovieEntity
+import com.buntupana.tmdb.core.data.database.entity.RemoteKeyEntity
+import com.buntupana.tmdb.core.data.database.entity.TvShowEntity
+import com.buntupana.tmdb.core.data.database.entity.WatchlistEntity
 
 @Database(
     entities = [
-        MovieDetailsEntity::class,
-        TvShowDetailsEntity::class,
-        EpisodeEntity::class
+        RemoteKeyEntity::class,
+        MovieEntity::class,
+        TvShowEntity::class,
+        EpisodeEntity::class,
+        AnyMediaEntity::class,
+        WatchlistEntity::class,
+        FavoriteEntity::class
     ],
-    version = 2,
+    version = 1,
     exportSchema = false,
 )
 abstract class TmdbDataBase : RoomDatabase() {
@@ -33,9 +45,17 @@ abstract class TmdbDataBase : RoomDatabase() {
         }
     }
 
-    abstract val movieDetailsDao: MovieDetailsDao
+    abstract val remoteKeyDao: RemoteKeyDao
 
-    abstract val tvShowDetailsDao: TvShowDetailsDao
+    abstract val movieDao: MovieDao
+
+    abstract val tvShowDao: TvShowDao
 
     abstract val episodesDao: EpisodesDao
+
+    abstract val anyMediaDao: AnyMediaDao
+
+    abstract val watchlistDao: WatchlistDao
+
+    abstract val favoriteDao: FavoriteDao
 }

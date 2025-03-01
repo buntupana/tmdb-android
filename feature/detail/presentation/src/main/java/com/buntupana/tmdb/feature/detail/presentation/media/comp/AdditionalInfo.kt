@@ -76,14 +76,14 @@ private fun MovieAdditionalInfo(
 
         AdditionalInfoItem(
             title = stringResource(R.string.text_budget),
-            value = if (movieDetails.budget == 0L) " - " else "$${movieDetails.budget.toLocalizedString()}"
+            value = if (movieDetails.budget == null || movieDetails.budget == 0L) " - " else "$${movieDetails.budget?.toLocalizedString()}"
         )
 
         Spacer(modifier = Modifier.padding(vertical = verticalItemPadding))
 
         AdditionalInfoItem(
             title = stringResource(R.string.text_revenue),
-            value = if (movieDetails.revenue == 0L) " - " else "$${movieDetails.revenue.toLocalizedString()}"
+            value = if (movieDetails.revenue == null || movieDetails.revenue == 0L) " - " else "$${movieDetails.revenue?.toLocalizedString()}"
         )
     }
 }

@@ -1,7 +1,10 @@
 package com.buntupana.tmdb.feature.account.di
 
-import com.buntupana.tmdb.core.data.database.dao.MovieDetailsDao
-import com.buntupana.tmdb.core.data.database.dao.TvShowDetailsDao
+import com.buntupana.tmdb.core.data.database.dao.FavoriteDao
+import com.buntupana.tmdb.core.data.database.dao.MovieDao
+import com.buntupana.tmdb.core.data.database.dao.RemoteKeyDao
+import com.buntupana.tmdb.core.data.database.dao.TvShowDao
+import com.buntupana.tmdb.core.data.database.dao.WatchlistDao
 import com.buntupana.tmdb.core.di.CoreCommonModule
 import com.buntupana.tmdb.feature.account.data.remote_data_source.AccountRemoteDataSource
 import com.buntupana.tmdb.feature.account.data.repository.AccountRepositoryImpl
@@ -22,15 +25,21 @@ class AccountModule {
     @Provides
     fun providesAccountRepository(
         accountRemoteDataSource: AccountRemoteDataSource,
-        movieDetailsDao: MovieDetailsDao,
-        tvShowDetailsDao: TvShowDetailsDao,
+        movieDao: MovieDao,
+        tvShowDao: TvShowDao,
+        watchlistDao: WatchlistDao,
+        favoriteDao: FavoriteDao,
+        remoteKeyDao: RemoteKeyDao,
         sessionManager: SessionManager,
         urlProvider: UrlProvider
     ): AccountRepository {
         return AccountRepositoryImpl(
             accountRemoteDataSource = accountRemoteDataSource,
-            movieDetailsDao = movieDetailsDao,
-            tvShowDetailsDao = tvShowDetailsDao,
+            movieDao = movieDao,
+            tvShowDao = tvShowDao,
+            watchlistDao = watchlistDao,
+            favoriteDao = favoriteDao,
+            remoteKeyDao = remoteKeyDao,
             sessionManager = sessionManager,
             urlProvider = urlProvider
         )

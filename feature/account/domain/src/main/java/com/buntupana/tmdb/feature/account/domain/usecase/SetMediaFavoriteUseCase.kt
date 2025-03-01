@@ -13,12 +13,12 @@ class SetMediaFavoriteUseCase @Inject constructor(
     suspend operator fun invoke(
         mediaType: MediaType,
         mediaId: Long,
-        favorite: Boolean
+        isFavorite: Boolean
     ): Result<Unit, NetworkError> {
         return accountRepository.setMediaFavorite(
             mediaId = mediaId,
             mediaType = mediaType,
-            favorite = favorite
+            isFavorite = isFavorite
         )
     }
 }

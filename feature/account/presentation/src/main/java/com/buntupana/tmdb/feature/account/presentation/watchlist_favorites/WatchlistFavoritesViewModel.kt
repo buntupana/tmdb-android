@@ -23,8 +23,8 @@ import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.model.Order
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -50,10 +50,11 @@ class WatchlistFavoritesViewModel @Inject constructor(
     )
         private set
 
-    private var _sideEffect = Channel<WatchlistFavoritesSideEffect>()
-    val sideEffect = _sideEffect.receiveAsFlow()
-
     private var getWatchListData: Job? = null
+
+    init {
+        onEvent(WatchlistFavoritesEvent.GetMediaItemList)
+    }
 
     fun onEvent(event: WatchlistFavoritesEvent) {
         Timber.d("onEvent() called with: event = $event")
@@ -73,7 +74,7 @@ class WatchlistFavoritesViewModel @Inject constructor(
 
         getWatchListData = viewModelScope.launch {
 
-            val getItemsUseCase: suspend () -> Result<GetMediaItemTotalCountResult, NetworkError> =
+            val getItemsUseCase: suspend () -> Flow<Result<GetMediaItemTotalCountResult, NetworkError>> =
                 when (state.screenType) {
                     ScreenType.WATCHLIST -> {
                         { getWatchlistTotalCountUseCase() }
@@ -89,23 +90,23 @@ class WatchlistFavoritesViewModel @Inject constructor(
                 isLoading = state.movieItemsTotalCount == null || state.tvShowItemsTotalCount == null
             )
 
-            getItemsUseCase()
-                .onError {
+            getItemsUseCase().collectLatest { result ->
+                Timber.d("getWatchlistData: collect")
+                result.onError {
                     state = state.copy(isLoading = false, isError = true)
                 }
-                .onSuccess {
-                    state = state.copy(
-                        isLoading = false,
-                        movieItemsTotalCount = it.movieTotalCount,
-                        tvShowItemsTotalCount = it.tvShowTotalCount
-                    )
-                    if (state.movieItems == null || state.tvShowItems == null) {
-                        getMediaItems(MediaFilter.MOVIES)
-                        getMediaItems(MediaFilter.TV_SHOWS)
-                    } else {
-                        _sideEffect.send(WatchlistFavoritesSideEffect.RefreshMediaItemList)
+                    .onSuccess {
+                        state = state.copy(
+                            isLoading = false,
+                            movieItemsTotalCount = it.movieTotalCount,
+                            tvShowItemsTotalCount = it.tvShowTotalCount
+                        )
+                        if (state.movieItems == null || state.tvShowItems == null) {
+                            getMediaItems(MediaFilter.MOVIES)
+                            getMediaItems(MediaFilter.TV_SHOWS)
+                        }
                     }
-                }
+            }
         }
     }
 

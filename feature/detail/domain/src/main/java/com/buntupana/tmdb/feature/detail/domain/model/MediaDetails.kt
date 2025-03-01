@@ -17,7 +17,7 @@ sealed class MediaDetails(
     open val releaseDate: LocalDate?,
     open val voteAverage: Int?,
     open val voteCount: Int,
-    open val runTime: Long,
+    open val runTime: Long?,
     open val genreList: List<String>,
     open val ageCertification: String,
     open val creatorList: List<Person.Crew>,
@@ -48,7 +48,7 @@ sealed class MediaDetails(
         val localReleaseDate: String?,
         override val voteAverage: Int?,
         override val voteCount: Int,
-        override val runTime: Long,
+        override val runTime: Long?,
         override val genreList: List<String>,
         override val ageCertification: String,
         override val creatorList: List<Person.Crew.Movie>,
@@ -62,8 +62,8 @@ sealed class MediaDetails(
         override val isRateable: Boolean,
         override val status: String?,
         override val originalLanguage: String?,
-        val budget: Long,
-        val revenue: Long,
+        val budget: Long?,
+        val revenue: Long?,
         override val externalLinkList: List<ExternalLink>,
         override val shareLink: String
     ) : MediaDetails(

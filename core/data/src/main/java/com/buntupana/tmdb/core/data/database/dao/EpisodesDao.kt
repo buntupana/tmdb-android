@@ -13,16 +13,16 @@ abstract class EpisodesDao {
     @Upsert
     abstract suspend fun upsertEpisodes(episodesEntityList: List<EpisodeEntity>)
 
-    @Query("SELECT * FROM episodeentity WHERE showId = :showId AND seasonNumber = :seasonNumber ORDER BY episodeNumber ASC")
+    @Query("SELECT * FROM episode WHERE showId = :showId AND seasonNumber = :seasonNumber ORDER BY episodeNumber ASC")
     abstract fun getEpisodes(showId: Long, seasonNumber: Int): Flow<List<EpisodeEntity>>
 
-    @Query("DELETE FROM episodeentity WHERE showId = :showId AND seasonNumber = :seasonNumber")
+    @Query("DELETE FROM episode WHERE showId = :showId AND seasonNumber = :seasonNumber")
     abstract suspend fun deleteSeasonEpisodes(showId: Long, seasonNumber: Int)
 
     @Delete
     abstract suspend fun deleteEpisodes(episodesEntityList: List<EpisodeEntity>)
 
-    @Query("UPDATE episodeentity SET userRating = :rating WHERE showId = :tvShowId AND seasonNumber = :seasonNumber AND episodeNumber = :episodeNumber")
+    @Query("UPDATE episode SET userRating = :rating WHERE showId = :tvShowId AND seasonNumber = :seasonNumber AND episodeNumber = :episodeNumber")
     abstract suspend fun updateRating(
         tvShowId: Long,
         seasonNumber: Int,
@@ -30,7 +30,6 @@ abstract class EpisodesDao {
         rating: Int?
     )
 
-    @Query("DELETE FROM episodeentity")
+    @Query("DELETE FROM episode")
     abstract suspend fun clearAll()
-
 }

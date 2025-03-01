@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.core.data.database.entity.TvShowDetailsEntity
+import com.buntupana.tmdb.core.data.database.entity.TvShowEntity
 import com.buntupana.tmdb.core.data.mapper.getGender
 import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ContentRatingsRaw
@@ -26,11 +26,11 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
-fun TvShowDetailsRaw.toEntity(): TvShowDetailsEntity {
+fun TvShowDetailsRaw.toEntity(): TvShowEntity {
 
     val credits = credits?.copy(cast = credits.cast.take(9), crew = credits.crew.take(9))
 
-    return TvShowDetailsEntity(
+    return TvShowEntity(
         id = id,
         name = name.orEmpty(),
         posterPath = posterPath,
@@ -74,7 +74,7 @@ fun TvShowDetailsRaw.toEntity(): TvShowDetailsEntity {
     )
 }
 
-fun TvShowDetailsEntity.toModel(
+fun TvShowEntity.toModel(
     baseUrlPoster: String,
     baseUrlBackdrop: String,
     baseUrlProfile: String,
@@ -98,7 +98,7 @@ fun TvShowDetailsEntity.toModel(
     val videoList = videos?.let { Json.decodeFromString<MediaVideosRaw>(it) }?.toModel().orEmpty()
 
     val runTime =
-        episodeRunTimeList.let { Json.decodeFromString<List<Long>>(it) }.firstOrNull() ?: 0L
+        episodeRunTimeList?.let { Json.decodeFromString<List<Long>>(it) }?.firstOrNull() ?: 0L
 
     val genderList = genreList?.let { Json.decodeFromString<List<Genre>>(it) }
 

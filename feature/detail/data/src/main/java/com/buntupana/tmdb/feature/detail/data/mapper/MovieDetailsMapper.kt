@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.core.data.database.entity.MovieDetailsEntity
+import com.buntupana.tmdb.core.data.database.entity.MovieEntity
 import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsMovieRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ExternalLinksRaw
@@ -22,9 +22,9 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
-fun MovieDetailsRaw.toEntity(): MovieDetailsEntity {
+fun MovieDetailsRaw.toEntity(): MovieEntity {
 
-    return MovieDetailsEntity(
+    return MovieEntity(
         id = id,
         title = title,
         posterPath = posterPath,
@@ -61,7 +61,7 @@ fun MovieDetailsRaw.toEntity(): MovieDetailsEntity {
     )
 }
 
-fun MovieDetailsEntity.toModel(
+fun MovieEntity.toModel(
     baseUrlPoster: String,
     baseUrlBackdrop: String,
     baseUrlProfile: String,
@@ -84,9 +84,9 @@ fun MovieDetailsEntity.toModel(
 
     val videoList = videos?.let { Json.decodeFromString<MediaVideosRaw>(it).toModel() }.orEmpty()
 
-    val genreList = genreList.let { Json.decodeFromString<List<Genre>>(it) }
+    val genreList = genreList?.let { Json.decodeFromString<List<Genre>>(it) }
 
-    val productionCountryCodeList = productionCountryList.let {
+    val productionCountryCodeList = productionCountryList?.let {
         Json.decodeFromString<List<ProductionCountry>>(it)
     }
 
@@ -113,14 +113,14 @@ fun MovieDetailsEntity.toModel(
         posterUrl = posterUrl,
         backdropUrl = backdropUrl,
         trailerUrl = getVideoTrailerUrl(videoList),
-        overview = overview,
-        tagLine = tagline,
+        overview = overview.orEmpty(),
+        tagLine = tagline.orEmpty(),
         releaseDate = releaseLocalDate,
-        userScore = if ((voteCount ?: 0) == 0) null else (voteAverage * 10).toInt(),
+        userScore = if ((voteCount ?: 0) == 0) null else ((voteAverage ?: 0f) * 10).toInt(),
         voteCount = voteCount ?: 0,
         runTime = runtime,
-        genreList = genreList.map { it.name },
-        productionCountryCodeList = productionCountryCodeList.map { it.iso_3166_1 },
+        genreList = genreList?.map { it.name }.orEmpty(),
+        productionCountryCodeList = productionCountryCodeList?.map { it.iso_3166_1 }.orEmpty(),
         releaseDateList = releaseDateList?.results?.map { it.toModel() }.orEmpty(),
         videoList = videoList,
         credits = credits?.toModel(baseUrlProfile = baseUrlProfile) ?: Credits(

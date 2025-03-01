@@ -15,7 +15,7 @@ data class MovieDetails(
     val releaseDate: LocalDate?,
     val userScore: Int?,
     val voteCount: Int,
-    val runTime: Long,
+    val runTime: Long?,
     val genreList: List<String>,
     val productionCountryCodeList: List<String>,
     val releaseDateList: List<ReleaseDate>,
@@ -28,7 +28,7 @@ data class MovieDetails(
     val isRateable: Boolean,
     val status: String?,
     val originalLanguage: String?,
-    val budget: Long,
-    val revenue: Long,
+    val budget: Long?,
+    val revenue: Long?,
     val externalLinkList: List<ExternalLink>
 )

@@ -12,11 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,13 +20,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
@@ -43,13 +34,11 @@ import com.buntupana.tmdb.core.ui.util.isVisible
 import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.account.presentation.R
+import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.comp.WatchlistFavoritePager
 import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.comp.WatchlistFavoriteTabRow
-import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.comp.WatchlistPager
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun WatchlistScreen(
@@ -58,34 +47,6 @@ fun WatchlistScreen(
     onSearchClick: () -> Unit,
     onMediaClick: (mediaItemId: Long, mediaType: MediaType, mainPosterColor: Color?) -> Unit,
 ) {
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    var movieItems by remember { mutableStateOf<LazyPagingItems<MediaItem.Movie>?>(null) }
-    var tvShowItems by remember { mutableStateOf<LazyPagingItems<MediaItem.TvShow>?>(null) }
-
-    movieItems = viewModel.state.movieItems?.collectAsLazyPagingItems()
-    tvShowItems = viewModel.state.tvShowItems?.collectAsLazyPagingItems()
-
-    LaunchedEffect(lifecycleOwner.lifecycle) {
-        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-            viewModel.onEvent(WatchlistFavoritesEvent.GetMediaItemList)
-
-            launch {
-                viewModel.sideEffect.collect { sideEffect ->
-                    Timber.d("WatchlistScreen: sideEffect = $sideEffect")
-                    when (sideEffect) {
-                        WatchlistFavoritesSideEffect.RefreshMediaItemList -> {
-                            movieItems?.refresh()
-                            tvShowItems?.refresh()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     WatchlistContent(
         state = viewModel.state,
         onBackClick = onBackClick,
@@ -204,7 +165,7 @@ fun WatchlistContent(
                     else -> MediaFilter.MOVIES.strRes to movieItems
                 }
 
-                WatchlistPager(
+                WatchlistFavoritePager(
                     modifier = Modifier,
                     navigationBarPadding = paddingValues.calculateBottomPadding(),
                     pagingItems = pagingItems,

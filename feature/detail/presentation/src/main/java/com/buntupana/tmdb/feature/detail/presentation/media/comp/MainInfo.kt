@@ -293,10 +293,10 @@ fun MainInfo(
                     )
                 }
 
-                if (mediaDetails.runTime != 0L) {
+                if (mediaDetails.runTime != null && mediaDetails.runTime != 0L) {
                     HoursMinutesText(
                         modifier = Modifier.padding(horizontal = Dimens.padding.tiny),
-                        time = mediaDetails.runTime,
+                        time = mediaDetails.runTime ?: 0,
                         color = textColor
                     )
                 }

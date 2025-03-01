@@ -18,7 +18,7 @@ class SetMediaWatchListUseCase @Inject constructor(
         return accountRepository.setMediaWatchList(
             mediaId = mediaId,
             mediaType = mediaType,
-            watchlist = watchlist
+            isWatchlisted = watchlist
         )
     }
 }

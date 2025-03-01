@@ -1,11 +1,19 @@
 package com.buntupana.tmdb.feature.account.data.repository
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.buntupana.tmdb.core.data.api.GenericPagingDataSource
-import com.buntupana.tmdb.core.data.database.dao.MovieDetailsDao
-import com.buntupana.tmdb.core.data.database.dao.TvShowDetailsDao
+import androidx.paging.map
+import com.buntupana.tmdb.core.data.api.GenericRemoteMediator
+import com.buntupana.tmdb.core.data.database.dao.FavoriteDao
+import com.buntupana.tmdb.core.data.database.dao.MovieDao
+import com.buntupana.tmdb.core.data.database.dao.RemoteKeyDao
+import com.buntupana.tmdb.core.data.database.dao.TvShowDao
+import com.buntupana.tmdb.core.data.database.dao.WatchlistDao
+import com.buntupana.tmdb.core.data.database.entity.FavoriteEntity
+import com.buntupana.tmdb.core.data.database.entity.WatchlistEntity
+import com.buntupana.tmdb.core.data.mapper.toEntity
 import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.account.data.mapper.toModel
 import com.buntupana.tmdb.feature.account.data.remote_data_source.AccountRemoteDataSource
@@ -23,17 +31,29 @@ import com.panabuntu.tmdb.core.common.model.Order
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import com.panabuntu.tmdb.core.common.util.Const.PAGINATION_SIZE
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class AccountRepositoryImpl @Inject constructor(
     private val accountRemoteDataSource: AccountRemoteDataSource,
-    private val movieDetailsDao: MovieDetailsDao,
-    private val tvShowDetailsDao: TvShowDetailsDao,
+    private val remoteKeyDao: RemoteKeyDao,
+    private val movieDao: MovieDao,
+    private val tvShowDao: TvShowDao,
+    private val watchlistDao: WatchlistDao,
+    private val favoriteDao: FavoriteDao,
     private val urlProvider: UrlProvider,
     private val sessionManager: SessionManager
 ) : AccountRepository {
 
     private val session = sessionManager.session
+
+    private var favoriteMovieTotalCount = MutableStateFlow(0)
+    private var favoriteTvShowTotalCount = MutableStateFlow(0)
+    private var watchlistMovieTotalCount = MutableStateFlow(0)
+    private var watchlistTvShowTotalCount = MutableStateFlow(0)
 
     override suspend fun createRequestToken(): Result<String, NetworkError> {
         return accountRemoteDataSource.createRequestToken().map { it.requestToken }
@@ -58,19 +78,70 @@ class AccountRepositoryImpl @Inject constructor(
             .map { it.toModel(baseUrlAvatar = urlProvider.BASE_URL_AVATAR) }
     }
 
-    override suspend fun getWatchlistMoviesTotalCount(): Result<Int, NetworkError> {
-        return accountRemoteDataSource.getWatchlistMovies(
+    override suspend fun getWatchlistMoviesTotalCount(): Flow<Result<Int, NetworkError>> {
+        val result = accountRemoteDataSource.getWatchlistMovies(
             session.value.accountDetails?.accountObjectId.orEmpty()
-        ).map { result ->
-            result.totalResults
+        ).onSuccess { result ->
+            watchlistMovieTotalCount.value = result.totalResults
+        }
+        return flow {
+            when (result) {
+                is Result.Error -> emit(result)
+                is Result.Success -> {
+                    emitAll(watchlistMovieTotalCount.map { Result.Success(it) })
+                }
+            }
         }
     }
 
-    override suspend fun getFavoriteMoviesTotalCount(): Result<Int, NetworkError> {
-        return accountRemoteDataSource.getFavoriteMovies(
+    override suspend fun getWatchlistTvShowsTotalCount(): Flow<Result<Int, NetworkError>> {
+        val result = accountRemoteDataSource.getWatchlistTvShows(
             session.value.accountDetails?.accountObjectId.orEmpty()
-        ).map { result ->
-            result.totalResults
+        ).onSuccess { result ->
+            watchlistTvShowTotalCount.value = result.totalResults
+        }
+        return flow {
+            when (result) {
+                is Result.Error -> emit(result)
+                is Result.Success -> {
+                    emitAll(watchlistTvShowTotalCount.map { Result.Success(it) })
+                }
+            }
+        }
+    }
+
+    override suspend fun getFavoriteMoviesTotalCount(): Flow<Result<Int, NetworkError>> {
+
+        val result = accountRemoteDataSource.getFavoriteMovies(
+            session.value.accountDetails?.accountObjectId.orEmpty()
+        ).onSuccess {
+            favoriteMovieTotalCount.value = it.totalResults
+        }
+
+        return flow {
+            when (result) {
+                is Result.Error -> emit(result)
+                is Result.Success -> {
+                    emitAll(favoriteMovieTotalCount.map { Result.Success(it) })
+                }
+            }
+        }
+    }
+
+    override suspend fun getFavoriteTvShowsTotalCount(): Flow<Result<Int, NetworkError>> {
+        val result = accountRemoteDataSource.getFavoriteTvShows(
+            session.value.accountDetails?.accountObjectId.orEmpty()
+        ).onSuccess { result ->
+            favoriteTvShowTotalCount.value = result.totalResults
+        }
+
+        return flow {
+            when (result) {
+                is Result.Error -> emit(result)
+                is Result.Success -> {
+                    emitAll(favoriteTvShowTotalCount.map { Result.Success(it) })
+                }
+            }
         }
     }
 
@@ -96,71 +167,101 @@ class AccountRepositoryImpl @Inject constructor(
         }
     }
 
+    @OptIn(ExperimentalPagingApi::class)
     override suspend fun getWatchlistMoviePaging(order: Order): Flow<PagingData<MediaItem.Movie>> {
+
+        val remoteType = "watchlist_movie"
+
         return Pager(
             config = PagingConfig(
                 pageSize = PAGINATION_SIZE,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = {
-                GenericPagingDataSource(
-                    networkCall = { page ->
-                        accountRemoteDataSource.getWatchlistMovies(
-                            accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
-                            page = page,
-                            order = order
-                        )
-                    },
-                    mapItemList = {
-                        it.toModel(
-                            baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                            baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-                        )
-                    }
-                )
-            }
-        ).flow
-    }
-
-    override suspend fun getFavoriteMoviePaging(order: Order): Flow<PagingData<MediaItem.Movie>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = PAGINATION_SIZE,
-                enablePlaceholders = false
+            remoteMediator = GenericRemoteMediator(
+                remoteType = remoteType,
+                networkCall = { page ->
+                    accountRemoteDataSource.getWatchlistMovies(
+                        accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
+                        page = page,
+                        order = order
+                    )
+                },
+                remoteKeyDao = remoteKeyDao,
+                clearTable = {
+                    watchlistDao.clearByMediaType(mediaType = MediaType.MOVIE)
+                    remoteKeyDao.remoteKeyByType(remoteType)
+                },
+                insertNetworkResult = { resultList ->
+                    movieDao.upsert(resultList.toEntity())
+                    watchlistDao.upsert(
+                        resultList.map {
+                            WatchlistEntity(
+                                mediaId = it.id,
+                                mediaType = MediaType.MOVIE
+                            )
+                        }
+                    )
+                }
             ),
             pagingSourceFactory = {
-                GenericPagingDataSource(
-                    networkCall = { page ->
-                        accountRemoteDataSource.getFavoriteMovies(
-                            accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
-                            page = page,
-                            order = order
-                        )
-                    },
-                    mapItemList = {
-                        it.toModel(
-                            baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                            baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-                        )
-                    }
+                movieDao.getWatchlistMovies()
+            }
+        ).flow.map { pagingData ->
+            pagingData.map {
+                it.toModel(
+                    baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
                 )
             }
-        ).flow
-    }
-
-    override suspend fun getWatchlistTvShowsTotalCount(): Result<Int, NetworkError> {
-        return accountRemoteDataSource.getWatchlistTvShows(
-            session.value.accountDetails?.accountObjectId.orEmpty()
-        ).map { result ->
-            result.totalResults
         }
     }
 
-    override suspend fun getFavoriteTvShowsTotalCount(): Result<Int, NetworkError> {
-        return accountRemoteDataSource.getFavoriteTvShows(
-            session.value.accountDetails?.accountObjectId.orEmpty()
-        ).map { result ->
-            result.totalResults
+    @OptIn(ExperimentalPagingApi::class)
+    override suspend fun getFavoriteMoviePaging(order: Order): Flow<PagingData<MediaItem.Movie>> {
+
+        val remoteType = "favorite_movie"
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGINATION_SIZE,
+                enablePlaceholders = false
+            ),
+            remoteMediator = GenericRemoteMediator(
+                remoteType = remoteType,
+                networkCall = { page ->
+                    accountRemoteDataSource.getFavoriteMovies(
+                        accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
+                        page = page,
+                        order = order
+                    )
+                },
+                remoteKeyDao = remoteKeyDao,
+                clearTable = {
+                    favoriteDao.clearByMediaType(mediaType = MediaType.MOVIE)
+                    remoteKeyDao.remoteKeyByType(remoteType)
+                },
+                insertNetworkResult = { resultList ->
+                    movieDao.upsert(resultList.toEntity())
+                    favoriteDao.upsert(
+                        resultList.map {
+                            FavoriteEntity(
+                                mediaId = it.id,
+                                mediaType = MediaType.MOVIE
+                            )
+                        }
+                    )
+                }
+            ),
+            pagingSourceFactory = {
+                movieDao.getFavoriteMovies()
+            }
+        ).flow.map { pagingData ->
+            pagingData.map {
+                it.toModel(
+                    baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                )
+            }
         }
     }
 
@@ -188,72 +289,138 @@ class AccountRepositoryImpl @Inject constructor(
         }
     }
 
+    @OptIn(ExperimentalPagingApi::class)
     override suspend fun getWatchlistTvShowPaging(order: Order): Flow<PagingData<MediaItem.TvShow>> {
+
+        val remoteType = "watchlist_tv_show"
+
         return Pager(
             config = PagingConfig(
                 pageSize = PAGINATION_SIZE,
                 enablePlaceholders = false
             ),
+            remoteMediator = GenericRemoteMediator(
+                remoteType = remoteType,
+                networkCall = { page ->
+                    accountRemoteDataSource.getWatchlistTvShows(
+                        accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
+                        page = page,
+                        order = order
+                    )
+                },
+                remoteKeyDao = remoteKeyDao,
+                clearTable = {
+                    watchlistDao.clearByMediaType(mediaType = MediaType.TV_SHOW)
+                    remoteKeyDao.remoteKeyByType(remoteType)
+                },
+                insertNetworkResult = { resultList ->
+                    tvShowDao.upsert(resultList.toEntity())
+                    watchlistDao.upsert(
+                        resultList.map {
+                            WatchlistEntity(
+                                mediaId = it.id,
+                                mediaType = MediaType.TV_SHOW
+                            )
+                        }
+                    )
+                }
+            ),
             pagingSourceFactory = {
-                GenericPagingDataSource(
-                    networkCall = { page ->
-                        accountRemoteDataSource.getWatchlistTvShows(
-                            accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
-                            page = page,
-                            order = order
-                        )
-                    },
-                    mapItemList = {
-                        it.toModel(
-                            baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                            baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-                        )
-                    }
+                tvShowDao.getWatchlistTvShows()
+            }
+        ).flow.map { pagingData ->
+            pagingData.map {
+                it.toModel(
+                    baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
                 )
             }
-        ).flow
+        }
     }
 
+    @OptIn(ExperimentalPagingApi::class)
     override suspend fun getFavoriteTvShowPaging(order: Order): Flow<PagingData<MediaItem.TvShow>> {
+
+        val remoteType = "favorite_tv_show"
+
         return Pager(
             config = PagingConfig(
                 pageSize = PAGINATION_SIZE,
                 enablePlaceholders = false
             ),
+            remoteMediator = GenericRemoteMediator(
+                remoteType = remoteType,
+                networkCall = { page ->
+                    accountRemoteDataSource.getFavoriteTvShows(
+                        accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
+                        page = page,
+                        order = order
+                    )
+                },
+                remoteKeyDao = remoteKeyDao,
+                clearTable = {
+                    favoriteDao.clearByMediaType(mediaType = MediaType.TV_SHOW)
+                    remoteKeyDao.remoteKeyByType(remoteType)
+                },
+                insertNetworkResult = { resultList ->
+                    tvShowDao.upsert(resultList.toEntity())
+                    favoriteDao.upsert(
+                        resultList.map {
+                            FavoriteEntity(
+                                mediaId = it.id,
+                                mediaType = MediaType.TV_SHOW
+                            )
+                        }
+                    )
+                }
+            ),
             pagingSourceFactory = {
-                GenericPagingDataSource(
-                    networkCall = { page ->
-                        accountRemoteDataSource.getFavoriteTvShows(
-                            accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
-                            page = page,
-                            order = order
-                        )
-                    },
-                    mapItemList = {
-                        it.toModel(
-                            baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                            baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-                        )
-                    }
+                tvShowDao.getFavoriteTvShows()
+            }
+        ).flow.map { pagingData ->
+            pagingData.map {
+                it.toModel(
+                    baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
                 )
             }
-        ).flow
+        }
     }
 
     override suspend fun setMediaFavorite(
         mediaId: Long,
         mediaType: MediaType,
-        favorite: Boolean
+        isFavorite: Boolean
     ): Result<Unit, NetworkError> {
         return accountRemoteDataSource.setMediaFavorite(
             accountId = sessionManager.session.value.accountDetails?.id ?: 0,
             mediaId = mediaId,
             mediaType = mediaType,
-            favorite = favorite
+            favorite = isFavorite
         ).onSuccess {
             when (mediaType) {
-                MediaType.MOVIE -> movieDetailsDao.updateFavorite(mediaId, favorite)
-                MediaType.TV_SHOW -> tvShowDetailsDao.updateFavorite(mediaId, favorite)
+                MediaType.MOVIE -> {
+                    movieDao.updateFavorite(mediaId, isFavorite)
+                    if (isFavorite) {
+                        favoriteMovieTotalCount.value += 1
+                    } else {
+                        favoriteMovieTotalCount.value -= 1
+                    }
+                }
+
+                MediaType.TV_SHOW -> {
+                    tvShowDao.updateFavorite(mediaId, isFavorite)
+                    if (isFavorite) {
+                        favoriteTvShowTotalCount.value += 1
+                    } else {
+                        favoriteTvShowTotalCount.value -= 1
+                    }
+                }
+            }
+            if (isFavorite) {
+                favoriteDao.insert(mediaId, mediaType)
+            } else {
+                favoriteDao.delete(mediaId, mediaType)
             }
         }
     }
@@ -261,17 +428,37 @@ class AccountRepositoryImpl @Inject constructor(
     override suspend fun setMediaWatchList(
         mediaId: Long,
         mediaType: MediaType,
-        watchlist: Boolean
+        isWatchlisted: Boolean
     ): Result<Unit, NetworkError> {
         return accountRemoteDataSource.setMediaWatchlist(
             accountId = sessionManager.session.value.accountDetails?.id ?: 0,
             mediaId = mediaId,
             mediaType = mediaType,
-            watchlist = watchlist
+            watchlist = isWatchlisted
         ).onSuccess {
             when (mediaType) {
-                MediaType.MOVIE -> movieDetailsDao.updateWatchList(mediaId, watchlist)
-                MediaType.TV_SHOW -> tvShowDetailsDao.updateWatchList(mediaId, watchlist)
+                MediaType.MOVIE -> {
+                    movieDao.updateWatchList(mediaId, isWatchlisted)
+                    if (isWatchlisted) {
+                        watchlistMovieTotalCount.value += 1
+                    } else {
+                        watchlistMovieTotalCount.value -= 1
+                    }
+                }
+
+                MediaType.TV_SHOW -> {
+                    tvShowDao.updateWatchList(mediaId, isWatchlisted)
+                    if (isWatchlisted) {
+                        watchlistTvShowTotalCount.value += 1
+                    } else {
+                        watchlistTvShowTotalCount.value -= 1
+                    }
+                }
+            }
+            if (isWatchlisted) {
+                watchlistDao.insert(mediaId, mediaType)
+            } else {
+                watchlistDao.delete(mediaId, mediaType)
             }
         }
     }
@@ -289,8 +476,8 @@ class AccountRepositoryImpl @Inject constructor(
                 mediaId = mediaId
             ).onSuccess {
                 when (mediaType) {
-                    MediaType.MOVIE -> movieDetailsDao.updateRatingAndWatchlist(mediaId, value)
-                    MediaType.TV_SHOW -> tvShowDetailsDao.updateRatingAndWatchlist(mediaId, value)
+                    MediaType.MOVIE -> movieDao.updateRatingAndWatchlist(mediaId, value)
+                    MediaType.TV_SHOW -> tvShowDao.updateRatingAndWatchlist(mediaId, value)
                 }
             }
         } else {
@@ -301,8 +488,8 @@ class AccountRepositoryImpl @Inject constructor(
                 rating = value
             ).onSuccess {
                 when (mediaType) {
-                    MediaType.MOVIE -> movieDetailsDao.updateRatingAndWatchlist(mediaId, value)
-                    MediaType.TV_SHOW -> tvShowDetailsDao.updateRatingAndWatchlist(mediaId, value)
+                    MediaType.MOVIE -> movieDao.updateRatingAndWatchlist(mediaId, value)
+                    MediaType.TV_SHOW -> tvShowDao.updateRatingAndWatchlist(mediaId, value)
                 }
             }
         }

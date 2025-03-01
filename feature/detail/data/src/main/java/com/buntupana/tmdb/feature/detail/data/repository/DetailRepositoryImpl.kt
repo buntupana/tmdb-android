@@ -1,8 +1,8 @@
 package com.buntupana.tmdb.feature.detail.data.repository
 
 import com.buntupana.tmdb.core.data.database.dao.EpisodesDao
-import com.buntupana.tmdb.core.data.database.dao.MovieDetailsDao
-import com.buntupana.tmdb.core.data.database.dao.TvShowDetailsDao
+import com.buntupana.tmdb.core.data.database.dao.MovieDao
+import com.buntupana.tmdb.core.data.database.dao.TvShowDao
 import com.buntupana.tmdb.core.data.util.getFlowResult
 import com.buntupana.tmdb.feature.detail.data.mapper.toEntity
 import com.buntupana.tmdb.feature.detail.data.mapper.toModel
@@ -27,8 +27,8 @@ import javax.inject.Inject
 
 class DetailRepositoryImpl @Inject constructor(
     private val detailRemoteDataSource: DetailRemoteDataSource,
-    private val movieDetailsDao: MovieDetailsDao,
-    private val tvShowDetailsDao: TvShowDetailsDao,
+    private val movieDao: MovieDao,
+    private val tvShowDao: TvShowDao,
     private val episodesDao: EpisodesDao,
     private val urlProvider: UrlProvider,
     private val sessionManager: SessionManager
@@ -47,10 +47,10 @@ class DetailRepositoryImpl @Inject constructor(
                 it.toEntity()
             },
             updateDataBaseQuery = {
-                movieDetailsDao.upsertMovieDetails(it)
+                movieDao.upsert(it)
             },
             dataBaseQuery = {
-                movieDetailsDao.getMovieDetails(movieId)
+                movieDao.getMovieDetails(movieId)
             },
             mapToModel = {
                 it.toModel(
@@ -80,10 +80,10 @@ class DetailRepositoryImpl @Inject constructor(
                 it.toEntity()
             },
             updateDataBaseQuery = {
-                tvShowDetailsDao.upsertTvShowDetails(it)
+                tvShowDao.upsertTvShowDetails(it)
             },
             dataBaseQuery = {
-                tvShowDetailsDao.getTvShowDetails(tvShowId)
+                tvShowDao.getTvShowDetails(tvShowId)
             },
             mapToModel = {
                 it.toModel(

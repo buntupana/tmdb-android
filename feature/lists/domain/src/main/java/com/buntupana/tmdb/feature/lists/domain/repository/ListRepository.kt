@@ -1,8 +1,7 @@
 package com.buntupana.tmdb.feature.lists.domain.repository
 
 import androidx.paging.PagingData
-import com.buntupana.tmdb.feature.lists.domain.model.ListDetail
-import com.buntupana.tmdb.feature.lists.domain.model.ListItem
+import com.buntupana.tmdb.feature.lists.domain.model.MediaList
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
@@ -11,11 +10,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface ListRepository {
 
-    suspend fun getListTotalCount(): Result<Int, NetworkError>
+    suspend fun getListTotalCount(): Flow<Result<Int, NetworkError>>
 
-    suspend fun getLists(justFirstPage: Boolean = false): Result<List<ListItem>, NetworkError>
-
-    suspend fun getListsPaging(): Flow<PagingData<ListItem>>
+    suspend fun getListsPaging(): Flow<PagingData<MediaList>>
 
     suspend fun checkIfitemInList(
         listId: Long,
@@ -50,7 +47,9 @@ interface ListRepository {
         mediaType: MediaType
     ): Result<Unit, NetworkError>
 
-    suspend fun getListDetails(listId: Long): Result<ListDetail, NetworkError>
+    suspend fun getListDetails(listId: Long): Flow<Result<MediaList?, NetworkError>>
 
     fun getListItems(listId: Long): Flow<PagingData<MediaItem>>
+
+    suspend fun getLists(justFirstPage: Boolean = false): Result<List<MediaList>, NetworkError>
 }

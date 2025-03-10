@@ -204,7 +204,7 @@ class AccountRepositoryImpl @Inject constructor(
                 }
             ),
             pagingSourceFactory = {
-                movieDao.getWatchlistMovies()
+                movieDao.getWatchlist()
             }
         ).flow.map { pagingData ->
             pagingData.map {
@@ -253,7 +253,7 @@ class AccountRepositoryImpl @Inject constructor(
                 }
             ),
             pagingSourceFactory = {
-                movieDao.getFavoriteMovies()
+                movieDao.getFavorites()
             }
         ).flow.map { pagingData ->
             pagingData.map {
@@ -326,7 +326,7 @@ class AccountRepositoryImpl @Inject constructor(
                 }
             ),
             pagingSourceFactory = {
-                tvShowDao.getWatchlistTvShows()
+                tvShowDao.getWatchlist()
             }
         ).flow.map { pagingData ->
             pagingData.map {
@@ -375,7 +375,7 @@ class AccountRepositoryImpl @Inject constructor(
                 }
             ),
             pagingSourceFactory = {
-                tvShowDao.getFavoriteTvShows()
+                tvShowDao.getFavorites()
             }
         ).flow.map { pagingData ->
             pagingData.map {

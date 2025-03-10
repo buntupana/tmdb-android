@@ -49,8 +49,8 @@ class DetailRepositoryImpl @Inject constructor(
             updateDataBaseQuery = {
                 movieDao.upsert(it)
             },
-            dataBaseQuery = {
-                movieDao.getMovieDetails(movieId)
+            fetchFromDataBaseQuery = {
+                movieDao.getById(movieId)
             },
             mapToModel = {
                 it.toModel(
@@ -82,8 +82,8 @@ class DetailRepositoryImpl @Inject constructor(
             updateDataBaseQuery = {
                 tvShowDao.upsertTvShowDetails(it)
             },
-            dataBaseQuery = {
-                tvShowDao.getTvShowDetails(tvShowId)
+            fetchFromDataBaseQuery = {
+                tvShowDao.getById(tvShowId)
             },
             mapToModel = {
                 it.toModel(
@@ -123,7 +123,7 @@ class DetailRepositoryImpl @Inject constructor(
             updateDataBaseQuery = {
                 episodesDao.upsertEpisodes(it)
             },
-            dataBaseQuery = {
+            fetchFromDataBaseQuery = {
                 episodesDao.getEpisodes(tvShowId, seasonNumber)
             },
             mapToModel = {

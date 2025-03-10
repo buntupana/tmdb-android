@@ -120,6 +120,10 @@ object CoreCommonModule {
 
     @Singleton
     @Provides
+    fun provideListDao(db: TmdbDataBase) = db.mediaListDao
+
+    @Singleton
+    @Provides
     fun provideSessionManager(@ApplicationContext context: Context): SessionManager {
         return SessionManagerImpl(context)
     }

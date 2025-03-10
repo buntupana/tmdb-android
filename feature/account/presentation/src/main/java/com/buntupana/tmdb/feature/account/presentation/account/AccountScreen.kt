@@ -194,7 +194,7 @@ fun AccountContent(
 
             ListItemsSection(
                 modifier = Modifier.fillMaxWidth(),
-                listItemList = state.listsMediaItemList,
+                listItemMediaList = state.listsMediaItemList,
                 isLoadingError = state.isListsLoadingError,
                 titleClicked = onListsClick,
                 onItemClicked = navigateToListDetail,

@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.feature.lists.domain.model.ListItem
+import com.buntupana.tmdb.feature.lists.domain.model.MediaList
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsState
 import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -27,8 +27,8 @@ import com.buntupana.tmdb.core.ui.R as RCore
 fun ManageListsLists(
     modifier: Modifier = Modifier,
     state: ManageListsState,
-    onAddToListClick: (listItem: ListItem) -> Unit = {},
-    onDeleteFromListClick: (listItem: ListItem) -> Unit = {}
+    onAddToListClick: (mediaList: MediaList) -> Unit = {},
+    onDeleteFromListClick: (mediaList: MediaList) -> Unit = {}
 ) {
     LazyColumn(
         modifier = modifier
@@ -67,7 +67,7 @@ fun ManageListsLists(
                 modifier = Modifier
                     .fillMaxWidth()
                     .animateItem(),
-                listItem = listItem,
+                mediaList = listItem,
                 isForAdd = false,
                 onItemClick = { onDeleteFromListClick(listItem) }
             )
@@ -119,7 +119,7 @@ fun ManageListsLists(
                 modifier = Modifier
                     .fillMaxWidth()
                     .animateItem(),
-                listItem = listItem,
+                mediaList = listItem,
                 isForAdd = true,
                 onItemClick = { onAddToListClick(listItem) }
             )
@@ -155,7 +155,7 @@ private fun ManageListsListsPreview() {
             mediaType = MediaType.MOVIE,
             searchKey = "",
             listMediaLists = listOf(
-                ListItem(
+                MediaList(
                     id = 1,
                     name = "List 1",
                     description = "Description 1",
@@ -170,7 +170,7 @@ private fun ManageListsListsPreview() {
                 )
             ),
             listAllLists = listOf(
-                ListItem(
+                MediaList(
                     id = 2,
                     name = "List 2",
                     description = "Description 1",

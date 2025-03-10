@@ -21,14 +21,14 @@ import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.ShowMoreButton
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.account.presentation.R
-import com.buntupana.tmdb.feature.lists.domain.model.ListItem
+import com.buntupana.tmdb.feature.lists.domain.model.MediaList
 import com.panabuntu.tmdb.core.common.util.Const.PLACE_HOLDER_ITEM_NUMBER
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun ListItemsSection(
     modifier: Modifier = Modifier,
-    listItemList: List<ListItem>?,
+    listItemMediaList: List<MediaList>?,
     isLoadingError: Boolean,
     onItemClicked: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
     titleClicked: () -> Unit,
@@ -65,7 +65,7 @@ fun ListItemsSection(
                     Spacer(modifier = Modifier.padding(horizontal = Dimens.padding.small))
                 }
 
-                if (listItemList.isNullOrEmpty() || isLoadingError) {
+                if (listItemMediaList.isNullOrEmpty() || isLoadingError) {
 
                     items(PLACE_HOLDER_ITEM_NUMBER) {
                         ListItemHorizontalPlaceHolder()
@@ -75,24 +75,24 @@ fun ListItemsSection(
                 }
 
                 items(
-                    count = listItemList.count(),
-                    key = { index -> listItemList[index].id }
+                    count = listItemMediaList.count(),
+                    key = { index -> listItemMediaList[index].id }
                 ) { index ->
 
-                    val listItem = listItemList[index]
+                    val listItem = listItemMediaList[index]
 
                     ListItemHorizontal(
                         modifier = Modifier.animateItem(),
-                        listItem = listItem,
+                        mediaList = listItem,
                         onListClick = onItemClicked
                     )
 
-                    if (index != listItemList.lastIndex) {
+                    if (index != listItemMediaList.lastIndex) {
                         Spacer(modifier = Modifier.padding(horizontal = Dimens.padding.tiny))
                     }
                 }
 
-                if (listItemList.count() > 2 && onShowMoreClick != null) {
+                if (listItemMediaList.count() > 2 && onShowMoreClick != null) {
 
                     item {
                         Spacer(modifier = Modifier.padding(horizontal = Dimens.padding.tiny))
@@ -106,7 +106,7 @@ fun ListItemsSection(
                 }
             }
 
-            if (listItemList?.isEmpty() == true) {
+            if (listItemMediaList?.isEmpty() == true) {
                 Box(
                     modifier = Modifier
                         .matchParentSize()
@@ -140,7 +140,7 @@ fun ListItemsSection(
 @Composable
 private fun ListItemsSectionPreview() {
     ListItemsSection(
-        listItemList = null,
+        listItemMediaList = null,
         isLoadingError = false,
         onItemClicked = { _, _, _, _ -> },
         titleClicked = {},

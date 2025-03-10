@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ListDetailRaw(
     @SerialName("id")
-    val id: Int,
+    val id: Long,
     @SerialName("name")
     val name: String,
     @SerialName("description")
@@ -32,7 +32,7 @@ data class ListDetailRaw(
     @SerialName("revenue")
     val revenue: Long?,
     @SerialName("runtime")
-    val runtime: Int,
+    val runtime: Int?,
     @SerialName("sort_by")
     val sortBy: String,
     @SerialName("total_pages")

@@ -16,13 +16,13 @@ interface TvShowDao {
     suspend fun upsertTvShowDetails(tvShowEntity: TvShowEntity)
 
     @Upsert(entity = TvShowEntity::class)
-    abstract suspend fun upsert(movieItemEntityList: List<TvShowSimpleEntity>)
+    suspend fun upsert(movieItemEntityList: List<TvShowSimpleEntity>)
 
     @Query("SELECT * FROM tv_show WHERE id = :id")
-    fun getTvShowDetails(id: Long): Flow<TvShowEntity>
+    fun getById(id: Long): Flow<TvShowEntity>
 
     @Query("DELETE FROM tv_show WHERE id = :id")
-    suspend fun deleteTvShowDetails(id: Long)
+    suspend fun delete(id: Long)
 
     @Query("""
         SELECT tv_show.* FROM tv_show 
@@ -30,7 +30,7 @@ interface TvShowDao {
         WHERE watchlist.mediaType = 'TV_SHOW'
         ORDER BY watchlist.addedAt ASC
     """)
-    abstract fun getWatchlistTvShows(): PagingSource<Int, TvShowSimpleEntity>
+    fun getWatchlist(): PagingSource<Int, TvShowSimpleEntity>
 
     @Query("""
         SELECT tv_show.* FROM tv_show 
@@ -38,7 +38,7 @@ interface TvShowDao {
         WHERE favorite.mediaType = 'TV_SHOW'
         ORDER BY favorite.addedAt ASC
     """)
-    abstract fun getFavoriteTvShows(): PagingSource<Int, TvShowSimpleEntity>
+    fun getFavorites(): PagingSource<Int, TvShowSimpleEntity>
 
     @Query("UPDATE tv_show SET isFavorite = :isFavorite WHERE id = :id")
     suspend fun updateFavorite(id: Long, isFavorite: Boolean)
@@ -50,7 +50,7 @@ interface TvShowDao {
     suspend fun updateRating(id: Long, rating: Int?)
 
     @Transaction
-    open suspend fun updateRatingAndWatchlist(id: Long, rating: Int?) {
+    suspend fun updateRatingAndWatchlist(id: Long, rating: Int?) {
         updateRating(id = id, rating = rating)
         if (rating != null && rating != 0) {
             updateWatchList(id = id, isWatchListed = false)
@@ -59,5 +59,4 @@ interface TvShowDao {
 
     @Query("DELETE FROM tv_show")
     suspend fun clearAll()
-
 }

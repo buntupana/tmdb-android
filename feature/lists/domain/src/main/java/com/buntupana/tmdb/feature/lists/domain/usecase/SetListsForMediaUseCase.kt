@@ -14,8 +14,8 @@ class SetListsForMediaUseCase @Inject constructor(
     suspend operator fun invoke(
         mediaId: Long,
         mediaType: MediaType,
-        originalList: List<com.buntupana.tmdb.feature.lists.domain.model.ListItem>,
-        newList: List<com.buntupana.tmdb.feature.lists.domain.model.ListItem>
+        originalList: List<com.buntupana.tmdb.feature.lists.domain.model.MediaList>,
+        newList: List<com.buntupana.tmdb.feature.lists.domain.model.MediaList>
     ): Result<Unit, NetworkError> {
 
         val listsToDelete = originalList.filter { id -> newList.contains(id).not() }

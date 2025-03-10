@@ -1,5 +1,7 @@
 package com.buntupana.tmdb.feature.lists.di
 
+import com.buntupana.tmdb.core.data.database.dao.MediaListDao
+import com.buntupana.tmdb.core.data.database.dao.RemoteKeyDao
 import com.buntupana.tmdb.core.di.CoreCommonModule
 import com.buntupana.tmdb.feature.lists.data.remote_data_source.ListRemoteDataSource
 import com.buntupana.tmdb.feature.lists.data.repository.ListRepositoryImpl
@@ -21,12 +23,16 @@ class ListsModule {
     fun providesListRepository(
         listRemoteDataSource: ListRemoteDataSource,
         sessionManager: SessionManager,
-        urlProvider: UrlProvider
+        urlProvider: UrlProvider,
+        remoteKeyDao: RemoteKeyDao,
+        mediaListDao: MediaListDao
     ): ListRepository {
         return ListRepositoryImpl(
             listRemoteDataSource = listRemoteDataSource,
             sessionManager = sessionManager,
-            urlProvider = urlProvider
+            urlProvider = urlProvider,
+            remoteKeyDao = remoteKeyDao,
+            mediaListDao = mediaListDao
         )
     }
 }

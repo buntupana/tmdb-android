@@ -32,14 +32,14 @@ import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.feature.lists.domain.model.ListItem
+import com.buntupana.tmdb.feature.lists.domain.model.MediaList
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 @Composable
 fun ListItemHorizontal(
     modifier: Modifier = Modifier,
     width: Dp = 200.dp,
-    listItem: ListItem,
+    mediaList: MediaList,
     onListClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
 
@@ -52,17 +52,17 @@ fun ListItemHorizontal(
             .clip(RoundedCornerShape(Dimens.posterRound))
             .background(PlaceHolderColor)
             .clickable {
-                onListClick(listItem.id, listItem.name, listItem.description, listItem.backdropUrl)
+                onListClick(mediaList.id, mediaList.name, mediaList.description, mediaList.backdropUrl)
             }
     ) {
 
         var backgroundColor = PrimaryColor
 
-        if (listItem.backdropUrl.isNotNullOrBlank()) {
+        if (mediaList.backdropUrl.isNotNullOrBlank()) {
             backgroundColor = backgroundColor.copy(alpha = 0.8f)
             ImageFromUrl(
                 modifier = Modifier.fillMaxSize(),
-                imageUrl = listItem.backdropUrl,
+                imageUrl = mediaList.backdropUrl,
                 showPlaceHolder = true
             ) { extractedColor ->
                 dominantColor = extractedColor
@@ -84,7 +84,7 @@ fun ListItemHorizontal(
         ) {
 
             BasicText(
-                text = listItem.name,
+                text = mediaList.name,
                 autoSize = TextAutoSize.StepBased(minFontSize = 18.sp, stepSize = 10.sp),
                 maxLines = 3,
                 color = { Color.White },
@@ -100,7 +100,7 @@ fun ListItemHorizontal(
 private fun ListItemHorizontalPreview() {
     ListItemHorizontal(
         width = 200.dp,
-        listItem = ListItem(
+        mediaList = MediaList(
             id = 1,
             name = "List Name",
             description = "List Description",

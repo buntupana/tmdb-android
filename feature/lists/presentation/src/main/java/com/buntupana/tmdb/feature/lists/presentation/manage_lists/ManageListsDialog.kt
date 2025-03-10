@@ -31,7 +31,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.feature.lists.domain.model.ListItem
+import com.buntupana.tmdb.feature.lists.domain.model.MediaList
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.comp.ManageListsHeader
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.comp.ManageListsLists
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -103,8 +103,8 @@ fun ManageListsContent(
     state: ManageListsState,
     sheetState: SheetState,
     onDismiss: () -> Unit,
-    onAddToListClick: (listItem: ListItem) -> Unit = {},
-    onDeleteFromListClick: (listItem: ListItem) -> Unit = {},
+    onAddToListClick: (mediaList: MediaList) -> Unit = {},
+    onDeleteFromListClick: (mediaList: MediaList) -> Unit = {},
     onConfirmClick: () -> Unit = {}
 ) {
 
@@ -187,7 +187,7 @@ private fun ManageListsPreview() {
             mediaType = MediaType.MOVIE,
             searchKey = "",
             listMediaLists = listOf(
-                ListItem(
+                MediaList(
                     id = 1,
                     name = "List 1",
                     description = "Description 1",
@@ -202,7 +202,7 @@ private fun ManageListsPreview() {
                 )
             ),
             listAllLists = listOf(
-                ListItem(
+                MediaList(
                     id = 2,
                     name = "List 2",
                     description = "Description 1",

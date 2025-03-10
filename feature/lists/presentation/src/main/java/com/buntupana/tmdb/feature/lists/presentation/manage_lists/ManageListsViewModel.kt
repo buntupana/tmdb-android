@@ -10,7 +10,7 @@ import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.navArgs
-import com.buntupana.tmdb.feature.lists.domain.model.ListItem
+import com.buntupana.tmdb.feature.lists.domain.model.MediaList
 import com.buntupana.tmdb.feature.lists.domain.usecase.GetListsFromMediaUseCase
 import com.buntupana.tmdb.feature.lists.domain.usecase.SetListsForMediaUseCase
 import com.buntupana.tmdb.feature.presentation.R
@@ -41,8 +41,8 @@ class ManageListsViewModel @Inject constructor(
     private val _sideEffect = Channel<ManageListsSideEffect>()
     val sideEffect = _sideEffect.receiveAsFlow()
 
-    private var listMediaListsOri = listOf<ListItem>()
-    private var listAllListsOri = listOf<ListItem>()
+    private var listMediaListsOri = listOf<MediaList>()
+    private var listAllListsOri = listOf<MediaList>()
 
     init {
         onEvent(ManageListsEvent.GetLists)
@@ -54,9 +54,9 @@ class ManageListsViewModel @Inject constructor(
             when (event) {
                 is ManageListsEvent.GetLists -> getListFromMedia()
 
-                is ManageListsEvent.AddToList -> addToList(event.listItem)
+                is ManageListsEvent.AddToList -> addToList(event.mediaList)
 
-                is ManageListsEvent.DeleteFromList -> deleteFromList(event.listItem)
+                is ManageListsEvent.DeleteFromList -> deleteFromList(event.mediaList)
 
                 ManageListsEvent.Confirm -> setListsForMedia()
             }
@@ -88,25 +88,25 @@ class ManageListsViewModel @Inject constructor(
             }
     }
 
-    private fun addToList(listItem: ListItem) {
+    private fun addToList(mediaList: MediaList) {
         val newMediaList = state.listMediaLists?.toMutableList() ?: mutableListOf()
         // Adding one item to the list item count
-        newMediaList.add(index = 0, element = listItem.copy(itemCount = listItem.itemCount + 1))
+        newMediaList.add(index = 0, element = mediaList.copy(itemCount = mediaList.itemCount + 1))
         val newAllList = state.listAllLists?.toMutableList()
-        newAllList?.remove(listItem)
+        newAllList?.remove(mediaList)
         state = state.copy(listMediaLists = newMediaList, listAllLists = newAllList)
     }
 
-    private fun deleteFromList(listItem: ListItem) {
+    private fun deleteFromList(mediaList: MediaList) {
         val newMediaList = state.listMediaLists?.toMutableList() ?: mutableListOf()
-        newMediaList.remove(listItem)
+        newMediaList.remove(mediaList)
 
         val newAllList = listAllListsOri.filterNot {
             newMediaList.map { listItem -> listItem.id }.contains(it.id)
         }.map {
             // Removing one item from the list item count
-            if (listItem.id == it.id) {
-                it.copy(itemCount = listItem.itemCount - 1)
+            if (mediaList.id == it.id) {
+                it.copy(itemCount = mediaList.itemCount - 1)
             } else {
                 it
             }

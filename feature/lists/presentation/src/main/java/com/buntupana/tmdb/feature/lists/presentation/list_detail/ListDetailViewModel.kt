@@ -20,6 +20,7 @@ import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -65,8 +66,8 @@ class ListDetailViewModel @Inject constructor(
 
         state = state.copy(isLoading = state.mediaItemList == null, isError = false)
 
-        getListDetailsUseCase(navArgs.listId)
-            .onError {
+        getListDetailsUseCase(navArgs.listId).collectLatest {
+            it.onError {
                 if (state.itemTotalCount == null) {
                     state = state.copy(isLoading = false, isError = true)
                 } else {
@@ -77,6 +78,9 @@ class ListDetailViewModel @Inject constructor(
                     )
                 }
             }.onSuccess { listDetails ->
+
+                listDetails ?: return@onSuccess
+
                 state = state.copy(
                     isLoading = false,
                     listName = listDetails.name,
@@ -91,6 +95,7 @@ class ListDetailViewModel @Inject constructor(
                     _sideEffect.send(ListDetailSideEffect.RefreshMediaItemList)
                 }
             }
+        }
     }
 
     private fun getListItems() {

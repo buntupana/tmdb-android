@@ -23,10 +23,10 @@ abstract class MovieDao {
     abstract suspend fun upsert(movieSimpleEntityList: List<MovieSimpleEntity>)
 
     @Query("SELECT * FROM movie WHERE id = :id")
-    abstract fun getMovieDetails(id: Long): Flow<MovieEntity>
+    abstract fun getById(id: Long): Flow<MovieEntity>
 
     @Query("DELETE FROM movie WHERE id = :id")
-    abstract suspend fun deleteMovieDetails(id: Long)
+    abstract suspend fun delete(id: Long)
 
     @Query("""
         SELECT movie.* FROM movie 
@@ -34,7 +34,7 @@ abstract class MovieDao {
         WHERE watchlist.mediaType = 'MOVIE'
         ORDER BY watchlist.addedAt ASC
     """)
-    abstract fun getWatchlistMovies(): PagingSource<Int, MovieEntity>
+    abstract fun getWatchlist(): PagingSource<Int, MovieEntity>
 
     @Query("""
         SELECT movie.* FROM movie 
@@ -42,10 +42,10 @@ abstract class MovieDao {
         WHERE favorite.mediaType = 'MOVIE'
         ORDER BY favorite.addedAt ASC
     """)
-    abstract fun getFavoriteMovies(): PagingSource<Int, MovieEntity>
+    abstract fun getFavorites(): PagingSource<Int, MovieEntity>
 
     @Delete
-    abstract suspend fun deleteMovieDetails(movieEntity: MovieEntity)
+    abstract suspend fun delete(movieEntity: MovieEntity)
 
     @Query("UPDATE movie SET isFavorite = :isFavorite WHERE id = :id")
     abstract suspend fun updateFavorite(id: Long, isFavorite: Boolean)
@@ -66,5 +66,4 @@ abstract class MovieDao {
 
     @Query("DELETE FROM movie")
     abstract suspend fun clearAll()
-
 }

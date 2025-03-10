@@ -11,7 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,10 +22,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
@@ -41,8 +36,6 @@ import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUp
 import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListItemVertical
 import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListSubBar
 import com.buntupana.tmdb.feature.presentation.R
-import kotlinx.coroutines.launch
-import timber.log.Timber
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,31 +46,8 @@ fun ListsScreen(
     onSearchClick: () -> Unit,
     onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
 
     var showCreateListBottomSheet by remember { mutableStateOf(false) }
-
-    var listItems by remember {  mutableStateOf<LazyPagingItems<com.buntupana.tmdb.feature.lists.domain.model.ListItem>?>(null)}
-
-    listItems = viewModel.state.listItems?.collectAsLazyPagingItems()
-
-    LaunchedEffect(lifecycleOwner.lifecycle) {
-        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-            viewModel.onEvent(ListsEvent.GetLists)
-
-            launch {
-                viewModel.sideEffect.collect { sideEffect ->
-                    Timber.d("WatchlistScreen: sideEffect = $sideEffect")
-                    when (sideEffect) {
-                        is ListsSideEffect.RefreshListItemList -> {
-                            listItems?.refresh()
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     ListsContent(
         state = viewModel.state,
@@ -95,9 +65,7 @@ fun ListsScreen(
     CreateUpdateListDialog(
         showDialog = showCreateListBottomSheet,
         onDismiss = { showCreateListBottomSheet = false },
-        onCreateUpdateListSuccess = {
-            viewModel.onEvent(ListsEvent.GetLists)
-        }
+        onCreateUpdateListSuccess = {}
     )
 }
 
@@ -134,7 +102,7 @@ fun ListsContent(
     ) { paddingValues ->
 
 
-        val listItems = state.listItems?.collectAsLazyPagingItems()
+        val listItems = state.mediaListItems?.collectAsLazyPagingItems()
 
         if (state.isLoading) {
             Box(
@@ -150,7 +118,7 @@ fun ListsContent(
                 ErrorAndRetry(
                     modifier = Modifier.align(Alignment.Center),
                     textColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
-                    errorMessage = stringResource(id = com.buntupana.tmdb.core.ui.R.string.message_loading_content_error),
+                    errorMessage = stringResource(id = RCore.string.message_loading_content_error),
                     onRetryClick = onRetryClick
                 )
             }
@@ -197,7 +165,7 @@ fun ListsContent(
             ) { _, item ->
                 ListItemVertical(
                     modifier = Modifier.animateItem(),
-                    listItem = item,
+                    mediaList = item,
                     onItemClick = onListDetailClick
                 )
             }

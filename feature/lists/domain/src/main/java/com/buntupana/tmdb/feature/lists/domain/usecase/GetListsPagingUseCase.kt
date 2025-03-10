@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetListsPagingUseCase @Inject constructor(
     private val listRepository: ListRepository
 ) {
-    suspend operator fun invoke(): Flow<PagingData<com.buntupana.tmdb.feature.lists.domain.model.ListItem>> {
+    suspend operator fun invoke(): Flow<PagingData<com.buntupana.tmdb.feature.lists.domain.model.MediaList>> {
         return  listRepository.getListsPaging()
     }
 }

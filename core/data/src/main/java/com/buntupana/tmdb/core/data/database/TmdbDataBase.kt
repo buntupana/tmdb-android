@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import com.buntupana.tmdb.core.data.database.dao.AnyMediaDao
 import com.buntupana.tmdb.core.data.database.dao.EpisodesDao
 import com.buntupana.tmdb.core.data.database.dao.FavoriteDao
+import com.buntupana.tmdb.core.data.database.dao.MediaListDao
 import com.buntupana.tmdb.core.data.database.dao.MovieDao
 import com.buntupana.tmdb.core.data.database.dao.RemoteKeyDao
 import com.buntupana.tmdb.core.data.database.dao.TvShowDao
@@ -14,6 +15,7 @@ import com.buntupana.tmdb.core.data.database.dao.WatchlistDao
 import com.buntupana.tmdb.core.data.database.entity.AnyMediaEntity
 import com.buntupana.tmdb.core.data.database.entity.EpisodeEntity
 import com.buntupana.tmdb.core.data.database.entity.FavoriteEntity
+import com.buntupana.tmdb.core.data.database.entity.MediaListEntity
 import com.buntupana.tmdb.core.data.database.entity.MovieEntity
 import com.buntupana.tmdb.core.data.database.entity.RemoteKeyEntity
 import com.buntupana.tmdb.core.data.database.entity.TvShowEntity
@@ -27,9 +29,10 @@ import com.buntupana.tmdb.core.data.database.entity.WatchlistEntity
         EpisodeEntity::class,
         AnyMediaEntity::class,
         WatchlistEntity::class,
-        FavoriteEntity::class
+        FavoriteEntity::class,
+        MediaListEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
 abstract class TmdbDataBase : RoomDatabase() {
@@ -58,4 +61,6 @@ abstract class TmdbDataBase : RoomDatabase() {
     abstract val watchlistDao: WatchlistDao
 
     abstract val favoriteDao: FavoriteDao
+
+    abstract val mediaListDao: MediaListDao
 }

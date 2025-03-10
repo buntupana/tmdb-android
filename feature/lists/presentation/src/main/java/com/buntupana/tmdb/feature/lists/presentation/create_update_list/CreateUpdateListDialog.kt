@@ -40,34 +40,24 @@ import timber.log.Timber
 @Composable
 fun CreateUpdateListDialog(
     viewModel: CreateUpdateListViewModel = hiltViewModel(),
-    showDialog: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { viewModel.state.isLoading.not() }
     ),
     onDismiss: () -> Unit,
-    onCreateUpdateListSuccess: () -> Unit,
-    listId: Long? = null,
-    listName: String = "",
-    listDescription: String? = null,
-    isPublic: Boolean = true
+    onCreateUpdateListSuccess: () -> Unit = {}
 ) {
-
-    if (showDialog.not()) return
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(lifecycleOwner.lifecycle) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-            viewModel.onEvent(CreateListEvent.InitList(listId, listName, listDescription, isPublic))
-
             launch {
                 viewModel.sideEffect.collect { sideEffect ->
                     Timber.d("CreateListDialog: sideEffect = $sideEffect")
                     when (sideEffect) {
-                        CreateListSideEffect.CreateListSuccess -> {
+                        CreateUpdateListSideEffect.CreateUpdateListSuccess -> {
                             onCreateUpdateListSuccess()
                             sheetState.hide()
                             onDismiss()
@@ -87,11 +77,11 @@ fun CreateUpdateListDialog(
                 onDismiss()
             }
         },
-        onCreateListClick = { viewModel.onEvent(CreateListEvent.CreateList) },
+        onCreateListClick = { viewModel.onEvent(CreateUpdateListEvent.CreateUpdateList) },
         updateForm = { listName, listDescription, isPublic ->
 
             viewModel.onEvent(
-                CreateListEvent.UpdateForm(
+                CreateUpdateListEvent.UpdateForm(
                     listName = listName,
                     description = listDescription,
                     isPublic = isPublic
@@ -104,7 +94,7 @@ fun CreateUpdateListDialog(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateListContent(
-    state: CreateListState,
+    state: CreateUpdateListState,
     sheetState: SheetState,
     onDismiss: () -> Unit,
     onCreateListClick: () -> Unit,
@@ -176,8 +166,11 @@ fun CreateListContent(
 @Composable
 fun CreateListScreenPreview() {
     CreateListContent(
-        state = CreateListState(
-            listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars"
+        state = CreateUpdateListState(
+            isNewList = false,
+            listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
+            description = "",
+            isPublic = true
         ),
         sheetState = SheetState(
             skipPartiallyExpanded = true,

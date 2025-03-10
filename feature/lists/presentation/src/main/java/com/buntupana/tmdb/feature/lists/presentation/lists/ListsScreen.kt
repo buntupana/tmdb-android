@@ -11,10 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -32,7 +28,6 @@ import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isVisible
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
-import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListDialog
 import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListItemVertical
 import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListSubBar
 import com.buntupana.tmdb.feature.presentation.R
@@ -45,9 +40,8 @@ fun ListsScreen(
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
+    onCreateListDialogClick: () -> Unit
 ) {
-
-    var showCreateListBottomSheet by remember { mutableStateOf(false) }
 
     ListsContent(
         state = viewModel.state,
@@ -57,15 +51,7 @@ fun ListsScreen(
         onRetryClick = {
             viewModel.onEvent(ListsEvent.GetLists)
         },
-        onCreateListClick = {
-            showCreateListBottomSheet = true
-        }
-    )
-
-    CreateUpdateListDialog(
-        showDialog = showCreateListBottomSheet,
-        onDismiss = { showCreateListBottomSheet = false },
-        onCreateUpdateListSuccess = {}
+        onCreateListClick = onCreateListDialogClick
     )
 }
 

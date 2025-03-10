@@ -79,7 +79,11 @@ class ListDetailViewModel @Inject constructor(
                 }
             }.onSuccess { listDetails ->
 
-                listDetails ?: return@onSuccess
+                if (listDetails == null) {
+                    Timber.d("getListDetails: null")
+                    _sideEffect.send(ListDetailSideEffect.NavigateBack)
+                    return@onSuccess
+                }
 
                 state = state.copy(
                     isLoading = false,

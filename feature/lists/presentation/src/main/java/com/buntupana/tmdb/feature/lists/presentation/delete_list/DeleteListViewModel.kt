@@ -3,11 +3,13 @@ package com.buntupana.tmdb.feature.lists.presentation.delete_list
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.UiText
+import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.lists.domain.usecase.DeleteListUseCase
 import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.entity.onError
@@ -21,26 +23,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DeleteListViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val deleteListUseCase: DeleteListUseCase
 ) : ViewModel() {
 
-    var state by mutableStateOf(DeleteListState())
+    private val navArgs = savedStateHandle.navArgs<DeleteListNav>()
+
+    var state by mutableStateOf(DeleteListState(listName = navArgs.listName))
         private set
 
     private var _sideEffect = Channel<DeleteListSideEffect>()
     val sideEffect = _sideEffect.receiveAsFlow()
-
-    private lateinit var navArgs: DeleteListNav
 
     fun onEvent(event: DeleteListEvent) {
         Timber.d("onEvent() called with: event = [$event]")
         viewModelScope.launch {
             when (event) {
                 DeleteListEvent.ConfirmDeleteList -> deleteList()
-                is DeleteListEvent.Init -> {
-                    navArgs = event.deleteListNav
-                    state = state.copy(listName = navArgs.listName)
-                }
             }
         }
     }

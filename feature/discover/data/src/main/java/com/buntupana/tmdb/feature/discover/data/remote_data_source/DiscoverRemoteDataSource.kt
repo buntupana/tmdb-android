@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.feature.discover.data.remote_data_source
 
 import androidx.compose.ui.text.intl.Locale
-import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
+import com.buntupana.tmdb.core.data.raw.MediaItemRaw
 import com.buntupana.tmdb.core.data.raw.MovieItemRaw
 import com.buntupana.tmdb.core.data.raw.ResponseListRaw
 import com.buntupana.tmdb.core.data.raw.TvShowItemRaw
@@ -62,7 +62,7 @@ class DiscoverRemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getTrending(trendingType: TrendingType): Result<ResponseListRaw<AnyMediaItemRaw>, NetworkError> {
+    suspend fun getTrending(trendingType: TrendingType): Result<ResponseListRaw<MediaItemRaw>, NetworkError> {
 
         val timeWindow = when (trendingType) {
             TrendingType.TODAY -> "day"

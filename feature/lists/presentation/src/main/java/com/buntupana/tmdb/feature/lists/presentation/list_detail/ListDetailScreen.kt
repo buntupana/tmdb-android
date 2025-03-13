@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.lists.presentation.list_detail
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.AnimationConstants
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -37,7 +38,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
@@ -52,14 +52,12 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
-import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListDialog
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListDialog
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListNav
-import com.buntupana.tmdb.feature.lists.presentation.delete_list.DeleteListDialog
-import com.buntupana.tmdb.feature.lists.presentation.delete_list.DeleteListNav
 import com.buntupana.tmdb.feature.lists.presentation.list_detail.comp.ListDetailHeader
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -71,39 +69,28 @@ fun ListDetailScreen(
     onLogoClick: () -> Unit,
     onSearchClick: () -> Unit,
     onMediaClick: (mediaItemId: Long, mediaType: MediaType, mainPosterColor: Color?) -> Unit,
+    onUpdateListClick: (listId: Long, listName: String, listDescription: String, isPublic: Boolean) -> Unit,
+    onDeleteListClick: (listId: Long, listName: String) -> Unit
 ) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    var showEditListDialog by remember { mutableStateOf(false) }
-    var showRemoveListConfirmDialog by remember { mutableStateOf(false) }
     var showRemoveItemListConfirmDialog by remember { mutableStateOf(false) }
 
     var deleteItemListNav by remember { mutableStateOf<DeleteItemListNav?>(null) }
 
-    var mediaItemList by remember { mutableStateOf<LazyPagingItems<ItemListViewEntity>?>(null) }
-
-    mediaItemList = viewModel.state.mediaItemList?.collectAsLazyPagingItems()
+    val mediaItemList = viewModel.state.mediaItemList?.collectAsLazyPagingItems()
 
     LaunchedEffect(lifecycleOwner.lifecycle) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-            viewModel.onEvent(ListDetailEvent.GetDetails)
-
             launch {
                 viewModel.sideEffect.collect { sideEffect ->
                     Timber.d("WatchlistScreen: sideEffect = $sideEffect")
                     when (sideEffect) {
-                        is ListDetailSideEffect.RefreshMediaItemList -> {
-                            mediaItemList?.refresh()
-                        }
-
-                        is ListDetailSideEffect.UpdateItemRevealed -> {
-                            mediaItemList?.itemSnapshotList?.find {
-                                it?.id == sideEffect.itemId
-                            }?.let { itemListViewEntity ->
-                                itemListViewEntity.isDeleteRevealed.value = sideEffect.isRevealed
-                            }
+                        ListDetailSideEffect.NavigateBack -> {
+                            // add delay to wait for bottomsheet to disappear
+                            delay(AnimationConstants.DefaultDurationMillis.toLong())
+                            onBackClick()
                         }
                     }
                 }
@@ -125,10 +112,15 @@ fun ListDetailScreen(
         },
         onRetryClick = { viewModel.onEvent(ListDetailEvent.GetDetails) },
         onEditClick = {
-            showEditListDialog = true
+            onUpdateListClick(
+                viewModel.state.listId,
+                viewModel.state.listName,
+                viewModel.state.description.orEmpty(),
+                viewModel.state.isPublic
+            )
         },
         onDeleteClick = {
-            showRemoveListConfirmDialog = true
+            onDeleteListClick(viewModel.state.listId, viewModel.state.listName)
         },
         onItemDeleteClick = { itemId, mediaItem ->
             deleteItemListNav = DeleteItemListNav(
@@ -140,29 +132,6 @@ fun ListDetailScreen(
             )
             showRemoveItemListConfirmDialog = true
         }
-    )
-
-    CreateUpdateListDialog(
-        listId = viewModel.state.listId,
-        listName = viewModel.state.listName,
-        listDescription = viewModel.state.description,
-        isPublic = viewModel.state.isPublic,
-        showDialog = showEditListDialog,
-        onDismiss = { showEditListDialog = false },
-        onCreateUpdateListSuccess = {
-            showEditListDialog = false
-            viewModel.onEvent(ListDetailEvent.GetDetails)
-        }
-    )
-
-    DeleteListDialog(
-        deleteListNav = DeleteListNav(
-            listId = viewModel.state.listId,
-            listName = viewModel.state.listName
-        ),
-        showDialog = showRemoveListConfirmDialog,
-        onDismiss = { showRemoveListConfirmDialog = false },
-        onDeleteSuccess = onBackClick
     )
 
     DeleteItemListDialog(
@@ -180,12 +149,6 @@ fun ListDetailScreen(
         },
         onDeleteSuccess = {
             showRemoveItemListConfirmDialog = false
-            viewModel.onEvent(
-                ListDetailEvent.SuccessDeleteItemList(
-                    itemId = deleteItemListNav?.itemId.orEmpty(),
-                    mediaType = deleteItemListNav?.mediaType ?: MediaType.MOVIE
-                )
-            )
         }
     )
 }

@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.manage_lists
 
-import com.buntupana.tmdb.feature.lists.domain.model.ListItem
+import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.panabuntu.tmdb.core.common.entity.MediaType
 
 data class ManageListsState(
@@ -8,6 +8,6 @@ data class ManageListsState(
     val isError: Boolean = false,
     val searchKey: String = "",
     val mediaType: MediaType,
-    val listMediaLists: List<ListItem>? = null,
-    val listAllLists: List<ListItem>? = null,
+    val userListDetails: List<UserListDetails>? = null,
+    val listAllLists: List<UserListDetails>? = null,
 )

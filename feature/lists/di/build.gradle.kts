@@ -39,6 +39,7 @@ dependencies {
     implementation(project(":feature:lists:presentation"))
     implementation(project(":feature:lists:domain"))
     implementation(project(":feature:lists:data"))
+    implementation(project(":core:data"))
     implementation(project(":core:di"))
 
     // Dagger Hilt

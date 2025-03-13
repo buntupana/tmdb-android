@@ -7,14 +7,15 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.buntupana.tmdb.core.data.api.GenericRemoteMediator
 import com.buntupana.tmdb.core.data.database.dao.FavoriteDao
-import com.buntupana.tmdb.core.data.database.dao.MovieDao
+import com.buntupana.tmdb.core.data.database.dao.MediaDao
 import com.buntupana.tmdb.core.data.database.dao.RemoteKeyDao
-import com.buntupana.tmdb.core.data.database.dao.TvShowDao
 import com.buntupana.tmdb.core.data.database.dao.WatchlistDao
 import com.buntupana.tmdb.core.data.database.entity.FavoriteEntity
 import com.buntupana.tmdb.core.data.database.entity.WatchlistEntity
 import com.buntupana.tmdb.core.data.mapper.toEntity
 import com.buntupana.tmdb.core.data.mapper.toModel
+import com.buntupana.tmdb.core.data.mapper.toMovieItemModel
+import com.buntupana.tmdb.core.data.mapper.toTvShowItemModel
 import com.buntupana.tmdb.feature.account.data.mapper.toModel
 import com.buntupana.tmdb.feature.account.data.remote_data_source.AccountRemoteDataSource
 import com.buntupana.tmdb.feature.account.domain.model.UserCredentials
@@ -40,8 +41,7 @@ import javax.inject.Inject
 class AccountRepositoryImpl @Inject constructor(
     private val accountRemoteDataSource: AccountRemoteDataSource,
     private val remoteKeyDao: RemoteKeyDao,
-    private val movieDao: MovieDao,
-    private val tvShowDao: TvShowDao,
+    private val mediaDao: MediaDao,
     private val watchlistDao: WatchlistDao,
     private val favoriteDao: FavoriteDao,
     private val urlProvider: UrlProvider,
@@ -192,23 +192,26 @@ class AccountRepositoryImpl @Inject constructor(
                     remoteKeyDao.remoteKeyByType(remoteType)
                 },
                 insertNetworkResult = { resultList ->
-                    movieDao.upsert(resultList.toEntity())
+                    mediaDao.upsertSimple(resultList.toEntity())
+                    var addedAt = System.currentTimeMillis()
                     watchlistDao.upsert(
                         resultList.map {
+                            addedAt += 1
                             WatchlistEntity(
                                 mediaId = it.id,
-                                mediaType = MediaType.MOVIE
+                                mediaType = MediaType.MOVIE,
+                                addedAt = addedAt
                             )
                         }
                     )
                 }
             ),
             pagingSourceFactory = {
-                movieDao.getWatchlistMovies()
+                mediaDao.getWatchlist(MediaType.MOVIE)
             }
         ).flow.map { pagingData ->
             pagingData.map {
-                it.toModel(
+                it.toMovieItemModel(
                     baseUrlPoster = urlProvider.BASE_URL_POSTER,
                     baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
                 )
@@ -241,23 +244,26 @@ class AccountRepositoryImpl @Inject constructor(
                     remoteKeyDao.remoteKeyByType(remoteType)
                 },
                 insertNetworkResult = { resultList ->
-                    movieDao.upsert(resultList.toEntity())
+                    mediaDao.upsertSimple(resultList.toEntity())
+                    var addedAt = System.currentTimeMillis()
                     favoriteDao.upsert(
                         resultList.map {
+                            addedAt += 1
                             FavoriteEntity(
                                 mediaId = it.id,
-                                mediaType = MediaType.MOVIE
+                                mediaType = MediaType.MOVIE,
+                                addedAt = addedAt
                             )
                         }
                     )
                 }
             ),
             pagingSourceFactory = {
-                movieDao.getFavoriteMovies()
+                mediaDao.getFavorites(mediaType = MediaType.MOVIE)
             }
         ).flow.map { pagingData ->
             pagingData.map {
-                it.toModel(
+                it.toMovieItemModel(
                     baseUrlPoster = urlProvider.BASE_URL_POSTER,
                     baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
                 )
@@ -314,23 +320,26 @@ class AccountRepositoryImpl @Inject constructor(
                     remoteKeyDao.remoteKeyByType(remoteType)
                 },
                 insertNetworkResult = { resultList ->
-                    tvShowDao.upsert(resultList.toEntity())
+                    mediaDao.upsertSimple(resultList.toEntity())
+                    var addedAt = System.currentTimeMillis()
                     watchlistDao.upsert(
                         resultList.map {
+                            addedAt += 1
                             WatchlistEntity(
                                 mediaId = it.id,
-                                mediaType = MediaType.TV_SHOW
+                                mediaType = MediaType.TV_SHOW,
+                                addedAt = addedAt
                             )
                         }
                     )
                 }
             ),
             pagingSourceFactory = {
-                tvShowDao.getWatchlistTvShows()
+                mediaDao.getWatchlist(MediaType.TV_SHOW)
             }
         ).flow.map { pagingData ->
             pagingData.map {
-                it.toModel(
+                it.toTvShowItemModel(
                     baseUrlPoster = urlProvider.BASE_URL_POSTER,
                     baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
                 )
@@ -363,23 +372,26 @@ class AccountRepositoryImpl @Inject constructor(
                     remoteKeyDao.remoteKeyByType(remoteType)
                 },
                 insertNetworkResult = { resultList ->
-                    tvShowDao.upsert(resultList.toEntity())
+                    mediaDao.upsertSimple(resultList.toEntity())
+                    var addedAt = System.currentTimeMillis()
                     favoriteDao.upsert(
                         resultList.map {
+                            addedAt += 1
                             FavoriteEntity(
                                 mediaId = it.id,
-                                mediaType = MediaType.TV_SHOW
+                                mediaType = MediaType.TV_SHOW,
+                                addedAt = addedAt
                             )
                         }
                     )
                 }
             ),
             pagingSourceFactory = {
-                tvShowDao.getFavoriteTvShows()
+                mediaDao.getFavorites(MediaType.TV_SHOW)
             }
         ).flow.map { pagingData ->
             pagingData.map {
-                it.toModel(
+                it.toTvShowItemModel(
                     baseUrlPoster = urlProvider.BASE_URL_POSTER,
                     baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
                 )
@@ -398,9 +410,9 @@ class AccountRepositoryImpl @Inject constructor(
             mediaType = mediaType,
             favorite = isFavorite
         ).onSuccess {
+            mediaDao.updateFavorite(mediaId, mediaType, isFavorite)
             when (mediaType) {
                 MediaType.MOVIE -> {
-                    movieDao.updateFavorite(mediaId, isFavorite)
                     if (isFavorite) {
                         favoriteMovieTotalCount.value += 1
                     } else {
@@ -409,7 +421,6 @@ class AccountRepositoryImpl @Inject constructor(
                 }
 
                 MediaType.TV_SHOW -> {
-                    tvShowDao.updateFavorite(mediaId, isFavorite)
                     if (isFavorite) {
                         favoriteTvShowTotalCount.value += 1
                     } else {
@@ -436,9 +447,10 @@ class AccountRepositoryImpl @Inject constructor(
             mediaType = mediaType,
             watchlist = isWatchlisted
         ).onSuccess {
+            mediaDao.updateWatchList(mediaId, mediaType, isWatchlisted)
             when (mediaType) {
                 MediaType.MOVIE -> {
-                    movieDao.updateWatchList(mediaId, isWatchlisted)
+
                     if (isWatchlisted) {
                         watchlistMovieTotalCount.value += 1
                     } else {
@@ -447,7 +459,6 @@ class AccountRepositoryImpl @Inject constructor(
                 }
 
                 MediaType.TV_SHOW -> {
-                    tvShowDao.updateWatchList(mediaId, isWatchlisted)
                     if (isWatchlisted) {
                         watchlistTvShowTotalCount.value += 1
                     } else {
@@ -475,10 +486,7 @@ class AccountRepositoryImpl @Inject constructor(
                 mediaType = mediaType,
                 mediaId = mediaId
             ).onSuccess {
-                when (mediaType) {
-                    MediaType.MOVIE -> movieDao.updateRatingAndWatchlist(mediaId, value)
-                    MediaType.TV_SHOW -> tvShowDao.updateRatingAndWatchlist(mediaId, value)
-                }
+                mediaDao.updateRating(mediaId, mediaType, value)
             }
         } else {
             accountRemoteDataSource.addMediaRating(
@@ -487,10 +495,7 @@ class AccountRepositoryImpl @Inject constructor(
                 mediaId = mediaId,
                 rating = value
             ).onSuccess {
-                when (mediaType) {
-                    MediaType.MOVIE -> movieDao.updateRatingAndWatchlist(mediaId, value)
-                    MediaType.TV_SHOW -> tvShowDao.updateRatingAndWatchlist(mediaId, value)
-                }
+                mediaDao.updateRating(mediaId, mediaType, value)
             }
         }
 

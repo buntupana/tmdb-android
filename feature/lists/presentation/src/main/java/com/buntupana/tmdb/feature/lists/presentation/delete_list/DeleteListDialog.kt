@@ -25,18 +25,10 @@ import timber.log.Timber
 @Composable
 fun DeleteListDialog(
     viewModel: DeleteListViewModel = hiltViewModel(),
-    deleteListNav: DeleteListNav,
-    showDialog: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onDismiss: () -> Unit,
-    onDeleteSuccess: () -> Unit
+    onDeleteSuccess: () -> Unit = {}
 ) {
-
-    if (showDialog.not()) return
-
-    LaunchedEffect(deleteListNav) {
-        viewModel.onEvent(DeleteListEvent.Init(deleteListNav))
-    }
 
     val scope = rememberCoroutineScope()
     val lifecycleOwner = LocalLifecycleOwner.current

@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.lists.domain.usecase
 
+import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.domain.repository.ListRepository
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
@@ -18,8 +19,8 @@ class GetListsFromMediaUseCase @Inject constructor(
 
         val getListsResult = listRepository.getLists()
 
-        val mediaBelongsList = mutableListOf<com.buntupana.tmdb.feature.lists.domain.model.ListItem>()
-        val mediaNotBelongsList = mutableListOf<com.buntupana.tmdb.feature.lists.domain.model.ListItem>()
+        val mediaBelongsList = mutableListOf<UserListDetails>()
+        val mediaNotBelongsList = mutableListOf<UserListDetails>()
 
         var networkError: NetworkError? = null
 
@@ -33,7 +34,7 @@ class GetListsFromMediaUseCase @Inject constructor(
 
                     getListsResult.data.forEach { listItem ->
 
-                        listRepository.checkIfitemInList(
+                        listRepository.checkIfItemInList(
                             listId = listItem.id,
                             mediaId = mediaId,
                             mediaType = mediaType
@@ -68,7 +69,7 @@ class GetListsFromMediaUseCase @Inject constructor(
 
 
 data class GetListsFromMediaUseCaseResult(
-    val mediaBelongsList: List<com.buntupana.tmdb.feature.lists.domain.model.ListItem>,
-    val mediaNotBelongsList: List<com.buntupana.tmdb.feature.lists.domain.model.ListItem>,
-    val allListsList: List<com.buntupana.tmdb.feature.lists.domain.model.ListItem>,
+    val mediaBelongsList: List<UserListDetails>,
+    val mediaNotBelongsList: List<UserListDetails>,
+    val allListsList: List<UserListDetails>,
 )

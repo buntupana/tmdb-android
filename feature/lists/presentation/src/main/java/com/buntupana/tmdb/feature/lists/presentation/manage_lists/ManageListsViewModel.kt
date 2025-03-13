@@ -10,7 +10,7 @@ import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.navArgs
-import com.buntupana.tmdb.feature.lists.domain.model.ListItem
+import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.domain.usecase.GetListsFromMediaUseCase
 import com.buntupana.tmdb.feature.lists.domain.usecase.SetListsForMediaUseCase
 import com.buntupana.tmdb.feature.presentation.R
@@ -41,8 +41,8 @@ class ManageListsViewModel @Inject constructor(
     private val _sideEffect = Channel<ManageListsSideEffect>()
     val sideEffect = _sideEffect.receiveAsFlow()
 
-    private var listMediaListsOri = listOf<ListItem>()
-    private var listAllListsOri = listOf<ListItem>()
+    private var listMediaListsOri = listOf<UserListDetails>()
+    private var listAllListsOri = listOf<UserListDetails>()
 
     init {
         onEvent(ManageListsEvent.GetLists)
@@ -54,9 +54,9 @@ class ManageListsViewModel @Inject constructor(
             when (event) {
                 is ManageListsEvent.GetLists -> getListFromMedia()
 
-                is ManageListsEvent.AddToList -> addToList(event.listItem)
+                is ManageListsEvent.AddToList -> addToList(event.mediaList)
 
-                is ManageListsEvent.DeleteFromList -> deleteFromList(event.listItem)
+                is ManageListsEvent.DeleteFromList -> deleteFromList(event.mediaList)
 
                 ManageListsEvent.Confirm -> setListsForMedia()
             }
@@ -82,37 +82,37 @@ class ManageListsViewModel @Inject constructor(
 
                 state = state.copy(
                     isLoading = false,
-                    listMediaLists = listMediaListsOri,
+                    userListDetails = listMediaListsOri,
                     listAllLists = result.mediaNotBelongsList
                 )
             }
     }
 
-    private fun addToList(listItem: ListItem) {
-        val newMediaList = state.listMediaLists?.toMutableList() ?: mutableListOf()
+    private fun addToList(mediaList: UserListDetails) {
+        val newMediaList = state.userListDetails?.toMutableList() ?: mutableListOf()
         // Adding one item to the list item count
-        newMediaList.add(index = 0, element = listItem.copy(itemCount = listItem.itemCount + 1))
+        newMediaList.add(index = 0, element = mediaList.copy(itemCount = mediaList.itemCount + 1))
         val newAllList = state.listAllLists?.toMutableList()
-        newAllList?.remove(listItem)
-        state = state.copy(listMediaLists = newMediaList, listAllLists = newAllList)
+        newAllList?.remove(mediaList)
+        state = state.copy(userListDetails = newMediaList, listAllLists = newAllList)
     }
 
-    private fun deleteFromList(listItem: ListItem) {
-        val newMediaList = state.listMediaLists?.toMutableList() ?: mutableListOf()
-        newMediaList.remove(listItem)
+    private fun deleteFromList(mediaList: UserListDetails) {
+        val newMediaList = state.userListDetails?.toMutableList() ?: mutableListOf()
+        newMediaList.remove(mediaList)
 
         val newAllList = listAllListsOri.filterNot {
             newMediaList.map { listItem -> listItem.id }.contains(it.id)
         }.map {
             // Removing one item from the list item count
-            if (listItem.id == it.id) {
-                it.copy(itemCount = listItem.itemCount - 1)
+            if (mediaList.id == it.id) {
+                it.copy(itemCount = mediaList.itemCount - 1)
             } else {
                 it
             }
         }
 
-        state = state.copy(listMediaLists = newMediaList, listAllLists = newAllList)
+        state = state.copy(userListDetails = newMediaList, listAllLists = newAllList)
     }
 
     private suspend fun setListsForMedia() {
@@ -122,7 +122,7 @@ class ManageListsViewModel @Inject constructor(
             mediaId = navArgs.mediaId,
             mediaType = navArgs.mediaType,
             originalList = listMediaListsOri,
-            newList = state.listMediaLists?.reversed() ?: listOf()
+            newList = state.userListDetails?.reversed() ?: listOf()
         ).onError {
             state = state.copy(isLoading = false)
 

@@ -10,8 +10,8 @@ suspend fun <RAW, ENTITY, MODEL> getFlowResult(
     prevDataBaseQuery: suspend () -> Unit = {},
     networkCall: suspend () -> Result<RAW, NetworkError>,
     mapToEntity: (raw: RAW) -> ENTITY,
-    updateDataBaseQuery: suspend (raw: ENTITY) -> Unit = {},
-    dataBaseQuery: suspend () -> Flow<ENTITY>,
+    updateDataBaseQuery: suspend (entity: ENTITY) -> Unit = {},
+    fetchFromDataBaseQuery: suspend () -> Flow<ENTITY>,
     mapToModel: (entity: ENTITY) -> MODEL
 ): Flow<Result<MODEL, NetworkError>> {
 
@@ -21,7 +21,7 @@ suspend fun <RAW, ENTITY, MODEL> getFlowResult(
             prevDataBaseQuery()
             val entity = mapToEntity(result.data)
             updateDataBaseQuery(entity)
-            dataBaseQuery().map { Result.Success(mapToModel(it)) }
+            fetchFromDataBaseQuery().map { Result.Success(mapToModel(it)) }
         }
     }
 }

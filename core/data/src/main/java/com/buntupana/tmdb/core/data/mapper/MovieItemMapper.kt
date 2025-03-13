@@ -1,9 +1,9 @@
 package com.buntupana.tmdb.core.data.mapper
 
 
-import com.buntupana.tmdb.core.data.database.entity.MovieEntity
-import com.buntupana.tmdb.core.data.database.entity.MovieSimpleEntity
+import com.buntupana.tmdb.core.data.database.entity.MediaSimpleEntity
 import com.buntupana.tmdb.core.data.raw.MovieItemRaw
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.util.DateUtil
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
@@ -11,11 +11,12 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-fun List<MovieItemRaw>.toEntity(): List<MovieSimpleEntity> {
+fun List<MovieItemRaw>.toEntity(): List<MediaSimpleEntity> {
 
     return map { raw ->
-        MovieSimpleEntity(
+        MediaSimpleEntity(
             id = raw.id,
+            mediaType = MediaType.MOVIE,
             title = raw.title,
             originalTitle = raw.originalTitle,
             overview = raw.overview,
@@ -30,41 +31,6 @@ fun List<MovieItemRaw>.toEntity(): List<MovieSimpleEntity> {
             voteCount = raw.voteCount
         )
     }
-}
-
-fun MovieEntity.toModel(
-    baseUrlPoster: String,
-    baseUrlBackdrop: String
-): MediaItem.Movie {
-
-    val posterUrl =
-        posterPath.ifNotNullOrBlank { baseUrlPoster + posterPath.orEmpty() }
-    val backdropUrl =
-        backdropPath.ifNotNullOrBlank { baseUrlBackdrop + backdropPath.orEmpty() }
-
-    val releaseLocalDate = try {
-        LocalDate.parse(releaseDate.orEmpty())
-            .format(DateTimeFormatter.ofPattern(DateUtil.dateFormat))
-    } catch (e: DateTimeParseException) {
-        ""
-    }
-
-    return MediaItem.Movie(
-        id = id,
-        name = title,
-        originalName = originalTitle,
-        overview = overview.orEmpty(),
-        posterUrl = posterUrl,
-        backdropUrl = backdropUrl,
-        originalLanguage = originalLanguageCode,
-        popularity = popularity ?: 0f,
-        voteAverage = if ((voteCount ?: 0) == 0) null else ((voteAverage
-            ?: 0f) * 10).toInt(),
-        voteCount = voteCount ?: 0,
-        releaseDate = releaseLocalDate,
-        video = video ?: false,
-        adult = adult
-    )
 }
 
 fun MovieItemRaw.toModel(
@@ -90,7 +56,7 @@ fun MovieItemRaw.toModel(
         overview = overview.orEmpty(),
         posterUrl = posterUrl,
         backdropUrl = backdropUrl,
-        originalLanguage = originalLanguage,
+        originalLanguageCode = originalLanguage,
         popularity = popularity ?: 0f,
         voteAverage = if ((voteCount ?: 0) == 0) null else ((voteAverage ?: 0f) * 10).toInt(),
         voteCount = voteCount ?: 0,

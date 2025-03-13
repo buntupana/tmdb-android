@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.lists.data.remote_data_source
 
-import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
+import com.buntupana.tmdb.core.data.raw.MediaItemRaw
 import com.buntupana.tmdb.core.data.raw.ResponseListRaw
 import com.buntupana.tmdb.core.data.raw.StandardRaw
 import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
@@ -150,7 +150,7 @@ class ListRemoteDataSource @Inject constructor(
     suspend fun getListItems(
         listId: Long,
         page: Int = 1
-    ): Result<ResponseListRaw<AnyMediaItemRaw>, NetworkError> {
+    ): Result<ResponseListRaw<MediaItemRaw>, NetworkError> {
         return getResult {
             httpClient.get(urlString = "/4/list/$listId") {
                 parameter("page", page)

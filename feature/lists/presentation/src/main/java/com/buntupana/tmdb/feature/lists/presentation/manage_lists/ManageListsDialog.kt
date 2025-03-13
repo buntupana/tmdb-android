@@ -31,7 +31,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.feature.lists.domain.model.ListItem
+import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.comp.ManageListsHeader
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.comp.ManageListsLists
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -103,8 +103,8 @@ fun ManageListsContent(
     state: ManageListsState,
     sheetState: SheetState,
     onDismiss: () -> Unit,
-    onAddToListClick: (listItem: ListItem) -> Unit = {},
-    onDeleteFromListClick: (listItem: ListItem) -> Unit = {},
+    onAddToListClick: (userListDetails: UserListDetails) -> Unit = {},
+    onDeleteFromListClick: (userListDetails: UserListDetails) -> Unit = {},
     onConfirmClick: () -> Unit = {}
 ) {
 
@@ -136,14 +136,14 @@ fun ManageListsContent(
             ManageListsHeader(
                 modifier = Modifier.fillMaxWidth(),
                 isLoading = state.isLoading,
-                areListsNull = state.listMediaLists == null,
+                areListsNull = state.userListDetails == null,
                 onCancelClick = onDismiss,
                 onConfirmClick = onConfirmClick
             )
 
             Box {
                 androidx.compose.animation.AnimatedVisibility(
-                    visible = state.listMediaLists != null,
+                    visible = state.userListDetails != null,
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
@@ -186,8 +186,8 @@ private fun ManageListsPreview() {
             isLoading = false,
             mediaType = MediaType.MOVIE,
             searchKey = "",
-            listMediaLists = listOf(
-                ListItem(
+            userListDetails = listOf(
+                UserListDetails(
                     id = 1,
                     name = "List 1",
                     description = "Description 1",
@@ -202,7 +202,7 @@ private fun ManageListsPreview() {
                 )
             ),
             listAllLists = listOf(
-                ListItem(
+                UserListDetails(
                     id = 2,
                     name = "List 2",
                     description = "Description 1",

@@ -152,10 +152,10 @@ class AccountViewModel @Inject constructor(
                 .onError {
                     state = state.copy(isListsLoadingError = true)
                 }
-                .onSuccess { listItemList ->
+                .onSuccess { userListDetailsList ->
                     // Fake delay to show loading
                     delay(LOADING_DELAY)
-                    state = state.copy(listsMediaItemList = listItemList)
+                    state = state.copy(userListDetailsList = userListDetailsList)
                 }
         }
     }

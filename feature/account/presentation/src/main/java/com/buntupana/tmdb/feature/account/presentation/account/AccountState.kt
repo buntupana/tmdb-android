@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.feature.account.presentation.account
 
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
-import com.buntupana.tmdb.feature.lists.domain.model.ListItem
+import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.panabuntu.tmdb.core.common.model.MediaItem
 
 data class AccountState(
@@ -12,7 +12,7 @@ data class AccountState(
     val favoritesFilterSelected: MediaFilter = MediaFilter.MOVIES,
     val watchlistMediaItemList: List<MediaItem>? = null,
     val favoritesMediaItemList: List<MediaItem>? = null,
-    val listsMediaItemList: List<ListItem>? = null,
+    val userListDetailsList: List<UserListDetails>? = null,
     val isWatchlistLoadingError: Boolean = false,
     val isFavoritesLoadingError: Boolean = false,
     val isListsLoadingError: Boolean = false,

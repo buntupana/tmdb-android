@@ -7,7 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import androidx.paging.filter
 import androidx.paging.map
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
@@ -20,6 +19,7 @@ import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -48,15 +48,15 @@ class ListDetailViewModel @Inject constructor(
     private var _sideEffect = Channel<ListDetailSideEffect>()
     val sideEffect = _sideEffect.receiveAsFlow()
 
+    init {
+        onEvent(ListDetailEvent.GetDetails)
+    }
+
     fun onEvent(event: ListDetailEvent) {
         Timber.d("onEvent() called with: event = [$event]")
         viewModelScope.launch {
             when (event) {
                 ListDetailEvent.GetDetails -> getListDetails()
-
-                is ListDetailEvent.SuccessDeleteItemList -> deleteItemList(
-                    itemId = event.itemId
-                )
             }
         }
     }
@@ -65,8 +65,8 @@ class ListDetailViewModel @Inject constructor(
 
         state = state.copy(isLoading = state.mediaItemList == null, isError = false)
 
-        getListDetailsUseCase(navArgs.listId)
-            .onError {
+        getListDetailsUseCase(navArgs.listId).collectLatest {
+            it.onError {
                 if (state.itemTotalCount == null) {
                     state = state.copy(isLoading = false, isError = true)
                 } else {
@@ -77,6 +77,13 @@ class ListDetailViewModel @Inject constructor(
                     )
                 }
             }.onSuccess { listDetails ->
+
+                if (listDetails == null) {
+                    Timber.d("getListDetails: null")
+                    _sideEffect.send(ListDetailSideEffect.NavigateBack)
+                    return@onSuccess
+                }
+
                 state = state.copy(
                     isLoading = false,
                     listName = listDetails.name,
@@ -87,10 +94,9 @@ class ListDetailViewModel @Inject constructor(
                 )
                 if (state.mediaItemList == null) {
                     getListItems()
-                } else {
-                    _sideEffect.send(ListDetailSideEffect.RefreshMediaItemList)
                 }
             }
+        }
     }
 
     private fun getListItems() {
@@ -107,17 +113,5 @@ class ListDetailViewModel @Inject constructor(
                 }.cachedIn(viewModelScope)
             )
         }
-    }
-
-    private fun deleteItemList(itemId: String) {
-        val pagingList = state.mediaItemList?.map { pagingData ->
-            pagingData.filter { item ->
-                (itemId == item.id).not()
-            }
-        }
-        state = state.copy(
-            mediaItemList = pagingList?.cachedIn(viewModelScope),
-            itemTotalCount = (state.itemTotalCount ?: 0) - 1
-        )
     }
 }

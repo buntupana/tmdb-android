@@ -47,6 +47,10 @@ import com.buntupana.tmdb.feature.detail.presentation.rating.RatingMediaType
 import com.buntupana.tmdb.feature.detail.presentation.rating.RatingNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
+import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListDialog
+import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListNav
+import com.buntupana.tmdb.feature.lists.presentation.delete_list.DeleteListDialog
+import com.buntupana.tmdb.feature.lists.presentation.delete_list.DeleteListNav
 import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailNav
 import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailScreen
 import com.buntupana.tmdb.feature.lists.presentation.lists.ListsNav
@@ -395,7 +399,12 @@ class MainActivity : ComponentActivity() {
                                         )
                                     )
                                 },
-                                onSearchClick = { navRoutesMain.navigate(SearchNav) }
+                                onSearchClick = { navRoutesMain.navigate(SearchNav) },
+                                onCreateListDialogClick = {
+                                    navRoutesMain.navigate(
+                                        CreateUpdateListNav()
+                                    )
+                                }
                             )
                         }
                         composable<ListDetailNav> {
@@ -409,6 +418,24 @@ class MainActivity : ComponentActivity() {
                                             mediaId = mediaId,
                                             mediaType = mediaType,
                                             backgroundColor = mainPosterColor?.toArgb()
+                                        )
+                                    )
+                                },
+                                onUpdateListClick = { listId, listName, listDescription, isPublic ->
+                                    navRoutesMain.navigate(
+                                        CreateUpdateListNav(
+                                            listId = listId,
+                                            listName = listName,
+                                            listDescription = listDescription,
+                                            isPublic = isPublic
+                                        )
+                                    )
+                                },
+                                onDeleteListClick = { listId, listName ->
+                                    navRoutesMain.navigate(
+                                        DeleteListNav(
+                                            listId = listId,
+                                            listName = listName
                                         )
                                     )
                                 }
@@ -425,6 +452,16 @@ class MainActivity : ComponentActivity() {
                         }
                         bottomSheet<ManageListsNav> {
                             ManageListsDialog(
+                                onDismiss = { navRoutesMain.popBackStack() }
+                            )
+                        }
+                        bottomSheet<CreateUpdateListNav> {
+                            CreateUpdateListDialog(
+                                onDismiss = { navRoutesMain.popBackStack() }
+                            )
+                        }
+                        bottomSheet<DeleteListNav> {
+                            DeleteListDialog(
                                 onDismiss = { navRoutesMain.popBackStack() }
                             )
                         }

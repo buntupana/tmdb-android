@@ -11,8 +11,7 @@ import com.buntupana.tmdb.feature.lists.domain.usecase.GetListsPagingUseCase
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -26,8 +25,9 @@ class ListsViewModel @Inject constructor(
     var state by mutableStateOf(ListsState())
         private set
 
-    private var _sideEffect = Channel<ListsSideEffect>()
-    val sideEffect = _sideEffect.receiveAsFlow()
+    init {
+        onEvent(ListsEvent.GetLists)
+    }
 
     fun onEvent(event: ListsEvent) {
         Timber.d("onEvent() called with: event = [$event]")
@@ -45,23 +45,21 @@ class ListsViewModel @Inject constructor(
             isError = false
         )
 
-        getListsTotalCountUseCase()
-            .onError {
+        getListsTotalCountUseCase().collectLatest { result ->
+            result.onError {
                 state = state.copy(isError = true, isLoading = false)
-            }
-            .onSuccess { totalCount ->
+            }.onSuccess { totalCount ->
                 state = state.copy(listItemTotalCount = totalCount, isLoading = false)
-                if (state.listItems == null) {
+                if (state.userListDetailsList == null) {
                     getLists()
-                } else {
-                    _sideEffect.send(ListsSideEffect.RefreshListItemList)
                 }
             }
+        }
     }
 
     private suspend fun getLists() {
         getListsPagingUseCase().let {
-            state = state.copy(listItems = it.cachedIn(viewModelScope))
+            state = state.copy(userListDetailsList = it.cachedIn(viewModelScope))
         }
     }
 }

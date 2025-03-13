@@ -9,6 +9,8 @@ import kotlinx.serialization.json.internal.FormatLanguage
 import kotlinx.serialization.serializer
 import java.text.NumberFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
@@ -28,6 +30,14 @@ fun LocalDate.toFullDate(): String {
         Locale.getDefault()
     )
     return this.format(dateFormatter)
+}
+
+fun LocalDateTime.toFullDateTimeUTC(): String {
+    val utcDateTime = atOffset(ZoneOffset.UTC) // Convert to UTC Offset
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss 'UTC'") // Format
+
+    val formattedDate = utcDateTime.format(formatter)
+    return formattedDate
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -108,7 +118,7 @@ fun Long.toLocalizedString(locale: Locale = Locale.getDefault()): String {
 fun getLanguageName(languageCode: String?): String {
     return try {
         Locale(languageCode!!).displayLanguage
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         " - "
     }
 }

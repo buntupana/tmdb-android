@@ -91,21 +91,19 @@ class WatchlistFavoritesViewModel @Inject constructor(
             )
 
             getItemsUseCase().collectLatest { result ->
-                Timber.d("getWatchlistData: collect")
                 result.onError {
                     state = state.copy(isLoading = false, isError = true)
-                }
-                    .onSuccess {
-                        state = state.copy(
-                            isLoading = false,
-                            movieItemsTotalCount = it.movieTotalCount,
-                            tvShowItemsTotalCount = it.tvShowTotalCount
-                        )
-                        if (state.movieItems == null || state.tvShowItems == null) {
-                            getMediaItems(MediaFilter.MOVIES)
-                            getMediaItems(MediaFilter.TV_SHOWS)
-                        }
+                }.onSuccess {
+                    state = state.copy(
+                        isLoading = false,
+                        movieItemsTotalCount = it.movieTotalCount,
+                        tvShowItemsTotalCount = it.tvShowTotalCount
+                    )
+                    if (state.movieItems == null || state.tvShowItems == null) {
+                        getMediaItems(MediaFilter.MOVIES)
+                        getMediaItems(MediaFilter.TV_SHOWS)
                     }
+                }
             }
         }
     }

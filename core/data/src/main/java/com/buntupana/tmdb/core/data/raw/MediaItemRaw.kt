@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  * returns a mix of everything
  * */
 @Serializable
-data class AnyMediaItemRaw(
+data class MediaItemRaw(
     val id: Long,
     @SerialName("media_type")
     val mediaType: String,

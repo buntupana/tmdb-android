@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ManageListsItem(
     modifier: Modifier = Modifier,
-    listItem: com.buntupana.tmdb.feature.lists.domain.model.ListItem,
+    mediaList: com.buntupana.tmdb.feature.lists.domain.model.UserListDetails,
     isForAdd: Boolean,
     onItemClick: () -> Unit = {}
 ) {
@@ -33,7 +33,7 @@ fun ManageListsItem(
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            text = "${listItem.name} (${listItem.itemCount})"
+            text = "${mediaList.name} (${mediaList.itemCount})"
         )
 
         val icon = if (isForAdd) Icons.Rounded.Add else Icons.Rounded.Remove
@@ -60,7 +60,7 @@ private fun ManageListsItemPreview() {
     ManageListsItem(
         modifier = Modifier.fillMaxWidth(),
         isForAdd = false,
-        listItem = com.buntupana.tmdb.feature.lists.domain.model.ListItem(
+        mediaList = com.buntupana.tmdb.feature.lists.domain.model.UserListDetails(
             id = 1,
             name = "List 1",
             description = "Description 1",

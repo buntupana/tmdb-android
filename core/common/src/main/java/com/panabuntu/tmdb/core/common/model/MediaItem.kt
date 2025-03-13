@@ -22,7 +22,7 @@ sealed class MediaItem(
         override val overview: String,
         override val posterUrl: String?,
         override val backdropUrl: String?,
-        val originalLanguage: String?,
+        val originalLanguageCode: String?,
         override val popularity: Float,
         override val voteAverage: Int?,
         val voteCount: Int,
@@ -48,12 +48,11 @@ sealed class MediaItem(
         override val overview: String,
         override val posterUrl: String?,
         override val backdropUrl: String?,
-        val originalLanguage: String?,
+        val originalLanguageCode: String?,
         override val popularity: Float,
         override val voteAverage: Int?,
         val voteCount: Int,
-        override val releaseDate: String,
-        val originCountryList: List<String>
+        override val releaseDate: String
     ) : MediaItem(
         id = id,
         name = name,

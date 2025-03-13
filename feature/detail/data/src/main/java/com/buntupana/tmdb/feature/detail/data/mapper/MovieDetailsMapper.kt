@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.core.data.database.entity.MovieEntity
+import com.buntupana.tmdb.core.data.database.entity.MediaEntity
 import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsMovieRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ExternalLinksRaw
@@ -12,6 +12,7 @@ import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.Recommendat
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ReleaseDatesRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.util.Const.RATABLE_DAYS
 import com.panabuntu.tmdb.core.common.util.encodeToStringSafe
 import com.panabuntu.tmdb.core.common.util.getLanguageName
@@ -22,10 +23,11 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
-fun MovieDetailsRaw.toEntity(): MovieEntity {
+fun MovieDetailsRaw.toEntity(): MediaEntity {
 
-    return MovieEntity(
+    return MediaEntity(
         id = id,
+        mediaType = MediaType.MOVIE,
         title = title,
         posterPath = posterPath,
         backdropPath = backdropPath,
@@ -61,7 +63,7 @@ fun MovieDetailsRaw.toEntity(): MovieEntity {
     )
 }
 
-fun MovieEntity.toModel(
+fun MediaEntity.toMovieModel(
     baseUrlPoster: String,
     baseUrlBackdrop: String,
     baseUrlProfile: String,

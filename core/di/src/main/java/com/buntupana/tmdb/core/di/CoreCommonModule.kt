@@ -96,19 +96,11 @@ object CoreCommonModule {
 
     @Singleton
     @Provides
-    fun provideMovieDetailsDao(db: TmdbDataBase) = db.movieDao
-
-    @Singleton
-    @Provides
-    fun provideTvShowDetailsDao(db: TmdbDataBase) = db.tvShowDao
-
-    @Singleton
-    @Provides
     fun provideEpisodesDao(db: TmdbDataBase) = db.episodesDao
 
     @Singleton
     @Provides
-    fun provideAnyMediaDao(db: TmdbDataBase) = db.anyMediaDao
+    fun provideAnyMediaDao(db: TmdbDataBase) = db.mediaDao
 
     @Singleton
     @Provides
@@ -120,7 +112,11 @@ object CoreCommonModule {
 
     @Singleton
     @Provides
-    fun provideListDao(db: TmdbDataBase) = db.mediaListDao
+    fun provideListDao(db: TmdbDataBase) = db.userListDetailsDao
+
+    @Singleton
+    @Provides
+    fun provideUserListItemDao(db: TmdbDataBase) = db.userListItemDao
 
     @Singleton
     @Provides

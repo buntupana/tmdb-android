@@ -3,7 +3,7 @@ package com.buntupana.tmdb.feature.lists.domain.model
 import com.panabuntu.tmdb.core.common.model.DefaultItem
 import java.time.LocalDate
 
-data class MediaList(
+data class UserListDetails(
     override val id: Long,
     val name: String,
     val backdropUrl: String?,

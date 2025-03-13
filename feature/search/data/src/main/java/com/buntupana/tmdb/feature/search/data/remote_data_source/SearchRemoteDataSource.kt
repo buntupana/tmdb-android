@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.search.data.remote_data_source
 
-import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
+import com.buntupana.tmdb.core.data.raw.MediaItemRaw
 import com.buntupana.tmdb.core.data.raw.MovieItemRaw
 import com.buntupana.tmdb.core.data.raw.ResponseListRaw
 import com.buntupana.tmdb.core.data.raw.TvShowItemRaw
@@ -17,13 +17,13 @@ class SearchRemoteDataSource @Inject constructor(
     private val httpClient: HttpClient
 ) : RemoteDataSource() {
 
-    suspend fun getTrending(): Result<ResponseListRaw<AnyMediaItemRaw>, NetworkError> {
+    suspend fun getTrending(): Result<ResponseListRaw<MediaItemRaw>, NetworkError> {
         return getResult {
             httpClient.get("/3/trending/all/day")
         }
     }
 
-    suspend fun getSearchMedia(searchKey: String): Result<ResponseListRaw<AnyMediaItemRaw>, NetworkError> {
+    suspend fun getSearchMedia(searchKey: String): Result<ResponseListRaw<MediaItemRaw>, NetworkError> {
         return getResult {
             httpClient.get("/3/search/multi") {
                 parameter("query", searchKey)

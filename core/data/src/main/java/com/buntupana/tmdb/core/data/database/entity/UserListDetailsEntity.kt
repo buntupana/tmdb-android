@@ -4,8 +4,8 @@ package com.buntupana.tmdb.core.data.database.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "media_list")
-data class MediaListEntity(
+@Entity(tableName = "user_list_details")
+data class UserListDetailsEntity(
     @PrimaryKey
     val id: Long,
     val name: String,

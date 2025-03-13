@@ -50,7 +50,7 @@ class ListsViewModel @Inject constructor(
                 state = state.copy(isError = true, isLoading = false)
             }.onSuccess { totalCount ->
                 state = state.copy(listItemTotalCount = totalCount, isLoading = false)
-                if (state.mediaListItems == null) {
+                if (state.userListDetailsList == null) {
                     getLists()
                 }
             }
@@ -59,7 +59,7 @@ class ListsViewModel @Inject constructor(
 
     private suspend fun getLists() {
         getListsPagingUseCase().let {
-            state = state.copy(mediaListItems = it.cachedIn(viewModelScope))
+            state = state.copy(userListDetailsList = it.cachedIn(viewModelScope))
         }
     }
 }

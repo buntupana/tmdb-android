@@ -194,7 +194,7 @@ fun AccountContent(
 
             ListItemsSection(
                 modifier = Modifier.fillMaxWidth(),
-                listItemMediaList = state.listsMediaItemList,
+                userListDetailsList = state.userListDetailsList,
                 isLoadingError = state.isListsLoadingError,
                 titleClicked = onListsClick,
                 onItemClicked = navigateToListDetail,
@@ -271,7 +271,7 @@ fun AccountScreenPreview() {
         AccountState(
             isUserLogged = true,
             username = "Alvaro",
-            listsMediaItemList = null
+            userListDetailsList = null
         ),
         onSignInClick = {},
         onSignOutClick = {},

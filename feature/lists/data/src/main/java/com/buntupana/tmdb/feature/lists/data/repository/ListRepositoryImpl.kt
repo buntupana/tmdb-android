@@ -5,18 +5,21 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.buntupana.tmdb.core.data.api.GenericPagingDataSource
 import com.buntupana.tmdb.core.data.api.GenericRemoteMediator
-import com.buntupana.tmdb.core.data.database.dao.MediaListDao
+import com.buntupana.tmdb.core.data.database.dao.MediaDao
 import com.buntupana.tmdb.core.data.database.dao.RemoteKeyDao
-import com.buntupana.tmdb.core.data.database.entity.MediaListEntity
-import com.buntupana.tmdb.core.data.mapper.toModel
+import com.buntupana.tmdb.core.data.database.dao.UserListDetailsDao
+import com.buntupana.tmdb.core.data.database.dao.UserListItemDao
+import com.buntupana.tmdb.core.data.database.entity.UserListDetailsEntity
+import com.buntupana.tmdb.core.data.database.entity.UserListItemEntity
+import com.buntupana.tmdb.core.data.mapper.toEntity
+import com.buntupana.tmdb.core.data.mapper.toItemModel
 import com.buntupana.tmdb.core.data.repository.getAllItemsFromPaging
 import com.buntupana.tmdb.feature.lists.data.mapper.toEntity
 import com.buntupana.tmdb.feature.lists.data.mapper.toModel
 import com.buntupana.tmdb.feature.lists.data.remote_data_source.ListRemoteDataSource
 import com.buntupana.tmdb.feature.lists.domain.model.MediaItemBasic
-import com.buntupana.tmdb.feature.lists.domain.model.MediaList
+import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.domain.repository.ListRepository
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
@@ -41,7 +44,9 @@ import javax.inject.Inject
 class ListRepositoryImpl @Inject constructor(
     private val listRemoteDataSource: ListRemoteDataSource,
     private val remoteKeyDao: RemoteKeyDao,
-    private val mediaListDao: MediaListDao,
+    private val mediaDao: MediaDao,
+    private val userListDetailsDao: UserListDetailsDao,
+    private val userListItemDao: UserListItemDao,
     private val urlProvider: UrlProvider,
     sessionManager: SessionManager
 ) : ListRepository {
@@ -51,7 +56,7 @@ class ListRepositoryImpl @Inject constructor(
     private var listsTotalCount = MutableStateFlow(0)
 
     override suspend fun getListTotalCount(): Flow<Result<Int, NetworkError>> {
-        val result =  listRemoteDataSource.getLists(
+        val result = listRemoteDataSource.getLists(
             accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty()
         ).map { result ->
             listsTotalCount.value = result.totalResults
@@ -67,7 +72,7 @@ class ListRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getLists(justFirstPage: Boolean): Result<List<MediaList>, NetworkError> {
+    override suspend fun getLists(justFirstPage: Boolean): Result<List<UserListDetails>, NetworkError> {
 
         return if (justFirstPage) {
             listRemoteDataSource.getLists(
@@ -97,9 +102,9 @@ class ListRepositoryImpl @Inject constructor(
     }
 
     @OptIn(ExperimentalPagingApi::class)
-    override suspend fun getListsPaging(): Flow<PagingData<MediaList>> {
+    override suspend fun getListsPaging(): Flow<PagingData<UserListDetails>> {
 
-        val remoteType = "media_list"
+        val remoteType = "user_list_details"
 
         return Pager(
             config = PagingConfig(
@@ -116,15 +121,15 @@ class ListRepositoryImpl @Inject constructor(
                 },
                 remoteKeyDao = remoteKeyDao,
                 clearTable = {
-                    mediaListDao.clearAll()
+                    userListDetailsDao.clearAll()
                     remoteKeyDao.remoteKeyByType(remoteType)
                 },
                 insertNetworkResult = { resultList ->
-                    mediaListDao.upsert(resultList.toEntity())
+                    userListDetailsDao.upsert(resultList.toEntity())
                 }
             ),
             pagingSourceFactory = {
-                mediaListDao.getAll()
+                userListDetailsDao.getAll()
             }
         ).flow.map { pagingData ->
             pagingData.map {
@@ -136,7 +141,7 @@ class ListRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun checkIfitemInList(
+    override suspend fun checkIfItemInList(
         listId: Long,
         mediaId: Long,
         mediaType: MediaType
@@ -158,8 +163,8 @@ class ListRepositoryImpl @Inject constructor(
             description = description,
             isPublic = isPublic,
         ).onSuccess {
-            mediaListDao.upsert(
-                MediaListEntity(
+            userListDetailsDao.upsert(
+                UserListDetailsEntity(
                     id = it.id,
                     name = name,
                     description = description,
@@ -192,9 +197,9 @@ class ListRepositoryImpl @Inject constructor(
             description = description,
             isPublic = isPublic
         ).onSuccess {
-            val entity = mediaListDao.getById(listId).firstOrNull() ?: return@onSuccess
+            val entity = userListDetailsDao.getById(listId).firstOrNull() ?: return@onSuccess
 
-            mediaListDao.upsert(
+            userListDetailsDao.upsert(
                 entity.copy(
                     name = name,
                     description = description,
@@ -208,44 +213,22 @@ class ListRepositoryImpl @Inject constructor(
     override suspend fun deleteList(listId: Long): Result<Unit, NetworkError> {
         return listRemoteDataSource.deleteList(listId = listId)
             .onSuccess {
-                mediaListDao.deleteById(listId)
+                userListDetailsDao.deleteById(listId)
                 listsTotalCount.value -= 1
             }
             .asEmptyDataResult()
     }
 
-    override suspend fun addMediaItemList(
-        listId: Long,
-        mediaId: Long,
-        mediaType: MediaType
-    ): Result<Unit, NetworkError> {
-        return listRemoteDataSource.addMediaItemList(
-            listId = listId,
-            mediaItemList = listOf(MediaItemBasic(mediaId, mediaType))
-        ).asEmptyDataResult()
-    }
-
-    override suspend fun deleteMediaItemList(
-        listId: Long,
-        mediaId: Long,
-        mediaType: MediaType
-    ): Result<Unit, NetworkError> {
-        return listRemoteDataSource.removeMediaItemList(
-            listId = listId,
-            mediaItemList = listOf(MediaItemBasic(mediaId, mediaType))
-        ).asEmptyDataResult()
-    }
-
-    override suspend fun getListDetails(listId: Long): Flow<Result<MediaList?, NetworkError>> {
+    override suspend fun getListDetails(listId: Long): Flow<Result<UserListDetails?, NetworkError>> {
 
         return flow {
             when (val result = listRemoteDataSource.getListDetail(listId = listId)) {
                 is Result.Error -> emit(result)
                 is Result.Success -> {
                     val entity = result.data.toEntity()
-                    mediaListDao.upsert(entity)
+                    userListDetailsDao.upsert(entity)
                     emitAll(
-                        mediaListDao.getById(listId).map {
+                        userListDetailsDao.getById(listId).map {
                             Result.Success(
                                 it?.toModel(
                                     baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
@@ -258,28 +241,90 @@ class ListRepositoryImpl @Inject constructor(
         }
     }
 
+    @OptIn(ExperimentalPagingApi::class)
     override fun getListItems(listId: Long): Flow<PagingData<MediaItem>> {
+        val remoteType = "user_list_$listId"
+
         return Pager(
             config = PagingConfig(
                 pageSize = PAGINATION_SIZE,
                 enablePlaceholders = false
             ),
+            remoteMediator = GenericRemoteMediator(
+                remoteType = remoteType,
+                networkCall = { page ->
+                    listRemoteDataSource.getListItems(
+                        listId = listId,
+                        page = page
+                    )
+                },
+                remoteKeyDao = remoteKeyDao,
+                clearTable = {
+                    userListItemDao.clearByListId(listId)
+                    remoteKeyDao.remoteKeyByType(remoteType)
+                },
+                insertNetworkResult = { resultList ->
+                    mediaDao.upsertSimple(resultList.toEntity())
+                    var addedAt = System.currentTimeMillis()
+                    userListItemDao.upsert(
+                        resultList.map {
+                            addedAt += 1
+                            UserListItemEntity(
+                                listId = listId,
+                                mediaId = it.id,
+                                mediaType = MediaType.fromValue(it.mediaType),
+                                addedAt = addedAt
+                            )
+                        }
+                    )
+                }
+            ),
             pagingSourceFactory = {
-                GenericPagingDataSource(
-                    networkCall = { page ->
-                        listRemoteDataSource.getListItems(
-                            listId = listId,
-                            page = page
-                        )
-                    },
-                    mapItemList = {
-                        it.toModel(
-                            baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                            baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-                        )
-                    }
+                mediaDao.getUserListItem(listId)
+            }
+        ).flow.map { pagingData ->
+            pagingData.map {
+                it.toItemModel(
+                    baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
                 )
             }
-        ).flow
+        }
+    }
+
+    override suspend fun addMediaItemList(
+        listId: Long,
+        mediaId: Long,
+        mediaType: MediaType
+    ): Result<Unit, NetworkError> {
+        return listRemoteDataSource.addMediaItemList(
+            listId = listId,
+            mediaItemList = listOf(MediaItemBasic(mediaId, mediaType))
+        ).onSuccess {
+            userListItemDao.insert(
+                listId = listId,
+                mediaId = mediaId,
+                mediaType = mediaType
+            )
+            userListDetailsDao.addItemCount(listId)
+        }.asEmptyDataResult()
+    }
+
+    override suspend fun deleteMediaItemList(
+        listId: Long,
+        mediaId: Long,
+        mediaType: MediaType
+    ): Result<Unit, NetworkError> {
+        return listRemoteDataSource.removeMediaItemList(
+            listId = listId,
+            mediaItemList = listOf(MediaItemBasic(mediaId, mediaType))
+        ).onSuccess {
+            userListItemDao.delete(
+                listId = listId,
+                mediaId = mediaId,
+                mediaType = mediaType
+            )
+            userListDetailsDao.restItemCount(listId)
+        }.asEmptyDataResult()
     }
 }

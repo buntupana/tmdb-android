@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.feature.lists.domain.model.MediaList
+import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsState
 import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -27,8 +27,8 @@ import com.buntupana.tmdb.core.ui.R as RCore
 fun ManageListsLists(
     modifier: Modifier = Modifier,
     state: ManageListsState,
-    onAddToListClick: (mediaList: MediaList) -> Unit = {},
-    onDeleteFromListClick: (mediaList: MediaList) -> Unit = {}
+    onAddToListClick: (mediaList: UserListDetails) -> Unit = {},
+    onDeleteFromListClick: (mediaList: UserListDetails) -> Unit = {}
 ) {
     LazyColumn(
         modifier = modifier
@@ -56,11 +56,11 @@ fun ManageListsLists(
         }
 
         items(
-            count = state.listMediaLists?.size ?: 0,
-            key = { index -> "${state.listMediaLists?.get(index)?.id}_media" }
+            count = state.userListDetails?.size ?: 0,
+            key = { index -> "${state.userListDetails?.get(index)?.id}_media" }
         ) { index ->
 
-            val listItem = state.listMediaLists?.get(index)
+            val listItem = state.userListDetails?.get(index)
             listItem ?: return@items
 
             ManageListsItem(
@@ -74,7 +74,7 @@ fun ManageListsLists(
         }
 
         item {
-            if (state.listMediaLists?.isNotEmpty() == true) return@item
+            if (state.userListDetails?.isNotEmpty() == true) return@item
 
             Row(
                 modifier = Modifier
@@ -154,8 +154,8 @@ private fun ManageListsListsPreview() {
             isLoading = false,
             mediaType = MediaType.MOVIE,
             searchKey = "",
-            listMediaLists = listOf(
-                MediaList(
+            userListDetails = listOf(
+                UserListDetails(
                     id = 1,
                     name = "List 1",
                     description = "Description 1",
@@ -170,7 +170,7 @@ private fun ManageListsListsPreview() {
                 )
             ),
             listAllLists = listOf(
-                MediaList(
+                UserListDetails(
                     id = 2,
                     name = "List 2",
                     description = "Description 1",

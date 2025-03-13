@@ -4,33 +4,30 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.buntupana.tmdb.core.data.database.dao.AnyMediaDao
 import com.buntupana.tmdb.core.data.database.dao.EpisodesDao
 import com.buntupana.tmdb.core.data.database.dao.FavoriteDao
-import com.buntupana.tmdb.core.data.database.dao.MediaListDao
-import com.buntupana.tmdb.core.data.database.dao.MovieDao
+import com.buntupana.tmdb.core.data.database.dao.MediaDao
 import com.buntupana.tmdb.core.data.database.dao.RemoteKeyDao
-import com.buntupana.tmdb.core.data.database.dao.TvShowDao
+import com.buntupana.tmdb.core.data.database.dao.UserListDetailsDao
+import com.buntupana.tmdb.core.data.database.dao.UserListItemDao
 import com.buntupana.tmdb.core.data.database.dao.WatchlistDao
-import com.buntupana.tmdb.core.data.database.entity.AnyMediaEntity
 import com.buntupana.tmdb.core.data.database.entity.EpisodeEntity
 import com.buntupana.tmdb.core.data.database.entity.FavoriteEntity
-import com.buntupana.tmdb.core.data.database.entity.MediaListEntity
-import com.buntupana.tmdb.core.data.database.entity.MovieEntity
+import com.buntupana.tmdb.core.data.database.entity.MediaEntity
 import com.buntupana.tmdb.core.data.database.entity.RemoteKeyEntity
-import com.buntupana.tmdb.core.data.database.entity.TvShowEntity
+import com.buntupana.tmdb.core.data.database.entity.UserListDetailsEntity
+import com.buntupana.tmdb.core.data.database.entity.UserListItemEntity
 import com.buntupana.tmdb.core.data.database.entity.WatchlistEntity
 
 @Database(
     entities = [
         RemoteKeyEntity::class,
-        MovieEntity::class,
-        TvShowEntity::class,
         EpisodeEntity::class,
-        AnyMediaEntity::class,
+        MediaEntity::class,
         WatchlistEntity::class,
         FavoriteEntity::class,
-        MediaListEntity::class
+        UserListDetailsEntity::class,
+        UserListItemEntity::class
     ],
     version = 2,
     exportSchema = false,
@@ -50,17 +47,15 @@ abstract class TmdbDataBase : RoomDatabase() {
 
     abstract val remoteKeyDao: RemoteKeyDao
 
-    abstract val movieDao: MovieDao
-
-    abstract val tvShowDao: TvShowDao
-
     abstract val episodesDao: EpisodesDao
 
-    abstract val anyMediaDao: AnyMediaDao
+    abstract val mediaDao: MediaDao
 
     abstract val watchlistDao: WatchlistDao
 
     abstract val favoriteDao: FavoriteDao
 
-    abstract val mediaListDao: MediaListDao
+    abstract val userListDetailsDao: UserListDetailsDao
+
+    abstract val userListItemDao: UserListItemDao
 }

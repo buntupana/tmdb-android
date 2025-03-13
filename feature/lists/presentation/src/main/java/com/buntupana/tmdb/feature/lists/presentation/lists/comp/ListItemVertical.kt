@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.feature.lists.domain.model.MediaList
+import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.presentation.util.listItemMediaLists
 import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
@@ -42,7 +42,7 @@ import com.buntupana.tmdb.core.ui.R as RCore
 @Composable
 fun ListItemVertical(
     modifier: Modifier,
-    mediaList: MediaList,
+    userListDetails: UserListDetails,
     onItemClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
     var dominantColor by remember { mutableStateOf<Color?>(null) }
@@ -55,7 +55,7 @@ fun ListItemVertical(
                 vertical = Dimens.padding.verticalItem
             )
             .clickable {
-                onItemClick(mediaList.id, mediaList.name, mediaList.description, mediaList.backdropUrl)
+                onItemClick(userListDetails.id, userListDetails.name, userListDetails.description, userListDetails.backdropUrl)
             },
         shape = RoundedCornerShape(Dimens.posterRound),
         shadowElevation = Dimens.cardElevation
@@ -73,11 +73,11 @@ fun ListItemVertical(
 
                 var backgroundColor = PrimaryColor
 
-                if (mediaList.backdropUrl.isNotNullOrBlank()) {
+                if (userListDetails.backdropUrl.isNotNullOrBlank()) {
                     backgroundColor = backgroundColor.copy(alpha = 0.8f)
                     ImageFromUrl(
                         modifier = Modifier.fillMaxSize(),
-                        imageUrl = mediaList.backdropUrl,
+                        imageUrl = userListDetails.backdropUrl,
                         showPlaceHolder = true
                     ) { extractedColor ->
                         dominantColor = extractedColor
@@ -100,7 +100,7 @@ fun ListItemVertical(
                 ) {
 
                     BasicText(
-                        text = mediaList.name,
+                        text = userListDetails.name,
                         autoSize = TextAutoSize.StepBased(minFontSize = 18.sp, stepSize = 10.sp),
                         maxLines = 3,
                         color = { Color.White },
@@ -114,13 +114,13 @@ fun ListItemVertical(
                         Text(
                             text = stringResource(
                                 RCore.string.text_num_items,
-                                mediaList.itemCount
+                                userListDetails.itemCount
                             ),
                             color = Color.White,
                             style = MaterialTheme.typography.bodyLarge
                         )
 
-                        val listTypeResId = if (mediaList.isPublic) {
+                        val listTypeResId = if (userListDetails.isPublic) {
                             R.string.text_public
                         } else {
                             R.string.text_private
@@ -140,14 +140,14 @@ fun ListItemVertical(
                 }
             }
 
-            if (mediaList.description.isNullOrBlank()) return@Column
+            if (userListDetails.description.isNullOrBlank()) return@Column
 
             Text(
                 modifier = Modifier.padding(
                     horizontal = Dimens.padding.horizontal,
                     Dimens.padding.vertical
                 ),
-                text = mediaList.description!!
+                text = userListDetails.description!!
             )
         }
     }
@@ -158,7 +158,7 @@ fun ListItemVertical(
 private fun ListItemVerticalPreview() {
     ListItemVertical(
         modifier = Modifier,
-        mediaList = listItemMediaLists.first().copy(name = "adsf asdf asdf asdf adf asf"),
+        userListDetails = listItemMediaLists.first().copy(name = "adsf asdf asdf asdf adf asf"),
         onItemClick = { _, _, _, _ -> }
     )
 }

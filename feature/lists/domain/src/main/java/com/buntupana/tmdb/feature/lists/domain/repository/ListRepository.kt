@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.feature.lists.domain.repository
 
 import androidx.paging.PagingData
-import com.buntupana.tmdb.feature.lists.domain.model.MediaList
+import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
@@ -12,9 +12,9 @@ interface ListRepository {
 
     suspend fun getListTotalCount(): Flow<Result<Int, NetworkError>>
 
-    suspend fun getListsPaging(): Flow<PagingData<MediaList>>
+    suspend fun getListsPaging(): Flow<PagingData<UserListDetails>>
 
-    suspend fun checkIfitemInList(
+    suspend fun checkIfItemInList(
         listId: Long,
         mediaId: Long,
         mediaType: MediaType
@@ -47,9 +47,9 @@ interface ListRepository {
         mediaType: MediaType
     ): Result<Unit, NetworkError>
 
-    suspend fun getListDetails(listId: Long): Flow<Result<MediaList?, NetworkError>>
+    suspend fun getListDetails(listId: Long): Flow<Result<UserListDetails?, NetworkError>>
 
     fun getListItems(listId: Long): Flow<PagingData<MediaItem>>
 
-    suspend fun getLists(justFirstPage: Boolean = false): Result<List<MediaList>, NetworkError>
+    suspend fun getLists(justFirstPage: Boolean = false): Result<List<UserListDetails>, NetworkError>
 }

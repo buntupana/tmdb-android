@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
-import com.buntupana.tmdb.core.data.database.entity.TvShowEntity
+import com.buntupana.tmdb.core.data.database.entity.MediaEntity
 import com.buntupana.tmdb.core.data.mapper.getGender
 import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ContentRatingsRaw
@@ -16,6 +16,7 @@ import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.TvShowDetai
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.util.Const.RATABLE_DAYS
 import com.panabuntu.tmdb.core.common.util.encodeToStringSafe
 import com.panabuntu.tmdb.core.common.util.getLanguageName
@@ -26,13 +27,14 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
-fun TvShowDetailsRaw.toEntity(): TvShowEntity {
+fun TvShowDetailsRaw.toEntity(): MediaEntity {
 
     val credits = credits?.copy(cast = credits.cast.take(9), crew = credits.crew.take(9))
 
-    return TvShowEntity(
+    return MediaEntity(
         id = id,
-        name = name.orEmpty(),
+        mediaType = MediaType.TV_SHOW,
+        title = name.orEmpty(),
         posterPath = posterPath,
         backdropPath = backdropPath,
         overview = overview,
@@ -56,13 +58,13 @@ fun TvShowDetailsRaw.toEntity(): TvShowEntity {
         episodeRunTimeList = Json.encodeToString(episodeRunTime),
         createdByList = Json.encodeToString(createdBy),
         adult = adult,
-        firstAirDate = firstAirDate,
+        releaseDate = firstAirDate,
         voteAverage = voteAverage,
         spokenLanguageList = Json.encodeToString(spokenLanguages),
         productionCountryList = Json.encodeToString(productionCountries),
         productionCompanyList = Json.encodeToString(productionCompanies),
         popularity = popularity,
-        originalName = originalName,
+        originalTitle = originalName,
         originalLanguageCode = originalLanguageCode,
         originCountryList = Json.encodeToString(originCountry),
         numberOfSeasons = numberOfSeasons,
@@ -74,7 +76,7 @@ fun TvShowDetailsRaw.toEntity(): TvShowEntity {
     )
 }
 
-fun TvShowEntity.toModel(
+fun MediaEntity.toTvShowModel(
     baseUrlPoster: String,
     baseUrlBackdrop: String,
     baseUrlProfile: String,
@@ -86,7 +88,7 @@ fun TvShowEntity.toModel(
 ): TvShowDetails {
 
     val releaseLocalDate = try {
-        LocalDate.parse(firstAirDate)
+        LocalDate.parse(releaseDate)
     } catch (exc: DateTimeParseException) {
         null
     }
@@ -131,8 +133,8 @@ fun TvShowEntity.toModel(
 
     return TvShowDetails(
         id = id,
-        title = name,
-        originalTitle = originalName.orEmpty(),
+        title = title,
+        originalTitle = originalTitle,
         posterUrl = posterUrl,
         backdropUrl = backdropUrl,
         trailerUrl = getVideoTrailerUrl(videoList),

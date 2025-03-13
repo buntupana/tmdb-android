@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.core.data.database.entity
 
-data class MediaListSimpleEntity(
+data class UserListDetailsSimpleEntity(
     val id: Long,
     val name: String,
     val backdropPath: String?,

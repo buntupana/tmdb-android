@@ -87,8 +87,7 @@ fun ListsContent(
         }
     ) { paddingValues ->
 
-
-        val listItems = state.mediaListItems?.collectAsLazyPagingItems()
+        val userListDetailsList = state.userListDetailsList?.collectAsLazyPagingItems()
 
         if (state.isLoading) {
             Box(
@@ -128,7 +127,7 @@ fun ListsContent(
                 onCreateListClick = onCreateListClick
             )
 
-            listItems ?: return@Scaffold
+            userListDetailsList ?: return@Scaffold
 
             LazyColumnGeneric(
                 modifier = Modifier
@@ -137,7 +136,7 @@ fun ListsContent(
                 topPadding = Dimens.padding.small,
                 bottomPadding = Dimens.padding.small + paddingValues.calculateBottomPadding(),
                 animateItem = true,
-                itemList = listItems,
+                itemList = userListDetailsList,
                 noResultContent = {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -151,7 +150,7 @@ fun ListsContent(
             ) { _, item ->
                 ListItemVertical(
                     modifier = Modifier.animateItem(),
-                    mediaList = item,
+                    userListDetails = item,
                     onItemClick = onListDetailClick
                 )
             }

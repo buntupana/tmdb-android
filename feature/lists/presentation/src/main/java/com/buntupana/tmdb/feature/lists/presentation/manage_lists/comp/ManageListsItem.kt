@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ManageListsItem(
     modifier: Modifier = Modifier,
-    mediaList: com.buntupana.tmdb.feature.lists.domain.model.MediaList,
+    mediaList: com.buntupana.tmdb.feature.lists.domain.model.UserListDetails,
     isForAdd: Boolean,
     onItemClick: () -> Unit = {}
 ) {
@@ -60,7 +60,7 @@ private fun ManageListsItemPreview() {
     ManageListsItem(
         modifier = Modifier.fillMaxWidth(),
         isForAdd = false,
-        mediaList = com.buntupana.tmdb.feature.lists.domain.model.MediaList(
+        mediaList = com.buntupana.tmdb.feature.lists.domain.model.UserListDetails(
             id = 1,
             name = "List 1",
             description = "Description 1",

@@ -1,11 +1,12 @@
 package com.buntupana.tmdb.feature.detail.data.repository
 
 import com.buntupana.tmdb.core.data.database.dao.EpisodesDao
-import com.buntupana.tmdb.core.data.database.dao.MovieDao
-import com.buntupana.tmdb.core.data.database.dao.TvShowDao
+import com.buntupana.tmdb.core.data.database.dao.MediaDao
 import com.buntupana.tmdb.core.data.util.getFlowResult
 import com.buntupana.tmdb.feature.detail.data.mapper.toEntity
 import com.buntupana.tmdb.feature.detail.data.mapper.toModel
+import com.buntupana.tmdb.feature.detail.data.mapper.toMovieModel
+import com.buntupana.tmdb.feature.detail.data.mapper.toTvShowModel
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.DetailRemoteDataSource
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
@@ -16,6 +17,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.domain.model.SeasonDetail
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.map
@@ -27,8 +29,7 @@ import javax.inject.Inject
 
 class DetailRepositoryImpl @Inject constructor(
     private val detailRemoteDataSource: DetailRemoteDataSource,
-    private val movieDao: MovieDao,
-    private val tvShowDao: TvShowDao,
+    private val mediaDao: MediaDao,
     private val episodesDao: EpisodesDao,
     private val urlProvider: UrlProvider,
     private val sessionManager: SessionManager
@@ -47,13 +48,13 @@ class DetailRepositoryImpl @Inject constructor(
                 it.toEntity()
             },
             updateDataBaseQuery = {
-                movieDao.upsert(it)
+                mediaDao.upsert(it)
             },
             fetchFromDataBaseQuery = {
-                movieDao.getById(movieId)
+                mediaDao.get(movieId, MediaType.MOVIE)
             },
             mapToModel = {
-                it.toModel(
+                it.toMovieModel(
                     baseUrlPoster = urlProvider.BASE_URL_POSTER,
                     baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
                     baseUrlProfile = urlProvider.BASE_URL_PROFILE,
@@ -80,13 +81,13 @@ class DetailRepositoryImpl @Inject constructor(
                 it.toEntity()
             },
             updateDataBaseQuery = {
-                tvShowDao.upsertTvShowDetails(it)
+                mediaDao.upsert(it)
             },
             fetchFromDataBaseQuery = {
-                tvShowDao.getById(tvShowId)
+                mediaDao.get(tvShowId, MediaType.TV_SHOW)
             },
             mapToModel = {
-                it.toModel(
+                it.toTvShowModel(
                     baseUrlPoster = urlProvider.BASE_URL_POSTER,
                     baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
                     baseUrlProfile = urlProvider.BASE_URL_PROFILE,

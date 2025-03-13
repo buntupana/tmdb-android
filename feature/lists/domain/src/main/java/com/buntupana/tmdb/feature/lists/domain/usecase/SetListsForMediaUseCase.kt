@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.lists.domain.usecase
 
+import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.domain.repository.ListRepository
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
@@ -14,8 +15,8 @@ class SetListsForMediaUseCase @Inject constructor(
     suspend operator fun invoke(
         mediaId: Long,
         mediaType: MediaType,
-        originalList: List<com.buntupana.tmdb.feature.lists.domain.model.MediaList>,
-        newList: List<com.buntupana.tmdb.feature.lists.domain.model.MediaList>
+        originalList: List<UserListDetails>,
+        newList: List<UserListDetails>
     ): Result<Unit, NetworkError> {
 
         val listsToDelete = originalList.filter { id -> newList.contains(id).not() }

@@ -7,7 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import androidx.paging.filter
 import androidx.paging.map
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
@@ -49,15 +48,15 @@ class ListDetailViewModel @Inject constructor(
     private var _sideEffect = Channel<ListDetailSideEffect>()
     val sideEffect = _sideEffect.receiveAsFlow()
 
+    init {
+        onEvent(ListDetailEvent.GetDetails)
+    }
+
     fun onEvent(event: ListDetailEvent) {
         Timber.d("onEvent() called with: event = [$event]")
         viewModelScope.launch {
             when (event) {
                 ListDetailEvent.GetDetails -> getListDetails()
-
-                is ListDetailEvent.SuccessDeleteItemList -> deleteItemList(
-                    itemId = event.itemId
-                )
             }
         }
     }
@@ -95,8 +94,6 @@ class ListDetailViewModel @Inject constructor(
                 )
                 if (state.mediaItemList == null) {
                     getListItems()
-                } else {
-                    _sideEffect.send(ListDetailSideEffect.RefreshMediaItemList)
                 }
             }
         }
@@ -116,17 +113,5 @@ class ListDetailViewModel @Inject constructor(
                 }.cachedIn(viewModelScope)
             )
         }
-    }
-
-    private fun deleteItemList(itemId: String) {
-        val pagingList = state.mediaItemList?.map { pagingData ->
-            pagingData.filter { item ->
-                (itemId == item.id).not()
-            }
-        }
-        state = state.copy(
-            mediaItemList = pagingList?.cachedIn(viewModelScope),
-            itemTotalCount = (state.itemTotalCount ?: 0) - 1
-        )
     }
 }

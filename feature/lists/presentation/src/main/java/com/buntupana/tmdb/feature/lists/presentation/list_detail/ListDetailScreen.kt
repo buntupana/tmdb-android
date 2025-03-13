@@ -38,7 +38,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
@@ -80,31 +79,14 @@ fun ListDetailScreen(
 
     var deleteItemListNav by remember { mutableStateOf<DeleteItemListNav?>(null) }
 
-    var mediaItemList by remember { mutableStateOf<LazyPagingItems<ItemListViewEntity>?>(null) }
-
-    mediaItemList = viewModel.state.mediaItemList?.collectAsLazyPagingItems()
+    val mediaItemList = viewModel.state.mediaItemList?.collectAsLazyPagingItems()
 
     LaunchedEffect(lifecycleOwner.lifecycle) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-            viewModel.onEvent(ListDetailEvent.GetDetails)
-
             launch {
                 viewModel.sideEffect.collect { sideEffect ->
                     Timber.d("WatchlistScreen: sideEffect = $sideEffect")
                     when (sideEffect) {
-                        is ListDetailSideEffect.RefreshMediaItemList -> {
-                            mediaItemList?.refresh()
-                        }
-
-                        is ListDetailSideEffect.UpdateItemRevealed -> {
-                            mediaItemList?.itemSnapshotList?.find {
-                                it?.id == sideEffect.itemId
-                            }?.let { itemListViewEntity ->
-                                itemListViewEntity.isDeleteRevealed.value = sideEffect.isRevealed
-                            }
-                        }
-
                         ListDetailSideEffect.NavigateBack -> {
                             // add delay to wait for bottomsheet to disappear
                             delay(AnimationConstants.DefaultDurationMillis.toLong())
@@ -167,12 +149,6 @@ fun ListDetailScreen(
         },
         onDeleteSuccess = {
             showRemoveItemListConfirmDialog = false
-            viewModel.onEvent(
-                ListDetailEvent.SuccessDeleteItemList(
-                    itemId = deleteItemListNav?.itemId.orEmpty(),
-                    mediaType = deleteItemListNav?.mediaType ?: MediaType.MOVIE
-                )
-            )
         }
     )
 }

@@ -1,7 +1,9 @@
 package com.buntupana.tmdb.feature.lists.presentation.util
 
+import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
+
 val listItemMediaLists = listOf(
-    com.buntupana.tmdb.feature.lists.domain.model.MediaList(
+    UserListDetails(
         id = 1,
         name = "Action Movies",
         backdropUrl = "",
@@ -14,7 +16,7 @@ val listItemMediaLists = listOf(
         runtime = 10000,
         updatedAt = null
     ),
-    com.buntupana.tmdb.feature.lists.domain.model.MediaList(
+    UserListDetails(
         id = 1,
         name = "Drama TV Shows",
         backdropUrl = "",

@@ -40,7 +40,7 @@ data class TvShowDetailsRaw(
     @SerialName("original_language")
     val originalLanguageCode: String? = null,
     @SerialName("original_name")
-    val originalName: String? = null,
+    val originalName: String,
     val popularity: Float? = null,
     @SerialName("production_companies")
     val productionCompanies: List<ProductionCompany>,

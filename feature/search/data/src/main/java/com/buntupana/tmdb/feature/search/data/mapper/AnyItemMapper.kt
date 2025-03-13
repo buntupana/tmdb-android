@@ -1,10 +1,10 @@
 package com.buntupana.tmdb.feature.search.data.mapper
 
-import com.buntupana.tmdb.core.data.raw.AnyMediaItemRaw
+import com.buntupana.tmdb.core.data.raw.MediaItemRaw
 import com.buntupana.tmdb.feature.search.domain.model.SearchItem
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 
-fun List<AnyMediaItemRaw>.toSearchModel(
+fun List<MediaItemRaw>.toSearchModel(
     baseUrlPoster : String
 ): List<SearchItem> {
     val result = mutableListOf<SearchItem>()

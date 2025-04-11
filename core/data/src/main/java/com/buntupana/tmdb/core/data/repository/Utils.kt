@@ -6,19 +6,18 @@ import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 
-suspend fun <RAW, MODEL> getAllItemsFromPaging(
-    networkCall: suspend (page: Int) -> Result<ResponseListRaw<RAW>, NetworkError>,
-    mapItemList: (List<RAW>) -> List<MODEL>
-): Result<List<MODEL>, NetworkError> {
+suspend fun <RAW> getAllItemsFromPaging(
+    networkCall: suspend (page: Int) -> Result<ResponseListRaw<RAW>, NetworkError>
+): Result<ResponseListRaw<RAW>, NetworkError> {
 
     var page: Int? = 1
-    val lists = mutableListOf<MODEL>()
+    val lists = mutableListOf<RAW>()
     var networkError: NetworkError? = null
 
     while (page != null) {
         networkCall(page).onSuccess {
             if (it.results.isNotEmpty()) {
-                lists.addAll(mapItemList(it.results))
+                lists.addAll(it.results)
                 page = it.page + 1
             } else {
                 page = null
@@ -32,6 +31,13 @@ suspend fun <RAW, MODEL> getAllItemsFromPaging(
     return if (networkError != null) {
         Result.Error(networkError!!)
     } else {
-        Result.Success(lists)
+        Result.Success(
+            ResponseListRaw(
+                page = 1,
+                results = lists,
+                totalPages = 1,
+                totalResults = lists.size
+            )
+        )
     }
 }

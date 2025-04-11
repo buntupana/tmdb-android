@@ -16,12 +16,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 
 @Composable
 fun VerticalTextRoulette(
     modifier: Modifier = Modifier,
     text: String?,
     color: Color = Color.Unspecified,
+    fontSize: TextUnit = TextUnit.Unspecified,
     fontWeight: FontWeight = FontWeight.Normal
 ) {
 
@@ -46,6 +48,7 @@ fun VerticalTextRoulette(
             modifier = modifier,
             text = targetText,
             color = color,
+            fontSize = fontSize,
             fontWeight = fontWeight
         )
     }

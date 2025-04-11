@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.Text
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsState
@@ -32,6 +34,7 @@ fun ManageListsLists(
 ) {
     LazyColumn(
         modifier = modifier
+            .padding(horizontal = Dimens.padding.horizontal)
             .animateContentSize()
     ) {
 
@@ -141,6 +144,10 @@ fun ManageListsLists(
                 )
             }
         }
+
+        item {
+            Spacer(modifier = Modifier.height(Dimens.padding.medium))
+        }
     }
 }
 
@@ -151,9 +158,13 @@ private fun ManageListsListsPreview() {
         modifier = Modifier
             .fillMaxSize(),
         state = ManageListsState(
-            isLoading = false,
+            isContentLoading = true,
             mediaType = MediaType.MOVIE,
+            mediaName = "Blue Velvet",
+            backgroundColor = DetailBackgroundColor,
+            posterUrl = "asdf",
             searchKey = "",
+            releaseYear = "1998",
             userListDetails = listOf(
                 UserListDetails(
                     id = 1,

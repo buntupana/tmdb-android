@@ -148,15 +148,15 @@ class AccountViewModel @Inject constructor(
 
             state = state.copy(isListsLoadingError = false)
 
-            getListsUseCase()
-                .onError {
+            getListsUseCase().collectLatest {
+                it.onError {
                     state = state.copy(isListsLoadingError = true)
-                }
-                .onSuccess { userListDetailsList ->
+                }.onSuccess { userListDetailsList ->
                     // Fake delay to show loading
                     delay(LOADING_DELAY)
                     state = state.copy(userListDetailsList = userListDetailsList)
                 }
+            }
         }
     }
 }

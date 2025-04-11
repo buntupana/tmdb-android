@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.detail.presentation.common
+package com.buntupana.tmdb.core.ui.composables
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -23,7 +23,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.Typography
@@ -37,8 +36,8 @@ fun HeaderSimple(
     posterUrl: String?,
     mediaName: String,
     releaseYear: String?,
-    subtitle: String? = null,
-    setDominantColor: (color: Color) -> Unit = {}
+    setDominantColor: (color: Color) -> Unit = {},
+    subtitle: @Composable () -> Unit = {}
 ) {
     Row(
         modifier = modifier
@@ -80,15 +79,38 @@ fun HeaderSimple(
                 fontSize = Typography.titleLarge.fontSize
             )
 
-            if (subtitle.isNullOrBlank()) return@Column
-
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = subtitle,
-                color = backgroundColor.getOnBackgroundColor(),
-                fontSize = Typography.titleMedium.fontSize
-            )
+            subtitle()
         }
+    }
+}
+
+@Composable
+fun HeaderSimple(
+    modifier: Modifier = Modifier,
+    backgroundColor: Color,
+    posterUrl: String?,
+    mediaName: String,
+    releaseYear: String?,
+    subtitle: String?,
+    setDominantColor: (color: Color) -> Unit = {}
+) {
+
+    HeaderSimple(
+        modifier,
+        backgroundColor,
+        posterUrl,
+        mediaName,
+        releaseYear,
+        setDominantColor,
+    ) {
+        if (subtitle.isNullOrBlank()) return@HeaderSimple
+
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = subtitle,
+            color = backgroundColor.getOnBackgroundColor(),
+            fontSize = Typography.titleMedium.fontSize
+        )
     }
 }
 

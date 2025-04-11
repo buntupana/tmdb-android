@@ -15,6 +15,7 @@ import com.buntupana.tmdb.core.data.database.entity.UserListItemEntity
 import com.buntupana.tmdb.core.data.mapper.toEntity
 import com.buntupana.tmdb.core.data.mapper.toItemModel
 import com.buntupana.tmdb.core.data.repository.getAllItemsFromPaging
+import com.buntupana.tmdb.core.data.util.getFlowListResult
 import com.buntupana.tmdb.feature.lists.data.mapper.toEntity
 import com.buntupana.tmdb.feature.lists.data.mapper.toModel
 import com.buntupana.tmdb.feature.lists.data.remote_data_source.ListRemoteDataSource
@@ -72,17 +73,12 @@ class ListRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getLists(justFirstPage: Boolean): Result<List<UserListDetails>, NetworkError> {
+    override suspend fun getLists(justFirstPage: Boolean): Flow<Result<List<UserListDetails>, NetworkError>> {
 
-        return if (justFirstPage) {
+        val result = if (justFirstPage) {
             listRemoteDataSource.getLists(
                 accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty()
-            ).map { result ->
-                result.results.toModel(
-                    baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-                )
-            }
+            )
         } else {
             getAllItemsFromPaging(
                 networkCall = { page ->
@@ -90,15 +86,29 @@ class ListRepositoryImpl @Inject constructor(
                         accountObjectId = session.value.accountDetails?.accountObjectId.orEmpty(),
                         page = page
                     )
-                },
-                mapItemList = {
+                }
+            )
+        }
+
+        return getFlowListResult(
+            prevDataBaseQuery = {
+                userListDetailsDao.clearAll()
+            },
+            networkCall = { result },
+            mapToEntity = { it.toEntity() },
+            updateDataBaseQuery = {
+                userListDetailsDao.upsert(it)
+            },
+            fetchFromDataBaseQuery = { userListDetailsDao.getAll() },
+            mapToModel = {
+                it.map {
                     it.toModel(
                         baseUrlPoster = urlProvider.BASE_URL_POSTER,
                         baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
                     )
                 }
-            )
-        }
+            }
+        )
     }
 
     @OptIn(ExperimentalPagingApi::class)
@@ -129,7 +139,7 @@ class ListRepositoryImpl @Inject constructor(
                 }
             ),
             pagingSourceFactory = {
-                userListDetailsDao.getAll()
+                userListDetailsDao.getAllPS()
             }
         ).flow.map { pagingData ->
             pagingData.map {

@@ -27,7 +27,7 @@ import com.buntupana.tmdb.core.ui.theme.RatingColor
 import com.buntupana.tmdb.core.ui.theme.WatchListColor
 import com.buntupana.tmdb.core.ui.util.IconButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
-import com.panabuntu.tmdb.core.common.util.Const.CHANGE_COLOR_ANIM_DURATION
+import com.panabuntu.tmdb.core.common.util.Const.ANIM_DURATION
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
@@ -55,7 +55,7 @@ fun AccountBar(
 
     val animateFavoriteColor by animateColorAsState(
         targetValue = favoriteTint,
-        animationSpec = tween(durationMillis = CHANGE_COLOR_ANIM_DURATION)
+        animationSpec = tween(durationMillis = ANIM_DURATION)
     )
 
     val watchListTint = getColor(
@@ -66,7 +66,7 @@ fun AccountBar(
 
     val animateWatchlistColor by animateColorAsState(
         targetValue = watchListTint,
-        animationSpec = tween(durationMillis = CHANGE_COLOR_ANIM_DURATION)
+        animationSpec = tween(durationMillis = ANIM_DURATION)
     )
 
     val ratingTint =
@@ -78,7 +78,7 @@ fun AccountBar(
 
     val animateRatingColor by animateColorAsState(
         targetValue = ratingTint,
-        animationSpec = tween(durationMillis = CHANGE_COLOR_ANIM_DURATION)
+        animationSpec = tween(durationMillis = ANIM_DURATION)
     )
 
     Row(

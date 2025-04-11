@@ -486,7 +486,11 @@ class AccountRepositoryImpl @Inject constructor(
                 mediaType = mediaType,
                 mediaId = mediaId
             ).onSuccess {
-                mediaDao.updateRating(mediaId, mediaType, value)
+                mediaDao.updateRating(
+                    id = mediaId,
+                    mediaType = mediaType,
+                    rating = value
+                )
             }
         } else {
             accountRemoteDataSource.addMediaRating(
@@ -495,7 +499,11 @@ class AccountRepositoryImpl @Inject constructor(
                 mediaId = mediaId,
                 rating = value
             ).onSuccess {
-                mediaDao.updateRating(mediaId, mediaType, value)
+                mediaDao.updateRatingAndWatchlist(
+                    id = mediaId,
+                    mediaType = mediaType,
+                    rating = value
+                )
             }
         }
 

@@ -25,11 +25,20 @@ abstract class UserListDetailsDao {
 
     @Query(
         """
+        SELECT * 
+        FROM user_list_details
+        ORDER BY updatedAt DESC
+    """
+    )
+    abstract fun getAll(): Flow<List<UserListDetailsEntity>>
+
+    @Query(
+        """
         SELECT * FROM user_list_details
         ORDER BY updatedAt DESC
     """
     )
-    abstract fun getAll(): PagingSource<Int, UserListDetailsEntity>
+    abstract fun getAllPS(): PagingSource<Int, UserListDetailsEntity>
 
     @Query(
         """

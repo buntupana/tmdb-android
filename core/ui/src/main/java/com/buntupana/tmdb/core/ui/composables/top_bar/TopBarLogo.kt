@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.core.ui.composables
+package com.buntupana.tmdb.core.ui.composables.top_bar
 
 import android.content.Intent
 import androidx.compose.foundation.Image
@@ -34,6 +34,7 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.IconButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,7 +42,7 @@ import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 fun TopBarLogo(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
-    onSearchClick: () -> Unit,
+    onSearchClick: (() -> Unit)? = null,
     onLogoClick: () -> Unit,
     backgroundColor: Color,
     scrollBehavior: TopAppBarScrollBehavior? = null,
@@ -71,11 +72,13 @@ fun TopBarLogo(
         },
         title = {
 
-            val startMargin = if (shareLink.isNotNullOrBlank()) {
-                LocalMinimumInteractiveComponentSize.current
-            } else {
-                0.dp
+            val startMargin = when{
+                shareLink.isNotNullOrBlank() && onSearchClick != null -> {
+                    LocalMinimumInteractiveComponentSize.current
+                }
+                else -> 0.dp
             }
+
             Row(
                 modifier = Modifier
                     .fillMaxSize()
@@ -132,8 +135,8 @@ fun TopBarLogo(
             }
 
             IconButton(
-                modifier = Modifier,
-                onClick = onSearchClick,
+                modifier = Modifier.isInvisible(onSearchClick == null),
+                onClick = {onSearchClick?.invoke()},
                 rippleColor = backgroundColor.getOnBackgroundColor()
             ) {
                 Icon(
@@ -147,6 +150,7 @@ fun TopBarLogo(
         },
     )
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable

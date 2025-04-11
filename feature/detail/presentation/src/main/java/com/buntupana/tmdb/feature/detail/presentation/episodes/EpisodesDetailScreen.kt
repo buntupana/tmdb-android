@@ -25,12 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
-import com.buntupana.tmdb.core.ui.composables.TopBarLogo
+import com.buntupana.tmdb.core.ui.composables.HeaderSimple
+import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.presentation.R
-import com.buntupana.tmdb.feature.detail.presentation.common.HeaderSimple
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
 import com.buntupana.tmdb.feature.detail.presentation.episodes.comp.EpisodeHorizontal
 import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
@@ -191,7 +191,7 @@ fun EpisodesDetailScreenPreview() {
             isLoading = true,
             tvShowId = 0L,
             sessionName = "Jack Reacher",
-            posterUrl = null,
+            posterUrl = "asdf",
             releaseYear = "2003",
             backgroundColor = DetailBackgroundColor,
             seasonNumber = 3,

@@ -21,8 +21,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
-import com.buntupana.tmdb.core.ui.composables.TopBarTitle
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
+import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarTitle
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -33,7 +33,6 @@ import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListSubBar
 import com.buntupana.tmdb.feature.presentation.R
 import com.buntupana.tmdb.core.ui.R as RCore
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListsScreen(
     viewModel: ListsViewModel = hiltViewModel(),

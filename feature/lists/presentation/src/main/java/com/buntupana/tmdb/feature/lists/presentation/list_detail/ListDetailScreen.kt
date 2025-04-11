@@ -42,12 +42,12 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
-import com.buntupana.tmdb.core.ui.composables.TopBarLogo
 import com.buntupana.tmdb.core.ui.composables.item.ActionsAlign
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontalPlaceHolder
 import com.buntupana.tmdb.core.ui.composables.item.SwipeableItem
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
+import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -89,7 +89,7 @@ fun ListDetailScreen(
                     when (sideEffect) {
                         ListDetailSideEffect.NavigateBack -> {
                             // add delay to wait for bottomsheet to disappear
-                            delay(AnimationConstants.DefaultDurationMillis.toLong())
+                            delay(AnimationConstants.DefaultDurationMillis.toLong() + 100)
                             onBackClick()
                         }
                     }

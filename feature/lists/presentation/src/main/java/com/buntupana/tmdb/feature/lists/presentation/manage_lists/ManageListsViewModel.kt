@@ -3,11 +3,14 @@ package com.buntupana.tmdb.feature.lists.presentation.manage_lists
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
+import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
@@ -18,23 +21,29 @@ import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-import com.buntupana.tmdb.core.ui.R as RCore
 
 @HiltViewModel
 class ManageListsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getListsFromMediaPagingUseCase: GetListsFromMediaUseCase,
+    private val getListsFromMediaUseCase: GetListsFromMediaUseCase,
     private val setListsForMediaUseCase: SetListsForMediaUseCase
 ) : ViewModel() {
 
     private val navArgs: ManageListsNav = savedStateHandle.navArgs()
 
     var state by mutableStateOf(
-        ManageListsState(mediaType = navArgs.mediaType)
+        ManageListsState(
+            mediaType = navArgs.mediaType,
+            backgroundColor = Color(navArgs.backgroundColor ?: DetailBackgroundColor.toArgb()),
+            mediaName = navArgs.mediaName,
+            posterUrl = navArgs.posterUrl,
+            releaseYear = navArgs.releaseYear
+        )
     )
         private set
 
@@ -65,27 +74,34 @@ class ManageListsViewModel @Inject constructor(
 
     private suspend fun getListFromMedia() {
 
-        state = state.copy(isLoading = true)
+        state = state.copy(isContentLoading = true, isError = false)
 
-        getListsFromMediaPagingUseCase(navArgs.mediaId, navArgs.mediaType)
-            .onError {
-                SnackbarController.sendEvent(
-                    SnackbarEvent(
-                        message = UiText.StringResource(RCore.string.message_loading_content_error)
-                    )
-                )
-                _sideEffect.send(ManageListsSideEffect.Dismiss)
-            }
-            .onSuccess { result ->
-                listMediaListsOri = result.mediaBelongsList
-                listAllListsOri = result.allListsList
+        getListsFromMediaUseCase(navArgs.mediaId, navArgs.mediaType).collectLatest { result ->
+            result.onError {
+                state = state.copy(isContentLoading = false, isError = true)
+            }.onSuccess {
+                listMediaListsOri = it.mediaBelongsList
+                listAllListsOri = it.allListsList
+
+                // If there is already data in the lists, it will filter in order to no modify the current list selection
+                val (userListDetails, listAllLists) = if (
+                    state.userListDetails == null || state.listAllLists == null
+                ) {
+                    listMediaListsOri to it.mediaNotBelongsList
+                } else {
+                    // as the items are modified, it will compared by id and not by reference
+                    state.userListDetails to listAllListsOri.filterNot { listItem ->
+                        state.userListDetails.orEmpty().any { listItem.id == it.id }
+                    }
+                }
 
                 state = state.copy(
-                    isLoading = false,
-                    userListDetails = listMediaListsOri,
-                    listAllLists = result.mediaNotBelongsList
+                    isContentLoading = false,
+                    userListDetails = userListDetails,
+                    listAllLists = listAllLists.toList()
                 )
             }
+        }
     }
 
     private fun addToList(mediaList: UserListDetails) {
@@ -116,7 +132,7 @@ class ManageListsViewModel @Inject constructor(
     }
 
     private suspend fun setListsForMedia() {
-        state = state.copy(isLoading = true)
+        state = state.copy(isConfirmLoading = true)
 
         setListsForMediaUseCase(
             mediaId = navArgs.mediaId,
@@ -124,7 +140,7 @@ class ManageListsViewModel @Inject constructor(
             originalList = listMediaListsOri,
             newList = state.userListDetails?.reversed() ?: listOf()
         ).onError {
-            state = state.copy(isLoading = false)
+            state = state.copy(isConfirmLoading = false)
 
             SnackbarController.sendEvent(
                 SnackbarEvent(

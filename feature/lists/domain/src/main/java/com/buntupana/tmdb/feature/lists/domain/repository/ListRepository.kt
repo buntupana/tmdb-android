@@ -51,5 +51,5 @@ interface ListRepository {
 
     fun getListItems(listId: Long): Flow<PagingData<MediaItem>>
 
-    suspend fun getLists(justFirstPage: Boolean = false): Result<List<UserListDetails>, NetworkError>
+    suspend fun getLists(justFirstPage: Boolean = false): Flow<Result<List<UserListDetails>, NetworkError>>
 }

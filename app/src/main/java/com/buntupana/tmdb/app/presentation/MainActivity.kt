@@ -288,11 +288,15 @@ class MainActivity : ComponentActivity() {
                                     }
 
                                 },
-                                onManageListClick = { mediaId, mediaType ->
+                                onManageListClick = { mediaId, mediaType, mediaName, mediaPosterUrl, backgroundColor, releaseYear ->
                                     navRoutesMain.navigate(
                                         ManageListsNav(
                                             mediaId = mediaId,
-                                            mediaType = mediaType
+                                            mediaType = mediaType,
+                                            posterUrl = mediaPosterUrl,
+                                            mediaName = mediaName,
+                                            backgroundColor = backgroundColor,
+                                            releaseYear = releaseYear
                                         )
                                     )
                                 }
@@ -441,6 +445,15 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+                        composable<ManageListsNav> {
+                            ManageListsDialog(
+                                onBackClick = { navRoutesMain.popBackStack() },
+                                onLogoClick = { navRoutesMain.popBackStack(HomeNav::class) },
+                                onCreateListClick = {
+                                    navRoutesMain.navigate(CreateUpdateListNav())
+                                }
+                            )
+                        }
                         bottomSheet<RatingNav>(
                             typeMap = RatingNav.typeMap
                         ) {
@@ -448,11 +461,6 @@ class MainActivity : ComponentActivity() {
                                 onDismiss = {
                                     navRoutesMain.popBackStack()
                                 }
-                            )
-                        }
-                        bottomSheet<ManageListsNav> {
-                            ManageListsDialog(
-                                onDismiss = { navRoutesMain.popBackStack() }
                             )
                         }
                         bottomSheet<CreateUpdateListNav> {

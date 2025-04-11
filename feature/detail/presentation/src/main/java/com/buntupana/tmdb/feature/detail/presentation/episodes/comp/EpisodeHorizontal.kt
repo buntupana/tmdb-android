@@ -23,6 +23,7 @@ fun EpisodeHorizontal(
     modifier: Modifier = Modifier,
     isLogged: Boolean,
     episode: Episode,
+    seasonNumber: Int,
     onRateClick: () -> Unit = {},
     onItemClick: () -> Unit
 ) {
@@ -66,7 +67,8 @@ fun EpisodeHorizontal(
                                 .fillMaxWidth()
                                 .padding(top = Dimens.padding.small)
                             ,
-                            isLogged = isLogged,
+                            // Added season 0 limitation to rate because a bug in the API (https://www.themoviedb.org/talk/67b7098c0c61025fafc3fb2b)
+                            isLogged = isLogged && seasonNumber > 0,
                             episode = episode,
                             onRateClick = onRateClick
                         )
@@ -91,6 +93,7 @@ fun EpisodeHorizontalPreview() {
     EpisodeHorizontal(
         episode = episodeSample,
         isLogged = true,
+        seasonNumber = 1,
         onItemClick = {}
     )
 }

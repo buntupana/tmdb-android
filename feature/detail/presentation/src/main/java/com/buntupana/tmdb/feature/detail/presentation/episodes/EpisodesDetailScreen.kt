@@ -156,6 +156,7 @@ private fun EpisodesDetailContent(
                                 horizontal = Dimens.padding.horizontal,
                                 vertical = Dimens.padding.vertical
                             ),
+                        seasonNumber = state.seasonNumber,
                         episode = episode,
                         isLogged = state.isLogged,
                         onItemClick = {},

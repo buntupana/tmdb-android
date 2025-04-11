@@ -34,6 +34,16 @@ abstract class UserListDetailsDao {
 
     @Query(
         """
+        SELECT * 
+        FROM user_list_details
+        ORDER BY updatedAt DESC
+        LIMIT :pageSize
+    """
+    )
+    abstract fun getFirstPage(pageSize: Int): Flow<List<UserListDetailsEntity>>
+
+    @Query(
+        """
         SELECT * FROM user_list_details
         ORDER BY updatedAt DESC
     """

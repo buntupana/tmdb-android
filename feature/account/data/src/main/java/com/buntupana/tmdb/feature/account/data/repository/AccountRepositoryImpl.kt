@@ -13,9 +13,9 @@ import com.buntupana.tmdb.core.data.database.dao.WatchlistDao
 import com.buntupana.tmdb.core.data.database.entity.FavoriteEntity
 import com.buntupana.tmdb.core.data.database.entity.WatchlistEntity
 import com.buntupana.tmdb.core.data.mapper.toEntity
-import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.core.data.mapper.toMovieItemModel
 import com.buntupana.tmdb.core.data.mapper.toTvShowItemModel
+import com.buntupana.tmdb.core.data.util.getFlowListSEResult
 import com.buntupana.tmdb.feature.account.data.mapper.toModel
 import com.buntupana.tmdb.feature.account.data.remote_data_source.AccountRemoteDataSource
 import com.buntupana.tmdb.feature.account.domain.model.UserCredentials
@@ -145,26 +145,84 @@ class AccountRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getWatchlistMovies(): Result<List<MediaItem>, NetworkError> {
-        return accountRemoteDataSource.getWatchlistMovies(
-            session.value.accountDetails?.accountObjectId.orEmpty()
-        ).map { result ->
-            result.results.toModel(
-                baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-            )
-        }
+    override suspend fun getWatchlistMovies(): Flow<Result<List<MediaItem>, NetworkError>> {
+
+        return getFlowListSEResult(
+            prevDataBaseQuery = {
+                watchlistDao.clearByMediaType(mediaType = MediaType.MOVIE)
+            },
+            networkCall = {
+                accountRemoteDataSource.getWatchlistMovies(
+                    session.value.accountDetails?.accountObjectId.orEmpty()
+                )
+            },
+            mapToEntity = { it.toEntity() },
+            updateDataBaseQuery = { resultList ->
+                mediaDao.upsertSimple(resultList)
+                var addedAt = System.currentTimeMillis()
+                watchlistDao.upsert(
+                    resultList.map {
+                        addedAt += 1
+                        WatchlistEntity(
+                            mediaId = it.id,
+                            mediaType = MediaType.MOVIE,
+                            addedAt = addedAt
+                        )
+                    }
+                )
+            },
+            fetchFromDataBaseQuery = {
+                mediaDao.getWatchlist(MediaType.MOVIE, pageSize = PAGINATION_SIZE)
+            },
+            mapToModel = {
+                it.map {
+                    it.toMovieItemModel(
+                        baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                        baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                    )
+                }
+            }
+        )
     }
 
-    override suspend fun getFavoriteMovies(): Result<List<MediaItem>, NetworkError> {
-        return accountRemoteDataSource.getFavoriteMovies(
-            session.value.accountDetails?.accountObjectId.orEmpty()
-        ).map { result ->
-            result.results.toModel(
-                baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-            )
-        }
+    override suspend fun getFavoriteMovies(): Flow<Result<List<MediaItem>, NetworkError>> {
+
+        return getFlowListSEResult(
+            prevDataBaseQuery = {
+                favoriteDao.clearByMediaType(mediaType = MediaType.MOVIE)
+            },
+            networkCall = {
+                accountRemoteDataSource.getFavoriteMovies(
+                    session.value.accountDetails?.accountObjectId.orEmpty()
+                )
+            },
+            mapToEntity = { it.toEntity() },
+            updateDataBaseQuery = { resultList ->
+                mediaDao.upsertSimple(resultList)
+                var addedAt = System.currentTimeMillis()
+                favoriteDao.upsert(
+                    resultList.map {
+                        addedAt += 1
+                        FavoriteEntity(
+                            mediaId = it.id,
+                            mediaType = MediaType.MOVIE,
+                            addedAt = addedAt
+                        )
+                    }
+                )
+            },
+            fetchFromDataBaseQuery = {
+                mediaDao.getFavorites(MediaType.MOVIE, pageSize = PAGINATION_SIZE)
+            },
+            mapToModel = {
+                it.map {
+                    it.toMovieItemModel(
+                        baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                        baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                    )
+                }
+            }
+        )
     }
 
     @OptIn(ExperimentalPagingApi::class)
@@ -271,28 +329,84 @@ class AccountRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getWatchlistTvShows(): Result<List<MediaItem>, NetworkError> {
-        return accountRemoteDataSource.getWatchlistTvShows(
-            session.value.accountDetails?.accountObjectId.orEmpty()
-        ).map { result ->
+    override suspend fun getWatchlistTvShows(): Flow<Result<List<MediaItem>, NetworkError>> {
 
-            result.results.toModel(
-                baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-            )
-        }
+        return getFlowListSEResult(
+            prevDataBaseQuery = {
+                watchlistDao.clearByMediaType(mediaType = MediaType.TV_SHOW)
+            },
+            networkCall = {
+                accountRemoteDataSource.getWatchlistTvShows(
+                    session.value.accountDetails?.accountObjectId.orEmpty()
+                )
+            },
+            mapToEntity = { it.toEntity() },
+            updateDataBaseQuery = { resultList ->
+                mediaDao.upsertSimple(resultList)
+                var addedAt = System.currentTimeMillis()
+                watchlistDao.upsert(
+                    resultList.map {
+                        addedAt += 1
+                        WatchlistEntity(
+                            mediaId = it.id,
+                            mediaType = MediaType.TV_SHOW,
+                            addedAt = addedAt
+                        )
+                    }
+                )
+            },
+            fetchFromDataBaseQuery = {
+                mediaDao.getWatchlist(MediaType.TV_SHOW, pageSize = PAGINATION_SIZE)
+            },
+            mapToModel = {
+                it.map {
+                    it.toTvShowItemModel(
+                        baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                        baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                    )
+                }
+            }
+        )
     }
 
-    override suspend fun getFavoriteTvShows(): Result<List<MediaItem>, NetworkError> {
-        return accountRemoteDataSource.getFavoriteTvShows(
-            session.value.accountDetails?.accountObjectId.orEmpty()
-        ).map { result ->
+    override suspend fun getFavoriteTvShows(): Flow<Result<List<MediaItem>, NetworkError>> {
 
-            result.results.toModel(
-                baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-            )
-        }
+        return getFlowListSEResult(
+            prevDataBaseQuery = {
+                favoriteDao.clearByMediaType(mediaType = MediaType.TV_SHOW)
+            },
+            networkCall = {
+                accountRemoteDataSource.getFavoriteTvShows(
+                    session.value.accountDetails?.accountObjectId.orEmpty()
+                )
+            },
+            mapToEntity = { it.toEntity() },
+            updateDataBaseQuery = { resultList ->
+                mediaDao.upsertSimple(resultList)
+                var addedAt = System.currentTimeMillis()
+                favoriteDao.upsert(
+                    resultList.map {
+                        addedAt += 1
+                        FavoriteEntity(
+                            mediaId = it.id,
+                            mediaType = MediaType.TV_SHOW,
+                            addedAt = addedAt
+                        )
+                    }
+                )
+            },
+            fetchFromDataBaseQuery = {
+                mediaDao.getFavorites(MediaType.TV_SHOW, pageSize = PAGINATION_SIZE)
+            },
+            mapToModel = {
+                it.map {
+                    it.toTvShowItemModel(
+                        baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                        baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                    )
+                }
+            }
+        )
     }
 
     @OptIn(ExperimentalPagingApi::class)

@@ -49,6 +49,9 @@ class AccountViewModel @Inject constructor(
                 )
             }
         }
+        onEvent(AccountEvent.GetWatchlist(state.watchlistFilterSelected))
+        onEvent(AccountEvent.GetFavorites(state.favoritesFilterSelected))
+        onEvent(AccountEvent.GetLists)
     }
 
     fun onEvent(event: AccountEvent) {
@@ -85,11 +88,10 @@ class AccountViewModel @Inject constructor(
                 }
             )
 
-            getWatchlistUseCase(mediaType)
-                .onError {
+            getWatchlistUseCase(mediaType).collectLatest {
+                it.onError {
                     state = state.copy(isWatchlistLoadingError = true)
-                }
-                .onSuccess { mediaItemList ->
+                }.onSuccess { mediaItemList ->
                     // Fake delay to show loading
                     delay(LOADING_DELAY)
                     state = state.copy(
@@ -97,6 +99,7 @@ class AccountViewModel @Inject constructor(
                         watchlistMediaItemList = mediaItemList
                     )
                 }
+            }
         }
     }
 
@@ -123,11 +126,10 @@ class AccountViewModel @Inject constructor(
                 }
             )
 
-            getFavoritesUseCase(mediaType)
-                .onError {
+            getFavoritesUseCase(mediaType).collectLatest {
+                it.onError {
                     state = state.copy(isFavoritesLoadingError = true)
-                }
-                .onSuccess { mediaItemList ->
+                }.onSuccess { mediaItemList ->
                     // Fake delay to show loading
                     delay(LOADING_DELAY)
                     state = state.copy(
@@ -135,6 +137,7 @@ class AccountViewModel @Inject constructor(
                         favoritesMediaItemList = mediaItemList
                     )
                 }
+            }
         }
     }
 

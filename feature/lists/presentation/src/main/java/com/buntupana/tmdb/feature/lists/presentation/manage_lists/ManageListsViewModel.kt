@@ -20,6 +20,7 @@ import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -53,6 +54,8 @@ class ManageListsViewModel @Inject constructor(
     private var listMediaListsOri = listOf<UserListDetails>()
     private var listAllListsOri = listOf<UserListDetails>()
 
+    private var getMediaListsJob: Job? = null
+
     init {
         onEvent(ManageListsEvent.GetLists)
     }
@@ -72,34 +75,38 @@ class ManageListsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getListFromMedia() {
+    private fun getListFromMedia() {
 
         state = state.copy(isContentLoading = true, isError = false)
 
-        getListsFromMediaUseCase(navArgs.mediaId, navArgs.mediaType).collectLatest { result ->
-            result.onError {
-                state = state.copy(isContentLoading = false, isError = true)
-            }.onSuccess {
-                listMediaListsOri = it.mediaBelongsList
-                listAllListsOri = it.allListsList
+        getMediaListsJob?.cancel()
 
-                // If there is already data in the lists, it will filter in order to no modify the current list selection
-                val (userListDetails, listAllLists) = if (
-                    state.userListDetails == null || state.listAllLists == null
-                ) {
-                    listMediaListsOri to it.mediaNotBelongsList
-                } else {
-                    // as the items are modified, it will compared by id and not by reference
-                    state.userListDetails to listAllListsOri.filterNot { listItem ->
-                        state.userListDetails.orEmpty().any { listItem.id == it.id }
+        getMediaListsJob = viewModelScope.launch {
+            getListsFromMediaUseCase(navArgs.mediaId, navArgs.mediaType).collectLatest { result ->
+                result.onError {
+                    state = state.copy(isContentLoading = false, isError = true)
+                }.onSuccess {
+                    listMediaListsOri = it.mediaBelongsList
+                    listAllListsOri = it.allListsList
+
+                    // If there is already data in the lists, it will filter in order to no modify the current list selection
+                    val (userListDetails, listAllLists) = if (
+                        state.userListDetails == null || state.listAllLists == null
+                    ) {
+                        listMediaListsOri to it.mediaNotBelongsList
+                    } else {
+                        // as the items are modified, it will compared by id and not by reference
+                        state.userListDetails to listAllListsOri.filterNot { listItem ->
+                            state.userListDetails.orEmpty().any { listItem.id == it.id }
+                        }
                     }
-                }
 
-                state = state.copy(
-                    isContentLoading = false,
-                    userListDetails = userListDetails,
-                    listAllLists = listAllLists.toList()
-                )
+                    state = state.copy(
+                        isContentLoading = false,
+                        userListDetails = userListDetails,
+                        listAllLists = listAllLists.toList()
+                    )
+                }
             }
         }
     }

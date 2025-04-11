@@ -99,7 +99,13 @@ class ListRepositoryImpl @Inject constructor(
             updateDataBaseQuery = {
                 userListDetailsDao.upsert(it)
             },
-            fetchFromDataBaseQuery = { userListDetailsDao.getAll() },
+            fetchFromDataBaseQuery = {
+                if (justFirstPage) {
+                    userListDetailsDao.getFirstPage(pageSize = PAGINATION_SIZE)
+                } else {
+                    userListDetailsDao.getAll()
+                }
+            },
             mapToModel = {
                 it.map {
                     it.toModel(

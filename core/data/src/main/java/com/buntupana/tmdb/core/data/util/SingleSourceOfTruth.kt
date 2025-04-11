@@ -19,8 +19,8 @@ suspend fun <RAW, ENTITY, MODEL> getFlowResult(
     return when (val result = networkCall()) {
         is Result.Error -> flowOf(result)
         is Result.Success -> {
-            prevDataBaseQuery()
             val entity = mapToEntity(result.data)
+            prevDataBaseQuery()
             updateDataBaseQuery(entity)
             fetchFromDataBaseQuery().map {
                 Result.Success(mapToModel(it))
@@ -41,8 +41,35 @@ suspend fun <RAW, ENTITY, MODEL> getFlowListResult(
     return when (val result = networkCall()) {
         is Result.Error -> flowOf(result)
         is Result.Success -> {
-            prevDataBaseQuery()
             val entity = mapToEntity(result.data.results)
+            prevDataBaseQuery()
+            updateDataBaseQuery(entity)
+
+            fetchFromDataBaseQuery().map {
+                if (it.isEmpty()) {
+                    Result.Success(emptyList())
+                } else {
+                    Result.Success(mapToModel(it))
+                }
+            }
+        }
+    }
+}
+
+suspend fun <RAW, SIMPLE_ENTITY, ENTITY, MODEL> getFlowListSEResult(
+    prevDataBaseQuery: suspend () -> Unit = {},
+    networkCall: suspend () -> Result<ResponseListRaw<RAW>, NetworkError>,
+    mapToEntity: (rawList: List<RAW>) -> List<SIMPLE_ENTITY>,
+    updateDataBaseQuery: suspend (entityList: List<SIMPLE_ENTITY>) -> Unit = {},
+    fetchFromDataBaseQuery: suspend () -> Flow<List<ENTITY>>,
+    mapToModel: (entityList: List<ENTITY>) -> List<MODEL>
+): Flow<Result<List<MODEL>, NetworkError>> {
+
+    return when (val result = networkCall()) {
+        is Result.Error -> flowOf(result)
+        is Result.Success -> {
+            val entity = mapToEntity(result.data.results)
+            prevDataBaseQuery()
             updateDataBaseQuery(entity)
 
             fetchFromDataBaseQuery().map {

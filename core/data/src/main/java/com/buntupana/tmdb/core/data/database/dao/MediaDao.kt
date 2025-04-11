@@ -32,9 +32,31 @@ abstract class MediaDao {
         INNER JOIN watchlist ON media.id = watchlist.mediaId 
         WHERE watchlist.mediaType = :mediaType
         ORDER BY watchlist.addedAt ASC
+        LIMIT :pageSize
+    """
+    )
+    abstract fun getWatchlist(mediaType: MediaType, pageSize: Int): Flow<List<MediaEntity>>
+
+    @Query(
+        """
+        SELECT media.* FROM media 
+        INNER JOIN watchlist ON media.id = watchlist.mediaId 
+        WHERE watchlist.mediaType = :mediaType
+        ORDER BY watchlist.addedAt ASC
     """
     )
     abstract fun getWatchlist(mediaType: MediaType): PagingSource<Int, MediaEntity>
+
+    @Query(
+        """
+        SELECT media.* FROM media 
+        INNER JOIN favorite ON media.id = favorite.mediaId 
+        WHERE favorite.mediaType = :mediaType
+        ORDER BY favorite.addedAt ASC
+        LIMIT :pageSize
+    """
+    )
+    abstract fun getFavorites(mediaType: MediaType, pageSize: Int): Flow<List<MediaEntity>>
 
     @Query(
         """

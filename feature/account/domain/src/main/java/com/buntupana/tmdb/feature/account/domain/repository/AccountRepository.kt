@@ -27,9 +27,9 @@ interface AccountRepository {
 
     suspend fun getWatchlistTvShowPaging(order: Order): Flow<PagingData<MediaItem.TvShow>>
 
-    suspend fun getWatchlistMovies(): Result<List<MediaItem>, NetworkError>
+    suspend fun getWatchlistMovies(): Flow<Result<List<MediaItem>, NetworkError>>
 
-    suspend fun getWatchlistTvShows(): Result<List<MediaItem>, NetworkError>
+    suspend fun getWatchlistTvShows(): Flow<Result<List<MediaItem>, NetworkError>>
 
     suspend fun setMediaFavorite(
         mediaId: Long,
@@ -55,13 +55,13 @@ interface AccountRepository {
 
     suspend fun getFavoriteMoviesTotalCount(): Flow<Result<Int, NetworkError>>
 
-    suspend fun getFavoriteMovies(): Result<List<MediaItem>, NetworkError>
+    suspend fun getFavoriteMovies(): Flow<Result<List<MediaItem>, NetworkError>>
 
     suspend fun getFavoriteMoviePaging(order: Order): Flow<PagingData<MediaItem.Movie>>
 
     suspend fun getFavoriteTvShowsTotalCount(): Flow<Result<Int, NetworkError>>
 
-    suspend fun getFavoriteTvShows(): Result<List<MediaItem>, NetworkError>
+    suspend fun getFavoriteTvShows(): Flow<Result<List<MediaItem>, NetworkError>>
 
     suspend fun getFavoriteTvShowPaging(order: Order): Flow<PagingData<MediaItem.TvShow>>
 }

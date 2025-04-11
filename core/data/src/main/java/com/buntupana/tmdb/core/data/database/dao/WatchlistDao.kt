@@ -38,7 +38,7 @@ abstract class WatchlistDao {
     }
 
     @Query("SELECT * FROM watchlist WHERE mediaType = :mediaType ORDER BY watchlist.addedAt ASC")
-    abstract fun getMedia(mediaType: MediaType): Flow<List<WatchlistEntity?>>
+    abstract fun getMedia(mediaType: MediaType): Flow<List<WatchlistEntity>>
 
     @Query("DELETE FROM watchlist WHERE mediaId = :mediaId AND mediaType = :mediaType")
     abstract suspend fun delete(mediaId: Long, mediaType: MediaType)

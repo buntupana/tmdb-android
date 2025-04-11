@@ -43,7 +43,7 @@ abstract class UserListItemDao {
         WHERE listId = :listId 
         ORDER BY user_list_item.addedAt ASC
     """)
-    abstract fun getByListId(listId: Long): Flow<List<UserListItemEntity?>>
+    abstract fun getByListId(listId: Long): Flow<List<UserListItemEntity>>
 
     @Query("DELETE FROM user_list_item WHERE listId = :listId AND mediaId = :mediaId AND mediaType = :mediaType")
     abstract suspend fun delete(listId: Long, mediaId: Long, mediaType: MediaType)

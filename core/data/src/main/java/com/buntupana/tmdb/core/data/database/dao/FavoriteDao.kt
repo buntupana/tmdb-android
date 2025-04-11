@@ -38,7 +38,7 @@ abstract class FavoriteDao {
     }
 
     @Query("SELECT * FROM favorite WHERE mediaType = :mediaType ORDER BY favorite.addedAt ASC")
-    abstract fun getMedia(mediaType: MediaType): Flow<List<FavoriteEntity?>>
+    abstract fun getMedia(mediaType: MediaType): Flow<List<FavoriteEntity>>
 
     @Query("DELETE FROM favorite WHERE mediaId = :mediaId AND mediaType = :mediaType")
     abstract suspend fun delete(mediaId: Long, mediaType: MediaType)

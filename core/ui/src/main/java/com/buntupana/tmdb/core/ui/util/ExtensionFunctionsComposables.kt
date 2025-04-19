@@ -2,7 +2,6 @@ package com.buntupana.tmdb.core.ui.util
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.text.Spanned
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabColorSchemeParams
@@ -49,6 +48,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
+import androidx.core.net.toUri
 import androidx.core.text.HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL
 import androidx.core.text.htmlEncode
 import androidx.core.text.toHtml
@@ -76,7 +76,7 @@ fun getCustomTabIntent(url: String): Intent {
         .setShowTitle(true)
         .build()
 
-    customTabsIntent.intent.data = Uri.parse(url)
+    customTabsIntent.intent.data = url.toUri()
 
     return customTabsIntent.intent
 }
@@ -208,10 +208,25 @@ inline fun <reified T : Any> NavGraphBuilder.bottomSheet(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun RippleColorContainer(
+    rippleColor: Color,
+    content: @Composable () -> Unit
+) {
+    val configuration = RippleConfiguration(color = rippleColor)
+
+    CompositionLocalProvider(
+        LocalRippleConfiguration provides configuration
+    ) {
+        content()
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun IconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    rippleColor: Color= MaterialTheme.colorScheme.background,
+    rippleColor: Color = MaterialTheme.colorScheme.background,
     enabled: Boolean = true,
     colors: IconButtonColors = IconButtonDefaults.iconButtonColors(),
     interactionSource: MutableInteractionSource? = null,

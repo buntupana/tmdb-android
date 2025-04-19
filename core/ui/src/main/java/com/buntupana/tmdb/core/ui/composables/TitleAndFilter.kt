@@ -3,15 +3,20 @@ package com.buntupana.tmdb.core.ui.composables
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelector
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelectorAlign
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelectorItem
@@ -43,6 +48,13 @@ fun <T : ExpandableMenuSelectorItem> TitleAndFilter(
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 22.sp,
                 color = MaterialTheme.colorScheme.onBackground
+            )
+            titleClicked ?: return@TextButton
+            Icon(
+                modifier = Modifier.size(22.dp),
+                painter = painterResource(R.drawable.ic_arrow_right),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onBackground
             )
         }
         ExpandableMenuSelector(

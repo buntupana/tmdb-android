@@ -24,7 +24,9 @@ import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.util.TextButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.feature.presentation.R
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
@@ -50,22 +52,22 @@ fun ManageListsBottomBar(
             .padding(bottom = bottomPadding),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Button(
-            border = BorderStroke(2.dp, backgroundColor.getOnBackgroundColor()),
-            colors = ButtonDefaults.buttonColors(containerColor = backgroundButtonColor),
+        TextButton(
             onClick = onCreateListClick,
+            rippleColor = backgroundColor.getOnBackgroundColor()
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(com.buntupana.tmdb.feature.presentation.R.string.text_create_list),
-                    color = backgroundButtonColor.getOnBackgroundColor()
+                    text = stringResource(R.string.text_create_list),
+                    color = backgroundColor.getOnBackgroundColor()
                 )
                 Icon(
                     modifier = Modifier.padding(start = Dimens.padding.small),
                     imageVector = Icons.Rounded.Add,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = backgroundColor.getOnBackgroundColor()
                 )
             }
         }

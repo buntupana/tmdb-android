@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.IconButton
+import com.buntupana.tmdb.core.ui.util.RippleColorContainer
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
@@ -87,20 +88,23 @@ fun TopBarLogo(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(Dimens.posterRound))
-                        .clickable { onLogoClick() }
-                        .padding(horizontal = Dimens.padding.medium)
+                RippleColorContainer(
+                    rippleColor = backgroundColor.getOnBackgroundColor()
                 ) {
-                    Image(
+                    Box(
                         modifier = Modifier
-                            .size(Dimens.topBarIconSize),
-                        painter = painterResource(id = R.drawable.img_logo),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(backgroundColor.getOnBackgroundColor())
-                    )
+                            .clip(RoundedCornerShape(Dimens.posterRound))
+                            .clickable { onLogoClick() }
+                            .padding(horizontal = Dimens.padding.medium)
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .size(Dimens.topBarIconSize),
+                            painter = painterResource(id = R.drawable.img_logo),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(backgroundColor.getOnBackgroundColor())
+                        )
+                    }
                 }
             }
         },

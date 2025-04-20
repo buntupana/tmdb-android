@@ -15,6 +15,7 @@ fun AccountDetailsRaw.toModel(
         accountObjectId = "",
         username = username,
         name = name,
-        avatarUrl = avatarUrl
+        avatarUrl = avatarUrl,
+        countryCode = iso_3166_1
     )
 }

@@ -9,18 +9,25 @@ import com.buntupana.tmdb.feature.discover.domain.repository.DiscoverRepository
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.map
+import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import javax.inject.Inject
 
 class DiscoverRepositoryImpl @Inject constructor(
     private val discoverRemoteDataSource: DiscoverRemoteDataSource,
-    private val urlProvider: UrlProvider
+    private val urlProvider: UrlProvider,
+    sessionManager: SessionManager
 ) : DiscoverRepository {
+
+    private val session = sessionManager.session
 
     override suspend fun getMoviesPopular(monetizationType: MonetizationType): Result<List<MediaItem>, NetworkError> {
 
-        return discoverRemoteDataSource.getMoviesPopular(monetizationType)
+        return discoverRemoteDataSource.getMoviesPopular(
+            monetizationType = monetizationType,
+            region = session.value.countryCode
+        )
             .map { result ->
                 result.results.map {
                     it.toModel(
@@ -33,7 +40,10 @@ class DiscoverRepositoryImpl @Inject constructor(
 
     override suspend fun getTvShowsPopular(monetizationType: MonetizationType): Result<List<MediaItem>, NetworkError> {
 
-        return discoverRemoteDataSource.getTvShowPopular(monetizationType)
+        return discoverRemoteDataSource.getTvShowPopular(
+            monetizationType = monetizationType,
+            region = session.value.countryCode
+        )
             .map { result ->
                 result.results.map {
                     it.toModel(
@@ -46,7 +56,9 @@ class DiscoverRepositoryImpl @Inject constructor(
 
     override suspend fun getMoviesInTheatres(): Result<List<MediaItem>, NetworkError> {
 
-        return discoverRemoteDataSource.getMoviesInTheatres()
+        return discoverRemoteDataSource.getMoviesInTheatres(
+            region = session.value.countryCode
+        )
             .map { result ->
                 result.results.map {
                     it.toModel(
@@ -61,7 +73,10 @@ class DiscoverRepositoryImpl @Inject constructor(
 
         return when (freeToWatchType) {
             FreeToWatchType.MOVIES -> {
-                discoverRemoteDataSource.getMoviesPopular(MonetizationType.FREE)
+                discoverRemoteDataSource.getMoviesPopular(
+                    monetizationType = MonetizationType.FREE,
+                    region = session.value.countryCode
+                )
                     .map { result ->
                         result.results.map {
                             it.toModel(
@@ -74,7 +89,10 @@ class DiscoverRepositoryImpl @Inject constructor(
             }
 
             FreeToWatchType.TV_SHOWS -> {
-                discoverRemoteDataSource.getTvShowPopular(MonetizationType.FREE)
+                discoverRemoteDataSource.getTvShowPopular(
+                    monetizationType = MonetizationType.FREE,
+                    region = session.value.countryCode
+                )
                     .map { result ->
                         result.results.map {
                             it.toModel(

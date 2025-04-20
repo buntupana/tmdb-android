@@ -24,6 +24,8 @@ data class MovieDetailsRaw(
     val popularity: Float,
     @SerialName("poster_path")
     val posterPath: String? = null,
+    @SerialName("origin_country")
+    val originCountry: List<String>,
     @SerialName("production_companies")
     val productionCompanies: List<ProductionCompany>,
     @SerialName("production_countries")

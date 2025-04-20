@@ -5,5 +5,6 @@ data class AccountDetails(
     val accountObjectId: String,
     val username: String,
     val name: String,
-    val avatarUrl: String?
+    val avatarUrl: String?,
+    val countryCode: String
 )

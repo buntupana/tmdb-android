@@ -118,6 +118,8 @@ fun MediaEntity.toTvShowModel(
         Json.decodeFromString<EpisodeRaw>(it)
     }
 
+    val originCountryList = originCountryList?.let { Json.decodeFromString<List<String>>(it) }
+
     val recommendations = recommendations?.let { Json.decodeFromString<RecommendationsRaw>(it) }
 
     val externalLinks = externalLinks?.let { Json.decodeFromString<ExternalLinksRaw>(it) }
@@ -168,6 +170,7 @@ fun MediaEntity.toTvShowModel(
         lastEpisode = lastEpisodeToAir?.toModel(baseUrlBackdrop = baseUrlBackdrop),
         nextEpisode = nextEpisodeToAir?.toModel(baseUrlBackdrop = baseUrlBackdrop),
         isInAir = nextEpisodeToAir != null,
+        originCountryList = originCountryList.orEmpty(),
         recommendationList = recommendations?.results?.toModel(
             baseUrlPoster = baseUrlPoster,
             baseUrlBackdrop = baseUrlBackdrop

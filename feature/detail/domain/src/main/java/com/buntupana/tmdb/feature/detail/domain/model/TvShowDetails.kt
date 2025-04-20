@@ -18,6 +18,7 @@ data class TvShowDetails(
     val runTime: Long,
     val genreList: List<String>,
     val creatorList: List<Person.Crew.TvShow>,
+    val originCountryList: List<String>,
     val certificationList: List<Certification>,
     val videoList: List<Video>,
     val credits: CreditsTvShow,

@@ -23,6 +23,7 @@ data class MediaEntity(
     val genreList: String? = null,
     val userRating: Int? = null,
     val homepage: String? = null,
+    val originCountryList: String? = null,
     val productionCompanyList: String? = null,
     val productionCountryList: String? = null,
     val spokenLanguageList: String? = null,
@@ -45,7 +46,6 @@ data class MediaEntity(
     val runtime: Long? = null,
     val releaseDates: String? = null,
     // Tv Show
-    val originCountryList: String? = null,
     val contentRatings: String? = null,
     val seasonList: String? = null,
     val type: String? = null,

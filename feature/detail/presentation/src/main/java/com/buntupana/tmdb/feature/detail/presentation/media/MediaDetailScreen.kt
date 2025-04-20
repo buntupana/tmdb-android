@@ -53,7 +53,7 @@ import com.buntupana.tmdb.feature.detail.presentation.media.comp.Header
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.MainInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.RecommendationsHorizontal
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.SeasonsSection
-import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
+import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.ExternalLinksRow
 import com.panabuntu.tmdb.core.common.entity.MediaType
 
@@ -383,7 +383,7 @@ fun MediaDetailScreenPreview() {
             isGetContentError = false,
             mediaId = 0L,
             mediaType = MediaType.MOVIE,
-            mediaDetails = mediaDetailsTvShowSample,
+            mediaDetails = mediaDetailsMovieSample,
             backgroundColor = DetailBackgroundColor
         ),
         onBackClick = {},

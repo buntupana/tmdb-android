@@ -1,6 +1,5 @@
 package com.buntupana.tmdb.feature.discover.data.remote_data_source
 
-import androidx.compose.ui.text.intl.Locale
 import com.buntupana.tmdb.core.data.raw.MediaItemRaw
 import com.buntupana.tmdb.core.data.raw.MovieItemRaw
 import com.buntupana.tmdb.core.data.raw.ResponseListRaw
@@ -20,14 +19,9 @@ class DiscoverRemoteDataSource @Inject constructor(
     private val httpClient: HttpClient
 ) : RemoteDataSource() {
 
-    companion object {
-        private fun getRegion(): String {
-            return Locale.current.region
-        }
-    }
-
     suspend fun getMoviesPopular(
-        monetizationType: MonetizationType
+        monetizationType: MonetizationType,
+        region: String
     ): Result<ResponseListRaw<MovieItemRaw>, NetworkError> {
 
         val monetizationValue = when (monetizationType) {
@@ -39,13 +33,15 @@ class DiscoverRemoteDataSource @Inject constructor(
         return getResult {
             httpClient.get(urlString = "/3/discover/movie") {
                 parameter("with_watch_monetization_types", monetizationValue)
-                parameter("watch_region", getRegion())
+                parameter("watch_region", region)
+                parameter("region", region)
             }
         }
     }
 
     suspend fun getTvShowPopular(
-        monetizationType: MonetizationType
+        monetizationType: MonetizationType,
+        region: String
     ): Result<ResponseListRaw<TvShowItemRaw>, NetworkError> {
 
         val monetizationValue = when (monetizationType) {
@@ -57,12 +53,15 @@ class DiscoverRemoteDataSource @Inject constructor(
         return getResult {
             httpClient.get(urlString = "/3/discover/tv") {
                 parameter("with_watch_monetization_types", monetizationValue)
-                parameter("watch_region", getRegion())
+                parameter("watch_region", region)
+                parameter("region", region)
             }
         }
     }
 
-    suspend fun getTrending(trendingType: TrendingType): Result<ResponseListRaw<MediaItemRaw>, NetworkError> {
+    suspend fun getTrending(
+        trendingType: TrendingType
+    ): Result<ResponseListRaw<MediaItemRaw>, NetworkError> {
 
         val timeWindow = when (trendingType) {
             TrendingType.TODAY -> "day"
@@ -74,7 +73,9 @@ class DiscoverRemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getMoviesInTheatres(): Result<ResponseListRaw<MovieItemRaw>, NetworkError> {
+    suspend fun getMoviesInTheatres(
+        region: String
+    ): Result<ResponseListRaw<MovieItemRaw>, NetworkError> {
 
         val fromReleaseDate = LocalDate.now()
             .minusMonths(1)
@@ -84,7 +85,8 @@ class DiscoverRemoteDataSource @Inject constructor(
 
         return getResult {
             httpClient.get("/3/discover/movie") {
-                parameter("region", getRegion())
+                parameter("watch_region", region)
+                parameter("region", region)
                 parameter("with_release_type", "3|2")
                 parameter("release_date.gte", fromReleaseDate)
                 parameter("release_date.lte", toReleaseDate)

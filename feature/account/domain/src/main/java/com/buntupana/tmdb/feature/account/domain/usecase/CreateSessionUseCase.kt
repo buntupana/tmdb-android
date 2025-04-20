@@ -49,7 +49,8 @@ class CreateSessionUseCase @Inject constructor(
                             accountObjectId = userCredentials.accountId,
                             username = getAccountRes.data.username,
                             name = getAccountRes.data.name,
-                            avatarUrl = getAccountRes.data.avatarUrl
+                            avatarUrl = getAccountRes.data.avatarUrl,
+                            countryCode = getAccountRes.data.countryCode
                         )
                     )
                 )

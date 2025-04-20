@@ -5,8 +5,8 @@
 #build_tools = '30.0.3'
 
 #Sdk and tools
-compile_sdk = "35"
-target_sdk = "35"
+compile_sdk = "36"
+target_sdk = "36"
 min_sdk = "21"
 
 #Kotlin

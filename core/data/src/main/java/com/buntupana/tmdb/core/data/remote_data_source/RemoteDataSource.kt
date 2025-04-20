@@ -2,16 +2,21 @@ package com.buntupana.tmdb.core.data.remote_data_source
 
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
+import com.panabuntu.tmdb.core.common.manager.SessionManager
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import kotlinx.serialization.SerializationException
 import timber.log.Timber
 import java.nio.channels.UnresolvedAddressException
+import javax.inject.Inject
 
 /**
  * Abstract Base Data source class with error handling
  */
 abstract class RemoteDataSource {
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     protected suspend inline fun <reified D> getResult(request: () -> HttpResponse): Result<D, NetworkError> {
         val response = try {
@@ -38,7 +43,10 @@ abstract class RemoteDataSource {
                 }
             }
 
-            401 -> Result.Error(NetworkError.UNAUTHORIZED)
+            401 -> {
+                sessionManager.clearSession()
+                Result.Error(NetworkError.UNAUTHORIZED)
+            }
 
             404 -> Result.Error(NetworkError.NOT_FOUND)
 
@@ -51,7 +59,6 @@ abstract class RemoteDataSource {
             in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
 
             else -> Result.Error(NetworkError.UNKNOWN)
-
         }
     }
 }

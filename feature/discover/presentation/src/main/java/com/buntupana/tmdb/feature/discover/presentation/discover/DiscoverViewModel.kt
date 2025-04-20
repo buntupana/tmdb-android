@@ -16,9 +16,11 @@ import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilte
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
+import com.panabuntu.tmdb.core.common.manager.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,20 +28,35 @@ import javax.inject.Inject
 class DiscoverViewModel @Inject constructor(
     private val getPopularMoviesListUseCase: GetPopularMoviesListUseCase,
     private val getFreeToWatchMediaListUseCase: GetFreeToWatchMediaListUseCase,
-    private val getTrendingMediaListUseCase: GetTrendingMediaListUseCase
+    private val getTrendingMediaListUseCase: GetTrendingMediaListUseCase,
+    sessionManager: SessionManager
 ) : ViewModel() {
 
     var state by mutableStateOf(DiscoverState())
         private set
+
+    private var countryCode: String? = null
 
     private var getPopularMoviesJob: Job? = null
     private var getFreeToWatchJob: Job? = null
     private var getTrendingJob: Job? = null
 
     init {
-        getPopularMovies(state.popularFilterSelected)
-        getFreeToWatchList(state.freeToWatchFilterSelected)
-        getTrendingList(state.trendingFilterSelected)
+        viewModelScope.launch {
+            sessionManager.session.collectLatest { session ->
+                if (session.countryCode != countryCode) {
+                    countryCode = session.countryCode
+                    state = state.copy(
+                        trendingMediaItemList = null,
+                        popularMediaItemList = null,
+                        freeToWatchMediaItemList = null
+                    )
+                    getPopularMovies(state.popularFilterSelected)
+                    getFreeToWatchList(state.freeToWatchFilterSelected)
+                    getTrendingList(state.trendingFilterSelected)
+                }
+            }
+        }
     }
 
     fun onEvent(event: DiscoverEvent) {

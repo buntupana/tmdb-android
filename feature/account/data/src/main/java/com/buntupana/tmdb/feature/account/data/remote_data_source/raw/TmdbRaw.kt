@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TmdbRaw(
     @SerialName("avatar_path")
-    val avatarPath: String
+    val avatarPath: String?
 )

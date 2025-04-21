@@ -34,5 +34,6 @@ data class TvShowDetails(
     val status: String?,
     val originalLanguage: String?,
     val type: String?,
-    val externalLinkList: List<ExternalLink>
+    val externalLinkList: List<ExternalLink>,
+    val providers: Providers
 )

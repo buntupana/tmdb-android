@@ -69,7 +69,8 @@ class GetTvShowDetailsUseCase @Inject constructor(
                             shareLink = urlProvider.getMediaShareLink(
                                 mediaType = MediaType.TV_SHOW,
                                 mediaId = tvShowId
-                            )
+                            ),
+                            providers = tvShowDetails.providers
                         )
                     )
                 }

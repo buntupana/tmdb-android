@@ -32,7 +32,8 @@ sealed class MediaDetails(
     open val status: String?,
     open val originalLanguage: String? = null,
     open val externalLinkList: List<ExternalLink>,
-    open val shareLink: String
+    open val shareLink: String,
+    open val providers: Providers? = null
 ) {
 
     data class Movie(
@@ -65,7 +66,8 @@ sealed class MediaDetails(
         val budget: Long?,
         val revenue: Long?,
         override val externalLinkList: List<ExternalLink>,
-        override val shareLink: String
+        override val shareLink: String,
+        override val providers: Providers?
     ) : MediaDetails(
         id = id,
         title = title,
@@ -93,7 +95,8 @@ sealed class MediaDetails(
         status = status,
         originalLanguage = originalLanguage,
         externalLinkList = externalLinkList,
-        shareLink = shareLink
+        shareLink = shareLink,
+        providers = providers
     )
 
     data class TvShow(
@@ -127,7 +130,8 @@ sealed class MediaDetails(
         val type: String?,
         override val originalLanguage: String?,
         override val externalLinkList: List<ExternalLink>,
-        override val shareLink: String
+        override val shareLink: String,
+        override val providers: Providers?
     ) : MediaDetails(
         id = id,
         title = title,
@@ -155,6 +159,7 @@ sealed class MediaDetails(
         status = status,
         originalLanguage = originalLanguage,
         externalLinkList = externalLinkList,
-        shareLink = shareLink
+        shareLink = shareLink,
+        providers = providers
     )
 }

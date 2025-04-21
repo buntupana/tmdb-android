@@ -32,20 +32,22 @@ class DetailRepositoryImpl @Inject constructor(
     private val mediaDao: MediaDao,
     private val episodesDao: EpisodesDao,
     private val urlProvider: UrlProvider,
-    private val sessionManager: SessionManager
+    sessionManager: SessionManager
 ) : DetailRepository {
+
+    private val session = sessionManager.session
 
     override suspend fun getMovieDetails(movieId: Long): Flow<Result<MovieDetails, NetworkError>> {
 
         return getFlowResult(
             networkCall = {
                 detailRemoteDataSource.getMovieDetail(
-                    sessionId = sessionManager.session.value.sessionId,
+                    sessionId = session.value.sessionId,
                     movieId = movieId
                 )
             },
             mapToEntity = {
-                it.toEntity()
+                it.toEntity(session.value.countryCode)
             },
             updateDataBaseQuery = {
                 mediaDao.upsert(it)
@@ -62,7 +64,8 @@ class DetailRepositoryImpl @Inject constructor(
                     baseUrlFacebook = urlProvider.BASE_URL_FACEBOOK,
                     baseUrlInstagram = urlProvider.BASE_URL_INSTAGRAM,
                     baseUrlX = urlProvider.BASE_URL_X,
-                    baseUrlTiktok = urlProvider.BASE_URL_TIKTOK
+                    baseUrlTiktok = urlProvider.BASE_URL_TIKTOK,
+                    baseUrlProvider = urlProvider.BASE_URL_PROVIDER
                 )
             }
         )
@@ -73,12 +76,12 @@ class DetailRepositoryImpl @Inject constructor(
         return getFlowResult(
             networkCall = {
                 detailRemoteDataSource.getTvShowDetail(
-                    sessionId = sessionManager.session.value.sessionId,
+                    sessionId = session.value.sessionId,
                     tvShowId = tvShowId
                 )
             },
             mapToEntity = {
-                it.toEntity()
+                it.toEntity(session.value.countryCode)
             },
             updateDataBaseQuery = {
                 mediaDao.upsert(it)
@@ -95,7 +98,8 @@ class DetailRepositoryImpl @Inject constructor(
                     baseUrlFacebook = urlProvider.BASE_URL_FACEBOOK,
                     baseUrlInstagram = urlProvider.BASE_URL_INSTAGRAM,
                     baseUrlX = urlProvider.BASE_URL_X,
-                    baseUrlTiktok = urlProvider.BASE_URL_TIKTOK
+                    baseUrlTiktok = urlProvider.BASE_URL_TIKTOK,
+                    baseUrlProvider = urlProvider.BASE_URL_PROVIDER
                 )
             }
         )
@@ -112,7 +116,7 @@ class DetailRepositoryImpl @Inject constructor(
         return getFlowResult(
             networkCall = {
                 detailRemoteDataSource.getSeasonDetail(
-                    sessionId = sessionManager.session.value.sessionId,
+                    sessionId = session.value.sessionId,
                     tvShowId = tvShowId,
                     seasonNumber = seasonNumber
                 )
@@ -146,7 +150,7 @@ class DetailRepositoryImpl @Inject constructor(
 
         return if (rating == null || rating == 0) {
             detailRemoteDataSource.deleteMediaRating(
-                sessionId = sessionManager.session.value.sessionId,
+                sessionId = session.value.sessionId,
                 tvShowId = tvShowId,
                 seasonNumber = seasonNumber,
                 episodeNumber = episodeNumber
@@ -160,7 +164,7 @@ class DetailRepositoryImpl @Inject constructor(
             }
         } else {
             detailRemoteDataSource.addEpisodeRating(
-                sessionId = sessionManager.session.value.sessionId,
+                sessionId = session.value.sessionId,
                 tvShowId = tvShowId,
                 seasonNumber = seasonNumber,
                 episodeNumber = episodeNumber,

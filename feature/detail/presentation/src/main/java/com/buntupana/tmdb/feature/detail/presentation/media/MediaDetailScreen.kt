@@ -51,6 +51,7 @@ import com.buntupana.tmdb.feature.detail.presentation.media.comp.AdditionalInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.CastHorizontalList
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.Header
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.MainInfo
+import com.buntupana.tmdb.feature.detail.presentation.media.comp.Providers
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.RecommendationsHorizontal
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.SeasonsSection
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
@@ -318,6 +319,12 @@ fun MediaDetailContent(
                                 state.backgroundColor
                             )
                         }
+                    )
+
+                    Providers(
+                        modifier = Modifier.fillMaxWidth(),
+                        backgroundColor = MaterialTheme.colorScheme.background,
+                        providers = state.mediaDetails.providers
                     )
 
                     if (state.mediaDetails is MediaDetails.TvShow) {

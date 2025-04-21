@@ -2,28 +2,36 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.core.data.database.entity.MediaEntity
 import com.buntupana.tmdb.core.data.mapper.toModel
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CountryWatchProvider
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsMovieRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ExternalLinksRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.Genre
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.MediaVideosRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.MovieDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ProductionCountry
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ProviderInfo
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.RecommendationsRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ReleaseDatesRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Credits
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
+import com.buntupana.tmdb.feature.detail.domain.model.Providers
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.util.Const.RATABLE_DAYS
 import com.panabuntu.tmdb.core.common.util.encodeToStringSafe
 import com.panabuntu.tmdb.core.common.util.getLanguageName
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
-fun MovieDetailsRaw.toEntity(): MediaEntity {
+fun MovieDetailsRaw.toEntity(
+    countryCode: String
+): MediaEntity {
+
+    val countryWatchProvider = watchProviders?.results?.get(countryCode)
 
     return MediaEntity(
         id = id,
@@ -60,7 +68,8 @@ fun MovieDetailsRaw.toEntity(): MediaEntity {
         spokenLanguageList = Json.encodeToString(spokenLanguages),
         isFavorite = accountStates?.favorite ?: false,
         isWatchListed = accountStates?.watchlist ?: false,
-        userRating = (accountStates?.rated?.value?.times(10))?.toInt()
+        userRating = (accountStates?.rated?.value?.times(10))?.toInt(),
+        watchProviders = Json.encodeToStringSafe(countryWatchProvider)
     )
 }
 
@@ -72,7 +81,8 @@ fun MediaEntity.toMovieModel(
     baseUrlFacebook: String,
     baseUrlInstagram: String,
     baseUrlX: String,
-    baseUrlTiktok: String
+    baseUrlTiktok: String,
+    baseUrlProvider: String
 ): MovieDetails {
 
     val releaseLocalDate = try {
@@ -110,6 +120,30 @@ fun MediaEntity.toMovieModel(
 
         else -> false
     }
+
+    val watchProvider = watchProviders?.let { Json.decodeFromString<CountryWatchProvider>(it) }
+
+    val providerInfoList = mutableListOf<ProviderInfo>()
+
+    if (watchProvider?.flatrate.isNotNullOrEmpty()) {
+        providerInfoList.addAll(watchProvider?.flatrate.orEmpty())
+    }
+    if (watchProvider?.buy.isNotNullOrEmpty()) {
+        providerInfoList.addAll(watchProvider?.buy.orEmpty())
+    }
+    if (watchProvider?.rent.isNotNullOrEmpty()) {
+        providerInfoList.addAll(watchProvider?.rent.orEmpty())
+    }
+    if (watchProvider?.ads.isNotNullOrEmpty()) {
+        providerInfoList.addAll(watchProvider?.ads.orEmpty())
+    }
+
+    val providers = Providers(
+        justWatchLink = watchProvider?.link.orEmpty(),
+        logoUrlList = providerInfoList.map {
+            baseUrlProvider + it.logoPath
+        }.distinct()
+    )
 
     return MovieDetails(
         id = id,
@@ -153,5 +187,6 @@ fun MediaEntity.toMovieModel(
             baseUrlTiktok = baseUrlTiktok,
             baseUrlImdb = baseUrlImdb
         ).orEmpty(),
+        providers = providers
     )
 }

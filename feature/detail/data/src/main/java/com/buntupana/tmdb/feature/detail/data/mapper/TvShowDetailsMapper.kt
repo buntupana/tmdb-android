@@ -4,32 +4,40 @@ import com.buntupana.tmdb.core.data.database.entity.MediaEntity
 import com.buntupana.tmdb.core.data.mapper.getGender
 import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ContentRatingsRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CountryWatchProvider
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreatedBy
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsTvShowRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.EpisodeRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ExternalLinksRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.Genre
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.MediaVideosRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ProviderInfo
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.RecommendationsRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.SeasonRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.Person
+import com.buntupana.tmdb.feature.detail.domain.model.Providers
 import com.buntupana.tmdb.feature.detail.domain.model.TvShowDetails
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.util.Const.RATABLE_DAYS
 import com.panabuntu.tmdb.core.common.util.encodeToStringSafe
 import com.panabuntu.tmdb.core.common.util.getLanguageName
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
+import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
-fun TvShowDetailsRaw.toEntity(): MediaEntity {
+fun TvShowDetailsRaw.toEntity(
+    countryCode: String
+): MediaEntity {
 
     val credits = credits?.copy(cast = credits.cast.take(9), crew = credits.crew.take(9))
+
+    val countryWatchProvider = watchProviders?.results?.get(countryCode)
 
     return MediaEntity(
         id = id,
@@ -72,7 +80,8 @@ fun TvShowDetailsRaw.toEntity(): MediaEntity {
         videos = Json.encodeToStringSafe(videos),
         contentRatings = Json.encodeToStringSafe(contentRatings),
         recommendations = Json.encodeToStringSafe(recommendations),
-        externalLinks = Json.encodeToStringSafe(externalLinks)
+        externalLinks = Json.encodeToStringSafe(externalLinks),
+        watchProviders = Json.encodeToStringSafe(countryWatchProvider)
     )
 }
 
@@ -84,7 +93,8 @@ fun MediaEntity.toTvShowModel(
     baseUrlFacebook: String,
     baseUrlInstagram: String,
     baseUrlX: String,
-    baseUrlTiktok: String
+    baseUrlTiktok: String,
+    baseUrlProvider: String
 ): TvShowDetails {
 
     val releaseLocalDate = try {
@@ -132,6 +142,30 @@ fun MediaEntity.toTvShowModel(
 
         else -> false
     }
+
+    val watchProvider = watchProviders?.let { Json.decodeFromString<CountryWatchProvider>(it) }
+
+    val providerInfoList = mutableListOf<ProviderInfo>()
+
+    if (watchProvider?.flatrate.isNotNullOrEmpty()) {
+        providerInfoList.addAll(watchProvider?.flatrate.orEmpty())
+    }
+    if (watchProvider?.buy.isNotNullOrEmpty()) {
+        providerInfoList.addAll(watchProvider?.buy.orEmpty())
+    }
+    if (watchProvider?.rent.isNotNullOrEmpty()) {
+        providerInfoList.addAll(watchProvider?.rent.orEmpty())
+    }
+    if (watchProvider?.ads.isNotNullOrEmpty()) {
+        providerInfoList.addAll(watchProvider?.ads.orEmpty())
+    }
+
+    val providers = Providers(
+        justWatchLink = watchProvider?.link.orEmpty(),
+        logoUrlList = providerInfoList.map {
+            baseUrlProvider + it.logoPath
+        }.distinct()
+    )
 
     return TvShowDetails(
         id = id,
@@ -189,6 +223,7 @@ fun MediaEntity.toTvShowModel(
             baseUrlX = baseUrlX,
             baseUrlTiktok = baseUrlTiktok,
             baseUrlImdb = baseUrlImdb
-        ).orEmpty()
+        ).orEmpty(),
+        providers = providers
     )
 }

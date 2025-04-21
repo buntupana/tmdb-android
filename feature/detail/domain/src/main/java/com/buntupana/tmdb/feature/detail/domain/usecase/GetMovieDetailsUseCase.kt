@@ -103,7 +103,8 @@ class GetMovieDetailsUseCase @Inject constructor(
                             shareLink = urlProvider.getMediaShareLink(
                                 mediaType = MediaType.MOVIE,
                                 mediaId = movieId
-                            )
+                            ),
+                            providers = movieDetails.providers
                         )
                     )
                 }

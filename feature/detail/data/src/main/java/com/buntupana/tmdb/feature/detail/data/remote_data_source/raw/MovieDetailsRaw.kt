@@ -52,5 +52,7 @@ data class MovieDetailsRaw(
     @SerialName("account_states")
     val accountStates: MediaAccountStateRaw? = null,
     @SerialName("external_ids")
-    val externalLinks: ExternalLinksRaw? = null
+    val externalLinks: ExternalLinksRaw? = null,
+    @SerialName("watch/providers")
+    val watchProviders: WatchProviders? = null
 )

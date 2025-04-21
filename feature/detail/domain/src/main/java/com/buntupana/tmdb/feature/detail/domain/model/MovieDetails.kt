@@ -31,5 +31,6 @@ data class MovieDetails(
     val originalLanguage: String?,
     val budget: Long?,
     val revenue: Long?,
-    val externalLinkList: List<ExternalLink>
+    val externalLinkList: List<ExternalLink>,
+    val providers: Providers
 )

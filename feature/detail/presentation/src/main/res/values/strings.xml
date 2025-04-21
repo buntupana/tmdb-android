@@ -68,4 +68,8 @@
     <string name="text_revenue">Revenue</string>
     <string name="text_type">Type</string>
 
+    // Watch Providers
+    <string name="text_available_in">Available In</string>
+    <string name="text_powered_by">powered by</string>
+
 </resources>

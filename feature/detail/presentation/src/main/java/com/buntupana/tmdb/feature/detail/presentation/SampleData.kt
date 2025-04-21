@@ -10,6 +10,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.Job
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
+import com.buntupana.tmdb.feature.detail.domain.model.Providers
 import com.buntupana.tmdb.feature.detail.domain.model.Role
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.panabuntu.tmdb.core.common.model.Gender
@@ -145,7 +146,11 @@ val mediaDetailsMovieSample = MediaDetails.Movie(
     budget = 200_000_000,
     revenue = 250_000_000,
     externalLinkList = externalLinkListSample,
-    shareLink = "shareLink"
+    shareLink = "shareLink",
+    providers = Providers(
+        justWatchLink = "justWatchLink",
+        logoUrlList = listOf("", "", "", "")
+    )
 )
 
 val creditItemPersonSample = CreditPersonItem.Movie(
@@ -239,5 +244,9 @@ val mediaDetailsTvShowSample = MediaDetails.TvShow(
     originalLanguage = "ja",
     type = "Scripted",
     externalLinkList = externalLinkListSample,
-    shareLink = "shareLink"
+    shareLink = "shareLink",
+    providers = Providers(
+        justWatchLink = "justWatchLink",
+        logoUrlList = listOf("", "", "", "")
+    )
 )

@@ -60,4 +60,5 @@ data class MediaEntity(
     val lastAirDate: String? = null,
     val lastEpisodeToAir: String? = null,
     val networkList: String? = null,
+    val watchProviders: String? = null,
 )

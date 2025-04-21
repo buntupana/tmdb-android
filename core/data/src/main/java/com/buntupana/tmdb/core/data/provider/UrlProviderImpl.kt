@@ -14,6 +14,7 @@ class UrlProviderImpl : UrlProvider {
     override val BASE_URL_BACKDROP = "$BASE_URL_IMAGE/w1000_and_h450_multi_faces/"
     override val BASE_URL_PROFILE = "$BASE_URL_IMAGE/w240_and_h266_face/"
     override val BASE_URL_AVATAR = "$BASE_URL_IMAGE/w150_and_h150_face/"
+    override val BASE_URL_PROVIDER: String = "$BASE_URL_IMAGE/t/p/original"
 
     private val BASE_URL_WEB = "https://www.themoviedb.org"
 

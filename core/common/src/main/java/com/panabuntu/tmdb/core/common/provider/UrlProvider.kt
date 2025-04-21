@@ -11,6 +11,7 @@ interface UrlProvider {
     val BASE_URL_BACKDROP: String
     val BASE_URL_PROFILE: String
     val BASE_URL_AVATAR: String
+    val BASE_URL_PROVIDER: String
 
     val SIGN_IN_DEEP_LINK_URL: String
 

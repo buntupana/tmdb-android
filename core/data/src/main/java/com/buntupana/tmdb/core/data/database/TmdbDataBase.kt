@@ -29,7 +29,7 @@ import com.buntupana.tmdb.core.data.database.entity.WatchlistEntity
         UserListDetailsEntity::class,
         UserListItemEntity::class
     ],
-    version = 2,
+    version = 1,
     exportSchema = false,
 )
 abstract class TmdbDataBase : RoomDatabase() {

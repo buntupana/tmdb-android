@@ -3,6 +3,7 @@ package com.buntupana.tmdb.feature.detail.data.remote_data_source
 import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsMovieRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsTvShowRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.MovieDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.PersonDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.TvShowDetailsRaw
@@ -25,12 +26,12 @@ class DetailRemoteDataSource @Inject constructor(
     suspend fun getMovieDetail(
         sessionId: String?,
         movieId: Long
-    ): Result<com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.MovieDetailsRaw, NetworkError> {
+    ): Result<MovieDetailsRaw, NetworkError> {
         return getResult {
             httpClient.get("/3/movie/$movieId") {
                 parameter(
                     "append_to_response",
-                    "release_dates,videos,credits,recommendations,account_states,external_ids"
+                    "release_dates,videos,credits,recommendations,account_states,external_ids,watch/providers"
                 )
                 if (sessionId != null) {
                     parameter("session_id", sessionId)
@@ -47,7 +48,7 @@ class DetailRemoteDataSource @Inject constructor(
             httpClient.get(urlString = "/3/tv/$tvShowId") {
                 parameter(
                     "append_to_response",
-                    "content_ratings,videos,aggregate_credits,recommendations,account_states,external_ids"
+                    "content_ratings,videos,aggregate_credits,recommendations,account_states,external_ids,watch/providers"
                 )
                 if (sessionId != null) {
                     parameter("session_id", sessionId)

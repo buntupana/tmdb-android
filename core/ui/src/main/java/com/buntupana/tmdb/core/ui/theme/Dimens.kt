@@ -30,6 +30,8 @@ object Dimens {
     val recommendationItemWidth = 275.dp
 
     val watchProviderIconSize = 40.dp
+
+    val errorAndRetryTopPadding = 200.dp
 }
 
 object PaddingPhone : Padding {

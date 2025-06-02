@@ -38,7 +38,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.Providers
 import com.buntupana.tmdb.feature.detail.presentation.R
 
 @Composable
-fun Providers(
+fun WatchProviders(
     modifier: Modifier = Modifier,
     backgroundColor: Color,
     providers: Providers?
@@ -135,8 +135,8 @@ fun Providers(
 
 @Preview(showBackground = true)
 @Composable
-private fun ProvidersPreview() {
-    Providers(
+private fun WatchProvidersPreview() {
+    WatchProviders(
         modifier = Modifier.fillMaxWidth(),
         backgroundColor = PrimaryColor,
         providers = Providers(

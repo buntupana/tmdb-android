@@ -25,7 +25,6 @@ import com.panabuntu.tmdb.core.common.util.encodeToStringSafe
 import com.panabuntu.tmdb.core.common.util.getLanguageName
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.Duration
 import java.time.LocalDate
@@ -201,8 +200,8 @@ fun MediaEntity.toTvShowModel(
             emptyList()
         ),
         seasonList = seasons?.toModel(baseUrlPoster = baseUrlPoster).orEmpty(),
-        lastEpisode = lastEpisodeToAir?.toModel(baseUrlBackdrop = baseUrlBackdrop),
-        nextEpisode = nextEpisodeToAir?.toModel(baseUrlBackdrop = baseUrlBackdrop),
+        lastEpisode = lastEpisodeToAir?.toModel(baseUrlBackdrop = baseUrlBackdrop, baseUrlProfile = baseUrlProfile),
+        nextEpisode = nextEpisodeToAir?.toModel(baseUrlBackdrop = baseUrlBackdrop, baseUrlProfile = baseUrlProfile),
         isInAir = nextEpisodeToAir != null,
         originCountryList = originCountryList.orEmpty(),
         recommendationList = recommendations?.results?.toModel(

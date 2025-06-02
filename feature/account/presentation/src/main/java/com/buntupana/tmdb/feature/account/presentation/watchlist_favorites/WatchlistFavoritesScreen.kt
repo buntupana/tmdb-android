@@ -28,6 +28,7 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarTitle
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isVisible
@@ -110,14 +111,14 @@ fun WatchlistContent(
         }
 
         if (state.isError) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                ErrorAndRetry(
-                    modifier = Modifier.align(Alignment.Center),
-                    textColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
-                    errorMessage = stringResource(id = com.buntupana.tmdb.core.ui.R.string.message_loading_content_error),
-                    onRetryClick = onRetryClick
-                )
-            }
+            ErrorAndRetry(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding),
+                textColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
+                errorMessage = stringResource(id = com.buntupana.tmdb.core.ui.R.string.message_loading_content_error),
+                onRetryClick = onRetryClick
+            )
         }
 
         val pagerState = rememberPagerState(
@@ -188,7 +189,7 @@ private fun WatchlistScreenPreview() {
         WatchlistFavoritesState(
             isLoading = false,
             screenType = ScreenType.FAVORITES,
-            isError = false,
+            isError = true,
             movieItemsTotalCount = 15,
             tvShowItemsTotalCount = 40,
             movieItems = flow {

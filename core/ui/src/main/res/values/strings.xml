@@ -58,6 +58,7 @@
     // Cast Detail
     <string name="text_cast">Cast</string>
     <string name="text_crew">Crew</string>
+    <string name="text_guest_stars">Guest Stars</string>
 
     // WatchList
     <string name="text_watchlist">Watchlist</string>

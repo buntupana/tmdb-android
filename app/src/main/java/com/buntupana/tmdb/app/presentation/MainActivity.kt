@@ -374,6 +374,11 @@ class MainActivity : ComponentActivity() {
                                             )
                                         )
                                     )
+                                },
+                                onPersonClick = { personId: Long ->
+                                    navRoutesMain.navigate(
+                                        PersonDetailNav(personId = personId)
+                                    )
                                 }
                             )
                         }

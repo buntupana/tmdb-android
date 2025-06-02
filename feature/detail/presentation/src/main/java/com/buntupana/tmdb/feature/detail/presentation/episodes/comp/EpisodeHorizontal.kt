@@ -1,16 +1,21 @@
 package com.buntupana.tmdb.feature.detail.presentation.episodes.comp
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.Dimens
@@ -25,7 +30,7 @@ fun EpisodeHorizontal(
     episode: Episode,
     seasonNumber: Int,
     onRateClick: () -> Unit = {},
-    onItemClick: () -> Unit
+    onSeeMoreClick: () -> Unit
 ) {
 
     Surface(
@@ -65,8 +70,7 @@ fun EpisodeHorizontal(
                         EpisodeSubtitle(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = Dimens.padding.small)
-                            ,
+                                .padding(top = Dimens.padding.small),
                             // Added season 0 limitation to rate because a bug in the API (https://www.themoviedb.org/talk/67b7098c0c61025fafc3fb2b)
                             isLogged = isLogged && seasonNumber > 0,
                             episode = episode,
@@ -83,6 +87,23 @@ fun EpisodeHorizontal(
                     )
                 }
             }
+
+            if (episode.castList.isEmpty() || episode.personCrewMap.orEmpty().isEmpty()) return@Column
+
+            HorizontalDivider()
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onSeeMoreClick)
+                    .padding(vertical = Dimens.padding.vertical),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = "See more...",
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }
@@ -94,6 +115,6 @@ fun EpisodeHorizontalPreview() {
         episode = episodeSample,
         isLogged = true,
         seasonNumber = 1,
-        onItemClick = {}
+        onSeeMoreClick = {}
     )
 }

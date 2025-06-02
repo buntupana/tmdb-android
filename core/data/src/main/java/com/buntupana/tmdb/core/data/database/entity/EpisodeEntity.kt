@@ -21,5 +21,5 @@ data class EpisodeEntity(
     val voteCount: Int? = null,
     val guestStarList: String,
     val crewList: String,
-    val userRating: Int?
+    val userRating: Int?,
 )

@@ -28,6 +28,6 @@ data class EpisodeRaw(
     @SerialName("vote_count")
     val voteCount: Int? = null,
     @SerialName("guest_stars")
-    val guestStars: List<MediaCastMovieRaw>? = null,
-    val crew: List<MediaCrewMovieRaw>? = null
+    val guestStars: List<MediaCastGuestStarRaw>? = null,
+    val crew: List<MediaCrewTvShowRaw>? = null
 )

@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -93,7 +92,6 @@ fun PersonItemCastHorizontal(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun TvShowCredits(
     modifier: Modifier = Modifier,
@@ -105,21 +103,24 @@ private fun TvShowCredits(
 
             roleEpisodeCountPairList.forEachIndexed { index, pair ->
                 append("${pair.first} ")
-                withStyle(
-                    style = SpanStyle(
-                        brush = SolidColor(MaterialTheme.colorScheme.onBackground),
-                        alpha = 0.5f
-                    )
-                ) {
-                    append(
-                        "(${
-                            pluralStringResource(
-                                id = R.plurals.text_episodes_count,
-                                count = pair.second,
-                                pair.second
-                            )
-                        })"
-                    )
+
+                if (pair.second > 0) {
+                    withStyle(
+                        style = SpanStyle(
+                            brush = SolidColor(MaterialTheme.colorScheme.onBackground),
+                            alpha = 0.5f
+                        )
+                    ) {
+                        append(
+                            "(${
+                                pluralStringResource(
+                                    id = R.plurals.text_episodes_count,
+                                    count = pair.second,
+                                    pair.second
+                                )
+                            })"
+                        )
+                    }
                 }
                 if (index + 1 < roleEpisodeCountPairList.size) {
                     append(", ")

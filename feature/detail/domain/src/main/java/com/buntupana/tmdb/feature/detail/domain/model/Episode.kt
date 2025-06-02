@@ -15,5 +15,7 @@ data class Episode(
     val voteAverage: Float?,
     val voteCount: Int?,
     val userRating: Int?,
-    val isRateable: Boolean
+    val isRateable: Boolean,
+    val castList: List<Person.Cast.TvShow>,
+    val personCrewMap: Map<String, List<Person.Crew>>? = null
 )

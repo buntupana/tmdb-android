@@ -215,7 +215,9 @@ fun ListDetailContent(
             if (state.isError) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     ErrorAndRetry(
-                        modifier = Modifier.align(Alignment.Center),
+                        modifier = Modifier
+                            .padding(vertical = paddingValues.calculateTopPadding() +  Dimens.errorAndRetryTopPadding)
+                            .fillMaxWidth(),
                         textColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
                         errorMessage = stringResource(id = R.string.message_loading_content_error),
                         onRetryClick = onRetryClick

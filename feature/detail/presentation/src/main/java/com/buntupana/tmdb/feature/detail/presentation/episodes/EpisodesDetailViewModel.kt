@@ -65,11 +65,11 @@ class EpisodesDetailViewModel @Inject constructor(
         getSeasonDetailsUseCase(state.tvShowId, state.seasonNumber).collectLatest {
             it.onError {
                 state = state.copy(isLoading = false, isGetEpisodesError = true)
-            }.onSuccess {
+            }.onSuccess { seasonDetail ->
                 state = state.copy(
                     isLoading = false,
                     isGetEpisodesError = false,
-                    episodeList = it.episodes
+                    episodeList = seasonDetail.episodes
                 )
             }
         }

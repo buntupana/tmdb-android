@@ -14,6 +14,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -21,7 +25,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
@@ -30,27 +33,48 @@ import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
+import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
 import com.buntupana.tmdb.feature.detail.presentation.episodes.comp.EpisodeHorizontal
 import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
 import com.buntupana.tmdb.core.ui.R as RCore
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EpisodesDetailScreen(
     viewModel: EpisodesDetailViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onLogoClick: () -> Unit,
-    onRateEpisodeClick: (tvShowId: Long, episodeName: String, seasonNumber: Int, episodeNumber: Int, currentRating: Int?) -> Unit
+    onRateEpisodeClick: (tvShowId: Long, episodeName: String, seasonNumber: Int, episodeNumber: Int, currentRating: Int?) -> Unit,
+    onPersonClick: (personId: Long) -> Unit
 ) {
+
+    var bottomSheetEpisode by remember { mutableStateOf<Episode?>(null) }
+
     EpisodesDetailContent(
         state = viewModel.state,
         onBackClick = onBackClick,
         onRetryClick = { viewModel.onEvent(EpisodesDetailEvent.GetEpisodesDetail) },
         onSearchClick = onSearchClick,
         onLogoClick = onLogoClick,
-        onRateEpisodeClick = onRateEpisodeClick
+        onRateEpisodeClick = onRateEpisodeClick,
+        onEpisodeShowMoreClick = { episode ->
+            bottomSheetEpisode = episode
+        }
+    )
+
+    EpisodeCastDialog(
+        showDialog = bottomSheetEpisode != null,
+        episode = bottomSheetEpisode,
+        onDismiss = {
+            bottomSheetEpisode = null
+        },
+        onPersonClick = { personId ->
+            bottomSheetEpisode = null
+            onPersonClick(personId)
+        }
     )
 }
 
@@ -62,7 +86,8 @@ private fun EpisodesDetailContent(
     onRetryClick: () -> Unit,
     onSearchClick: () -> Unit,
     onLogoClick: () -> Unit,
-    onRateEpisodeClick: (tvShowId: Long, episodeName: String, seasonNumber: Int, episodeNumber: Int, currentRating: Int?) -> Unit = { _, _, _, _, _ -> }
+    onRateEpisodeClick: (tvShowId: Long, episodeName: String, seasonNumber: Int, episodeNumber: Int, currentRating: Int?) -> Unit = { _, _, _, _, _ -> },
+    onEpisodeShowMoreClick: (episode: Episode) -> Unit
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -121,8 +146,8 @@ private fun EpisodesDetailContent(
         if (state.isGetEpisodesError) {
             ErrorAndRetry(
                 modifier = Modifier
-                    .padding(vertical = 200.dp)
-                    .fillMaxSize(),
+                    .padding(vertical = paddingValues.calculateTopPadding() +  Dimens.errorAndRetryTopPadding)
+                    .fillMaxWidth(),
                 errorMessage = stringResource(id = RCore.string.message_loading_content_error),
                 onRetryClick = onRetryClick
             )
@@ -159,7 +184,9 @@ private fun EpisodesDetailContent(
                         seasonNumber = state.seasonNumber,
                         episode = episode,
                         isLogged = state.isLogged,
-                        onItemClick = {},
+                        onSeeMoreClick = {
+                            onEpisodeShowMoreClick(episode)
+                        },
                         onRateClick = {
                             onRateEpisodeClick(
                                 state.tvShowId,
@@ -184,7 +211,7 @@ private fun EpisodesDetailContent(
     }
 }
 
-@Preview(showBackground = true, heightDp = 2000)
+@Preview(showBackground = true)
 @Composable
 fun EpisodesDetailScreenPreview() {
     EpisodesDetailContent(
@@ -192,6 +219,7 @@ fun EpisodesDetailScreenPreview() {
             isLoading = true,
             tvShowId = 0L,
             sessionName = "Jack Reacher",
+            isGetEpisodesError = true,
             posterUrl = "asdf",
             releaseYear = "2003",
             backgroundColor = DetailBackgroundColor,
@@ -205,6 +233,8 @@ fun EpisodesDetailScreenPreview() {
         onBackClick = {},
         onRetryClick = {},
         onSearchClick = { },
-        onLogoClick = {}
+        onLogoClick = {},
+        onRateEpisodeClick = { _, _, _, _, _ -> },
+        onEpisodeShowMoreClick = {}
     )
 }

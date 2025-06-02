@@ -3,10 +3,11 @@ package com.buntupana.tmdb.feature.detail.data.mapper
 import com.buntupana.tmdb.core.data.database.entity.EpisodeEntity
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.EpisodeAccountStateRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.EpisodeRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.MediaCastGuestStarRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.MediaCrewTvShowRaw
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.panabuntu.tmdb.core.common.util.ifNotNull
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
@@ -32,13 +33,14 @@ fun List<EpisodeRaw>.toEntity(
             runtime = episodeRaw.runtime,
             guestStarList = Json.encodeToString(episodeRaw.guestStars),
             crewList = Json.encodeToString(episodeRaw.crew),
-            userRating = (episodeAccountStateList?.get(index)?.rated?.value.ifNotNull { it * 10 })?.toInt()
-        )
+            userRating = (episodeAccountStateList?.get(index)?.rated?.value.ifNotNull { it * 10 })?.toInt(),
+            )
     }
 }
 
 fun EpisodeRaw.toModel(
     baseUrlBackdrop: String,
+    baseUrlProfile: String
 ): Episode {
 
     val releaseLocalDate = try {
@@ -64,12 +66,15 @@ fun EpisodeRaw.toModel(
         voteAverage = voteAverage,
         voteCount = voteCount,
         userRating = null,
-        isRateable = isRateable
+        isRateable = isRateable,
+        castList = guestStars.orEmpty().toModel(baseUrlProfile),
+        personCrewMap = crew.orEmpty().toModel(baseUrlProfile).groupBy { it.department }.toSortedMap()
     )
 }
 
 fun List<EpisodeEntity>.toModel(
     baseUrlBackdrop: String,
+    baseUrlProfile: String
 ): List<Episode> {
 
     return map { episodeEntity ->
@@ -85,6 +90,11 @@ fun List<EpisodeEntity>.toModel(
 
         val isRateable = releaseLocalDate != null && releaseLocalDate.isBefore(LocalDate.now())
 
+        val guestStarList =
+            Json.decodeFromString<List<MediaCastGuestStarRaw>>(episodeEntity.guestStarList)
+
+        val crewList = Json.decodeFromString<List<MediaCrewTvShowRaw>>(episodeEntity.crewList)
+
         Episode(
             id = episodeEntity.id,
             showId = episodeEntity.showId,
@@ -98,7 +108,9 @@ fun List<EpisodeEntity>.toModel(
             voteAverage = episodeEntity.voteAverage,
             voteCount = episodeEntity.voteCount,
             userRating = episodeEntity.userRating,
-            isRateable = isRateable
+            isRateable = isRateable,
+            castList = guestStarList.toModel(baseUrlProfile),
+            personCrewMap = crewList.toModel(baseUrlProfile).groupBy { it.department }.toSortedMap()
         )
     }
 }

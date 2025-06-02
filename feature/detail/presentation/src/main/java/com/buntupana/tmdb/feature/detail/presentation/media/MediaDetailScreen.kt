@@ -51,9 +51,9 @@ import com.buntupana.tmdb.feature.detail.presentation.media.comp.AdditionalInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.CastHorizontalList
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.Header
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.MainInfo
-import com.buntupana.tmdb.feature.detail.presentation.media.comp.Providers
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.RecommendationsHorizontal
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.SeasonsSection
+import com.buntupana.tmdb.feature.detail.presentation.media.comp.WatchProviders
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.ExternalLinksRow
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -128,13 +128,13 @@ fun MediaDetailScreen(
                 viewModel.state.mediaDetails?.userRating
             )
         },
-        onListClick = {
+        onListClick = { backgroundColor ->
             onManageListClick(
                 viewModel.state.mediaId,
                 viewModel.state.mediaType,
                 viewModel.state.mediaDetails?.title.orEmpty(),
                 viewModel.state.mediaDetails?.posterUrl,
-                viewModel.state.backgroundColor.toArgb(),
+                backgroundColor.toArgb(),
                 viewModel.state.mediaDetails?.releaseDate?.year.toString(),
             )
         }
@@ -157,7 +157,7 @@ fun MediaDetailContent(
     onFavoriteClick: () -> Unit,
     onWatchlistClick: () -> Unit,
     onRatingClick: () -> Unit,
-    onListClick: () -> Unit
+    onListClick: (backgroundColor: Color) -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -216,7 +216,7 @@ fun MediaDetailContent(
                         onFavoriteClick = onFavoriteClick,
                         onWatchlistClick = onWatchlistClick,
                         onRatingClick = onRatingClick,
-                        onListClick = onListClick
+                        onListClick = { onListClick(backgroundColor) }
                     )
                     Spacer(
                         modifier = Modifier
@@ -251,8 +251,8 @@ fun MediaDetailContent(
 
                 ErrorAndRetry(
                     modifier = Modifier
-                        .padding(vertical = 200.dp)
-                        .fillMaxSize(),
+                        .padding(vertical = paddingValues.calculateTopPadding() +  Dimens.errorAndRetryTopPadding)
+                        .fillMaxWidth(),
                     errorMessage = stringResource(id = R.string.message_loading_content_error),
                     textColor = backgroundColor.getOnBackgroundColor(),
                     onRetryClick = onRetryClick
@@ -321,7 +321,7 @@ fun MediaDetailContent(
                         }
                     )
 
-                    Providers(
+                    WatchProviders(
                         modifier = Modifier.fillMaxWidth(),
                         backgroundColor = MaterialTheme.colorScheme.background,
                         providers = state.mediaDetails.providers

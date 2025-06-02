@@ -22,6 +22,7 @@ import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
 
 fun LazyListScope.castList(
     modifier: Modifier = Modifier,
+    isEpisode: Boolean = false,
     personCastList: List<Person.Cast>?,
     personCrewMap: Map<String, List<Person.Crew>>?,
     onPersonClick: (personId: Long) -> Unit
@@ -35,8 +36,11 @@ fun LazyListScope.castList(
                     .padding(horizontal = Dimens.padding.horizontal)
                     .padding(top = Dimens.padding.vertical, bottom = Dimens.padding.verticalItem)
             ) {
+
+                val castText = if (isEpisode) R.string.text_guest_stars else R.string.text_cast
+
                 Text(
-                    text = stringResource(id = R.string.text_cast),
+                    text = stringResource(id = castText),
                     fontSize = Typography.titleMedium.fontSize,
                     fontWeight = FontWeight.Bold
                 )

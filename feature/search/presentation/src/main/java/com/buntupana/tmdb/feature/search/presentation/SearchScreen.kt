@@ -99,7 +99,7 @@ fun SearchScreenContent(
                     ErrorAndRetry(
                         modifier = Modifier
                             .padding(vertical = 200.dp)
-                            .fillMaxSize(),
+                            .fillMaxWidth(),
                         errorMessage = stringResource(R.string.message_loading_content_error)
                     ) {
                         onSearch(state.searchKey, null)

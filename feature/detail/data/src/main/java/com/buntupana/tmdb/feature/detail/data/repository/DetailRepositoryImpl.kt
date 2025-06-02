@@ -110,8 +110,7 @@ class DetailRepositoryImpl @Inject constructor(
         seasonNumber: Int
     ): Flow<Result<SeasonDetail, NetworkError>> {
 
-        var seasonDetailsRaw: SeasonDetailsRaw? =
-            null
+        var seasonDetailsRaw: SeasonDetailsRaw? = null
 
         return getFlowResult(
             networkCall = {
@@ -133,6 +132,7 @@ class DetailRepositoryImpl @Inject constructor(
             },
             mapToModel = {
                 seasonDetailsRaw!!.toModel(
+                    baseUrlProfile = urlProvider.BASE_URL_PROFILE,
                     baseUrlPoster = urlProvider.BASE_URL_POSTER,
                     baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
                     episodeEntityList = it

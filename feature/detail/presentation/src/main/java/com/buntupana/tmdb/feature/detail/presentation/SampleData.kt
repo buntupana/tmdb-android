@@ -180,7 +180,9 @@ val episodeSample = Episode(
     voteAverage = 7.2f,
     voteCount = 24,
     userRating = 20,
-    isRateable = true
+    isRateable = true,
+    castList = listOf(castTvShowPersonSample),
+    personCrewMap = mapOf()
 )
 
 val seasonSample = Season(

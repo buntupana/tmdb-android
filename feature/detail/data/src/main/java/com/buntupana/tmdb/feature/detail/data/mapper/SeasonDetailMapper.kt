@@ -9,6 +9,7 @@ import java.time.LocalDate
 fun SeasonDetailsRaw.toModel(
     baseUrlPoster: String,
     baseUrlBackdrop: String,
+    baseUrlProfile: String,
     episodeEntityList: List<EpisodeEntity>
 ): SeasonDetail {
 
@@ -26,7 +27,10 @@ fun SeasonDetailsRaw.toModel(
         overview = overview,
         posterUrl = posterUrl,
         airDate = releaseLocalDate,
-        episodes = episodeEntityList.toModel(baseUrlBackdrop = baseUrlBackdrop),
+        episodes = episodeEntityList.toModel(
+            baseUrlProfile = baseUrlProfile,
+            baseUrlBackdrop = baseUrlBackdrop
+        ),
         seasonNumber = seasonNumber,
         voteAverage = voteAverage
     )

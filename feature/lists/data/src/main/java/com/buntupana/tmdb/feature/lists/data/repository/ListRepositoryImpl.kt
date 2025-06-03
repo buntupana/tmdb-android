@@ -32,14 +32,13 @@ import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import com.panabuntu.tmdb.core.common.util.Const.PAGINATION_SIZE
-import com.panabuntu.tmdb.core.common.util.toFullDateTimeUTC
+import com.panabuntu.tmdb.core.common.util.getCurrentUTC
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 class ListRepositoryImpl @Inject constructor(
@@ -193,8 +192,8 @@ class ListRepositoryImpl @Inject constructor(
                     posterPath = null,
                     revenue = null,
                     runtime = null,
-                    createdAt = LocalDateTime.now().toFullDateTimeUTC(),
-                    updatedAt = LocalDateTime.now().toFullDateTimeUTC()
+                    createdAt = getCurrentUTC(),
+                    updatedAt = getCurrentUTC()
                 )
             )
             listsTotalCount.value += 1
@@ -220,7 +219,7 @@ class ListRepositoryImpl @Inject constructor(
                     name = name,
                     description = description,
                     isPublic = isPublic,
-                    updatedAt = LocalDateTime.now().toFullDateTimeUTC()
+                    updatedAt = getCurrentUTC()
                 )
             )
         }.asEmptyDataResult()

@@ -8,9 +8,10 @@ import kotlinx.serialization.json.Json.Default.serializersModule
 import kotlinx.serialization.json.internal.FormatLanguage
 import kotlinx.serialization.serializer
 import java.text.NumberFormat
+import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
@@ -32,12 +33,12 @@ fun LocalDate.toFullDate(): String {
     return this.format(dateFormatter)
 }
 
-fun LocalDateTime.toFullDateTimeUTC(): String {
-    val utcDateTime = atOffset(ZoneOffset.UTC) // Convert to UTC Offset
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss 'UTC'") // Format
+fun getCurrentUTC(): String {
+    val currentInstant = Instant.now()
+    val currentUTCDateTime = ZonedDateTime.ofInstant(currentInstant, ZoneOffset.UTC)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss 'UTC'") // Format
 
-    val formattedDate = utcDateTime.format(formatter)
-    return formattedDate
+    return formatter.format(currentUTCDateTime)
 }
 
 @OptIn(ExperimentalContracts::class)

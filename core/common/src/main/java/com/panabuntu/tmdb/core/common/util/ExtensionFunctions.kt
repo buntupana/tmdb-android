@@ -68,6 +68,15 @@ fun String?.ifNotNullOrBlank(block: () -> String): String? {
     }
 }
 
+fun String.countWordsBySpace(): Int {
+    if (isBlank()) {
+        return 0
+    }
+    // Trim leading/trailing whitespace to avoid empty strings at the ends
+    // Split by one or more whitespace characters
+    return trim().split(Regex("\\s+")).size
+}
+
 fun formatTime(time: Int): String {
     var result = ""
     val hours = time / 60
@@ -117,7 +126,7 @@ fun Long.toLocalizedString(locale: Locale = Locale.getDefault()): String {
 
 fun getLanguageName(languageCode: String?): String {
     return try {
-        Locale(languageCode!!).displayLanguage
+        Locale.Builder().setLanguage(languageCode!!).build().displayLanguage
     } catch (_: Exception) {
         " - "
     }

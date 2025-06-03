@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -33,6 +31,7 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
+import com.panabuntu.tmdb.core.common.util.countWordsBySpace
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 @Composable
@@ -83,12 +82,19 @@ fun ListItemHorizontal(
             verticalArrangement = Arrangement.Center
         ) {
 
+
+            var maxLines = userListDetails.name.countWordsBySpace()
+
+            if (maxLines > 2) {
+                maxLines = 3
+            }
+
             BasicText(
                 text = userListDetails.name,
-                autoSize = TextAutoSize.StepBased(minFontSize = 18.sp, stepSize = 10.sp),
-                maxLines = 3,
+                autoSize = TextAutoSize.StepBased(minFontSize = 18.sp),
+                maxLines = maxLines,
                 color = { Color.White },
-                style = MaterialTheme.typography.titleLarge.merge(textAlign = TextAlign.Center),
+//                style = LocalTextStyle.current.merge(textAlign = TextAlign.Center),
                 overflow = TextOverflow.Ellipsis,
             )
         }

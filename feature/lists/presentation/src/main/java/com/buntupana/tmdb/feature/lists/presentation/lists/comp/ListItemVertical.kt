@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
@@ -36,6 +35,7 @@ import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.presentation.util.listItemMediaLists
 import com.buntupana.tmdb.feature.presentation.R
+import com.panabuntu.tmdb.core.common.util.countWordsBySpace
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 import com.buntupana.tmdb.core.ui.R as RCore
 
@@ -99,17 +99,29 @@ fun ListItemVertical(
                     verticalArrangement = Arrangement.Center
                 ) {
 
-                    BasicText(
-                        text = userListDetails.name,
-                        autoSize = TextAutoSize.StepBased(minFontSize = 18.sp, stepSize = 10.sp),
-                        maxLines = 3,
-                        color = { Color.White },
-                        style = MaterialTheme.typography.titleLarge.merge(textAlign = TextAlign.Center),
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.Center,
+                    ) {
+
+                        var maxLines = userListDetails.name.countWordsBySpace()
+
+                        if (maxLines > 2) {
+                            maxLines = 3
+                        }
+
+                        BasicText(
+                            text = userListDetails.name,
+                            autoSize = TextAutoSize.StepBased(minFontSize = 18.sp),
+                            maxLines = maxLines,
+                            color = { Color.White },
+//                        style = LocalTextStyle.current.merge(textAlign = TextAlign.Center),
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
 
                     Row(
-                        modifier = Modifier.padding(top = Dimens.padding.medium)
+                        modifier = Modifier.padding(vertical = Dimens.padding.medium)
                     ) {
                         Text(
                             text = stringResource(

@@ -93,7 +93,9 @@ class AccountViewModel @Inject constructor(
                     state = state.copy(isWatchlistLoadingError = true)
                 }.onSuccess { mediaItemList ->
                     // Fake delay to show loading
-                    delay(LOADING_DELAY)
+                    if (state.watchlistMediaItemList == null) {
+                        delay(LOADING_DELAY)
+                    }
                     state = state.copy(
                         isWatchlistLoadingError = false,
                         watchlistMediaItemList = mediaItemList
@@ -131,7 +133,9 @@ class AccountViewModel @Inject constructor(
                     state = state.copy(isFavoritesLoadingError = true)
                 }.onSuccess { mediaItemList ->
                     // Fake delay to show loading
-                    delay(LOADING_DELAY)
+                    if (state.favoritesMediaItemList == null) {
+                        delay(LOADING_DELAY)
+                    }
                     state = state.copy(
                         isFavoritesLoadingError = false,
                         favoritesMediaItemList = mediaItemList

@@ -618,6 +618,7 @@ class AccountRepositoryImpl @Inject constructor(
                     mediaType = mediaType,
                     rating = value
                 )
+                watchlistDao.delete(mediaId, mediaType)
             }
         }
 

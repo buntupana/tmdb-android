@@ -11,8 +11,9 @@ data class WatchProviders(
 @Serializable
 data class CountryWatchProvider(
     val link: String,
-    val buy: List<ProviderInfo>? = null,
     val rent: List<ProviderInfo>? = null,
+    val buy: List<ProviderInfo>? = null,
+    val free: List<ProviderInfo>? = null,
     val flatrate: List<ProviderInfo>? = null,
     val ads: List<ProviderInfo>? = null
 )

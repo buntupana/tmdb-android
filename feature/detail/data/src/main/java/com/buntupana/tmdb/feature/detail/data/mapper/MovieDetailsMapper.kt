@@ -21,7 +21,6 @@ import com.panabuntu.tmdb.core.common.util.encodeToStringSafe
 import com.panabuntu.tmdb.core.common.util.getLanguageName
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.Duration
 import java.time.LocalDate
@@ -125,14 +124,17 @@ fun MediaEntity.toMovieModel(
 
     val providerInfoList = mutableListOf<ProviderInfo>()
 
-    if (watchProvider?.flatrate.isNotNullOrEmpty()) {
-        providerInfoList.addAll(watchProvider?.flatrate.orEmpty())
+    if (watchProvider?.rent.isNotNullOrEmpty()) {
+        providerInfoList.addAll(watchProvider?.rent.orEmpty())
     }
     if (watchProvider?.buy.isNotNullOrEmpty()) {
         providerInfoList.addAll(watchProvider?.buy.orEmpty())
     }
-    if (watchProvider?.rent.isNotNullOrEmpty()) {
-        providerInfoList.addAll(watchProvider?.rent.orEmpty())
+    if (watchProvider?.free.isNotNullOrEmpty()) {
+        providerInfoList.addAll(watchProvider?.free.orEmpty())
+    }
+    if (watchProvider?.flatrate.isNotNullOrEmpty()) {
+        providerInfoList.addAll(watchProvider?.flatrate.orEmpty())
     }
     if (watchProvider?.ads.isNotNullOrEmpty()) {
         providerInfoList.addAll(watchProvider?.ads.orEmpty())

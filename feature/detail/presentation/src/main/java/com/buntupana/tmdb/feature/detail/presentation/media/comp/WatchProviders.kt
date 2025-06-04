@@ -77,11 +77,13 @@ fun WatchProviders(
             )
 
             FlowRow(
-                modifier = Modifier.padding(horizontal = Dimens.padding.horizontal),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Dimens.padding.horizontal),
                 verticalArrangement = Arrangement.spacedBy(
-                    Dimens.padding.small,
-                    Alignment.CenterVertically
-                )
+                    space = Dimens.padding.small,
+                    alignment = Alignment.CenterVertically
+                ),
             ) {
                 providers.logoUrlList.fastForEachIndexed { index, logoUrl ->
                     if (index != 0) {

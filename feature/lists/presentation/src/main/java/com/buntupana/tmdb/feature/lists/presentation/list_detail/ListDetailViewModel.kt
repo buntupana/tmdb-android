@@ -90,7 +90,8 @@ class ListDetailViewModel @Inject constructor(
                     description = listDetails.description,
                     backdropUrl = listDetails.backdropUrl,
                     isPublic = listDetails.isPublic,
-                    itemTotalCount = listDetails.itemCount
+                    itemTotalCount = listDetails.itemCount,
+                    shareLink = if (listDetails.isPublic) listDetails.shareLink else null
                 )
                 if (state.mediaItemList == null) {
                     getListItems()

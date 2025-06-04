@@ -14,7 +14,8 @@ val listItemMediaLists = listOf(
         isPublic = false,
         revenue = 1,
         runtime = 10000,
-        updatedAt = null
+        updatedAt = null,
+        shareLink = "test"
     ),
     UserListDetails(
         id = 1,
@@ -27,6 +28,7 @@ val listItemMediaLists = listOf(
         isPublic = false,
         revenue = 1,
         runtime = 20000,
-        updatedAt = null
+        updatedAt = null,
+        shareLink = "test"
     )
 )

@@ -242,7 +242,8 @@ private fun ManageListsPreview() {
                     runtime = null,
                     posterUrl = null,
                     averageRating = null,
-                    updatedAt = null
+                    updatedAt = null,
+                    shareLink = "test"
                 )
             ),
             listAllLists = listOf(
@@ -257,7 +258,8 @@ private fun ManageListsPreview() {
                     runtime = null,
                     posterUrl = null,
                     averageRating = null,
-                    updatedAt = null
+                    updatedAt = null,
+                    shareLink = "test"
                 )
             )
         ),

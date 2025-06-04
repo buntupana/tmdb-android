@@ -40,4 +40,8 @@ class UrlProviderImpl : UrlProvider {
     override fun getPersonShareLink(personId: Long): String {
         return "$BASE_URL_WEB/person/$personId"
     }
+
+    override fun getListShareLink(listId: Long): String {
+        return "$BASE_URL_WEB/list/$listId"
+    }
 }

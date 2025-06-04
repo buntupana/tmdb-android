@@ -42,6 +42,7 @@ fun ListItemRaw.toEntity(): UserListDetailsEntity {
 fun UserListDetailsEntity.toModel(
     baseUrlPoster: String,
     baseUrlBackdrop: String,
+    shareLink: String
 ): UserListDetails {
 
     val updatedAt = try {
@@ -66,44 +67,8 @@ fun UserListDetailsEntity.toModel(
         isPublic = isPublic,
         revenue = revenue,
         runtime = if (runtime.isNotNullOrBlank()) null else runtime?.toInt(),
-        updatedAt = updatedAt
-    )
-}
-
-fun List<ListItemRaw>.toModel(
-    baseUrlPoster: String,
-    baseUrlBackdrop: String,
-): List<UserListDetails> {
-    return map { it.toModel(baseUrlPoster, baseUrlBackdrop) }
-}
-
-fun ListItemRaw.toModel(
-    baseUrlPoster: String,
-    baseUrlBackdrop: String,
-): UserListDetails {
-    val updatedAt = try {
-        LocalDate.parse(updatedAt)
-    } catch (_: Exception) {
-        null
-    }
-
-    val posterUrl =
-        posterPath.ifNotNullOrBlank { baseUrlPoster + posterPath.orEmpty() }
-    val backdropUrl =
-        backdropPath.ifNotNullOrBlank { baseUrlBackdrop + backdropPath.orEmpty() }
-
-    return UserListDetails(
-        id = id,
-        name = name,
-        backdropUrl = backdropUrl,
-        posterUrl = posterUrl,
-        averageRating = averageRating.ifNotNull { (it * 10).toInt() },
-        description = description,
-        itemCount = numberOfItems,
-        isPublic = public == 1,
-        revenue = revenue,
-        runtime = if (runtime.isNotNullOrBlank()) null else runtime?.toInt(),
-        updatedAt = updatedAt
+        updatedAt = updatedAt,
+        shareLink = shareLink
     )
 }
 

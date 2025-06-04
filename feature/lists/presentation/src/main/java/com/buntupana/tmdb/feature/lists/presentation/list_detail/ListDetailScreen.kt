@@ -183,7 +183,8 @@ fun ListDetailContent(
                 onLogoClick = onLogoClick,
                 onBackClick = onBackClick,
                 onSearchClick = onSearchClick,
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                shareLink = state.shareLink
             )
         }
     ) { paddingValues ->
@@ -321,7 +322,8 @@ fun ListDetailScreenPreview() {
     ListDetailContent(
         state = ListDetailState(
             listId = 0,
-            listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars"
+            listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
+            shareLink = "test"
         ),
         onBackClick = {},
         onLogoClick = {},

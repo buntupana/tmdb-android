@@ -105,11 +105,12 @@ class ListRepositoryImpl @Inject constructor(
                     userListDetailsDao.getAll()
                 }
             },
-            mapToModel = {
-                it.map {
-                    it.toModel(
+            mapToModel = { userListDetailsList ->
+                userListDetailsList.map { entity ->
+                    entity.toModel(
                         baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                        baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                        baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
+                        shareLink = urlProvider.getListShareLink(entity.id)
                     )
                 }
             }
@@ -150,7 +151,8 @@ class ListRepositoryImpl @Inject constructor(
             pagingData.map {
                 it.toModel(
                     baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
+                    shareLink = urlProvider.getListShareLink(it.id)
                 )
             }
         }
@@ -247,7 +249,8 @@ class ListRepositoryImpl @Inject constructor(
                             Result.Success(
                                 it?.toModel(
                                     baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
-                                    baseUrlPoster = urlProvider.BASE_URL_POSTER
+                                    baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                                    shareLink = urlProvider.getListShareLink(it.id)
                                 )
                             )
                         })

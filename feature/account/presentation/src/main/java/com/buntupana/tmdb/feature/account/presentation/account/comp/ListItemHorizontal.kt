@@ -117,7 +117,8 @@ private fun ListItemHorizontalPreview() {
             revenue = 0L,
             runtime = null,
             averageRating = null,
-            updatedAt = null
+            updatedAt = null,
+            shareLink = "test"
         ),
         onListClick = { _, _, _, _ -> }
     )

@@ -14,5 +14,6 @@ data class UserListDetails(
     val isPublic: Boolean,
     val revenue: Long?,
     val runtime: Int?,
-    val updatedAt: LocalDate?
+    val updatedAt: LocalDate?,
+    val shareLink: String
 ) : DefaultItem

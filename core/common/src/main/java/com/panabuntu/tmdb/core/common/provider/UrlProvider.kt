@@ -25,4 +25,5 @@ interface UrlProvider {
     val SIGN_IN_DEEP_LINK_REDIRECT: String
     fun getMediaShareLink(mediaType: MediaType, mediaId: Long): String
     fun getPersonShareLink(personId: Long): String
+    fun getListShareLink(listId: Long): String
 }

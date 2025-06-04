@@ -71,7 +71,8 @@ private fun ManageListsItemPreview() {
             runtime = null,
             posterUrl = null,
             averageRating = null,
-            updatedAt = null
+            updatedAt = null,
+            shareLink = "test"
         )
     )
 }

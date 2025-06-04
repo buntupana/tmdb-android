@@ -12,5 +12,6 @@ data class ListDetailState(
     val backdropUrl: String? = null,
     val isPublic: Boolean = true,
     val itemTotalCount: Int? = null,
-    val mediaItemList: Flow<PagingData<ItemListViewEntity>>? = null
+    val mediaItemList: Flow<PagingData<ItemListViewEntity>>? = null,
+    val shareLink: String? = null
 )

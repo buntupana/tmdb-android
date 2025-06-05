@@ -21,7 +21,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -174,8 +173,9 @@ fun CreateListScreenPreview() {
         ),
         sheetState = SheetState(
             skipPartiallyExpanded = true,
-            LocalDensity.current,
-            initialValue = SheetValue.Expanded
+            positionalThreshold = { 0f },
+            initialValue = SheetValue.Expanded,
+            velocityThreshold = { 0f }
         ),
         onDismiss = {},
         onCreateListClick = {},

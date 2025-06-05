@@ -48,6 +48,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
@@ -133,6 +134,33 @@ fun Modifier.setStatusNavigationBarColor(
         .background(backgroundColor)
         .safeDrawingPadding()
         .background(MaterialTheme.colorScheme.background)
+}
+
+@Composable
+fun Modifier.paddingValues(
+    start: () -> Dp = { 0.dp },
+    top: () -> Dp = { 0.dp },
+    end: () -> Dp = { 0.dp },
+    bottom: () -> Dp = { 0.dp }
+): Modifier {
+
+    val padding = remember {
+
+        object : PaddingValues {
+            override fun calculateTopPadding(): Dp = top()
+
+            override fun calculateLeftPadding(layoutDirection: LayoutDirection): Dp {
+                return if (layoutDirection == LayoutDirection.Ltr) start() else end()
+            }
+
+            override fun calculateRightPadding(layoutDirection: LayoutDirection): Dp {
+                return if (layoutDirection == LayoutDirection.Ltr) end() else start()
+            }
+
+            override fun calculateBottomPadding(): Dp = bottom()
+        }
+    }
+    return padding(padding)
 }
 
 fun Modifier.isVisible(isVisible: Boolean, animateSize: Boolean = false): Modifier {

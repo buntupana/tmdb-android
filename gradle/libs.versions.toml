@@ -10,22 +10,22 @@ target_sdk = "36"
 min_sdk = "21"
 
 #Kotlin
-kotlin = "2.1.21"
-ksp = "2.1.21-2.0.1"
+kotlin = "2.2.0"
+ksp = "2.2.0-2.0.2"
 ktx = '1.16.0'
 work = '2.4.0'
 
 #Compose
-composeBom = "2025.06.00"
+composeBom = "2025.06.01"
 compose_activity = "1.10.1"
 compose_constraint = '1.1.01'
-compose_foundation = "1.8.2"
+compose_foundation = "1.8.3"
 compose_paging = "3.3.6"
 compose_lifecycle = "2.9.1"
 
 #Android dependencies
 lifecycle = "2.9.1"
-room = "2.7.1"
+room = "2.7.2"
 navigation = "2.9.0"
 palette = '1.0.0'
 
@@ -50,7 +50,7 @@ datastore = "1.1.7"
 
 #Tools
 timber = '5.0.1'
-serialization = "1.8.1"
+serialization = "1.9.0"
 moshi = "1.15.2"
 desugar_jdk = "2.1.5"
 secrets = "2.0.1"
@@ -67,14 +67,14 @@ test_runner = '1.4.0'
 mockito = '4.5.0'
 
 # Plugins
-agp = "8.10.1"
+agp = "8.11.0"
 uiToolingPreviewAndroid = "1.6.7"
 uiTooling = "1.7.3"
 appcompat = "1.7.1"
 material = "1.12.0"
-jetbrainsKotlinJvm = "2.0.21"
-uiTextGoogleFonts = "1.8.2"
-uiGraphicsAndroid = "1.8.2"
+jetbrainsKotlinJvm = "2.2.0"
+uiTextGoogleFonts = "1.8.3"
+uiGraphicsAndroid = "1.8.3"
 
 [libraries]
 

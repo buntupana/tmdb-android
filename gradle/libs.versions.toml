@@ -26,7 +26,7 @@ compose_lifecycle = "2.9.1"
 #Android dependencies
 lifecycle = "2.9.1"
 room = "2.7.2"
-navigation = "2.9.0"
+navigation = "2.9.1"
 palette = '1.0.0'
 
 #Accompanist

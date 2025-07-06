@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.balanced
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.presentation.cast.comp.castList
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
@@ -78,11 +79,13 @@ private fun EpisodeCastContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Dimens.padding.horizontal),
                 textAlign = TextAlign.Center,
                 text = episode.name,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.headlineMedium.balanced(),
+                fontWeight = FontWeight.Bold,
             )
 
             Spacer(modifier = Modifier.height(Dimens.padding.vertical))

@@ -251,7 +251,7 @@ fun MediaDetailContent(
 
                 ErrorAndRetry(
                     modifier = Modifier
-                        .padding(vertical = paddingValues.calculateTopPadding() +  Dimens.errorAndRetryTopPadding)
+                        .padding(vertical = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding)
                         .fillMaxWidth(),
                     errorMessage = stringResource(id = R.string.message_loading_content_error),
                     textColor = backgroundColor.getOnBackgroundColor(),
@@ -351,18 +351,15 @@ fun MediaDetailContent(
                         onItemClick = onRecommendationClick
                     )
 
-                    Spacer(modifier = Modifier.height(Dimens.padding.medium))
-
                     ExternalLinksRow(
-                        modifier = Modifier.padding(start = 10.dp),
+                        modifier = Modifier.padding(top = Dimens.padding.medium, start = 10.dp),
                         externalLinkList = state.mediaDetails.externalLinkList
                     )
-
-                    Spacer(modifier = Modifier.height(Dimens.padding.big))
 
                     AdditionalInfo(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(top = Dimens.padding.big)
                             .padding(horizontal = Dimens.padding.horizontal),
                         mediaDetails = state.mediaDetails
                     )

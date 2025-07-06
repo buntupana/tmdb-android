@@ -42,7 +42,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.fromHtml
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -79,6 +81,17 @@ fun getCustomTabIntent(url: String): Intent {
     customTabsIntent.intent.data = url.toUri()
 
     return customTabsIntent.intent
+}
+
+fun TextStyle.balanced() : TextStyle {
+    val customTitleLineBreak = LineBreak(
+        strategy = LineBreak.Strategy.Balanced,
+        strictness = LineBreak.Strictness.Strict,
+        wordBreak = LineBreak.WordBreak.Phrase
+    )
+    return copy(
+        lineBreak = customTitleLineBreak
+    )
 }
 
 @Composable

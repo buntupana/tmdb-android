@@ -27,6 +27,9 @@ fun ExternalLinksRow(
     iconSize: Dp = 40.dp,
     externalLinkList: List<ExternalLink>
 ) {
+
+    if (externalLinkList.isEmpty()) return
+
     Row(
         modifier = modifier.height(iconSize),
         verticalAlignment = Alignment.CenterVertically

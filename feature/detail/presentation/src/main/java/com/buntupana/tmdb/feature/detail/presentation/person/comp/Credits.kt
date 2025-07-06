@@ -1,5 +1,9 @@
 package com.buntupana.tmdb.feature.detail.presentation.person.comp
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +26,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.DropdownMenuText
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
@@ -67,7 +72,11 @@ fun CreditsFilter(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            if (mediaTypeSelected != null || departmentSelected != null) {
+            AnimatedVisibility(
+                visible = mediaTypeSelected != null || departmentSelected != null,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
                 Text(
                     modifier = Modifier
                         .clickable {
@@ -84,7 +93,7 @@ fun CreditsFilter(
             }
 
             DropdownMenuText(
-                modifier = Modifier,
+                modifier = Modifier.animateContentSize(),
                 text = mediaTypeSelectedValue,
                 optionList = mediaTypeMap,
                 onOptionClicked = { id, value ->
@@ -94,7 +103,7 @@ fun CreditsFilter(
             )
 
             DropdownMenuText(
-                modifier = Modifier,
+                modifier = Modifier.animateContentSize(),
                 text = departmentSelectedValue,
                 optionList = departmentMap,
                 onOptionClicked = { id, value ->
@@ -272,4 +281,23 @@ private fun LazyListScope.creditList(
     item {
         HorizontalDivider()
     }
+}
+
+@Preview
+@Composable
+fun CreditsFilterPreview() {
+    CreditsFilter(
+        mainDepartment = "Acting",
+        mediaTypeMap = mapOf(
+            RCore.string.text_movies to "Movies",
+            RCore.string.text_tv_shows to "TV Shows"
+        ),
+        departmentMap = mapOf(
+            "Acting" to "Acting",
+            "Directing" to "Directing"
+        ),
+        mediaTypeSelected = RCore.string.text_movies,
+        departmentSelected = "Acting",
+        onFilterChange = { _, _ -> }
+    )
 }

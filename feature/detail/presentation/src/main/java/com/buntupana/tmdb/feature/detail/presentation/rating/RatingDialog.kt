@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,6 +48,7 @@ import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.annotatedStringResource
+import com.buntupana.tmdb.core.ui.util.balanced
 import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.common.RatingSlider
@@ -148,7 +150,8 @@ fun RatingContent(
 
             Text(
                 textAlign = TextAlign.Center,
-                text = annotatedStringResource(R.string.message_what_do_you_think, state.mediaTitle)
+                text = annotatedStringResource(R.string.message_what_do_you_think, state.mediaTitle),
+                style = TextStyle.Default.balanced()
             )
 
             Spacer(modifier = Modifier.height(Dimens.padding.huge))

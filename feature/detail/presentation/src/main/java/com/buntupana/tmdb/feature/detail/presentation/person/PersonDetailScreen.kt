@@ -187,7 +187,7 @@ fun PersonDetailsContentPreview() {
     PersonDetailContent(
         state = PersonDetailState(
             isLoading = false,
-            isGetPersonError = true,
+            isGetPersonError = false,
             personDetails = personDetailsSample
         ),
         onBackClick = {},

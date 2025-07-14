@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -151,7 +150,8 @@ fun RatingContent(
             Text(
                 textAlign = TextAlign.Center,
                 text = annotatedStringResource(R.string.message_what_do_you_think, state.mediaTitle),
-                style = TextStyle.Default.balanced()
+                style = MaterialTheme.typography.titleMedium.balanced(),
+                fontWeight = FontWeight.Normal
             )
 
             Spacer(modifier = Modifier.height(Dimens.padding.huge))

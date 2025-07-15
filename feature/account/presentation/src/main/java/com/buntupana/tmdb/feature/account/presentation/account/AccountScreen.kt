@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.account.presentation.account
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +13,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -25,7 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -38,6 +37,7 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.account.presentation.R
 import com.buntupana.tmdb.feature.account.presentation.account.comp.AccountInfoTop
 import com.buntupana.tmdb.feature.account.presentation.account.comp.ListItemsSection
+import com.buntupana.tmdb.feature.account.presentation.account.comp.SignUp
 import com.buntupana.tmdb.feature.account.presentation.sign_out.SignOutDialog
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
@@ -59,7 +59,7 @@ fun AccountScreen(
 
     AccountContent(
         state = viewModel.state,
-        onSignInClick = onSignInClick,
+        onSignUpClick = onSignInClick,
         onSignOutClick = {
             showBottomSheet = true
         },
@@ -120,7 +120,7 @@ fun AccountScreen(
 @Composable
 fun AccountContent(
     state: AccountState,
-    onSignInClick: () -> Unit,
+    onSignUpClick: () -> Unit,
     onSignOutClick: () -> Unit,
     onWatchListClick: () -> Unit,
     onFavoritesClick: () -> Unit,
@@ -132,117 +132,115 @@ fun AccountContent(
     navigateToListDetail: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
 
-    if (state.isUserLogged) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(state = rememberScrollState()),
-        ) {
-            AccountInfoTop(
-                modifier = Modifier.fillMaxWidth(),
-                avatarUrl = state.avatarUrl,
-                username = state.username
-            )
+        if (state.isUserLogged) {
 
-            val lazyListStateWatchlist: LazyListState = rememberLazyListState()
-            val lazyListStateFavorites: LazyListState = rememberLazyListState()
-
-            TitleAndFilter(
-                modifier = Modifier.padding(vertical = Dimens.padding.medium),
-                title = stringResource(id = RCore.string.text_watchlist),
-                filterSet = MediaFilter.entries.toSet(),
-                indexSelected = MediaFilter.entries.toSet().indexOf(state.watchlistFilterSelected),
-                titleClicked = onWatchListClick,
-                filterClicked = { item, _ ->
-                    changeWatchlistType(item)
-                    lazyListStateWatchlist.requestScrollToItem(index = 0)
-                }
-            )
-
-            CarouselMediaItem(
-                modifier = Modifier.fillMaxWidth(),
-                animationEnabled = true,
-                mediaItemList = state.watchlistMediaItemList,
-                isLoadingError = state.isWatchlistLoadingError,
-                lazyListState = lazyListStateWatchlist,
-                onItemClicked = { mediaItem, mainPosterColor ->
-                    navigateToMediaDetail(mediaItem, mainPosterColor)
-                },
-                onRetryClicked = {
-                    changeWatchlistType(state.watchlistFilterSelected)
-                },
-                onShowMoreClick =  onWatchListClick
-            )
-
-            ListItemsSection(
-                modifier = Modifier.fillMaxWidth(),
-                userListDetailsList = state.userListDetailsList,
-                isLoadingError = state.isListsLoadingError,
-                titleClicked = onListsClick,
-                onItemClicked = navigateToListDetail,
-                onRetryClicked = listLoadItems,
-                onShowMoreClick = onListsClick
-            )
-
-            TitleAndFilter(
-                modifier = Modifier.padding(vertical = Dimens.padding.medium),
-                title = stringResource(id = RCore.string.text_favorites),
-                filterSet = MediaFilter.entries.toSet(),
-                indexSelected = MediaFilter.entries.toSet().indexOf(state.favoritesFilterSelected),
-                titleClicked = onFavoritesClick,
-                filterClicked = { item, _ ->
-                    changeFavoritesType(item)
-                    lazyListStateFavorites.requestScrollToItem(index = 0)
-                }
-            )
-
-            CarouselMediaItem(
-                modifier = Modifier.fillMaxWidth(),
-                animationEnabled = true,
-                mediaItemList = state.favoritesMediaItemList,
-                isLoadingError = state.isFavoritesLoadingError,
-                lazyListState = lazyListStateFavorites,
-                onItemClicked = { mediaItem, mainPosterColor ->
-                    navigateToMediaDetail(mediaItem, mainPosterColor)
-                },
-                onRetryClicked = {
-                    changeFavoritesType(state.favoritesFilterSelected)
-                },
-                onShowMoreClick = onFavoritesClick
-            )
-
-            Spacer(Modifier.padding(vertical = Dimens.padding.vertical))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(state = rememberScrollState()),
             ) {
-                Button(
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-                    onClick = onSignOutClick
+                AccountInfoTop(
+                    modifier = Modifier.fillMaxWidth(),
+                    avatarUrl = state.avatarUrl,
+                    username = state.username
+                )
+
+                val lazyListStateWatchlist: LazyListState = rememberLazyListState()
+                val lazyListStateFavorites: LazyListState = rememberLazyListState()
+
+                TitleAndFilter(
+                    modifier = Modifier.padding(vertical = Dimens.padding.medium),
+                    title = stringResource(id = RCore.string.text_watchlist),
+                    filterSet = MediaFilter.entries.toSet(),
+                    indexSelected = MediaFilter.entries.toSet()
+                        .indexOf(state.watchlistFilterSelected),
+                    titleClicked = onWatchListClick,
+                    filterClicked = { item, _ ->
+                        changeWatchlistType(item)
+                        lazyListStateWatchlist.requestScrollToItem(index = 0)
+                    }
+                )
+
+                CarouselMediaItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    animationEnabled = true,
+                    mediaItemList = state.watchlistMediaItemList,
+                    isLoadingError = state.isWatchlistLoadingError,
+                    lazyListState = lazyListStateWatchlist,
+                    onItemClicked = { mediaItem, mainPosterColor ->
+                        navigateToMediaDetail(mediaItem, mainPosterColor)
+                    },
+                    onRetryClicked = {
+                        changeWatchlistType(state.watchlistFilterSelected)
+                    },
+                    onShowMoreClick = onWatchListClick
+                )
+
+                ListItemsSection(
+                    modifier = Modifier.fillMaxWidth(),
+                    userListDetailsList = state.userListDetailsList,
+                    isLoadingError = state.isListsLoadingError,
+                    titleClicked = onListsClick,
+                    onItemClicked = navigateToListDetail,
+                    onRetryClicked = listLoadItems,
+                    onShowMoreClick = onListsClick
+                )
+
+                TitleAndFilter(
+                    modifier = Modifier.padding(vertical = Dimens.padding.medium),
+                    title = stringResource(id = RCore.string.text_favorites),
+                    filterSet = MediaFilter.entries.toSet(),
+                    indexSelected = MediaFilter.entries.toSet()
+                        .indexOf(state.favoritesFilterSelected),
+                    titleClicked = onFavoritesClick,
+                    filterClicked = { item, _ ->
+                        changeFavoritesType(item)
+                        lazyListStateFavorites.requestScrollToItem(index = 0)
+                    }
+                )
+
+                CarouselMediaItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    animationEnabled = true,
+                    mediaItemList = state.favoritesMediaItemList,
+                    isLoadingError = state.isFavoritesLoadingError,
+                    lazyListState = lazyListStateFavorites,
+                    onItemClicked = { mediaItem, mainPosterColor ->
+                        navigateToMediaDetail(mediaItem, mainPosterColor)
+                    },
+                    onRetryClicked = {
+                        changeFavoritesType(state.favoritesFilterSelected)
+                    },
+                    onShowMoreClick = onFavoritesClick
+                )
+
+                Spacer(Modifier.padding(vertical = Dimens.padding.vertical))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Icon(Icons.AutoMirrored.Filled.Login, contentDescription = null)
-                    Spacer(modifier = Modifier.padding(horizontal = Dimens.padding.tiny))
-                    Text(text = stringResource(R.string.text_sign_out))
+                    Button(
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                        onClick = onSignOutClick
+                    ) {
+                        Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null)
+                        Spacer(modifier = Modifier.padding(horizontal = Dimens.padding.tiny))
+                        Text(text = stringResource(R.string.text_sign_out))
+                    }
                 }
-            }
 
-            Spacer(Modifier.padding(vertical = Dimens.padding.vertical))
-        }
-    } else {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = onSignInClick,
-            ) {
-                Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null)
-                Spacer(modifier = Modifier.padding(horizontal = Dimens.padding.tiny))
-                Text(text = stringResource(R.string.text_sign_in))
+                Spacer(Modifier.padding(vertical = Dimens.padding.vertical))
             }
+        } else {
+            SignUp(
+                modifier = Modifier.fillMaxWidth(),
+                onSignUpClick = onSignUpClick
+            )
         }
     }
 }
@@ -252,11 +250,11 @@ fun AccountContent(
 fun AccountScreenPreview() {
     AccountContent(
         AccountState(
-            isUserLogged = true,
+            isUserLogged = false,
             username = "Alvaro",
             userListDetailsList = null
         ),
-        onSignInClick = {},
+        onSignUpClick = {},
         onSignOutClick = {},
         onWatchListClick = {},
         onFavoritesClick = {},

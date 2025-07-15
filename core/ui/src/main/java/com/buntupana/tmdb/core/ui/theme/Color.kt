@@ -17,6 +17,8 @@ val PlaceHolderColor = Color(0xffdbdbdb)
 val DetailBackgroundColor = Color(0xFFE3E3E3)
 val PersonBackgroundColor = BackgroundColor
 
+val SignUpBackgroundColor = Color(0xFF3D0098)
+
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)

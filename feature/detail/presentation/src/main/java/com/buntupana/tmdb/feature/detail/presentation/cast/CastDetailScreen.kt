@@ -34,6 +34,8 @@ import com.buntupana.tmdb.core.ui.composables.HeaderSimple
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
+import com.buntupana.tmdb.core.ui.util.isLight
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.presentation.cast.comp.castList
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
@@ -76,6 +78,13 @@ fun CastDetailContent(
     setStatusBarLightStatusFromBackground(
         LocalView.current,
         backgroundColor
+    )
+
+    SetLegacySystemBarsColors(
+        statusBarColor = backgroundColor,
+        navigationBarColor = backgroundColor,
+        useDarkStatusBarIcons = backgroundColor.isLight(),
+        useDarkNavigationBarIcons = backgroundColor.isLight()
     )
 
     val systemBackground = MaterialTheme.colorScheme.background

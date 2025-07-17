@@ -22,7 +22,9 @@ import androidx.navigation.compose.rememberNavController
 import com.buntupana.tmdb.app.R
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.util.isLight
 import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
 import com.buntupana.tmdb.feature.account.presentation.account.AccountScreen
@@ -76,6 +78,13 @@ fun HomeScreenContent(
     )
 
     val navController = rememberNavController()
+
+    SetLegacySystemBarsColors(
+        statusBarColor = PrimaryColor,
+        navigationBarColor = PrimaryColor,
+        useDarkStatusBarIcons = PrimaryColor.isLight(),
+        useDarkNavigationBarIcons = PrimaryColor.isLight()
+    )
 
     Scaffold(
         modifier = Modifier.setStatusNavigationBarColor(),
@@ -140,7 +149,11 @@ fun HomeScreenContent(
                 DiscoverScreen(onMediaItemClicked = onMediaItemClicked)
             }
             composable<MoviesNav> {
-                MoviesScreen()
+                MoviesScreen(
+//                    onMovieItemClicked = { movieId, posterDominantColor ->
+//                        onMediaItemClicked(movieId, MediaType.MOVIE, posterDominantColor)
+//                    }
+                )
             }
             composable<TvShowsNav> {
                 TvShowsScreen()

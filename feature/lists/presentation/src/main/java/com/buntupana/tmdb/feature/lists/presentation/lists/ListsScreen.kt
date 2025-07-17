@@ -25,7 +25,9 @@ import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarTitle
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.util.isLight
 import com.buntupana.tmdb.core.ui.util.isVisible
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListItemVertical
@@ -70,6 +72,13 @@ fun ListsContent(
     setStatusBarLightStatusFromBackground(
         LocalView.current,
         PrimaryColor
+    )
+
+    SetLegacySystemBarsColors(
+        statusBarColor = PrimaryColor,
+        navigationBarColor = PrimaryColor,
+        useDarkStatusBarIcons = PrimaryColor.isLight(),
+        useDarkNavigationBarIcons = PrimaryColor.isLight()
     )
 
     Scaffold(

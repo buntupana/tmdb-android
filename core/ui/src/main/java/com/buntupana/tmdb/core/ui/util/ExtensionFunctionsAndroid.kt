@@ -19,7 +19,6 @@ import androidx.navigation.toRoute
 import androidx.palette.graphics.Palette
 import com.buntupana.tmdb.core.ui.navigation.Routes
 import com.panabuntu.tmdb.core.common.util.decodeAllStrings
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
@@ -35,9 +34,13 @@ fun Drawable.getDominantColor(colorResult: (dominantColor: Color) -> Unit) {
     }
 }
 
+fun Color.isLight(): Boolean {
+    return luminance() > 0.5f
+}
+
 /** Return a black/white color that will be readable on top */
 fun Color.getOnBackgroundColor(): Color {
-    return if (luminance() > 0.5f) Color.Black else Color.White
+    return if (isLight()) Color.Black else Color.White
 }
 
 fun Modifier.brush(brush: Brush) = this

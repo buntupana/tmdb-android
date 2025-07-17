@@ -42,7 +42,9 @@ import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.util.isLight
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Season
@@ -169,6 +171,13 @@ fun MediaDetailContent(
     setStatusBarLightStatusFromBackground(
         LocalView.current,
         backgroundColor
+    )
+
+    SetLegacySystemBarsColors(
+        statusBarColor = backgroundColor,
+        navigationBarColor = backgroundColor,
+        useDarkStatusBarIcons = backgroundColor.isLight(),
+        useDarkNavigationBarIcons = backgroundColor.isLight()
     )
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()

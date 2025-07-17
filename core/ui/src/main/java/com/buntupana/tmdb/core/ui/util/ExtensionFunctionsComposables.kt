@@ -2,6 +2,7 @@ package com.buntupana.tmdb.core.ui.util
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.text.Spanned
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabColorSchemeParams
@@ -30,6 +31,7 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -55,6 +57,7 @@ import androidx.core.text.HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL
 import androidx.core.text.htmlEncode
 import androidx.core.text.toHtml
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -317,5 +320,41 @@ fun Modifier.clickableWithRipple(
         role = role,
         onClick = onClick
     )
+}
+
+@Composable
+fun SetLegacySystemBarsColors(
+    statusBarColor: Color,
+    navigationBarColor: Color,
+    useDarkStatusBarIcons: Boolean,
+    useDarkNavigationBarIcons: Boolean
+) {
+    val view = LocalView.current
+    if (!view.isInEditMode) { // Prevent running in Preview
+        SideEffect {
+            val window = (view.context as? Activity)?.window ?: return@SideEffect
+
+            // Set Status Bar Color
+            window.statusBarColor = statusBarColor.toArgb()
+
+            // Set Navigation Bar Color
+            // Note: On some older devices (API < 23 for nav bar, or specific manufacturer ROMs),
+            // fully opaque nav bar colors might not always render as expected, or might have scrims.
+            // Translucent colors often behave more consistently if you face issues.
+            window.navigationBarColor = navigationBarColor.toArgb()
+
+            val insetsController = WindowInsetsControllerCompat(window, view)
+
+            // Control Status Bar Icons
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // API 23+
+                insetsController.isAppearanceLightStatusBars = useDarkStatusBarIcons
+            }
+
+            // Control Navigation Bar Icons
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // API 26+
+                insetsController.isAppearanceLightNavigationBars = useDarkNavigationBarIcons
+            }
+        }
+    }
 }
 

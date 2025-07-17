@@ -34,6 +34,8 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
+import com.buntupana.tmdb.core.ui.util.isLight
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.comp.HeaderManageLists
@@ -108,6 +110,13 @@ fun ManageListsContent(
     setStatusBarLightStatusFromBackground(
         LocalView.current,
         state.backgroundColor
+    )
+
+    SetLegacySystemBarsColors(
+        statusBarColor = state.backgroundColor,
+        navigationBarColor = state.backgroundColor,
+        useDarkStatusBarIcons = state.backgroundColor.isLight(),
+        useDarkNavigationBarIcons = state.backgroundColor.isLight()
     )
 
     Scaffold(

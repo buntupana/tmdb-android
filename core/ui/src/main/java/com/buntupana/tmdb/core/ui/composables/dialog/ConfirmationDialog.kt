@@ -110,7 +110,6 @@ fun ConfirmationDialog(
 
             Spacer(modifier = Modifier.height(Dimens.padding.big))
 
-
             Box {
 
                 if (isLoading) {

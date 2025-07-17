@@ -28,6 +28,7 @@ import com.buntupana.tmdb.feature.discover.presentation.R
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.panabuntu.tmdb.core.common.model.MediaItem
 
 @Composable
 fun DiscoverScreen(
@@ -48,7 +49,7 @@ fun DiscoverScreen(
         },
         navigateToDetail = { mediaItem, posterDominantColor ->
             when (mediaItem) {
-                is com.panabuntu.tmdb.core.common.model.MediaItem.Movie -> {
+                is MediaItem.Movie -> {
                     onMediaItemClicked(
                         mediaItem.id,
                         MediaType.MOVIE,
@@ -56,7 +57,7 @@ fun DiscoverScreen(
                     )
                 }
 
-                is com.panabuntu.tmdb.core.common.model.MediaItem.TvShow -> {
+                is MediaItem.TvShow -> {
                     onMediaItemClicked(
                         mediaItem.id,
                         MediaType.TV_SHOW,
@@ -74,7 +75,7 @@ fun DiscoverContent(
     changeTrendingType: (trendingFilter: TrendingFilter) -> Unit,
     changePopularType: (popularFilter: PopularFilter) -> Unit,
     changeFreeToWatchType: (freeToWatchFilter: MediaFilter) -> Unit,
-    navigateToDetail: (mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem, posterDominantColor: Color) -> Unit
+    navigateToDetail: (mediaItem: MediaItem, posterDominantColor: Color) -> Unit
 ) {
 
     Column(

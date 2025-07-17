@@ -270,7 +270,7 @@ fun RippleColorContainer(
 fun IconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    rippleColor: Color = MaterialTheme.colorScheme.background,
+    rippleColor: Color = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
     enabled: Boolean = true,
     colors: IconButtonColors = IconButtonDefaults.iconButtonColors(),
     interactionSource: MutableInteractionSource? = null,

@@ -1,12 +1,15 @@
 package com.buntupana.tmdb.feature.discover.domain.repository
 
 
+import androidx.paging.PagingData
 import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
+import com.buntupana.tmdb.feature.discover.domain.entity.MediaFilter
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.model.MediaItem
+import kotlinx.coroutines.flow.Flow
 
 interface DiscoverRepository {
 
@@ -16,4 +19,5 @@ interface DiscoverRepository {
     suspend fun getMoviesInTheatres(): Result<List<MediaItem>, NetworkError>
     suspend fun getTvShowOnAir(): Result<List<MediaItem>, NetworkError>
     suspend fun getTvShowsPopular(monetizationType: MonetizationType): Result<List<MediaItem>, NetworkError>
+    suspend fun getFilteredMovies(mediaFilter: MediaFilter): Flow<PagingData<MediaItem.Movie>>
 }

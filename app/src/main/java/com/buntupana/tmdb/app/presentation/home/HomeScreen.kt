@@ -150,9 +150,9 @@ fun HomeScreenContent(
             }
             composable<MoviesNav> {
                 MoviesScreen(
-//                    onMovieItemClicked = { movieId, posterDominantColor ->
-//                        onMediaItemClicked(movieId, MediaType.MOVIE, posterDominantColor)
-//                    }
+                    onMovieItemClicked = { movieId, posterDominantColor ->
+                        onMediaItemClicked(movieId, MediaType.MOVIE, posterDominantColor)
+                    }
                 )
             }
             composable<TvShowsNav> {

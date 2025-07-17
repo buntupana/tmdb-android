@@ -29,7 +29,6 @@ import com.buntupana.tmdb.core.ui.util.balanced
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.presentation.cast.comp.castList
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,8 +39,6 @@ fun EpisodeCastDialog(
     onDismiss: () -> Unit,
     onPersonClick: (personId: Long) -> Unit
 ) {
-
-    Timber.d("EpisodeCastDialog: showDialog = $showDialog, episode = $episode")
 
     if (showDialog.not() || episode == null) return
 

@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,9 +34,7 @@ import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.paddingValues
-import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
-import com.buntupana.tmdb.core.ui.util.isLight
-import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
+import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.seasonSample
 import com.buntupana.tmdb.feature.detail.presentation.seasons.comp.SeasonItem
@@ -89,16 +86,9 @@ private fun SeasonsContent(
         mutableStateOf(state.backgroundColor)
     }
 
-    setStatusBarLightStatusFromBackground(
-        LocalView.current,
-        backgroundColor
-    )
-
-    SetLegacySystemBarsColors(
+    SetSystemBarsColors(
         statusBarColor = backgroundColor,
-        navigationBarColor = backgroundColor,
-        useDarkStatusBarIcons = backgroundColor.isLight(),
-        useDarkNavigationBarIcons = backgroundColor.isLight()
+        navigationBarColor = backgroundColor
     )
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()

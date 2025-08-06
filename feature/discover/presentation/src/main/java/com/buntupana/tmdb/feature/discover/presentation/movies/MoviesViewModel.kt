@@ -26,7 +26,7 @@ class MoviesViewModel @Inject constructor(
     }
 
     fun onEvent(event: MoviesEvent) {
-        Timber.d("onEvent() called with: event = []")
+        Timber.d("onEvent() called with: event = $event")
         viewModelScope.launch {
             when (event) {
                 is MoviesEvent.FilterMovies -> {
@@ -38,6 +38,8 @@ class MoviesViewModel @Inject constructor(
 
     private suspend fun getMovies(mediaFilter: MediaFilter) {
 
+        if (state.movieItems != null && state.mediaFilter == mediaFilter) return
+
         val movieFilter = when (mediaFilter) {
             MediaFilterMovieDefault.popular -> MovieFilter.POPULAR
             MediaFilterMovieDefault.nowPlaying -> MovieFilter.NOW_PLAYING
@@ -46,7 +48,7 @@ class MoviesViewModel @Inject constructor(
             else -> MovieFilter.CUSTOM
         }
 
-        state = state.copy(mediaFilter = mediaFilter, movieFilter = movieFilter)
+        state = state.copy(mediaFilter = mediaFilter, movieFilter = movieFilter, movieItems = null)
         getFilteredMoviesPagingUseCase(mediaFilter = state.mediaFilter).let {
             state = state.copy(movieItems = it.cachedIn(viewModelScope))
         }

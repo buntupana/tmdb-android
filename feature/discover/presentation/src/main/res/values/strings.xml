@@ -22,4 +22,27 @@
     <string name="text_top_rated">Top Rated</string>
     <string name="text_custom">Custom</string>
 
+    <string name="text_apply_filter">Apply Filter</string>
+
+    <string name="text_sort_by_popularity">Popularity</string>
+    <string name="text_sort_by_rating">Rating</string>
+    <string name="text_sort_by_release_date">Release Date</string>
+    <string name="text_sort_by_title">Title</string>
+
+    <string name="text_descending">Descending</string>
+    <string name="text_ascending">Ascending</string>
+
+    <string name="text_availability_stream">Stream</string>
+    <string name="text_availability_free">Free</string>
+    <string name="text_availability_ads">Ads</string>
+    <string name="text_availability_rent">Rent</string>
+    <string name="text_availability_buy">Buy</string>
+
+    <string name="text_release_type_theatrical_limited">Theatrical Limited</string>
+    <string name="text_release_type_theatrical">Theatrical</string>
+    <string name="text_release_type_premier">Premier</string>
+    <string name="text_release_type_digital">Digital</string>
+    <string name="text_release_type_physical">Physical</string>
+    <string name="text_release_type_tv">TV</string>
+
 </resources>

@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -30,6 +31,17 @@ fun <L : DefaultItem> LazyColumnGeneric(
     placeHolder: (@Composable () -> Unit)? = null,
     itemContent: @Composable LazyItemScope.(index: Int, item: L) -> Unit
 ) {
+
+    LaunchedEffect(itemList?.loadState?.refresh) {
+        if (itemList?.loadState?.refresh is LoadState.NotLoading &&
+            itemList.itemCount > 0 && // Ensure there's data to scroll to
+            state.firstVisibleItemIndex > 0 // Only scroll if not already at top
+        ) {
+            // A common pattern is to scroll when the itemCount becomes non-zero *after* a refresh
+            // or when the refresh state transitions to NotLoading.
+            state.scrollToItem(0)
+        }
+    }
 
     itemList ?: return
 

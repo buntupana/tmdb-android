@@ -49,8 +49,9 @@ fun SignOutDialog(
 
     if (showDialog.not()) return
 
+    val coroutineScope = rememberCoroutineScope()
     val lifecycleOwner = LocalLifecycleOwner.current
-    
+
     LaunchedEffect(lifecycleOwner.lifecycle) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             launch {
@@ -67,7 +68,12 @@ fun SignOutDialog(
     SignOutContent(
         state = viewModel.state,
         sheetState = sheetState,
-        onDismiss = onDismiss,
+        onDismiss = {
+            coroutineScope.launch {
+                sheetState.hide()
+                onDismiss()
+            }
+        },
         onSignOutClick = { viewModel.onEvent(SignOutEvent.SignOut) }
     )
 }
@@ -80,8 +86,6 @@ fun SignOutContent(
     onDismiss: () -> Unit,
     onSignOutClick: () -> Unit
 ) {
-
-    val coroutineScope = rememberCoroutineScope()
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -119,12 +123,8 @@ fun SignOutContent(
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
                     Button(
-                        onClick = {
-                            coroutineScope.launch {
-                                sheetState.hide()
-                                onDismiss()
-                            }
-                        }) {
+                        onClick = onDismiss
+                    ) {
                         Text(
                             text = stringResource(RCore.string.text_cancel),
                             style = MaterialTheme.typography.titleMedium,

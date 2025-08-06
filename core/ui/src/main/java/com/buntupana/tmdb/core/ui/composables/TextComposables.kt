@@ -1,6 +1,5 @@
 package com.buntupana.tmdb.core.ui.composables
 
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -42,6 +41,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -367,20 +367,24 @@ fun ExpandableTextPreview() {
 fun TextWithIcon(
     modifier: Modifier = Modifier,
     text: String,
-    @DrawableRes iconRes: Int
+    painter: Painter,
+    color: Color = MaterialTheme.colorScheme.onBackground
 ) {
 
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = text)
+        Text(
+            text = text,
+            color = color
+        )
         Spacer(modifier = Modifier.width(Dimens.padding.tiny))
         Image(
             modifier = Modifier.size(16.dp),
-            painter = painterResource(iconRes),
+            painter = painter,
             contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+            colorFilter = ColorFilter.tint(color)
         )
     }
 

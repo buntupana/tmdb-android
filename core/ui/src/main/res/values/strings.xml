@@ -19,6 +19,8 @@
     <string name="text_movie">Movie</string>
     <string name="text_tv_show">Tv Show</string>
     <string name="text_apply_changes">Apply Changes</string>
+    <string name="text_from">From</string>
+    <string name="text_to">To</string>
 
     // Filter
     <string name="text_last_added">Last Added</string>

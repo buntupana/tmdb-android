@@ -87,7 +87,7 @@ fun getCustomTabIntent(url: String): Intent {
     return customTabsIntent.intent
 }
 
-fun TextStyle.balanced() : TextStyle {
+fun TextStyle.balanced(): TextStyle {
     val customTitleLineBreak = LineBreak(
         strategy = LineBreak.Strategy.Balanced,
         strictness = LineBreak.Strictness.Strict,
@@ -351,36 +351,36 @@ fun Modifier.clickableWithRipple(
 }
 
 @Composable
-fun SetLegacySystemBarsColors(
+fun SetSystemBarsColors(
     statusBarColor: Color,
-    navigationBarColor: Color,
-    useDarkStatusBarIcons: Boolean,
-    useDarkNavigationBarIcons: Boolean
+    navigationBarColor: Color
 ) {
     val view = LocalView.current
     if (!view.isInEditMode) { // Prevent running in Preview
         SideEffect {
             val window = (view.context as? Activity)?.window ?: return@SideEffect
 
-            // Set Status Bar Color
-            window.statusBarColor = statusBarColor.toArgb()
-
-            // Set Navigation Bar Color
-            // Note: On some older devices (API < 23 for nav bar, or specific manufacturer ROMs),
-            // fully opaque nav bar colors might not always render as expected, or might have scrims.
-            // Translucent colors often behave more consistently if you face issues.
-            window.navigationBarColor = navigationBarColor.toArgb()
-
             val insetsController = WindowInsetsControllerCompat(window, view)
 
             // Control Status Bar Icons
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // API 23+
-                insetsController.isAppearanceLightStatusBars = useDarkStatusBarIcons
+                insetsController.isAppearanceLightStatusBars = statusBarColor.isLight()
             }
 
             // Control Navigation Bar Icons
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // API 26+
-                insetsController.isAppearanceLightNavigationBars = useDarkNavigationBarIcons
+                insetsController.isAppearanceLightNavigationBars = navigationBarColor.isLight()
+            }
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                // Set Status Bar Color
+                window.statusBarColor = statusBarColor.toArgb()
+
+                // Set Navigation Bar Color
+                // Note: On some older devices (API < 23 for nav bar, or specific manufacturer ROMs),
+                // fully opaque nav bar colors might not always render as expected, or might have scrims.
+                // Translucent colors often behave more consistently if you face issues.
+                window.navigationBarColor = navigationBarColor.toArgb()
             }
         }
     }

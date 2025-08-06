@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,6 +38,7 @@ import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.IconButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.discover.domain.entity.MediaFilter
+import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterDialog
 
 @Composable
 fun MoviesScreen(
@@ -63,6 +64,7 @@ fun MoviesContent(
     onApplyFilterClick: (mediaFilter: MediaFilter) -> Unit
 ) {
 
+    var showDefaultFiltersDialog by remember { mutableStateOf(false) }
     var showMovieFiltersDialog by remember { mutableStateOf(false) }
 
     Column(
@@ -79,7 +81,7 @@ fun MoviesContent(
 
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
-                onClick = { showMovieFiltersDialog = true },
+                onClick = { showDefaultFiltersDialog = true },
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -93,11 +95,12 @@ fun MoviesContent(
 
             IconButton(
                 onClick = {
+                    showMovieFiltersDialog = true
                 },
                 rippleColor = MaterialTheme.colorScheme.background.getOnBackgroundColor()
             ) {
                 Icon(
-                    imageVector = Icons.Default.FilterList,
+                    imageVector = Icons.Rounded.FilterList,
                     contentDescription = "Filter"
                 )
             }
@@ -106,45 +109,56 @@ fun MoviesContent(
         val lazyListState: LazyListState = rememberLazyListState()
         val movieItems = state.movieItems?.collectAsLazyPagingItems()
 
-        LazyColumnGeneric(
-            modifier = Modifier.fillMaxSize(),
-            state = lazyListState,
-            topPadding = Dimens.padding.medium,
-            animateItem = true,
-            itemList = movieItems,
-            noResultContent = {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "No results"
-                    )
+        if (movieItems != null) {
+            LazyColumnGeneric(
+                modifier = Modifier.fillMaxSize(),
+                state = lazyListState,
+                topPadding = Dimens.padding.medium,
+                animateItem = false,
+                itemList = movieItems,
+                noResultContent = {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "No results"
+                        )
+                    }
                 }
+            ) { _, item ->
+                MediaItemHorizontal(
+                    modifier = Modifier
+                        .animateItem()
+                        .height(Dimens.imageSize.posterHeight),
+                    onMediaClick = { _, mainPosterColor ->
+                        onMediaClick(item.id, mainPosterColor)
+                    },
+                    mediaId = item.id,
+                    title = item.name,
+                    posterUrl = item.posterUrl,
+                    overview = item.overview,
+                    releaseDate = item.releaseDate
+                )
             }
-        ) { _, item ->
-            MediaItemHorizontal(
-                modifier = Modifier
-                    .animateItem()
-                    .height(Dimens.imageSize.posterHeight),
-                onMediaClick = { _, mainPosterColor ->
-                    onMediaClick(item.id, mainPosterColor)
-                },
-                mediaId = item.id,
-                title = item.name,
-                posterUrl = item.posterUrl,
-                overview = item.overview,
-                releaseDate = item.releaseDate
-            )
         }
     }
 
     MovieFilterDialog(
+        showDialog = showDefaultFiltersDialog,
+        onDismiss = {
+            showDefaultFiltersDialog = false
+        },
+        onApplyFilterClick = onApplyFilterClick,
+    )
+
+    MediaFilterDialog(
         showDialog = showMovieFiltersDialog,
+        mediaFilter = state.mediaFilter,
         onDismiss = {
             showMovieFiltersDialog = false
         },
-        onApplyFilterClick = onApplyFilterClick,
+        onApplyFilterClick = onApplyFilterClick
     )
 }
 

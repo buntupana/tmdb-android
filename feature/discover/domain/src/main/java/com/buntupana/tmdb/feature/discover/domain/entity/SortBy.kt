@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.discover.domain.entity
 
-enum class SortBy{
+enum class SortBy {
     POPULARITY_DESC,
     POPULARITY_ASC,
     RATING_DESC,

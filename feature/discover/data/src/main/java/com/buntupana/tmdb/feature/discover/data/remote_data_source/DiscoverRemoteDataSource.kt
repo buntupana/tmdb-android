@@ -27,15 +27,12 @@ class DiscoverRemoteDataSource @Inject constructor(
         region: String
     ): Result<ResponseListRaw<MovieItemRaw>, NetworkError> {
 
-        val monetizationValue = when (monetizationType) {
-            MonetizationType.FREE -> "free"
-            MonetizationType.FLAT_RATE -> "flatrate"
-            MonetizationType.RENT -> "rent"
-        }
-
         return getResult {
             httpClient.get(urlString = "/3/discover/movie") {
-                parameter("with_watch_monetization_types", monetizationValue)
+                parameter(
+                    key = "with_watch_monetization_types",
+                    value = getMonetizationTypeValue(monetizationType)
+                )
                 parameter("watch_region", region)
                 parameter("region", region)
             }
@@ -47,15 +44,12 @@ class DiscoverRemoteDataSource @Inject constructor(
         region: String
     ): Result<ResponseListRaw<TvShowItemRaw>, NetworkError> {
 
-        val monetizationValue = when (monetizationType) {
-            MonetizationType.FREE -> "free"
-            MonetizationType.FLAT_RATE -> "flatrate"
-            MonetizationType.RENT -> "rent"
-        }
-
         return getResult {
             httpClient.get(urlString = "/3/discover/tv") {
-                parameter("with_watch_monetization_types", monetizationValue)
+                parameter(
+                    key = "with_watch_monetization_types",
+                    value = getMonetizationTypeValue(monetizationType)
+                )
                 parameter("watch_region", region)
                 parameter("region", region)
             }
@@ -122,20 +116,12 @@ class DiscoverRemoteDataSource @Inject constructor(
             SortBy.RELEASE_DATE_ASC -> "release_date.asc"
             SortBy.TITLE_DESC -> "original_title.desc"
             SortBy.TITLE_ASC -> "original_title.asc"
-            null -> "popularity.desc"
-        }
-
-        val monetizationValue = when (mediaFilter.monetizationType) {
-            MonetizationType.FREE -> "free"
-            MonetizationType.FLAT_RATE -> "flatrate"
-            MonetizationType.RENT -> "rent"
-            null -> null
         }
 
         val releaseDateFrom = mediaFilter.releaseDateFrom?.toString()
         val releaseDateTo = mediaFilter.releaseDateTo?.toString()
 
-        val releaseTypes = mediaFilter.releaseTypeList?.joinToString("|") {
+        val releaseTypes = mediaFilter.releaseTypeList.joinToString("|") {
             when (it) {
                 ReleaseType.PREMIER -> "1"
                 ReleaseType.THEATRICAL_LIMITED -> "2"
@@ -144,17 +130,25 @@ class DiscoverRemoteDataSource @Inject constructor(
                 ReleaseType.PHYSICAL -> "5"
                 ReleaseType.TV -> "6"
             }
-        }
+        }.ifEmpty { null }
+
+        val monetizationTypes =
+            mediaFilter.monetizationTypeList.joinToString("|") {
+                getMonetizationTypeValue(it).toString()
+            }.ifEmpty { null }
 
         return getResult {
             httpClient.get(urlString = "/3/discover/movie") {
                 parameter("page", page)
-                parameter("with_watch_monetization_types", monetizationValue)
+                parameter(
+                    key = "with_watch_monetization_types",
+                    value = monetizationTypes
+                )
                 parameter("with_release_type", releaseTypes)
                 parameter("with_runtime.lte", mediaFilter.runtime)
                 parameter("language", mediaFilter.language)
-                parameter("primary_release_date.lte", releaseDateTo)
-                parameter("primary_release_date.gte", releaseDateFrom)
+                parameter("release_date.lte", releaseDateTo)
+                parameter("release_date.gte", releaseDateFrom)
                 parameter("with_genres", genres?.joinToString(","))
                 parameter("sort_by", sortBy)
                 parameter("watch_region", region)
@@ -163,6 +157,17 @@ class DiscoverRemoteDataSource @Inject constructor(
                 parameter("vote_average.gte", mediaFilter.minRating)
                 parameter("vote_average.lte", mediaFilter.maxRating)
             }
+        }
+    }
+
+    private fun getMonetizationTypeValue(monetizationType: MonetizationType?): String? {
+        return when (monetizationType) {
+            MonetizationType.FREE -> "free"
+            MonetizationType.FLAT_RATE -> "flatrate"
+            MonetizationType.RENT -> "rent"
+            MonetizationType.ADS -> "ads"
+            MonetizationType.BUY -> "buy"
+            null -> null
         }
     }
 }

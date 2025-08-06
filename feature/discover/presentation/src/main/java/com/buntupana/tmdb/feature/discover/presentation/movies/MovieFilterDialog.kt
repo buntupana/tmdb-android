@@ -18,6 +18,7 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -26,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.discover.domain.entity.MediaFilter
 import com.buntupana.tmdb.feature.discover.presentation.R
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,9 +40,16 @@ fun MovieFilterDialog(
 
     if (showDialog.not()) return
 
+    val coroutineScope = rememberCoroutineScope()
+
     MovieFilterContent(
         sheetState = sheetState,
-        onDismiss = onDismiss,
+        onDismiss = {
+            coroutineScope.launch {
+                sheetState.hide()
+                onDismiss()
+            }
+        },
         onApplyFilterClick = onApplyFilterClick
     )
 }
@@ -101,7 +110,7 @@ private fun MovieFilterContent(
                                 onDismiss()
                             }
                             .padding(
-                                vertical = Dimens.padding.small,
+                                vertical = Dimens.padding.medium,
                                 horizontal = Dimens.padding.horizontal
                             )
                     ) {

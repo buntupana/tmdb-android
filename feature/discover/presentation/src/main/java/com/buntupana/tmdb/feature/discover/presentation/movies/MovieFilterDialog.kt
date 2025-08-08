@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.feature.discover.domain.entity.MediaFilter
+import com.buntupana.tmdb.feature.discover.domain.entity.MediaListFilter
 import com.buntupana.tmdb.feature.discover.presentation.R
 import kotlinx.coroutines.launch
 
@@ -35,7 +35,7 @@ fun MovieFilterDialog(
     showDialog: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onDismiss: () -> Unit,
-    onApplyFilterClick: (mediaFilter: MediaFilter) -> Unit,
+    onApplyFilterClick: (mediaListFilter: MediaListFilter) -> Unit,
 ) {
 
     if (showDialog.not()) return
@@ -59,7 +59,7 @@ fun MovieFilterDialog(
 private fun MovieFilterContent(
     sheetState: SheetState,
     onDismiss: () -> Unit,
-    onApplyFilterClick: (mediaFilter: MediaFilter) -> Unit,
+    onApplyFilterClick: (mediaListFilter: MediaListFilter) -> Unit,
 ) {
 
     ModalBottomSheet(

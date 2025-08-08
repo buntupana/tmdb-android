@@ -6,7 +6,7 @@ import com.buntupana.tmdb.core.data.raw.ResponseListRaw
 import com.buntupana.tmdb.core.data.raw.TvShowItemRaw
 import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
 import com.buntupana.tmdb.feature.discover.domain.entity.Genre
-import com.buntupana.tmdb.feature.discover.domain.entity.MediaFilter
+import com.buntupana.tmdb.feature.discover.domain.entity.MediaListFilter
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.ReleaseType
 import com.buntupana.tmdb.feature.discover.domain.entity.SortBy
@@ -101,12 +101,12 @@ class DiscoverRemoteDataSource @Inject constructor(
     }
 
     suspend fun getMovies(
-        mediaFilter: MediaFilter,
+        mediaListFilter: MediaListFilter,
         region: String,
         page: Int
     ): Result<ResponseListRaw<MovieItemRaw>, NetworkError> {
 
-        val sortBy = when (mediaFilter.sortBy) {
+        val sortBy = when (mediaListFilter.sortBy) {
             SortBy.POPULARITY_DESC -> "popularity.desc"
             SortBy.POPULARITY_ASC -> "popularity.asc"
             SortBy.RATING_DESC -> "vote_average.desc"
@@ -117,10 +117,10 @@ class DiscoverRemoteDataSource @Inject constructor(
             SortBy.TITLE_ASC -> "original_title.asc"
         }
 
-        val releaseDateFrom = mediaFilter.releaseDateFrom?.toString()
-        val releaseDateTo = mediaFilter.releaseDateTo?.toString()
+        val releaseDateFrom = mediaListFilter.releaseDateFrom?.toString()
+        val releaseDateTo = mediaListFilter.releaseDateTo?.toString()
 
-        val releaseTypes = mediaFilter.releaseTypeList.joinToString(",") {
+        val releaseTypes = mediaListFilter.releaseTypeList.joinToString(",") {
             when (it) {
                 ReleaseType.PREMIER -> "1"
                 ReleaseType.THEATRICAL_LIMITED -> "2"
@@ -132,11 +132,11 @@ class DiscoverRemoteDataSource @Inject constructor(
         }.ifEmpty { null }
 
         val monetizationTypes =
-            mediaFilter.monetizationTypeList.joinToString("|") {
+            mediaListFilter.monetizationTypeList.joinToString("|") {
                 getMonetizationTypeValue(it).toString()
             }.ifEmpty { null }
 
-        val genres = mediaFilter.genreList
+        val genres = mediaListFilter.genreList
             .map { getGenreId(it) }
             .joinToString(",")
             .ifEmpty { null }
@@ -149,17 +149,17 @@ class DiscoverRemoteDataSource @Inject constructor(
                     value = monetizationTypes
                 )
                 parameter("with_release_type", releaseTypes)
-                parameter("with_runtime.lte", mediaFilter.runtime)
-                parameter("language", mediaFilter.language)
+                parameter("with_runtime.lte", mediaListFilter.runtime)
+                parameter("language", mediaListFilter.language)
                 parameter("release_date.lte", releaseDateTo)
                 parameter("release_date.gte", releaseDateFrom)
                 parameter("with_genres", genres)
                 parameter("sort_by", sortBy)
                 parameter("watch_region", region)
                 parameter("region", region)
-                parameter("vote_count.gte", mediaFilter.minVoteCount)
-                parameter("vote_average.gte", mediaFilter.minRating)
-                parameter("vote_average.lte", mediaFilter.maxRating)
+                parameter("vote_count.gte", mediaListFilter.minVoteCount)
+                parameter("vote_average.gte", mediaListFilter.minRating)
+                parameter("vote_average.lte", mediaListFilter.maxRating)
             }
         }
     }

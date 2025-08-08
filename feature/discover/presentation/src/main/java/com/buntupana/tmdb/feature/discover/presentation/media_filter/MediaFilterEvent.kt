@@ -1,11 +1,11 @@
 package com.buntupana.tmdb.feature.discover.presentation.media_filter
 
 import com.buntupana.tmdb.core.ui.util.SelectableItem
-import com.buntupana.tmdb.feature.discover.domain.entity.MediaFilter
+import com.buntupana.tmdb.feature.discover.domain.entity.MediaListFilter
 import java.time.LocalDate
 
 sealed class MediaFilterEvent {
-    data class Init(val mediaFilter: MediaFilter) : MediaFilterEvent()
+    data class Init(val mediaListFilter: MediaListFilter) : MediaFilterEvent()
 
     data class ChangeSortBy(
         val sortBySimple: SortBySimple,

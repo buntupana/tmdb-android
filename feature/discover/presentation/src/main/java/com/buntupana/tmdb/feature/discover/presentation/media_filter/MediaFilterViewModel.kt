@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.feature.discover.domain.entity.Genre
-import com.buntupana.tmdb.feature.discover.domain.entity.MediaFilter
+import com.buntupana.tmdb.feature.discover.domain.entity.MediaListFilter
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.ReleaseType
 import com.buntupana.tmdb.feature.discover.domain.entity.SortBy
@@ -29,15 +29,15 @@ class MediaFilterViewModel @Inject constructor() : ViewModel() {
     private val _sideEffect = Channel<MediaFilterSideEffect>()
     val sideEffect = _sideEffect.receiveAsFlow()
 
-    private var mediaFilter: MediaFilter = MediaFilter()
+    private var mediaListFilter: MediaListFilter = MediaListFilter()
 
     fun onEvent(event: MediaFilterEvent) {
         Timber.d("onEvent() called with: event = [$event]")
         viewModelScope.launch {
             when (event) {
                 is MediaFilterEvent.Init -> {
-                    mediaFilter = event.mediaFilter
-                    setupFilters(event.mediaFilter)
+                    mediaListFilter = event.mediaListFilter
+                    setupFilters(event.mediaListFilter)
                 }
 
                 is MediaFilterEvent.ChangeSortBy -> {
@@ -115,7 +115,7 @@ class MediaFilterViewModel @Inject constructor() : ViewModel() {
             .filter { it.isSelected }
             .map { selectableItem -> Genre.entries[selectableItem.id] }
 
-        val newFilter = mediaFilter.copy(
+        val newFilter = mediaListFilter.copy(
             sortBy = sortBy,
             releaseDateFrom = state.releaseDateFrom,
             releaseDateTo = state.releaseDateTo,
@@ -127,9 +127,9 @@ class MediaFilterViewModel @Inject constructor() : ViewModel() {
         _sideEffect.send(MediaFilterSideEffect.ApplyFilters(newFilter))
     }
 
-    private fun setupFilters(mediaFilter: MediaFilter) {
+    private fun setupFilters(mediaListFilter: MediaListFilter) {
 
-        val (sortBy, sortByOrder) = when (mediaFilter.sortBy) {
+        val (sortBy, sortByOrder) = when (mediaListFilter.sortBy) {
             SortBy.POPULARITY_DESC -> {
                 SortBySimple.POPULARITY to SortByOrder.DESCENDING
             }
@@ -166,24 +166,24 @@ class MediaFilterViewModel @Inject constructor() : ViewModel() {
         state = state.copy(
             sortBySelected = sortBy,
             sortByOrderSelected = sortByOrder,
-            releaseDateFrom = mediaFilter.releaseDateFrom,
-            releaseDateTo = mediaFilter.releaseDateTo,
+            releaseDateFrom = mediaListFilter.releaseDateFrom,
+            releaseDateTo = mediaListFilter.releaseDateTo,
             releaseTypesList = ReleaseType.entries.mapIndexed { index, releaseType ->
                 releaseType.toSelectableItem(
                     id = index,
-                    isSelected = mediaFilter.releaseTypeList.contains(releaseType)
+                    isSelected = mediaListFilter.releaseTypeList.contains(releaseType)
                 )
             },
             availabilitiesList = MonetizationType.entries.mapIndexed { index, monetizationType ->
                 monetizationType.toSelectableItem(
                     id = index,
-                    isSelected = mediaFilter.monetizationTypeList.contains(monetizationType)
+                    isSelected = mediaListFilter.monetizationTypeList.contains(monetizationType)
                 )
             },
             genreList = Genre.entries.mapIndexed { index, genre ->
                 genre.toSelectableItem(
                     id = index,
-                    isSelected = mediaFilter.genreList.contains(genre)
+                    isSelected = mediaListFilter.genreList.contains(genre)
                 )
             }
         )

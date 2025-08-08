@@ -2,7 +2,7 @@ package com.buntupana.tmdb.feature.discover.domain.entity
 
 import java.time.LocalDate
 
-data class MediaFilter(
+data class MediaListFilter(
     val sortBy: SortBy = SortBy.POPULARITY_DESC,
     val releaseTypeList: List<ReleaseType> = emptyList(),
     val monetizationTypeList: List<MonetizationType> = emptyList(),

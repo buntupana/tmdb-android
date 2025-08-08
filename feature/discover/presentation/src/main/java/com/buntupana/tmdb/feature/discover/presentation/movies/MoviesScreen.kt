@@ -37,7 +37,7 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.IconButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
-import com.buntupana.tmdb.feature.discover.domain.entity.MediaFilter
+import com.buntupana.tmdb.feature.discover.domain.entity.MediaListFilter
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterDialog
 
 @Composable
@@ -51,7 +51,7 @@ fun MoviesScreen(
             onMovieItemClicked(mediaId, mainPosterColor)
         },
         onApplyFilterClick = {
-            viewModel.onEvent(MoviesEvent.FilterMovies(mediaFilter = it))
+            viewModel.onEvent(MoviesEvent.FilterMovies(mediaListFilter = it))
         }
     )
 }
@@ -61,7 +61,7 @@ fun MoviesScreen(
 fun MoviesContent(
     state: MoviesState,
     onMediaClick: (mediaId: Long, mainPosterColor: Color) -> Unit,
-    onApplyFilterClick: (mediaFilter: MediaFilter) -> Unit
+    onApplyFilterClick: (mediaListFilter: MediaListFilter) -> Unit
 ) {
 
     var showDefaultFiltersDialog by remember { mutableStateOf(false) }
@@ -154,7 +154,7 @@ fun MoviesContent(
 
     MediaFilterDialog(
         showDialog = showMovieFiltersDialog,
-        mediaFilter = state.mediaFilter,
+        mediaListFilter = state.mediaListFilter,
         onDismiss = {
             showMovieFiltersDialog = false
         },

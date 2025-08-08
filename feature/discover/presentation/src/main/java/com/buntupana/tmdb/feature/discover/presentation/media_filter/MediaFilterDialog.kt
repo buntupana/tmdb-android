@@ -32,7 +32,7 @@ import com.buntupana.tmdb.core.ui.dialog.DialogHeader
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SelectableItem
 import com.buntupana.tmdb.feature.discover.domain.entity.Genre
-import com.buntupana.tmdb.feature.discover.domain.entity.MediaFilter
+import com.buntupana.tmdb.feature.discover.domain.entity.MediaListFilter
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.ReleaseType
 import com.buntupana.tmdb.feature.discover.presentation.R
@@ -49,9 +49,9 @@ fun MediaFilterDialog(
     viewModel: MediaFilterViewModel = hiltViewModel(),
     showDialog: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-    mediaFilter: MediaFilter,
+    mediaListFilter: MediaListFilter,
     onDismiss: () -> Unit,
-    onApplyFilterClick: (mediaFilter: MediaFilter) -> Unit,
+    onApplyFilterClick: (mediaListFilter: MediaListFilter) -> Unit,
 ) {
 
     if (showDialog.not()) return
@@ -59,8 +59,8 @@ fun MediaFilterDialog(
     val coroutineScope = rememberCoroutineScope()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(mediaFilter) {
-        viewModel.onEvent(MediaFilterEvent.Init(mediaFilter))
+    LaunchedEffect(mediaListFilter) {
+        viewModel.onEvent(MediaFilterEvent.Init(mediaListFilter))
     }
 
     LaunchedEffect(lifecycleOwner.lifecycle) {
@@ -70,7 +70,7 @@ fun MediaFilterDialog(
                     Timber.d("SignOutDialog: sideEffect = $sideEffect")
                     when (sideEffect) {
                         is MediaFilterSideEffect.ApplyFilters -> {
-                            onApplyFilterClick(sideEffect.mediaFilter)
+                            onApplyFilterClick(sideEffect.mediaListFilter)
                             onDismiss()
                         }
                     }

@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.buntupana.tmdb.feature.discover.domain.entity.MediaFilter
+import com.buntupana.tmdb.feature.discover.domain.entity.MediaListFilter
 import com.buntupana.tmdb.feature.discover.domain.usecase.GetFilteredMoviesPagingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,7 +22,7 @@ class MoviesViewModel @Inject constructor(
         private set
 
     init {
-        onEvent(MoviesEvent.FilterMovies(mediaFilter = state.mediaFilter))
+        onEvent(MoviesEvent.FilterMovies(mediaListFilter = state.mediaListFilter))
     }
 
     fun onEvent(event: MoviesEvent) {
@@ -30,17 +30,17 @@ class MoviesViewModel @Inject constructor(
         viewModelScope.launch {
             when (event) {
                 is MoviesEvent.FilterMovies -> {
-                    getMovies(event.mediaFilter)
+                    getMovies(event.mediaListFilter)
                 }
             }
         }
     }
 
-    private suspend fun getMovies(mediaFilter: MediaFilter) {
+    private suspend fun getMovies(mediaListFilter: MediaListFilter) {
 
-        if (state.movieItems != null && state.mediaFilter == mediaFilter) return
+        if (state.movieItems != null && state.mediaListFilter == mediaListFilter) return
 
-        val movieFilter = when (mediaFilter) {
+        val movieFilter = when (mediaListFilter) {
             MediaFilterMovieDefault.popular -> MovieFilter.POPULAR
             MediaFilterMovieDefault.nowPlaying -> MovieFilter.NOW_PLAYING
             MediaFilterMovieDefault.topRated -> MovieFilter.TOP_RATED
@@ -48,8 +48,8 @@ class MoviesViewModel @Inject constructor(
             else -> MovieFilter.CUSTOM
         }
 
-        state = state.copy(mediaFilter = mediaFilter, movieFilter = movieFilter, movieItems = null)
-        getFilteredMoviesPagingUseCase(mediaFilter = state.mediaFilter).let {
+        state = state.copy(mediaListFilter = mediaListFilter, movieFilter = movieFilter, movieItems = null)
+        getFilteredMoviesPagingUseCase(mediaListFilter = state.mediaListFilter).let {
             state = state.copy(movieItems = it.cachedIn(viewModelScope))
         }
     }

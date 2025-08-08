@@ -7,7 +7,7 @@ import com.buntupana.tmdb.core.data.api.GenericPagingDataSource
 import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.discover.data.remote_data_source.DiscoverRemoteDataSource
 import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
-import com.buntupana.tmdb.feature.discover.domain.entity.MediaFilter
+import com.buntupana.tmdb.feature.discover.domain.entity.MediaListFilter
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
 import com.buntupana.tmdb.feature.discover.domain.repository.DiscoverRepository
@@ -130,7 +130,7 @@ class DiscoverRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun getFilteredMovies(mediaFilter: MediaFilter): Flow<PagingData<MediaItem.Movie>> {
+    override suspend fun getFilteredMovies(mediaListFilter: MediaListFilter): Flow<PagingData<MediaItem.Movie>> {
 
         return Pager(
             config = PagingConfig(
@@ -141,7 +141,7 @@ class DiscoverRepositoryImpl @Inject constructor(
                 GenericPagingDataSource(
                     networkCall = { page ->
                         discoverRemoteDataSource.getMovies(
-                            mediaFilter = mediaFilter,
+                            mediaListFilter = mediaListFilter,
                             page = page,
                             region = session.value.countryCode
                         )

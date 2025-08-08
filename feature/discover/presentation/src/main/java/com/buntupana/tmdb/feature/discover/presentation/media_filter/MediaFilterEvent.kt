@@ -1,8 +1,7 @@
 package com.buntupana.tmdb.feature.discover.presentation.media_filter
 
+import com.buntupana.tmdb.core.ui.util.SelectableItem
 import com.buntupana.tmdb.feature.discover.domain.entity.MediaFilter
-import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
-import com.buntupana.tmdb.feature.discover.domain.entity.ReleaseType
 import java.time.LocalDate
 
 sealed class MediaFilterEvent {
@@ -13,9 +12,13 @@ sealed class MediaFilterEvent {
         val sortByOrder: SortByOrder
     ) : MediaFilterEvent()
 
-    data class SelectMonetizationType(val monetizationType: MonetizationType) : MediaFilterEvent()
+    data class SelectMonetizationType(val monetizationTypeList: List<SelectableItem>) : MediaFilterEvent()
 
-    data class SelectReleaseType(val releaseType: ReleaseType) : MediaFilterEvent()
+    data class SelectReleaseType(val releaseTypeList: List<SelectableItem>) : MediaFilterEvent()
 
     data class SelectReleaseDateRange(val releaseDateFrom: LocalDate?, val releaseDateTo: LocalDate?) : MediaFilterEvent()
+
+    data class SelectGenreNew(val genreList: List<SelectableItem>): MediaFilterEvent()
+
+    data object ApplyFilter: MediaFilterEvent()
 }

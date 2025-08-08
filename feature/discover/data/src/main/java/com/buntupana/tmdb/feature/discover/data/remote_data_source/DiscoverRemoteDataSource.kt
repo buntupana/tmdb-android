@@ -5,6 +5,7 @@ import com.buntupana.tmdb.core.data.raw.MovieItemRaw
 import com.buntupana.tmdb.core.data.raw.ResponseListRaw
 import com.buntupana.tmdb.core.data.raw.TvShowItemRaw
 import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
+import com.buntupana.tmdb.feature.discover.domain.entity.Genre
 import com.buntupana.tmdb.feature.discover.domain.entity.MediaFilter
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.ReleaseType
@@ -105,8 +106,6 @@ class DiscoverRemoteDataSource @Inject constructor(
         page: Int
     ): Result<ResponseListRaw<MovieItemRaw>, NetworkError> {
 
-        val genres = mediaFilter.genreList?.map { it.name.lowercase() }
-
         val sortBy = when (mediaFilter.sortBy) {
             SortBy.POPULARITY_DESC -> "popularity.desc"
             SortBy.POPULARITY_ASC -> "popularity.asc"
@@ -121,7 +120,7 @@ class DiscoverRemoteDataSource @Inject constructor(
         val releaseDateFrom = mediaFilter.releaseDateFrom?.toString()
         val releaseDateTo = mediaFilter.releaseDateTo?.toString()
 
-        val releaseTypes = mediaFilter.releaseTypeList.joinToString("|") {
+        val releaseTypes = mediaFilter.releaseTypeList.joinToString(",") {
             when (it) {
                 ReleaseType.PREMIER -> "1"
                 ReleaseType.THEATRICAL_LIMITED -> "2"
@@ -137,6 +136,11 @@ class DiscoverRemoteDataSource @Inject constructor(
                 getMonetizationTypeValue(it).toString()
             }.ifEmpty { null }
 
+        val genres = mediaFilter.genreList
+            .map { getGenreId(it) }
+            .joinToString(",")
+            .ifEmpty { null }
+
         return getResult {
             httpClient.get(urlString = "/3/discover/movie") {
                 parameter("page", page)
@@ -149,7 +153,7 @@ class DiscoverRemoteDataSource @Inject constructor(
                 parameter("language", mediaFilter.language)
                 parameter("release_date.lte", releaseDateTo)
                 parameter("release_date.gte", releaseDateFrom)
-                parameter("with_genres", genres?.joinToString(","))
+                parameter("with_genres", genres)
                 parameter("sort_by", sortBy)
                 parameter("watch_region", region)
                 parameter("region", region)
@@ -168,6 +172,29 @@ class DiscoverRemoteDataSource @Inject constructor(
             MonetizationType.ADS -> "ads"
             MonetizationType.BUY -> "buy"
             null -> null
+        }
+    }
+
+    private fun getGenreId(genre: Genre): Long {
+        return when (genre) {
+            Genre.ACTION -> 28
+            Genre.ADVENTURE -> 12
+            Genre.ANIMATION -> 16
+            Genre.COMEDY -> 35
+            Genre.CRIME -> 80
+            Genre.DOCUMENTARY -> 99
+            Genre.DRAMA -> 18
+            Genre.FAMILY -> 10
+            Genre.FANTASY -> 14
+            Genre.HISTORY -> 36
+            Genre.HORROR -> 27
+            Genre.MUSIC -> 1
+            Genre.MYSTERY -> 9648
+            Genre.ROMANCE -> 10749
+            Genre.SCI_FI -> 878
+            Genre.THRILLER -> 53
+            Genre.WAR -> 10752
+            Genre.WESTERN -> 37
         }
     }
 }

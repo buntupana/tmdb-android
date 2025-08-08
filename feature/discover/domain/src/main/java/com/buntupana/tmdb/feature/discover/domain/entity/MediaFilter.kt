@@ -8,7 +8,7 @@ data class MediaFilter(
     val monetizationTypeList: List<MonetizationType> = emptyList(),
     val releaseDateFrom: LocalDate? = null,
     val releaseDateTo: LocalDate? = null,
-    val genreList: List<Genre>? = null,
+    val genreList: List<Genre> = emptyList(),
     val language: String? = null,
     val userScoreMax: Int? = null,
     val userScoreMin: Int? = null,

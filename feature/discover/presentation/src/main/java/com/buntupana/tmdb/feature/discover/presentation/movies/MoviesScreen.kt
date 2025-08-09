@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material3.Button
@@ -106,13 +104,11 @@ fun MoviesContent(
             }
         }
 
-        val lazyListState: LazyListState = rememberLazyListState()
         val movieItems = state.movieItems?.collectAsLazyPagingItems()
 
         if (movieItems != null) {
             LazyColumnGeneric(
                 modifier = Modifier.fillMaxSize(),
-                state = lazyListState,
                 topPadding = Dimens.padding.medium,
                 animateItem = false,
                 itemList = movieItems,

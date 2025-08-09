@@ -141,6 +141,13 @@ class DiscoverRemoteDataSource @Inject constructor(
             .joinToString(",")
             .ifEmpty { null }
 
+        val voteCountMin =
+            if (mediaListFilter.minVoteCount == 0 && mediaListFilter.includeNotRated.not()) {
+                1
+            } else {
+                mediaListFilter.minVoteCount
+            }
+
         return getResult {
             httpClient.get(urlString = "/3/discover/movie") {
                 parameter("page", page)
@@ -157,9 +164,9 @@ class DiscoverRemoteDataSource @Inject constructor(
                 parameter("sort_by", sortBy)
                 parameter("watch_region", region)
                 parameter("region", region)
-                parameter("vote_count.gte", mediaListFilter.minVoteCount)
-                parameter("vote_average.gte", mediaListFilter.minRating)
-                parameter("vote_average.lte", mediaListFilter.maxRating)
+                parameter("vote_count.gte", voteCountMin)
+                parameter("vote_average.gte", mediaListFilter.userScoreMin / 10)
+                parameter("vote_average.lte", mediaListFilter.userScoreMax / 10)
             }
         }
     }

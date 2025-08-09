@@ -12,13 +12,23 @@ sealed class MediaFilterEvent {
         val sortByOrder: SortByOrder
     ) : MediaFilterEvent()
 
-    data class SelectMonetizationType(val monetizationTypeList: List<SelectableItem>) : MediaFilterEvent()
+    data class SelectMonetizationType(val monetizationTypeList: List<SelectableItem>) :
+        MediaFilterEvent()
 
     data class SelectReleaseType(val releaseTypeList: List<SelectableItem>) : MediaFilterEvent()
 
-    data class SelectReleaseDateRange(val releaseDateFrom: LocalDate?, val releaseDateTo: LocalDate?) : MediaFilterEvent()
+    data class SelectReleaseDateRange(
+        val releaseDateFrom: LocalDate?,
+        val releaseDateTo: LocalDate?
+    ) : MediaFilterEvent()
 
-    data class SelectGenreNew(val genreList: List<SelectableItem>): MediaFilterEvent()
+    data class SelectGenreNew(val genreList: List<SelectableItem>) : MediaFilterEvent()
 
-    data object ApplyFilter: MediaFilterEvent()
+    data class SelectUserScoreRange(
+        val min: Int,
+        val max: Int,
+        val includeNotRated: Boolean
+    ) : MediaFilterEvent()
+
+    data object ApplyFilter : MediaFilterEvent()
 }

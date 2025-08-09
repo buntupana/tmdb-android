@@ -67,6 +67,10 @@ import androidx.navigation.compose.DialogNavigatorDestinationBuilder
 import androidx.navigation.get
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.HighScoreColor
+import com.buntupana.tmdb.core.ui.theme.LowScoreColor
+import com.buntupana.tmdb.core.ui.theme.MediumScoreColor
+import com.buntupana.tmdb.core.ui.theme.NoScoreColor
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.panabuntu.tmdb.core.common.model.Gender
 import kotlin.reflect.KType
@@ -383,6 +387,15 @@ fun SetSystemBarsColors(
                 window.navigationBarColor = navigationBarColor.toArgb()
             }
         }
+    }
+}
+
+fun getRatingColor(rating: Int): Color {
+    return when (rating) {
+        in 0..30 -> LowScoreColor
+        in 4..60 -> MediumScoreColor
+        in 7..100 -> HighScoreColor
+        else -> NoScoreColor
     }
 }
 

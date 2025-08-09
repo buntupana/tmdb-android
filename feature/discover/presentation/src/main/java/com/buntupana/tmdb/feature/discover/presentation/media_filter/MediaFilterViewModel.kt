@@ -21,9 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MediaFilterViewModel @Inject constructor() : ViewModel() {
 
-    var state by mutableStateOf(
-        MediaFilterState()
-    )
+    var state by mutableStateOf(MediaFilterState())
         private set
 
     private val _sideEffect = Channel<MediaFilterSideEffect>()
@@ -63,68 +61,17 @@ class MediaFilterViewModel @Inject constructor() : ViewModel() {
                     state = state.copy(genreList = event.genreList)
                 }
 
+                is MediaFilterEvent.SelectUserScoreRange -> {
+                    state = state.copy(
+                        minUserScore = event.min,
+                        maxUserScore = event.max,
+                        includeNotRated = event.includeNotRated
+                    )
+                }
+
                 MediaFilterEvent.ApplyFilter -> applyFilters()
             }
         }
-    }
-
-    private suspend fun applyFilters() {
-        val sortBy = when (state.sortBySelected) {
-            SortBySimple.POPULARITY -> {
-                when (state.sortByOrderSelected) {
-                    SortByOrder.ASCENDING -> SortBy.POPULARITY_ASC
-
-                    SortByOrder.DESCENDING -> SortBy.POPULARITY_DESC
-                }
-            }
-
-            SortBySimple.RATING -> {
-                when (state.sortByOrderSelected) {
-                    SortByOrder.ASCENDING -> SortBy.RATING_ASC
-
-                    SortByOrder.DESCENDING -> SortBy.RATING_DESC
-                }
-            }
-
-            SortBySimple.RELEASE_DATE -> {
-                when (state.sortByOrderSelected) {
-                    SortByOrder.ASCENDING -> SortBy.RELEASE_DATE_ASC
-
-                    SortByOrder.DESCENDING -> SortBy.RELEASE_DATE_DESC
-                }
-            }
-
-            SortBySimple.TITLE -> {
-                when (state.sortByOrderSelected) {
-                    SortByOrder.ASCENDING -> SortBy.TITLE_ASC
-
-                    SortByOrder.DESCENDING -> SortBy.TITLE_DESC
-                }
-            }
-        }
-
-        val releaseTypeList = state.releaseTypesList
-            .filter { it.isSelected }
-            .map { selectableItem -> ReleaseType.entries[selectableItem.id] }
-
-        val monetizationTypeList = state.availabilitiesList
-            .filter { it.isSelected }
-            .map { selectableItem -> MonetizationType.entries[selectableItem.id] }
-
-        val genreList = state.genreList
-            .filter { it.isSelected }
-            .map { selectableItem -> Genre.entries[selectableItem.id] }
-
-        val newFilter = mediaListFilter.copy(
-            sortBy = sortBy,
-            releaseDateFrom = state.releaseDateFrom,
-            releaseDateTo = state.releaseDateTo,
-            releaseTypeList = releaseTypeList,
-            monetizationTypeList = monetizationTypeList,
-            genreList = genreList
-        )
-
-        _sideEffect.send(MediaFilterSideEffect.ApplyFilters(newFilter))
     }
 
     private fun setupFilters(mediaListFilter: MediaListFilter) {
@@ -185,8 +132,73 @@ class MediaFilterViewModel @Inject constructor() : ViewModel() {
                     id = index,
                     isSelected = mediaListFilter.genreList.contains(genre)
                 )
-            }
+            },
+            minUserScore = mediaListFilter.userScoreMin,
+            maxUserScore = mediaListFilter.userScoreMax,
+            includeNotRated = mediaListFilter.includeNotRated
         )
+    }
+
+    private suspend fun applyFilters() {
+        val sortBy = when (state.sortBySelected) {
+            SortBySimple.POPULARITY -> {
+                when (state.sortByOrderSelected) {
+                    SortByOrder.ASCENDING -> SortBy.POPULARITY_ASC
+
+                    SortByOrder.DESCENDING -> SortBy.POPULARITY_DESC
+                }
+            }
+
+            SortBySimple.RATING -> {
+                when (state.sortByOrderSelected) {
+                    SortByOrder.ASCENDING -> SortBy.RATING_ASC
+
+                    SortByOrder.DESCENDING -> SortBy.RATING_DESC
+                }
+            }
+
+            SortBySimple.RELEASE_DATE -> {
+                when (state.sortByOrderSelected) {
+                    SortByOrder.ASCENDING -> SortBy.RELEASE_DATE_ASC
+
+                    SortByOrder.DESCENDING -> SortBy.RELEASE_DATE_DESC
+                }
+            }
+
+            SortBySimple.TITLE -> {
+                when (state.sortByOrderSelected) {
+                    SortByOrder.ASCENDING -> SortBy.TITLE_ASC
+
+                    SortByOrder.DESCENDING -> SortBy.TITLE_DESC
+                }
+            }
+        }
+
+        val releaseTypeList = state.releaseTypesList
+            .filter { it.isSelected }
+            .map { selectableItem -> ReleaseType.entries[selectableItem.id] }
+
+        val monetizationTypeList = state.availabilitiesList
+            .filter { it.isSelected }
+            .map { selectableItem -> MonetizationType.entries[selectableItem.id] }
+
+        val genreList = state.genreList
+            .filter { it.isSelected }
+            .map { selectableItem -> Genre.entries[selectableItem.id] }
+
+        val newFilter = mediaListFilter.copy(
+            sortBy = sortBy,
+            releaseDateFrom = state.releaseDateFrom,
+            releaseDateTo = state.releaseDateTo,
+            releaseTypeList = releaseTypeList,
+            monetizationTypeList = monetizationTypeList,
+            genreList = genreList,
+            userScoreMin = state.minUserScore,
+            userScoreMax = state.maxUserScore,
+            includeNotRated = state.includeNotRated
+        )
+
+        _sideEffect.send(MediaFilterSideEffect.ApplyFilters(newFilter))
     }
 
     private fun changeSortBy(sortBySimple: SortBySimple, sortByOrder: SortByOrder) {

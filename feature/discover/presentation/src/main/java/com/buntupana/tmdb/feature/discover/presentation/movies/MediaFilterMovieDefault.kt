@@ -9,6 +9,8 @@ object MediaFilterMovieDefault {
 
     val popular = MediaListFilter(
         sortBy = SortBy.POPULARITY_DESC,
+        releaseDateTo = LocalDate.now()
+            .plusMonths(6)
     )
 
     val nowPlaying = MediaListFilter(
@@ -29,6 +31,8 @@ object MediaFilterMovieDefault {
 
     val topRated = MediaListFilter(
         sortBy = SortBy.RATING_DESC,
+        releaseDateTo = LocalDate.now()
+            .plusMonths(6),
         minVoteCount = 300
     )
 }

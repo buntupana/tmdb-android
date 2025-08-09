@@ -39,6 +39,7 @@ import com.buntupana.tmdb.feature.discover.presentation.R
 import com.buntupana.tmdb.feature.discover.presentation.mapper.toSelectableItem
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.ReleaseDates
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.SortBy
+import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.UserScoreRangeSelector
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
@@ -108,6 +109,15 @@ fun MediaFilterDialog(
         onGenreSelectedListChanged = {
             viewModel.onEvent(MediaFilterEvent.SelectGenreNew(it))
         },
+        onUserScoreRangeSelected = { min, max, includeNotRated ->
+            viewModel.onEvent(
+                MediaFilterEvent.SelectUserScoreRange(
+                    min = min,
+                    max = max,
+                    includeNotRated = includeNotRated
+                )
+            )
+        },
         onApplyFilterClick = {
             viewModel.onEvent(MediaFilterEvent.ApplyFilter)
         }
@@ -125,6 +135,7 @@ fun MediaFilterContent(
     onReleaseTypeSelectedListChanged: (releaseTypeList: List<SelectableItem>) -> Unit,
     onSelectReleaseDateRange: (releaseDateFrom: LocalDate?, releaseDateTo: LocalDate?) -> Unit,
     onGenreSelectedListChanged: (genreList: List<SelectableItem>) -> Unit,
+    onUserScoreRangeSelected: (min: Int, max: Int, includeNotRated: Boolean) -> Unit,
     onApplyFilterClick: () -> Unit,
 ) {
 
@@ -204,6 +215,18 @@ fun MediaFilterContent(
                     showAll = false,
                     onSelectionChanged = onGenreSelectedListChanged
                 )
+
+                UserScoreRangeSelector(
+                    modifier = Modifier
+                        .padding(
+                            horizontal = Dimens.padding.horizontal,
+                            vertical = Dimens.padding.medium
+                        ),
+                    userScoreMin = state.minUserScore,
+                    userScoreMax = state.maxUserScore,
+                    includeNotRated = state.includeNotRated,
+                    onUserScoreRangeChanged = onUserScoreRangeSelected
+                )
             }
         }
     }
@@ -230,6 +253,7 @@ fun MediaFilterScreenPreview() {
         onReleaseTypeSelectedListChanged = {},
         onSelectReleaseDateRange = { _, _ -> },
         onGenreSelectedListChanged = {},
+        onUserScoreRangeSelected = { _, _, _ -> },
         onApplyFilterClick = {}
     )
 }

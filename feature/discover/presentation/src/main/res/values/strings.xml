@@ -69,4 +69,7 @@
     <string name="text_genre_war">War</string>
     <string name="text_genre_western">Western</string>
 
+    <string name="text_user_score">User Score</string>
+    <string name="text_include_not_rated">Include Not Rated</string>
+
 </resources>

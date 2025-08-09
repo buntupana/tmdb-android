@@ -156,7 +156,7 @@ class DiscoverRemoteDataSource @Inject constructor(
                     value = monetizationTypes
                 )
                 parameter("with_release_type", releaseTypes)
-                parameter("with_runtime.lte", mediaListFilter.runtime)
+                parameter("with_runtime.lte", mediaListFilter.runtimeMin)
                 parameter("language", mediaListFilter.language)
                 parameter("release_date.lte", releaseDateTo)
                 parameter("release_date.gte", releaseDateFrom)
@@ -167,6 +167,8 @@ class DiscoverRemoteDataSource @Inject constructor(
                 parameter("vote_count.gte", voteCountMin)
                 parameter("vote_average.gte", mediaListFilter.userScoreMin / 10)
                 parameter("vote_average.lte", mediaListFilter.userScoreMax / 10)
+                parameter("with_runtime.gte", mediaListFilter.runtimeMin)
+                parameter("with_runtime.lte", mediaListFilter.runtimeMax)
             }
         }
     }

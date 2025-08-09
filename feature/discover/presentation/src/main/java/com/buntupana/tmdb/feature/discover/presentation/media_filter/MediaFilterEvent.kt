@@ -32,5 +32,7 @@ sealed class MediaFilterEvent {
 
     data class SelectMinUserVotes(val minUserVotes: Int) : MediaFilterEvent()
 
+    data class SelectRuntimeRange(val min: Int, val max: Int) : MediaFilterEvent()
+
     data object ApplyFilter : MediaFilterEvent()
 }

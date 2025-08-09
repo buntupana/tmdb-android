@@ -35,6 +35,8 @@ fun RangeSliderCustom(
     onValueChange: (startValue: Int, endValue: Int) -> Unit
 ) {
 
+    val startValue = if (startValue > endValue) endValue else startValue
+    val endValue = if (endValue > valueRange.last) valueRange.last else endValue
     val value = startValue.toFloat()..endValue.toFloat()
 
     RangeSlider(
@@ -115,18 +117,18 @@ fun RangeSliderCustom(
 @Composable
 private fun RangeSliderCustomPreview() {
 
-    var minDefaultValue by remember { mutableIntStateOf(0) }
-    var maxDefaultValue by remember { mutableIntStateOf(80) }
+    var minDefaultValue by remember { mutableIntStateOf(10) }
+    var maxDefaultValue by remember { mutableIntStateOf(800) }
 
     RangeSliderCustom(
         modifier = Modifier.fillMaxWidth(),
         startValue = minDefaultValue,
         endValue = maxDefaultValue,
-        steps = 9,
+        steps = 25,
         onValueChange = { minValue, maxValue ->
             minDefaultValue = minValue
             maxDefaultValue = maxValue
         },
-        valueRange = 0..100,
+        valueRange = 0..390,
     )
 }

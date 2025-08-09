@@ -38,6 +38,8 @@ fun SliderCustom(
     selectedBackgroundBrush: Brush? = null
 ) {
 
+    val value = if (value > valueRange.last) valueRange.last else value
+
     Slider(
         modifier = modifier.fillMaxWidth(),
         enabled = enabled,
@@ -88,7 +90,7 @@ fun SliderCustom(
                             .background(Color.Black.copy(alpha = 0.2f))
                     ) {
                         SliderValueIndicators(
-                            indicatorCount = (endWeight *  (steps + 1)).roundToInt()
+                            indicatorCount = (endWeight * (steps + 1)).roundToInt()
                         )
                     }
                 }
@@ -105,13 +107,13 @@ fun SliderCustom(
 @Composable
 private fun SliderCustomPreview() {
 
-    var value by remember { mutableIntStateOf(30) }
+    var value by remember { mutableIntStateOf(300) }
 
     SliderCustom(
         modifier = Modifier,
         value = value,
         steps = 9,
-        valueRange =  0..500,
+        valueRange = 0..500,
         onValueChange = { newValue ->
             value = newValue
         }

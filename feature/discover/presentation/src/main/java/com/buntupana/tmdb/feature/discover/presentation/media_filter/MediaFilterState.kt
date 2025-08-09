@@ -14,5 +14,7 @@ data class MediaFilterState(
     val minUserScore: Int = 0,
     val maxUserScore: Int = 100,
     val includeNotRated: Boolean = true,
-    val minUserVotes: Int = 0
+    val minUserVotes: Int = 0,
+    val runtimeMin: Int = 0,
+    val runtimeMax: Int = 390
 )

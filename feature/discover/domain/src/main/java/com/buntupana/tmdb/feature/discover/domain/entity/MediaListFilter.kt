@@ -14,5 +14,6 @@ data class MediaListFilter(
     val userScoreMax: Int = 100,
     val includeNotRated: Boolean = true,
     val minUserVotes: Int = 0,
-    val runtime: Long? = null
+    val runtimeMin: Int = 0,
+    val runtimeMax: Int = 390
 )

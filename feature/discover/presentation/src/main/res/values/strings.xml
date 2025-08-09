@@ -72,5 +72,6 @@
     <string name="text_user_score">User Score</string>
     <string name="text_include_not_rated">Include Not Rated</string>
     <string name="text_min_user_votes">Minimum User Votes</string>
+    <string name="text_runtime">Runtime</string>
 
 </resources>

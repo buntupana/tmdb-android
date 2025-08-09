@@ -39,6 +39,7 @@ import com.buntupana.tmdb.feature.discover.presentation.R
 import com.buntupana.tmdb.feature.discover.presentation.mapper.toSelectableItem
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.MinUserVotes
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.ReleaseDates
+import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.RuntimeSelector
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.SortBy
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.UserScoreRangeSelector
 import kotlinx.coroutines.launch
@@ -125,6 +126,9 @@ fun MediaFilterDialog(
         onMinUserVotesChanged = {
             viewModel.onEvent(MediaFilterEvent.SelectMinUserVotes(it))
         },
+        onRuntimeRangeSelected = { min, max ->
+            viewModel.onEvent(MediaFilterEvent.SelectRuntimeRange(min, max))
+        },
         onApplyFilterClick = {
             viewModel.onEvent(MediaFilterEvent.ApplyFilter)
         }
@@ -144,6 +148,7 @@ fun MediaFilterContent(
     onGenreSelectedListChanged: (genreList: List<SelectableItem>) -> Unit,
     onUserScoreRangeSelected: (min: Int, max: Int, includeNotRated: Boolean) -> Unit,
     onMinUserVotesChanged: (minUserVotes: Int) -> Unit,
+    onRuntimeRangeSelected: (min: Int, max: Int) -> Unit,
     onApplyFilterClick: () -> Unit,
 ) {
 
@@ -245,6 +250,17 @@ fun MediaFilterContent(
                     minUserVotes = state.minUserVotes,
                     onValueChange = onMinUserVotesChanged
                 )
+
+                RuntimeSelector(
+                    modifier = Modifier
+                        .padding(
+                            horizontal = Dimens.padding.horizontal,
+                            vertical = Dimens.padding.small
+                        ),
+                    runtimeStart = state.runtimeMin,
+                    runtimeEnd = state.runtimeMax,
+                    onValueChanged = onRuntimeRangeSelected
+                )
             }
         }
     }
@@ -273,6 +289,7 @@ fun MediaFilterScreenPreview() {
         onGenreSelectedListChanged = {},
         onUserScoreRangeSelected = { _, _, _ -> },
         onMinUserVotesChanged = {},
+        onRuntimeRangeSelected = { _, _ -> },
         onApplyFilterClick = {}
     )
 }

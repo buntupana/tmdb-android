@@ -73,6 +73,10 @@ class MediaFilterViewModel @Inject constructor() : ViewModel() {
                     state = state.copy(minUserVotes = event.minUserVotes)
                 }
 
+                is MediaFilterEvent.SelectRuntimeRange -> {
+                    state = state.copy(runtimeMin = event.min, runtimeMax = event.max)
+                }
+
                 MediaFilterEvent.ApplyFilter -> applyFilters()
             }
         }
@@ -140,7 +144,9 @@ class MediaFilterViewModel @Inject constructor() : ViewModel() {
             minUserScore = mediaListFilter.userScoreMin,
             maxUserScore = mediaListFilter.userScoreMax,
             includeNotRated = mediaListFilter.includeNotRated,
-            minUserVotes = mediaListFilter.minUserVotes
+            minUserVotes = mediaListFilter.minUserVotes,
+            runtimeMin = mediaListFilter.runtimeMin,
+            runtimeMax = mediaListFilter.runtimeMax
         )
     }
 
@@ -201,7 +207,9 @@ class MediaFilterViewModel @Inject constructor() : ViewModel() {
             userScoreMin = state.minUserScore,
             userScoreMax = state.maxUserScore,
             includeNotRated = state.includeNotRated,
-            minUserVotes = state.minUserVotes
+            minUserVotes = state.minUserVotes,
+            runtimeMin = state.runtimeMin,
+            runtimeMax = state.runtimeMax,
         )
 
         _sideEffect.send(MediaFilterSideEffect.ApplyFilters(newFilter))

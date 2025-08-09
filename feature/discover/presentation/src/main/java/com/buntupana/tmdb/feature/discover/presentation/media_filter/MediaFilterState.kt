@@ -13,5 +13,6 @@ data class MediaFilterState(
     val genreList: List<SelectableItem> = emptyList(),
     val minUserScore: Int = 0,
     val maxUserScore: Int = 100,
-    val includeNotRated: Boolean = true
+    val includeNotRated: Boolean = true,
+    val minUserVotes: Int = 0
 )

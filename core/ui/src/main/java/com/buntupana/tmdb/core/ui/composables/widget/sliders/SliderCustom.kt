@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.getRatingColor
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,33 +56,43 @@ fun SliderCustom(
                     .fillMaxWidth()
                     .height(16.dp)
             ) {
-                Box(
-                    Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth(sliderState.value / sliderState.valueRange.endInclusive)
-                        .clip(RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp))
-                        .then(
-                            if (selectedBackgroundBrush != null) {
-                                Modifier.background(selectedBackgroundBrush)
-                            } else {
-                                Modifier.background(SecondaryColor)
-                            }
-                        )
-                ) {
-                    SliderValueIndicators(indicatorCount = sliderState.value.toInt() / (steps + 1))
+
+                val startWeight = value.toFloat() / valueRange.last.toFloat()
+
+                if (startWeight > 0) {
+                    Box(
+                        Modifier
+                            .fillMaxHeight()
+                            .weight(startWeight)
+                            .clip(RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp))
+                            .then(
+                                if (selectedBackgroundBrush != null) {
+                                    Modifier.background(selectedBackgroundBrush)
+                                } else {
+                                    Modifier.background(SecondaryColor)
+                                }
+                            )
+                    ) {
+                        SliderValueIndicators(indicatorCount = (startWeight * (steps + 1)).roundToInt())
+                    }
                 }
 
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp))
-                        .background(Color.Black.copy(alpha = 0.2f))
-                ) {
-                    SliderValueIndicators(
-                        indicatorCount = (sliderState.valueRange.endInclusive.toInt() - sliderState.value.toInt()) / (steps + 1)
-                    )
+                val endWeight = 1f - startWeight
+
+                if (endWeight > 0) {
+                    Box(
+                        Modifier
+                            .weight(endWeight)
+                            .fillMaxHeight()
+                            .clip(RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp))
+                            .background(Color.Black.copy(alpha = 0.2f))
+                    ) {
+                        SliderValueIndicators(
+                            indicatorCount = (endWeight *  (steps + 1)).roundToInt()
+                        )
+                    }
                 }
+
             }
         },
         colors = SliderDefaults.colors(
@@ -100,7 +111,7 @@ private fun SliderCustomPreview() {
         modifier = Modifier,
         value = value,
         steps = 9,
-        valueRange =  0..100,
+        valueRange =  0..500,
         onValueChange = { newValue ->
             value = newValue
         }

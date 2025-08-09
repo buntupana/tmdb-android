@@ -69,6 +69,10 @@ class MediaFilterViewModel @Inject constructor() : ViewModel() {
                     )
                 }
 
+                is MediaFilterEvent.SelectMinUserVotes -> {
+                    state = state.copy(minUserVotes = event.minUserVotes)
+                }
+
                 MediaFilterEvent.ApplyFilter -> applyFilters()
             }
         }
@@ -135,7 +139,8 @@ class MediaFilterViewModel @Inject constructor() : ViewModel() {
             },
             minUserScore = mediaListFilter.userScoreMin,
             maxUserScore = mediaListFilter.userScoreMax,
-            includeNotRated = mediaListFilter.includeNotRated
+            includeNotRated = mediaListFilter.includeNotRated,
+            minUserVotes = mediaListFilter.minUserVotes
         )
     }
 
@@ -195,7 +200,8 @@ class MediaFilterViewModel @Inject constructor() : ViewModel() {
             genreList = genreList,
             userScoreMin = state.minUserScore,
             userScoreMax = state.maxUserScore,
-            includeNotRated = state.includeNotRated
+            includeNotRated = state.includeNotRated,
+            minUserVotes = state.minUserVotes
         )
 
         _sideEffect.send(MediaFilterSideEffect.ApplyFilters(newFilter))

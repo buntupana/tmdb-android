@@ -33,6 +33,6 @@ object MediaFilterMovieDefault {
         sortBy = SortBy.RATING_DESC,
         releaseDateTo = LocalDate.now()
             .plusMonths(6),
-        minVoteCount = 300
+        minUserVotes = 300
     )
 }

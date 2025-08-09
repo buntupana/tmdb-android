@@ -37,6 +37,7 @@ import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.ReleaseType
 import com.buntupana.tmdb.feature.discover.presentation.R
 import com.buntupana.tmdb.feature.discover.presentation.mapper.toSelectableItem
+import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.MinUserVotes
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.ReleaseDates
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.SortBy
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.UserScoreRangeSelector
@@ -68,11 +69,14 @@ fun MediaFilterDialog(
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             launch {
                 viewModel.sideEffect.collect { sideEffect ->
-                    Timber.d("SignOutDialog: sideEffect = $sideEffect")
+                    Timber.d("MediaFilterDialog: sideEffect = $sideEffect")
                     when (sideEffect) {
                         is MediaFilterSideEffect.ApplyFilters -> {
-                            onApplyFilterClick(sideEffect.mediaListFilter)
-                            onDismiss()
+                            coroutineScope.launch {
+                                onApplyFilterClick(sideEffect.mediaListFilter)
+                                sheetState.hide()
+                                onDismiss()
+                            }
                         }
                     }
                 }
@@ -118,6 +122,9 @@ fun MediaFilterDialog(
                 )
             )
         },
+        onMinUserVotesChanged = {
+            viewModel.onEvent(MediaFilterEvent.SelectMinUserVotes(it))
+        },
         onApplyFilterClick = {
             viewModel.onEvent(MediaFilterEvent.ApplyFilter)
         }
@@ -136,6 +143,7 @@ fun MediaFilterContent(
     onSelectReleaseDateRange: (releaseDateFrom: LocalDate?, releaseDateTo: LocalDate?) -> Unit,
     onGenreSelectedListChanged: (genreList: List<SelectableItem>) -> Unit,
     onUserScoreRangeSelected: (min: Int, max: Int, includeNotRated: Boolean) -> Unit,
+    onMinUserVotesChanged: (minUserVotes: Int) -> Unit,
     onApplyFilterClick: () -> Unit,
 ) {
 
@@ -227,6 +235,16 @@ fun MediaFilterContent(
                     includeNotRated = state.includeNotRated,
                     onUserScoreRangeChanged = onUserScoreRangeSelected
                 )
+
+                MinUserVotes(
+                    modifier = Modifier
+                        .padding(
+                            horizontal = Dimens.padding.horizontal,
+                            vertical = Dimens.padding.small
+                        ),
+                    minUserVotes = state.minUserVotes,
+                    onValueChange = onMinUserVotesChanged
+                )
             }
         }
     }
@@ -254,6 +272,7 @@ fun MediaFilterScreenPreview() {
         onSelectReleaseDateRange = { _, _ -> },
         onGenreSelectedListChanged = {},
         onUserScoreRangeSelected = { _, _, _ -> },
+        onMinUserVotesChanged = {},
         onApplyFilterClick = {}
     )
 }

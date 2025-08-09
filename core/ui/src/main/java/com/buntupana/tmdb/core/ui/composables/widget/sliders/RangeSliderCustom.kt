@@ -68,7 +68,7 @@ fun RangeSliderCustom(
                         Modifier
                             .fillMaxHeight()
                             .fillMaxWidth()
-                            .weight(value.start / valueRange.endInclusive)
+                            .weight(startWeight)
                             .clip(RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp))
                             .background(color = Color.Black.copy(alpha = 0.2f))
                     ) {
@@ -116,7 +116,7 @@ fun RangeSliderCustom(
 private fun RangeSliderCustomPreview() {
 
     var minDefaultValue by remember { mutableIntStateOf(0) }
-    var maxDefaultValue by remember { mutableIntStateOf(100) }
+    var maxDefaultValue by remember { mutableIntStateOf(80) }
 
     RangeSliderCustom(
         modifier = Modifier.fillMaxWidth(),

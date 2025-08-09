@@ -142,10 +142,10 @@ class DiscoverRemoteDataSource @Inject constructor(
             .ifEmpty { null }
 
         val voteCountMin =
-            if (mediaListFilter.minVoteCount == 0 && mediaListFilter.includeNotRated.not()) {
+            if (mediaListFilter.minUserVotes == 0 && mediaListFilter.includeNotRated.not()) {
                 1
             } else {
-                mediaListFilter.minVoteCount
+                mediaListFilter.minUserVotes
             }
 
         return getResult {

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.widget.sliders.RangeSliderCustom
+import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.feature.discover.presentation.R
 import com.panabuntu.tmdb.core.common.util.Const
@@ -57,9 +59,10 @@ fun UserScoreRangeSelector(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.End
         ) {
             Text(
+                modifier = Modifier.padding(horizontal = Dimens.padding.horizontal),
                 text = stringResource(R.string.text_include_not_rated),
                 style = MaterialTheme.typography.bodyLarge
             )

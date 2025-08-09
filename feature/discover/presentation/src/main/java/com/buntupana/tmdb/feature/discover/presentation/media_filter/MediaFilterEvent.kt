@@ -30,5 +30,7 @@ sealed class MediaFilterEvent {
         val includeNotRated: Boolean
     ) : MediaFilterEvent()
 
+    data class SelectMinUserVotes(val minUserVotes: Int) : MediaFilterEvent()
+
     data object ApplyFilter : MediaFilterEvent()
 }

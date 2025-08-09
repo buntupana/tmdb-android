@@ -43,7 +43,7 @@ fun RangeSliderCustom(
         modifier = modifier,
         value = value,
         onValueChange = {
-            onValueChange(it.start.toInt(), it.endInclusive.toInt())
+            onValueChange(it.start.roundToInt(), it.endInclusive.roundToInt())
         },
         enabled = enabled,
         steps = steps,
@@ -117,8 +117,8 @@ fun RangeSliderCustom(
 @Composable
 private fun RangeSliderCustomPreview() {
 
-    var minDefaultValue by remember { mutableIntStateOf(10) }
-    var maxDefaultValue by remember { mutableIntStateOf(800) }
+    var minDefaultValue by remember { mutableIntStateOf(0) }
+    var maxDefaultValue by remember { mutableIntStateOf(390) }
 
     RangeSliderCustom(
         modifier = Modifier.fillMaxWidth(),

@@ -13,7 +13,7 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.discover.presentation.R
 
 @Composable
-fun MinUserVotes(
+fun MinUserVotesSelector(
     modifier: Modifier = Modifier,
     minUserVotes: Int,
     onValueChange: (minUserVotes: Int) -> Unit
@@ -40,8 +40,8 @@ fun MinUserVotes(
 
 @Preview(showBackground = true)
 @Composable
-private fun MinUserVotesPreview() {
-    MinUserVotes(
+private fun MinUserVotesSelectorPreview() {
+    MinUserVotesSelector(
         minUserVotes = 100,
         onValueChange = {}
     )

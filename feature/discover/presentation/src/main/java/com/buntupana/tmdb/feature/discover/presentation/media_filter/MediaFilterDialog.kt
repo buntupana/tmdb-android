@@ -37,10 +37,10 @@ import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.ReleaseType
 import com.buntupana.tmdb.feature.discover.presentation.R
 import com.buntupana.tmdb.feature.discover.presentation.mapper.toSelectableItem
-import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.MinUserVotes
-import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.ReleaseDates
+import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.MinUserVotesSelector
+import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.ReleaseDatesSelector
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.RuntimeSelector
-import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.SortBy
+import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.SortBySelector
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.UserScoreRangeSelector
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -180,7 +180,7 @@ fun MediaFilterContent(
                 modifier = Modifier.verticalScroll(state = rememberScrollState())
             ) {
 
-                SortBy(
+                SortBySelector(
                     modifier = Modifier
                         .padding(
                             horizontal = Dimens.padding.horizontal,
@@ -204,7 +204,7 @@ fun MediaFilterContent(
                     onSelectionChanged = onAvailabilityListChanged
                 )
 
-                ReleaseDates(
+                ReleaseDatesSelector(
                     modifier = Modifier
                         .padding(
                             horizontal = Dimens.padding.horizontal,
@@ -241,7 +241,7 @@ fun MediaFilterContent(
                     onUserScoreRangeChanged = onUserScoreRangeSelected
                 )
 
-                MinUserVotes(
+                MinUserVotesSelector(
                     modifier = Modifier
                         .padding(
                             horizontal = Dimens.padding.horizontal,

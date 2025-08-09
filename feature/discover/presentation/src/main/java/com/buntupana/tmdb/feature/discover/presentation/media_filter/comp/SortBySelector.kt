@@ -18,7 +18,7 @@ import com.buntupana.tmdb.feature.discover.presentation.media_filter.SortByOrder
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.SortBySimple
 
 @Composable
-fun SortBy(
+fun SortBySelector(
     modifier: Modifier = Modifier,
     sortBySelected: SortBySimple,
     sortByOrderSelected: SortByOrder,
@@ -77,8 +77,8 @@ fun SortBy(
 
 @Preview(showBackground = true)
 @Composable
-private fun SortByPreview() {
-    SortBy(
+private fun SortBySelectorPreview() {
+    SortBySelector(
         modifier = Modifier,
         sortBySelected = SortBySimple.POPULARITY,
         sortByOrderSelected = SortByOrder.DESCENDING,

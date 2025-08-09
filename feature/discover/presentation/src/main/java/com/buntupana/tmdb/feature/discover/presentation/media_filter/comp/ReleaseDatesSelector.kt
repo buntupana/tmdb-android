@@ -16,7 +16,7 @@ import java.time.LocalDate
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
-fun ReleaseDates(
+fun ReleaseDatesSelector(
     modifier: Modifier = Modifier,
     releaseTypeList: List<SelectableItem>,
     releaseDateFrom: LocalDate?,
@@ -58,8 +58,8 @@ fun ReleaseDates(
 
 @Preview(showBackground = true)
 @Composable
-private fun ReleaseDatesPreview() {
-    ReleaseDates(
+private fun ReleaseDatesSelectorPreview() {
+    ReleaseDatesSelector(
         modifier = Modifier,
         releaseTypeList = listOf(SelectableItem(1, UiText.StringResource(R.string.text_release_type_theatrical), true)),
         releaseDateFrom = LocalDate.now(),

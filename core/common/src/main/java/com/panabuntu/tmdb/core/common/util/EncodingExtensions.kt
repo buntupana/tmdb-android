@@ -1,26 +1,21 @@
 package com.panabuntu.tmdb.core.common.util
 
-import java.net.URLDecoder
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
+import android.util.Base64
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.isAccessible
 
 
-private fun String.encode(): String {
-    return URLEncoder.encode(this, StandardCharsets.UTF_8.toString())
+fun String.encode(): String {
+    return Base64.encodeToString(this.toByteArray(), Base64.URL_SAFE)
 }
 
-private fun String.decode(): String {
-    return URLDecoder.decode(this, StandardCharsets.UTF_8.toString())
+fun String.decode(): String {
+    return String(Base64.decode(this, Base64.URL_SAFE))
 }
-
-// Regular expression to match URLs
-private val navigationRegex = Regex("((?:https?|ftp|file|content|android\\.resource|tel)://\\S+|[a-zA-Z]:\\\\(?:[^\\\\/:*?\"<>|\\r\\n]+\\\\)*[^\\\\/:*?\"<>|\\r\\n]*|/(?:[^\\s/]+/?)+)")
 
 // Recursive extension function to encode all strings, including in lists, maps, and nested objects
-fun <T : Any> T.encodeAllUrls(): T {
+fun <T : Any> T.encodeAllStrings(): T {
     val params = mutableMapOf<String, Any?>()
 
     // Process each property in the class
@@ -39,7 +34,8 @@ fun <T : Any> T.encodeAllUrls(): T {
                 value.map { item ->
                     when (item) {
                         is String -> item.encode()
-                        is Any -> item.encodeAllUrls() // Recursively encode nested objects in lists
+                        is Enum<*> -> item // Keep Enum items as-is
+                        is Any -> item.encodeAllStrings() // Recursively encode nested objects in lists
                         else -> item // Keep non-String, non-object items as-is
                     }
                 }
@@ -49,7 +45,8 @@ fun <T : Any> T.encodeAllUrls(): T {
                 value.map { item ->
                     when (item) {
                         is String -> item.encode()
-                        is Any -> item.encodeAllUrls() // Recursively encode nested objects in lists
+                        is Enum<*> -> item // Keep Enum items as-is
+                        is Any -> item.encodeAllStrings() // Recursively encode nested objects in lists
                         else -> item // Keep non-String, non-object items as-is
                     }
                 }
@@ -59,14 +56,15 @@ fun <T : Any> T.encodeAllUrls(): T {
                 value.mapValues { (_, mapValue) ->
                     when (mapValue) {
                         is String -> mapValue.encode()
-                        is Any -> mapValue.encodeAllUrls() // Recursively encode nested objects in maps
+                        is Enum<*> -> mapValue // Keep Enum items as-is
+                        is Any -> mapValue.encodeAllStrings() // Recursively encode nested objects in maps
                         else -> mapValue // Keep non-String, non-object items as-is
                     }
                 }
             }
             // Recursively encode other nested data class objects
             value != null && value::class.isData -> {
-                value.encodeAllUrls()
+                value.encodeAllStrings()
             }
             else -> value // For other types, keep the value unchanged
         }
@@ -98,6 +96,7 @@ fun <T : Any> T.decodeAllStrings(): T {
                 value.map { item ->
                     when (item) {
                         is String -> item.decode() // Decode strings in lists
+                        is Enum<*> -> item // Keep Enum items as-is
                         is Any -> item.decodeAllStrings() // Recursively decode nested objects in lists
                         else -> item // Keep non-String, non-object items as-is
                     }
@@ -108,6 +107,7 @@ fun <T : Any> T.decodeAllStrings(): T {
                 value.map { item ->
                     when (item) {
                         is String -> item.decode() // Decode strings in lists
+                        is Enum<*> -> item // Keep Enum items as-is
                         is Any -> item.decodeAllStrings() // Recursively decode nested objects in lists
                         else -> item // Keep non-String, non-object items as-is
                     }
@@ -118,6 +118,7 @@ fun <T : Any> T.decodeAllStrings(): T {
                 value.mapValues { (_, mapValue) ->
                     when (mapValue) {
                         is String -> mapValue.decode() // Decode strings in maps
+                        is Enum<*> -> mapValue // Keep Enum items as-is
                         is Any -> mapValue.decodeAllStrings() // Recursively decode nested objects in maps
                         else -> mapValue // Keep non-String, non-object items as-is
                     }

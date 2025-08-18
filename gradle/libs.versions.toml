@@ -10,23 +10,23 @@ target_sdk = "36"
 min_sdk = "21"
 
 #Kotlin
-kotlin = "2.2.0"
-ksp = "2.2.0-2.0.2"
-ktx = '1.16.0'
+kotlin = "2.2.10"
+ksp = "2.2.10-2.0.2"
+ktx = '1.17.0'
 work = '2.4.0'
 
 #Compose
-composeBom = "2025.06.01"
+composeBom = "2025.08.00"
 compose_activity = "1.10.1"
 compose_constraint = '1.1.01'
-compose_foundation = "1.8.3"
+compose_foundation = "1.9.0"
 compose_paging = "3.3.6"
-compose_lifecycle = "2.9.1"
+compose_lifecycle = "2.9.2"
 
 #Android dependencies
-lifecycle = "2.9.1"
+lifecycle = "2.9.2"
 room = "2.7.2"
-navigation = "2.9.1"
+navigation = "2.9.3"
 palette = '1.0.0'
 
 #Accompanist
@@ -39,11 +39,11 @@ material3 = "1.4.0-beta02"
 firebase = '28.1.0'
 
 #Di
-dagger = "2.56.2"
+dagger = "2.57"
 dagger_android = "1.2.0"
 
 #Ktor
-ktor_bom = "3.1.3"
+ktor_bom = "3.2.3"
 
 #Storage
 datastore = "1.1.7"
@@ -55,26 +55,26 @@ moshi = "1.15.2"
 desugar_jdk = "2.1.5"
 secrets = "2.0.1"
 coil = "2.7.0"
-browser = "1.8.0"
+browser = "1.9.0"
 
 #Testing
 junit = "4.13.2"
-junitVersion = "1.2.1"
+junitVersion = "1.3.0"
 junit_android = '1.1.3'
 test_core = '1.4.0'
-espresso = '3.6.1'
+espresso = '3.7.0'
 test_runner = '1.4.0'
 mockito = '4.5.0'
 
 # Plugins
-agp = "8.11.1"
+agp = "8.12.0"
 uiToolingPreviewAndroid = "1.6.7"
 uiTooling = "1.7.3"
 appcompat = "1.7.1"
 material = "1.12.0"
-jetbrainsKotlinJvm = "2.2.0"
-uiTextGoogleFonts = "1.8.3"
-uiGraphicsAndroid = "1.8.3"
+jetbrainsKotlinJvm = "2.2.10"
+uiTextGoogleFonts = "1.9.0"
+uiGraphicsAndroid = "1.9.0"
 
 [libraries]
 

@@ -33,7 +33,7 @@ palette = '1.0.0'
 accompanist = "0.36.0"
 
 #Material Design
-material3 = "1.4.0-alpha17"
+material3 = "1.4.0-beta02"
 
 #Firebase
 firebase = '28.1.0'

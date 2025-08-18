@@ -35,6 +35,7 @@ import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isLight
 import com.buntupana.tmdb.core.ui.util.isVisible
 import com.buntupana.tmdb.core.ui.util.mediaItemMovie
+import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.account.presentation.R
 import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.comp.WatchlistFavoritePager
@@ -135,7 +136,7 @@ fun WatchlistContent(
         ) { MediaType.entries.size }
 
         Column(
-            modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
+            modifier = Modifier.paddingValues(top = { paddingValues.calculateTopPadding() })
         ) {
 
             WatchlistFavoriteTabRow(

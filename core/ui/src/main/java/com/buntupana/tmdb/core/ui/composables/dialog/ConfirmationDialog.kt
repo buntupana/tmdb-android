@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -171,8 +170,9 @@ private fun ConfirmationDialogPreview() {
     ConfirmationDialog(
         sheetState = SheetState(
             skipPartiallyExpanded = true,
-            LocalDensity.current,
-            initialValue = SheetValue.Expanded
+            positionalThreshold = { 0f },
+            initialValue = SheetValue.Expanded,
+            velocityThreshold = { 0f }
         ),
         title = "Dialog Title",
         description = "Dialog Description",

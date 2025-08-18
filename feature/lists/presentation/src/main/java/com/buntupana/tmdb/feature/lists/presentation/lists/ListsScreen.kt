@@ -29,6 +29,7 @@ import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isLight
 import com.buntupana.tmdb.core.ui.util.isVisible
+import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListItemVertical
 import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListSubBar
@@ -85,13 +86,25 @@ fun ListsContent(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopBarTitle(
-                title = stringResource(R.string.text_lists),
-                backgroundColor = PrimaryColor,
-                onBackClick = onBackClick,
-                onSearchClick = onSearchClick,
-                scrollBehavior = scrollBehavior
-            )
+            Column {
+                TopBarTitle(
+                    title = stringResource(R.string.text_lists),
+                    backgroundColor = PrimaryColor,
+                    onBackClick = onBackClick,
+                    onSearchClick = onSearchClick,
+                    scrollBehavior = scrollBehavior
+                )
+                ListSubBar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .isVisible(
+                            isVisible = state.isError.not() && state.isLoading.not(),
+                            animateSize = true
+                        ),
+                    listItemTotalCount = state.listItemTotalCount,
+                    onCreateListClick = onCreateListClick
+                )
+            }
         }
     ) { paddingValues ->
 
@@ -119,21 +132,8 @@ fun ListsContent(
 
         Column(
             modifier = Modifier
-                .padding(
-                    top = paddingValues.calculateTopPadding()
-                )
+                .paddingValues(top = { paddingValues.calculateTopPadding() })
         ) {
-
-            ListSubBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .isVisible(
-                        isVisible = state.isError.not() && state.isLoading.not(),
-                        animateSize = true
-                    ),
-                listItemTotalCount = state.listItemTotalCount,
-                onCreateListClick = onCreateListClick
-            )
 
             userListDetailsList ?: return@Scaffold
 
@@ -142,7 +142,7 @@ fun ListsContent(
                     .padding(horizontal = Dimens.padding.small)
                     .fillMaxSize(),
                 topPadding = Dimens.padding.small,
-                bottomPadding = Dimens.padding.small + paddingValues.calculateBottomPadding(),
+                bottomPadding = { Dimens.padding.small + paddingValues.calculateBottomPadding() },
                 animateItem = true,
                 itemList = userListDetailsList,
                 noResultContent = {

@@ -32,6 +32,7 @@ import com.buntupana.tmdb.core.ui.composables.HeaderSimple
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
 import com.buntupana.tmdb.core.ui.util.isLight
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
@@ -141,7 +142,6 @@ private fun EpisodesDetailContent(
         }
     ) { paddingValues ->
 
-
         if (state.isLoading) {
 
             Box(
@@ -155,7 +155,7 @@ private fun EpisodesDetailContent(
         if (state.isGetEpisodesError) {
             ErrorAndRetry(
                 modifier = Modifier
-                    .padding(vertical = paddingValues.calculateTopPadding() +  Dimens.errorAndRetryTopPadding)
+                    .padding(vertical = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding)
                     .fillMaxWidth(),
                 errorMessage = stringResource(id = RCore.string.message_loading_content_error),
                 onRetryClick = onRetryClick
@@ -171,7 +171,7 @@ private fun EpisodesDetailContent(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = paddingValues.calculateTopPadding())
+                    .paddingValues(top = { paddingValues.calculateTopPadding() })
             ) {
 
                 if (state.episodeList.isNullOrEmpty()) return@LazyColumn
@@ -212,7 +212,7 @@ private fun EpisodesDetailContent(
                     Spacer(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = Dimens.padding.small + paddingValues.calculateBottomPadding())
+                            .paddingValues(bottom = { Dimens.padding.small + paddingValues.calculateBottomPadding() })
                     )
                 }
             }

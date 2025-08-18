@@ -27,6 +27,7 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
 import com.buntupana.tmdb.core.ui.util.isLight
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
@@ -136,7 +137,7 @@ fun PersonDetailContent(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = paddingValues.calculateTopPadding())
+                    .paddingValues(top = { paddingValues.calculateTopPadding() })
             ) {
 
                 if (state.personDetails == null) {

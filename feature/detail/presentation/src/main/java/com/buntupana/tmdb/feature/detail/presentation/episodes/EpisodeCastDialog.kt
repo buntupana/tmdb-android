@@ -21,7 +21,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -115,8 +114,9 @@ private fun EpisodeCastPreview() {
     EpisodeCastContent(
         sheetState = SheetState(
             skipPartiallyExpanded = true,
-            LocalDensity.current,
-            initialValue = SheetValue.Expanded
+            positionalThreshold = { 0f },
+            initialValue = SheetValue.Expanded,
+            velocityThreshold = { 0f }
         ),
         episode = episodeSample,
         onDismiss = {},

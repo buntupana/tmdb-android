@@ -36,6 +36,7 @@ import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
 import com.buntupana.tmdb.core.ui.util.isLight
+import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.presentation.cast.comp.castList
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
@@ -143,7 +144,7 @@ fun CastDetailContent(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = paddingValues.calculateTopPadding())
+                    .paddingValues(top = { paddingValues.calculateTopPadding() })
             ) {
                 castList(
                     modifier = Modifier

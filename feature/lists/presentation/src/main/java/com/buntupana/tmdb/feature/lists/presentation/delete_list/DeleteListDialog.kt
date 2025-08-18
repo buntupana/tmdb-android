@@ -8,7 +8,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -84,8 +83,9 @@ fun DeleteListScreenPreview() {
         isLoading = false,
         sheetState = SheetState(
             skipPartiallyExpanded = true,
-            LocalDensity.current,
-            initialValue = SheetValue.Expanded
+            positionalThreshold = { 0f },
+            initialValue = SheetValue.Expanded,
+            velocityThreshold = { 0f }
         ),
         confirmButtonColor = MaterialTheme.colorScheme.error,
         onConfirmClick = {},

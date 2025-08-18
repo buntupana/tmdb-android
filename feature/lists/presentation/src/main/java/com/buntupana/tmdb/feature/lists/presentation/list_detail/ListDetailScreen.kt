@@ -53,6 +53,7 @@ import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isLight
+import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListDialog
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListNav
@@ -187,31 +188,33 @@ fun ListDetailContent(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopBarLogo(
-                backgroundColor = PrimaryColor,
-                onLogoClick = onLogoClick,
-                onBackClick = onBackClick,
-                onSearchClick = onSearchClick,
-                scrollBehavior = scrollBehavior,
-                shareLink = state.shareLink
-            )
+            Column {
+                TopBarLogo(
+                    backgroundColor = PrimaryColor,
+                    onLogoClick = onLogoClick,
+                    onBackClick = onBackClick,
+                    onSearchClick = onSearchClick,
+                    scrollBehavior = scrollBehavior,
+                    shareLink = state.shareLink
+                )
+
+                ListDetailHeader(
+                    modifier = Modifier.fillMaxWidth(),
+                    listName = state.listName,
+                    description = state.description,
+                    backdropUrl = state.backdropUrl,
+                    isPublic = state.isPublic,
+                    itemsTotalCount = state.itemTotalCount,
+                    onEditClick = onEditClick,
+                    onDeleteClick = onDeleteClick
+                )
+            }
         }
     ) { paddingValues ->
 
         Column(
-            modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
+            modifier = Modifier.paddingValues(top = { paddingValues.calculateTopPadding() })
         ) {
-
-            ListDetailHeader(
-                modifier = Modifier.fillMaxWidth(),
-                listName = state.listName,
-                description = state.description,
-                backdropUrl = state.backdropUrl,
-                isPublic = state.isPublic,
-                itemsTotalCount = state.itemTotalCount,
-                onEditClick = onEditClick,
-                onDeleteClick = onDeleteClick
-            )
 
             if (state.isLoading) {
                 Box(
@@ -226,7 +229,7 @@ fun ListDetailContent(
                 Box(modifier = Modifier.fillMaxSize()) {
                     ErrorAndRetry(
                         modifier = Modifier
-                            .padding(vertical = paddingValues.calculateTopPadding() +  Dimens.errorAndRetryTopPadding)
+                            .paddingValues(top = { paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding })
                             .fillMaxWidth(),
                         textColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
                         errorMessage = stringResource(id = R.string.message_loading_content_error),
@@ -239,7 +242,7 @@ fun ListDetailContent(
                 modifier = Modifier
                     .fillMaxSize(),
                 topPadding = Dimens.padding.small,
-                bottomPadding = Dimens.padding.small + paddingValues.calculateBottomPadding(),
+                bottomPadding = { Dimens.padding.small + paddingValues.calculateBottomPadding() },
                 itemList = state.mediaItemList?.collectAsLazyPagingItems(),
                 animateItem = true,
                 noResultContent = {

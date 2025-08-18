@@ -44,6 +44,7 @@ import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.core.ui.util.isLight
 import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
@@ -274,7 +275,7 @@ fun MediaDetailContent(
         AnimatedVisibility(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding()),
+                .paddingValues(top = { paddingValues.calculateTopPadding() }),
             visible = state.isLoading.not(),
             enter = fadeIn(),
             exit = fadeOut()
@@ -375,9 +376,7 @@ fun MediaDetailContent(
 
                     Spacer(
                         modifier = Modifier
-                            .height(
-                                paddingValues.calculateBottomPadding() + Dimens.padding.big
-                            )
+                            .paddingValues(top = { paddingValues.calculateBottomPadding() + Dimens.padding.big })
                     )
                 }
             }

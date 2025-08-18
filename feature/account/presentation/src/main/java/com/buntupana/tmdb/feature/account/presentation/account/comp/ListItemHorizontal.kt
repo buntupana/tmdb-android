@@ -2,16 +2,14 @@ package com.buntupana.tmdb.feature.account.presentation.account.comp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -51,7 +50,12 @@ fun ListItemHorizontal(
             .clip(RoundedCornerShape(Dimens.posterRound))
             .background(PlaceHolderColor)
             .clickable {
-                onListClick(userListDetails.id, userListDetails.name, userListDetails.description, userListDetails.backdropUrl)
+                onListClick(
+                    userListDetails.id,
+                    userListDetails.name,
+                    userListDetails.description,
+                    userListDetails.backdropUrl
+                )
             }
     ) {
 
@@ -74,27 +78,25 @@ fun ListItemHorizontal(
                 .background(backgroundColor)
         )
 
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = Dimens.padding.horizontal),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            contentAlignment = Alignment.Center,
         ) {
-
-
             var maxLines = userListDetails.name.countWordsBySpace()
 
             if (maxLines > 2) {
                 maxLines = 3
             }
 
-            BasicText(
+            Text(
+                modifier = Modifier,
+                textAlign = TextAlign.Center,
                 text = userListDetails.name,
-                autoSize = TextAutoSize.StepBased(minFontSize = 18.sp),
+                autoSize = TextAutoSize.StepBased(minFontSize = 18.sp, maxFontSize = 60.sp),
                 maxLines = maxLines,
-                color = { Color.White },
-//                style = LocalTextStyle.current.merge(textAlign = TextAlign.Center),
+                color = Color.White,
                 overflow = TextOverflow.Ellipsis,
             )
         }
@@ -108,7 +110,7 @@ private fun ListItemHorizontalPreview() {
         width = 200.dp,
         userListDetails = UserListDetails(
             id = 1,
-            name = "List Name",
+            name = "Sci Fi",
             description = "List Description",
             backdropUrl = null,
             posterUrl = null,

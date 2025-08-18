@@ -41,7 +41,7 @@ fun WatchlistFavoritePager(
         modifier = Modifier.fillMaxSize(),
         state = state,
         topPadding = Dimens.padding.medium,
-        bottomPadding = Dimens.padding.medium + navigationBarPadding,
+        bottomPadding = { Dimens.padding.medium + navigationBarPadding },
         animateItem = true,
         itemList = pagingItems,
         noResultContent = {

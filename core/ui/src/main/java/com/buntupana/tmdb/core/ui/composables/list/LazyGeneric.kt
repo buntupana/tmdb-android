@@ -22,7 +22,7 @@ fun <L : DefaultItem> LazyColumnGeneric(
     modifier: Modifier = Modifier,
     state: LazyListState = rememberLazyListState(),
     topPadding: Dp = 0.dp,
-    bottomPadding: Dp = 0.dp,
+    bottomPadding: () -> Dp = { 0.dp },
     animateItem: Boolean = false,
     itemList: LazyPagingItems<L>?,
     headerContent: @Composable () -> Unit = {},
@@ -90,7 +90,7 @@ fun <L : DefaultItem> LazyRowGeneric(
         lazyContentGeneric(
             itemList = itemList,
             initialPadding = startPadding,
-            finalPadding = endPadding,
+            finalPadding = { endPadding },
             animateItem = animateItem,
             placeHolder = placeHolder
         ) { index, item ->
@@ -102,7 +102,7 @@ fun <L : DefaultItem> LazyRowGeneric(
 fun <L : DefaultItem> LazyListScope.lazyContentGeneric(
     itemList: LazyPagingItems<L>,
     initialPadding: Dp,
-    finalPadding: Dp,
+    finalPadding: () -> Dp,
     animateItem: Boolean = false,
     placeHolder: (@Composable () -> Unit)?,
     itemContent: @Composable LazyItemScope.(index: Int, item: L) -> Unit
@@ -145,6 +145,6 @@ fun <L : DefaultItem> LazyListScope.lazyContentGeneric(
     )
 
     item {
-        Spacer(modifier = Modifier.height(finalPadding))
+        Spacer(modifier = Modifier.height(finalPadding()))
     }
 }

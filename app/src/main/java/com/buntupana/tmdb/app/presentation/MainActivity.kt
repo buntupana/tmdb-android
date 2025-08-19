@@ -31,6 +31,7 @@ import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.theme.TMDBTheme
 import com.buntupana.tmdb.core.ui.util.ObserveAsEvents
 import com.buntupana.tmdb.core.ui.util.bottomSheet
+import com.buntupana.tmdb.core.ui.util.getResult
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInNav
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInScreen
 import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.ScreenType
@@ -49,6 +50,9 @@ import com.buntupana.tmdb.feature.detail.presentation.rating.RatingMediaType
 import com.buntupana.tmdb.feature.detail.presentation.rating.RatingNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
+import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterNav
+import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterScreen
+import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
 import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListDialog
 import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListNav
 import com.buntupana.tmdb.feature.lists.presentation.delete_list.DeleteListDialog
@@ -124,15 +128,16 @@ class MainActivity : ComponentActivity() {
                         startDestination = HomeNav
                     ) {
 
-                        composable<HomeNav> {
+                        composable<HomeNav> { entry ->
                             HomeScreen(
+                                mediaListFilterResult = entry.getResult<MediaListFilter>(),
                                 onSignInClicked = {
                                     navRoutesMain.navigate(SignInNav())
                                 },
                                 onSearchClicked = {
                                     navRoutesMain.navigate(SearchNav)
                                 },
-                                onMediaItemClicked = { mediaItemId, mediaItemType, posterDominantColor ->
+                                onMediaItemClicked = { mediaItemType, mediaItemId, posterDominantColor ->
                                     navRoutesMain.navigate(
                                         MediaDetailNav(
                                             mediaId = mediaItemId,
@@ -175,6 +180,13 @@ class MainActivity : ComponentActivity() {
                                             listName = listName,
                                             description = description,
                                             backdropUrl = backdropUrl
+                                        )
+                                    )
+                                },
+                                onMovieFilterClick = { mediaListFilter ->
+                                    navRoutesMain.navigate(
+                                        MediaFilterNav(
+                                            mediaListFilter = mediaListFilter
                                         )
                                     )
                                 }
@@ -460,6 +472,19 @@ class MainActivity : ComponentActivity() {
                                 onLogoClick = { navRoutesMain.popBackStack(HomeNav::class) },
                                 onCreateListClick = {
                                     navRoutesMain.navigate(CreateUpdateListNav())
+                                }
+                            )
+                        }
+                        composable<MediaFilterNav>(
+                            typeMap = MediaFilterNav.typeMap
+                        ) {
+                            MediaFilterScreen(
+                                onBackClick = {
+                                    navRoutesMain.popBackStack()
+                                },
+                                onApplyFilterClick = { mediaListFilter ->
+                                    navRoutesMain.saveResult(mediaListFilter)
+                                    navRoutesMain.popBackStack()
                                 }
                             )
                         }

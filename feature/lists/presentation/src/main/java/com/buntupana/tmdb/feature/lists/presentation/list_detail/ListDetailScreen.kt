@@ -52,7 +52,6 @@ import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.paddingValues
-import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListDialog
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListNav
 import com.buntupana.tmdb.feature.lists.presentation.list_detail.comp.ListDetailHeader

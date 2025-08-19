@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.discover.presentation.movies
+package com.buntupana.tmdb.feature.discover.presentation.media_list
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,35 +36,44 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.IconButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
-import com.buntupana.tmdb.feature.discover.domain.entity.MediaListFilter
-import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterDialog
+import com.buntupana.tmdb.feature.discover.presentation.media_list.filters.MediaFilterListDefault
+import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
+import com.panabuntu.tmdb.core.common.entity.MediaType
 
 @Composable
-fun MoviesScreen(
-    viewModel: MoviesViewModel = hiltViewModel(),
-    onMovieItemClicked: (mediaItemId: Long, posterDominantColor: Color) -> Unit
+fun MediaListScreen(
+    viewModel: MediaListViewModel = hiltViewModel(),
+    mediaListFilterResult: MediaListFilter?,
+    onMediaItemClicked: (mediaType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit,
+    onFilterClick: (movieListFilter: MediaListFilter) -> Unit
 ) {
-    MoviesContent(
-        state = viewModel.state,
-        onMediaClick = { mediaId, mainPosterColor ->
-            onMovieItemClicked(mediaId, mainPosterColor)
-        },
-        onApplyFilterClick = {
-            viewModel.onEvent(MoviesEvent.FilterMovies(mediaListFilter = it))
+
+    LaunchedEffect(mediaListFilterResult) {
+        if (mediaListFilterResult != null) {
+            viewModel.onEvent(MediaListEvent.FilterMediaList(mediaListFilterResult))
         }
+    }
+
+    MediaListContent(
+        state = viewModel.state,
+        onMediaClick = onMediaItemClicked,
+        onApplyFilterClick = {
+            viewModel.onEvent(MediaListEvent.FilterMediaList(mediaListFilter = it))
+        },
+        onFilterClick = onFilterClick
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoviesContent(
-    state: MoviesState,
-    onMediaClick: (mediaId: Long, mainPosterColor: Color) -> Unit,
-    onApplyFilterClick: (mediaListFilter: MediaListFilter) -> Unit
+fun MediaListContent(
+    state: MediaListState,
+    onMediaClick: (mediaType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit,
+    onApplyFilterClick: (movieListFilter: MediaListFilter) -> Unit,
+    onFilterClick: (movieListFilter: MediaListFilter) -> Unit
 ) {
 
     var showDefaultFiltersDialog by remember { mutableStateOf(false) }
-    var showMovieFiltersDialog by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -84,16 +94,22 @@ fun MoviesContent(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+
+                    val filterNameResId = when(state.mediaType) {
+                        MediaType.MOVIE -> state.movieDefaultFilter.filterNameResId
+                        MediaType.TV_SHOW -> state.tvShowDefaultFilter.filterNameResId
+                    }
+
                     Text(
                         modifier = Modifier.animateContentSize(),
-                        text = stringResource(state.movieFilter.filterNameResId)
+                        text = stringResource(filterNameResId)
                     )
                 }
             }
 
             IconButton(
                 onClick = {
-                    showMovieFiltersDialog = true
+                    onFilterClick(state.mediaListFilter)
                 },
                 rippleColor = MaterialTheme.colorScheme.background.getOnBackgroundColor()
             ) {
@@ -104,14 +120,17 @@ fun MoviesContent(
             }
         }
 
-        val movieItems = state.movieItems?.collectAsLazyPagingItems()
+        val mediaItems = when (state.mediaType) {
+            MediaType.MOVIE -> state.movieItems?.collectAsLazyPagingItems()
+            MediaType.TV_SHOW -> state.tvShowItems?.collectAsLazyPagingItems()
+        }
 
-        if (movieItems != null) {
+        if (mediaItems != null) {
             LazyColumnGeneric(
                 modifier = Modifier.fillMaxSize(),
                 topPadding = Dimens.padding.medium,
                 animateItem = false,
-                itemList = movieItems,
+                itemList = mediaItems,
                 noResultContent = {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -128,7 +147,7 @@ fun MoviesContent(
                         .animateItem()
                         .height(Dimens.imageSize.posterHeight),
                     onMediaClick = { _, mainPosterColor ->
-                        onMediaClick(item.id, mainPosterColor)
+                        onMediaClick(state.mediaType, item.id, mainPosterColor)
                     },
                     mediaId = item.id,
                     title = item.name,
@@ -140,30 +159,26 @@ fun MoviesContent(
         }
     }
 
-    MovieFilterDialog(
+    MediaDefaultFilterDialog(
+        mediaType = state.mediaType,
         showDialog = showDefaultFiltersDialog,
         onDismiss = {
             showDefaultFiltersDialog = false
         },
         onApplyFilterClick = onApplyFilterClick,
     )
-
-    MediaFilterDialog(
-        showDialog = showMovieFiltersDialog,
-        mediaListFilter = state.mediaListFilter,
-        onDismiss = {
-            showMovieFiltersDialog = false
-        },
-        onApplyFilterClick = onApplyFilterClick
-    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun MoviesScreenPreview() {
-    MoviesContent(
-        state = MoviesState(),
-        onMediaClick = { _, _ -> },
+    MediaListContent(
+        state = MediaListState(
+            mediaType = MediaType.MOVIE,
+            mediaListFilter = MediaFilterListDefault.popularMovie
+        ),
+        onMediaClick = { _, _, _ -> },
+        onFilterClick = {},
         onApplyFilterClick = {}
     )
 }

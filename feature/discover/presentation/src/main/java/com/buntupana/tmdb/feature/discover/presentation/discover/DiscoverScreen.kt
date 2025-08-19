@@ -33,7 +33,7 @@ import com.panabuntu.tmdb.core.common.model.MediaItem
 @Composable
 fun DiscoverScreen(
     viewModel: DiscoverViewModel = hiltViewModel(),
-    onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
+    onMediaItemClicked: (mediaItemType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit
 ) {
 
     DiscoverContent(
@@ -51,16 +51,16 @@ fun DiscoverScreen(
             when (mediaItem) {
                 is MediaItem.Movie -> {
                     onMediaItemClicked(
-                        mediaItem.id,
                         MediaType.MOVIE,
+                        mediaItem.id,
                         posterDominantColor
                     )
                 }
 
                 is MediaItem.TvShow -> {
                     onMediaItemClicked(
-                        mediaItem.id,
                         MediaType.TV_SHOW,
+                        mediaItem.id,
                         posterDominantColor
                     )
                 }

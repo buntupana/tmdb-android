@@ -51,7 +51,7 @@ fun AccountScreen(
     onWatchListClick: (mediaType: MediaType) -> Unit,
     onFavoritesClick: (mediaType: MediaType) -> Unit,
     onListsClick: () -> Unit,
-    onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit,
+    onMediaItemClicked: (mediaItemType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit,
     onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
 
@@ -88,16 +88,16 @@ fun AccountScreen(
             when (mediaItem) {
                 is MediaItem.Movie -> {
                     onMediaItemClicked(
-                        mediaItem.id,
                         MediaType.MOVIE,
+                        mediaItem.id,
                         posterDominantColor
                     )
                 }
 
                 is MediaItem.TvShow -> {
                     onMediaItemClicked(
-                        mediaItem.id,
                         MediaType.TV_SHOW,
+                        mediaItem.id,
                         posterDominantColor
                     )
                 }

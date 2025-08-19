@@ -7,9 +7,10 @@ import com.buntupana.tmdb.core.data.api.GenericPagingDataSource
 import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.discover.data.remote_data_source.DiscoverRemoteDataSource
 import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
-import com.buntupana.tmdb.feature.discover.domain.entity.MediaListFilter
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
+import com.buntupana.tmdb.feature.discover.domain.entity.MovieListFilter
 import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
+import com.buntupana.tmdb.feature.discover.domain.entity.TvShowListFilter
 import com.buntupana.tmdb.feature.discover.domain.repository.DiscoverRepository
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
@@ -130,7 +131,7 @@ class DiscoverRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun getFilteredMovies(mediaListFilter: MediaListFilter): Flow<PagingData<MediaItem.Movie>> {
+    override suspend fun getFilteredMovies(movieListFilter: MovieListFilter): Flow<PagingData<MediaItem.Movie>> {
 
         return Pager(
             config = PagingConfig(
@@ -141,7 +142,33 @@ class DiscoverRepositoryImpl @Inject constructor(
                 GenericPagingDataSource(
                     networkCall = { page ->
                         discoverRemoteDataSource.getMovies(
-                            mediaListFilter = mediaListFilter,
+                            movieListFilter = movieListFilter,
+                            page = page,
+                            region = session.value.countryCode
+                        )
+                    },
+                    mapItemList = {
+                        it.toModel(
+                            baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                            baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                        )
+                    }
+                )
+            }
+        ).flow
+    }
+
+    override suspend fun getFilteredTvShows(tvShowListFilter: TvShowListFilter): Flow<PagingData<MediaItem.TvShow>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                GenericPagingDataSource(
+                    networkCall = { page ->
+                        discoverRemoteDataSource.getTvShows(
+                            tvShowListFilter = tvShowListFilter,
                             page = page,
                             region = session.value.countryCode
                         )

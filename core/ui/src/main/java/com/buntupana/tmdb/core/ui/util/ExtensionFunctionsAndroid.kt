@@ -11,10 +11,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.toRoute
 import androidx.palette.graphics.Palette
-import com.buntupana.tmdb.core.ui.navigation.Routes
+import com.buntupana.tmdb.core.ui.navigation.Route
 import com.panabuntu.tmdb.core.common.util.decodeAllStrings
 import kotlinx.serialization.json.Json
 import kotlin.reflect.KType
@@ -49,7 +50,7 @@ fun Modifier.brush(brush: Brush) = this
         }
     }
 
-inline fun <reified T : Routes> SavedStateHandle.navArgs(
+inline fun <reified T : Route> SavedStateHandle.navArgs(
     typeMap: Map<KType, NavType<*>> = emptyMap()
 ): T {
     return toRoute<T>(typeMap).decodeAllStrings()
@@ -73,4 +74,14 @@ inline fun <reified T : Any> serializableType(
 
 inline fun <reified T : Any> navType(): Pair<KType, NavType<*>> {
     return typeOf<T>() to serializableType<T>()
+}
+
+fun <T> NavBackStackEntry.getResult(): T? {
+    return try {
+        val result = savedStateHandle.get<T>("result")
+        savedStateHandle.remove<T>("result")
+        result
+    } catch (_: Exception) {
+        null
+    }
 }

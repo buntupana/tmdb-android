@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.serialization.generateHashCode
-import com.panabuntu.tmdb.core.common.util.encodeAllUrls
+import com.panabuntu.tmdb.core.common.util.encodeAllStrings
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializer
 import timber.log.Timber
@@ -26,23 +26,23 @@ class NavRoutesMainImpl : NavRoutesMain {
     }
 
     override fun navigate(
-        destination: Routes
+        destination: Route
     ) {
         Timber.d("navigate() called with: destination = [$destination]")
-        navigate<Routes>(
+        navigate<Route>(
             destination = destination,
             popUpTo = null,
             popUpToInclusive = false
         )
     }
 
-    override fun <T : Routes> navigate(
-        destination: Routes,
+    override fun <T : Route> navigate(
+        destination: Route,
         popUpTo: KClass<T>?,
         popUpToInclusive: Boolean
     ) {
         Timber.d("navigate() called with: destination = [$destination], popUpTo = [$popUpTo], popUpToInclusive = [$popUpToInclusive]")
-        navController?.navigate(destination.encodeAllUrls())
+        navController?.navigate(destination.encodeAllStrings())
     }
 
     override fun popBackStack() {
@@ -52,15 +52,19 @@ class NavRoutesMainImpl : NavRoutesMain {
 
     @SuppressLint("RestrictedApi")
     @OptIn(InternalSerializationApi::class)
-    override fun <T : Routes> popBackStack(
+    override fun <T : Route> popBackStack(
         destination: KClass<in T>,
         inclusive: Boolean
     ) {
         navController?.popBackStack(destination.serializer().generateHashCode(), inclusive)
     }
 
-    override fun <T : Routes> isCurrentDestination(destination: KClass<T>): Boolean {
+    override fun <T : Route> isCurrentDestination(destination: KClass<T>): Boolean {
         Timber.d("isCurrentDestination() called with: destination = [$destination]")
         return navController?.currentDestination?.hasRoute(destination) ?: false
+    }
+
+    override fun saveResult(value: Any) {
+        navController?.previousBackStackEntry?.savedStateHandle?.set("result", value)
     }
 }

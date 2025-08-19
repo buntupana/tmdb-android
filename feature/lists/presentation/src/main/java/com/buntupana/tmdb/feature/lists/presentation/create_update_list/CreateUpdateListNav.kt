@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.create_update_list
 
-import com.buntupana.tmdb.core.ui.navigation.Routes
+import com.buntupana.tmdb.core.ui.navigation.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -9,4 +9,4 @@ data class CreateUpdateListNav(
     val listName: String = "",
     val listDescription: String = "",
     val isPublic: Boolean = true
-): Routes
+): Route

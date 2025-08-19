@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.discover.domain.entity
 
-enum class Genre {
+enum class MovieGenre {
     ACTION,
     ADVENTURE,
     ANIMATION,

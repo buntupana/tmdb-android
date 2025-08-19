@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.episodes
 
-import com.buntupana.tmdb.core.ui.navigation.Routes
+import com.buntupana.tmdb.core.ui.navigation.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,4 +11,4 @@ data class EpisodesDetailNav(
     val posterUrl: String?,
     val backgroundColor: Int?,
     val releaseYear: String?
-) : Routes
+) : Route

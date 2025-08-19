@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.discover.presentation.movies
+package com.buntupana.tmdb.feature.discover.presentation.media_list
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,22 +20,26 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.feature.discover.domain.entity.MediaListFilter
 import com.buntupana.tmdb.feature.discover.presentation.R
+import com.buntupana.tmdb.feature.discover.presentation.media_list.filters.MediaFilterListDefault
+import com.buntupana.tmdb.feature.discover.presentation.media_list.filters.MovieDefaultFilter
+import com.buntupana.tmdb.feature.discover.presentation.media_list.filters.TvShowDefaultFilter
+import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieFilterDialog(
+fun MediaDefaultFilterDialog(
+    mediaType: MediaType,
     showDialog: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onDismiss: () -> Unit,
-    onApplyFilterClick: (mediaListFilter: MediaListFilter) -> Unit,
+    onApplyFilterClick: (movieListFilter: MediaListFilter) -> Unit,
 ) {
 
     if (showDialog.not()) return
@@ -43,6 +47,7 @@ fun MovieFilterDialog(
     val coroutineScope = rememberCoroutineScope()
 
     MovieFilterContent(
+        mediaType = mediaType,
         sheetState = sheetState,
         onDismiss = {
             coroutineScope.launch {
@@ -57,9 +62,10 @@ fun MovieFilterDialog(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MovieFilterContent(
+    mediaType: MediaType,
     sheetState: SheetState,
     onDismiss: () -> Unit,
-    onApplyFilterClick: (mediaListFilter: MediaListFilter) -> Unit,
+    onApplyFilterClick: (movieListFilter: MediaListFilter) -> Unit,
 ) {
 
     ModalBottomSheet(
@@ -91,22 +97,21 @@ private fun MovieFilterContent(
             Spacer(modifier = Modifier.height(Dimens.padding.big))
 
             LazyColumn {
-                items(count = MovieFilter.entries.size) { index ->
 
-                    if (MovieFilter.entries[index] == MovieFilter.CUSTOM) return@items
+                val listSize = when (mediaType) {
+                    MediaType.MOVIE -> MovieDefaultFilter.entries.size
+                    MediaType.TV_SHOW -> TvShowDefaultFilter.entries.size
+                }
+
+                items(count = listSize) { index ->
+
+                    if (isCustomFilter(mediaType, index)) return@items
 
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                val mediaFilter = when (MovieFilter.entries[index]) {
-                                    MovieFilter.POPULAR -> MediaFilterMovieDefault.popular
-                                    MovieFilter.NOW_PLAYING -> MediaFilterMovieDefault.nowPlaying
-                                    MovieFilter.UPCOMING -> MediaFilterMovieDefault.upcoming
-                                    MovieFilter.TOP_RATED -> MediaFilterMovieDefault.topRated
-                                    MovieFilter.CUSTOM -> MediaFilterMovieDefault.popular
-                                }
-                                onApplyFilterClick(mediaFilter)
+                                onApplyFilterClick(getMediaDefaultFilter(mediaType, index))
                                 onDismiss()
                             }
                             .padding(
@@ -114,8 +119,14 @@ private fun MovieFilterContent(
                                 horizontal = Dimens.padding.horizontal
                             )
                     ) {
+
+                        val titleResid = when (mediaType) {
+                            MediaType.MOVIE -> MovieDefaultFilter.entries[index].filterNameResId
+                            MediaType.TV_SHOW -> TvShowDefaultFilter.entries[index].filterNameResId
+                        }
+
                         Text(
-                            text = stringResource(MovieFilter.entries[index].filterNameResId),
+                            text = stringResource(titleResid),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
@@ -126,15 +137,48 @@ private fun MovieFilterContent(
     }
 }
 
+private fun getMediaDefaultFilter(mediaType: MediaType, index: Int): MediaListFilter {
+    return when (mediaType) {
+        MediaType.MOVIE -> {
+            when (MovieDefaultFilter.entries[index]) {
+                MovieDefaultFilter.POPULAR -> MediaFilterListDefault.popularMovie
+                MovieDefaultFilter.NOW_PLAYING -> MediaFilterListDefault.nowPlayingMovie
+                MovieDefaultFilter.UPCOMING -> MediaFilterListDefault.upcomingMovie
+                MovieDefaultFilter.TOP_RATED -> MediaFilterListDefault.topRatedMovie
+                MovieDefaultFilter.CUSTOM -> MediaFilterListDefault.popularMovie
+            }
+        }
+
+        MediaType.TV_SHOW -> {
+            when (TvShowDefaultFilter.entries[index]) {
+                TvShowDefaultFilter.POPULAR -> MediaFilterListDefault.popularTvShow
+                TvShowDefaultFilter.AIRING_TODAY -> MediaFilterListDefault.airingTodayTvShow
+                TvShowDefaultFilter.ON_TV -> MediaFilterListDefault.onTvTvShow
+                TvShowDefaultFilter.TOP_RATED -> MediaFilterListDefault.topRatedTvShow
+                TvShowDefaultFilter.CUSTOM -> MediaFilterListDefault.popularTvShow
+            }
+        }
+    }
+}
+
+private fun isCustomFilter(mediaType: MediaType, index: Int): Boolean {
+    return when (mediaType) {
+        MediaType.MOVIE -> MovieDefaultFilter.entries[index] == MovieDefaultFilter.CUSTOM
+        MediaType.TV_SHOW -> TvShowDefaultFilter.entries[index] == TvShowDefaultFilter.CUSTOM
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 private fun MovieFilterDialogPreview() {
-    MovieFilterDialog(
+    MediaDefaultFilterDialog(
+        mediaType = MediaType.TV_SHOW,
         sheetState = SheetState(
             skipPartiallyExpanded = true,
-            LocalDensity.current,
-            initialValue = SheetValue.Expanded
+            positionalThreshold = { 0f },
+            initialValue = SheetValue.Expanded,
+            velocityThreshold = { 0f }
         ),
         showDialog = true,
         onDismiss = {},

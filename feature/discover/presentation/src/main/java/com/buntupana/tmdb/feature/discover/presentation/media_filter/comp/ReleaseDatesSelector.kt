@@ -26,18 +26,21 @@ fun ReleaseDatesSelector(
 ) {
     Column(modifier = modifier) {
 
-        ChipSelector(
-            modifier = Modifier,
-            title = stringResource(R.string.text_release_dates),
-            chipItemList = releaseTypeList,
-            showAll = true,
-            onSelectionChanged = onReleaseTypeListChange
-        )
+        if (releaseTypeList.isNotEmpty()) {
+            ChipSelector(
+                modifier = Modifier.
+                padding(bottom = Dimens.padding.small),
+                title = stringResource(R.string.text_release_dates),
+                chipItemList = releaseTypeList,
+                showAll = true,
+                onSelectionChanged = onReleaseTypeListChange
+            )
+        }
 
         DatePickerTextBox(
             modifier = Modifier
                 .padding(
-                    vertical = Dimens.padding.small
+                    bottom = Dimens.padding.small
                 ),
             label = stringResource(RCore.string.text_from),
             localDate = releaseDateFrom,

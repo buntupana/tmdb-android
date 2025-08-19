@@ -20,6 +20,8 @@
     <string name="text_now_playing">Now Playing</string>
     <string name="text_upcoming">Upcoming</string>
     <string name="text_top_rated">Top Rated</string>
+    <string name="text_airing_today">Airing Today</string>
+    <string name="text_on_the_air">On The Air</string>
     <string name="text_custom">Custom</string>
 
     <string name="text_apply_filter">Apply Filter</string>
@@ -68,6 +70,14 @@
     <string name="text_genre_thriller">Thriller</string>
     <string name="text_genre_war">War</string>
     <string name="text_genre_western">Western</string>
+    <string name="text_genre_action_and_adventure">Action &amp; Adventure</string>
+    <string name="text_genre_kids">Kids</string>
+    <string name="text_genre_news">News</string>
+    <string name="text_genre_reality">Reality</string>
+    <string name="text_genre_soap">Soap</string>
+    <string name="text_genre_talk">Talk</string>
+    <string name="text_genre_war_and_politics">War &amp; Politics</string>
+    <string name="text_genre_sci_fi_and_fantasy">Sci-Fi &amp; Fantasy</string>
 
     <string name="text_user_score">User Score</string>
     <string name="text_include_not_rated">Include Not Rated</string>

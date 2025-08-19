@@ -1,8 +1,8 @@
-package com.buntupana.tmdb.feature.discover.presentation.movies
+package com.buntupana.tmdb.feature.discover.presentation.media_list.filters
 
 import com.buntupana.tmdb.feature.discover.presentation.R
 
-enum class MovieFilter(
+enum class MovieDefaultFilter(
     val filterNameResId: Int
 ) {
     POPULAR(R.string.text_popular),

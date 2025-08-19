@@ -28,7 +28,6 @@ import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isVisible
 import com.buntupana.tmdb.core.ui.util.paddingValues
-import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListItemVertical
 import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListSubBar
 import com.buntupana.tmdb.feature.presentation.R

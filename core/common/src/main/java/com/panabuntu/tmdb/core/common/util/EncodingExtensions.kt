@@ -135,6 +135,6 @@ fun <T : Any> T.decodeAllStrings(): T {
     }
 
     // Create a new instance using the primary constructor with updated parameters
-    val primaryConstructor = this::class.primaryConstructor!!
+    val primaryConstructor = this::class.primaryConstructor ?: return this
     return primaryConstructor.callBy(primaryConstructor.parameters.associateWith { params[it.name] })
 }

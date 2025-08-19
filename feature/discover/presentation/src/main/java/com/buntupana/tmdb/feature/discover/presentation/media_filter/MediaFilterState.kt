@@ -1,9 +1,11 @@
 package com.buntupana.tmdb.feature.discover.presentation.media_filter
 
 import com.buntupana.tmdb.core.ui.util.SelectableItem
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import java.time.LocalDate
 
 data class MediaFilterState(
+    val mediaType: MediaType = MediaType.MOVIE,
     val sortBySelected: SortBySimple = SortBySimple.POPULARITY,
     val sortByOrderSelected: SortByOrder = SortByOrder.DESCENDING,
     val availabilitiesList: List<SelectableItem> = emptyList(),
@@ -11,10 +13,8 @@ data class MediaFilterState(
     val releaseDateFrom: LocalDate? = null,
     val releaseDateTo: LocalDate? = null,
     val genreList: List<SelectableItem> = emptyList(),
-    val minUserScore: Int = 0,
-    val maxUserScore: Int = 100,
+    val userScoreRange: IntRange = IntRange(0, 100),
     val includeNotRated: Boolean = true,
     val minUserVotes: Int = 0,
-    val runtimeMin: Int = 0,
-    val runtimeMax: Int = 390
+    val runtimeRange: IntRange = IntRange(0, 390),
 )

@@ -2,35 +2,65 @@ package com.buntupana.tmdb.feature.discover.presentation.mapper
 
 import com.buntupana.tmdb.core.ui.util.SelectableItem
 import com.buntupana.tmdb.core.ui.util.UiText
-import com.buntupana.tmdb.feature.discover.domain.entity.Genre
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
+import com.buntupana.tmdb.feature.discover.domain.entity.MovieGenre
 import com.buntupana.tmdb.feature.discover.domain.entity.ReleaseType
+import com.buntupana.tmdb.feature.discover.domain.entity.TvShowGenre
 import com.buntupana.tmdb.feature.discover.presentation.R
 
-fun Genre.toStringResourceId(): Int {
+fun MovieGenre.toStringResourceId(): Int {
     return when (this) {
-        Genre.ACTION -> R.string.text_genre_action
-        Genre.ADVENTURE -> R.string.text_genre_adventure
-        Genre.ANIMATION -> R.string.text_genre_animation
-        Genre.COMEDY -> R.string.text_genre_comedy
-        Genre.CRIME -> R.string.text_genre_crime
-        Genre.DOCUMENTARY -> R.string.text_genre_documentary
-        Genre.DRAMA -> R.string.text_genre_drama
-        Genre.FAMILY -> R.string.text_genre_family
-        Genre.FANTASY -> R.string.text_genre_fantasy
-        Genre.HISTORY -> R.string.text_genre_history
-        Genre.HORROR -> R.string.text_genre_horror
-        Genre.MUSIC -> R.string.text_genre_music
-        Genre.MYSTERY -> R.string.text_genre_mystery
-        Genre.ROMANCE -> R.string.text_genre_romance
-        Genre.SCI_FI -> R.string.text_genre_science_fiction
-        Genre.THRILLER -> R.string.text_genre_thriller
-        Genre.WAR -> R.string.text_genre_war
-        Genre.WESTERN -> R.string.text_genre_western
+        MovieGenre.ACTION -> R.string.text_genre_action
+        MovieGenre.ADVENTURE -> R.string.text_genre_adventure
+        MovieGenre.ANIMATION -> R.string.text_genre_animation
+        MovieGenre.COMEDY -> R.string.text_genre_comedy
+        MovieGenre.CRIME -> R.string.text_genre_crime
+        MovieGenre.DOCUMENTARY -> R.string.text_genre_documentary
+        MovieGenre.DRAMA -> R.string.text_genre_drama
+        MovieGenre.FAMILY -> R.string.text_genre_family
+        MovieGenre.FANTASY -> R.string.text_genre_fantasy
+        MovieGenre.HISTORY -> R.string.text_genre_history
+        MovieGenre.HORROR -> R.string.text_genre_horror
+        MovieGenre.MUSIC -> R.string.text_genre_music
+        MovieGenre.MYSTERY -> R.string.text_genre_mystery
+        MovieGenre.ROMANCE -> R.string.text_genre_romance
+        MovieGenre.SCI_FI -> R.string.text_genre_science_fiction
+        MovieGenre.THRILLER -> R.string.text_genre_thriller
+        MovieGenre.WAR -> R.string.text_genre_war
+        MovieGenre.WESTERN -> R.string.text_genre_western
     }
 }
 
-fun Genre.toSelectableItem(id: Int, isSelected: Boolean = false): SelectableItem {
+fun MovieGenre.toSelectableItem(id: Int, isSelected: Boolean = false): SelectableItem {
+    return SelectableItem(
+        id = id,
+        name = UiText.StringResource(this.toStringResourceId()),
+        isSelected = isSelected
+    )
+}
+
+fun TvShowGenre.toStringResourceId(): Int {
+    return when(this) {
+        TvShowGenre.ACTION_AND_ADVENTURE -> R.string.text_genre_action_and_adventure
+        TvShowGenre.ANIMATION -> R.string.text_genre_animation
+        TvShowGenre.COMEDY -> R.string.text_genre_comedy
+        TvShowGenre.CRIME -> R.string.text_genre_crime
+        TvShowGenre.DOCUMENTARY -> R.string.text_genre_documentary
+        TvShowGenre.DRAMA -> R.string.text_genre_drama
+        TvShowGenre.FAMILY -> R.string.text_genre_family
+        TvShowGenre.KIDS -> R.string.text_genre_kids
+        TvShowGenre.MYSTERY -> R.string.text_genre_mystery
+        TvShowGenre.NEWS -> R.string.text_genre_news
+        TvShowGenre.REALITY -> R.string.text_genre_reality
+        TvShowGenre.SCI_FI_AND_FANTASY -> R.string.text_genre_sci_fi_and_fantasy
+        TvShowGenre.SOAP -> R.string.text_genre_soap
+        TvShowGenre.TALK -> R.string.text_genre_talk
+        TvShowGenre.WAR_AND_POLITICS -> R.string.text_genre_war_and_politics
+        TvShowGenre.WESTERN -> R.string.text_genre_western
+    }
+}
+
+fun TvShowGenre.toSelectableItem(id: Int, isSelected: Boolean = false): SelectableItem {
     return SelectableItem(
         id = id,
         name = UiText.StringResource(this.toStringResourceId()),

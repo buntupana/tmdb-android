@@ -10,18 +10,17 @@ import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Tv
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.buntupana.tmdb.core.ui.navigation.Routes
+import com.buntupana.tmdb.core.ui.navigation.Route
 import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNav
-import com.buntupana.tmdb.feature.discover.presentation.movies.MoviesNav
-import com.buntupana.tmdb.feature.discover.presentation.tv_shows.TvShowsNav
+import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListNav
 
 
 sealed class TabNavigationItem(
     open val title: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector = selectedIcon,
-    val route: Routes
+    val route: Route
 ) {
     data class Discover(
         override val title: String
@@ -38,7 +37,7 @@ sealed class TabNavigationItem(
         title = title,
         selectedIcon = Icons.Rounded.Movie,
         unselectedIcon = Icons.Outlined.Movie,
-        route = MoviesNav
+        route = MediaListNav.Movie()
     )
 
     data class TVShows(
@@ -47,7 +46,7 @@ sealed class TabNavigationItem(
         title = title,
         selectedIcon = Icons.Rounded.Tv,
         unselectedIcon = Icons.Outlined.Tv,
-        route = TvShowsNav
+        route = MediaListNav.TvShow()
     )
 
     data class Account(

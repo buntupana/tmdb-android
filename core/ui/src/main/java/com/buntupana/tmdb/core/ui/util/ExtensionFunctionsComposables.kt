@@ -141,6 +141,42 @@ fun Modifier.setStatusNavigationBarColor(
 }
 
 @Composable
+fun SetSystemBarsColors(
+    statusBarColor: Color,
+    navigationBarColor: Color
+) {
+    val view = LocalView.current
+    if (!view.isInEditMode) { // Prevent running in Preview
+        SideEffect {
+            val window = (view.context as? Activity)?.window ?: return@SideEffect
+
+            val insetsController = WindowInsetsControllerCompat(window, view)
+
+            // Control Status Bar Icons
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // API 23+
+                insetsController.isAppearanceLightStatusBars = statusBarColor.isLight()
+            }
+
+            // Control Navigation Bar Icons
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // API 26+
+                insetsController.isAppearanceLightNavigationBars = navigationBarColor.isLight()
+            }
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                // Set Status Bar Color
+                window.statusBarColor = statusBarColor.toArgb()
+
+                // Set Navigation Bar Color
+                // Note: On some older devices (API < 23 for nav bar, or specific manufacturer ROMs),
+                // fully opaque nav bar colors might not always render as expected, or might have scrims.
+                // Translucent colors often behave more consistently if you face issues.
+                window.navigationBarColor = navigationBarColor.toArgb()
+            }
+        }
+    }
+}
+
+@Composable
 fun Modifier.paddingValues(
     start: () -> Dp = { 0.dp },
     top: () -> Dp = { 0.dp },
@@ -352,42 +388,6 @@ fun Modifier.clickableWithRipple(
         role = role,
         onClick = onClick
     )
-}
-
-@Composable
-fun SetSystemBarsColors(
-    statusBarColor: Color,
-    navigationBarColor: Color
-) {
-    val view = LocalView.current
-    if (!view.isInEditMode) { // Prevent running in Preview
-        SideEffect {
-            val window = (view.context as? Activity)?.window ?: return@SideEffect
-
-            val insetsController = WindowInsetsControllerCompat(window, view)
-
-            // Control Status Bar Icons
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // API 23+
-                insetsController.isAppearanceLightStatusBars = statusBarColor.isLight()
-            }
-
-            // Control Navigation Bar Icons
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // API 26+
-                insetsController.isAppearanceLightNavigationBars = navigationBarColor.isLight()
-            }
-
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                // Set Status Bar Color
-                window.statusBarColor = statusBarColor.toArgb()
-
-                // Set Navigation Bar Color
-                // Note: On some older devices (API < 23 for nav bar, or specific manufacturer ROMs),
-                // fully opaque nav bar colors might not always render as expected, or might have scrims.
-                // Translucent colors often behave more consistently if you face issues.
-                window.navigationBarColor = navigationBarColor.toArgb()
-            }
-        }
-    }
 }
 
 fun getRatingColor(rating: Int): Color {

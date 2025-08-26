@@ -22,12 +22,9 @@ import androidx.navigation.compose.rememberNavController
 import com.buntupana.tmdb.app.R
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
-import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
-import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
 import com.buntupana.tmdb.feature.account.presentation.account.AccountScreen
-import com.buntupana.tmdb.feature.discover.presentation.comp.TopBar
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNav
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverScreen
 import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListNav
@@ -83,18 +80,7 @@ fun HomeScreenContent(
 
     val navController = rememberNavController()
 
-    SetSystemBarsColors(
-        statusBarColor = PrimaryColor,
-        navigationBarColor = PrimaryColor
-    )
-
     Scaffold(
-        modifier = Modifier.setStatusNavigationBarColor(),
-        topBar = {
-            TopBar(
-                onSearchClick = onSearchClicked
-            )
-        },
         bottomBar = {
 
             val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -141,18 +127,20 @@ fun HomeScreenContent(
                 }
             }
         }
-    ) {
+    ) { paddingValues ->
 
         NavHost(
-            modifier = Modifier.padding(it),
+            modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()),
             navController = navController,
             startDestination = DiscoverNav
         ) {
             composable<DiscoverNav> {
-                DiscoverScreen(onMediaItemClicked = onMediaItemClicked)
+                DiscoverScreen(
+                    onSearchClicked = onSearchClicked,
+                    onMediaItemClicked = onMediaItemClicked
+                )
             }
             composable<MediaListNav.Movie> {
-
                 MediaListScreen(
                     mediaListFilterResult = mediaListFilterResult,
                     onMediaItemClicked = onMediaItemClicked,
@@ -160,7 +148,6 @@ fun HomeScreenContent(
                 )
             }
             composable<MediaListNav.TvShow> {
-
                 MediaListScreen(
                     mediaListFilterResult = mediaListFilterResult,
                     onMediaItemClicked = onMediaItemClicked,

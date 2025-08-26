@@ -1,7 +1,6 @@
 package com.buntupana.tmdb.feature.account.presentation.account
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,8 +34,10 @@ import com.buntupana.tmdb.core.ui.composables.TitleAndFilter
 import com.buntupana.tmdb.core.ui.composables.item.CarouselMediaItem
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.account.presentation.R
-import com.buntupana.tmdb.feature.account.presentation.account.comp.AccountInfoTop
+import com.buntupana.tmdb.feature.account.presentation.account.comp.AccountTopBar
 import com.buntupana.tmdb.feature.account.presentation.account.comp.ListItemsSection
 import com.buntupana.tmdb.feature.account.presentation.account.comp.SignUp
 import com.buntupana.tmdb.feature.account.presentation.sign_out.SignOutDialog
@@ -71,10 +73,10 @@ fun AccountScreen(
             onWatchListClick(mediaType)
         },
         onFavoritesClick = {
-                val mediaType = when (viewModel.state.favoritesFilterSelected) {
-                    MediaFilter.MOVIES -> MediaType.MOVIE
-                    MediaFilter.TV_SHOWS -> MediaType.TV_SHOW
-                }
+            val mediaType = when (viewModel.state.favoritesFilterSelected) {
+                MediaFilter.MOVIES -> MediaType.MOVIE
+                MediaFilter.TV_SHOWS -> MediaType.TV_SHOW
+            }
             onFavoritesClick(mediaType)
         },
         onListsClick = onListsClick,
@@ -132,22 +134,29 @@ fun AccountContent(
     navigateToListDetail: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    SetSystemBarsColors(
+        statusBarColor = PrimaryColor,
+        navigationBarColor = PrimaryColor
+    )
+
+    Scaffold(
+        topBar = {
+            AccountTopBar(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                avatarUrl = state.avatarUrl,
+                username = state.username
+            )
+        }
+    ) { paddingValues ->
 
         if (state.isUserLogged) {
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(state = rememberScrollState()),
+                    .verticalScroll(state = rememberScrollState())
+                    .padding(paddingValues),
             ) {
-                AccountInfoTop(
-                    modifier = Modifier.fillMaxWidth(),
-                    avatarUrl = state.avatarUrl,
-                    username = state.username
-                )
 
                 val lazyListStateWatchlist: LazyListState = rememberLazyListState()
                 val lazyListStateFavorites: LazyListState = rememberLazyListState()
@@ -238,7 +247,9 @@ fun AccountContent(
             }
         } else {
             SignUp(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues),
                 onSignUpClick = onSignUpClick
             )
         }
@@ -250,7 +261,7 @@ fun AccountContent(
 fun AccountScreenPreview() {
     AccountContent(
         AccountState(
-            isUserLogged = false,
+            isUserLogged = true,
             username = "Alvaro",
             userListDetailsList = null
         ),

@@ -5,16 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -30,7 +29,7 @@ import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.account.presentation.R
 
 @Composable
-fun AccountInfoTop(
+fun AccountTopBar(
     modifier: Modifier = Modifier,
     avatarUrl: String? = null,
     username: String? = null
@@ -39,9 +38,6 @@ fun AccountInfoTop(
         modifier = modifier
             .background(PrimaryColor)
     ) {
-
-        var avatarDominantColor by remember { mutableStateOf(SecondaryColor) }
-
         Image(
             modifier = Modifier
                 .matchParentSize()
@@ -51,19 +47,18 @@ fun AccountInfoTop(
             painter = painterResource(R.drawable.img_account_background),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            colorFilter = ColorFilter.tint(avatarDominantColor)
+            colorFilter = ColorFilter.tint(SecondaryColor)
         )
         Row(
             modifier = Modifier
+                .windowInsetsPadding(WindowInsets.statusBars)
                 .padding(Dimens.padding.medium),
             verticalAlignment = Alignment.CenterVertically
         ) {
             AvatarImage(
                 username = username,
                 avatarUrl = avatarUrl,
-            ) { dominantColor ->
-                avatarDominantColor = dominantColor
-            }
+            )
             Spacer(Modifier.padding(horizontal = Dimens.padding.vertical))
             Text(
                 text = username.orEmpty(),
@@ -77,8 +72,8 @@ fun AccountInfoTop(
 
 @Preview(showBackground = true)
 @Composable
-fun AccountInfoTopPreview() {
-    AccountInfoTop(
+fun AccountTopBarPreview() {
+    AccountTopBar(
         modifier = Modifier.fillMaxWidth(),
         avatarUrl = "",
         username = "John"

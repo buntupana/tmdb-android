@@ -1,21 +1,11 @@
 package com.buntupana.tmdb.feature.discover.presentation.media_list
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.FilterList
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,9 +23,9 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
-import com.buntupana.tmdb.core.ui.util.IconButton
-import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
+import com.buntupana.tmdb.feature.discover.presentation.media_list.comp.MediaListTopBar
 import com.buntupana.tmdb.feature.discover.presentation.media_list.filters.MediaFilterListDefault
 import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -73,52 +63,32 @@ fun MediaListContent(
     onFilterClick: (movieListFilter: MediaListFilter) -> Unit
 ) {
 
+    SetSystemBarsColors(
+        statusBarColor = PrimaryColor,
+        navigationBarColor = PrimaryColor
+    )
+
     var showDefaultFiltersDialog by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Scaffold(
+        topBar = {
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = Dimens.padding.medium, vertical = Dimens.padding.vertical),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Button(
-                colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
-                onClick = { showDefaultFiltersDialog = true },
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    val filterNameResId = when(state.mediaType) {
-                        MediaType.MOVIE -> state.movieDefaultFilter.filterNameResId
-                        MediaType.TV_SHOW -> state.tvShowDefaultFilter.filterNameResId
-                    }
-
-                    Text(
-                        modifier = Modifier.animateContentSize(),
-                        text = stringResource(filterNameResId)
-                    )
-                }
+            val filterNameResId = when (state.mediaType) {
+                MediaType.MOVIE -> state.movieDefaultFilter.filterNameResId
+                MediaType.TV_SHOW -> state.tvShowDefaultFilter.filterNameResId
             }
 
-            IconButton(
-                onClick = {
-                    onFilterClick(state.mediaListFilter)
+            MediaListTopBar(
+                filterName = stringResource(filterNameResId),
+                onDefaultFiltersClick = {
+                    showDefaultFiltersDialog = true
                 },
-                rippleColor = MaterialTheme.colorScheme.background.getOnBackgroundColor()
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.FilterList,
-                    contentDescription = "Filter"
-                )
-            }
+                onFilterClick = {
+                    onFilterClick(state.mediaListFilter)
+                }
+            )
         }
+    ) { paddingValues ->
 
         val mediaItems = when (state.mediaType) {
             MediaType.MOVIE -> state.movieItems?.collectAsLazyPagingItems()
@@ -127,7 +97,9 @@ fun MediaListContent(
 
         if (mediaItems != null) {
             LazyColumnGeneric(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
                 topPadding = Dimens.padding.medium,
                 animateItem = false,
                 itemList = mediaItems,

@@ -21,6 +21,8 @@ sealed class MediaFilterEvent {
         val releaseDateTo: LocalDate?
     ) : MediaFilterEvent()
 
+    data class SelectSearchFirstAirDate(val searchFirstAirDate: Boolean) : MediaFilterEvent()
+
     data class SelectGenreNew(val genreList: List<SelectableItem>) : MediaFilterEvent()
 
     data class SelectUserScoreRange(

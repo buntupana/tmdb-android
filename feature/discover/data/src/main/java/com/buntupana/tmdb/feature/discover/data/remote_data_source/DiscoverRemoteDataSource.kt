@@ -202,10 +202,13 @@ class DiscoverRemoteDataSource @Inject constructor(
                     value = monetizationTypes
                 )
                 parameter("language", tvShowListFilter.language)
-                parameter("air_date.gte", releaseDateFrom)
-                parameter("air_date.lte", releaseDateTo)
-//                parameter("first_air_date.gte", releaseDateFrom)
-//                parameter("first_air_date.lte", releaseDateTo)
+                if (tvShowListFilter.searchFirstAirDate) {
+                    parameter("first_air_date.gte", releaseDateFrom)
+                    parameter("first_air_date.lte", releaseDateTo)
+                } else {
+                    parameter("air_date.gte", releaseDateFrom)
+                    parameter("air_date.lte", releaseDateTo)
+                }
                 parameter("with_genres", genres)
                 parameter("watch_region", region)
                 parameter("region", region)

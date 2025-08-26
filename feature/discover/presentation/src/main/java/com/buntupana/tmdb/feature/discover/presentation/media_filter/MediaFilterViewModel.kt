@@ -63,6 +63,10 @@ class MediaFilterViewModel @Inject constructor(
                     )
                 }
 
+                is MediaFilterEvent.SelectSearchFirstAirDate -> {
+                    state = state.copy(searchFirstAirDate = event.searchFirstAirDate)
+                }
+
                 is MediaFilterEvent.SelectGenreNew -> {
                     state = state.copy(genreList = event.genreList)
                 }
@@ -92,6 +96,7 @@ class MediaFilterViewModel @Inject constructor(
         val mediaType: MediaType
         val releaseTypeList: List<SelectableItem>
         val genreList: List<SelectableItem>
+        val searchFirstAirDate: Boolean
 
         when (mediaListFilter) {
             is MediaListFilter.Movie -> {
@@ -108,6 +113,7 @@ class MediaFilterViewModel @Inject constructor(
                         isSelected = mediaListFilter.genreList.contains(genre)
                     )
                 }
+                searchFirstAirDate = false
             }
 
             is MediaListFilter.TvShow -> {
@@ -119,6 +125,7 @@ class MediaFilterViewModel @Inject constructor(
                         isSelected = mediaListFilter.genreList.contains(genre)
                     )
                 }
+                searchFirstAirDate = mediaListFilter.searchFirstAirDate
             }
         }
 
@@ -128,6 +135,7 @@ class MediaFilterViewModel @Inject constructor(
             sortByOrderSelected = mediaListFilter.sortByOrder,
             releaseDateFrom = mediaListFilter.releaseDateFrom,
             releaseDateTo = mediaListFilter.releaseDateTo,
+            searchFirstAirDate = searchFirstAirDate,
             releaseTypesList = releaseTypeList,
             availabilitiesList = MonetizationType.entries.mapIndexed { index, monetizationType ->
                 monetizationType.toSelectableItem(
@@ -185,8 +193,9 @@ class MediaFilterViewModel @Inject constructor(
                 MediaListFilter.TvShow(
                     _sortBy = state.sortBySelected,
                     _sortByOrder = state.sortByOrderSelected,
-                    _releaseDateFrom = state.releaseDateFrom,
-                    _releaseDateTo = state.releaseDateTo,
+                    airDateFrom = state.releaseDateFrom,
+                    airDateTo = state.releaseDateTo,
+                    searchFirstAirDate = state.searchFirstAirDate,
                     _monetizationTypeList = monetizationTypeList,
                     genreList = tvShowGenreList,
                     _userScoreMin = state.userScoreRange.first,

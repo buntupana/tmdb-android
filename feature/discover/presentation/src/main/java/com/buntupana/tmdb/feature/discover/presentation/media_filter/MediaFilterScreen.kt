@@ -105,6 +105,9 @@ fun MediaFilterScreen(
                 )
             )
         },
+        onSearchFirstAirDateChange = {
+            viewModel.onEvent(MediaFilterEvent.SelectSearchFirstAirDate(it))
+        },
         onMinUserVotesChanged = {
             viewModel.onEvent(MediaFilterEvent.SelectMinUserVotes(it))
         },
@@ -126,6 +129,7 @@ fun MediaFilterContent(
     onAvailabilityListChanged: (genreList: List<SelectableItem>) -> Unit,
     onReleaseTypeSelectedListChanged: (releaseTypeList: List<SelectableItem>) -> Unit,
     onSelectReleaseDateRange: (releaseDateFrom: LocalDate?, releaseDateTo: LocalDate?) -> Unit,
+    onSearchFirstAirDateChange: (searchFirstAirDate: Boolean) -> Unit,
     onGenreSelectedListChanged: (genreList: List<SelectableItem>) -> Unit,
     onUserScoreRangeSelected: (min: Int, max: Int, includeNotRated: Boolean) -> Unit,
     onMinUserVotesChanged: (minUserVotes: Int) -> Unit,
@@ -190,38 +194,44 @@ fun MediaFilterContent(
 
             ChipSelector(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(
                         horizontal = Dimens.padding.horizontal,
                         vertical = Dimens.padding.medium
                     ),
                 title = stringResource(R.string.text_availabilities),
                 chipItemList = state.availabilitiesList,
-                showAll = true,
+                showAllChip = true,
                 onSelectionChanged = onAvailabilityListChanged
             )
 
             ReleaseDatesSelector(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(
                         horizontal = Dimens.padding.horizontal,
                         vertical = Dimens.padding.small
                     ),
+                mediaType = state.mediaType,
                 releaseTypeList = state.releaseTypesList,
                 releaseDateFrom = state.releaseDateFrom,
                 releaseDateTo = state.releaseDateTo,
+                isSearchFirstAirDateSelected = state.searchFirstAirDate,
                 onSelectReleaseDateRange = onSelectReleaseDateRange,
-                onReleaseTypeListChange = onReleaseTypeSelectedListChanged
+                onReleaseTypeListChange = onReleaseTypeSelectedListChanged,
+                onSearchFirstAirDateChange = onSearchFirstAirDateChange
             )
 
             ChipSelector(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(
                         horizontal = Dimens.padding.horizontal,
                         vertical = Dimens.padding.medium
                     ),
                 title = stringResource(R.string.text_genres),
                 chipItemList = state.genreList,
-                showAll = false,
+                showAllChip = false,
                 onSelectionChanged = onGenreSelectedListChanged
             )
 
@@ -280,6 +290,7 @@ fun MediaFilterScreenPreview() {
         onUserScoreRangeSelected = { _, _, _ -> },
         onMinUserVotesChanged = {},
         onRuntimeRangeSelected = { _, _ -> },
-        onApplyFilterClick = {}
+        onApplyFilterClick = {},
+        onSearchFirstAirDateChange = {}
     )
 }

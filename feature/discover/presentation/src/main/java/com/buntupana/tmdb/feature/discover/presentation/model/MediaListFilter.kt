@@ -70,9 +70,10 @@ sealed class MediaListFilter(
         private val _sortByOrder: SortByOrder = SortByOrder.DESCENDING,
         private val _monetizationTypeList: List<MonetizationType> = emptyList(),
         @Serializable(with = LocalDateSerializer::class)
-        private val _releaseDateFrom: LocalDate? = null,
+        private val airDateFrom: LocalDate? = null,
         @Serializable(with = LocalDateSerializer::class)
-        private val _releaseDateTo: LocalDate? = null,
+        private val airDateTo: LocalDate? = null,
+        val searchFirstAirDate: Boolean = false,
         val genreList: List<TvShowGenre> = emptyList(),
         private val _language: String? = null,
         private val _userScoreMin: Int = 0,
@@ -85,8 +86,8 @@ sealed class MediaListFilter(
         sortBy = _sortBy,
         sortByOrder = _sortByOrder,
         monetizationTypeList = _monetizationTypeList,
-        releaseDateFrom = _releaseDateFrom,
-        releaseDateTo = _releaseDateTo,
+        releaseDateFrom = airDateFrom,
+        releaseDateTo = airDateTo,
         language = _language,
         userScoreMin = _userScoreMin,
         userScoreMax = _userScoreMax,

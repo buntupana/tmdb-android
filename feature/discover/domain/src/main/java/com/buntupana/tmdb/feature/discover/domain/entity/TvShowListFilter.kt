@@ -5,6 +5,7 @@ import java.time.LocalDate
 data class TvShowListFilter(
     val sortBy: SortBy = SortBy.POPULARITY_DESC,
     val monetizationTypeList: List<MonetizationType> = emptyList(),
+    val searchFirstAirDate: Boolean = false,
     val releaseDateFrom: LocalDate? = null,
     val releaseDateTo: LocalDate? = null,
     val genreList: List<TvShowGenre> = emptyList(),

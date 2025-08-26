@@ -19,7 +19,7 @@ object MediaFilterListDefault {
     val popularTvShow = MediaListFilter.TvShow(
         _sortBy = SortBySimple.POPULARITY,
         _sortByOrder = SortByOrder.DESCENDING,
-        _releaseDateTo = LocalDate.now()
+        airDateTo = LocalDate.now()
             .plusMonths(6)
     )
 
@@ -32,8 +32,8 @@ object MediaFilterListDefault {
     val airingTodayTvShow = MediaListFilter.TvShow(
         _sortBy = SortBySimple.POPULARITY,
         _sortByOrder = SortByOrder.DESCENDING,
-        _releaseDateFrom = LocalDate.now(),
-        _releaseDateTo = LocalDate.now()
+        airDateFrom = LocalDate.now(),
+        airDateTo = LocalDate.now()
     )
 
     val upcomingMovie = MediaListFilter.Movie(
@@ -47,8 +47,8 @@ object MediaFilterListDefault {
     val onTvTvShow = MediaListFilter.TvShow(
         _sortBy = SortBySimple.POPULARITY,
         _sortByOrder = SortByOrder.DESCENDING,
-        _releaseDateFrom = LocalDate.now(),
-        _releaseDateTo = LocalDate.now().plusDays(7)
+        airDateFrom = LocalDate.now(),
+        airDateTo = LocalDate.now().plusDays(7)
     )
 
     val topRatedMovie = MediaListFilter.Movie(
@@ -62,7 +62,7 @@ object MediaFilterListDefault {
     val topRatedTvShow = MediaListFilter.TvShow(
         _sortBy = SortBySimple.RATING,
         _sortByOrder = SortByOrder.DESCENDING,
-        _releaseDateTo = LocalDate.now()
+        airDateTo = LocalDate.now()
             .plusMonths(6),
         _minUserVotes = 200
     )

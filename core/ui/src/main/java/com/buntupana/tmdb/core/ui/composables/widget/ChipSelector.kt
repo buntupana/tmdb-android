@@ -3,7 +3,6 @@ package com.buntupana.tmdb.core.ui.composables.widget
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
@@ -25,7 +24,7 @@ import com.buntupana.tmdb.core.ui.util.UiText
 fun ChipSelector(
     modifier: Modifier = Modifier,
     title: String? = null,
-    showAll: Boolean = false,
+    showAllChip: Boolean = false,
     chipItemList: List<SelectableItem>,
     onSelectionChanged: (chipItemList: List<SelectableItem>) -> Unit
 ) {
@@ -47,13 +46,12 @@ fun ChipSelector(
 
         FlowRow(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(
                     top = Dimens.padding.small
                 ),
             horizontalArrangement = Arrangement.spacedBy(Dimens.padding.small)
         ) {
-            if (showAll) {
+            if (showAllChip) {
                 FilterChip(
                     selected = isAllSelected,
                     onClick = {
@@ -107,7 +105,7 @@ private fun ChipSelectorPreview() {
     ChipSelector(
         modifier = Modifier,
         title = "Genres",
-        showAll = true,
+        showAllChip = true,
         chipItemList = chipItemList,
         onSelectionChanged = {
             chipItemList = it

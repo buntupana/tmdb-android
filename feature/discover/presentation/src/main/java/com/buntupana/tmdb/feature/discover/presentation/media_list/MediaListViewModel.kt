@@ -122,7 +122,7 @@ class MediaListViewModel @Inject constructor(
         state = state.copy(
             mediaListFilter = mediaListFilter,
             tvShowDefaultFilter = tvShowDefaultFilter,
-            movieItems = null
+            tvShowItems = null
         )
 
         val sortBy = getSortBy(
@@ -135,6 +135,7 @@ class MediaListViewModel @Inject constructor(
             monetizationTypeList = mediaListFilter.monetizationTypeList,
             releaseDateFrom = mediaListFilter.releaseDateFrom,
             releaseDateTo = mediaListFilter.releaseDateTo,
+            searchFirstAirDate = mediaListFilter.searchFirstAirDate,
             genreList = mediaListFilter.genreList,
             language = mediaListFilter.language,
             userScoreRange = IntRange(mediaListFilter.userScoreMin, mediaListFilter.userScoreMax),

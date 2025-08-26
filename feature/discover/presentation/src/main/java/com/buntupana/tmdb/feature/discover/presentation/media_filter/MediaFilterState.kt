@@ -12,6 +12,7 @@ data class MediaFilterState(
     val releaseTypesList: List<SelectableItem> = emptyList(),
     val releaseDateFrom: LocalDate? = null,
     val releaseDateTo: LocalDate? = null,
+    val searchFirstAirDate: Boolean = false,
     val genreList: List<SelectableItem> = emptyList(),
     val userScoreRange: IntRange = IntRange(0, 100),
     val includeNotRated: Boolean = true,

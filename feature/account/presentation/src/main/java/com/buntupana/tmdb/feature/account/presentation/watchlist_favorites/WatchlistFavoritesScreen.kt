@@ -81,17 +81,36 @@ fun WatchlistContent(
         navigationBarColor = PrimaryColor
     )
 
+    val pagerState = rememberPagerState(
+        initialPage = state.defaultPage
+    ) { MediaType.entries.size }
+
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopBarTitle(
-                title = stringResource(state.screenType.titleResId),
-                backgroundColor = PrimaryColor,
-                onBackClick = onBackClick,
-                onSearchClick = onSearchClick,
-                scrollBehavior = scrollBehavior
-            )
+            Column {
+                TopBarTitle(
+                    title = stringResource(state.screenType.titleResId),
+                    backgroundColor = PrimaryColor,
+                    onBackClick = onBackClick,
+                    onSearchClick = onSearchClick,
+                    scrollBehavior = scrollBehavior
+                )
+                WatchlistFavoriteTabRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .isVisible(
+                            isVisible = state.movieItemsTotalCount != null && state.tvShowItemsTotalCount != null,
+                            animateSize = true
+                        ),
+                    pagerState = pagerState,
+                    order = state.order,
+                    movieItemsTotalCount = state.movieItemsTotalCount,
+                    tvShowItemsTotalCount = state.tvShowItemsTotalCount,
+                    onOrderClick = onOrderClick
+                )
+            }
         }
     ) { paddingValues ->
 
@@ -121,27 +140,9 @@ fun WatchlistContent(
             )
         }
 
-        val pagerState = rememberPagerState(
-            initialPage = state.defaultPage
-        ) { MediaType.entries.size }
-
         Column(
             modifier = Modifier.paddingValues(top = { paddingValues.calculateTopPadding() })
         ) {
-
-            WatchlistFavoriteTabRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .isVisible(
-                        isVisible = state.movieItemsTotalCount != null && state.tvShowItemsTotalCount != null,
-                        animateSize = true
-                    ),
-                pagerState = pagerState,
-                order = state.order,
-                movieItemsTotalCount = state.movieItemsTotalCount,
-                tvShowItemsTotalCount = state.tvShowItemsTotalCount,
-                onOrderClick = onOrderClick
-            )
 
             if (state.isError || state.isLoading) {
                 return@Scaffold

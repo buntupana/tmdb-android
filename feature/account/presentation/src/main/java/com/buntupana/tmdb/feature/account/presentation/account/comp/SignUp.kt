@@ -1,12 +1,17 @@
 package com.buntupana.tmdb.feature.account.presentation.account.comp
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material3.Button
@@ -36,84 +41,68 @@ fun SignUp(
 
     val backgroundColor = SignUpBackgroundColor
 
-    Column(
-        modifier = modifier
+
+    Box(
+        modifier = Modifier
             .fillMaxSize()
+            .background(backgroundColor)
     ) {
-
+        ImageFromUrl(
+            modifier = Modifier.fillMaxSize(),
+            imageUrl = "https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/lMnoYqPIAVL0YaLP5YjRy7iwaYv.jpg",
+            showPlaceHolder = true,
+            placeHolderColor = backgroundColor
+        )
         Box(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-        ) { }
+                .fillMaxSize()
+                .background(backgroundColor.copy(alpha = 0.70f))
+        )
 
-        Box(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(backgroundColor)
+                .fillMaxSize()
+                .verticalScroll(state = rememberScrollState())
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(
+                    horizontal = Dimens.padding.horizontal
+                ),
+            verticalArrangement = Arrangement.Center
         ) {
-
-            ImageFromUrl(
-                modifier = Modifier.matchParentSize(),
-                imageUrl = "https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/lMnoYqPIAVL0YaLP5YjRy7iwaYv.jpg",
-                showPlaceHolder = true,
-                placeHolderColor = backgroundColor
+            Text(
+                text = stringResource(R.string.text_join_today),
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    color = Color.White
+                ),
+                fontWeight = FontWeight.Bold
             )
 
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(backgroundColor.copy(alpha = 0.70f))
+            Text(
+                modifier = Modifier.padding(top = Dimens.padding.medium),
+                text = AnnotatedString.fromHtml(htmlString = stringResource(R.string.message_sign_up_html_description)),
+                style = MaterialTheme.typography.titleLarge.copy(
+                    color = Color.White
+                )
             )
 
-            Column(
-                modifier = Modifier
-                    .padding(
-                        horizontal = Dimens.padding.horizontal,
-                        vertical = Dimens.padding.big
-                    )
+            Button(
+                modifier = Modifier.padding(top = Dimens.padding.medium),
+                colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
+                onClick = onSignUpClick,
             ) {
-                Text(
-                    text = stringResource(R.string.text_join_today),
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        color = Color.White
-                    ),
-                    fontWeight = FontWeight.Bold
-                )
-
-                Text(
-                    modifier = Modifier.padding(top = Dimens.padding.medium),
-                    text = AnnotatedString.fromHtml(htmlString = stringResource(R.string.message_sign_up_html_description)),
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        color = Color.White
-                    )
-                )
-
-                Button(
-                    modifier = Modifier.padding(top = Dimens.padding.medium),
-                    colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
-                    onClick = onSignUpClick,
-                ) {
-                    Icon(Icons.AutoMirrored.Filled.Login, contentDescription = null)
-                    Spacer(modifier = Modifier.padding(horizontal = Dimens.padding.tiny))
-                    Text(text = stringResource(R.string.text_sign_up))
-                }
-
-                Text(
-                    modifier = Modifier.padding(top = Dimens.padding.big),
-                    text = AnnotatedString.fromHtml(htmlString = stringResource(R.string.list_sign_up_vantages)),
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        color = Color.White
-                    )
-                )
+                Icon(Icons.AutoMirrored.Filled.Login, contentDescription = null)
+                Spacer(modifier = Modifier.padding(horizontal = Dimens.padding.tiny))
+                Text(text = stringResource(R.string.text_sign_up))
             }
+
+            Text(
+                modifier = Modifier.padding(top = Dimens.padding.big),
+                text = AnnotatedString.fromHtml(htmlString = stringResource(R.string.list_sign_up_vantages)),
+                style = MaterialTheme.typography.titleSmall.copy(
+                    color = Color.White
+                )
+            )
         }
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-//                .background(backgroundColor)
-        ) { }
     }
 }
 

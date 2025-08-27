@@ -1,21 +1,16 @@
 package com.buntupana.tmdb.feature.discover.presentation.media_filter
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,7 +21,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.composables.widget.ChipSelector
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.SelectableItem
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
@@ -145,59 +139,42 @@ fun MediaFilterContent(
     Scaffold(
         topBar = {
             MediaFilterTopBar(
+                mediaType = state.mediaType,
+                onApplyClick = onApplyFilterClick,
                 onSaveClick = {},
                 onBackClick = onBackClick
             )
-        },
-        bottomBar = {
-            Column (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(PrimaryColor)
-                ,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    modifier = Modifier
-                        .padding(
-                            horizontal = Dimens.padding.horizontal,
-                            vertical = Dimens.padding.medium
-                        ),
-                    colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
-                    onClick = onApplyFilterClick,
-                ) {
-                    Text("Apply")
-                }
-            }
         }
     ) { paddingValues ->
 
         Column(
             modifier = Modifier
-                .padding(vertical = Dimens.padding.vertical)
+                .padding(top = paddingValues.calculateTopPadding())
                 .verticalScroll(state = rememberScrollState())
-                .padding(paddingValues)
         ) {
 
             SortBySelector(
                 modifier = Modifier
                     .padding(
+                        top = Dimens.padding.medium,
+                        bottom = Dimens.padding.small
+                    )
+                    .padding(
                         horizontal = Dimens.padding.horizontal,
-                        vertical = Dimens.padding.small
                     ),
                 sortBySelected = state.sortBySelected,
                 sortByOrderSelected = state.sortByOrderSelected,
                 onApplySortBy = onApplySortBy
             )
 
+            HorizontalDivider()
 
             ChipSelector(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
                         horizontal = Dimens.padding.horizontal,
-                        vertical = Dimens.padding.medium
+                        vertical = Dimens.padding.vertical
                     ),
                 title = stringResource(R.string.text_availabilities),
                 chipItemList = state.availabilitiesList,
@@ -205,12 +182,26 @@ fun MediaFilterContent(
                 onSelectionChanged = onAvailabilityListChanged
             )
 
+            HorizontalDivider()
+
+            UserScoreRangeSelector(
+                modifier = Modifier
+                    .padding(top = Dimens.padding.medium)
+                    .padding(horizontal = Dimens.padding.horizontal),
+                userScoreMin = state.userScoreRange.start,
+                userScoreMax = state.userScoreRange.endInclusive,
+                includeNotRated = state.includeNotRated,
+                onUserScoreRangeChanged = onUserScoreRangeSelected
+            )
+
+            HorizontalDivider()
+
             ReleaseDatesSelector(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
                         horizontal = Dimens.padding.horizontal,
-                        vertical = Dimens.padding.small
+                        vertical = Dimens.padding.medium
                     ),
                 mediaType = state.mediaType,
                 releaseTypeList = state.releaseTypesList,
@@ -222,12 +213,24 @@ fun MediaFilterContent(
                 onSearchFirstAirDateChange = onSearchFirstAirDateChange
             )
 
+            HorizontalDivider()
+
+            MinUserVotesSelector(
+                modifier = Modifier
+                    .padding(top = Dimens.padding.medium)
+                    .padding(horizontal = Dimens.padding.horizontal),
+                minUserVotes = state.minUserVotes,
+                onValueChange = onMinUserVotesChanged
+            )
+
+            HorizontalDivider()
+
             ChipSelector(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
                         horizontal = Dimens.padding.horizontal,
-                        vertical = Dimens.padding.medium
+                        vertical = Dimens.padding.vertical
                     ),
                 title = stringResource(R.string.text_genres),
                 chipItemList = state.genreList,
@@ -235,33 +238,14 @@ fun MediaFilterContent(
                 onSelectionChanged = onGenreSelectedListChanged
             )
 
-            UserScoreRangeSelector(
-                modifier = Modifier
-                    .padding(
-                        horizontal = Dimens.padding.horizontal,
-                        vertical = Dimens.padding.medium
-                    ),
-                userScoreMin = state.userScoreRange.start,
-                userScoreMax = state.userScoreRange.endInclusive,
-                includeNotRated = state.includeNotRated,
-                onUserScoreRangeChanged = onUserScoreRangeSelected
-            )
-
-            MinUserVotesSelector(
-                modifier = Modifier
-                    .padding(
-                        horizontal = Dimens.padding.horizontal,
-                        vertical = Dimens.padding.small
-                    ),
-                minUserVotes = state.minUserVotes,
-                onValueChange = onMinUserVotesChanged
-            )
+            HorizontalDivider()
 
             RuntimeSelector(
                 modifier = Modifier
+                    .padding(bottom = paddingValues.calculateBottomPadding())
                     .padding(
                         horizontal = Dimens.padding.horizontal,
-                        vertical = Dimens.padding.small
+                        vertical = Dimens.padding.medium
                     ),
                 runtimeStart = state.runtimeRange.start,
                 runtimeEnd = state.runtimeRange.endInclusive,

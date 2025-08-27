@@ -19,7 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
 import com.buntupana.tmdb.core.ui.theme.Dimens
@@ -95,11 +97,22 @@ fun MediaListContent(
             MediaType.TV_SHOW -> state.tvShowItems?.collectAsLazyPagingItems()
         }
 
+        if (
+            state.isLoading ||
+            mediaItems?.loadState?.refresh is LoadState.Loading
+        ) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicatorDelayed(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+
         if (mediaItems != null) {
             LazyColumnGeneric(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .padding(top = paddingValues.calculateTopPadding()),
                 topPadding = Dimens.padding.medium,
                 animateItem = false,
                 itemList = mediaItems,
@@ -141,7 +154,7 @@ fun MediaListContent(
     )
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MoviesScreenPreview() {
     MediaListContent(

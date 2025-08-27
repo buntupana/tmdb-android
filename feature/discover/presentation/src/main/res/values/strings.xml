@@ -15,6 +15,9 @@
     <string name="text_today">Today</string>
     <string name="text_this_week">This Week</string>
 
+    <string name="text_movies_filter">Movies Filter</string>
+    <string name="text_tv_shows_filter">Tv Shows Filter</string>
+
     <string name="text_select_filter">Select Filter</string>
     <string name="text_popular">Popular</string>
     <string name="text_now_playing">Now Playing</string>
@@ -84,6 +87,6 @@
     <string name="text_include_not_rated">Include Not Rated</string>
     <string name="text_min_user_votes">Minimum User Votes</string>
     <string name="text_runtime">Runtime (minutes)</string>
-    <string name="text_first_air_date">First Air Date</string>
+    <string name="text_search_first_air_date">Search First Air Date</string>
 
 </resources>

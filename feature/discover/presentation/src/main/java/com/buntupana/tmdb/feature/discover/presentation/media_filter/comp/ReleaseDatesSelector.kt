@@ -90,7 +90,7 @@ fun ReleaseDatesSelector(
             ) {
                 Text(
                     modifier = Modifier.padding(horizontal = Dimens.padding.horizontal),
-                    text = stringResource(R.string.text_first_air_date),
+                    text = stringResource(R.string.text_search_first_air_date),
                     style = MaterialTheme.typography.bodyLarge
                 )
 

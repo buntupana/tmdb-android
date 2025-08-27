@@ -141,12 +141,14 @@ fun AccountContent(
 
     Scaffold(
         topBar = {
-            AccountTopBar(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                avatarUrl = state.avatarUrl,
-                username = state.username
-            )
+            if (state.isUserLogged) {
+                AccountTopBar(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    avatarUrl = state.avatarUrl,
+                    username = state.username
+                )
+            }
         }
     ) { paddingValues ->
 
@@ -242,14 +244,10 @@ fun AccountContent(
                         Text(text = stringResource(R.string.text_sign_out))
                     }
                 }
-
-                Spacer(Modifier.padding(vertical = Dimens.padding.vertical))
             }
         } else {
             SignUp(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(paddingValues),
+                modifier = Modifier.fillMaxSize(),
                 onSignUpClick = onSignUpClick
             )
         }
@@ -261,7 +259,7 @@ fun AccountContent(
 fun AccountScreenPreview() {
     AccountContent(
         AccountState(
-            isUserLogged = true,
+            isUserLogged = false,
             username = "Alvaro",
             userListDetailsList = null
         ),

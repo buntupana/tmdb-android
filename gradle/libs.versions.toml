@@ -16,15 +16,15 @@ ktx = '1.17.0'
 work = '2.4.0'
 
 #Compose
-composeBom = "2025.08.00"
+composeBom = "2025.08.01"
 compose_activity = "1.10.1"
 compose_constraint = '1.1.01'
 compose_foundation = "1.9.0"
 compose_paging = "3.3.6"
-compose_lifecycle = "2.9.2"
+compose_lifecycle = "2.9.3"
 
 #Android dependencies
-lifecycle = "2.9.2"
+lifecycle = "2.9.3"
 room = "2.7.2"
 navigation = "2.9.3"
 palette = '1.0.0'
@@ -33,13 +33,13 @@ palette = '1.0.0'
 accompanist = "0.36.0"
 
 #Material Design
-material3 = "1.4.0-beta02"
+material3 = "1.4.0-beta03"
 
 #Firebase
 firebase = '28.1.0'
 
 #Di
-dagger = "2.57"
+dagger = "2.57.1"
 dagger_android = "1.2.0"
 
 #Ktor
@@ -81,7 +81,6 @@ uiGraphicsAndroid = "1.9.0"
 #Kotlin
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
-kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 
 #Android
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }

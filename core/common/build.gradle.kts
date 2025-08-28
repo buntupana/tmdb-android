@@ -45,7 +45,6 @@ android {
 dependencies {
 
     coreLibraryDesugaring(libs.desugar.jdk)
-    implementation(kotlin("reflect"))
 
     // Kotlin
     implementation(libs.kotlinx.serialization.json)

@@ -44,7 +44,6 @@ android {
 dependencies {
 
     coreLibraryDesugaring(libs.desugar.jdk)
-    implementation(kotlin("reflect"))
 
     // Modules
     implementation(project(":core:common"))

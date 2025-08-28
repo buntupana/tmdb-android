@@ -75,7 +75,6 @@ dependencies {
     implementation(project(":feature:lists:presentation"))
 
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlin.reflect)
 
     // Compose
     implementation(platform(libs.androidx.compose.bom))

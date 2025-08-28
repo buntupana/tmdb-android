@@ -9,14 +9,11 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -57,7 +54,6 @@ import androidx.core.net.toUri
 import androidx.core.text.HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL
 import androidx.core.text.htmlEncode
 import androidx.core.text.toHtml
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
@@ -67,6 +63,10 @@ import androidx.navigation.compose.DialogNavigatorDestinationBuilder
 import androidx.navigation.get
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.HighScoreColor
+import com.buntupana.tmdb.core.ui.theme.LowScoreColor
+import com.buntupana.tmdb.core.ui.theme.MediumScoreColor
+import com.buntupana.tmdb.core.ui.theme.NoScoreColor
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.panabuntu.tmdb.core.common.model.Gender
 import kotlin.reflect.KType
@@ -87,7 +87,7 @@ fun getCustomTabIntent(url: String): Intent {
     return customTabsIntent.intent
 }
 
-fun TextStyle.balanced() : TextStyle {
+fun TextStyle.balanced(): TextStyle {
     val customTitleLineBreak = LineBreak(
         strategy = LineBreak.Strategy.Balanced,
         strictness = LineBreak.Strictness.Strict,
@@ -113,27 +113,42 @@ fun Modifier.clickableTextPadding(): Modifier {
 }
 
 @Composable
-fun Modifier.setStatusNavigationBarColor(
-    backgroundColor: Color = PrimaryColor
-): Modifier {
-
+fun SetSystemBarsColors(
+    statusBarColor: Color? = null,
+    navigationBarColor: Color? = null,
+    translucentNavigationBar: Boolean? = null
+) {
     val view = LocalView.current
-    val isLightStatus = backgroundColor.getOnBackgroundColor() != Color.White
+    if (!view.isInEditMode) { // Prevent running in Preview
+        SideEffect {
+            val window = (view.context as? Activity)?.window ?: return@SideEffect
 
-    (view.context as? Activity)?.run {
-        WindowCompat.getInsetsController(
-            window,
-            view
-        ).run {
-            isAppearanceLightStatusBars = isLightStatus
-//            isAppearanceLightNavigationBars = isLightStatus
+            val insetsController = WindowInsetsControllerCompat(window, view)
+
+            // Control Status Bar Icons
+            if (statusBarColor != null) { // API 23+
+                insetsController.isAppearanceLightStatusBars = statusBarColor.isLight()
+            }
+
+            // Control Navigation Bar Icons
+            if (navigationBarColor != null) { // API 26+
+                insetsController.isAppearanceLightNavigationBars = navigationBarColor.isLight()
+            }
+
+            if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
+                navigationBarColor != null
+            ) {
+                window.navigationBarColor = navigationBarColor.toArgb()
+            } else if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                translucentNavigationBar != null
+            ) {
+                window.isNavigationBarContrastEnforced = translucentNavigationBar
+            }
         }
     }
-
-    return fillMaxSize()
-        .background(backgroundColor)
-        .safeDrawingPadding()
-        .background(MaterialTheme.colorScheme.background)
 }
 
 @Composable
@@ -270,7 +285,7 @@ fun RippleColorContainer(
 fun IconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    rippleColor: Color = MaterialTheme.colorScheme.background,
+    rippleColor: Color = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
     enabled: Boolean = true,
     colors: IconButtonColors = IconButtonDefaults.iconButtonColors(),
     interactionSource: MutableInteractionSource? = null,
@@ -350,39 +365,12 @@ fun Modifier.clickableWithRipple(
     )
 }
 
-@Composable
-fun SetLegacySystemBarsColors(
-    statusBarColor: Color,
-    navigationBarColor: Color,
-    useDarkStatusBarIcons: Boolean,
-    useDarkNavigationBarIcons: Boolean
-) {
-    val view = LocalView.current
-    if (!view.isInEditMode) { // Prevent running in Preview
-        SideEffect {
-            val window = (view.context as? Activity)?.window ?: return@SideEffect
-
-            // Set Status Bar Color
-            window.statusBarColor = statusBarColor.toArgb()
-
-            // Set Navigation Bar Color
-            // Note: On some older devices (API < 23 for nav bar, or specific manufacturer ROMs),
-            // fully opaque nav bar colors might not always render as expected, or might have scrims.
-            // Translucent colors often behave more consistently if you face issues.
-            window.navigationBarColor = navigationBarColor.toArgb()
-
-            val insetsController = WindowInsetsControllerCompat(window, view)
-
-            // Control Status Bar Icons
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // API 23+
-                insetsController.isAppearanceLightStatusBars = useDarkStatusBarIcons
-            }
-
-            // Control Navigation Bar Icons
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // API 26+
-                insetsController.isAppearanceLightNavigationBars = useDarkNavigationBarIcons
-            }
-        }
+fun getRatingColor(rating: Int): Color {
+    return when (rating) {
+        in 0..30 -> LowScoreColor
+        in 4..60 -> MediumScoreColor
+        in 7..100 -> HighScoreColor
+        else -> NoScoreColor
     }
 }
 

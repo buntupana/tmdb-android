@@ -19,6 +19,10 @@
     <string name="text_movie">Movie</string>
     <string name="text_tv_show">Tv Show</string>
     <string name="text_apply_changes">Apply Changes</string>
+    <string name="text_apply">Apply</string>
+    <string name="text_from">From</string>
+    <string name="text_to">To</string>
+    <string name="text_all">All</string>
 
     // Filter
     <string name="text_last_added">Last Added</string>
@@ -42,7 +46,6 @@
     // Person Detail
     <string name="text_department">Department</string>
     <string name="text_clear">Clear</string>
-    <string name="text_all">All</string>
     <string name="text_movies">Movies</string>
     <string name="text_tv_shows">TV Shows</string>
     <string name="text_people">People</string>

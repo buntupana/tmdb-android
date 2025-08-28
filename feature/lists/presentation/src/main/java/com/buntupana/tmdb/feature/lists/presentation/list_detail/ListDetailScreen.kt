@@ -31,7 +31,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,11 +49,9 @@ import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
+import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
-import com.buntupana.tmdb.core.ui.util.isLight
 import com.buntupana.tmdb.core.ui.util.paddingValues
-import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListDialog
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListNav
 import com.buntupana.tmdb.feature.lists.presentation.list_detail.comp.ListDetailHeader
@@ -172,16 +169,10 @@ fun ListDetailContent(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    setStatusBarLightStatusFromBackground(
-        LocalView.current,
-        PrimaryColor
-    )
-
-    SetLegacySystemBarsColors(
+    SetSystemBarsColors(
         statusBarColor = PrimaryColor,
         navigationBarColor = PrimaryColor,
-        useDarkStatusBarIcons = PrimaryColor.isLight(),
-        useDarkNavigationBarIcons = PrimaryColor.isLight()
+        translucentNavigationBar = true
     )
 
     Scaffold(

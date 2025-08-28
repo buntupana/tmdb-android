@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,17 +14,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
-import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
+import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchBar
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchResults
+import com.buntupana.tmdb.feature.search.presentation.comp.SuggestionList
 import com.buntupana.tmdb.feature.search.presentation.comp.TrendingList
 import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
 
 @Composable
 fun SearchScreen(
@@ -76,13 +78,33 @@ fun SearchScreenContent(
     onDismissSuggestionsClick: () -> Unit
 ) {
 
-    Box(
-        modifier = Modifier.setStatusNavigationBarColor()
-    ) {
+    SetSystemBarsColors(
+        statusBarColor = PrimaryColor,
+        navigationBarColor = MaterialTheme.colorScheme.background,
+        translucentNavigationBar = true
+    )
+
+    Scaffold(
+        topBar = {
+            SearchBar(
+                modifier = Modifier.fillMaxWidth(),
+                searchKey = state.searchKey,
+                onValueChanged = {
+                    onSearchSuggestions(it)
+                },
+                isLoadingSuggestions = state.isSearchSuggestionsLoading,
+                onSearch = { searchKey ->
+                    onSearch(searchKey, null)
+                },
+                isLoadingSearch = state.isSearchLoading,
+                requestFocus = true
+            )
+        }
+    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = Dimens.topBarHeight)
+                .padding(top = paddingValues.calculateTopPadding())
         ) {
             when {
                 state.isSearchLoading -> {
@@ -98,17 +120,18 @@ fun SearchScreenContent(
                 state.isSearchError -> {
                     ErrorAndRetry(
                         modifier = Modifier
-                            .padding(vertical = 200.dp)
-                            .fillMaxWidth(),
+                            .padding(paddingValues)
+                            .fillMaxSize(),
                         errorMessage = stringResource(R.string.message_loading_content_error)
                     ) {
                         onSearch(state.searchKey, null)
                     }
                 }
 
-                state.resultCountList.isNotEmpty() -> {
+                state.resultCountList.isNotNullOrEmpty() -> {
                     SearchResults(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxSize(),
+                        bottomPadding = paddingValues.calculateBottomPadding(),
                         searchState = state,
                         onMediaClick = onMediaClick,
                         onPersonClick = onPersonClick
@@ -125,39 +148,37 @@ fun SearchScreenContent(
                     )
                 }
             }
-        }
 
-        SearchBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopCenter),
-            searchKey = state.searchKey,
-            onValueChanged = {
-                onSearchSuggestions(it)
-            },
-            isLoadingSuggestions = state.isSearchSuggestionsLoading,
-            onSearch = { searchKey ->
-                onSearch(searchKey, null)
-            },
-            isLoadingSearch = state.isSearchLoading,
-            requestFocus = true,
-            suggestionList = state.searchSuggestionList,
-            isSearchSuggestionError = state.isSearchSuggestionsError,
-            onSuggestionItemClick = { mediaItemName, searchType ->
-                onSearch(mediaItemName, searchType)
-            },
-            onDismissSuggestionsClick = onDismissSuggestionsClick
-        )
+            if (state.searchKey.isNotBlank()) {
+                SuggestionList(
+                    suggestionList = state.searchSuggestionList,
+                    onSuggestionItemClick = { mediaItemName, searchType ->
+                        onSearch(mediaItemName, searchType)
+                    },
+                    isSearchSuggestionError = state.isSearchSuggestionsError,
+                    onDismissSuggestionsClick = onDismissSuggestionsClick
+                )
+            }
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun SearchScreenPreview() {
+
+    val suggestionList = listOf(
+        searchItemMovieSample,
+        searchItemTVShowSample,
+        searchItemPersonSample
+    )
+
     SearchScreenContent(
         state = SearchState(
-            searchSuggestionList = null,
-            isSearchError = true
+            searchKey = "asdf",
+            resultCountList = listOf(MediaResultCount(SearchType.MOVIE, 100)),
+            searchSuggestionList = suggestionList,
+            isSearchError = false
         ),
         onSearchSuggestions = {},
         onSearch = { _, _ -> },

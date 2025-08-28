@@ -1,10 +1,16 @@
 package com.buntupana.tmdb.feature.discover.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.buntupana.tmdb.core.data.api.GenericPagingDataSource
 import com.buntupana.tmdb.core.data.mapper.toModel
 import com.buntupana.tmdb.feature.discover.data.remote_data_source.DiscoverRemoteDataSource
 import com.buntupana.tmdb.feature.discover.domain.entity.FreeToWatchType
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
+import com.buntupana.tmdb.feature.discover.domain.entity.MovieListFilter
 import com.buntupana.tmdb.feature.discover.domain.entity.TrendingType
+import com.buntupana.tmdb.feature.discover.domain.entity.TvShowListFilter
 import com.buntupana.tmdb.feature.discover.domain.repository.DiscoverRepository
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
@@ -12,6 +18,7 @@ import com.panabuntu.tmdb.core.common.entity.map
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class DiscoverRepositoryImpl @Inject constructor(
@@ -27,15 +34,14 @@ class DiscoverRepositoryImpl @Inject constructor(
         return discoverRemoteDataSource.getMoviesPopular(
             monetizationType = monetizationType,
             region = session.value.countryCode
-        )
-            .map { result ->
-                result.results.map {
-                    it.toModel(
-                        baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                        baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-                    )
-                }
+        ).map { result ->
+            result.results.map {
+                it.toModel(
+                    baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                )
             }
+        }
     }
 
     override suspend fun getTvShowsPopular(monetizationType: MonetizationType): Result<List<MediaItem>, NetworkError> {
@@ -43,30 +49,28 @@ class DiscoverRepositoryImpl @Inject constructor(
         return discoverRemoteDataSource.getTvShowPopular(
             monetizationType = monetizationType,
             region = session.value.countryCode
-        )
-            .map { result ->
-                result.results.map {
-                    it.toModel(
-                        baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                        baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-                    )
-                }
+        ).map { result ->
+            result.results.map {
+                it.toModel(
+                    baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                )
             }
+        }
     }
 
     override suspend fun getMoviesInTheatres(): Result<List<MediaItem>, NetworkError> {
 
         return discoverRemoteDataSource.getMoviesInTheatres(
             region = session.value.countryCode
-        )
-            .map { result ->
-                result.results.map {
-                    it.toModel(
-                        baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                        baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-                    )
-                }
+        ).map { result ->
+            result.results.map {
+                it.toModel(
+                    baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                    baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                )
             }
+        }
     }
 
     override suspend fun getMoviesFreeToWatch(freeToWatchType: FreeToWatchType): Result<List<MediaItem>, NetworkError> {
@@ -76,15 +80,14 @@ class DiscoverRepositoryImpl @Inject constructor(
                 discoverRemoteDataSource.getMoviesPopular(
                     monetizationType = MonetizationType.FREE,
                     region = session.value.countryCode
-                )
-                    .map { result ->
-                        result.results.map {
-                            it.toModel(
-                                baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                                baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-                            )
-                        }
+                ).map { result ->
+                    result.results.map {
+                        it.toModel(
+                            baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                            baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                        )
                     }
+                }
 
             }
 
@@ -92,15 +95,14 @@ class DiscoverRepositoryImpl @Inject constructor(
                 discoverRemoteDataSource.getTvShowPopular(
                     monetizationType = MonetizationType.FREE,
                     region = session.value.countryCode
-                )
-                    .map { result ->
-                        result.results.map {
-                            it.toModel(
-                                baseUrlPoster = urlProvider.BASE_URL_POSTER,
-                                baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
-                            )
-                        }
+                ).map { result ->
+                    result.results.map {
+                        it.toModel(
+                            baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                            baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                        )
                     }
+                }
             }
         }
     }
@@ -127,5 +129,58 @@ class DiscoverRepositoryImpl @Inject constructor(
                     )
                 }
             }
+    }
+
+    override suspend fun getFilteredMovies(movieListFilter: MovieListFilter): Flow<PagingData<MediaItem.Movie>> {
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                GenericPagingDataSource(
+                    networkCall = { page ->
+                        discoverRemoteDataSource.getMovies(
+                            movieListFilter = movieListFilter,
+                            page = page,
+                            region = session.value.countryCode
+                        )
+                    },
+                    mapItemList = {
+                        it.toModel(
+                            baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                            baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                        )
+                    }
+                )
+            }
+        ).flow
+    }
+
+    override suspend fun getFilteredTvShows(tvShowListFilter: TvShowListFilter): Flow<PagingData<MediaItem.TvShow>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                GenericPagingDataSource(
+                    networkCall = { page ->
+                        discoverRemoteDataSource.getTvShows(
+                            tvShowListFilter = tvShowListFilter,
+                            page = page,
+                            region = session.value.countryCode
+                        )
+                    },
+                    mapItemList = {
+                        it.toModel(
+                            baseUrlPoster = urlProvider.BASE_URL_POSTER,
+                            baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP
+                        )
+                    }
+                )
+            }
+        ).flow
     }
 }

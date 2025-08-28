@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.manage_lists
 
-import com.buntupana.tmdb.core.ui.navigation.Routes
+import com.buntupana.tmdb.core.ui.navigation.Route
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import kotlinx.serialization.Serializable
 
@@ -12,4 +12,4 @@ data class ManageListsNav(
     val backgroundColor: Int?,
     val posterUrl: String?,
     val releaseYear: String?
-) : Routes
+) : Route

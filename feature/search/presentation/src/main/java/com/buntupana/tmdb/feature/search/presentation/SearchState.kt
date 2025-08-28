@@ -5,7 +5,6 @@ import com.buntupana.tmdb.feature.search.domain.model.SearchItem
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.model.PersonItem
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 
 data class SearchState(
     val searchKey: String = "",
@@ -15,9 +14,9 @@ data class SearchState(
     val isSearchSuggestionsError: Boolean = false,
     val trendingList: List<SearchItem> = emptyList(),
     val searchSuggestionList: List<SearchItem>? = null,
-    val movieItems: Flow<PagingData<MediaItem.Movie>> = flowOf(PagingData.empty()),
-    val tvShowItems: Flow<PagingData<MediaItem.TvShow>> = flowOf(PagingData.empty()),
-    val personItems: Flow<PagingData<PersonItem>> = flowOf(PagingData.empty()),
-    val resultCountList: List<MediaResultCount> = emptyList(),
+    val movieItems: Flow<PagingData<MediaItem.Movie>>? = null,
+    val tvShowItems: Flow<PagingData<MediaItem.TvShow>>? = null,
+    val personItems: Flow<PagingData<PersonItem>>? = null,
+    val resultCountList: List<MediaResultCount>? = null,
     val defaultPage: Int = SearchType.entries.indexOf(SearchType.MOVIE)
 )

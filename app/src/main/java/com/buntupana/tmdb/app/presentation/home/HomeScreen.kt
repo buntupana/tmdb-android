@@ -22,53 +22,60 @@ import androidx.navigation.compose.rememberNavController
 import com.buntupana.tmdb.app.R
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
-import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
+import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
-import com.buntupana.tmdb.core.ui.util.isLight
-import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
 import com.buntupana.tmdb.feature.account.presentation.account.AccountScreen
-import com.buntupana.tmdb.feature.discover.presentation.comp.TopBar
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNav
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverScreen
-import com.buntupana.tmdb.feature.discover.presentation.movies.MoviesNav
-import com.buntupana.tmdb.feature.discover.presentation.movies.MoviesScreen
-import com.buntupana.tmdb.feature.discover.presentation.tv_shows.TvShowsNav
-import com.buntupana.tmdb.feature.discover.presentation.tv_shows.TvShowsScreen
+import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListNav
+import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListScreen
+import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
 
 
 @Composable
 fun HomeScreen(
+    mediaListFilterResult: MediaListFilter?,
     onSignInClicked: () -> Unit,
     onSearchClicked: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
     onFavoritesClick: (mediaType: MediaType) -> Unit,
     onListsClick: () -> Unit,
-    onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit,
+    onMediaItemClicked: (mediaItemType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit,
     onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
+    onMovieFilterClick: (mediaListFilter: MediaListFilter) -> Unit
 ) {
     HomeScreenContent(
+        mediaListFilterResult = mediaListFilterResult,
         onSignInClicked = onSignInClicked,
         onSearchClicked = onSearchClicked,
         onWatchListClick = onWatchListClick,
         onFavoritesClick = onFavoritesClick,
         onListsClick = onListsClick,
         onMediaItemClicked = onMediaItemClicked,
+        onMovieFilterClick = onMovieFilterClick,
         onListDetailClick = onListDetailClick
     )
 }
 
 @Composable
 fun HomeScreenContent(
+    mediaListFilterResult: MediaListFilter?,
     onSignInClicked: () -> Unit,
     onSearchClicked: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
     onFavoritesClick: (mediaType: MediaType) -> Unit,
     onListsClick: () -> Unit,
-    onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit,
+    onMediaItemClicked: (mediaItemType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit,
     onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
+    onMovieFilterClick: (movieListFilter: MediaListFilter) -> Unit
 ) {
+
+    SetSystemBarsColors(
+        navigationBarColor = PrimaryColor,
+        translucentNavigationBar = false
+    )
 
     val navigationItems = listOf(
         TabNavigationItem.Discover(title = stringResource(R.string.text_explore)),
@@ -79,20 +86,7 @@ fun HomeScreenContent(
 
     val navController = rememberNavController()
 
-    SetLegacySystemBarsColors(
-        statusBarColor = PrimaryColor,
-        navigationBarColor = PrimaryColor,
-        useDarkStatusBarIcons = PrimaryColor.isLight(),
-        useDarkNavigationBarIcons = PrimaryColor.isLight()
-    )
-
     Scaffold(
-        modifier = Modifier.setStatusNavigationBarColor(),
-        topBar = {
-            TopBar(
-                onSearchClick = onSearchClicked
-            )
-        },
         bottomBar = {
 
             val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -139,24 +133,32 @@ fun HomeScreenContent(
                 }
             }
         }
-    ) {
+    ) { paddingValues ->
+
         NavHost(
-            modifier = Modifier.padding(it),
+            modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()),
             navController = navController,
             startDestination = DiscoverNav
         ) {
             composable<DiscoverNav> {
-                DiscoverScreen(onMediaItemClicked = onMediaItemClicked)
-            }
-            composable<MoviesNav> {
-                MoviesScreen(
-//                    onMovieItemClicked = { movieId, posterDominantColor ->
-//                        onMediaItemClicked(movieId, MediaType.MOVIE, posterDominantColor)
-//                    }
+                DiscoverScreen(
+                    onSearchClicked = onSearchClicked,
+                    onMediaItemClicked = onMediaItemClicked
                 )
             }
-            composable<TvShowsNav> {
-                TvShowsScreen()
+            composable<MediaListNav.Movie> {
+                MediaListScreen(
+                    mediaListFilterResult = mediaListFilterResult,
+                    onMediaItemClicked = onMediaItemClicked,
+                    onFilterClick = onMovieFilterClick
+                )
+            }
+            composable<MediaListNav.TvShow> {
+                MediaListScreen(
+                    mediaListFilterResult = mediaListFilterResult,
+                    onMediaItemClicked = onMediaItemClicked,
+                    onFilterClick = onMovieFilterClick
+                )
             }
             composable<AccountNav> {
                 AccountScreen(
@@ -176,12 +178,14 @@ fun HomeScreenContent(
 @Composable
 fun HomeScreenPreview() {
     HomeScreenContent(
+        mediaListFilterResult = null,
         onSignInClicked = {},
         onSearchClicked = {},
         onWatchListClick = {},
         onFavoritesClick = {},
         onListsClick = {},
         onMediaItemClicked = { _, _, _ -> },
+        onMovieFilterClick = {},
         onListDetailClick = { _, _, _, _ -> }
     )
 }

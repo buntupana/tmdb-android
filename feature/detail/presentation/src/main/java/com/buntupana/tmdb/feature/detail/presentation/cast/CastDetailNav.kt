@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.feature.detail.presentation.cast
 
 import android.os.Parcelable
-import com.buntupana.tmdb.core.ui.navigation.Routes
+import com.buntupana.tmdb.core.ui.navigation.Route
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -15,4 +15,4 @@ data class CastDetailNav(
     val posterUrl: String?,
     val backgroundColor: Int?,
     val releaseYear: String?
-) : Parcelable, Routes
+) : Parcelable, Route

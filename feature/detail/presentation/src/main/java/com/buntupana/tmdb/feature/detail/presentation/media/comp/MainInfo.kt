@@ -48,10 +48,10 @@ import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.TextButton
 import com.buntupana.tmdb.core.ui.util.clickableWithRipple
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.core.ui.util.getRatingColor
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.presentation.R
-import com.buntupana.tmdb.feature.detail.presentation.getRatingColor
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
 import com.panabuntu.tmdb.core.common.util.toLocalizedString
 import com.buntupana.tmdb.core.ui.R as RCore

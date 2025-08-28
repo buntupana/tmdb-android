@@ -112,7 +112,7 @@ class SearchViewModel @Inject constructor(
                     state = state.copy(
                         isSearchSuggestionsLoading = false,
                         isSearchSuggestionsError = true,
-                        searchSuggestionList = emptyList()
+                        searchSuggestionList = null
                     )
                 }
                 .onSuccess {

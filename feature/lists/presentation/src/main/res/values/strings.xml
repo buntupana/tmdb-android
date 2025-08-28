@@ -22,4 +22,5 @@
     <string name="message_it_does_no_belongs_to_lists">It doesn\'t belong to any list</string>
     <string name="message_no_list_to_show">No lists to show</string>
     <string name="text_belongs_to">belongs to</string>
+    <string name="text_public_list">Public List</string>
 </resources>

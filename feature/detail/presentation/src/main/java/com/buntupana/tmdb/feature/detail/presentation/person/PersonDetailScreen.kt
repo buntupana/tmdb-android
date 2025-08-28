@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,10 +26,8 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.paddingValues
-import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
-import com.buntupana.tmdb.core.ui.util.isLight
-import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.CreditsFilter
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.HeaderContent
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.KnownFor
@@ -75,16 +72,10 @@ fun PersonDetailContent(
     mediaTypeAndDepartmentSelected: (mediaType: Int?, department: String?) -> Unit
 ) {
 
-    setStatusBarLightStatusFromBackground(
-        LocalView.current,
-        MaterialTheme.colorScheme.background
-    )
-
-    SetLegacySystemBarsColors(
+    SetSystemBarsColors(
         statusBarColor = MaterialTheme.colorScheme.background,
         navigationBarColor = MaterialTheme.colorScheme.background,
-        useDarkStatusBarIcons = MaterialTheme.colorScheme.background.isLight(),
-        useDarkNavigationBarIcons = MaterialTheme.colorScheme.background.isLight()
+        translucentNavigationBar = true
     )
 
     val mediaTypeMap = mapOf(

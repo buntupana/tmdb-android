@@ -21,7 +21,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -33,10 +32,8 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.paddingValues
-import com.buntupana.tmdb.core.ui.util.SetLegacySystemBarsColors
-import com.buntupana.tmdb.core.ui.util.isLight
-import com.buntupana.tmdb.core.ui.util.setStatusBarLightStatusFromBackground
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.comp.HeaderManageLists
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.comp.ManageListsBottomBar
@@ -106,17 +103,10 @@ fun ManageListsContent(
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
-    setStatusBarLightStatusFromBackground(
-        LocalView.current,
-        state.backgroundColor
-    )
-
-    SetLegacySystemBarsColors(
+    SetSystemBarsColors(
         statusBarColor = state.backgroundColor,
         navigationBarColor = state.backgroundColor,
-        useDarkStatusBarIcons = state.backgroundColor.isLight(),
-        useDarkNavigationBarIcons = state.backgroundColor.isLight()
+        translucentNavigationBar = false
     )
 
     Scaffold(

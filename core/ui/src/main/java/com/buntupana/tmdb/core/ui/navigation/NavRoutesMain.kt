@@ -11,18 +11,20 @@ interface NavRoutesMain {
     fun handleDeepLing(intent: Intent)
 
     fun navigate(
-        destination: Routes
+        destination: Route
     )
 
-    fun <T : Routes> navigate(
-        destination: Routes,
+    fun <T : Route> navigate(
+        destination: Route,
         popUpTo: KClass<T>?,
         popUpToInclusive: Boolean,
     )
 
     fun popBackStack()
 
-    fun <T : Routes> popBackStack(destination: KClass<in T>, inclusive: Boolean = false)
+    fun <T : Route> popBackStack(destination: KClass<in T>, inclusive: Boolean = false)
 
-    fun <T : Routes> isCurrentDestination(destination: KClass<T>): Boolean
+    fun <T : Route> isCurrentDestination(destination: KClass<T>): Boolean
+
+    fun saveResult(value: Any)
 }

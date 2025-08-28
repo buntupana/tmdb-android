@@ -10,12 +10,18 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.panabuntu.tmdb.core.common.model.DefaultItem
+import timber.log.Timber
 
 @Composable
 fun <L : DefaultItem> LazyColumnGeneric(
@@ -30,6 +36,27 @@ fun <L : DefaultItem> LazyColumnGeneric(
     placeHolder: (@Composable () -> Unit)? = null,
     itemContent: @Composable LazyItemScope.(index: Int, item: L) -> Unit
 ) {
+
+    // Remember the previous refresh state to detect a transition.
+    var previousRefreshState by remember { mutableStateOf(itemList?.loadState?.refresh) }
+
+    LaunchedEffect(itemList?.loadState?.refresh, itemList?.itemCount) {
+        val currentRefreshState = itemList?.loadState?.refresh
+        Timber.d("LazyColumnGeneric: Refresh state changed: $previousRefreshState -> $currentRefreshState, Item count: ${itemList?.itemCount}")
+
+        // Check if a refresh has just completed (transitioned from Loading to NotLoading)
+        // and new items have been loaded (itemCount > 0).
+        if (previousRefreshState is LoadState.Loading &&
+            currentRefreshState is LoadState.NotLoading &&
+            itemList.itemCount > 0 &&
+            state.firstVisibleItemIndex > 0 // Only scroll if not already at top
+        ) {
+            Timber.d("LazyColumnGeneric: Scrolling to item 0 after refresh.")
+            state.scrollToItem(0)
+        }
+        // Update the previous state for the next evaluation.
+        previousRefreshState = currentRefreshState
+    }
 
     itemList ?: return
 

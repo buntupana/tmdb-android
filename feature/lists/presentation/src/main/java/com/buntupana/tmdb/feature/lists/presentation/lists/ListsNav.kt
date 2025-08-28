@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.feature.lists.presentation.lists
 
-import com.buntupana.tmdb.core.ui.navigation.Routes
+import com.buntupana.tmdb.core.ui.navigation.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
-object ListsNav: Routes
+object ListsNav: Route

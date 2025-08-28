@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.feature.presentation.R
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
@@ -75,7 +76,7 @@ fun CreateListForm(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Public List?",
+                text = stringResource(R.string.text_public_list),
                 style = MaterialTheme.typography.bodyLarge
             )
 

@@ -41,16 +41,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleStartEffect
+import com.buntupana.tmdb.core.ui.composables.widget.sliders.RatingSlider
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.annotatedStringResource
 import com.buntupana.tmdb.core.ui.util.balanced
+import com.buntupana.tmdb.core.ui.util.getRatingColor
 import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.buntupana.tmdb.feature.detail.presentation.R
-import com.buntupana.tmdb.feature.detail.presentation.common.RatingSlider
-import com.buntupana.tmdb.feature.detail.presentation.getRatingColor
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import com.buntupana.tmdb.core.ui.R as RCore

@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,19 +25,25 @@ import com.buntupana.tmdb.core.ui.composables.TitleAndFilter
 import com.buntupana.tmdb.core.ui.composables.item.CarouselMediaItem
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.discover.presentation.R
+import com.buntupana.tmdb.feature.discover.presentation.comp.TopBar
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.panabuntu.tmdb.core.common.model.MediaItem
 
 @Composable
 fun DiscoverScreen(
     viewModel: DiscoverViewModel = hiltViewModel(),
-    onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit
+    onSearchClicked: () -> Unit,
+    onMediaItemClicked: (mediaItemType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit
 ) {
 
     DiscoverContent(
         state = viewModel.state,
+        onSearchClicked = onSearchClicked,
         changeTrendingType = { trendingType ->
             viewModel.onEvent(DiscoverEvent.ChangeTrendingType(trendingType))
         },
@@ -48,18 +55,18 @@ fun DiscoverScreen(
         },
         navigateToDetail = { mediaItem, posterDominantColor ->
             when (mediaItem) {
-                is com.panabuntu.tmdb.core.common.model.MediaItem.Movie -> {
+                is MediaItem.Movie -> {
                     onMediaItemClicked(
-                        mediaItem.id,
                         MediaType.MOVIE,
+                        mediaItem.id,
                         posterDominantColor
                     )
                 }
 
-                is com.panabuntu.tmdb.core.common.model.MediaItem.TvShow -> {
+                is MediaItem.TvShow -> {
                     onMediaItemClicked(
-                        mediaItem.id,
                         MediaType.TV_SHOW,
+                        mediaItem.id,
                         posterDominantColor
                     )
                 }
@@ -71,106 +78,121 @@ fun DiscoverScreen(
 @Composable
 fun DiscoverContent(
     state: DiscoverState,
+    onSearchClicked: () -> Unit,
     changeTrendingType: (trendingFilter: TrendingFilter) -> Unit,
     changePopularType: (popularFilter: PopularFilter) -> Unit,
     changeFreeToWatchType: (freeToWatchFilter: MediaFilter) -> Unit,
-    navigateToDetail: (mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem, posterDominantColor: Color) -> Unit
+    navigateToDetail: (mediaItem: MediaItem, posterDominantColor: Color) -> Unit
 ) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(state = rememberScrollState())
-    ) {
+    SetSystemBarsColors(
+        statusBarColor = PrimaryColor
+    )
 
-        val lazyListStateTrending: LazyListState = rememberLazyListState()
-        val lazyListStatePopular: LazyListState = rememberLazyListState()
-        val lazyListStateFree: LazyListState = rememberLazyListState()
+    Scaffold(
+        topBar = {
+            TopBar(
+                onSearchClick = onSearchClicked
+            )
+        }
+    ) { paddingValues ->
 
-        TitleAndFilter(
-            modifier = Modifier.padding(vertical = Dimens.padding.medium),
-            title = stringResource(id = R.string.text_trending),
-            filterSet = state.trendingFilterSet,
-            indexSelected = state.trendingFilterSet.indexOf(state.trendingFilterSelected),
-            filterClicked = { item, _ ->
-                changeTrendingType(item)
-                lazyListStateTrending.requestScrollToItem(index = 0)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(state = rememberScrollState())
+                .padding(paddingValues)
+        ) {
+
+            val lazyListStateTrending: LazyListState = rememberLazyListState()
+            val lazyListStatePopular: LazyListState = rememberLazyListState()
+            val lazyListStateFree: LazyListState = rememberLazyListState()
+
+            TitleAndFilter(
+                modifier = Modifier.padding(vertical = Dimens.padding.medium),
+                title = stringResource(id = R.string.text_trending),
+                filterSet = state.trendingFilterSet,
+                indexSelected = state.trendingFilterSet.indexOf(state.trendingFilterSelected),
+                filterClicked = { item, _ ->
+                    changeTrendingType(item)
+                    lazyListStateTrending.requestScrollToItem(index = 0)
+                }
+            )
+            Box(modifier = Modifier.fillMaxWidth()) {
+
+                Image(
+                    painter = painterResource(id = R.drawable.img_trending),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center)
+                )
+
+                CarouselMediaItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    mediaItemList = state.trendingMediaItemList,
+                    isLoadingError = state.isTrendingMediaLoadingError,
+                    lazyListState = lazyListStateTrending,
+                    onItemClicked = { mediaItem, mainPosterColor ->
+                        navigateToDetail(mediaItem, mainPosterColor)
+                    },
+                    onRetryClicked = {
+                        changeTrendingType(state.trendingFilterSelected)
+                    }
+                )
             }
-        )
-        Box(modifier = Modifier.fillMaxWidth()) {
 
-            Image(
-                painter = painterResource(id = R.drawable.img_trending),
-                contentDescription = null,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center)
+            TitleAndFilter(
+                modifier = Modifier.padding(vertical = Dimens.padding.medium),
+                title = stringResource(id = R.string.text_whats_popular),
+                filterSet = state.popularFilterSet,
+                indexSelected = state.popularFilterSet.indexOf(state.popularFilterSelected),
+                filterClicked = { item, _ ->
+                    changePopularType(item)
+                    lazyListStatePopular.requestScrollToItem(index = 0)
+                }
             )
 
             CarouselMediaItem(
                 modifier = Modifier.fillMaxWidth(),
-                mediaItemList = state.trendingMediaItemList,
-                isLoadingError = state.isTrendingMediaLoadingError,
-                lazyListState = lazyListStateTrending,
+                mediaItemList = state.popularMediaItemList,
+                isLoadingError = state.isPopularMediaLoadingError,
+                lazyListState = lazyListStatePopular,
                 onItemClicked = { mediaItem, mainPosterColor ->
                     navigateToDetail(mediaItem, mainPosterColor)
                 },
                 onRetryClicked = {
-                    changeTrendingType(state.trendingFilterSelected)
+                    changePopularType(state.popularFilterSelected)
                 }
             )
+
+            TitleAndFilter(
+                modifier = Modifier.padding(vertical = Dimens.padding.medium),
+                title = stringResource(id = R.string.text_free_to_watch),
+                filterSet = state.freeToWatchFilterSet,
+                indexSelected = state.freeToWatchFilterSet.indexOf(state.freeToWatchFilterSelected),
+                filterClicked = { item, _ ->
+                    changeFreeToWatchType(item)
+                    lazyListStateFree.requestScrollToItem(index = 0)
+                }
+            )
+
+            CarouselMediaItem(
+                modifier = Modifier.fillMaxWidth(),
+                mediaItemList = state.freeToWatchMediaItemList,
+                isLoadingError = state.isFreeToWatchMediaLoadingError,
+                lazyListState = lazyListStateFree,
+                onItemClicked = { mediaItem, mainPosterColor ->
+                    navigateToDetail(mediaItem, mainPosterColor)
+                },
+                onRetryClicked = {
+                    changeFreeToWatchType(state.freeToWatchFilterSelected)
+                }
+            )
+
+            Spacer(modifier = Modifier.padding(vertical = Dimens.padding.medium))
         }
-
-        TitleAndFilter(
-            modifier = Modifier.padding(vertical = Dimens.padding.medium),
-            title = stringResource(id = R.string.text_whats_popular),
-            filterSet = state.popularFilterSet,
-            indexSelected = state.popularFilterSet.indexOf(state.popularFilterSelected),
-            filterClicked = { item, _ ->
-                changePopularType(item)
-                lazyListStatePopular.requestScrollToItem(index = 0)
-            }
-        )
-
-        CarouselMediaItem(
-            modifier = Modifier.fillMaxWidth(),
-            mediaItemList = state.popularMediaItemList,
-            isLoadingError = state.isPopularMediaLoadingError,
-            lazyListState = lazyListStatePopular,
-            onItemClicked = { mediaItem, mainPosterColor ->
-                navigateToDetail(mediaItem, mainPosterColor)
-            },
-            onRetryClicked = {
-                changePopularType(state.popularFilterSelected)
-            }
-        )
-
-        TitleAndFilter(
-            modifier = Modifier.padding(vertical = Dimens.padding.medium),
-            title = stringResource(id = R.string.text_free_to_watch),
-            filterSet = state.freeToWatchFilterSet,
-            indexSelected = state.freeToWatchFilterSet.indexOf(state.freeToWatchFilterSelected),
-            filterClicked = { item, _ ->
-                changeFreeToWatchType(item)
-                lazyListStateFree.requestScrollToItem(index = 0)
-            }
-        )
-
-        CarouselMediaItem(
-            modifier = Modifier.fillMaxWidth(),
-            mediaItemList = state.freeToWatchMediaItemList,
-            isLoadingError = state.isFreeToWatchMediaLoadingError,
-            lazyListState = lazyListStateFree,
-            onItemClicked = { mediaItem, mainPosterColor ->
-                navigateToDetail(mediaItem, mainPosterColor)
-            },
-            onRetryClicked = {
-                changeFreeToWatchType(state.freeToWatchFilterSelected)
-            }
-        )
-
-        Spacer(modifier = Modifier.padding(vertical = Dimens.padding.medium))
     }
 }
 
@@ -179,6 +201,7 @@ fun DiscoverContent(
 fun DiscoverScreenPreview() {
     DiscoverContent(
         state = DiscoverState(),
+        onSearchClicked = {},
         changeTrendingType = {},
         changePopularType = {},
         changeFreeToWatchType = {},

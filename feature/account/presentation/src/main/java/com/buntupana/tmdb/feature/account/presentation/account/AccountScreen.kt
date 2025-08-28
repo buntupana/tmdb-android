@@ -1,7 +1,6 @@
 package com.buntupana.tmdb.feature.account.presentation.account
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,8 +34,10 @@ import com.buntupana.tmdb.core.ui.composables.TitleAndFilter
 import com.buntupana.tmdb.core.ui.composables.item.CarouselMediaItem
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.account.presentation.R
-import com.buntupana.tmdb.feature.account.presentation.account.comp.AccountInfoTop
+import com.buntupana.tmdb.feature.account.presentation.account.comp.AccountTopBar
 import com.buntupana.tmdb.feature.account.presentation.account.comp.ListItemsSection
 import com.buntupana.tmdb.feature.account.presentation.account.comp.SignUp
 import com.buntupana.tmdb.feature.account.presentation.sign_out.SignOutDialog
@@ -51,7 +53,7 @@ fun AccountScreen(
     onWatchListClick: (mediaType: MediaType) -> Unit,
     onFavoritesClick: (mediaType: MediaType) -> Unit,
     onListsClick: () -> Unit,
-    onMediaItemClicked: (mediaItemId: Long, mediaItemType: MediaType, posterDominantColor: Color) -> Unit,
+    onMediaItemClicked: (mediaItemType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit,
     onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
 
@@ -71,10 +73,10 @@ fun AccountScreen(
             onWatchListClick(mediaType)
         },
         onFavoritesClick = {
-                val mediaType = when (viewModel.state.favoritesFilterSelected) {
-                    MediaFilter.MOVIES -> MediaType.MOVIE
-                    MediaFilter.TV_SHOWS -> MediaType.TV_SHOW
-                }
+            val mediaType = when (viewModel.state.favoritesFilterSelected) {
+                MediaFilter.MOVIES -> MediaType.MOVIE
+                MediaFilter.TV_SHOWS -> MediaType.TV_SHOW
+            }
             onFavoritesClick(mediaType)
         },
         onListsClick = onListsClick,
@@ -88,16 +90,16 @@ fun AccountScreen(
             when (mediaItem) {
                 is MediaItem.Movie -> {
                     onMediaItemClicked(
-                        mediaItem.id,
                         MediaType.MOVIE,
+                        mediaItem.id,
                         posterDominantColor
                     )
                 }
 
                 is MediaItem.TvShow -> {
                     onMediaItemClicked(
-                        mediaItem.id,
                         MediaType.TV_SHOW,
+                        mediaItem.id,
                         posterDominantColor
                     )
                 }
@@ -132,22 +134,30 @@ fun AccountContent(
     navigateToListDetail: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    SetSystemBarsColors(
+        statusBarColor = PrimaryColor
+    )
 
-        if (state.isUserLogged) {
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(state = rememberScrollState()),
-            ) {
-                AccountInfoTop(
-                    modifier = Modifier.fillMaxWidth(),
+    Scaffold(
+        topBar = {
+            if (state.isUserLogged) {
+                AccountTopBar(
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     avatarUrl = state.avatarUrl,
                     username = state.username
                 )
+            }
+        }
+    ) { paddingValues ->
+
+        if (state.isUserLogged) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(state = rememberScrollState())
+                    .padding(paddingValues),
+            ) {
 
                 val lazyListStateWatchlist: LazyListState = rememberLazyListState()
                 val lazyListStateFavorites: LazyListState = rememberLazyListState()
@@ -233,12 +243,10 @@ fun AccountContent(
                         Text(text = stringResource(R.string.text_sign_out))
                     }
                 }
-
-                Spacer(Modifier.padding(vertical = Dimens.padding.vertical))
             }
         } else {
             SignUp(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxSize(),
                 onSignUpClick = onSignUpClick
             )
         }

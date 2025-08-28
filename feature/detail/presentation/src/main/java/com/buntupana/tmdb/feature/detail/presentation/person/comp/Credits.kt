@@ -19,6 +19,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -30,7 +31,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.DropdownMenuText
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.util.TextButton
 import com.buntupana.tmdb.core.ui.util.clickableTextPadding
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -70,32 +73,30 @@ fun CreditsFilter(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             AnimatedVisibility(
                 visible = mediaTypeSelected != null || departmentSelected != null,
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                Text(
-                    modifier = Modifier
-                        .clickable {
-                            Timber.d("Credits: click clear")
-                            onFilterChange(null, null)
-                        }
-                        .padding(
-                            horizontal = Dimens.padding.medium,
-                            vertical = Dimens.padding.small
-                        ),
-                    text = stringResource(id = RCore.string.text_clear),
-                    color = SecondaryColor
-                )
+                TextButton(
+                    onClick = { onFilterChange(null, null) },
+                    rippleColor = MaterialTheme.colorScheme.background.getOnBackgroundColor()
+                ) {
+                    Text(
+                        modifier = Modifier,
+                        text = stringResource(id = RCore.string.text_clear),
+                        color = SecondaryColor
+                    )
+                }
             }
 
             DropdownMenuText(
                 modifier = Modifier.animateContentSize(),
                 text = mediaTypeSelectedValue,
-                optionList = mediaTypeMap,
+                optionMap = mediaTypeMap,
                 onOptionClicked = { id, value ->
                     Timber.d("Credits: selected type $value")
                     onFilterChange(id, departmentSelected)
@@ -105,7 +106,7 @@ fun CreditsFilter(
             DropdownMenuText(
                 modifier = Modifier.animateContentSize(),
                 text = departmentSelectedValue,
-                optionList = departmentMap,
+                optionMap = departmentMap,
                 onOptionClicked = { id, value ->
                     Timber.d("Credits: selected department $value")
                     onFilterChange(mediaTypeSelected, id)

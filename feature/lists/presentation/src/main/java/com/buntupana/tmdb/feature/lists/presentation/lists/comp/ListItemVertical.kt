@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -111,13 +110,13 @@ fun ListItemVertical(
                             maxLines = 3
                         }
 
-                        BasicText(
+                        Text(
                             text  = userListDetails.name,
                             style = TextStyle.Default.copy(textAlign = TextAlign.Center),
                             autoSize = TextAutoSize.StepBased(minFontSize = 18.sp),
                             maxLines = maxLines,
                             overflow = TextOverflow.Ellipsis,
-                            color =  { Color.White }
+                            color =  Color.White
                         )
                     }
 

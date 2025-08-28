@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -86,13 +86,13 @@ fun ListItemHorizontal(
                 maxLines = 3
             }
 
-            BasicText(
+            Text(
                 text  = userListDetails.name,
                 style = TextStyle.Default.copy(textAlign = TextAlign.Center),
                 autoSize = TextAutoSize.StepBased(minFontSize = 18.sp, maxFontSize = 60.sp),
                 maxLines = maxLines,
                 overflow = TextOverflow.Ellipsis,
-                color =  { Color.White }
+                color =  Color.White
             )
         }
     }
@@ -105,7 +105,7 @@ private fun ListItemHorizontalPreview() {
         width = 200.dp,
         userListDetails = UserListDetails(
             id = 1,
-            name = "Sci Fi",
+            name = "Multi Story Lines",
             description = "List Description",
             backdropUrl = null,
             posterUrl = null,

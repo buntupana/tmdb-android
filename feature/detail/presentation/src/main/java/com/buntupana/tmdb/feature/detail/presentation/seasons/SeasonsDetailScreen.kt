@@ -33,8 +33,8 @@ import com.buntupana.tmdb.core.ui.composables.HeaderSimple
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
+import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.seasonSample
 import com.buntupana.tmdb.feature.detail.presentation.seasons.comp.SeasonItem
@@ -88,7 +88,8 @@ private fun SeasonsContent(
 
     SetSystemBarsColors(
         statusBarColor = backgroundColor,
-        navigationBarColor = backgroundColor
+        navigationBarColor = backgroundColor,
+        translucentNavigationBar = true
     )
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()

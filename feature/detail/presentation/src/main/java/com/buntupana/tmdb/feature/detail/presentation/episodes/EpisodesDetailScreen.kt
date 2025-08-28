@@ -31,8 +31,8 @@ import com.buntupana.tmdb.core.ui.composables.HeaderSimple
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
+import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
@@ -94,7 +94,8 @@ private fun EpisodesDetailContent(
 
     SetSystemBarsColors(
         statusBarColor = state.backgroundColor,
-        navigationBarColor = state.backgroundColor
+        navigationBarColor = state.backgroundColor,
+        translucentNavigationBar = true
     )
 
     Scaffold(

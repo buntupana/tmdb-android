@@ -66,8 +66,7 @@ fun MediaListContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor,
-        navigationBarColor = PrimaryColor
+        statusBarColor = PrimaryColor
     )
 
     var showDefaultFiltersDialog by remember { mutableStateOf(false) }

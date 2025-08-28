@@ -78,7 +78,8 @@ fun WatchlistContent(
 
     SetSystemBarsColors(
         statusBarColor = PrimaryColor,
-        navigationBarColor = PrimaryColor
+        navigationBarColor = PrimaryColor,
+        translucentNavigationBar = true
     )
 
     val pagerState = rememberPagerState(

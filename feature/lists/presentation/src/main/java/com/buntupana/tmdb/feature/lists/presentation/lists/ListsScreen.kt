@@ -70,6 +70,7 @@ fun ListsContent(
     SetSystemBarsColors(
         statusBarColor = PrimaryColor,
         navigationBarColor = PrimaryColor,
+        translucentNavigationBar = true
     )
 
     Scaffold(

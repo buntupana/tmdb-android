@@ -135,8 +135,7 @@ fun AccountContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor,
-        navigationBarColor = PrimaryColor
+        statusBarColor = PrimaryColor
     )
 
     Scaffold(

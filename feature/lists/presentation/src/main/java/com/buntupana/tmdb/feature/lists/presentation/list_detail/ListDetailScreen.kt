@@ -171,7 +171,8 @@ fun ListDetailContent(
 
     SetSystemBarsColors(
         statusBarColor = PrimaryColor,
-        navigationBarColor = PrimaryColor
+        navigationBarColor = PrimaryColor,
+        translucentNavigationBar = true
     )
 
     Scaffold(

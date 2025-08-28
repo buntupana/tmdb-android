@@ -32,8 +32,8 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
-import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
+import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.comp.HeaderManageLists
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.comp.ManageListsBottomBar
@@ -106,6 +106,7 @@ fun ManageListsContent(
     SetSystemBarsColors(
         statusBarColor = state.backgroundColor,
         navigationBarColor = state.backgroundColor,
+        translucentNavigationBar = false
     )
 
     Scaffold(

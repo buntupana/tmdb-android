@@ -26,8 +26,8 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
+import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.CreditsFilter
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.HeaderContent
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.KnownFor
@@ -74,7 +74,8 @@ fun PersonDetailContent(
 
     SetSystemBarsColors(
         statusBarColor = MaterialTheme.colorScheme.background,
-        navigationBarColor = MaterialTheme.colorScheme.background
+        navigationBarColor = MaterialTheme.colorScheme.background,
+        translucentNavigationBar = true
     )
 
     val mediaTypeMap = mapOf(

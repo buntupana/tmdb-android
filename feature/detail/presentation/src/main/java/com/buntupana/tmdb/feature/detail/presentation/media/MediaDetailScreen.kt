@@ -167,7 +167,8 @@ fun MediaDetailContent(
 
     SetSystemBarsColors(
         statusBarColor = backgroundColor,
-        navigationBarColor = backgroundColor
+        navigationBarColor = backgroundColor,
+        translucentNavigationBar = state.isUserLoggedIn.not()
     )
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()

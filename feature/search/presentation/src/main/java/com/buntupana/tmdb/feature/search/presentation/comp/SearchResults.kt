@@ -1,10 +1,11 @@
 package com.buntupana.tmdb.feature.search.presentation.comp
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
@@ -12,14 +13,20 @@ import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
+import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.feature.search.presentation.MediaResultCount
@@ -33,9 +40,12 @@ import timber.log.Timber
 fun SearchResults(
     modifier: Modifier = Modifier,
     searchState: SearchState,
+    bottomPadding: Dp,
     onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color) -> Unit,
     onPersonClick: (personId: Long) -> Unit
 ) {
+
+    searchState.resultCountList ?: return
 
     val scope = rememberCoroutineScope()
 
@@ -93,34 +103,105 @@ fun SearchResults(
         ) { currentPage ->
 
             Timber.d("SearchResults() called with: currentPage = [$currentPage]")
-            val noResultMessageStringRes: Int
             // Getting Result information for each page of the pager
-            val pagingItems = when (searchState.resultCountList[currentPage].searchType) {
+            when (searchState.resultCountList[currentPage].searchType) {
                 SearchType.MOVIE -> {
-                    noResultMessageStringRes = R.string.message_movies_no_result
-                    searchState.movieItems.collectAsLazyPagingItems()
+                    LazyColumnGeneric(
+                        modifier = Modifier.fillMaxSize(),
+                        bottomPadding = { bottomPadding },
+                        itemList = searchState.movieItems?.collectAsLazyPagingItems(),
+                        noResultContent = {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(Dimens.padding.medium),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(text = stringResource(R.string.message_movies_no_result))
+                            }
+                        },
+                        itemContent = { index, item ->
+                            MediaItemHorizontal(
+                                modifier = Modifier.height(Dimens.imageSize.posterHeight),
+                                onMediaClick = { _, mainPosterColor ->
+                                    onMediaClick(item, mainPosterColor)
+                                },
+                                mediaId = item.id,
+                                title = item.name,
+                                posterUrl = item.posterUrl,
+                                overview = item.overview,
+                                releaseDate = item.releaseDate
+                            )
+                        }
+                    )
                 }
 
                 SearchType.TV_SHOW -> {
-                    noResultMessageStringRes = R.string.message_tv_shows_no_result
-                    searchState.tvShowItems.collectAsLazyPagingItems()
+                    LazyColumnGeneric(
+                        modifier = Modifier.fillMaxSize(),
+                        bottomPadding = { bottomPadding },
+                        itemList = searchState.tvShowItems?.collectAsLazyPagingItems(),
+                        noResultContent = {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(Dimens.padding.medium),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(text = stringResource(R.string.message_tv_shows_no_result))
+                            }
+                        },
+                        itemContent = { index, item ->
+                            MediaItemHorizontal(
+                                modifier = Modifier.height(Dimens.imageSize.posterHeight),
+                                onMediaClick = { _, mainPosterColor ->
+                                    onMediaClick(item, mainPosterColor)
+                                },
+                                mediaId = item.id,
+                                title = item.name,
+                                posterUrl = item.posterUrl,
+                                overview = item.overview.orEmpty(),
+                                releaseDate = item.releaseDate
+                            )
+                        }
+                    )
                 }
 
                 SearchType.PERSON -> {
-                    noResultMessageStringRes = R.string.message_people_no_result
-                    searchState.personItems.collectAsLazyPagingItems()
+                    LazyColumnGeneric(
+                        modifier = Modifier.fillMaxSize(),
+                        bottomPadding = { bottomPadding },
+                        itemList = searchState.personItems?.collectAsLazyPagingItems(),
+                        noResultContent = {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(Dimens.padding.medium),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(text = stringResource(R.string.message_people_no_result))
+                            }
+                        },
+                        itemContent = { index, item ->
+                            val description = if (item.knownForList.firstOrNull() == null) {
+                                item.knownForDepartment
+                            } else {
+                                "${item.knownForDepartment} • ${item.knownForList.first()}"
+                            }
+
+                            PersonItemHorizontal(
+                                modifier = Modifier.height(Dimens.imageSize.personHeightSmall),
+                                personId = item.id,
+                                name = item.name,
+                                profileUrl = item.profilePath,
+                                gender = item.gender,
+                                description = description,
+                                onClick = onPersonClick
+                            )
+                        }
+                    )
                 }
             }
-
-            SearchPager(
-                modifier = Modifier.fillMaxSize(),
-                pagingItems = pagingItems,
-                noResultMessage = stringResource(id = noResultMessageStringRes),
-                onMediaClick = onMediaClick,
-                onPersonClick = onPersonClick
-            )
-
-            Spacer(modifier = Modifier.height(Dimens.padding.tiny))
         }
     }
 }
@@ -136,6 +217,7 @@ fun SearchResultsPreview() {
                 MediaResultCount(SearchType.PERSON, 10)
             )
         ),
+        bottomPadding = 0.dp,
         onMediaClick = { _, _ -> },
         onPersonClick = {},
     )

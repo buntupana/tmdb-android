@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,9 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getCustomTabIntent
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
-import com.buntupana.tmdb.core.ui.util.setStatusNavigationBarColor
 import com.buntupana.tmdb.feature.account.presentation.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -79,42 +79,48 @@ fun SignInContent(
     state: SignInState,
     onRetryClicked: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .setStatusNavigationBarColor(backgroundColor = PrimaryColor)
-            .background(color = PrimaryColor),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Image(
-            modifier = Modifier.padding(top = 100.dp),
-            painter = painterResource(RCore.drawable.img_logo),
-            contentDescription = "Logo"
-        )
+
+    SetSystemBarsColors(
+        statusBarColor = PrimaryColor,
+        navigationBarColor = PrimaryColor,
+        translucentNavigationBar = false
+    )
+
+    Scaffold { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 100.dp),
+                .background(color = PrimaryColor)
+                .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom
+            verticalArrangement = Arrangement.SpaceAround
         ) {
-            if (state.isLoading) {
-                Text(
-                    text = stringResource(R.string.text_signing_in),
-                    color =  MaterialTheme.colorScheme.onPrimaryContainer
-                )
-                Spacer(
-                    modifier = Modifier.padding(vertical = 20.dp)
-                )
-                CircularProgressIndicator(
-                    color = PrimaryColor.getOnBackgroundColor()
-                )
-            } else if (state.isSignInError) {
-                ErrorAndRetry(
-                    textColor = PrimaryColor.getOnBackgroundColor(),
-                    errorMessage = stringResource(R.string.text_signing_in_error),
-                    onRetryClick = onRetryClicked
-                )
+            Image(
+                painter = painterResource(RCore.drawable.img_logo),
+                contentDescription = "Logo"
+            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom
+            ) {
+                if (state.isLoading) {
+                    Text(
+                        text = stringResource(R.string.text_signing_in),
+                        color = PrimaryColor.getOnBackgroundColor()
+                    )
+                    Spacer(
+                        modifier = Modifier.padding(vertical = 20.dp)
+                    )
+                    CircularProgressIndicator(
+                        color = PrimaryColor.getOnBackgroundColor()
+                    )
+                } else if (state.isSignInError) {
+                    ErrorAndRetry(
+                        textColor = PrimaryColor.getOnBackgroundColor(),
+                        errorMessage = stringResource(R.string.text_signing_in_error),
+                        onRetryClick = onRetryClicked
+                    )
+                }
             }
         }
     }
@@ -124,7 +130,10 @@ fun SignInContent(
 @Composable
 fun SignInScreenPreview() {
     SignInContent(
-        SignInState(isSignInError = true, isLoading = false),
+        SignInState(
+            isSignInError = true,
+            isLoading = true
+        ),
         onRetryClicked = {}
     )
 }

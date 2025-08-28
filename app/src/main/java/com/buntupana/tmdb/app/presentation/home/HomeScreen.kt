@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.buntupana.tmdb.app.R
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
 import com.buntupana.tmdb.feature.account.presentation.account.AccountScreen
@@ -70,6 +71,11 @@ fun HomeScreenContent(
     onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
     onMovieFilterClick: (movieListFilter: MediaListFilter) -> Unit
 ) {
+
+    SetSystemBarsColors(
+        navigationBarColor = PrimaryColor,
+        translucentNavigationBar = false
+    )
 
     val navigationItems = listOf(
         TabNavigationItem.Discover(title = stringResource(R.string.text_explore)),

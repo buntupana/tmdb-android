@@ -9,14 +9,11 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -57,7 +54,6 @@ import androidx.core.net.toUri
 import androidx.core.text.HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL
 import androidx.core.text.htmlEncode
 import androidx.core.text.toHtml
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
@@ -117,33 +113,10 @@ fun Modifier.clickableTextPadding(): Modifier {
 }
 
 @Composable
-fun Modifier.setStatusNavigationBarColor(
-    backgroundColor: Color = PrimaryColor
-): Modifier {
-
-    val view = LocalView.current
-    val isLightStatus = backgroundColor.getOnBackgroundColor() != Color.White
-
-    (view.context as? Activity)?.run {
-        WindowCompat.getInsetsController(
-            window,
-            view
-        ).run {
-            isAppearanceLightStatusBars = isLightStatus
-//            isAppearanceLightNavigationBars = isLightStatus
-        }
-    }
-
-    return fillMaxSize()
-        .background(backgroundColor)
-        .safeDrawingPadding()
-        .background(MaterialTheme.colorScheme.background)
-}
-
-@Composable
 fun SetSystemBarsColors(
-    statusBarColor: Color,
-    navigationBarColor: Color
+    statusBarColor: Color? = null,
+    navigationBarColor: Color? = null,
+    translucentNavigationBar: Boolean? = null
 ) {
     val view = LocalView.current
     if (!view.isInEditMode) { // Prevent running in Preview
@@ -153,24 +126,26 @@ fun SetSystemBarsColors(
             val insetsController = WindowInsetsControllerCompat(window, view)
 
             // Control Status Bar Icons
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // API 23+
+            if (statusBarColor != null) { // API 23+
                 insetsController.isAppearanceLightStatusBars = statusBarColor.isLight()
             }
 
             // Control Navigation Bar Icons
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // API 26+
+            if (navigationBarColor != null) { // API 26+
                 insetsController.isAppearanceLightNavigationBars = navigationBarColor.isLight()
             }
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                // Set Status Bar Color
-                window.statusBarColor = statusBarColor.toArgb()
-
-                // Set Navigation Bar Color
-                // Note: On some older devices (API < 23 for nav bar, or specific manufacturer ROMs),
-                // fully opaque nav bar colors might not always render as expected, or might have scrims.
-                // Translucent colors often behave more consistently if you face issues.
+            if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
+                navigationBarColor != null
+            ) {
                 window.navigationBarColor = navigationBarColor.toArgb()
+            } else if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                translucentNavigationBar != null
+            ) {
+                window.isNavigationBarContrastEnforced = translucentNavigationBar
             }
         }
     }

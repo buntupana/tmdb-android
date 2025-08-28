@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.TertiaryColor
 import com.buntupana.tmdb.core.ui.util.SelectableItem
 import com.buntupana.tmdb.core.ui.util.UiText
 
@@ -54,6 +56,7 @@ fun ChipSelector(
             if (showAllChip) {
                 FilterChip(
                     selected = isAllSelected,
+                    colors = FilterChipDefaults.filterChipColors(selectedContainerColor = TertiaryColor),
                     onClick = {
                         chipItemList.map { chipItem ->
                             chipItem.copy(isSelected = false)
@@ -63,13 +66,14 @@ fun ChipSelector(
                     },
                     label = {
                         Text(text = stringResource(R.string.text_all))
-                    }
+                    },
                 )
             }
 
             chipItemList.forEach {
                 FilterChip(
                     selected = it.isSelected,
+                    colors = FilterChipDefaults.filterChipColors(selectedContainerColor = TertiaryColor),
                     onClick = {
                         chipItemList.map { chipItem ->
                             chipItem.copy(

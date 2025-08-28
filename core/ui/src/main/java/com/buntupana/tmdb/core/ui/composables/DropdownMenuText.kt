@@ -59,9 +59,13 @@ fun <OPTION_ID> DropdownMenuCustom(
             composable()
         }
 
-        DropdownMenu(expanded = dropdownExpanded, onDismissRequest = {
-            dropdownExpanded = false
-        }) {
+        DropdownMenu(
+            containerColor = MaterialTheme.colorScheme.background,
+            expanded = dropdownExpanded,
+            onDismissRequest = {
+                dropdownExpanded = false
+            }
+        ) {
             optionList.forEach { (id, value) ->
                 DropdownMenuItem(
                     text = {

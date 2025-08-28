@@ -73,13 +73,13 @@ fun ListSubBar(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = stringResource(R.string.text_create_list)
-                )
                 Icon(
-                    modifier = Modifier.padding(start = Dimens.padding.small),
+                    modifier = Modifier.padding(end = Dimens.padding.small),
                     imageVector = Icons.Rounded.Add,
                     contentDescription = null
+                )
+                Text(
+                    text = stringResource(R.string.text_create_list)
                 )
             }
         }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -90,7 +92,10 @@ fun ListItemVertical(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = Dimens.padding.horizontal),
+                        .padding(
+                            horizontal = Dimens.padding.horizontal,
+                            vertical = Dimens.padding.vertical
+                        ),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -106,18 +111,18 @@ fun ListItemVertical(
                             maxLines = 3
                         }
 
-                        Text(
-                            text = userListDetails.name,
-                            textAlign = TextAlign.Center,
+                        BasicText(
+                            text  = userListDetails.name,
+                            style = TextStyle.Default.copy(textAlign = TextAlign.Center),
                             autoSize = TextAutoSize.StepBased(minFontSize = 18.sp),
                             maxLines = maxLines,
-                            color = Color.White,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
+                            color =  { Color.White }
                         )
                     }
 
                     Row(
-                        modifier = Modifier.padding(vertical = Dimens.padding.medium)
+                        modifier = Modifier.padding(top = Dimens.padding.medium)
                     ) {
                         Text(
                             text = stringResource(

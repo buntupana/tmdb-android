@@ -8,17 +8,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,8 +37,6 @@ fun ListItemHorizontal(
     userListDetails: UserListDetails,
     onListClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
-
-    var dominantColor by remember { mutableStateOf<Color?>(null) }
 
     Box(
         modifier = modifier
@@ -67,9 +62,7 @@ fun ListItemHorizontal(
                 modifier = Modifier.fillMaxSize(),
                 imageUrl = userListDetails.backdropUrl,
                 showPlaceHolder = true
-            ) { extractedColor ->
-                dominantColor = extractedColor
-            }
+            )
         }
 
         Box(
@@ -81,7 +74,10 @@ fun ListItemHorizontal(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = Dimens.padding.horizontal),
+                .padding(
+                    horizontal = Dimens.padding.horizontal,
+                    vertical = Dimens.padding.small
+                ),
             contentAlignment = Alignment.Center,
         ) {
             var maxLines = userListDetails.name.countWordsBySpace()
@@ -90,14 +86,13 @@ fun ListItemHorizontal(
                 maxLines = 3
             }
 
-            Text(
-                modifier = Modifier,
-                textAlign = TextAlign.Center,
-                text = userListDetails.name,
+            BasicText(
+                text  = userListDetails.name,
+                style = TextStyle.Default.copy(textAlign = TextAlign.Center),
                 autoSize = TextAutoSize.StepBased(minFontSize = 18.sp, maxFontSize = 60.sp),
                 maxLines = maxLines,
-                color = Color.White,
                 overflow = TextOverflow.Ellipsis,
+                color =  { Color.White }
             )
         }
     }

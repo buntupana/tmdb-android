@@ -302,8 +302,10 @@ fun MainInfo(
                 }
             }
             Text(
+                modifier = Modifier.fillMaxWidth(),
                 text = mediaDetails.genreList.joinToString(", "),
-                color = textColor
+                color = textColor,
+                textAlign = TextAlign.Center,
             )
         }
 

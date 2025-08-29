@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
@@ -40,7 +39,6 @@ fun ListDetailHeader(
     modifier: Modifier = Modifier,
     listName: String,
     description: String?,
-    backdropUrl: String?,
     isPublic: Boolean,
     itemsTotalCount: Int?,
     onEditClick: () -> Unit = {},
@@ -50,20 +48,8 @@ fun ListDetailHeader(
         modifier = modifier.animateContentSize()
     ) {
 
-        var backgroundColor = PrimaryColor
-
-        if (backdropUrl.isNotNullOrBlank()) {
-            backgroundColor = backgroundColor.copy(alpha = 0.8f)
-            ImageFromUrl(
-                modifier = Modifier.matchParentSize(),
-                imageUrl = backdropUrl,
-            )
-        }
-
         Box(
-            modifier = Modifier
-                .matchParentSize()
-                .background(backgroundColor),
+            modifier = Modifier.matchParentSize()
         )
 
         Column(
@@ -180,9 +166,7 @@ fun ListDetailHeader(
 private fun ListDetailHeaderPreview() {
     ListDetailHeader(
         modifier = Modifier.fillMaxWidth(),
-//        listName = "The 97th Academy",
         listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
-        backdropUrl = "",
         description = "",
         isPublic = true,
         itemsTotalCount = 3

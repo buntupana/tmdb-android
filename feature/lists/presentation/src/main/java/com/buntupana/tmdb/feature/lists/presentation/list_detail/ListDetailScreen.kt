@@ -46,7 +46,6 @@ import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontalPlaceHolder
 import com.buntupana.tmdb.core.ui.composables.item.SwipeableItem
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
-import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
@@ -54,7 +53,7 @@ import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListDialog
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListNav
-import com.buntupana.tmdb.feature.lists.presentation.list_detail.comp.ListDetailHeader
+import com.buntupana.tmdb.feature.lists.presentation.list_detail.comp.ListDetailTopBar
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.delay
@@ -179,27 +178,20 @@ fun ListDetailContent(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            Column {
-                TopBarLogo(
-                    backgroundColor = PrimaryColor,
-                    onLogoClick = onLogoClick,
-                    onBackClick = onBackClick,
-                    onSearchClick = onSearchClick,
-                    scrollBehavior = scrollBehavior,
-                    shareLink = state.shareLink
-                )
-
-                ListDetailHeader(
-                    modifier = Modifier.fillMaxWidth(),
-                    listName = state.listName,
-                    description = state.description,
-                    backdropUrl = state.backdropUrl,
-                    isPublic = state.isPublic,
-                    itemsTotalCount = state.itemTotalCount,
-                    onEditClick = onEditClick,
-                    onDeleteClick = onDeleteClick
-                )
-            }
+            ListDetailTopBar(
+                scrollBehavior = scrollBehavior,
+                listName = state.listName,
+                description = state.description.orEmpty(),
+                backdropUrl = state.backdropUrl,
+                shareLink = state.shareLink,
+                isPublic = state.isPublic,
+                itemTotalCount = state.itemTotalCount,
+                onBackClick = onBackClick,
+                onLogoClick = onLogoClick,
+                onSearchClick = onSearchClick,
+                onEditClick = onEditClick,
+                onDeleteClick = onDeleteClick
+            )
         }
     ) { paddingValues ->
 

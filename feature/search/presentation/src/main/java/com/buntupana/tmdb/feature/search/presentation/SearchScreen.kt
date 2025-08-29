@@ -21,7 +21,7 @@ import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchBar
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchResults
-import com.buntupana.tmdb.feature.search.presentation.comp.SuggestionList
+import com.buntupana.tmdb.feature.search.presentation.comp.SearchSuggestionList
 import com.buntupana.tmdb.feature.search.presentation.comp.TrendingList
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
@@ -149,16 +149,14 @@ fun SearchScreenContent(
                 }
             }
 
-            if (state.searchKey.isNotBlank()) {
-                SuggestionList(
-                    suggestionList = state.searchSuggestionList,
-                    onSuggestionItemClick = { mediaItemName, searchType ->
-                        onSearch(mediaItemName, searchType)
-                    },
-                    isSearchSuggestionError = state.isSearchSuggestionsError,
-                    onDismissSuggestionsClick = onDismissSuggestionsClick
-                )
-            }
+            SearchSuggestionList(
+                suggestionList = state.searchSuggestionList,
+                onSuggestionItemClick = { mediaItemName, searchType ->
+                    onSearch(mediaItemName, searchType)
+                },
+                isSearchSuggestionError = state.isSearchSuggestionsError,
+                onDismissSuggestionsClick = onDismissSuggestionsClick
+            )
         }
     }
 }

@@ -72,7 +72,7 @@ dependencies {
 
     // Tools
     implementation(libs.jakewharton.timber)
-    implementation(libs.io.coil.kt)
+    implementation(libs.bundles.coil)
     implementation(libs.androidx.pallete)
     implementation(libs.androidx.browser)
 

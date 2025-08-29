@@ -54,7 +54,7 @@ serialization = "1.9.0"
 moshi = "1.15.2"
 desugar_jdk = "2.1.5"
 secrets = "2.0.1"
-coil = "2.7.0"
+coil = "3.3.0"
 browser = "1.9.0"
 
 #Testing
@@ -67,7 +67,7 @@ test_runner = '1.4.0'
 mockito = '4.5.0'
 
 # Plugins
-agp = "8.12.1"
+agp = "8.12.2"
 uiToolingPreviewAndroid = "1.6.7"
 uiTooling = "1.7.3"
 appcompat = "1.7.1"
@@ -141,7 +141,8 @@ google-accompanist-systemuicontroller = { group = "com.google.accompanist", name
 
 #Tools
 jakewharton-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
-io-coil-kt = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+io-coil-kt = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+io-coil-kt-network ={ group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 androidx-pallete = { group = "androidx.palette", name = "palette-ktx", version.ref = "palette" }
 squareup-moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
 squareup-moshi-ksp = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
@@ -169,14 +170,6 @@ secrets-gradle = { id = "com.google.android.libraries.mapsplatform.secrets-gradl
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 [bundles]
-ktor = [
-    "io-ktor-client-core",
-    "io-ktor-client-okhttp",
-    "io-ktor-client-content-negotiation",
-    "io-ktor-client-auth",
-    "io-ktor-client-logging",
-    "io-ktor-serialization-kotlinx-json"
-]
 compose = [
     "androidx-activity-compose",
     "androidx-ui",
@@ -186,4 +179,16 @@ compose = [
     "androidx-icons-extended",
     "androidx-lifecycle-compose",
     "androidx-navigation"
+]
+ktor = [
+    "io-ktor-client-core",
+    "io-ktor-client-okhttp",
+    "io-ktor-client-content-negotiation",
+    "io-ktor-client-auth",
+    "io-ktor-client-logging",
+    "io-ktor-serialization-kotlinx-json"
+]
+coil =[
+    "io-coil-kt",
+    "io-coil-kt-network"
 ]

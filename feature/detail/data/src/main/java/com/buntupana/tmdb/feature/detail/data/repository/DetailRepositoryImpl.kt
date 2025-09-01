@@ -9,7 +9,7 @@ import com.buntupana.tmdb.feature.detail.data.mapper.toMovieModel
 import com.buntupana.tmdb.feature.detail.data.mapper.toTvShowModel
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.DetailRemoteDataSource
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.SeasonDetailsRaw
-import com.buntupana.tmdb.feature.detail.domain.model.Credits
+import com.buntupana.tmdb.feature.detail.domain.model.CreditsMovie
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
 import com.buntupana.tmdb.feature.detail.domain.model.PersonDetails
@@ -196,7 +196,7 @@ class DetailRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMovieCredits(movieId: Long): Result<Credits, NetworkError> {
+    override suspend fun getMovieCredits(movieId: Long): Result<CreditsMovie, NetworkError> {
         return detailRemoteDataSource.getMovieCredits(movieId)
             .map { it.toModel(baseUrlProfile = urlProvider.BASE_URL_PROFILE) }
     }

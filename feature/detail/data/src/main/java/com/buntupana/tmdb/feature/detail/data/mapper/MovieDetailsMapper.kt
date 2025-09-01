@@ -12,7 +12,7 @@ import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ProductionC
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ProviderInfo
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.RecommendationsRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.ReleaseDatesRaw
-import com.buntupana.tmdb.feature.detail.domain.model.Credits
+import com.buntupana.tmdb.feature.detail.domain.model.CreditsMovie
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Providers
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -165,7 +165,7 @@ fun MediaEntity.toMovieModel(
         productionCountryCodeList = productionCountryCodeList?.map { it.iso_3166_1 }.orEmpty(),
         releaseDateInfoList = releaseDateList?.results?.map { it.toModel() }.orEmpty(),
         videoList = videoList,
-        credits = credits?.toModel(baseUrlProfile = baseUrlProfile) ?: Credits(
+        creditsMovie = credits?.toModel(baseUrlProfile = baseUrlProfile) ?: CreditsMovie(
             emptyList(),
             emptyList()
         ),

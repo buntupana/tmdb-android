@@ -1,13 +1,13 @@
 package com.buntupana.tmdb.feature.detail.data.mapper
 
 import com.buntupana.tmdb.core.data.mapper.getGender
-import com.buntupana.tmdb.feature.detail.domain.model.Credits
+import com.buntupana.tmdb.feature.detail.domain.model.CreditsMovie
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.panabuntu.tmdb.core.common.util.ifNotNullOrBlank
 
 fun com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsMovieRaw.toModel(
     baseUrlProfile : String,
-): Credits {
+): CreditsMovie {
 
     val castList = cast.map {
         val profileUrl =
@@ -34,5 +34,5 @@ fun com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsMovieRa
         )
     }
 
-    return Credits(castList, crewList)
+    return CreditsMovie(castList, crewList)
 }

@@ -21,7 +21,7 @@ data class MovieDetails(
     val productionCountryCodeList: List<String>,
     val releaseDateInfoList: List<ReleaseDateInfo>,
     val videoList: List<Video>,
-    val credits: Credits,
+    val creditsMovie: CreditsMovie,
     val recommendationList: List<com.panabuntu.tmdb.core.common.model.MediaItem>,
     val isFavorite: Boolean,
     val isWatchListed: Boolean,

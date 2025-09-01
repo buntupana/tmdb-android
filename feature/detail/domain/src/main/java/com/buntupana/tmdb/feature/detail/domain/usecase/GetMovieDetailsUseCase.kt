@@ -54,7 +54,7 @@ class GetMovieDetailsUseCase @Inject constructor(
                         listOf("Director", "Writer", "Characters", "Screenplay", "Story", "Novel")
 
                     val creatorList =
-                        movieDetails.credits.crewList.filter { creatorJobList.contains(it.job) }
+                        movieDetails.creditsMovie.crewList.filter { creatorJobList.contains(it.job) }
                             .groupBy { it.id }.map {
                                 Person.Crew.Movie(
                                     id = it.key,
@@ -87,8 +87,8 @@ class GetMovieDetailsUseCase @Inject constructor(
                             genreList = movieDetails.genreList,
                             ageCertification = certification.orEmpty(),
                             creatorList = creatorList,
-                            castList = movieDetails.credits.castList,
-                            crewList = movieDetails.credits.crewList,
+                            castList = movieDetails.creditsMovie.castList,
+                            crewList = movieDetails.creditsMovie.crewList,
                             recommendationList = movieDetails.recommendationList,
                             localCountryCodeRelease = localReleaseDateInfo?.countryCode.orEmpty(),
                             isFavorite = movieDetails.isFavorite,

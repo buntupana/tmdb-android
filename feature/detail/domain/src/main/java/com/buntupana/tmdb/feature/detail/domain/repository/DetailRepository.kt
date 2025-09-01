@@ -1,6 +1,6 @@
 package com.buntupana.tmdb.feature.detail.domain.repository
 
-import com.buntupana.tmdb.feature.detail.domain.model.Credits
+import com.buntupana.tmdb.feature.detail.domain.model.CreditsMovie
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
 import com.buntupana.tmdb.feature.detail.domain.model.PersonDetails
@@ -16,7 +16,7 @@ interface DetailRepository {
 
     suspend fun getTvShowDetails(tvShowId: Long): Flow<Result<TvShowDetails, NetworkError>>
 
-    suspend fun getMovieCredits(movieId: Long): Result<Credits, NetworkError>
+    suspend fun getMovieCredits(movieId: Long): Result<CreditsMovie, NetworkError>
 
     suspend fun getTvShowCredits(tvShowId: Long): Result<CreditsTvShow, NetworkError>
 

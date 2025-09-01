@@ -51,6 +51,10 @@ dependencies {
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.ksp)
     implementation(libs.dagger.hilt.navigation.compose)
+    
+    // Room
+    implementation(libs.bundles.room)
+    ksp(libs.androidx.room.compiler)
 
     // Networking
     implementation(platform(libs.io.ktor.bom))

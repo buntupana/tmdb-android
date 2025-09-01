@@ -1,7 +1,6 @@
 package com.buntupana.tmdb.feature.detail.data.repository
 
-import com.buntupana.tmdb.core.data.database.dao.EpisodesDao
-import com.buntupana.tmdb.core.data.database.dao.MediaDao
+import com.buntupana.tmdb.core.data.database.TmdbDataBase
 import com.buntupana.tmdb.core.data.util.getFlowResult
 import com.buntupana.tmdb.feature.detail.data.mapper.toEntity
 import com.buntupana.tmdb.feature.detail.data.mapper.toModel
@@ -29,8 +28,7 @@ import javax.inject.Inject
 
 class DetailRepositoryImpl @Inject constructor(
     private val detailRemoteDataSource: DetailRemoteDataSource,
-    private val mediaDao: MediaDao,
-    private val episodesDao: EpisodesDao,
+    private val db: TmdbDataBase,
     private val urlProvider: UrlProvider,
     sessionManager: SessionManager
 ) : DetailRepository {
@@ -50,10 +48,10 @@ class DetailRepositoryImpl @Inject constructor(
                 it.toEntity(session.value.countryCode)
             },
             updateDataBaseQuery = {
-                mediaDao.upsert(it)
+                db.mediaDao.upsert(it)
             },
             fetchFromDataBaseQuery = {
-                mediaDao.get(movieId, MediaType.MOVIE)
+                db.mediaDao.get(movieId, MediaType.MOVIE)
             },
             mapToModel = {
                 it.toMovieModel(
@@ -84,10 +82,10 @@ class DetailRepositoryImpl @Inject constructor(
                 it.toEntity(session.value.countryCode)
             },
             updateDataBaseQuery = {
-                mediaDao.upsert(it)
+                db.mediaDao.upsert(it)
             },
             fetchFromDataBaseQuery = {
-                mediaDao.get(tvShowId, MediaType.TV_SHOW)
+                db.mediaDao.get(tvShowId, MediaType.TV_SHOW)
             },
             mapToModel = {
                 it.toTvShowModel(
@@ -125,10 +123,10 @@ class DetailRepositoryImpl @Inject constructor(
                 it.episodes.toEntity(it.accountStates?.results)
             },
             updateDataBaseQuery = {
-                episodesDao.upsertEpisodes(it)
+                db.episodesDao.upsertEpisodes(it)
             },
             fetchFromDataBaseQuery = {
-                episodesDao.getEpisodes(tvShowId, seasonNumber)
+                db.episodesDao.getEpisodes(tvShowId, seasonNumber)
             },
             mapToModel = {
                 seasonDetailsRaw!!.toModel(
@@ -155,7 +153,7 @@ class DetailRepositoryImpl @Inject constructor(
                 seasonNumber = seasonNumber,
                 episodeNumber = episodeNumber
             ).onSuccess {
-                episodesDao.updateRating(
+                db.episodesDao.updateRating(
                     tvShowId = tvShowId,
                     seasonNumber = seasonNumber,
                     episodeNumber = episodeNumber,
@@ -170,7 +168,7 @@ class DetailRepositoryImpl @Inject constructor(
                 episodeNumber = episodeNumber,
                 rating = rating
             ).onSuccess {
-                episodesDao.updateRating(
+                db.episodesDao.updateRating(
                     tvShowId = tvShowId,
                     seasonNumber = seasonNumber,
                     episodeNumber = episodeNumber,

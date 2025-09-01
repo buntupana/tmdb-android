@@ -6,10 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.buntupana.tmdb.core.data.api.GenericRemoteMediator
-import com.buntupana.tmdb.core.data.database.dao.FavoriteDao
-import com.buntupana.tmdb.core.data.database.dao.MediaDao
-import com.buntupana.tmdb.core.data.database.dao.RemoteKeyDao
-import com.buntupana.tmdb.core.data.database.dao.WatchlistDao
+import com.buntupana.tmdb.core.data.database.TmdbDataBase
 import com.buntupana.tmdb.core.data.database.entity.FavoriteEntity
 import com.buntupana.tmdb.core.data.database.entity.WatchlistEntity
 import com.buntupana.tmdb.core.data.mapper.toEntity
@@ -40,10 +37,7 @@ import javax.inject.Inject
 
 class AccountRepositoryImpl @Inject constructor(
     private val accountRemoteDataSource: AccountRemoteDataSource,
-    private val remoteKeyDao: RemoteKeyDao,
-    private val mediaDao: MediaDao,
-    private val watchlistDao: WatchlistDao,
-    private val favoriteDao: FavoriteDao,
+    private val db: TmdbDataBase,
     private val urlProvider: UrlProvider,
     private val sessionManager: SessionManager
 ) : AccountRepository {
@@ -149,7 +143,7 @@ class AccountRepositoryImpl @Inject constructor(
 
         return getFlowListSEResult(
             prevDataBaseQuery = {
-                watchlistDao.clearByMediaType(mediaType = MediaType.MOVIE)
+                db.watchlistDao.clearByMediaType(mediaType = MediaType.MOVIE)
             },
             networkCall = {
                 accountRemoteDataSource.getWatchlistMovies(
@@ -158,9 +152,9 @@ class AccountRepositoryImpl @Inject constructor(
             },
             mapToEntity = { it.toEntity() },
             updateDataBaseQuery = { resultList ->
-                mediaDao.upsertSimple(resultList)
+                db.mediaDao.upsertSimple(resultList)
                 var addedAt = System.currentTimeMillis()
-                watchlistDao.upsert(
+                db.watchlistDao.upsert(
                     resultList.map {
                         addedAt += 1
                         WatchlistEntity(
@@ -172,7 +166,7 @@ class AccountRepositoryImpl @Inject constructor(
                 )
             },
             fetchFromDataBaseQuery = {
-                mediaDao.getWatchlist(MediaType.MOVIE, pageSize = PAGINATION_SIZE)
+                db.mediaDao.getWatchlist(MediaType.MOVIE, pageSize = PAGINATION_SIZE)
             },
             mapToModel = {
                 it.map {
@@ -189,7 +183,7 @@ class AccountRepositoryImpl @Inject constructor(
 
         return getFlowListSEResult(
             prevDataBaseQuery = {
-                favoriteDao.clearByMediaType(mediaType = MediaType.MOVIE)
+                db.favoriteDao.clearByMediaType(mediaType = MediaType.MOVIE)
             },
             networkCall = {
                 accountRemoteDataSource.getFavoriteMovies(
@@ -198,9 +192,9 @@ class AccountRepositoryImpl @Inject constructor(
             },
             mapToEntity = { it.toEntity() },
             updateDataBaseQuery = { resultList ->
-                mediaDao.upsertSimple(resultList)
+                db.mediaDao.upsertSimple(resultList)
                 var addedAt = System.currentTimeMillis()
-                favoriteDao.upsert(
+                db.favoriteDao.upsert(
                     resultList.map {
                         addedAt += 1
                         FavoriteEntity(
@@ -212,7 +206,7 @@ class AccountRepositoryImpl @Inject constructor(
                 )
             },
             fetchFromDataBaseQuery = {
-                mediaDao.getFavorites(MediaType.MOVIE, pageSize = PAGINATION_SIZE)
+                db.mediaDao.getFavorites(MediaType.MOVIE, pageSize = PAGINATION_SIZE)
             },
             mapToModel = {
                 it.map {
@@ -244,15 +238,15 @@ class AccountRepositoryImpl @Inject constructor(
                         order = order
                     )
                 },
-                remoteKeyDao = remoteKeyDao,
+                remoteKeyDao = db.remoteKeyDao,
                 clearTable = {
-                    watchlistDao.clearByMediaType(mediaType = MediaType.MOVIE)
-                    remoteKeyDao.remoteKeyByType(remoteType)
+                    db.watchlistDao.clearByMediaType(mediaType = MediaType.MOVIE)
+                    db.remoteKeyDao.remoteKeyByType(remoteType)
                 },
                 insertNetworkResult = { resultList ->
-                    mediaDao.upsertSimple(resultList.toEntity())
+                    db.mediaDao.upsertSimple(resultList.toEntity())
                     var addedAt = System.currentTimeMillis()
-                    watchlistDao.upsert(
+                    db.watchlistDao.upsert(
                         resultList.map {
                             addedAt += 1
                             WatchlistEntity(
@@ -265,7 +259,7 @@ class AccountRepositoryImpl @Inject constructor(
                 }
             ),
             pagingSourceFactory = {
-                mediaDao.getWatchlist(MediaType.MOVIE)
+                db.mediaDao.getWatchlist(MediaType.MOVIE)
             }
         ).flow.map { pagingData ->
             pagingData.map {
@@ -296,15 +290,15 @@ class AccountRepositoryImpl @Inject constructor(
                         order = order
                     )
                 },
-                remoteKeyDao = remoteKeyDao,
+                remoteKeyDao = db.remoteKeyDao,
                 clearTable = {
-                    favoriteDao.clearByMediaType(mediaType = MediaType.MOVIE)
-                    remoteKeyDao.remoteKeyByType(remoteType)
+                    db.favoriteDao.clearByMediaType(mediaType = MediaType.MOVIE)
+                    db.remoteKeyDao.remoteKeyByType(remoteType)
                 },
                 insertNetworkResult = { resultList ->
-                    mediaDao.upsertSimple(resultList.toEntity())
+                    db.mediaDao.upsertSimple(resultList.toEntity())
                     var addedAt = System.currentTimeMillis()
-                    favoriteDao.upsert(
+                    db.favoriteDao.upsert(
                         resultList.map {
                             addedAt += 1
                             FavoriteEntity(
@@ -317,7 +311,7 @@ class AccountRepositoryImpl @Inject constructor(
                 }
             ),
             pagingSourceFactory = {
-                mediaDao.getFavorites(mediaType = MediaType.MOVIE)
+                db.mediaDao.getFavorites(mediaType = MediaType.MOVIE)
             }
         ).flow.map { pagingData ->
             pagingData.map {
@@ -333,7 +327,7 @@ class AccountRepositoryImpl @Inject constructor(
 
         return getFlowListSEResult(
             prevDataBaseQuery = {
-                watchlistDao.clearByMediaType(mediaType = MediaType.TV_SHOW)
+                db.watchlistDao.clearByMediaType(mediaType = MediaType.TV_SHOW)
             },
             networkCall = {
                 accountRemoteDataSource.getWatchlistTvShows(
@@ -342,9 +336,9 @@ class AccountRepositoryImpl @Inject constructor(
             },
             mapToEntity = { it.toEntity() },
             updateDataBaseQuery = { resultList ->
-                mediaDao.upsertSimple(resultList)
+                db.mediaDao.upsertSimple(resultList)
                 var addedAt = System.currentTimeMillis()
-                watchlistDao.upsert(
+                db.watchlistDao.upsert(
                     resultList.map {
                         addedAt += 1
                         WatchlistEntity(
@@ -356,7 +350,7 @@ class AccountRepositoryImpl @Inject constructor(
                 )
             },
             fetchFromDataBaseQuery = {
-                mediaDao.getWatchlist(MediaType.TV_SHOW, pageSize = PAGINATION_SIZE)
+                db.mediaDao.getWatchlist(MediaType.TV_SHOW, pageSize = PAGINATION_SIZE)
             },
             mapToModel = {
                 it.map {
@@ -373,7 +367,7 @@ class AccountRepositoryImpl @Inject constructor(
 
         return getFlowListSEResult(
             prevDataBaseQuery = {
-                favoriteDao.clearByMediaType(mediaType = MediaType.TV_SHOW)
+                db.favoriteDao.clearByMediaType(mediaType = MediaType.TV_SHOW)
             },
             networkCall = {
                 accountRemoteDataSource.getFavoriteTvShows(
@@ -382,9 +376,9 @@ class AccountRepositoryImpl @Inject constructor(
             },
             mapToEntity = { it.toEntity() },
             updateDataBaseQuery = { resultList ->
-                mediaDao.upsertSimple(resultList)
+                db.mediaDao.upsertSimple(resultList)
                 var addedAt = System.currentTimeMillis()
-                favoriteDao.upsert(
+                db.favoriteDao.upsert(
                     resultList.map {
                         addedAt += 1
                         FavoriteEntity(
@@ -396,7 +390,7 @@ class AccountRepositoryImpl @Inject constructor(
                 )
             },
             fetchFromDataBaseQuery = {
-                mediaDao.getFavorites(MediaType.TV_SHOW, pageSize = PAGINATION_SIZE)
+                db.mediaDao.getFavorites(MediaType.TV_SHOW, pageSize = PAGINATION_SIZE)
             },
             mapToModel = {
                 it.map {
@@ -428,15 +422,15 @@ class AccountRepositoryImpl @Inject constructor(
                         order = order
                     )
                 },
-                remoteKeyDao = remoteKeyDao,
+                remoteKeyDao = db.remoteKeyDao,
                 clearTable = {
-                    watchlistDao.clearByMediaType(mediaType = MediaType.TV_SHOW)
-                    remoteKeyDao.remoteKeyByType(remoteType)
+                    db.watchlistDao.clearByMediaType(mediaType = MediaType.TV_SHOW)
+                    db.remoteKeyDao.remoteKeyByType(remoteType)
                 },
                 insertNetworkResult = { resultList ->
-                    mediaDao.upsertSimple(resultList.toEntity())
+                    db.mediaDao.upsertSimple(resultList.toEntity())
                     var addedAt = System.currentTimeMillis()
-                    watchlistDao.upsert(
+                    db.watchlistDao.upsert(
                         resultList.map {
                             addedAt += 1
                             WatchlistEntity(
@@ -449,7 +443,7 @@ class AccountRepositoryImpl @Inject constructor(
                 }
             ),
             pagingSourceFactory = {
-                mediaDao.getWatchlist(MediaType.TV_SHOW)
+                db.mediaDao.getWatchlist(MediaType.TV_SHOW)
             }
         ).flow.map { pagingData ->
             pagingData.map {
@@ -480,15 +474,15 @@ class AccountRepositoryImpl @Inject constructor(
                         order = order
                     )
                 },
-                remoteKeyDao = remoteKeyDao,
+                remoteKeyDao = db.remoteKeyDao,
                 clearTable = {
-                    favoriteDao.clearByMediaType(mediaType = MediaType.TV_SHOW)
-                    remoteKeyDao.remoteKeyByType(remoteType)
+                    db.favoriteDao.clearByMediaType(mediaType = MediaType.TV_SHOW)
+                    db.remoteKeyDao.remoteKeyByType(remoteType)
                 },
                 insertNetworkResult = { resultList ->
-                    mediaDao.upsertSimple(resultList.toEntity())
+                    db.mediaDao.upsertSimple(resultList.toEntity())
                     var addedAt = System.currentTimeMillis()
-                    favoriteDao.upsert(
+                    db.favoriteDao.upsert(
                         resultList.map {
                             addedAt += 1
                             FavoriteEntity(
@@ -501,7 +495,7 @@ class AccountRepositoryImpl @Inject constructor(
                 }
             ),
             pagingSourceFactory = {
-                mediaDao.getFavorites(MediaType.TV_SHOW)
+                db.mediaDao.getFavorites(MediaType.TV_SHOW)
             }
         ).flow.map { pagingData ->
             pagingData.map {
@@ -524,7 +518,7 @@ class AccountRepositoryImpl @Inject constructor(
             mediaType = mediaType,
             favorite = isFavorite
         ).onSuccess {
-            mediaDao.updateFavorite(mediaId, mediaType, isFavorite)
+            db.mediaDao.updateFavorite(mediaId, mediaType, isFavorite)
             when (mediaType) {
                 MediaType.MOVIE -> {
                     if (isFavorite) {
@@ -543,9 +537,9 @@ class AccountRepositoryImpl @Inject constructor(
                 }
             }
             if (isFavorite) {
-                favoriteDao.insert(mediaId, mediaType)
+                db.favoriteDao.insert(mediaId, mediaType)
             } else {
-                favoriteDao.delete(mediaId, mediaType)
+                db.favoriteDao.delete(mediaId, mediaType)
             }
         }
     }
@@ -561,7 +555,7 @@ class AccountRepositoryImpl @Inject constructor(
             mediaType = mediaType,
             watchlist = isWatchlisted
         ).onSuccess {
-            mediaDao.updateWatchList(mediaId, mediaType, isWatchlisted)
+            db.mediaDao.updateWatchList(mediaId, mediaType, isWatchlisted)
             when (mediaType) {
                 MediaType.MOVIE -> {
 
@@ -581,9 +575,9 @@ class AccountRepositoryImpl @Inject constructor(
                 }
             }
             if (isWatchlisted) {
-                watchlistDao.insert(mediaId, mediaType)
+                db.watchlistDao.insert(mediaId, mediaType)
             } else {
-                watchlistDao.delete(mediaId, mediaType)
+                db.watchlistDao.delete(mediaId, mediaType)
             }
         }
     }
@@ -600,7 +594,7 @@ class AccountRepositoryImpl @Inject constructor(
                 mediaType = mediaType,
                 mediaId = mediaId
             ).onSuccess {
-                mediaDao.updateRating(
+                db.mediaDao.updateRating(
                     id = mediaId,
                     mediaType = mediaType,
                     rating = value
@@ -613,12 +607,12 @@ class AccountRepositoryImpl @Inject constructor(
                 mediaId = mediaId,
                 rating = value
             ).onSuccess {
-                mediaDao.updateRatingAndWatchlist(
+                db.mediaDao.updateRatingAndWatchlist(
                     id = mediaId,
                     mediaType = mediaType,
                     rating = value
                 )
-                watchlistDao.delete(mediaId, mediaType)
+                db.watchlistDao.delete(mediaId, mediaType)
             }
         }
 

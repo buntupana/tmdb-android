@@ -54,11 +54,9 @@ dependencies {
     implementation(libs.bundles.ktor)
 
     // Room
-    implementation(libs.androidx.room)
-    implementation(libs.androidx.room.common)
-    implementation(libs.androidx.room.runtime)
+    // Room
+    implementation(libs.bundles.room)
     ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.paging)
 
     // Tools
     api(libs.jakewharton.timber)

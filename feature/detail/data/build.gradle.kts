@@ -56,6 +56,10 @@ dependencies {
     implementation(platform(libs.io.ktor.bom))
     implementation(libs.bundles.ktor)
 
+    // Room
+    implementation(libs.bundles.room)
+    ksp(libs.androidx.room.compiler)
+
     // Tools
     api(libs.jakewharton.timber)
     implementation(libs.squareup.moshi)

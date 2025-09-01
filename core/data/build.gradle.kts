@@ -55,9 +55,7 @@ dependencies {
     implementation(libs.androidx.paging.compose)
 
     // Room
-    implementation(libs.androidx.room)
-    implementation(libs.androidx.room.common)
-    implementation(libs.androidx.room.paging)
+    implementation(libs.bundles.room)
     ksp(libs.androidx.room.compiler)
 
     // Storage

@@ -6,10 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.buntupana.tmdb.core.data.api.GenericRemoteMediator
-import com.buntupana.tmdb.core.data.database.dao.MediaDao
-import com.buntupana.tmdb.core.data.database.dao.RemoteKeyDao
-import com.buntupana.tmdb.core.data.database.dao.UserListDetailsDao
-import com.buntupana.tmdb.core.data.database.dao.UserListItemDao
+import com.buntupana.tmdb.core.data.database.TmdbDataBase
 import com.buntupana.tmdb.core.data.database.entity.UserListDetailsEntity
 import com.buntupana.tmdb.core.data.database.entity.UserListItemEntity
 import com.buntupana.tmdb.core.data.mapper.toEntity
@@ -43,10 +40,7 @@ import javax.inject.Inject
 
 class ListRepositoryImpl @Inject constructor(
     private val listRemoteDataSource: ListRemoteDataSource,
-    private val remoteKeyDao: RemoteKeyDao,
-    private val mediaDao: MediaDao,
-    private val userListDetailsDao: UserListDetailsDao,
-    private val userListItemDao: UserListItemDao,
+    private val db: TmdbDataBase,
     private val urlProvider: UrlProvider,
     sessionManager: SessionManager
 ) : ListRepository {
@@ -91,18 +85,18 @@ class ListRepositoryImpl @Inject constructor(
 
         return getFlowListResult(
             prevDataBaseQuery = {
-                userListDetailsDao.clearAll()
+                db.userListDetailsDao.clearAll()
             },
             networkCall = { result },
             mapToEntity = { it.toEntity() },
             updateDataBaseQuery = {
-                userListDetailsDao.upsert(it)
+                db.userListDetailsDao.upsert(it)
             },
             fetchFromDataBaseQuery = {
                 if (justFirstPage) {
-                    userListDetailsDao.getFirstPage(pageSize = PAGINATION_SIZE)
+                    db.userListDetailsDao.getFirstPage(pageSize = PAGINATION_SIZE)
                 } else {
-                    userListDetailsDao.getAll()
+                    db.userListDetailsDao.getAll()
                 }
             },
             mapToModel = { userListDetailsList ->
@@ -135,17 +129,17 @@ class ListRepositoryImpl @Inject constructor(
                         page = page,
                     )
                 },
-                remoteKeyDao = remoteKeyDao,
+                remoteKeyDao = db.remoteKeyDao,
                 clearTable = {
-                    userListDetailsDao.clearAll()
-                    remoteKeyDao.remoteKeyByType(remoteType)
+                    db.userListDetailsDao.clearAll()
+                    db.remoteKeyDao.remoteKeyByType(remoteType)
                 },
                 insertNetworkResult = { resultList ->
-                    userListDetailsDao.upsert(resultList.toEntity())
+                    db.userListDetailsDao.upsert(resultList.toEntity())
                 }
             ),
             pagingSourceFactory = {
-                userListDetailsDao.getAllPS()
+                db.userListDetailsDao.getAllPS()
             }
         ).flow.map { pagingData ->
             pagingData.map {
@@ -180,7 +174,7 @@ class ListRepositoryImpl @Inject constructor(
             description = description,
             isPublic = isPublic,
         ).onSuccess {
-            userListDetailsDao.upsert(
+            db.userListDetailsDao.upsert(
                 UserListDetailsEntity(
                     id = it.id,
                     name = name,
@@ -214,9 +208,9 @@ class ListRepositoryImpl @Inject constructor(
             description = description,
             isPublic = isPublic
         ).onSuccess {
-            val entity = userListDetailsDao.getById(listId).firstOrNull() ?: return@onSuccess
+            val entity = db.userListDetailsDao.getById(listId).firstOrNull() ?: return@onSuccess
 
-            userListDetailsDao.upsert(
+            db.userListDetailsDao.upsert(
                 entity.copy(
                     name = name,
                     description = description,
@@ -230,7 +224,7 @@ class ListRepositoryImpl @Inject constructor(
     override suspend fun deleteList(listId: Long): Result<Unit, NetworkError> {
         return listRemoteDataSource.deleteList(listId = listId)
             .onSuccess {
-                userListDetailsDao.deleteById(listId)
+                db.userListDetailsDao.deleteById(listId)
                 listsTotalCount.value -= 1
             }
             .asEmptyDataResult()
@@ -243,9 +237,9 @@ class ListRepositoryImpl @Inject constructor(
                 is Result.Error -> emit(result)
                 is Result.Success -> {
                     val entity = result.data.toEntity()
-                    userListDetailsDao.upsert(entity)
+                    db.userListDetailsDao.upsert(entity)
                     emitAll(
-                        userListDetailsDao.getById(listId).map {
+                        db.userListDetailsDao.getById(listId).map {
                             Result.Success(
                                 it?.toModel(
                                     baseUrlBackdrop = urlProvider.BASE_URL_BACKDROP,
@@ -276,15 +270,15 @@ class ListRepositoryImpl @Inject constructor(
                         page = page
                     )
                 },
-                remoteKeyDao = remoteKeyDao,
+                remoteKeyDao = db.remoteKeyDao,
                 clearTable = {
-                    userListItemDao.clearByListId(listId)
-                    remoteKeyDao.remoteKeyByType(remoteType)
+                    db.userListItemDao.clearByListId(listId)
+                    db.remoteKeyDao.remoteKeyByType(remoteType)
                 },
                 insertNetworkResult = { resultList ->
-                    mediaDao.upsertSimple(resultList.toEntity())
+                    db.mediaDao.upsertSimple(resultList.toEntity())
                     var addedAt = System.currentTimeMillis()
-                    userListItemDao.upsert(
+                    db.userListItemDao.upsert(
                         resultList.map {
                             addedAt += 1
                             UserListItemEntity(
@@ -298,7 +292,7 @@ class ListRepositoryImpl @Inject constructor(
                 }
             ),
             pagingSourceFactory = {
-                mediaDao.getUserListItem(listId)
+                db.mediaDao.getUserListItem(listId)
             }
         ).flow.map { pagingData ->
             pagingData.map {
@@ -319,12 +313,12 @@ class ListRepositoryImpl @Inject constructor(
             listId = listId,
             mediaItemList = listOf(MediaItemBasic(mediaId, mediaType))
         ).onSuccess {
-            userListItemDao.insert(
+            db.userListItemDao.insert(
                 listId = listId,
                 mediaId = mediaId,
                 mediaType = mediaType
             )
-            userListDetailsDao.addItemCount(listId)
+            db.userListDetailsDao.addItemCount(listId)
         }.asEmptyDataResult()
     }
 
@@ -337,12 +331,12 @@ class ListRepositoryImpl @Inject constructor(
             listId = listId,
             mediaItemList = listOf(MediaItemBasic(mediaId, mediaType))
         ).onSuccess {
-            userListItemDao.delete(
+            db.userListItemDao.delete(
                 listId = listId,
                 mediaId = mediaId,
                 mediaType = mediaType
             )
-            userListDetailsDao.restItemCount(listId)
+            db.userListDetailsDao.restItemCount(listId)
         }.asEmptyDataResult()
     }
 }

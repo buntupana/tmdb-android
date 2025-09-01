@@ -142,7 +142,7 @@ google-accompanist-systemuicontroller = { group = "com.google.accompanist", name
 #Tools
 jakewharton-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 io-coil-kt = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
-io-coil-kt-network ={ group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
+io-coil-kt-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 androidx-pallete = { group = "androidx.palette", name = "palette-ktx", version.ref = "palette" }
 squareup-moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
 squareup-moshi-ksp = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
@@ -180,6 +180,11 @@ compose = [
     "androidx-lifecycle-compose",
     "androidx-navigation"
 ]
+room = [
+    "androidx-room",
+    "androidx-room-common",
+    "androidx-room-paging"
+]
 ktor = [
     "io-ktor-client-core",
     "io-ktor-client-okhttp",
@@ -188,7 +193,7 @@ ktor = [
     "io-ktor-client-logging",
     "io-ktor-serialization-kotlinx-json"
 ]
-coil =[
+coil = [
     "io-coil-kt",
     "io-coil-kt-network"
 ]

@@ -1,7 +1,6 @@
 package com.buntupana.tmdb.feature.detail.di
 
-import com.buntupana.tmdb.core.data.database.dao.EpisodesDao
-import com.buntupana.tmdb.core.data.database.dao.MediaDao
+import com.buntupana.tmdb.core.data.database.TmdbDataBase
 import com.buntupana.tmdb.core.di.CoreCommonModule
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.DetailRemoteDataSource
 import com.buntupana.tmdb.feature.detail.data.repository.DetailRepositoryImpl
@@ -22,17 +21,15 @@ class DetailModule {
     @Provides
     fun bindDetailRepository(
         detailRemoteDataSource: DetailRemoteDataSource,
-        mediaDao: MediaDao,
-        episodesDao: EpisodesDao,
+        db: TmdbDataBase,
         urlProvider: UrlProvider,
         sessionManager: SessionManager
     ): DetailRepository {
         return DetailRepositoryImpl(
             detailRemoteDataSource = detailRemoteDataSource,
-            mediaDao = mediaDao,
-            episodesDao = episodesDao,
             urlProvider = urlProvider,
-            sessionManager = sessionManager
+            sessionManager = sessionManager,
+            db = db
         )
     }
 }

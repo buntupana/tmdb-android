@@ -20,7 +20,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.composables.TitleAndFilter
 import com.buntupana.tmdb.core.ui.composables.item.CarouselMediaItem
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
@@ -33,10 +32,11 @@ import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilte
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DiscoverScreen(
-    viewModel: DiscoverViewModel = hiltViewModel(),
+    viewModel: DiscoverViewModel = koinViewModel(),
     onSearchClicked: () -> Unit,
     onMediaItemClicked: (mediaItemType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit
 ) {

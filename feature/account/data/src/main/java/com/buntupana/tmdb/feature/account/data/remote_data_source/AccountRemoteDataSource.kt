@@ -30,9 +30,8 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import javax.inject.Inject
 
-class AccountRemoteDataSource @Inject constructor(
+class AccountRemoteDataSource(
     private val httpClient: HttpClient,
     private val urlProvider: UrlProvider
 ) : RemoteDataSource() {

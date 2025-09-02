@@ -1,17 +1,13 @@
 package com.buntupana.tmdb.core.di
 
-import android.content.Context
 import com.buntupana.tmdb.core.data.database.TmdbDataBase
 import com.buntupana.tmdb.core.data.manager.SessionManagerImpl
 import com.buntupana.tmdb.core.data.provider.UrlProviderImpl
+import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
+import com.buntupana.tmdb.core.ui.navigation.NavRoutesMainImpl
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import com.panabuntu.tmdb.core.common.util.ifNullOrBlank
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.DefaultRequest
@@ -27,23 +23,31 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.koin.android.ext.koin.androidApplication
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
 import timber.log.Timber
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-object CoreCommonModule {
 
-    @Singleton
-    @Provides
-    fun provideUrlProvider(): UrlProvider {
-        return UrlProviderImpl()
+val commonModule = module {
+
+    singleOf(::NavRoutesMainImpl) bind NavRoutesMain::class
+
+    singleOf(::UrlProviderImpl) bind UrlProvider::class
+
+    singleOf(::SessionManagerImpl) bind SessionManager::class
+
+    single<TmdbDataBase> {
+        TmdbDataBase.newInstance(context = androidApplication())
     }
 
-    @Singleton
-    @Provides
-    fun provideHttpClient(sessionManager: SessionManager, urlProvider: UrlProvider): HttpClient {
-        return HttpClient(OkHttp) {
+    single<HttpClient> {
+
+        val urlProvider: UrlProvider = get()
+        val sessionManager: SessionManager = get()
+
+        HttpClient(OkHttp) {
             install(Logging) {
                 logger = object : Logger {
                     override fun log(message: String) {
@@ -82,45 +86,5 @@ object CoreCommonModule {
                 )
             }
         }
-    }
-
-    @Singleton
-    @Provides
-    fun provideDatabase(@ApplicationContext app: Context): TmdbDataBase {
-        return TmdbDataBase.newInstance(context = app)
-    }
-
-    @Singleton
-    @Provides
-    fun provideRemoteKeyDao(db: TmdbDataBase) = db.remoteKeyDao
-
-    @Singleton
-    @Provides
-    fun provideEpisodesDao(db: TmdbDataBase) = db.episodesDao
-
-    @Singleton
-    @Provides
-    fun provideAnyMediaDao(db: TmdbDataBase) = db.mediaDao
-
-    @Singleton
-    @Provides
-    fun provideWatchlistDao(db: TmdbDataBase) = db.watchlistDao
-
-    @Singleton
-    @Provides
-    fun provideFavoriteDao(db: TmdbDataBase) = db.favoriteDao
-
-    @Singleton
-    @Provides
-    fun provideListDao(db: TmdbDataBase) = db.userListDetailsDao
-
-    @Singleton
-    @Provides
-    fun provideUserListItemDao(db: TmdbDataBase) = db.userListItemDao
-
-    @Singleton
-    @Provides
-    fun provideSessionManager(@ApplicationContext context: Context): SessionManager {
-        return SessionManagerImpl(context)
     }
 }

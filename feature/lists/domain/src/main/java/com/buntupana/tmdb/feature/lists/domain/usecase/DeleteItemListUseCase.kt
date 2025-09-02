@@ -4,9 +4,8 @@ import com.buntupana.tmdb.feature.lists.domain.repository.ListRepository
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
-import javax.inject.Inject
 
-class DeleteItemListUseCase @Inject constructor(
+class DeleteItemListUseCase(
     private val listRepository: ListRepository
 ) {
 

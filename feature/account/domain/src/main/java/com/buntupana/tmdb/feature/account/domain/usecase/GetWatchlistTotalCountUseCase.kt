@@ -7,9 +7,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import javax.inject.Inject
 
-class GetWatchlistTotalCountUseCase @Inject constructor(
+class GetWatchlistTotalCountUseCase(
     private val accountRepository: AccountRepository
 ) {
 

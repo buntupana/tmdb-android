@@ -24,7 +24,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.HeaderSimple
@@ -38,12 +37,13 @@ import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
 import com.buntupana.tmdb.feature.detail.presentation.episodes.comp.EpisodeHorizontal
 import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
+import org.koin.androidx.compose.koinViewModel
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EpisodesDetailScreen(
-    viewModel: EpisodesDetailViewModel = hiltViewModel(),
+    viewModel: EpisodesDetailViewModel = koinViewModel(),
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onLogoClick: () -> Unit,

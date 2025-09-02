@@ -15,15 +15,13 @@ import com.buntupana.tmdb.feature.search.domain.usecase.GetSearchTvShowsUseCase
 import com.buntupana.tmdb.feature.search.domain.usecase.GetTrendingMediaUseCase
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
-class SearchViewModel @Inject constructor(
+
+class SearchViewModel(
     private val getTrendingMediaUseCase: GetTrendingMediaUseCase,
     private val getSearchMediaUseCase: GetSearchMediaUseCase,
     private val getSearchMoviesUseCase: GetSearchMoviesUseCase,

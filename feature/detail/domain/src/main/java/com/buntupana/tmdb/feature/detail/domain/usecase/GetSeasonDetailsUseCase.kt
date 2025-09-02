@@ -6,9 +6,8 @@ import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class GetSeasonDetailsUseCase @Inject constructor(
+class GetSeasonDetailsUseCase(
     private val detailRepository: DetailRepository
 ) {
 

@@ -8,9 +8,8 @@ import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import javax.inject.Inject
 
-class GetPopularMoviesListUseCase @Inject constructor(
+class GetPopularMoviesListUseCase(
     private val discoverRepository: DiscoverRepository
 ) {
 

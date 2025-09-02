@@ -17,17 +17,15 @@ import com.buntupana.tmdb.feature.lists.domain.usecase.GetListDetailsUseCase
 import com.buntupana.tmdb.feature.lists.domain.usecase.GetListItemsPagingUseCase
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
-class ListDetailViewModel @Inject constructor(
+
+class ListDetailViewModel(
     savedStateHandle: SavedStateHandle,
     private val getListDetailsUseCase: GetListDetailsUseCase,
     private val getListItemsPagingUseCase: GetListItemsPagingUseCase

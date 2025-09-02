@@ -24,18 +24,15 @@ import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.util.applyDelayFor
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
 // to smooth transitions a delay it's applied
 private const val FIRST_LOAD_DELAY = 300L
 
-@HiltViewModel
-class MediaDetailViewModel @Inject constructor(
-    val savedStateHandle: SavedStateHandle,
+class MediaDetailViewModel(
+    savedStateHandle: SavedStateHandle,
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     private val getTvShowDetailsUseCase: GetTvShowDetailsUseCase,
     private val setMediaFavoriteUseCase: SetMediaFavoriteUseCase,

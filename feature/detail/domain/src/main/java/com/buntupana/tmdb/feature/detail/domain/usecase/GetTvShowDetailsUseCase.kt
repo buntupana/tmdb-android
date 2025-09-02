@@ -9,9 +9,8 @@ import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class GetTvShowDetailsUseCase @Inject constructor(
+class GetTvShowDetailsUseCase(
     private val detailRepository: DetailRepository,
     private val urlProvider: UrlProvider,
     private val sessionManager: SessionManager

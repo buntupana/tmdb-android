@@ -14,9 +14,8 @@ import kotlinx.coroutines.flow.map
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
-import javax.inject.Inject
 
-class GetMovieDetailsUseCase @Inject constructor(
+class GetMovieDetailsUseCase(
     private val detailRepository: DetailRepository,
     private val urlProvider: UrlProvider,
     private val sessionManager: SessionManager

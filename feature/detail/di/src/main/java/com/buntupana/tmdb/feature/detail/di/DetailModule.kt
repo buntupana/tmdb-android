@@ -1,35 +1,52 @@
 package com.buntupana.tmdb.feature.detail.di
 
-import com.buntupana.tmdb.core.data.database.TmdbDataBase
-import com.buntupana.tmdb.core.di.CoreCommonModule
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.DetailRemoteDataSource
 import com.buntupana.tmdb.feature.detail.data.repository.DetailRepositoryImpl
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
-import com.panabuntu.tmdb.core.common.manager.SessionManager
-import com.panabuntu.tmdb.core.common.provider.UrlProvider
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import com.buntupana.tmdb.feature.detail.domain.usecase.AddEpisodeRatingUseCase
+import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieCreditsUseCase
+import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieDetailsUseCase
+import com.buntupana.tmdb.feature.detail.domain.usecase.GetPersonDetailsUseCase
+import com.buntupana.tmdb.feature.detail.domain.usecase.GetSeasonDetailsUseCase
+import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowCreditsUseCase
+import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
+import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowSeasonsUseCase
+import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailViewModel
+import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailViewModel
+import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailViewModel
+import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailViewModel
+import com.buntupana.tmdb.feature.detail.presentation.rating.RatingViewModel
+import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonDetailViewModel
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
-@Module(includes = [CoreCommonModule::class])
-@InstallIn(SingletonComponent::class)
-class DetailModule {
+private val dataModule = module {
+    singleOf(::DetailRepositoryImpl) bind DetailRepository::class
+    singleOf(::DetailRemoteDataSource)
+}
 
-    @Singleton
-    @Provides
-    fun bindDetailRepository(
-        detailRemoteDataSource: DetailRemoteDataSource,
-        db: TmdbDataBase,
-        urlProvider: UrlProvider,
-        sessionManager: SessionManager
-    ): DetailRepository {
-        return DetailRepositoryImpl(
-            detailRemoteDataSource = detailRemoteDataSource,
-            urlProvider = urlProvider,
-            sessionManager = sessionManager,
-            db = db
-        )
-    }
+private val domainModule = module {
+    factoryOf(::AddEpisodeRatingUseCase)
+    factoryOf(::GetMovieCreditsUseCase)
+    factoryOf(::GetMovieDetailsUseCase)
+    factoryOf(::GetPersonDetailsUseCase)
+    factoryOf(::GetSeasonDetailsUseCase)
+    factoryOf(::GetTvShowCreditsUseCase)
+    factoryOf(::GetTvShowDetailsUseCase)
+    factoryOf(::GetTvShowSeasonsUseCase)
+}
+
+private val presentationModule = module {
+    factoryOf(::CastDetailViewModel)
+    factoryOf(::EpisodesDetailViewModel)
+    factoryOf(::MediaDetailViewModel)
+    factoryOf(::PersonDetailViewModel)
+    factoryOf(::RatingViewModel)
+    factoryOf(::SeasonDetailViewModel)
+}
+
+val searchModule = module {
+    includes(dataModule, domainModule, presentationModule)
 }

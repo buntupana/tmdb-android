@@ -3,9 +3,8 @@ package com.buntupana.tmdb.feature.lists.domain.usecase
 import com.buntupana.tmdb.feature.lists.domain.repository.ListRepository
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
-import javax.inject.Inject
 
-class CreateListUseCase @Inject constructor(
+class CreateListUseCase(
     private val listRepository: ListRepository
 ) {
 

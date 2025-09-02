@@ -7,9 +7,8 @@ import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.map
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
-import javax.inject.Inject
 
-class CreateAuthenticationUrlUseCase @Inject constructor(
+class CreateAuthenticationUrlUseCase(
     private val accountRepository: AccountRepository,
     private val sessionManager: SessionManager,
     private val urlProvider: UrlProvider

@@ -6,9 +6,8 @@ import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class GetFavoritesUseCase @Inject constructor(
+class GetFavoritesUseCase(
     private val accountRepository: AccountRepository
 ) {
 

@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
@@ -35,10 +34,11 @@ import com.buntupana.tmdb.feature.detail.presentation.person.comp.PersonalInfo
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.credits
 import com.buntupana.tmdb.feature.detail.presentation.personDetailsSample
 import com.panabuntu.tmdb.core.common.entity.MediaType
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun PersonDetailScreen(
-    viewModel: PersonDetailViewModel = hiltViewModel(),
+    viewModel: PersonDetailViewModel = koinViewModel(),
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onMediaClick: (mediaItemId: Long, mediaType: MediaType, mainPosterColor: Color?) -> Unit,

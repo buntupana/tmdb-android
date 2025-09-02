@@ -19,17 +19,14 @@ import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.util.applyDelayFor
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
 
-@HiltViewModel
-class RatingViewModel @Inject constructor(
+class RatingViewModel(
     savedStateHandle: SavedStateHandle,
     private val addMediaRatingUseCase: AddMediaRatingUseCase,
     private val addEpisodeRatingUseCase: AddEpisodeRatingUseCase

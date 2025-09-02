@@ -5,9 +5,8 @@ import com.buntupana.tmdb.feature.account.domain.repository.AccountRepository
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.model.Order
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class GetTvShowFavoritesPagingUseCase @Inject constructor(
+class GetTvShowFavoritesPagingUseCase(
     private val accountRepository: AccountRepository
 ) {
 

@@ -4,9 +4,8 @@ import com.buntupana.tmdb.feature.account.domain.repository.AccountRepository
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
-import javax.inject.Inject
 
-class SetMediaFavoriteUseCase @Inject constructor(
+class SetMediaFavoriteUseCase(
     private val accountRepository: AccountRepository
 ) {
 

@@ -4,9 +4,8 @@ import com.buntupana.tmdb.feature.lists.domain.repository.ListRepository
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class GetListTotalCountUseCase @Inject constructor(
+class GetListTotalCountUseCase(
     private val listRepository: ListRepository
 ) {
 

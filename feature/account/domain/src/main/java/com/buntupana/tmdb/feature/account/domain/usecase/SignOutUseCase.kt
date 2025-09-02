@@ -5,9 +5,8 @@ import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.manager.SessionManager
-import javax.inject.Inject
 
-class SignOutUseCase @Inject constructor(
+class SignOutUseCase(
     private val accountRepository: AccountRepository,
     private val sessionManager: SessionManager
 ) {

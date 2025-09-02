@@ -5,9 +5,8 @@ import com.buntupana.tmdb.feature.search.domain.repository.SearchRepository
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.onSuccess
-import javax.inject.Inject
 
-class GetSearchMediaUseCase @Inject constructor(
+class GetSearchMediaUseCase(
     private val searchRepository: SearchRepository
 ) {
 

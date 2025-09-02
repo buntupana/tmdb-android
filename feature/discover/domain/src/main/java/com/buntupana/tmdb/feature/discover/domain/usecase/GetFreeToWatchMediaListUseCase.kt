@@ -5,9 +5,8 @@ import com.buntupana.tmdb.feature.discover.domain.repository.DiscoverRepository
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.model.MediaItem
-import javax.inject.Inject
 
-class GetFreeToWatchMediaListUseCase @Inject constructor(
+class GetFreeToWatchMediaListUseCase(
     private val discoverRepository: DiscoverRepository
 ) {
 

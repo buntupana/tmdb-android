@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
@@ -31,11 +30,12 @@ import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListItemVertical
 import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListSubBar
 import com.buntupana.tmdb.feature.presentation.R
+import org.koin.compose.viewmodel.koinViewModel
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun ListsScreen(
-    viewModel: ListsViewModel = hiltViewModel(),
+    viewModel: ListsViewModel = koinViewModel(),
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,

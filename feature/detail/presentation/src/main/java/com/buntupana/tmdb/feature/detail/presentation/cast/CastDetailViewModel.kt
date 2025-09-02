@@ -15,13 +15,10 @@ import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowCreditsUseCase
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
-class CastDetailViewModel @Inject constructor(
+class CastDetailViewModel(
     savedStateHandle: SavedStateHandle,
     private val getMovieCreditsUseCase: GetMovieCreditsUseCase,
     private val getTvShowCreditsUseCase: GetTvShowCreditsUseCase

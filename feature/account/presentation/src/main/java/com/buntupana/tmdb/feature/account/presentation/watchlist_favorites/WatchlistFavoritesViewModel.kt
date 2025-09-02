@@ -21,16 +21,14 @@ import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.model.Order
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
-class WatchlistFavoritesViewModel @Inject constructor(
+
+class WatchlistFavoritesViewModel(
     savedStateHandle: SavedStateHandle,
     private val getMovieWatchlistPagingUseCase: GetMovieWatchlistPagingUseCase,
     private val getTvShowWatchlistPagingUseCase: GetTvShowWatchlistPagingUseCase,

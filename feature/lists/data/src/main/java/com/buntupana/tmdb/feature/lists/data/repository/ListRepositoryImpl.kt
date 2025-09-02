@@ -36,9 +36,8 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class ListRepositoryImpl @Inject constructor(
+class ListRepositoryImpl(
     private val listRemoteDataSource: ListRemoteDataSource,
     private val db: TmdbDataBase,
     private val urlProvider: UrlProvider,

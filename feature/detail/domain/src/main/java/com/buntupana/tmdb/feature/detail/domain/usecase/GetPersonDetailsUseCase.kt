@@ -9,9 +9,8 @@ import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import java.time.LocalDate
-import javax.inject.Inject
 
-class GetPersonDetailsUseCase @Inject constructor(
+class GetPersonDetailsUseCase(
     private val detailRepository: DetailRepository,
     private val urlProvider: UrlProvider
 ) {

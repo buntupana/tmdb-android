@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.devtools.ksp)
-    alias(libs.plugins.dagger.hilt)
 }
 
 android {
@@ -42,10 +41,9 @@ dependencies {
     // Modules
     api(project(":core:common"))
 
-    // Dagger Hilt
-    implementation(libs.dagger.hilt)
-    ksp(libs.dagger.hilt.ksp)
-    api(libs.dagger.hilt.navigation.compose)
+    // Koin
+    implementation(platform(libs.koin.bom))
+    implementation(libs.bundles.koin)
 
     api(libs.androidx.paging.compose)
 

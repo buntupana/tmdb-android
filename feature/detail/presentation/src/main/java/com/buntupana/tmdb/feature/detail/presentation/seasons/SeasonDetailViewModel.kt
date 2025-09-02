@@ -13,13 +13,10 @@ import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowSeasonsUseCase
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
-class SeasonDetailViewModel @Inject constructor(
+class SeasonDetailViewModel(
     savedStateHandle: SavedStateHandle,
     private val getTvShowSeasonsUseCase: GetTvShowSeasonsUseCase
 ) : ViewModel() {

@@ -10,14 +10,12 @@ import com.buntupana.tmdb.feature.lists.domain.usecase.GetListTotalCountUseCase
 import com.buntupana.tmdb.feature.lists.domain.usecase.GetListsPagingUseCase
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
-class ListsViewModel @Inject constructor(
+
+class ListsViewModel(
     private val getListsPagingUseCase: GetListsPagingUseCase,
     private val getListsTotalCountUseCase: GetListTotalCountUseCase
 ) : ViewModel() {

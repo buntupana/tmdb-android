@@ -15,15 +15,12 @@ import com.buntupana.tmdb.feature.lists.domain.usecase.UpdateListUseCase
 import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
-class CreateUpdateListViewModel @Inject constructor(
+class CreateUpdateListViewModel(
     savedStateHandle: SavedStateHandle,
     private val createListUseCase: CreateListUseCase,
     private val updateListUseCase: UpdateListUseCase

@@ -4,9 +4,8 @@ import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.map
-import javax.inject.Inject
 
-class GetMovieCreditsUseCase @Inject constructor(
+class GetMovieCreditsUseCase(
     private val detailRepository: DetailRepository
 ) {
 

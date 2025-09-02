@@ -17,15 +17,13 @@ import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilt
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.manager.SessionManager
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class DiscoverViewModel @Inject constructor(
+
+class DiscoverViewModel(
     private val getPopularMoviesListUseCase: GetPopularMoviesListUseCase,
     private val getFreeToWatchMediaListUseCase: GetFreeToWatchMediaListUseCase,
     private val getTrendingMediaListUseCase: GetTrendingMediaListUseCase,

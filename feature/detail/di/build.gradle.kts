@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.devtools.ksp)
-    alias(libs.plugins.dagger.hilt)
 }
 
 android {
@@ -39,13 +38,17 @@ dependencies {
     implementation(project(":feature:detail:presentation"))
     implementation(project(":feature:detail:domain"))
     implementation(project(":feature:detail:data"))
+    implementation(project(":feature:account:domain"))
     implementation(project(":core:di"))
     implementation(project(":core:data"))
 
-    // Dagger Hilt
-    implementation(libs.dagger.hilt)
-    ksp(libs.dagger.hilt.ksp)
+    // Koin
+    implementation(platform(libs.koin.bom))
+    implementation(libs.bundles.koin)
 
+    // Networking
+    implementation(platform(libs.io.ktor.bom))
+    implementation(libs.bundles.ktor)
 
     // Testing
     testImplementation(libs.junit)

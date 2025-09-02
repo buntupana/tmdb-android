@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
@@ -38,10 +37,11 @@ import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.feature.detail.presentation.cast.comp.castList
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
 import com.panabuntu.tmdb.core.common.entity.MediaType
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CastDetailScreen(
-    viewModel: CastDetailViewModel = hiltViewModel(),
+    viewModel: CastDetailViewModel = koinViewModel(),
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onPersonClick: (personId: Long) -> Unit,

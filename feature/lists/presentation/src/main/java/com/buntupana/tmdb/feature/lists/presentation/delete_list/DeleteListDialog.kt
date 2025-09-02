@@ -10,7 +10,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
@@ -18,12 +17,13 @@ import com.buntupana.tmdb.core.ui.composables.dialog.ConfirmationDialog
 import com.buntupana.tmdb.core.ui.util.annotatedStringResource
 import com.buntupana.tmdb.feature.presentation.R
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeleteListDialog(
-    viewModel: DeleteListViewModel = hiltViewModel(),
+    viewModel: DeleteListViewModel = koinViewModel(),
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onDismiss: () -> Unit,
     onDeleteSuccess: () -> Unit = {}

@@ -14,14 +14,11 @@ import com.buntupana.tmdb.feature.detail.domain.usecase.GetSeasonDetailsUseCase
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.manager.SessionManager
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
-class EpisodesDetailViewModel @Inject constructor(
+class EpisodesDetailViewModel(
     savedStateHandle: SavedStateHandle,
     sessionManager: SessionManager,
     private val getSeasonDetailsUseCase: GetSeasonDetailsUseCase

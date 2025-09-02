@@ -7,9 +7,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import javax.inject.Inject
 
-class GetFavoriteTotalCountUseCase @Inject constructor(
+class GetFavoriteTotalCountUseCase(
     private val accountRepository: AccountRepository
 ) {
 

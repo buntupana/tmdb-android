@@ -6,9 +6,8 @@ import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.model.AccountDetails
 import com.panabuntu.tmdb.core.common.model.Session
-import javax.inject.Inject
 
-class CreateSessionUseCase @Inject constructor(
+class CreateSessionUseCase(
     private val accountRepository: AccountRepository,
     private val sessionManager: SessionManager
 ) {

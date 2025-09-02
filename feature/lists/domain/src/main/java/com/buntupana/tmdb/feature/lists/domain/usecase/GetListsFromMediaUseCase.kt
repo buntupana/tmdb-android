@@ -9,9 +9,8 @@ import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class GetListsFromMediaUseCase @Inject constructor(
+class GetListsFromMediaUseCase(
     private val listRepository: ListRepository
 ) {
     suspend operator fun invoke(
@@ -75,10 +74,3 @@ class GetListsFromMediaUseCase @Inject constructor(
         }
     }
 }
-
-
-data class GetListsFromMediaUseCaseResult(
-    val mediaBelongsList: List<UserListDetails>,
-    val mediaNotBelongsList: List<UserListDetails>,
-    val allListsList: List<UserListDetails>,
-)

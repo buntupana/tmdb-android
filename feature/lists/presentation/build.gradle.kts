@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.google.devtools.ksp)
-    alias(libs.plugins.dagger.hilt)
 }
 
 android {
@@ -52,10 +51,7 @@ dependencies {
     // Kotlin
     implementation(libs.kotlinx.serialization.json)
 
-    // Dagger Hilt
-    implementation(libs.dagger.hilt)
-    ksp(libs.dagger.hilt.ksp)
-    api(libs.dagger.hilt.navigation.compose)
+
 
     // Android
     implementation(libs.androidx.core.ktx)
@@ -65,6 +61,10 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
     implementation(libs.androidx.navigation)
+
+    // Koin
+    implementation(platform(libs.koin.bom))
+    implementation(libs.bundles.koin)
 
     // Accompanist
     api(libs.google.accompanist.systemuicontroller)

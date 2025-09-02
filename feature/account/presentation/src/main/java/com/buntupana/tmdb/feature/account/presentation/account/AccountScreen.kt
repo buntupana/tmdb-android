@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.composables.TitleAndFilter
 import com.buntupana.tmdb.core.ui.composables.item.CarouselMediaItem
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
@@ -43,12 +42,13 @@ import com.buntupana.tmdb.feature.account.presentation.account.comp.SignUp
 import com.buntupana.tmdb.feature.account.presentation.sign_out.SignOutDialog
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
+import org.koin.androidx.compose.koinViewModel
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountScreen(
-    viewModel: AccountViewModel = hiltViewModel(),
+    viewModel: AccountViewModel = koinViewModel(),
     onSignInClick: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
     onFavoritesClick: (mediaType: MediaType) -> Unit,

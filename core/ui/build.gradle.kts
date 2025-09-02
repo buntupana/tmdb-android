@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.google.devtools.ksp)
-    alias(libs.plugins.dagger.hilt)
 }
 
 android {
@@ -48,10 +47,9 @@ dependencies {
     // Modules
     implementation(project(":core:common"))
 
-    // Dagger Hilt
-    implementation(libs.dagger.hilt)
-    implementation(libs.dagger.hilt.navigation.compose)
-    ksp(libs.dagger.hilt.ksp)
+    // Koin
+    implementation(platform(libs.koin.bom))
+    implementation(libs.bundles.koin)
 
     // Kotlin
     implementation(libs.kotlinx.serialization.json)

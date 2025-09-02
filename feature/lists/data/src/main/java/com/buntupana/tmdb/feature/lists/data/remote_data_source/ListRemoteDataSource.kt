@@ -23,9 +23,8 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
-import javax.inject.Inject
 
-class ListRemoteDataSource @Inject constructor(
+class ListRemoteDataSource(
     private val httpClient: HttpClient
 ) : RemoteDataSource() {
 

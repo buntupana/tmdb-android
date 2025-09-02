@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
@@ -31,10 +30,11 @@ import com.buntupana.tmdb.feature.discover.presentation.media_list.comp.MediaLis
 import com.buntupana.tmdb.feature.discover.presentation.media_list.filters.MediaFilterListDefault
 import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MediaListScreen(
-    viewModel: MediaListViewModel = hiltViewModel(),
+    viewModel: MediaListViewModel = koinViewModel(),
     mediaListFilterResult: MediaListFilter?,
     onMediaItemClicked: (mediaType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit,
     onFilterClick: (movieListFilter: MediaListFilter) -> Unit

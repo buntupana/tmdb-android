@@ -14,7 +14,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
@@ -36,13 +35,14 @@ import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.SortBy
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.UserScoreRangeSelector
 import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import timber.log.Timber
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaFilterScreen(
-    viewModel: MediaFilterViewModel = hiltViewModel(),
+    viewModel: MediaFilterViewModel = koinViewModel(),
     onBackClick: () -> Unit,
     onApplyFilterClick: (movieListFilter: MediaListFilter) -> Unit,
 ) {

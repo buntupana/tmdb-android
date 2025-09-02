@@ -6,9 +6,8 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.onError
-import javax.inject.Inject
 
-class SetListsForMediaUseCase @Inject constructor(
+class SetListsForMediaUseCase(
     private val listRepository: ListRepository
 ) {
 

@@ -24,9 +24,8 @@ import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class DetailRepositoryImpl @Inject constructor(
+class DetailRepositoryImpl(
     private val detailRemoteDataSource: DetailRemoteDataSource,
     private val db: TmdbDataBase,
     private val urlProvider: UrlProvider,

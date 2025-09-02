@@ -15,15 +15,13 @@ import com.buntupana.tmdb.feature.discover.domain.entity.TvShowGenre
 import com.buntupana.tmdb.feature.discover.presentation.mapper.toSelectableItem
 import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
-class MediaFilterViewModel @Inject constructor(
+
+class MediaFilterViewModel(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 

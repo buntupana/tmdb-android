@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
@@ -38,10 +37,11 @@ import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.seasonSample
 import com.buntupana.tmdb.feature.detail.presentation.seasons.comp.SeasonItem
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SeasonsDetailScreen(
-    viewModel: SeasonDetailViewModel = hiltViewModel(),
+    viewModel: SeasonDetailViewModel = koinViewModel(),
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onLogoClick: () -> Unit,

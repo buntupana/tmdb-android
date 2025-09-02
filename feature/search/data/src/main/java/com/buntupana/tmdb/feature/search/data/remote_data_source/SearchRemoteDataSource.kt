@@ -11,9 +11,8 @@ import com.panabuntu.tmdb.core.common.entity.Result
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import javax.inject.Inject
 
-class SearchRemoteDataSource @Inject constructor(
+class SearchRemoteDataSource(
     private val httpClient: HttpClient
 ) : RemoteDataSource() {
 

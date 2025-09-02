@@ -19,9 +19,8 @@ import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class DiscoverRepositoryImpl @Inject constructor(
+class DiscoverRepositoryImpl(
     private val discoverRemoteDataSource: DiscoverRemoteDataSource,
     private val urlProvider: UrlProvider,
     sessionManager: SessionManager

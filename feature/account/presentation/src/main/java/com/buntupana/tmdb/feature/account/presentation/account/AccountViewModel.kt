@@ -14,16 +14,14 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.manager.SessionManager
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
-class AccountViewModel @Inject constructor(
+
+class AccountViewModel(
     sessionManager: SessionManager,
     private val getWatchlistUseCase: GetWatchlistUseCase,
     private val getFavoritesUseCase: GetFavoritesUseCase,

@@ -6,17 +6,17 @@ import com.panabuntu.tmdb.core.common.manager.SessionManager
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import kotlinx.serialization.SerializationException
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import timber.log.Timber
 import java.nio.channels.UnresolvedAddressException
-import javax.inject.Inject
 
 /**
  * Abstract Base Data source class with error handling
  */
-abstract class RemoteDataSource {
+abstract class RemoteDataSource: KoinComponent {
 
-    @Inject
-    lateinit var sessionManager: SessionManager
+    val sessionManager: SessionManager by inject()
 
     protected suspend inline fun <reified D> getResult(request: () -> HttpResponse): Result<D, NetworkError> {
         val response = try {

@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
@@ -40,10 +39,11 @@ import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.comp.
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.flow.flow
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun WatchlistScreen(
-    viewModel: WatchlistFavoritesViewModel = hiltViewModel(),
+    viewModel: WatchlistFavoritesViewModel = koinViewModel(),
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onMediaClick: (mediaItemId: Long, mediaType: MediaType, mainPosterColor: Color?) -> Unit,

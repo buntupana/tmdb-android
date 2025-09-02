@@ -17,9 +17,8 @@ import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.model.PersonItem
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class SearchRepositoryImpl @Inject constructor(
+class SearchRepositoryImpl(
     private val searchRemoteDataSource: SearchRemoteDataSource,
     private val urlProvider: UrlProvider
 ) : SearchRepository {

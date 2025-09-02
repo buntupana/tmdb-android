@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -67,22 +66,18 @@ import com.buntupana.tmdb.feature.search.presentation.SearchNav
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import javax.inject.Inject
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var navRoutesMain: NavRoutesMain
+    private val navRoutesMain: NavRoutesMain by inject()
+    private val urlProvider: UrlProvider by inject()
 
-    @Inject
-    lateinit var urlProvider: UrlProvider
-
-    private val viewModel by viewModels<MainActivityViewModel>()
+    private val viewModel: MainActivityViewModel by viewModel()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {

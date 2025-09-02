@@ -39,7 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleStartEffect
 import com.buntupana.tmdb.core.ui.composables.widget.sliders.RatingSlider
 import com.buntupana.tmdb.core.ui.theme.Dimens
@@ -52,13 +51,14 @@ import com.buntupana.tmdb.core.ui.util.getRatingColor
 import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.buntupana.tmdb.feature.detail.presentation.R
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import timber.log.Timber
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RatingDialog(
-    viewModel: RatingViewModel = hiltViewModel(),
+    viewModel: RatingViewModel = koinViewModel(),
     sheetState: SheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { viewModel.state.isLoading.not() }

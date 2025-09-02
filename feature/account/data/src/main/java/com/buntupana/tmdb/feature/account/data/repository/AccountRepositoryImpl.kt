@@ -33,9 +33,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class AccountRepositoryImpl @Inject constructor(
+class AccountRepositoryImpl(
     private val accountRemoteDataSource: AccountRemoteDataSource,
     private val db: TmdbDataBase,
     private val urlProvider: UrlProvider,

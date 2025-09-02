@@ -6,9 +6,8 @@ import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.onError
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import javax.inject.Inject
 
-class GetSearchResultCountUseCase @Inject constructor(
+class GetSearchResultCountUseCase(
     private val searchRepository: SearchRepository
 ) {
 

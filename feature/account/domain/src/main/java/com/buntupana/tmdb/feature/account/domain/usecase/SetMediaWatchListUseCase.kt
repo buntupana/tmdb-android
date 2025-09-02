@@ -4,9 +4,8 @@ import com.buntupana.tmdb.feature.account.domain.repository.AccountRepository
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
-import javax.inject.Inject
 
-class SetMediaWatchListUseCase @Inject constructor(
+class SetMediaWatchListUseCase(
     private val accountRepository: AccountRepository
 ) {
 

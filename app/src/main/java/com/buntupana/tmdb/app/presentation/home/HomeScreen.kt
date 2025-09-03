@@ -3,6 +3,7 @@ package com.buntupana.tmdb.app.presentation.home
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -20,10 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.buntupana.tmdb.app.R
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
-import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
 import com.buntupana.tmdb.feature.account.presentation.account.AccountScreen
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNav
@@ -73,7 +71,7 @@ fun HomeScreenContent(
 ) {
 
     SetSystemBarsColors(
-        navigationBarColor = PrimaryColor,
+        navigationBarColor = MaterialTheme.colorScheme.primary,
         translucentNavigationBar = false
     )
 
@@ -93,8 +91,8 @@ fun HomeScreenContent(
 
             NavigationBar(
                 modifier = Modifier.fillMaxWidth(),
-                containerColor = PrimaryColor,
-                contentColor = SecondaryColor
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.secondary
             ) {
                 navigationItems.forEach { item ->
 
@@ -119,13 +117,13 @@ fun HomeScreenContent(
                                 Icon(
                                     imageVector = item.unselectedIcon,
                                     contentDescription = item.title,
-                                    tint = PrimaryColor.getOnBackgroundColor()
+                                    tint = MaterialTheme.colorScheme.onPrimary
                                 )
                             }
                         },
                         label = {
                             Text(
-                                color = PrimaryColor.getOnBackgroundColor(),
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 text = item.title
                             )
                         }

@@ -26,8 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
@@ -79,7 +77,7 @@ fun EpisodeSubtitle(
                 .border(
                     width = 1.dp,
                     shape = RoundedCornerShape(Dimens.posterRound),
-                    color = PrimaryColor
+                    color = MaterialTheme.colorScheme.primary
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -108,7 +106,7 @@ fun EpisodeSubtitle(
             if (isLogged) {
                 Row(
                     modifier = Modifier
-                        .background(SecondaryColor)
+                        .background(MaterialTheme.colorScheme.secondary)
                         .animateContentSize()
                         .clickable { onRateClick() }
                         .padding(horizontal = 8.dp, vertical = 2.dp),

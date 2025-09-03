@@ -45,8 +45,8 @@ import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontalPlaceHolder
 import com.buntupana.tmdb.core.ui.composables.item.SwipeableItem
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.paddingValues
@@ -169,8 +169,8 @@ fun ListDetailContent(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor,
-        navigationBarColor = PrimaryColor,
+        statusBarColor = MaterialTheme.colorScheme.primary,
+        navigationBarColor = MaterialTheme.colorScheme.primary,
         translucentNavigationBar = true
     )
 
@@ -314,16 +314,18 @@ fun ListDetailContent(
 @Preview(showBackground = true)
 @Composable
 fun ListDetailScreenPreview() {
-    ListDetailContent(
-        state = ListDetailState(
-            listId = 0,
-            listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
-            shareLink = "test"
-        ),
-        onBackClick = {},
-        onLogoClick = {},
-        onSearchClick = {},
-        onMediaClick = { _, _ -> },
-        onRetryClick = {}
-    )
+    AppTheme {
+        ListDetailContent(
+            state = ListDetailState(
+                listId = 0,
+                listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
+                shareLink = "test"
+            ),
+            onBackClick = {},
+            onLogoClick = {},
+            onSearchClick = {},
+            onMediaClick = { _, _ -> },
+            onRetryClick = {}
+        )
+    }
 }

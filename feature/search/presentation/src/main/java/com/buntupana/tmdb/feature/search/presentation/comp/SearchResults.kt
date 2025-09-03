@@ -27,8 +27,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.feature.search.presentation.MediaResultCount
 import com.buntupana.tmdb.feature.search.presentation.SearchState
 import com.buntupana.tmdb.feature.search.presentation.SearchType
@@ -62,7 +62,7 @@ fun SearchResults(
             indicator = { tabPositions ->
                 SecondaryIndicator(
                     modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
-                    color = SecondaryColor,
+                    color = MaterialTheme.colorScheme.secondary,
                 )
             }
         ) {
@@ -209,16 +209,18 @@ fun SearchResults(
 @Preview
 @Composable
 fun SearchResultsPreview() {
-    SearchResults(
-        searchState = SearchState(
-            resultCountList = listOf(
-                MediaResultCount(SearchType.MOVIE, 100),
-                MediaResultCount(SearchType.TV_SHOW, 87),
-                MediaResultCount(SearchType.PERSON, 10)
-            )
-        ),
-        bottomPadding = 0.dp,
-        onMediaClick = { _, _ -> },
-        onPersonClick = {},
-    )
+    AppTheme(darkTheme = true) {
+        SearchResults(
+            searchState = SearchState(
+                resultCountList = listOf(
+                    MediaResultCount(SearchType.MOVIE, 100),
+                    MediaResultCount(SearchType.TV_SHOW, 87),
+                    MediaResultCount(SearchType.PERSON, 10)
+                )
+            ),
+            bottomPadding = 0.dp,
+            onMediaClick = { _, _ -> },
+            onPersonClick = {},
+        )
+    }
 }

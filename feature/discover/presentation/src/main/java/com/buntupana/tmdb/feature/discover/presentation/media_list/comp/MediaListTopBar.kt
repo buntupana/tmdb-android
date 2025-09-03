@@ -14,16 +14,14 @@ import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.IconButton
-import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 
 @Composable
 fun MediaListTopBar(
@@ -35,7 +33,7 @@ fun MediaListTopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(PrimaryColor)
+            .background(MaterialTheme.colorScheme.primary)
             .windowInsetsPadding(WindowInsets.statusBars)
             .padding(
                 horizontal = Dimens.padding.medium,
@@ -47,7 +45,7 @@ fun MediaListTopBar(
     ) {
 
         Button(
-            colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
             onClick = onDefaultFiltersClick,
         ) {
             Row(
@@ -63,12 +61,12 @@ fun MediaListTopBar(
 
         IconButton(
             onClick = onFilterClick,
-            rippleColor = PrimaryColor.getOnBackgroundColor()
+            rippleColor = MaterialTheme.colorScheme.onPrimary
         ) {
             Icon(
                 imageVector = Icons.Rounded.FilterList,
                 contentDescription = "Filter",
-                tint = PrimaryColor.getOnBackgroundColor()
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         }
     }

@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 
 @Composable
 fun AvatarImage(
@@ -35,7 +34,7 @@ fun AvatarImage(
         ) {
             Text(
                 text = username.orEmpty().first().toString().uppercase(),
-                color = SecondaryColor,
+                color = MaterialTheme.colorScheme.secondary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 80.dp.value.sp,
             )

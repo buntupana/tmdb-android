@@ -31,7 +31,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.feature.account.presentation.R
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
@@ -132,7 +131,7 @@ fun SignOutContent(
                     }
                     Button(
                         onClick = onSignOutClick,
-                        colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor)
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                     ) {
                         Text(
                             text = stringResource(RCore.string.text_confirm),

@@ -27,9 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.IconButton
-import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 import com.buntupana.tmdb.core.ui.R as RCore
@@ -135,7 +133,7 @@ fun ListDetailHeader(
 
                         IconButton(
                             onClick = onEditClick,
-                            rippleColor = PrimaryColor.getOnBackgroundColor()
+                            rippleColor = MaterialTheme.colorScheme.onPrimary
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Edit,
@@ -146,7 +144,7 @@ fun ListDetailHeader(
 
                         IconButton(
                             onClick = onDeleteClick,
-                            rippleColor = PrimaryColor.getOnBackgroundColor()
+                            rippleColor = MaterialTheme.colorScheme.onPrimary
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Delete,

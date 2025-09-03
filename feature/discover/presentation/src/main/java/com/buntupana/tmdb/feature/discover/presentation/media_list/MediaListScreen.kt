@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +25,6 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.discover.presentation.media_list.comp.MediaListTopBar
 import com.buntupana.tmdb.feature.discover.presentation.media_list.filters.MediaFilterListDefault
@@ -66,7 +66,7 @@ fun MediaListContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor
+        statusBarColor = MaterialTheme.colorScheme.primary
     )
 
     var showDefaultFiltersDialog by remember { mutableStateOf(false) }

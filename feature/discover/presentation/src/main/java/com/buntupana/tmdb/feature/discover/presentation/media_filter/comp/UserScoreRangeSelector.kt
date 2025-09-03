@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.widget.sliders.RangeSliderCustom
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.feature.discover.presentation.R
 import com.panabuntu.tmdb.core.common.util.Const
 
@@ -70,7 +69,7 @@ fun UserScoreRangeSelector(
             Switch(
                 modifier = Modifier,
                 checked = includeNotRated,
-                colors = SwitchDefaults.colors(checkedTrackColor = PrimaryColor),
+                colors = SwitchDefaults.colors(checkedTrackColor = MaterialTheme.colorScheme.primary),
                 onCheckedChange = {
                     onUserScoreRangeChanged(userScoreMin, userScoreMax, it)
                 }

@@ -28,6 +28,7 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.HeaderSimple
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
@@ -214,27 +215,29 @@ private fun EpisodesDetailContent(
 @Preview(showBackground = true)
 @Composable
 fun EpisodesDetailScreenPreview() {
-    EpisodesDetailContent(
-        state = EpisodesDetailState(
-            isLoading = true,
-            tvShowId = 0L,
-            sessionName = "Jack Reacher",
-            isGetEpisodesError = true,
-            posterUrl = "asdf",
-            releaseYear = "2003",
-            backgroundColor = DetailBackgroundColor,
-            seasonNumber = 3,
-            episodeList = listOf(
-                episodeSample,
-                episodeSample,
-                episodeSample
-            )
-        ),
-        onBackClick = {},
-        onRetryClick = {},
-        onSearchClick = { },
-        onLogoClick = {},
-        onRateEpisodeClick = { _, _, _, _, _ -> },
-        onEpisodeShowMoreClick = {}
-    )
+    AppTheme {
+        EpisodesDetailContent(
+            state = EpisodesDetailState(
+                isLoading = true,
+                tvShowId = 0L,
+                sessionName = "Jack Reacher",
+                isGetEpisodesError = true,
+                posterUrl = "asdf",
+                releaseYear = "2003",
+                backgroundColor = DetailBackgroundColor,
+                seasonNumber = 3,
+                episodeList = listOf(
+                    episodeSample,
+                    episodeSample,
+                    episodeSample
+                )
+            ),
+            onBackClick = {},
+            onRetryClick = {},
+            onSearchClick = { },
+            onLogoClick = {},
+            onRateEpisodeClick = { _, _, _, _, _ -> },
+            onEpisodeShowMoreClick = {}
+        )
+    }
 }

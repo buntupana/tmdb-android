@@ -38,6 +38,8 @@ fun ImageFromUrl(
 
     if (imageUrl.isNotNullOrBlank()) {
 
+        val context = LocalContext.current
+
         Box(
             modifier = modifier
         ) {
@@ -50,7 +52,7 @@ fun ImageFromUrl(
 
             AsyncImage(
                 modifier = modifier,
-                model = ImageRequest.Builder(LocalContext.current)
+                model = ImageRequest.Builder(context)
                     .data(imageUrl)
                     .crossfade(crossFade)
                     .allowHardware(allowHardware)
@@ -58,7 +60,7 @@ fun ImageFromUrl(
                         if (setDominantColor == null) {
                             return@listener
                         }
-                        result.image.getDominantColor { dominantColor ->
+                        result.image.getDominantColor(context) { dominantColor ->
                             setDominantColor(dominantColor)
                         }
                     }

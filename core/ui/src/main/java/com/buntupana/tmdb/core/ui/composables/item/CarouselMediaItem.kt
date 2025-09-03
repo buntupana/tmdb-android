@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.ShowMoreButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import com.panabuntu.tmdb.core.common.model.MediaItem
@@ -147,11 +148,13 @@ fun CarouselMediaItem(
 @Preview
 @Composable
 fun CarouselMediaItemPreview() {
-    CarouselMediaItem(
-        mediaItemList = listOf(mediaItemMovie, mediaItemMovie.copy(id = 9)),
-        isLoadingError = false,
-        onItemClicked = { _, _ -> },
-        onRetryClicked = {},
-        onShowMoreClick = {}
-    )
+    AppTheme {
+        CarouselMediaItem(
+            mediaItemList = listOf(mediaItemMovie, mediaItemMovie.copy(id = 9)),
+            isLoadingError = false,
+            onItemClicked = { _, _ -> },
+            onRetryClicked = {},
+            onShowMoreClick = {}
+        )
+    }
 }

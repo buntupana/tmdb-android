@@ -12,8 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,8 +28,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.presentation.util.listItemMediaLists
 import com.buntupana.tmdb.feature.presentation.R
@@ -43,7 +44,7 @@ fun ListItemVertical(
     onItemClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
 ) {
 
-    Surface(
+    Card(
         modifier = modifier
             .padding(
                 horizontal = Dimens.padding.horizontal,
@@ -58,7 +59,7 @@ fun ListItemVertical(
                 )
             },
         shape = RoundedCornerShape(Dimens.posterRound),
-        shadowElevation = Dimens.cardElevation
+        elevation = CardDefaults.cardElevation(defaultElevation = Dimens.cardElevation),
     ) {
         Column(
             modifier = modifier
@@ -71,7 +72,7 @@ fun ListItemVertical(
                     .aspectRatio(16f / 10f)
             ) {
 
-                var backgroundColor = PrimaryColor
+                var backgroundColor = MaterialTheme.colorScheme.primary
 
                 if (userListDetails.backdropUrl.isNotNullOrBlank()) {
                     backgroundColor = backgroundColor.copy(alpha = 0.8f)
@@ -168,9 +169,11 @@ fun ListItemVertical(
 @Preview(showBackground = true)
 @Composable
 private fun ListItemVerticalPreview() {
-    ListItemVertical(
-        modifier = Modifier,
-        userListDetails = listItemMediaLists.first().copy(name = "Body Transformation"),
-        onItemClick = { _, _, _, _ -> }
-    )
+    AppTheme {
+        ListItemVertical(
+            modifier = Modifier,
+            userListDetails = listItemMediaLists.first().copy(name = "Body Transformation"),
+            onItemClick = { _, _, _, _ -> }
+        )
+    }
 }

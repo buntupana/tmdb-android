@@ -6,7 +6,6 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,9 +18,10 @@ fun ShowMoreButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    TextButton(
+    com.buntupana.tmdb.core.ui.util.TextButton(
         modifier = modifier,
-        onClick = onClick
+        onClick = onClick,
+        rippleColor = MaterialTheme.colorScheme.onBackground
     ) {
         Text(
             text = stringResource(R.string.text_show_more),

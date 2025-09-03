@@ -27,7 +27,6 @@ import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarTitle
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isVisible
@@ -77,8 +76,8 @@ fun WatchlistContent(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor,
-        navigationBarColor = PrimaryColor,
+        statusBarColor = MaterialTheme.colorScheme.primary,
+        navigationBarColor = MaterialTheme.colorScheme.primary,
         translucentNavigationBar = true
     )
 
@@ -93,7 +92,7 @@ fun WatchlistContent(
             Column {
                 TopBarTitle(
                     title = stringResource(state.screenType.titleResId),
-                    backgroundColor = PrimaryColor,
+                    backgroundColor = MaterialTheme.colorScheme.primary,
                     onBackClick = onBackClick,
                     onSearchClick = onSearchClick,
                     scrollBehavior = scrollBehavior

@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -44,8 +46,8 @@ import com.buntupana.tmdb.core.ui.composables.list.NestedVerticalLazyGrid
 import com.buntupana.tmdb.core.ui.composables.widget.UserScore
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.TextButton
+import com.buntupana.tmdb.core.ui.util.balanced
 import com.buntupana.tmdb.core.ui.util.clickableWithRipple
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.getRatingColor
@@ -199,13 +201,13 @@ fun MainInfo(
                         .padding(top = Dimens.padding.small, bottom = Dimens.padding.medium)
                         .clip(RoundedCornerShape(100.dp))
                         .clickableWithRipple(
-                            color = PrimaryColor.getOnBackgroundColor(),
+                            color = MaterialTheme.colorScheme.onPrimary,
                             onClick = onRatingClick
                         )
-                        .background(PrimaryColor)
+                        .background(MaterialTheme.colorScheme.primary)
                         .border(
                             width = 1.dp,
-                            color = PrimaryColor.getOnBackgroundColor(),
+                            color = MaterialTheme.colorScheme.onPrimary,
                             shape = RoundedCornerShape(100.dp)
                         )
                         .padding(
@@ -218,7 +220,7 @@ fun MainInfo(
                     ) {
                         Text(
                             text = stringResource(R.string.text_your_rating_is),
-                            color = PrimaryColor.getOnBackgroundColor(),
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.Bold
                         )
                         VerticalTextRoulette(
@@ -228,7 +230,7 @@ fun MainInfo(
                         )
                         Text(
                             text = "%",
-                            color = PrimaryColor.getOnBackgroundColor(),
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.Bold,
                             fontSize = 10.sp
                         )
@@ -306,6 +308,7 @@ fun MainInfo(
                 text = mediaDetails.genreList.joinToString(", "),
                 color = textColor,
                 textAlign = TextAlign.Center,
+                style = LocalTextStyle.current.balanced()
             )
         }
 

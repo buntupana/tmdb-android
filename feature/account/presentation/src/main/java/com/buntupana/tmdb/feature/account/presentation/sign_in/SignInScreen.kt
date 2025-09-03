@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,10 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getCustomTabIntent
-import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.account.presentation.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -51,12 +51,19 @@ fun SignInScreen(
         }
     }
 
+    val customTabToolbarColor = MaterialTheme.colorScheme.primary
+
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collect { sideEffect ->
             Timber.d("sideEffect = [$sideEffect]")
             when (sideEffect) {
                 is SignInSideEffect.CreatedRequestTokenSuccess -> {
-                    customTabLauncher.launch(getCustomTabIntent(sideEffect.authenticationUrl))
+                    customTabLauncher.launch(
+                        getCustomTabIntent(
+                            url = sideEffect.authenticationUrl,
+                            toolbarColor = customTabToolbarColor
+                        )
+                    )
                 }
 
                 SignInSideEffect.LoginSuccess -> {
@@ -81,8 +88,8 @@ fun SignInContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor,
-        navigationBarColor = PrimaryColor,
+        statusBarColor = MaterialTheme.colorScheme.background,
+        navigationBarColor = MaterialTheme.colorScheme.background,
         translucentNavigationBar = false
     )
 
@@ -90,7 +97,7 @@ fun SignInContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = PrimaryColor)
+                .background(color = MaterialTheme.colorScheme.background)
                 .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceAround
@@ -106,17 +113,17 @@ fun SignInContent(
                 if (state.isLoading) {
                     Text(
                         text = stringResource(R.string.text_signing_in),
-                        color = PrimaryColor.getOnBackgroundColor()
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                     Spacer(
                         modifier = Modifier.padding(vertical = 20.dp)
                     )
                     CircularProgressIndicator(
-                        color = PrimaryColor.getOnBackgroundColor()
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 } else if (state.isSignInError) {
                     ErrorAndRetry(
-                        textColor = PrimaryColor.getOnBackgroundColor(),
+                        textColor = MaterialTheme.colorScheme.onBackground,
                         errorMessage = stringResource(R.string.text_signing_in_error),
                         onRetryClick = onRetryClicked
                     )
@@ -129,11 +136,13 @@ fun SignInContent(
 @Preview
 @Composable
 fun SignInScreenPreview() {
-    SignInContent(
-        SignInState(
-            isSignInError = true,
-            isLoading = true
-        ),
-        onRetryClicked = {}
-    )
+    AppTheme(darkTheme = true) {
+        SignInContent(
+            SignInState(
+                isSignInError = true,
+                isLoading = true
+            ),
+            onRetryClicked = {}
+        )
+    }
 }

@@ -22,9 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.FavoriteColor
 import com.buntupana.tmdb.core.ui.theme.RatingColor
-import com.buntupana.tmdb.core.ui.theme.WatchListColor
+import com.buntupana.tmdb.core.ui.theme.StaticColor
 import com.buntupana.tmdb.core.ui.util.IconButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.panabuntu.tmdb.core.common.util.Const.ANIM_DURATION
@@ -49,7 +48,7 @@ fun AccountBar(
 
     val favoriteTint = getColor(
         isActive = isFavorite,
-        activeColor = FavoriteColor,
+        activeColor = StaticColor.favorite,
         inactiveColor = iconColor
     )
 
@@ -60,7 +59,7 @@ fun AccountBar(
 
     val watchListTint = getColor(
         isActive = isWatchListed,
-        activeColor = WatchListColor,
+        activeColor = StaticColor.watchList,
         inactiveColor = iconColor
     )
 

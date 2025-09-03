@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
@@ -44,7 +47,7 @@ fun MediaItemHorizontal(
     releaseDate: String?
 ) {
 
-    Surface(
+    Card(
         modifier = modifier
             .height(height)
             .padding(
@@ -52,7 +55,7 @@ fun MediaItemHorizontal(
                 vertical = Dimens.padding.verticalItem
             ),
         shape = RoundedCornerShape(Dimens.posterRound),
-        shadowElevation = Dimens.cardElevation,
+        elevation = CardDefaults.cardElevation(defaultElevation = Dimens.cardElevation),
     ) {
         var mainPosterColor: Color = DetailBackgroundColor
 
@@ -177,8 +180,10 @@ fun MediaItemHorizontalPlaceHolder(
 @Preview(showBackground = true)
 @Composable
 private fun MediaItemHorizontalPlaceHolderPreview() {
-    MediaItemHorizontalPlaceHolder(
-        modifier = Modifier
-            .fillMaxWidth(),
-    )
+    AppTheme {
+        MediaItemHorizontalPlaceHolder(
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
+    }
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -13,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +36,7 @@ fun ListDetailTopBar(
     Box(
         modifier = modifier
     ) {
-        var backgroundColor = PrimaryColor
+        var backgroundColor = MaterialTheme.colorScheme.primary
 
         if (backdropUrl.isNotNullOrBlank()) {
             backgroundColor = backgroundColor.copy(alpha = 0.8f)

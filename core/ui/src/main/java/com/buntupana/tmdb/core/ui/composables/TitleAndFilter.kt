@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +20,9 @@ import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMen
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelectorAlign
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelectorItem
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.TextButton
 
 @Composable
 fun <T : ExpandableMenuSelectorItem> TitleAndFilter(
@@ -41,7 +42,8 @@ fun <T : ExpandableMenuSelectorItem> TitleAndFilter(
                 .padding(start = Dimens.padding.tiny)
                 .align(Alignment.CenterStart),
             onClick = { titleClicked?.invoke() },
-            enabled = titleClicked != null
+            enabled = titleClicked != null,
+            rippleColor = MaterialTheme.colorScheme.onBackground
         ) {
             Text(
                 text = title,
@@ -73,9 +75,11 @@ fun <T : ExpandableMenuSelectorItem> TitleAndFilter(
 @Preview(showBackground = true)
 @Composable
 fun TitleAndFilterPreview() {
-    TitleAndFilter(
-        title = "Title",
-        filterSet = MediaFilter.entries.toSet(),
-        titleClicked = {}
-    )
+    AppTheme {
+        TitleAndFilter(
+            title = "Title",
+            filterSet = MediaFilter.entries.toSet(),
+            titleClicked = {}
+        )
+    }
 }

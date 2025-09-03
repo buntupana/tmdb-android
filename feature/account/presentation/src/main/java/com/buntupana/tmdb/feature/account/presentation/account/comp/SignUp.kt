@@ -29,7 +29,6 @@ import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.theme.SignUpBackgroundColor
 import com.buntupana.tmdb.feature.account.presentation.R
 
@@ -87,7 +86,7 @@ fun SignUp(
 
             Button(
                 modifier = Modifier.padding(top = Dimens.padding.medium),
-                colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
                 onClick = onSignUpClick,
             ) {
                 Icon(Icons.AutoMirrored.Filled.Login, contentDescription = null)

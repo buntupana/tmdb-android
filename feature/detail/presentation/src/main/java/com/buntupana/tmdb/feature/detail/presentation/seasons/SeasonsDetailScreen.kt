@@ -30,6 +30,7 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.HeaderSimple
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
@@ -185,21 +186,23 @@ private fun SeasonsContent(
 @Preview(showBackground = true, heightDp = 2000)
 @Composable
 private fun SeasonsScreenPreview() {
-    SeasonsContent(
-        state = SeasonsDetailState(
-            isLoading = true,
-            isGetSeasonsError = true,
-            tvShowId = 0L,
-            tvShowName = "Jack Reacher",
-            posterUrl = null,
-            releaseYear = "2003",
-            backgroundColor = DetailBackgroundColor,
-            seasonList = listOf(seasonSample, seasonSample, seasonSample)
-        ),
-        onBackClick = {},
-        onRetryClick = {},
-        onSearchClick = { },
-        onLogoClick = {},
-        onSeasonClick = { _, _, _ -> }
-    )
+    AppTheme {
+        SeasonsContent(
+            state = SeasonsDetailState(
+                isLoading = true,
+                isGetSeasonsError = true,
+                tvShowId = 0L,
+                tvShowName = "Jack Reacher",
+                posterUrl = null,
+                releaseYear = "2003",
+                backgroundColor = DetailBackgroundColor,
+                seasonList = listOf(seasonSample, seasonSample, seasonSample)
+            ),
+            onBackClick = {},
+            onRetryClick = {},
+            onSearchClick = { },
+            onLogoClick = {},
+            onSeasonClick = { _, _, _ -> }
+        )
+    }
 }

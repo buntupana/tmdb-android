@@ -8,9 +8,10 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,9 +34,9 @@ fun EpisodeHorizontal(
     onSeeMoreClick: () -> Unit
 ) {
 
-    Surface(
+    Card(
         modifier = modifier,
-        shadowElevation = Dimens.cardElevation,
+        elevation = CardDefaults.cardElevation(defaultElevation = Dimens.cardElevation),
         shape = RoundedCornerShape(Dimens.posterRound)
     ) {
 

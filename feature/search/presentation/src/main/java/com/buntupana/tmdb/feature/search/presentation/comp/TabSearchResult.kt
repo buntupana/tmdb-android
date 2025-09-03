@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.OutlinedText
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 
 @Composable
 fun TabSearchResult(
@@ -29,12 +30,12 @@ fun TabSearchResult(
     val fontWeight: FontWeight
 
     if (isSelected) {
-        textColor = SecondaryColor
-        outLineColor = SecondaryColor
+        textColor = MaterialTheme.colorScheme.secondary
+        outLineColor = MaterialTheme.colorScheme.secondary
         fontWeight = FontWeight.Bold
     } else {
-        textColor = Color.Black
-        outLineColor = Color.Gray
+        textColor = MaterialTheme.colorScheme.onBackground
+        outLineColor = MaterialTheme.colorScheme.surfaceContainer
         fontWeight = FontWeight.Normal
     }
 
@@ -52,18 +53,21 @@ fun TabSearchResult(
             text = resultCount.toString(),
             cornerRound = 6.dp,
             internalHorizontalPadding = 8.dp,
-            outlineColor = outLineColor
+            outlineColor = outLineColor,
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }
 
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun TabSearchResultPreview() {
-    TabSearchResult(
-        titleResId = com.buntupana.tmdb.core.ui.R.string.text_movies,
-        resultCount = 3,
-        isSelected = true
-    )
+    AppTheme(darkTheme = true) {
+        TabSearchResult(
+            titleResId = com.buntupana.tmdb.core.ui.R.string.text_movies,
+            resultCount = 3,
+            isSelected = false
+        )
+    }
 }

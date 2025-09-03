@@ -17,8 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.TertiaryColor
 import com.buntupana.tmdb.core.ui.util.SelectableItem
 import com.buntupana.tmdb.core.ui.util.UiText
 
@@ -56,7 +56,9 @@ fun ChipSelector(
             if (showAllChip) {
                 FilterChip(
                     selected = isAllSelected,
-                    colors = FilterChipDefaults.filterChipColors(selectedContainerColor = TertiaryColor),
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = MaterialTheme.colorScheme.tertiary
+                    ),
                     onClick = {
                         chipItemList.map { chipItem ->
                             chipItem.copy(isSelected = false)
@@ -65,7 +67,10 @@ fun ChipSelector(
                         }
                     },
                     label = {
-                        Text(text = stringResource(R.string.text_all))
+                        Text(
+                            text = stringResource(R.string.text_all),
+                            color = MaterialTheme.colorScheme.onTertiary
+                        )
                     },
                 )
             }
@@ -73,7 +78,9 @@ fun ChipSelector(
             chipItemList.forEach {
                 FilterChip(
                     selected = it.isSelected,
-                    colors = FilterChipDefaults.filterChipColors(selectedContainerColor = TertiaryColor),
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = MaterialTheme.colorScheme.tertiary
+                    ),
                     onClick = {
                         chipItemList.map { chipItem ->
                             chipItem.copy(
@@ -106,13 +113,15 @@ private fun ChipSelectorPreview() {
         )
     }
 
-    ChipSelector(
-        modifier = Modifier,
-        title = "Genres",
-        showAllChip = true,
-        chipItemList = chipItemList,
-        onSelectionChanged = {
-            chipItemList = it
-        }
-    )
+    AppTheme {
+        ChipSelector(
+            modifier = Modifier,
+            title = "Genres",
+            showAllChip = true,
+            chipItemList = chipItemList,
+            onSelectionChanged = {
+                chipItemList = it
+            }
+        )
+    }
 }

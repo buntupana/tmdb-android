@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.widget.ChipSelector
 import com.buntupana.tmdb.core.ui.composables.widget.DatePickerTextBox
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SelectableItem
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.feature.discover.presentation.R
@@ -97,7 +96,7 @@ fun ReleaseDatesSelector(
                 Switch(
                     modifier = Modifier,
                     checked = isSearchFirstAirDateSelected,
-                    colors = SwitchDefaults.colors(checkedTrackColor = PrimaryColor),
+                    colors = SwitchDefaults.colors(checkedTrackColor = MaterialTheme.colorScheme.primary),
                     onCheckedChange = onSearchFirstAirDateChange
 
                 )

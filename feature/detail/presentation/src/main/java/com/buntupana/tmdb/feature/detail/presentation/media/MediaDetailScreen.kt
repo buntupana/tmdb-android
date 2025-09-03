@@ -37,6 +37,7 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
@@ -52,7 +53,7 @@ import com.buntupana.tmdb.feature.detail.presentation.media.comp.MainInfo
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.RecommendationsHorizontal
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.SeasonsSection
 import com.buntupana.tmdb.feature.detail.presentation.media.comp.WatchProviders
-import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
+import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.ExternalLinksRow
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import org.koin.androidx.compose.koinViewModel
@@ -378,28 +379,30 @@ fun MediaDetailContent(
 @Composable
 fun MediaDetailScreenPreview() {
 
-    MediaDetailContent(
-        state = MediaDetailState(
-            isUserLoggedIn = true,
-            isLoading = false,
-            isGetContentError = false,
-            mediaId = 0L,
-            mediaType = MediaType.MOVIE,
-            mediaDetails = mediaDetailsMovieSample,
-            backgroundColor = DetailBackgroundColor
-        ),
-        onBackClick = {},
-        onSearchClick = {},
-        onPersonClick = {},
-        onFullCastClick = { _, _, _ -> },
-        onSeasonClick = { _, _, _ -> },
-        onAllSeasonsClick = { _, _ -> },
-        onRecommendationClick = { _, _ -> },
-        onRetryClick = {},
-        onLogoClick = {},
-        onFavoriteClick = {},
-        onWatchlistClick = {},
-        onRatingClick = {},
-        onListClick = {}
-    )
+    AppTheme {
+        MediaDetailContent(
+            state = MediaDetailState(
+                isUserLoggedIn = true,
+                isLoading = false,
+                isGetContentError = false,
+                mediaId = 0L,
+                mediaType = MediaType.TV_SHOW,
+                mediaDetails = mediaDetailsTvShowSample,
+                backgroundColor = DetailBackgroundColor
+            ),
+            onBackClick = {},
+            onSearchClick = {},
+            onPersonClick = {},
+            onFullCastClick = { _, _, _ -> },
+            onSeasonClick = { _, _, _ -> },
+            onAllSeasonsClick = { _, _ -> },
+            onRecommendationClick = { _, _ -> },
+            onRetryClick = {},
+            onLogoClick = {},
+            onFavoriteClick = {},
+            onWatchlistClick = {},
+            onRatingClick = {},
+            onListClick = {}
+        )
+    }
 }

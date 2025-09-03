@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RangeSlider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,7 +21,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,7 +87,7 @@ fun RangeSliderCustom(
                             .fillMaxHeight()
                             .fillMaxWidth()
                             .weight(selectionWeight)
-                            .background(color = SecondaryColor)
+                            .background(color = MaterialTheme.colorScheme.secondary)
                     ) {
                         SliderValueIndicators(indicatorCount = (selectionWeight * (steps + 1)).roundToInt())
                     }

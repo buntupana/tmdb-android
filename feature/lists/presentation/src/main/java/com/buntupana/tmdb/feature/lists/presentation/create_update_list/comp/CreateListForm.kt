@@ -22,8 +22,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.feature.presentation.R
 import com.buntupana.tmdb.core.ui.R as RCore
 
@@ -45,7 +43,7 @@ fun CreateListForm(
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = SecondaryColor),
+            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.secondary),
             value = listName,
             onValueChange = {
                 updateForm(it, description, isPublic)
@@ -58,7 +56,7 @@ fun CreateListForm(
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = SecondaryColor),
+            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.secondary),
             value = description,
             onValueChange = {
                 updateForm(listName, it, isPublic)
@@ -83,7 +81,7 @@ fun CreateListForm(
             Switch(
                 modifier = Modifier,
                 checked = isPublic,
-                colors = SwitchDefaults.colors(checkedTrackColor = PrimaryColor),
+                colors = SwitchDefaults.colors(checkedTrackColor = MaterialTheme.colorScheme.primary),
                 onCheckedChange = {
                     updateForm(listName, description, it)
                 }
@@ -102,7 +100,7 @@ fun CreateListForm(
                     onCreateListClick()
                 },
                 enabled = listName.isNotBlank(),
-                colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
             ) {
                 Text(
                     text = stringResource(RCore.string.text_confirm)

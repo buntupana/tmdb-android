@@ -23,9 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
-import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.account.presentation.R
 
 @Composable
@@ -36,18 +33,18 @@ fun AccountTopBar(
 ) {
     Box(
         modifier = modifier
-            .background(PrimaryColor)
+            .background(MaterialTheme.colorScheme.primary)
     ) {
         Image(
             modifier = Modifier
                 .matchParentSize()
                 .fillMaxWidth()
                 .height(100.dp)
-                .background(PrimaryColor),
+                .background(MaterialTheme.colorScheme.primary),
             painter = painterResource(R.drawable.img_account_background),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            colorFilter = ColorFilter.tint(SecondaryColor)
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
         )
         Row(
             modifier = Modifier
@@ -62,7 +59,7 @@ fun AccountTopBar(
             Spacer(Modifier.padding(horizontal = Dimens.padding.vertical))
             Text(
                 text = username.orEmpty(),
-                color = PrimaryColor.getOnBackgroundColor(),
+                color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )

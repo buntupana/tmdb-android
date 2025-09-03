@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.TextButton
 
 @Composable
@@ -54,13 +55,13 @@ fun <OPTION_ID> DropdownMenuCustom(
 
         TextButton(
             onClick = { dropdownExpanded = true },
-            rippleColor = MaterialTheme.colorScheme.onBackground,
+            rippleColor = MaterialTheme.colorScheme.onSurface,
         ) {
             composable()
         }
 
         DropdownMenu(
-            containerColor = MaterialTheme.colorScheme.background,
+            containerColor = MaterialTheme.colorScheme.surfaceContainer,
             expanded = dropdownExpanded,
             onDismissRequest = {
                 dropdownExpanded = false
@@ -84,14 +85,16 @@ fun <OPTION_ID> DropdownMenuCustom(
 @Preview(showBackground = true)
 @Composable
 private fun DropdownMenuTextPreview() {
-    DropdownMenuText(
-        modifier = Modifier,
-        text = "Text",
-        optionMap = mapOf(
-            1 to "Option 1",
-            2 to "Option 2",
-            3 to "Option 3"
-        ),
-        onOptionClicked = { _, _ -> }
-    )
+    AppTheme(darkTheme = true) {
+        DropdownMenuText(
+            modifier = Modifier,
+            text = "Text",
+            optionMap = mapOf(
+                1 to "Option 1",
+                2 to "Option 2",
+                3 to "Option 3"
+            ),
+            onOptionClicked = { _, _ -> }
+        )
+    }
 }

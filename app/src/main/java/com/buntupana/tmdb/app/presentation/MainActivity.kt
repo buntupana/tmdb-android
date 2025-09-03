@@ -27,7 +27,7 @@ import com.buntupana.tmdb.app.presentation.home.HomeScreen
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
-import com.buntupana.tmdb.core.ui.theme.TMDBTheme
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.ObserveAsEvents
 import com.buntupana.tmdb.core.ui.util.bottomSheet
 import com.buntupana.tmdb.core.ui.util.getResult
@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            TMDBTheme {
+            AppTheme {
                 viewModel.reloadSession.collectAsStateWithLifecycle()
                 val context = LocalContext.current
 

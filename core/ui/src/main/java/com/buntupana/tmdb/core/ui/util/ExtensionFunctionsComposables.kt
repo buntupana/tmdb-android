@@ -63,20 +63,15 @@ import androidx.navigation.compose.DialogNavigatorDestinationBuilder
 import androidx.navigation.get
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.HighScoreColor
-import com.buntupana.tmdb.core.ui.theme.LowScoreColor
-import com.buntupana.tmdb.core.ui.theme.MediumScoreColor
-import com.buntupana.tmdb.core.ui.theme.NoScoreColor
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
+import com.buntupana.tmdb.core.ui.theme.StaticColor
 import com.panabuntu.tmdb.core.common.model.Gender
 import kotlin.reflect.KType
 
-//@Composable
-fun getCustomTabIntent(url: String): Intent {
+fun getCustomTabIntent(url: String, toolbarColor: Color): Intent {
     val customTabsIntent = CustomTabsIntent.Builder()
         .setDefaultColorSchemeParams(
             CustomTabColorSchemeParams.Builder()
-                .setToolbarColor(PrimaryColor.toArgb())
+                .setToolbarColor(toolbarColor.toArgb())
                 .build()
         )
         .setShowTitle(true)
@@ -367,10 +362,10 @@ fun Modifier.clickableWithRipple(
 
 fun getRatingColor(rating: Int): Color {
     return when (rating) {
-        in 0..30 -> LowScoreColor
-        in 4..60 -> MediumScoreColor
-        in 7..100 -> HighScoreColor
-        else -> NoScoreColor
+        in 0..30 -> StaticColor.scoreLowScore
+        in 4..60 -> StaticColor.scoreMediumScore
+        in 7..100 -> StaticColor.scoreHighScore
+        else -> StaticColor.scoreNoScore
     }
 }
 

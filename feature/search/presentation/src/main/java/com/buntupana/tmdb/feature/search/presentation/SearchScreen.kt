@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchBar
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchResults
@@ -79,7 +78,7 @@ fun SearchScreenContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor,
+        statusBarColor = MaterialTheme.colorScheme.primary,
         navigationBarColor = MaterialTheme.colorScheme.background,
         translucentNavigationBar = true
     )
@@ -112,7 +111,7 @@ fun SearchScreenContent(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator(color = PrimaryColor)
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                     }
 
                 }

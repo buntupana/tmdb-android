@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.R
@@ -91,9 +92,11 @@ fun SeasonItem(
 @Preview(showBackground = true)
 @Composable
 private fun SeasonItemPreview() {
-    SeasonItem(
-        tvShowName = "Jack Reacher",
-        season = seasonSample,
-        onSeasonClick = {}
-    )
+    AppTheme {
+        SeasonItem(
+            tvShowName = "Jack Reacher",
+            season = seasonSample,
+            onSeasonClick = {}
+        )
+    }
 }

@@ -12,6 +12,7 @@ import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,7 +24,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.TextButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.presentation.R
@@ -39,9 +39,9 @@ fun ManageListsBottomBar(
 ) {
 
     val backgroundButtonColor = if(backgroundColor.getOnBackgroundColor() == Color.White) {
-        SecondaryColor
+        MaterialTheme.colorScheme.secondary
     } else {
-        SecondaryColor
+        MaterialTheme.colorScheme.secondary
     }
 
     Row(

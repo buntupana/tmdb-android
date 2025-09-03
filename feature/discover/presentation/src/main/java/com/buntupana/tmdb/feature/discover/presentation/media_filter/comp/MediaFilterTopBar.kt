@@ -11,6 +11,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -20,10 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.IconButton
-import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.discover.presentation.R
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.buntupana.tmdb.core.ui.R as RCore
@@ -46,19 +44,19 @@ fun MediaFilterTopBar(
     TopAppBar(
         modifier = modifier,
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = PrimaryColor,
-            scrolledContainerColor = PrimaryColor
+            containerColor = MaterialTheme.colorScheme.primary,
+            scrolledContainerColor = MaterialTheme.colorScheme.primary
         ),
         navigationIcon = {
             IconButton(
                 modifier = Modifier,
                 onClick = onBackClick,
-                rippleColor = PrimaryColor.getOnBackgroundColor()
+                rippleColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                     contentDescription = "Back",
-                    tint = PrimaryColor.getOnBackgroundColor()
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
 
@@ -67,18 +65,18 @@ fun MediaFilterTopBar(
 //            IconButton(
 //                modifier = Modifier,
 //                onClick = onSaveClick,
-//                rippleColor = PrimaryColor.getOnBackgroundColor()
+//                rippleColor = MaterialTheme.colorScheme.onPrimary
 //            ) {
 //                Icon(
 //                    modifier = Modifier
 //                        .padding(horizontal = Dimens.padding.small),
 //                    imageVector = Icons.Rounded.Save,
 //                    contentDescription = "Save",
-//                    tint = PrimaryColor.getOnBackgroundColor()
+//                    tint = MaterialTheme.colorScheme.onPrimary
 //                )
 //            }
             Button(
-                colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
                 onClick = onApplyClick,
             ) {
                 Row(
@@ -105,7 +103,7 @@ fun MediaFilterTopBar(
 
                 Text(
                     text = stringResource(titleStrResId),
-                    color = PrimaryColor.getOnBackgroundColor()
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }

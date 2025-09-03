@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,7 +20,6 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.composables.widget.ChipSelector
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SelectableItem
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
@@ -132,8 +132,8 @@ fun MediaFilterContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor,
-        navigationBarColor = PrimaryColor,
+        statusBarColor = MaterialTheme.colorScheme.primary,
+        navigationBarColor = MaterialTheme.colorScheme.primary,
         translucentNavigationBar = true
     )
 

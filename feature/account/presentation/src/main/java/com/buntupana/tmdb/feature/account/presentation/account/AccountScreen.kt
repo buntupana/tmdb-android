@@ -33,7 +33,6 @@ import com.buntupana.tmdb.core.ui.composables.TitleAndFilter
 import com.buntupana.tmdb.core.ui.composables.item.CarouselMediaItem
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.account.presentation.R
 import com.buntupana.tmdb.feature.account.presentation.account.comp.AccountTopBar
@@ -135,7 +134,7 @@ fun AccountContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor
+        statusBarColor = MaterialTheme.colorScheme.primary
     )
 
     Scaffold(

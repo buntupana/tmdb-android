@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,9 +33,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.buntupana.tmdb.core.ui.R
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.TertiaryDarkColor
-import com.buntupana.tmdb.core.ui.theme.TertiaryLightColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
+import com.buntupana.tmdb.core.ui.theme.StaticColor
 import com.buntupana.tmdb.core.ui.util.toDp
 import com.buntupana.tmdb.core.ui.util.toPx
 
@@ -64,7 +64,7 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
         modifier = modifier
             .horizontalScroll(scrollState)
             .padding(
-                start = if (menuAlign == ExpandableMenuSelectorAlign.START) horizontalPadding else  0.dp,
+                start = if (menuAlign == ExpandableMenuSelectorAlign.START) horizontalPadding else 0.dp,
                 end = if (menuAlign == ExpandableMenuSelectorAlign.END) horizontalPadding else 0.dp
             ),
         contentAlignment = if (menuAlign == ExpandableMenuSelectorAlign.END) Alignment.CenterEnd else Alignment.CenterStart
@@ -94,12 +94,15 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
             modifier = paddedModifier
                 .width(width = offsetXBackground.toDp())
                 .clip(RoundedCornerShape(ROUNDED_CORNER_RADIUS))
-                .border(BorderStroke(2.dp, PrimaryColor), RoundedCornerShape(ROUNDED_CORNER_RADIUS))
+                .border(
+                    BorderStroke(2.dp, MaterialTheme.colorScheme.primaryContainer),
+                    RoundedCornerShape(ROUNDED_CORNER_RADIUS)
+                )
                 .background(
                     brush = Brush.horizontalGradient(
                         listOf(
-                            TertiaryLightColor,
-                            TertiaryDarkColor
+                            StaticColor.expandableMenuSelectorLight,
+                            StaticColor.expandableMenuSelectorDark
                         )
                     )
                 )
@@ -153,7 +156,8 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
                         textWidths[index] = it.size.width
                     }
                     .graphicsLayer {
-                        translationX = if (menuAlign == ExpandableMenuSelectorAlign.END) -offsetX else offsetX
+                        translationX =
+                            if (menuAlign == ExpandableMenuSelectorAlign.END) -offsetX else offsetX
                         if (isSelected.not()) {
                             scaleX = scaling
                         }
@@ -174,24 +178,26 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
 @Preview(showBackground = true)
 @Composable
 fun ExpandableMenuSelectorPreview() {
-    ExpandableMenuSelector(
-        menuItemSet = ExpandableMenuSelectorItemSample.entries.toSet(),
-        menuAlign = ExpandableMenuSelectorAlign.START,
-        defaultCollapsed = true
-    )
+    AppTheme(darkTheme = false) {
+        ExpandableMenuSelector(
+            menuItemSet = ExpandableMenuSelectorItemSample.entries.toSet(),
+            menuAlign = ExpandableMenuSelectorAlign.START,
+            defaultCollapsed = true
+        )
+    }
 }
 
 enum class ExpandableMenuSelectorItemSample : ExpandableMenuSelectorItem {
-    STREAMING{
+    STREAMING {
         override val strRes: Int = R.string.text_menu_selector_sample_streaming
     },
-    ON_TV{
+    ON_TV {
         override val strRes: Int = R.string.text_menu_selector_sample_on_tv
     },
-    FOR_RENT{
+    FOR_RENT {
         override val strRes: Int = R.string.text_menu_selector_sample_for_rent
     },
-    IN_THEATRES{
+    IN_THEATRES {
         override val strRes: Int = R.string.text_menu_selector_sample_in_theatres
     }
 }

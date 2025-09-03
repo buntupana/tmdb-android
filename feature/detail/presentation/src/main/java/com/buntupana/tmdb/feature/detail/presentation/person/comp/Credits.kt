@@ -30,7 +30,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.DropdownMenuText
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.TextButton
 import com.buntupana.tmdb.core.ui.util.clickableTextPadding
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -88,7 +87,7 @@ fun CreditsFilter(
                     Text(
                         modifier = Modifier,
                         text = stringResource(id = RCore.string.text_clear),
-                        color = SecondaryColor
+                        color = MaterialTheme.colorScheme.secondary
                     )
                 }
             }

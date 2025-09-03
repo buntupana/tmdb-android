@@ -21,8 +21,8 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarTitle
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isVisible
@@ -68,8 +68,8 @@ fun ListsContent(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor,
-        navigationBarColor = PrimaryColor,
+        statusBarColor = MaterialTheme.colorScheme.primary,
+        navigationBarColor = MaterialTheme.colorScheme.primary,
         translucentNavigationBar = true
     )
 
@@ -80,7 +80,7 @@ fun ListsContent(
             Column {
                 TopBarTitle(
                     title = stringResource(R.string.text_lists),
-                    backgroundColor = PrimaryColor,
+                    backgroundColor = MaterialTheme.colorScheme.primary,
                     onBackClick = onBackClick,
                     onSearchClick = onSearchClick,
                     scrollBehavior = scrollBehavior
@@ -160,15 +160,17 @@ fun ListsContent(
 @Preview(showBackground = true)
 @Composable
 fun ListsScreenPreview() {
-    ListsContent(
-        ListsState(
-            isLoading = false,
-            isError = false,
-        ),
-        onBackClick = {},
-        onSearchClick = {},
-        onListDetailClick = { _, _, _, _ -> },
-        onRetryClick = {},
-        onCreateListClick = {}
-    )
+    AppTheme {
+        ListsContent(
+            ListsState(
+                isLoading = false,
+                isError = false,
+            ),
+            onBackClick = {},
+            onSearchClick = {},
+            onListDetailClick = { _, _, _, _ -> },
+            onRetryClick = {},
+            onCreateListClick = {}
+        )
+    }
 }

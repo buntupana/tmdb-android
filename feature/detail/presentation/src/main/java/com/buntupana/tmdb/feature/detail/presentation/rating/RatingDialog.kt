@@ -42,8 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleStartEffect
 import com.buntupana.tmdb.core.ui.composables.widget.sliders.RatingSlider
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.annotatedStringResource
 import com.buntupana.tmdb.core.ui.util.balanced
@@ -165,7 +163,7 @@ fun RatingContent(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .clip(RoundedCornerShape(100.dp))
-                            .background(PrimaryColor)
+                            .background(MaterialTheme.colorScheme.primary)
                             .padding(horizontal = 12.dp, vertical = 8.dp),
                         text = state.ratingTitle.asString(),
                         fontWeight = FontWeight.Bold,
@@ -202,7 +200,7 @@ fun RatingContent(
                     Button(
                         onClick = addRatingClick,
                         enabled = state.rating > 0,
-                        colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor)
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                     ) {
                         Text(
                             text = stringResource(RCore.string.text_confirm),

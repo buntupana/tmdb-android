@@ -24,6 +24,7 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.paddingValues
@@ -113,7 +114,7 @@ fun PersonDetailContent(
 
             ErrorAndRetry(
                 modifier = Modifier
-                    .padding(vertical = paddingValues.calculateTopPadding() +  Dimens.errorAndRetryTopPadding)
+                    .padding(vertical = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding)
                     .fillMaxWidth(),
                 errorMessage = stringResource(id = R.string.message_loading_content_error),
                 onRetryClick = onRetryClick
@@ -184,18 +185,19 @@ fun PersonDetailContent(
 @Preview(showBackground = true, heightDp = 1000)
 @Composable
 fun PersonDetailsContentPreview() {
-
-    PersonDetailContent(
-        state = PersonDetailState(
-            isLoading = false,
-            isGetPersonError = false,
-            personDetails = personDetailsSample
-        ),
-        onBackClick = {},
-        onSearchClick = {},
-        onRetryClick = {},
-        onMediaClick = { _, _, _ -> },
-        onLogoClick = {},
-        mediaTypeAndDepartmentSelected = { _, _ -> }
-    )
+    AppTheme(darkTheme = true) {
+        PersonDetailContent(
+            state = PersonDetailState(
+                isLoading = false,
+                isGetPersonError = false,
+                personDetails = personDetailsSample
+            ),
+            onBackClick = {},
+            onSearchClick = {},
+            onRetryClick = {},
+            onMediaClick = { _, _, _ -> },
+            onLogoClick = {},
+            mediaTypeAndDepartmentSelected = { _, _ -> }
+        )
+    }
 }

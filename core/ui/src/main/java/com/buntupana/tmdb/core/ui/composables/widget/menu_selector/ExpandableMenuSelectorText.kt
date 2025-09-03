@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,10 +22,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.R
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.PrimaryDarkColor
-import com.buntupana.tmdb.core.ui.theme.TertiaryDarkColor
-import com.buntupana.tmdb.core.ui.theme.TertiaryLightColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
+import com.buntupana.tmdb.core.ui.theme.StaticColor
 import com.buntupana.tmdb.core.ui.util.brush
 
 @Composable
@@ -40,10 +39,17 @@ fun SelectedText(
         Row(
             modifier = modifier
                 .clip(RoundedCornerShape(ROUNDED_CORNER_RADIUS))
-                .background(PrimaryDarkColor)
+                .background(MaterialTheme.colorScheme.primaryContainer)
                 .clickable { onClick() }
                 .padding(horizontal = 16.dp, vertical = 6.dp)
-                .brush(Brush.horizontalGradient(listOf(TertiaryLightColor, TertiaryDarkColor))),
+                .brush(
+                    Brush.horizontalGradient(
+                        listOf(
+                            StaticColor.expandableMenuSelectorLight,
+                            StaticColor.expandableMenuSelectorDark
+                        )
+                    )
+                ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
 
@@ -86,17 +92,32 @@ fun SelectedText(
             maxLines = 1,
             overflow = TextOverflow.Visible,
             textAlign = TextAlign.Center,
-            color = PrimaryColor
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun SelectedTextPreview() {
-    SelectedText(
-        text = "Text",
-        isSelected = true,
-        isCollapsed = true
-    )
+fun SelectedTextLightPreview() {
+    AppTheme {
+        SelectedText(
+            text = "Text",
+            isSelected = true,
+            isCollapsed = true
+        )
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun SelectedTextDarkPreview() {
+    AppTheme(darkTheme = true) {
+        SelectedText(
+            text = "Text",
+            isSelected = true,
+            isCollapsed = true
+        )
+    }
 }

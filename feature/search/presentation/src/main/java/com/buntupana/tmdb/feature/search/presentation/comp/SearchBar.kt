@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -31,10 +32,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.TextFieldSearch
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
-import com.buntupana.tmdb.core.ui.theme.TertiaryColor
 
 @Composable
 fun SearchBar(
@@ -49,7 +48,7 @@ fun SearchBar(
 ) {
     Row(
         modifier = modifier
-            .background(PrimaryColor)
+            .background(MaterialTheme.colorScheme.primary)
             .windowInsetsPadding(WindowInsets.statusBars)
             .height(barHeight)
             .padding(horizontal = Dimens.padding.medium),
@@ -59,7 +58,7 @@ fun SearchBar(
             modifier = Modifier.size(24.dp),
             painter = painterResource(id = R.drawable.ic_search),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(SecondaryColor)
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
         )
         TextFieldSearch(
             modifier = Modifier
@@ -74,7 +73,7 @@ fun SearchBar(
             },
             isEnabled = isLoadingSearch.not(),
             requestFocus = requestFocus,
-            cursorColor = SecondaryColor
+            cursorColor = MaterialTheme.colorScheme.secondary
         )
         Spacer(modifier = Modifier.width(8.dp))
         Box(
@@ -86,7 +85,7 @@ fun SearchBar(
                     modifier = Modifier
                         .clip(CircleShape)
                         .indication(
-                            indication = ripple(color = TertiaryColor),
+                            indication = ripple(color = MaterialTheme.colorScheme.tertiary),
                             interactionSource = interactionSource
                         )
                         .clickable {
@@ -94,11 +93,11 @@ fun SearchBar(
                         },
                     painter = painterResource(id = R.drawable.ic_cancel),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(SecondaryColor)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
                 )
             } else if (isLoadingSuggestions) {
                 CircularProgressIndicator(
-                    color = SecondaryColor
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
         }
@@ -108,9 +107,11 @@ fun SearchBar(
 @Preview
 @Composable
 fun SearchBarPreview() {
-    SearchBar(
-        onValueChanged = {},
-        searchKey = "hola",
-        onSearch = {},
-    )
+    AppTheme {
+        SearchBar(
+            onValueChanged = {},
+            searchKey = "hola",
+            onSearch = {},
+        )
+    }
 }

@@ -56,8 +56,6 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.TextButton
 import com.buntupana.tmdb.core.ui.util.toPx
 
@@ -142,7 +140,7 @@ fun TextFieldSearch(
     isEnabled: Boolean = true,
     fontSize: TextUnit = MaterialTheme.typography.titleLarge.fontSize,
     requestFocus: Boolean = false,
-    cursorColor: Color = PrimaryColor
+    cursorColor: Color = MaterialTheme.colorScheme.primary
 ) {
     Box(
         modifier = modifier.padding(
@@ -152,7 +150,7 @@ fun TextFieldSearch(
         contentAlignment = Alignment.CenterStart
     ) {
 
-        val focus = FocusRequester()
+        val focus = remember { FocusRequester() }
         val focusManager = LocalFocusManager.current
 
         var triggerFocus by rememberSaveable {
@@ -330,14 +328,14 @@ fun ExpandableText(
             ) {
                 Text(
                     text = stringResource(id = R.string.text_read_more),
-                    color = SecondaryColor,
+                    color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.Bold
                 )
                 Image(
                     modifier = Modifier.size(16.dp),
                     painter = painterResource(id = R.drawable.ic_arrow_right),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(SecondaryColor)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
                 )
             }
         }

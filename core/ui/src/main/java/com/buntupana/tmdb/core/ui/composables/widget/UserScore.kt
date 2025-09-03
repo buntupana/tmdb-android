@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,12 +28,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.ui.theme.HighScoreColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.HkFontFamily
-import com.buntupana.tmdb.core.ui.theme.LowScoreColor
-import com.buntupana.tmdb.core.ui.theme.MediumScoreColor
-import com.buntupana.tmdb.core.ui.theme.NoScoreColor
-import com.buntupana.tmdb.core.ui.theme.PrimaryDarkColor
+import com.buntupana.tmdb.core.ui.theme.StaticColor
 import com.buntupana.tmdb.core.ui.util.toSp
 
 @Composable
@@ -40,11 +38,11 @@ fun UserScore(
     modifier: Modifier = Modifier,
     size: Dp = 50.dp,
     @IntRange(from = 0, to = 100) score: Int?,
-    backGroundColor: Color = PrimaryDarkColor,
-    noScoreColor: Color = NoScoreColor,
-    lowScoreColor: Color = LowScoreColor,
-    mediumScoreColor: Color = MediumScoreColor,
-    highScoreColor: Color = HighScoreColor,
+    backGroundColor: Color = MaterialTheme.colorScheme.primary,
+    noScoreColor: Color = StaticColor.scoreNoScore,
+    lowScoreColor: Color = StaticColor.scoreLowScore,
+    mediumScoreColor: Color = StaticColor.scoreMediumScore,
+    highScoreColor: Color = StaticColor.scoreHighScore,
     fontFamily: FontFamily = HkFontFamily
 ) {
 
@@ -147,8 +145,10 @@ fun UserScore(
 @Composable
 @Preview
 fun UserScorePreview() {
-    UserScore(
-        size = 100.dp,
-        score = 20
-    )
+    AppTheme {
+        UserScore(
+            size = 100.dp,
+            score = 20
+        )
+    }
 }

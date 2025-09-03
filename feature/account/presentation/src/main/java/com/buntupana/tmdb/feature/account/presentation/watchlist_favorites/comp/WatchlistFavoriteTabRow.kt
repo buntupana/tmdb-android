@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
@@ -20,9 +21,6 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.OrderButtonAnimation
 import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
-import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.panabuntu.tmdb.core.common.model.Order
 import kotlinx.coroutines.launch
 
@@ -40,20 +38,20 @@ fun WatchlistFavoriteTabRow(
 
     Row(
         modifier = modifier
-            .background(PrimaryColor),
+            .background(MaterialTheme.colorScheme.primary),
         verticalAlignment = Alignment.CenterVertically,
     ) {
 
         ScrollableTabRow(
             modifier = Modifier.weight(1f),
-            contentColor = PrimaryColor.getOnBackgroundColor(),
+            contentColor = MaterialTheme.colorScheme.onPrimary,
             edgePadding = 0.dp,
-            containerColor = PrimaryColor,
+            containerColor = MaterialTheme.colorScheme.primary,
             selectedTabIndex = pagerState.currentPage,
             indicator = { tabPositions ->
                 SecondaryIndicator(
                     modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
-                    color = SecondaryColor,
+                    color = MaterialTheme.colorScheme.secondary,
                 )
             }
         ) {
@@ -86,7 +84,7 @@ fun WatchlistFavoriteTabRow(
 
         OrderButtonAnimation(
             modifier = Modifier,
-            textColor = PrimaryColor.getOnBackgroundColor(),
+            textColor = MaterialTheme.colorScheme.onPrimary,
             text = stringResource(R.string.text_last_added),
             order = order,
             onClick = onOrderClick

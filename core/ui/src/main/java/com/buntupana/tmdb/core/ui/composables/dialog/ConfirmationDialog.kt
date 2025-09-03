@@ -31,7 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.LifecycleStartEffect
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.isInvisible
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,7 +40,7 @@ fun ConfirmationDialog(
     title: String,
     description: String,
     isLoading: Boolean,
-    confirmButtonColor: Color = SecondaryColor,
+    confirmButtonColor: Color = MaterialTheme.colorScheme.secondary,
     onCancelClick: () -> Unit = {},
     onConfirmClick: () -> Unit,
     onDismiss: () -> Unit,
@@ -66,7 +65,7 @@ fun ConfirmationDialog(
     title: String,
     description: AnnotatedString,
     isLoading: Boolean,
-    confirmButtonColor: Color = SecondaryColor,
+    confirmButtonColor: Color = MaterialTheme.colorScheme.secondary,
     onConfirmClick: () -> Unit,
     onCancelClick: () -> Unit = {},
     onDismiss: () -> Unit,

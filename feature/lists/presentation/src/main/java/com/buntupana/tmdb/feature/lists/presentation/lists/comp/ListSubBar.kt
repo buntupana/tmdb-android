@@ -11,6 +11,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,9 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
-import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.presentation.R
 
 @Composable
@@ -34,7 +32,7 @@ fun ListSubBar(
 
     Row(
         modifier = modifier
-            .background(PrimaryColor)
+            .background(MaterialTheme.colorScheme.primary)
             .animateContentSize()
             .padding(
                 horizontal = Dimens.padding.horizontal,
@@ -49,25 +47,25 @@ fun ListSubBar(
         Row {
             Text(
                 text = stringResource(R.string.text_you_have),
-                color = PrimaryColor.getOnBackgroundColor(),
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.Bold
             )
 
             VerticalTextRoulette(
                 text = " $listItemTotalCount ",
-                color = PrimaryColor.getOnBackgroundColor(),
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = stringResource(R.string.text_lists).lowercase(),
-                color = PrimaryColor.getOnBackgroundColor(),
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.Bold
             )
         }
 
         Button(
-            colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
             onClick = onCreateListClick,
         ) {
             Row(

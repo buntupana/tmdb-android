@@ -11,18 +11,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryColor,
-    secondary = SecondaryColor,
-    tertiary = TertiaryColor,
+//    primary = PrimaryColor,
+//    secondary = SecondaryColor,
+//    tertiary = TertiaryColor,
     background = BackgroundColor,
     surface = BackgroundColor,
     surfaceTint = BackgroundColor,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = PrimaryColor,
-    secondary = SecondaryColor,
-    tertiary = TertiaryColor,
+//    primary = PrimaryColor,
+//    secondary = SecondaryColor,
+//    tertiary = TertiaryColor,
     background = BackgroundColor,
     surface = BackgroundColor,
     surfaceTint = BackgroundColor,

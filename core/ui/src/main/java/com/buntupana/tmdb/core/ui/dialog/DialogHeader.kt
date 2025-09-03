@@ -19,7 +19,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.IconButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 
@@ -68,10 +67,10 @@ fun DialogHeader(
             modifier = Modifier
                 .padding(horizontal = Dimens.padding.medium)
                 .alpha(if (onAcceptClick != null) 1f else 0f)
-                .background(shape = CircleShape, color = SecondaryColor),
+                .background(shape = CircleShape, color = MaterialTheme.colorScheme.secondary),
             onClick = { onAcceptClick?.invoke() },
             enabled = onAcceptClick != null,
-            rippleColor = SecondaryColor.getOnBackgroundColor()
+            rippleColor = MaterialTheme.colorScheme.onSecondary
         ) {
             Icon(
                 modifier = Modifier,

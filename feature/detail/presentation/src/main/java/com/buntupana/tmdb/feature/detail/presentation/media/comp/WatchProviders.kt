@@ -31,7 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.util.fastForEachIndexed
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.RippleColorContainer
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.model.Providers
@@ -140,7 +139,7 @@ fun WatchProviders(
 private fun WatchProvidersPreview() {
     WatchProviders(
         modifier = Modifier.fillMaxWidth(),
-        backgroundColor = PrimaryColor,
+        backgroundColor = MaterialTheme.colorScheme.primary,
         providers = Providers(
             justWatchLink = "justWatchLink",
             logoUrlList = listOf("", "", "", "", "", "", "", "", "", "", "", "", "", "")

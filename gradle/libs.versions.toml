@@ -68,7 +68,7 @@ test_runner = '1.4.0'
 mockito = '4.5.0'
 
 # Plugins
-agp = "8.12.2"
+agp = "8.13.0"
 uiToolingPreviewAndroid = "1.6.7"
 uiTooling = "1.7.3"
 appcompat = "1.7.1"

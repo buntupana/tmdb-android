@@ -14,6 +14,8 @@ import androidx.compose.ui.graphics.Color
 data class ExtendedColorScheme(
     val customColor1: ColorFamily,
     val customColor2: ColorFamily,
+    // Default container color for Cards across the app
+    val cardContainer: Color,
 )
 
 private val lightScheme = lightColorScheme(
@@ -105,6 +107,7 @@ val extendedLight = ExtendedColorScheme(
         customColor2ContainerLight,
         onCustomColor2ContainerLight,
     ),
+    cardContainer = surfaceContainerLight,
 )
 
 val extendedDark = ExtendedColorScheme(
@@ -120,6 +123,7 @@ val extendedDark = ExtendedColorScheme(
         customColor2ContainerDark,
         onCustomColor2ContainerDark,
     ),
+    cardContainer = surfaceContainerDark,
 )
 
 @Immutable

@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.lists.presentation.manage_lists.comp
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,7 +10,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.HeaderSimple
 import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Typography
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.presentation.R
@@ -60,7 +60,7 @@ fun HeaderManageLists(
 @Composable
 private fun CastHeaderPreview() {
     HeaderManageLists(
-        backgroundColor = DetailBackgroundColor,
+        backgroundColor = MaterialTheme.colorScheme.surfaceDim,
         posterUrl = null,
         mediaName = "Pain Hustlers",
         listsCount = 6,

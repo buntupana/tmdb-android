@@ -44,12 +44,10 @@ import com.buntupana.tmdb.core.ui.composables.OutlinedText
 import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
 import com.buntupana.tmdb.core.ui.composables.list.NestedVerticalLazyGrid
 import com.buntupana.tmdb.core.ui.composables.widget.UserScore
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.TextButton
 import com.buntupana.tmdb.core.ui.util.balanced
 import com.buntupana.tmdb.core.ui.util.clickableWithRipple
-import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.getRatingColor
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
@@ -392,10 +390,10 @@ fun MainInfoPreview() {
 
     MainInfo(
         modifier = Modifier
-            .background(DetailBackgroundColor),
+            .background(MaterialTheme.colorScheme.surfaceDim),
         mediaDetails = mediaDetailsMovieSample,
         onCreatorClick = {},
         onRatingClick = {},
-        textColor = DetailBackgroundColor.getOnBackgroundColor()
+        textColor = MaterialTheme.colorScheme.onSurface
     )
 }

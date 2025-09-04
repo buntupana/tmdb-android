@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,6 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.buntupana.tmdb.core.ui.composables.AppCard
 import com.buntupana.tmdb.core.ui.composables.ImagePersonFromUrl
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
@@ -40,7 +40,7 @@ fun PersonItemVertical(
     personCast: Person.Cast,
     onItemClick: ((personId: Long) -> Unit)? = null
 ) {
-    Card(
+    AppCard(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = Dimens.cardElevation),
         shape = RoundedCornerShape(Dimens.posterRound),
@@ -136,10 +136,19 @@ private fun NameAndCharacter(
         }
     }
 }
+@Preview(showBackground = true)
+@Composable
+fun PersonItemVerticalPreviewLight() {
+    AppTheme(darkTheme = false) {
+        PersonItemVertical(
+            personCast = castTvShowPersonSample
+        )
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
-fun PersonItemVerticalPreview() {
+fun PersonItemVerticalPreviewDark() {
     AppTheme(darkTheme = true) {
         PersonItemVertical(
             personCast = castTvShowPersonSample

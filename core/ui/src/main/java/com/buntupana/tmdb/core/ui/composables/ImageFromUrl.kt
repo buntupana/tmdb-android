@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,7 +21,7 @@ import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import coil3.request.crossfade
 import com.buntupana.tmdb.core.ui.R
-import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.getDominantColor
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
@@ -31,7 +32,7 @@ fun ImageFromUrl(
     contentDescription: String? = null,
     crossFade: Boolean = true,
     contentScale: ContentScale = ContentScale.Crop,
-    placeHolderColor: Color = PlaceHolderColor,
+    placeHolderColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     showPlaceHolder: Boolean = true,
     setDominantColor: ((dominantColor: Color) -> Unit)? = null
 ) {
@@ -76,7 +77,7 @@ fun ImageFromUrl(
             Box(
                 Modifier
                     .fillMaxSize()
-                    .background(PlaceHolderColor),
+                    .background(placeHolderColor),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -93,5 +94,15 @@ fun ImageFromUrl(
 @Preview
 @Composable
 private fun ImageFromUrlPreview() {
-    ImageFromUrl(modifier = Modifier.size(100.dp), imageUrl = null)
+    AppTheme {
+        ImageFromUrl(modifier = Modifier.size(100.dp), imageUrl = null)
+    }
+}
+
+@Preview
+@Composable
+private fun ImageFromUrlPreviewDark() {
+    AppTheme(darkTheme = true) {
+        ImageFromUrl(modifier = Modifier.size(100.dp), imageUrl = null)
+    }
 }

@@ -19,6 +19,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.composables.widget.ChipSelector
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SelectableItem
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
@@ -260,22 +261,24 @@ fun MediaFilterContent(
 @Preview(showBackground = true, heightDp = 2000)
 @Composable
 fun MediaFilterScreenPreview() {
-    MediaFilterContent(
-        state = MediaFilterState(
-            availabilitiesList = MonetizationType.entries.map { it.toSelectableItem(0) },
-            releaseTypesList = ReleaseType.entries.map { it.toSelectableItem(0) },
-            genreList = MovieGenre.entries.map { it.toSelectableItem(0) },
-        ),
-        onBackClick = {},
-        onApplySortBy = { _, _ -> },
-        onAvailabilityListChanged = {},
-        onReleaseTypeSelectedListChanged = {},
-        onSelectReleaseDateRange = { _, _ -> },
-        onGenreSelectedListChanged = {},
-        onUserScoreRangeSelected = { _, _, _ -> },
-        onMinUserVotesChanged = {},
-        onRuntimeRangeSelected = { _, _ -> },
-        onApplyFilterClick = {},
-        onSearchFirstAirDateChange = {}
-    )
+    AppTheme {
+        MediaFilterContent(
+            state = MediaFilterState(
+                availabilitiesList = MonetizationType.entries.map { it.toSelectableItem(0) },
+                releaseTypesList = ReleaseType.entries.map { it.toSelectableItem(0) },
+                genreList = MovieGenre.entries.map { it.toSelectableItem(0) },
+            ),
+            onBackClick = {},
+            onApplySortBy = { _, _ -> },
+            onAvailabilityListChanged = {},
+            onReleaseTypeSelectedListChanged = {},
+            onSelectReleaseDateRange = { _, _ -> },
+            onGenreSelectedListChanged = {},
+            onUserScoreRangeSelected = { _, _, _ -> },
+            onMinUserVotesChanged = {},
+            onRuntimeRangeSelected = { _, _ -> },
+            onApplyFilterClick = {},
+            onSearchFirstAirDateChange = {}
+        )
+    }
 }

@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.widget.sliders.RangeSliderCustom
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.discover.presentation.R
 import com.panabuntu.tmdb.core.common.util.Const
@@ -81,11 +82,13 @@ fun UserScoreRangeSelector(
 @Preview(showBackground = true)
 @Composable
 private fun UserScoreRangeSelectorPreview() {
-    UserScoreRangeSelector(
-        modifier = Modifier,
-        userScoreMin = 20,
-        userScoreMax = 80,
-        includeNotRated = true,
-        onUserScoreRangeChanged = { _, _, _ -> }
-    )
+    AppTheme {
+        UserScoreRangeSelector(
+            modifier = Modifier,
+            userScoreMin = 20,
+            userScoreMax = 80,
+            includeNotRated = true,
+            onUserScoreRangeChanged = { _, _, _ -> }
+        )
+    }
 }

@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.panabuntu.tmdb.core.common.util.countWordsBySpace
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
@@ -43,7 +43,7 @@ fun ListItemHorizontal(
             .width(width)
             .aspectRatio(16f / 10f)
             .clip(RoundedCornerShape(Dimens.posterRound))
-            .background(PlaceHolderColor)
+            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
             .clickable {
                 onListClick(
                     userListDetails.id,
@@ -87,12 +87,12 @@ fun ListItemHorizontal(
             }
 
             Text(
-                text  = userListDetails.name,
+                text = userListDetails.name,
                 style = TextStyle.Default.copy(textAlign = TextAlign.Center),
                 autoSize = TextAutoSize.StepBased(minFontSize = 18.sp, maxFontSize = 60.sp),
                 maxLines = maxLines,
                 overflow = TextOverflow.Ellipsis,
-                color =  Color.White
+                color = Color.White
             )
         }
     }
@@ -100,25 +100,52 @@ fun ListItemHorizontal(
 
 @Preview(showBackground = true)
 @Composable
-private fun ListItemHorizontalPreview() {
-    ListItemHorizontal(
-        width = 200.dp,
-        userListDetails = UserListDetails(
-            id = 1,
-            name = "Multi Story Lines",
-            description = "List Description",
-            backdropUrl = null,
-            posterUrl = null,
-            itemCount = 0,
-            isPublic = false,
-            revenue = 0L,
-            runtime = null,
-            averageRating = null,
-            updatedAt = null,
-            shareLink = "test"
-        ),
-        onListClick = { _, _, _, _ -> }
-    )
+private fun ListItemHorizontalPreviewLight() {
+    AppTheme(darkTheme = false) {
+        ListItemHorizontal(
+            width = 200.dp,
+            userListDetails = UserListDetails(
+                id = 1,
+                name = "Multi Story Lines",
+                description = "List Description",
+                backdropUrl = null,
+                posterUrl = null,
+                itemCount = 0,
+                isPublic = false,
+                revenue = 0L,
+                runtime = null,
+                averageRating = null,
+                updatedAt = null,
+                shareLink = "test"
+            ),
+            onListClick = { _, _, _, _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ListItemHorizontalPreviewDark() {
+    AppTheme(darkTheme = true) {
+        ListItemHorizontal(
+            width = 200.dp,
+            userListDetails = UserListDetails(
+                id = 1,
+                name = "Multi Story Lines",
+                description = "List Description",
+                backdropUrl = null,
+                posterUrl = null,
+                itemCount = 0,
+                isPublic = false,
+                revenue = 0L,
+                runtime = null,
+                averageRating = null,
+                updatedAt = null,
+                shareLink = "test"
+            ),
+            onListClick = { _, _, _, _ -> }
+        )
+    }
 }
 
 @Composable
@@ -131,14 +158,23 @@ fun ListItemHorizontalPlaceHolder(
             .width(width)
             .aspectRatio(16f / 10f)
             .clip(RoundedCornerShape(Dimens.posterRound))
-            .background(PlaceHolderColor)
+            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
     ) {
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun ListItemHorizontalPlaceHolderPreview() {
-    ListItemHorizontalPlaceHolder()
+private fun ListItemHorizontalPlaceHolderPreviewLight() {
+    AppTheme {
+        ListItemHorizontalPlaceHolder()
+    }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun ListItemHorizontalPlaceHolderPreviewDark() {
+    AppTheme(darkTheme = true) {
+        ListItemHorizontalPlaceHolder()
+    }
+}

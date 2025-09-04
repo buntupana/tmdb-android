@@ -1,7 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.item
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,9 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,11 +24,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.buntupana.tmdb.core.ui.composables.AppCard
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.AppTheme
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 
@@ -47,21 +43,19 @@ fun MediaItemHorizontal(
     releaseDate: String?
 ) {
 
-    Card(
+    var mainPosterColor: Color = MaterialTheme.colorScheme.surfaceDim
+
+    AppCard(
         modifier = modifier
             .height(height)
             .padding(
                 horizontal = Dimens.padding.horizontal,
                 vertical = Dimens.padding.verticalItem
             ),
-        shape = RoundedCornerShape(Dimens.posterRound),
-        elevation = CardDefaults.cardElevation(defaultElevation = Dimens.cardElevation),
+        onClick = { onMediaClick(mediaId, mainPosterColor) }
     ) {
-        var mainPosterColor: Color = DetailBackgroundColor
-
         Row(
             modifier = modifier
-                .clickable { onMediaClick(mediaId, mainPosterColor) }
         ) {
 
             ImageFromUrl(
@@ -107,17 +101,36 @@ fun MediaItemHorizontal(
 
 @Preview(showBackground = true)
 @Composable
-private fun MediaItemHorizontalPreview() {
-    MediaItemHorizontal(
-        modifier = Modifier
-            .fillMaxWidth(),
-        mediaId = 0L,
-        title = "Thor: Love and Thunder",
-        posterUrl = null,
-        overview = "After his retirement is interrupted by Gorr the God Butcher, a galactic killer who seeks the extinction of the gods, Thor enlists the help of King",
-        releaseDate = "10-11-20",
-        onMediaClick = { _, _ -> }
-    )
+private fun MediaItemHorizontalPreviewLight() {
+    AppTheme(darkTheme = false) {
+        MediaItemHorizontal(
+            modifier = Modifier
+                .fillMaxWidth(),
+            mediaId = 0L,
+            title = "Thor: Love and Thunder",
+            posterUrl = null,
+            overview = "After his retirement is interrupted by Gorr the God Butcher, a galactic killer who seeks the extinction of the gods, Thor enlists the help of King",
+            releaseDate = "10-11-20",
+            onMediaClick = { _, _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MediaItemHorizontalPreviewDark() {
+    AppTheme(darkTheme = true) {
+        MediaItemHorizontal(
+            modifier = Modifier
+                .fillMaxWidth(),
+            mediaId = 0L,
+            title = "Thor: Love and Thunder",
+            posterUrl = null,
+            overview = "After his retirement is interrupted by Gorr the God Butcher, a galactic killer who seeks the extinction of the gods, Thor enlists the help of King",
+            releaseDate = "10-11-20",
+            onMediaClick = { _, _ -> }
+        )
+    }
 }
 
 @Composable
@@ -125,22 +138,23 @@ fun MediaItemHorizontalPlaceHolder(
     modifier: Modifier = Modifier,
     height: Dp = Dimens.imageSize.posterHeight,
 ) {
-    Surface(
+
+    val placeHolderColor = MaterialTheme.colorScheme.surfaceContainerHigh
+
+    AppCard(
         modifier = modifier
             .height(height)
             .padding(
                 horizontal = Dimens.padding.horizontal,
                 vertical = Dimens.padding.verticalItem
-            ),
-        shape = RoundedCornerShape(Dimens.posterRound),
-        shadowElevation = Dimens.cardElevation
+            )
     ) {
         Row {
 
             Box(
                 modifier = Modifier
                     .aspectRatio(2f / 3f)
-                    .background(PlaceHolderColor)
+                    .background(placeHolderColor)
             )
             Column(
                 modifier = Modifier
@@ -152,25 +166,28 @@ fun MediaItemHorizontalPlaceHolder(
                 Text(
                     modifier = Modifier
                         .clip(RoundedCornerShape(15.dp))
-                        .background(PlaceHolderColor)
-                        .padding(4.dp),
-                    text = "Movie Title Example",
+                        .background(placeHolderColor)
+                        .padding(4.dp)
+                        .fillMaxWidth(),
+                    text = "",
+                    minLines = 1,
                     maxLines = 1,
                     fontWeight = FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis,
-                    color = PlaceHolderColor
+                    color = placeHolderColor
                 )
 
                 Text(
                     modifier = Modifier
                         .clip(RoundedCornerShape(15.dp))
-                        .background(PlaceHolderColor)
-                        .padding(4.dp),
-                    text = "Movie Title Example asdf asdf asdf adsf  asdf adsf asdf asdf asdf ",
-                    maxLines = 2,
+                        .background(placeHolderColor)
+                        .padding(4.dp)
+                        .fillMaxWidth(),
+                    text = "",
+                    minLines = 2,
                     fontWeight = FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis,
-                    color = PlaceHolderColor
+                    color = placeHolderColor
                 )
             }
         }
@@ -179,8 +196,18 @@ fun MediaItemHorizontalPlaceHolder(
 
 @Preview(showBackground = true)
 @Composable
-private fun MediaItemHorizontalPlaceHolderPreview() {
-    AppTheme {
+private fun MediaItemHorizontalPlaceHolderPreviewLight() {
+    AppTheme(darkTheme = false) {
+        MediaItemHorizontalPlaceHolder(
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
+    }
+}
+@Preview(showBackground = true)
+@Composable
+private fun MediaItemHorizontalPlaceHolderPreviewDark() {
+    AppTheme(darkTheme = true) {
         MediaItemHorizontalPlaceHolder(
             modifier = Modifier
                 .fillMaxWidth(),

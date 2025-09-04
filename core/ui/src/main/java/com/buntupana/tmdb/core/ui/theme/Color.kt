@@ -12,11 +12,6 @@ val BackgroundColor = Color(0xFFFFFFFF)
 //val TertiaryDarkColor = Color(0xFF1ED5A9)
 //val TertiaryLightColor = Color(0xFFC0FECF)
 
-val PlaceHolderColor = Color(0xffdbdbdb)
-
-val DetailBackgroundColor = Color(0xFFE3E3E3)
-val PersonBackgroundColor = BackgroundColor
-
 val SignUpBackgroundColor = Color(0xFF3D0098)
 
 val FavoriteColor = Color(0xFFee48b7)

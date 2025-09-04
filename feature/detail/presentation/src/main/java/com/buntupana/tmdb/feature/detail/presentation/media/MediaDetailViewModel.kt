@@ -3,14 +3,11 @@ package com.buntupana.tmdb.feature.detail.presentation.media
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.account.domain.usecase.SetMediaFavoriteUseCase
@@ -46,7 +43,7 @@ class MediaDetailViewModel(
         MediaDetailState(
             mediaId = navArgs.mediaId,
             mediaType = navArgs.mediaType,
-            backgroundColor = Color(navArgs.backgroundColor ?: DetailBackgroundColor.toArgb())
+            backgroundColor = navArgs.backgroundColor
         )
     )
         private set

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,10 +28,9 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.composables.widget.UserScore
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.HkFontFamily
-import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
 import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import com.panabuntu.tmdb.core.common.model.MediaItem
@@ -46,7 +46,7 @@ fun MediaItemVertical(
     onClick: (mainPosterColor: Color) -> Unit
 ) {
 
-    var mainPosterColor: Color = DetailBackgroundColor
+    var mainPosterColor: Color = MaterialTheme.colorScheme.surfaceDim
 
     BoxWithConstraints(
         modifier = modifier
@@ -149,12 +149,26 @@ private fun TitleAndDate(
 
 @Preview(showBackground = true)
 @Composable
-private fun MediaItemPreview() {
-    MediaItemVertical(
-        modifier = Modifier.width(Dimens.carouselMediaItemWidth),
-        mediaItem = mediaItemMovie,
-        onClick = { }
-    )
+private fun MediaItemPreviewLight() {
+    AppTheme(darkTheme = false) {
+        MediaItemVertical(
+            modifier = Modifier.width(Dimens.carouselMediaItemWidth),
+            mediaItem = mediaItemMovie,
+            onClick = { }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MediaItemPreviewDark() {
+    AppTheme(darkTheme = true) {
+        MediaItemVertical(
+            modifier = Modifier.width(Dimens.carouselMediaItemWidth),
+            mediaItem = mediaItemMovie,
+            onClick = { }
+        )
+    }
 }
 
 @Composable
@@ -181,7 +195,7 @@ fun MediaItemVerticalPlaceHolder(
                     .padding(bottom = userScoreSize / 2)
                     .clip(RoundedCornerShape(Dimens.posterRound))
                     .aspectRatio(2f / 3f)
-                    .background(PlaceHolderColor)
+                    .background(MaterialTheme.colorScheme.surfaceContainerHighest)
             ) {
             }
 
@@ -194,32 +208,35 @@ fun MediaItemVerticalPlaceHolder(
                 ) {
 
                     Text(
-                        text = "This a dummy text just for draw max size of this composable, it has be long to cover the min 3 lines",
+                        text = "",
                         maxLines = MAX_TITLE_LINES,
                         fontWeight = FontWeight.Bold,
                         overflow = TextOverflow.Ellipsis,
+                        minLines = 1,
                         fontSize = fontSize
                     )
 
                     Text(
-                        text = "This a dummy text just for draw max size of this composable, it has be long to cover the min 3 lines",
+                        text = "",
                         fontWeight = FontWeight.Normal,
                         overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
+                        minLines = 3,
                         fontSize = fontSize
                     )
                 }
 
                 Text(
-                    text = "Movie Title",
+                    modifier = Modifier
+                        .padding(end = Dimens.padding.medium)
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                        .fillMaxWidth(),
+                    text = "",
                     maxLines = MAX_TITLE_LINES,
+                    minLines = 1,
                     fontWeight = FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis,
-                    fontSize = fontSize,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(15.dp))
-                        .background(PlaceHolderColor),
-                    color = PlaceHolderColor
+                    fontSize = fontSize
                 )
             }
         }
@@ -228,8 +245,20 @@ fun MediaItemVerticalPlaceHolder(
 
 @Preview(showBackground = true)
 @Composable
-fun MediaItemPlaceHolderPreview() {
-    MediaItemVerticalPlaceHolder(
-        modifier = Modifier
-    )
+fun MediaItemPlaceHolderPreviewLight() {
+    AppTheme(darkTheme = false) {
+        MediaItemVerticalPlaceHolder(
+            modifier = Modifier
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MediaItemPlaceHolderPreviewDark() {
+    AppTheme(darkTheme = true) {
+        MediaItemVerticalPlaceHolder(
+            modifier = Modifier
+        )
+    }
 }

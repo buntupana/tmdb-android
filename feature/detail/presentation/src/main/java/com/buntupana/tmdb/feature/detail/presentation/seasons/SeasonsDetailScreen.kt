@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -31,7 +32,6 @@ import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.HeaderSimple
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.AppTheme
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.paddingValues
@@ -83,8 +83,14 @@ private fun SeasonsContent(
     ) -> Unit
 ) {
 
+    val defaultBackgroundColor = MaterialTheme.colorScheme.surfaceDim
+
     var backgroundColor by remember {
-        mutableStateOf(state.backgroundColor)
+        if (state.backgroundColor == null) {
+            mutableStateOf(defaultBackgroundColor)
+        } else {
+            mutableStateOf(Color(state.backgroundColor))
+        }
     }
 
     SetSystemBarsColors(
@@ -195,7 +201,7 @@ private fun SeasonsScreenPreview() {
                 tvShowName = "Jack Reacher",
                 posterUrl = null,
                 releaseYear = "2003",
-                backgroundColor = DetailBackgroundColor,
+                backgroundColor = null,
                 seasonList = listOf(seasonSample, seasonSample, seasonSample)
             ),
             onBackClick = {},

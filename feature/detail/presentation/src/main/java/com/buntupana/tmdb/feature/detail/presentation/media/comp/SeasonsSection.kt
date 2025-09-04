@@ -1,13 +1,11 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -21,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.buntupana.tmdb.core.ui.composables.AppCard
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.TextButton
@@ -70,7 +69,7 @@ fun SeasonsSection(
             fontWeight = FontWeight.Bold
         )
 
-        Card(
+        AppCard(
             modifier = Modifier
                 .padding(
                     horizontal = Dimens.padding.horizontal,
@@ -82,7 +81,6 @@ fun SeasonsSection(
         ) {
             Column(
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
                     .fillMaxWidth()
                     .padding(
                         horizontal = Dimens.padding.horizontal,
@@ -162,7 +160,23 @@ private fun LastEpisode(episode: Episode?) {
 
 @Preview(showBackground = true)
 @Composable
-private fun SeasonsPreview() {
+private fun SeasonsPreviewLight() {
+    AppTheme(darkTheme = false) {
+        SeasonsSection(
+            modifier = Modifier.fillMaxWidth(),
+            isInAir = false,
+            seasonList = listOf(seasonSample, seasonSample, seasonSample),
+            lastEpisode = episodeSample,
+            nextEpisode = episodeSample,
+            onAllSeasonsClick = {},
+            onLastSeasonClick = { _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SeasonsPreviewDark() {
     AppTheme(darkTheme = true) {
         SeasonsSection(
             modifier = Modifier.fillMaxWidth(),

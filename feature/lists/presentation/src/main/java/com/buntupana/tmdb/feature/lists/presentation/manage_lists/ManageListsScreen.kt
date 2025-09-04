@@ -18,8 +18,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +35,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
@@ -103,9 +107,20 @@ fun ManageListsContent(
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+    val defaultBackgroundColor = MaterialTheme.colorScheme.surfaceDim
+
+    var backgroundColor by remember {
+        if (state.backgroundColor == null) {
+            mutableStateOf(defaultBackgroundColor)
+        } else {
+            mutableStateOf(Color(state.backgroundColor))
+        }
+    }
+    
     SetSystemBarsColors(
-        statusBarColor = state.backgroundColor,
-        navigationBarColor = state.backgroundColor,
+        statusBarColor = backgroundColor,
+        navigationBarColor = backgroundColor,
         translucentNavigationBar = false
     )
 
@@ -116,14 +131,14 @@ fun ManageListsContent(
             Column {
 
                 TopBarLogo(
-                    backgroundColor = state.backgroundColor,
+                    backgroundColor = backgroundColor,
                     onBackClick = { onBackClick() },
                     onLogoClick = { onLogoClick() },
                     scrollBehavior = scrollBehavior
                 )
 
                 HeaderManageLists(
-                    backgroundColor = state.backgroundColor,
+                    backgroundColor = backgroundColor,
                     posterUrl = state.posterUrl,
                     mediaName = state.mediaName,
                     listsCount = state.userListDetails?.size,
@@ -207,7 +222,7 @@ fun ManageListsContent(
                 ManageListsBottomBar(
                     modifier = Modifier.fillMaxWidth(),
                     bottomPadding = paddingValues.calculateBottomPadding(),
-                    backgroundColor = state.backgroundColor,
+                    backgroundColor = backgroundColor,
                     onCreateListClick = onCreateListClick,
                     onConfirmClick = onConfirmClick
                 )
@@ -226,7 +241,7 @@ private fun ManageListsPreview() {
             mediaType = MediaType.MOVIE,
             searchKey = "",
             mediaName = "Blue Velvet",
-            backgroundColor = DetailBackgroundColor,
+            backgroundColor = null,
             posterUrl = "asdf",
             releaseYear = "1998",
             userListDetails = listOf(

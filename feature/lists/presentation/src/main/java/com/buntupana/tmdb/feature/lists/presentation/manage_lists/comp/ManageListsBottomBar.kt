@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.TextButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -99,7 +98,7 @@ private fun ManageListsBottomBarPreview() {
     ManageListsBottomBar(
         modifier = Modifier.fillMaxWidth(),
         bottomPadding = 0.dp,
-        backgroundColor = DetailBackgroundColor,
+        backgroundColor = MaterialTheme.colorScheme.surfaceDim,
         onCreateListClick = {},
         onConfirmClick = {}
     )

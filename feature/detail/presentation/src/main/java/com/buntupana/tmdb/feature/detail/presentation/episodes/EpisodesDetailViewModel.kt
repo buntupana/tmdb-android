@@ -3,12 +3,9 @@ package com.buntupana.tmdb.feature.detail.presentation.episodes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetSeasonDetailsUseCase
 import com.panabuntu.tmdb.core.common.entity.onError
@@ -33,7 +30,7 @@ class EpisodesDetailViewModel(
             seasonNumber = navArgs.seasonNumber,
             posterUrl = navArgs.posterUrl,
             releaseYear = navArgs.releaseYear,
-            backgroundColor = Color(navArgs.backgroundColor ?: DetailBackgroundColor.toArgb())
+            backgroundColor = navArgs.backgroundColor,
         )
     )
         private set

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,7 +24,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.Typography
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -114,16 +115,31 @@ fun HeaderSimple(
     }
 }
 
-@Preview
 @Composable
 private fun CastHeaderPreview() {
     HeaderSimple(
-        backgroundColor = DetailBackgroundColor,
+        backgroundColor = MaterialTheme.colorScheme.surfaceDim,
         posterUrl = null,
         mediaName = "Pain Hustlers",
         subtitle = "7 episodes",
         releaseYear = "2023",
         setDominantColor = {}
     )
+}
+
+@Preview
+@Composable
+private fun CastHeaderPreviewLight() {
+    AppTheme {
+        CastHeaderPreview()
+    }
+}
+
+@Preview
+@Composable
+private fun CastHeaderPreviewDark() {
+    AppTheme(darkTheme = true) {
+        CastHeaderPreview()
+    }
 }
 

@@ -3,14 +3,11 @@ package com.buntupana.tmdb.feature.lists.presentation.manage_lists
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
@@ -38,7 +35,7 @@ class ManageListsViewModel(
     var state by mutableStateOf(
         ManageListsState(
             mediaType = navArgs.mediaType,
-            backgroundColor = Color(navArgs.backgroundColor ?: DetailBackgroundColor.toArgb()),
+            backgroundColor = navArgs.backgroundColor,
             mediaName = navArgs.mediaName,
             posterUrl = navArgs.posterUrl,
             releaseYear = navArgs.releaseYear

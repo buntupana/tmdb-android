@@ -19,12 +19,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -32,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.TitleAndFilter
 import com.buntupana.tmdb.core.ui.composables.item.CarouselMediaItem
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.account.presentation.R
@@ -53,7 +57,7 @@ fun AccountScreen(
     onFavoritesClick: (mediaType: MediaType) -> Unit,
     onListsClick: () -> Unit,
     onMediaItemClicked: (mediaItemType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit,
-    onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
+    onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit
 ) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -242,6 +246,31 @@ fun AccountContent(
                         Text(text = stringResource(R.string.text_sign_out))
                     }
                 }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = Dimens.padding.huge),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = Dimens.padding.horizontal),
+                        text = "Dark Theme",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+
+                    var isEnabled by remember { mutableStateOf(false) }
+
+                    Switch(
+                        modifier = Modifier,
+                        checked = isEnabled,
+                        colors = SwitchDefaults.colors(checkedTrackColor = MaterialTheme.colorScheme.primary),
+                        onCheckedChange = {
+                            isEnabled = it
+                        }
+                    )
+                }
             }
         } else {
             SignUp(
@@ -252,12 +281,27 @@ fun AccountContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, heightDp = 1200)
+@Composable
+fun AccountScreenPreviewLight() {
+    AppTheme {
+        AccountScreenPreview()
+    }
+}
+
+@Preview(showBackground = true, heightDp = 1200)
+@Composable
+fun AccountScreenPreviewDark() {
+    AppTheme(darkTheme = true) {
+        AccountScreenPreview()
+    }
+}
+
 @Composable
 fun AccountScreenPreview() {
     AccountContent(
         AccountState(
-            isUserLogged = false,
+            isUserLogged = true,
             username = "Alvaro",
             userListDetailsList = null
         ),

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.buntupana.tmdb.core.ui.composables.AppCard
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
@@ -34,7 +34,7 @@ fun EpisodeHorizontal(
     onSeeMoreClick: () -> Unit
 ) {
 
-    Card(
+    AppCard(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = Dimens.cardElevation),
         shape = RoundedCornerShape(Dimens.posterRound)

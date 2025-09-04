@@ -38,7 +38,6 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.AppTheme
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -162,8 +161,14 @@ fun MediaDetailContent(
 
     val scrollState = rememberScrollState()
 
+    val defaultBackgroundColor = MaterialTheme.colorScheme.surfaceDim
+
     var backgroundColor by remember {
-        mutableStateOf(state.backgroundColor)
+        if (state.backgroundColor == null) {
+            mutableStateOf(defaultBackgroundColor)
+        } else {
+            mutableStateOf(Color(state.backgroundColor))
+        }
     }
 
     SetSystemBarsColors(
@@ -317,7 +322,7 @@ fun MediaDetailContent(
                             onFullCastClick(
                                 state.mediaDetails,
                                 state.mediaType,
-                                state.backgroundColor
+                                backgroundColor
                             )
                         }
                     )
@@ -388,7 +393,7 @@ fun MediaDetailScreenPreview() {
                 mediaId = 0L,
                 mediaType = MediaType.TV_SHOW,
                 mediaDetails = mediaDetailsTvShowSample,
-                backgroundColor = DetailBackgroundColor
+                backgroundColor = null
             ),
             onBackClick = {},
             onSearchClick = {},

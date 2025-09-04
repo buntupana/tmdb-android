@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsState
@@ -161,7 +160,7 @@ private fun ManageListsListsPreview() {
             isContentLoading = true,
             mediaType = MediaType.MOVIE,
             mediaName = "Blue Velvet",
-            backgroundColor = DetailBackgroundColor,
+            backgroundColor = null,
             posterUrl = "asdf",
             searchKey = "",
             releaseYear = "1998",

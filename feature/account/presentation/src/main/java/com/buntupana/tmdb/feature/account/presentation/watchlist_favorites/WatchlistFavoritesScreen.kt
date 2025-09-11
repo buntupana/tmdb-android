@@ -135,7 +135,8 @@ fun WatchlistContent(
             ErrorAndRetry(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding),
+                    .padding(top = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding)
+                    .padding(horizontal = Dimens.padding.horizontal),
                 contentColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
                 errorMessage = stringResource(id = com.buntupana.tmdb.core.ui.R.string.message_loading_content_error),
                 onRetryClick = onRetryClick

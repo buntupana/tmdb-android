@@ -141,7 +141,8 @@ private fun SeasonsContent(
 
             ErrorAndRetry(
                 modifier = Modifier
-                    .padding(vertical = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding)
+                    .padding(top = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding)
+                    .padding(horizontal = Dimens.padding.horizontal)
                     .fillMaxWidth(),
                 errorMessage = stringResource(id = R.string.message_loading_content_error),
                 onRetryClick = onRetryClick

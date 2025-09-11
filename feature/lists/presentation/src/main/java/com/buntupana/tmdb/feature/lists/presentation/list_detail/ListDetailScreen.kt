@@ -214,6 +214,7 @@ fun ListDetailContent(
                     ErrorAndRetry(
                         modifier = Modifier
                             .paddingValues(top = { paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding })
+                            .padding(horizontal = Dimens.padding.horizontal)
                             .fillMaxWidth(),
                         contentColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
                         errorMessage = stringResource(id = R.string.message_loading_content_error),

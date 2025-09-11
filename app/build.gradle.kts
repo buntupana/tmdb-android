@@ -81,6 +81,10 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.androidx.activity.compose)
 
+    // Material
+    implementation(libs.androidx.material3)
+
+    // Tools
     implementation(libs.androidx.browser)
 
     // Koin

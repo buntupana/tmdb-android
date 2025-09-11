@@ -85,7 +85,7 @@ fun ListDetailSubBar(
 
                 Text(
                     text = description,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
             }
 

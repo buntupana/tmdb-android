@@ -59,6 +59,7 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.widget.AppTextButton
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.toPx
 
 @Composable
@@ -146,7 +147,7 @@ fun HoursMinutesText(
 @Composable
 fun TextFieldSearch(
     modifier: Modifier = Modifier,
-    fontColor: Color = Color.Gray,
+    fontColor: Color = MaterialTheme.colorScheme.onPrimaryContainer.getOnBackgroundColor(),
     onValueChange: (value: String) -> Unit,
     onSearch: (searchKey: String) -> Unit,
     value: String,
@@ -209,7 +210,7 @@ fun TextFieldSearch(
         if (value.isBlank()) {
             Text(
                 text = stringResource(id = R.string.text_search),
-                color = Color.Gray,
+                color = fontColor.copy(alpha = 0.5f),
                 fontSize = fontSize
             )
         }
@@ -341,14 +342,14 @@ fun ExpandableText(
             ) {
                 Text(
                     text = stringResource(id = R.string.text_read_more),
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                     fontWeight = FontWeight.Bold
                 )
                 Image(
                     modifier = Modifier.size(16.dp),
                     painter = painterResource(id = R.drawable.ic_arrow_right),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondaryContainer)
                 )
             }
         }

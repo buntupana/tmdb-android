@@ -286,7 +286,7 @@ fun ListDetailContent(
                                         .padding(horizontal = Dimens.padding.huge),
                                     imageVector = Icons.Rounded.Delete,
                                     contentDescription = null,
-                                    tint = Color.White,
+                                    tint = MaterialTheme.colorScheme.onError,
                                 )
                             }
                         },
@@ -329,7 +329,8 @@ fun ListDetailScreenPreview() {
             state = ListDetailState(
                 listId = 0,
                 listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
-                shareLink = "test"
+                shareLink = "test",
+                description = "List description"
             ),
             onBackClick = {},
             onLogoClick = {},

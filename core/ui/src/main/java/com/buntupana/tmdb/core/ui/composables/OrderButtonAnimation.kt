@@ -32,7 +32,7 @@ import com.panabuntu.tmdb.core.common.model.Order
 @Composable
 fun OrderButtonAnimation(
     modifier: Modifier = Modifier,
-    textColor: Color = Color.Black,
+    textColor: Color = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
     text: String,
     onClick: () -> Unit,
     order: Order

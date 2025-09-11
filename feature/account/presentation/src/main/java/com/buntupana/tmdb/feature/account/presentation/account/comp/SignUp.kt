@@ -18,7 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +27,7 @@ import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.composables.widget.AppTextWithIconButton
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.account.presentation.R
 
 @Composable
@@ -37,7 +37,7 @@ fun SignUp(
 ) {
 
     val backgroundColor = MaterialTheme.colorScheme.primaryContainer
-    val textColor = Color.White
+    val contentColor = backgroundColor.getOnBackgroundColor()
 
     Box(
         modifier = modifier
@@ -69,7 +69,7 @@ fun SignUp(
             Text(
                 text = stringResource(R.string.text_join_today),
                 style = MaterialTheme.typography.headlineLarge.copy(
-                    color = textColor
+                    color = contentColor
                 ),
                 fontWeight = FontWeight.Bold
             )
@@ -78,7 +78,7 @@ fun SignUp(
                 modifier = Modifier.padding(top = Dimens.padding.medium),
                 text = AnnotatedString.fromHtml(htmlString = stringResource(R.string.message_sign_up_html_description)),
                 style = MaterialTheme.typography.titleLarge.copy(
-                    color = textColor
+                    color = contentColor
                 )
             )
 
@@ -93,7 +93,7 @@ fun SignUp(
                 modifier = Modifier.padding(top = Dimens.padding.big),
                 text = AnnotatedString.fromHtml(htmlString = stringResource(R.string.list_sign_up_vantages)),
                 style = MaterialTheme.typography.titleSmall.copy(
-                    color = textColor
+                    color = contentColor
                 )
             )
         }

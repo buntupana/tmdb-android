@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.HkFontFamily
 import com.buntupana.tmdb.core.ui.theme.StaticColor
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.toSp
 
 @Composable
@@ -46,6 +47,8 @@ fun UserScore(
     highScoreColor: Color = StaticColor.scoreHighScore,
     fontFamily: FontFamily = HkFontFamily
 ) {
+
+    val contentColor = backGroundColor.getOnBackgroundColor()
 
     // Choosing stroke color depending on score
     val strokeColor = when (score) {
@@ -103,7 +106,7 @@ fun UserScore(
             if (score == null) {
                 Text(
                     text = "NR",
-                    color = Color.White,
+                    color = contentColor,
                     textAlign = TextAlign.Center,
                     fontFamily = fontFamily,
                     fontSize = textSize,
@@ -116,7 +119,7 @@ fun UserScore(
             } else {
                 Text(
                     text = score.toString(),
-                    color = Color.White,
+                    color = contentColor,
                     textAlign = TextAlign.Center,
                     fontFamily = fontFamily,
                     fontSize = textSize,
@@ -128,7 +131,7 @@ fun UserScore(
                 )
                 Text(
                     text = "%",
-                    color = Color.White,
+                    color = contentColor,
                     fontFamily = fontFamily,
                     modifier = Modifier.fillMaxHeight(0.5f),
                     fontSize = symbolSize,

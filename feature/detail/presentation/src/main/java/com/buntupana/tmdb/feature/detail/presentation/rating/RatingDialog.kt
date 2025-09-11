@@ -154,6 +154,7 @@ fun RatingContent(
                 text = state.ratingTitle.asString(),
                 color = getRatingColor(state.rating),
                 borderColor = MaterialTheme.colorScheme.primaryContainer,
+                borderWidth = 4f,
                 minLines = 1,
                 style = MaterialTheme.typography.headlineMedium.balanced(),
             )

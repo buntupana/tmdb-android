@@ -1,10 +1,10 @@
 package com.buntupana.tmdb.core.ui.composables
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -15,6 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.widget.AppButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 
@@ -39,9 +41,10 @@ fun ErrorAndRetry(
 
         Spacer(modifier = Modifier.padding(vertical = Dimens.padding.vertical))
 
-        Button(
+        AppButton(
             onClick = onRetryClick,
-            colors = ButtonDefaults.buttonColors(containerColor = textColor)
+            colors = ButtonDefaults.buttonColors(containerColor = textColor),
+            rippleColor = textColor
         ) {
             Text(
                 text = stringResource(id = R.string.text_retry),
@@ -54,13 +57,24 @@ fun ErrorAndRetry(
 
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun ErrorAndRetryPreview() {
-    ErrorAndRetry(
-        modifier = Modifier.background(Color.White),
-        textColor = Color.Black,
-        errorMessage = "Unknown Error",
-        onRetryClick = {}
-    )
+    AppTheme {
+        ErrorAndRetry(
+            modifier = Modifier.background(Color.White),
+            textColor = Color.Black,
+            errorMessage = "Unknown Error",
+            onRetryClick = {}
+        )
+    }
 }

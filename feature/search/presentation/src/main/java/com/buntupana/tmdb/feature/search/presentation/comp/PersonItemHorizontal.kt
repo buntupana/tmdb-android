@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.search.presentation.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.ImagePersonFromUrl
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 
 @Composable
@@ -70,18 +72,29 @@ fun PersonItemHorizontal(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun PersonItemHorizontalPreview() {
-    PersonItemHorizontal(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(Dimens.imageSize.personHeightSmall),
-        personId = 0L,
-        name = "Jason Momoa",
-        profileUrl = "",
-        description = "Acting • Aquaman",
-        gender = com.panabuntu.tmdb.core.common.model.Gender.MALE,
-        onClick = {}
-    )
+    AppTheme {
+        PersonItemHorizontal(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(Dimens.imageSize.personHeightSmall),
+            personId = 0L,
+            name = "Jason Momoa",
+            profileUrl = "",
+            description = "Acting • Aquaman",
+            gender = com.panabuntu.tmdb.core.common.model.Gender.MALE,
+            onClick = {}
+        )
+    }
 }

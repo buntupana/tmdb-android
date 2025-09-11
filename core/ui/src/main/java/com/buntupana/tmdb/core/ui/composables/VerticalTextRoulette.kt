@@ -8,13 +8,9 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 
@@ -24,12 +20,11 @@ fun VerticalTextRoulette(
     text: String?,
     color: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Unspecified,
-    fontWeight: FontWeight = FontWeight.Normal
+    fontWeight: FontWeight = FontWeight.Normal,
+    style: TextStyle = TextStyle.Default
 ) {
 
     text ?: return
-
-    var previousText by remember { mutableStateOf(text) }
 
     AnimatedContent(
         targetState = text,
@@ -49,11 +44,8 @@ fun VerticalTextRoulette(
             text = targetText,
             color = color,
             fontSize = fontSize,
-            fontWeight = fontWeight
+            fontWeight = fontWeight,
+            style = style
         )
-    }
-
-    LaunchedEffect(text) {
-        previousText = text
     }
 }

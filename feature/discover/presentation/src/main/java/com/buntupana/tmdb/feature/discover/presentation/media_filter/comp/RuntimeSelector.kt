@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.composables.widget.sliders.RangeSliderCustom
+import com.buntupana.tmdb.core.ui.composables.widget.sliders.AppRangeSlider
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.discover.presentation.R
 
@@ -30,7 +30,7 @@ fun RuntimeSelector(
             style = MaterialTheme.typography.titleMedium
         )
 
-        RangeSliderCustom(
+        AppRangeSlider(
             valueRange = 0..390,
             steps = 25,
             startValue = runtimeStart,

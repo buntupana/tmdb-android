@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.list_detail
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.AnimationConstants
 import androidx.compose.animation.core.tween
@@ -45,8 +46,8 @@ import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontalPlaceHolder
 import com.buntupana.tmdb.core.ui.composables.item.SwipeableItem
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.paddingValues
@@ -169,8 +170,8 @@ fun ListDetailContent(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor,
-        navigationBarColor = PrimaryColor,
+        statusBarColor = MaterialTheme.colorScheme.primaryContainer,
+        navigationBarColor = MaterialTheme.colorScheme.primaryContainer,
         translucentNavigationBar = true
     )
 
@@ -285,7 +286,7 @@ fun ListDetailContent(
                                         .padding(horizontal = Dimens.padding.huge),
                                     imageVector = Icons.Rounded.Delete,
                                     contentDescription = null,
-                                    tint = Color.White,
+                                    tint = MaterialTheme.colorScheme.onError,
                                 )
                             }
                         },
@@ -311,19 +312,31 @@ fun ListDetailContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 fun ListDetailScreenPreview() {
-    ListDetailContent(
-        state = ListDetailState(
-            listId = 0,
-            listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
-            shareLink = "test"
-        ),
-        onBackClick = {},
-        onLogoClick = {},
-        onSearchClick = {},
-        onMediaClick = { _, _ -> },
-        onRetryClick = {}
-    )
+    AppTheme {
+        ListDetailContent(
+            state = ListDetailState(
+                listId = 0,
+                listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
+                shareLink = "test",
+                description = "List description"
+            ),
+            onBackClick = {},
+            onLogoClick = {},
+            onSearchClick = {},
+            onMediaClick = { _, _ -> },
+            onRetryClick = {}
+        )
+    }
 }

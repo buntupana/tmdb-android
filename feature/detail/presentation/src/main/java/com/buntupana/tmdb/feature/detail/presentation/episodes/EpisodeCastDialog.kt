@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.episodes
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.balanced
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
@@ -99,18 +101,29 @@ private fun EpisodeCastContent(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun EpisodeCastPreview() {
-    EpisodeCastContent(
-        sheetState = SheetState(
-            skipPartiallyExpanded = true,
-            positionalThreshold = { 0f },
-            initialValue = SheetValue.Expanded,
-            velocityThreshold = { 0f }
-        ),
-        episode = episodeSample,
-        onDismiss = {},
-        onPersonClick = {}
-    )
+    AppTheme {
+        EpisodeCastContent(
+            sheetState = SheetState(
+                skipPartiallyExpanded = true,
+                positionalThreshold = { 0f },
+                initialValue = SheetValue.Expanded,
+                velocityThreshold = { 0f }
+            ),
+            episode = episodeSample,
+            onDismiss = {},
+            onPersonClick = {}
+        )
+    }
 }

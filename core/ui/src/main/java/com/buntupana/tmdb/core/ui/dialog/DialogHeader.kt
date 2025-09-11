@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.dialog
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -18,9 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.buntupana.tmdb.core.ui.composables.widget.AppIconButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
-import com.buntupana.tmdb.core.ui.util.IconButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 
 @Composable
@@ -41,7 +42,7 @@ fun DialogHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        IconButton(
+        AppIconButton(
             modifier = Modifier
                 .padding(horizontal = Dimens.padding.medium)
                 .alpha(if (onCloseClick != null) 1f else 0f)
@@ -64,14 +65,14 @@ fun DialogHeader(
             fontWeight = FontWeight.Bold
         )
 
-        IconButton(
+        AppIconButton(
             modifier = Modifier
                 .padding(horizontal = Dimens.padding.medium)
                 .alpha(if (onAcceptClick != null) 1f else 0f)
-                .background(shape = CircleShape, color = SecondaryColor),
+                .background(shape = CircleShape, color = MaterialTheme.colorScheme.secondary),
             onClick = { onAcceptClick?.invoke() },
             enabled = onAcceptClick != null,
-            rippleColor = SecondaryColor.getOnBackgroundColor()
+            rippleColor = MaterialTheme.colorScheme.onSecondary
         ) {
             Icon(
                 modifier = Modifier,
@@ -83,12 +84,24 @@ fun DialogHeader(
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun DialogHeaderPreview() {
-    DialogHeader(
-        title = "Dialog Title",
-        onCloseClick = {},
-        onAcceptClick = {}
-    )
+    AppTheme {
+        DialogHeader(
+            title = "Dialog Title",
+            onCloseClick = {},
+            onAcceptClick = {}
+        )
+    }
 }

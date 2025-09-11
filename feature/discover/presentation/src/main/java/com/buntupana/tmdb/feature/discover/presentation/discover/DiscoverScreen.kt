@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.discover.presentation.discover
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,11 +25,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.TitleAndFilter
 import com.buntupana.tmdb.core.ui.composables.item.CarouselMediaItem
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.discover.presentation.R
-import com.buntupana.tmdb.feature.discover.presentation.comp.TopBar
+import com.buntupana.tmdb.feature.discover.presentation.comp.DiscoverTopBar
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -86,12 +88,12 @@ fun DiscoverContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor
+        statusBarColor = MaterialTheme.colorScheme.primaryContainer
     )
 
     Scaffold(
         topBar = {
-            TopBar(
+            DiscoverTopBar(
                 onSearchClick = onSearchClicked
             )
         }
@@ -196,16 +198,27 @@ fun DiscoverContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun DiscoverScreenPreview() {
-    DiscoverContent(
-        state = DiscoverState(),
-        onSearchClicked = {},
-        changeTrendingType = {},
-        changePopularType = {},
-        changeFreeToWatchType = {},
-        navigateToDetail = { _, _ -> }
-    )
+    AppTheme {
+        DiscoverContent(
+            state = DiscoverState(),
+            onSearchClicked = {},
+            changeTrendingType = {},
+            changePopularType = {},
+            changeFreeToWatchType = {},
+            navigateToDetail = { _, _ -> }
+        )
+    }
 }
 

@@ -1,6 +1,5 @@
 package com.buntupana.tmdb.feature.lists.presentation.manage_lists
 
-import androidx.compose.ui.graphics.Color
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.panabuntu.tmdb.core.common.entity.MediaType
 
@@ -11,7 +10,7 @@ data class ManageListsState(
     val searchKey: String = "",
     val mediaType: MediaType,
     val mediaName: String,
-    val backgroundColor: Color,
+    val backgroundColor: Int?,
     val posterUrl: String?,
     val releaseYear: String?,
     val userListDetails: List<UserListDetails>? = null,

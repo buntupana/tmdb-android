@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -55,10 +56,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.widget.AppTextButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
-import com.buntupana.tmdb.core.ui.util.TextButton
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.toPx
 
 @Composable
@@ -95,19 +96,30 @@ fun OutlinedText(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun OutlinedTextPreview() {
-    OutlinedText(
-        text = "Hola",
-        fontWeight = FontWeight.Bold,
-        backgroundColor = Color.Yellow,
-        cornerRound = 100.dp,
-        outlineColor = Color.Red,
-        internalVerticalPadding = 4.dp,
-        internalHorizontalPadding = 8.dp,
-        padding = PaddingValues(20.dp)
-    )
+    AppTheme {
+        OutlinedText(
+            text = "Hola",
+            fontWeight = FontWeight.Bold,
+            backgroundColor = Color.Yellow,
+            cornerRound = 100.dp,
+            outlineColor = Color.Red,
+            internalVerticalPadding = 4.dp,
+            internalHorizontalPadding = 8.dp,
+            padding = PaddingValues(20.dp)
+        )
+    }
 }
 
 @Composable
@@ -135,14 +147,14 @@ fun HoursMinutesText(
 @Composable
 fun TextFieldSearch(
     modifier: Modifier = Modifier,
-    fontColor: Color = Color.Gray,
+    fontColor: Color = MaterialTheme.colorScheme.onPrimaryContainer.getOnBackgroundColor(),
     onValueChange: (value: String) -> Unit,
     onSearch: (searchKey: String) -> Unit,
     value: String,
     isEnabled: Boolean = true,
     fontSize: TextUnit = MaterialTheme.typography.titleLarge.fontSize,
     requestFocus: Boolean = false,
-    cursorColor: Color = PrimaryColor
+    cursorColor: Color = MaterialTheme.colorScheme.primary
 ) {
     Box(
         modifier = modifier.padding(
@@ -152,7 +164,7 @@ fun TextFieldSearch(
         contentAlignment = Alignment.CenterStart
     ) {
 
-        val focus = FocusRequester()
+        val focus = remember { FocusRequester() }
         val focusManager = LocalFocusManager.current
 
         var triggerFocus by rememberSaveable {
@@ -198,7 +210,7 @@ fun TextFieldSearch(
         if (value.isBlank()) {
             Text(
                 text = stringResource(id = R.string.text_search),
-                color = Color.Gray,
+                color = fontColor.copy(alpha = 0.5f),
                 fontSize = fontSize
             )
         }
@@ -317,7 +329,7 @@ fun ExpandableText(
 
             val density = LocalDensity.current
 
-            TextButton(
+            AppTextButton(
                 modifier = Modifier
                     .onGloballyPositioned {
                         with(density) {
@@ -330,25 +342,35 @@ fun ExpandableText(
             ) {
                 Text(
                     text = stringResource(id = R.string.text_read_more),
-                    color = SecondaryColor,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                     fontWeight = FontWeight.Bold
                 )
                 Image(
                     modifier = Modifier.size(16.dp),
                     painter = painterResource(id = R.drawable.ic_arrow_right),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(SecondaryColor)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondaryContainer)
                 )
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun ExpandableTextPreview() {
-    ExpandableText(
-        text = """
+    AppTheme {
+        ExpandableText(
+            text = """
             111111111111111111111111111111111111111111111111111
             222222222222222222222222222222222222222222222222222
             333333333333333333333333333333333333333333333333333
@@ -359,8 +381,9 @@ fun ExpandableTextPreview() {
             888888888888888888888888888888888888888888888888888
             999999999999999999999999999999999999999999999999999
             """.trimIndent(),
-        collapsedVisibleLines = 8
-    )
+            collapsedVisibleLines = 8
+        )
+    }
 }
 
 @Composable
@@ -390,8 +413,19 @@ fun TextWithIcon(
 
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun TextFieldSearchPreview() {
-    TextFieldSearch(onValueChange = {}, value = "Hola", onSearch = {})
+    AppTheme {
+        TextFieldSearch(onValueChange = {}, value = "Hola", onSearch = {})
+    }
 }

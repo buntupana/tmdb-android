@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.widget
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -20,7 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.util.IconButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.panabuntu.tmdb.core.common.util.toLocalFormat
 import java.time.LocalDate
 import java.time.format.FormatStyle
@@ -75,7 +76,7 @@ fun DatePickerTextBox(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    IconButton(
+                    AppIconButton(
                         onClick = {
                             onValueChange(null)
                         }
@@ -86,7 +87,7 @@ fun DatePickerTextBox(
                         )
                     }
                 }
-                IconButton(onClick = { showDatePicker = !showDatePicker }) {
+                AppIconButton(onClick = { showDatePicker = !showDatePicker }) {
                     Icon(
                         imageVector = Icons.Rounded.DateRange,
                         contentDescription = "Select date"
@@ -97,12 +98,23 @@ fun DatePickerTextBox(
     )
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun DatePickerTextBoxPreview() {
-    DatePickerTextBox(
-        label = "From",
-        localDate = LocalDate.now(),
-        onValueChange = {}
-    )
+    AppTheme {
+        DatePickerTextBox(
+            label = "From",
+            localDate = LocalDate.now(),
+            onValueChange = {}
+        )
+    }
 }

@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.person.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.ExternalLink
 import com.buntupana.tmdb.feature.detail.presentation.R
@@ -86,10 +88,21 @@ fun ExternalLinksRow(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun ExternalLinksRowPreview() {
-    ExternalLinksRow(
-        externalLinkList = personDetailsSample.externalLinks
-    )
+    AppTheme {
+        ExternalLinksRow(
+            externalLinkList = personDetailsSample.externalLinks
+        )
+    }
 }

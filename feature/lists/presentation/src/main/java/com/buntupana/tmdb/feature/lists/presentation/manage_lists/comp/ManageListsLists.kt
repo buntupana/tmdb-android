@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.manage_lists.comp
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -17,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsState
@@ -151,52 +152,63 @@ fun ManageListsLists(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun ManageListsListsPreview() {
-    ManageListsLists(
-        modifier = Modifier
-            .fillMaxSize(),
-        state = ManageListsState(
-            isContentLoading = true,
-            mediaType = MediaType.MOVIE,
-            mediaName = "Blue Velvet",
-            backgroundColor = DetailBackgroundColor,
-            posterUrl = "asdf",
-            searchKey = "",
-            releaseYear = "1998",
-            userListDetails = listOf(
-                UserListDetails(
-                    id = 1,
-                    name = "List 1",
-                    description = "Description 1",
-                    itemCount = 1,
-                    isPublic = true,
-                    backdropUrl = null,
-                    revenue = null,
-                    runtime = null,
-                    posterUrl = null,
-                    averageRating = null,
-                    updatedAt = null,
-                    shareLink = "test"
-                )
-            ),
-            listAllLists = listOf(
-                UserListDetails(
-                    id = 2,
-                    name = "List 2",
-                    description = "Description 1",
-                    itemCount = 1,
-                    isPublic = true,
-                    backdropUrl = null,
-                    revenue = null,
-                    runtime = null,
-                    posterUrl = null,
-                    averageRating = null,
-                    updatedAt = null,
-                    shareLink = "test"
+    AppTheme {
+        ManageListsLists(
+            modifier = Modifier
+                .fillMaxSize(),
+            state = ManageListsState(
+                isContentLoading = true,
+                mediaType = MediaType.MOVIE,
+                mediaName = "Blue Velvet",
+                backgroundColor = null,
+                posterUrl = "asdf",
+                searchKey = "",
+                releaseYear = "1998",
+                userListDetails = listOf(
+                    UserListDetails(
+                        id = 1,
+                        name = "List 1",
+                        description = "Description 1",
+                        itemCount = 1,
+                        isPublic = true,
+                        backdropUrl = null,
+                        revenue = null,
+                        runtime = null,
+                        posterUrl = null,
+                        averageRating = null,
+                        updatedAt = null,
+                        shareLink = "test"
+                    )
+                ),
+                listAllLists = listOf(
+                    UserListDetails(
+                        id = 2,
+                        name = "List 2",
+                        description = "Description 1",
+                        itemCount = 1,
+                        isPublic = true,
+                        backdropUrl = null,
+                        revenue = null,
+                        runtime = null,
+                        posterUrl = null,
+                        averageRating = null,
+                        updatedAt = null,
+                        shareLink = "test"
+                    )
                 )
             )
         )
-    )
+    }
 }

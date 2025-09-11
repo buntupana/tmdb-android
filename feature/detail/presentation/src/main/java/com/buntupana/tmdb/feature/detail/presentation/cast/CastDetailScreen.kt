@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.cast
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -22,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +32,7 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.HeaderSimple
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.paddingValues
@@ -69,9 +71,16 @@ fun CastDetailContent(
     onLogoClick: () -> Unit
 ) {
 
+    val defaultBackgroundColor = MaterialTheme.colorScheme.surfaceDim
+
     var backgroundColor by remember {
-        mutableStateOf(state.backgroundColor)
+        if (state.backgroundColor == null) {
+            mutableStateOf(defaultBackgroundColor)
+        } else {
+            mutableStateOf(Color(state.backgroundColor))
+        }
     }
+
     SetSystemBarsColors(
         statusBarColor = backgroundColor,
         navigationBarColor = backgroundColor,
@@ -118,7 +127,7 @@ fun CastDetailContent(
         if (state.isGetContentError) {
             ErrorAndRetry(
                 modifier = Modifier
-                    .padding(vertical = paddingValues.calculateTopPadding() +  Dimens.errorAndRetryTopPadding)
+                    .padding(vertical = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding)
                     .fillMaxWidth(),
                 errorMessage = stringResource(id = R.string.message_loading_content_error),
                 onRetryClick = onRetryClick
@@ -152,26 +161,36 @@ fun CastDetailContent(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun CastDetailScreenPreview() {
-
-    CastDetailContent(
-        state = CastDetailState(
-            isLoading = false,
-            mediaId = 0,
-            mediaType = MediaType.MOVIE,
-            mediaName = "Pain Hustlers",
-            releaseYear = "2023",
-            posterUrl = "",
-            backgroundColor = DetailBackgroundColor,
-            personCastList = mediaDetailsMovieSample.castList,
-            personCrewMap = mediaDetailsMovieSample.crewList.groupBy { it.department }
-        ),
-        onBackClick = {},
-        onRetryClick = {},
-        onSearchClick = {},
-        onPersonClick = {},
-        onLogoClick = {}
-    )
+    AppTheme {
+        CastDetailContent(
+            state = CastDetailState(
+                isLoading = false,
+                mediaId = 0,
+                mediaType = MediaType.MOVIE,
+                mediaName = "Pain Hustlers",
+                releaseYear = "2023",
+                posterUrl = "",
+                backgroundColor = null,
+                personCastList = mediaDetailsMovieSample.castList,
+                personCrewMap = mediaDetailsMovieSample.crewList.groupBy { it.department }
+            ),
+            onBackClick = {},
+            onRetryClick = {},
+            onSearchClick = {},
+            onPersonClick = {},
+            onLogoClick = {}
+        )
+    }
 }

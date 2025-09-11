@@ -1,5 +1,7 @@
 package com.buntupana.tmdb.core.ui.util
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -21,14 +23,25 @@ import kotlinx.serialization.json.Json
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
-fun Image.getDominantColor(colorResult: (dominantColor: Color) -> Unit) {
+val Context.inDarkMode: Boolean
+    get() = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+val Context.inLightMode: Boolean
+    get() = !inDarkMode
+
+fun Image.getDominantColor(context: Context, colorResult: (dominantColor: Color) -> Unit) {
     Palette.Builder(toBitmap()).generate { palette ->
         if (palette == null) {
             return@generate
         }
-        palette.dominantSwatch?.rgb?.let { dominantColor ->
-            colorResult(Color(dominantColor))
+        val paletteColor = if (context.inDarkMode) {
+            palette.darkVibrantSwatch?.rgb
+        } else {
+            palette.lightVibrantSwatch?.rgb
         }
+
+        paletteColor ?: return@generate
+
+        colorResult(Color(paletteColor))
     }
 }
 

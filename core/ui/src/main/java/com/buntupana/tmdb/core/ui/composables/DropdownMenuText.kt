@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -14,7 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.R
-import com.buntupana.tmdb.core.ui.util.TextButton
+import com.buntupana.tmdb.core.ui.composables.widget.AppTextButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 
 @Composable
 fun <OPTION_ID> DropdownMenuText(
@@ -52,15 +54,15 @@ fun <OPTION_ID> DropdownMenuCustom(
             mutableStateOf(false)
         }
 
-        TextButton(
+        AppTextButton(
             onClick = { dropdownExpanded = true },
-            rippleColor = MaterialTheme.colorScheme.onBackground,
+            rippleColor = MaterialTheme.colorScheme.onSurface,
         ) {
             composable()
         }
 
         DropdownMenu(
-            containerColor = MaterialTheme.colorScheme.background,
+            containerColor = MaterialTheme.colorScheme.surfaceContainer,
             expanded = dropdownExpanded,
             onDismissRequest = {
                 dropdownExpanded = false
@@ -81,17 +83,28 @@ fun <OPTION_ID> DropdownMenuCustom(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun DropdownMenuTextPreview() {
-    DropdownMenuText(
-        modifier = Modifier,
-        text = "Text",
-        optionMap = mapOf(
-            1 to "Option 1",
-            2 to "Option 2",
-            3 to "Option 3"
-        ),
-        onOptionClicked = { _, _ -> }
-    )
+    AppTheme {
+        DropdownMenuText(
+            modifier = Modifier,
+            text = "Text",
+            optionMap = mapOf(
+                1 to "Option 1",
+                2 to "Option 2",
+                3 to "Option 3"
+            ),
+            onOptionClicked = { _, _ -> }
+        )
+    }
 }

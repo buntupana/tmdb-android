@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.widget
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -17,10 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.TertiaryColor
 import com.buntupana.tmdb.core.ui.util.SelectableItem
 import com.buntupana.tmdb.core.ui.util.UiText
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 
 @Composable
 fun ChipSelector(
@@ -56,7 +58,9 @@ fun ChipSelector(
             if (showAllChip) {
                 FilterChip(
                     selected = isAllSelected,
-                    colors = FilterChipDefaults.filterChipColors(selectedContainerColor = TertiaryColor),
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = MaterialTheme.colorScheme.tertiary
+                    ),
                     onClick = {
                         chipItemList.map { chipItem ->
                             chipItem.copy(isSelected = false)
@@ -65,15 +69,25 @@ fun ChipSelector(
                         }
                     },
                     label = {
-                        Text(text = stringResource(R.string.text_all))
-                    },
+                        val textColor = if (isAllSelected) {
+                            MaterialTheme.colorScheme.tertiary.getOnBackgroundColor()
+                        } else {
+                            MaterialTheme.colorScheme.onBackground
+                        }
+                        Text(
+                            text = stringResource(R.string.text_all),
+                            color = textColor
+                        )
+                    }
                 )
             }
 
             chipItemList.forEach {
                 FilterChip(
                     selected = it.isSelected,
-                    colors = FilterChipDefaults.filterChipColors(selectedContainerColor = TertiaryColor),
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = MaterialTheme.colorScheme.tertiary
+                    ),
                     onClick = {
                         chipItemList.map { chipItem ->
                             chipItem.copy(
@@ -84,7 +98,15 @@ fun ChipSelector(
                         }
                     },
                     label = {
-                        Text(text = it.name.asString())
+                        val textColor = if (it.isSelected) {
+                            MaterialTheme.colorScheme.tertiary.getOnBackgroundColor()
+                        } else {
+                            MaterialTheme.colorScheme.onBackground
+                        }
+                        Text(
+                            text = it.name.asString(),
+                            color = textColor
+                        )
                     }
                 )
             }
@@ -92,7 +114,16 @@ fun ChipSelector(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun ChipSelectorPreview() {
 
@@ -106,13 +137,15 @@ private fun ChipSelectorPreview() {
         )
     }
 
-    ChipSelector(
-        modifier = Modifier,
-        title = "Genres",
-        showAllChip = true,
-        chipItemList = chipItemList,
-        onSelectionChanged = {
-            chipItemList = it
-        }
-    )
+    AppTheme {
+        ChipSelector(
+            modifier = Modifier,
+            title = "Genres",
+            showAllChip = true,
+            chipItemList = chipItemList,
+            onSelectionChanged = {
+                chipItemList = it
+            }
+        )
+    }
 }

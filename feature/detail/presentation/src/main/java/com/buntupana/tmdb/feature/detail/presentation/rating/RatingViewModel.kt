@@ -18,9 +18,7 @@ import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
-import com.panabuntu.tmdb.core.common.util.applyDelayFor
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -67,8 +65,6 @@ class RatingViewModel(
 
         state = state.copy(isLoading = true)
 
-        val initMillis = System.currentTimeMillis()
-
         getAddRatingFunction(rating).invoke()
             .onError {
                 state = state.copy(isLoading = false)
@@ -82,11 +78,8 @@ class RatingViewModel(
                 )
             }
             .onSuccess {
-                applyDelayFor(initMillis)
-                _sideEffect.send(RatingSideEffect.AddRatingSuccess(rating))
-                // apply delay to end the hide animation and then reset the loading state
-                delay(500)
                 state = state.copy(isLoading = false)
+                _sideEffect.send(RatingSideEffect.AddRatingSuccess(rating))
             }
     }
 

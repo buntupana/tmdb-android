@@ -1,10 +1,12 @@
 package com.buntupana.tmdb.feature.discover.presentation.media_list
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,8 +25,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.discover.presentation.media_list.comp.MediaListTopBar
 import com.buntupana.tmdb.feature.discover.presentation.media_list.filters.MediaFilterListDefault
@@ -66,7 +68,7 @@ fun MediaListContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor
+        statusBarColor = MaterialTheme.colorScheme.primaryContainer
     )
 
     var showDefaultFiltersDialog by remember { mutableStateOf(false) }
@@ -153,16 +155,27 @@ fun MediaListContent(
     )
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun MoviesScreenPreview() {
-    MediaListContent(
-        state = MediaListState(
-            mediaType = MediaType.MOVIE,
-            mediaListFilter = MediaFilterListDefault.popularMovie
-        ),
-        onMediaClick = { _, _, _ -> },
-        onFilterClick = {},
-        onApplyFilterClick = {}
-    )
+    AppTheme {
+        MediaListContent(
+            state = MediaListState(
+                mediaType = MediaType.MOVIE,
+                mediaListFilter = MediaFilterListDefault.popularMovie
+            ),
+            onMediaClick = { _, _, _ -> },
+            onFilterClick = {},
+            onApplyFilterClick = {}
+        )
+    }
 }

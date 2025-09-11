@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.manage_lists.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -9,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.buntupana.tmdb.core.ui.composables.widget.AppIconButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 
 @Composable
 fun ManageListsItem(
@@ -38,7 +40,7 @@ fun ManageListsItem(
 
         val icon = if (isForAdd) Icons.Rounded.Add else Icons.Rounded.Remove
 
-        IconButton(
+        AppIconButton(
             onClick = onItemClick
         ) {
             Icon(
@@ -54,25 +56,36 @@ fun ManageListsItem(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun ManageListsItemPreview() {
-    ManageListsItem(
-        modifier = Modifier.fillMaxWidth(),
-        isForAdd = false,
-        mediaList = com.buntupana.tmdb.feature.lists.domain.model.UserListDetails(
-            id = 1,
-            name = "List 1",
-            description = "Description 1",
-            itemCount = 1,
-            isPublic = true,
-            backdropUrl = null,
-            revenue = null,
-            runtime = null,
-            posterUrl = null,
-            averageRating = null,
-            updatedAt = null,
-            shareLink = "test"
+    AppTheme {
+        ManageListsItem(
+            modifier = Modifier.fillMaxWidth(),
+            isForAdd = false,
+            mediaList = com.buntupana.tmdb.feature.lists.domain.model.UserListDetails(
+                id = 1,
+                name = "List 1",
+                description = "Description 1",
+                itemCount = 1,
+                isPublic = true,
+                backdropUrl = null,
+                revenue = null,
+                runtime = null,
+                posterUrl = null,
+                averageRating = null,
+                updatedAt = null,
+                shareLink = "test"
+            )
         )
-    )
+    }
 }

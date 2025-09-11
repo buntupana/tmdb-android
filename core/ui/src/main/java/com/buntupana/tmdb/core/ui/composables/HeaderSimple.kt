@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,7 +25,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.Typography
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -114,16 +116,27 @@ fun HeaderSimple(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun CastHeaderPreview() {
-    HeaderSimple(
-        backgroundColor = DetailBackgroundColor,
-        posterUrl = null,
-        mediaName = "Pain Hustlers",
-        subtitle = "7 episodes",
-        releaseYear = "2023",
-        setDominantColor = {}
-    )
+    AppTheme {
+        HeaderSimple(
+            backgroundColor = MaterialTheme.colorScheme.surfaceDim,
+            posterUrl = null,
+            mediaName = "Pain Hustlers",
+            subtitle = "7 episodes",
+            releaseYear = "2023",
+            setDominantColor = {}
+        )
+    }
 }
 

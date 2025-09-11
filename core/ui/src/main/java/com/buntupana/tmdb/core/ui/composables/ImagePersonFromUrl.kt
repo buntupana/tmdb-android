@@ -1,10 +1,12 @@
 package com.buntupana.tmdb.core.ui.composables
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.R
-import com.buntupana.tmdb.core.ui.theme.PlaceHolderColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.panabuntu.tmdb.core.common.model.Gender
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
@@ -50,7 +52,7 @@ fun ImagePersonFromUrl(
             Box(
                 Modifier
                     .fillMaxSize()
-                    .background(PlaceHolderColor),
+                    .background(MaterialTheme.colorScheme.surfaceContainerHigh),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -64,12 +66,24 @@ fun ImagePersonFromUrl(
     }
 }
 
-@Preview
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun ImagePersonFromUrlPreview() {
-    ImagePersonFromUrl(
-        modifier = Modifier.size(100.dp),
-        imageUrl = "",
-        gender = Gender.FEMALE
-    )
+    AppTheme {
+        ImagePersonFromUrl(
+            modifier = Modifier.size(100.dp),
+            imageUrl = "",
+            gender = Gender.FEMALE
+        )
+    }
 }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -30,7 +31,7 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.HeaderSimple
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
-import com.buntupana.tmdb.core.ui.theme.DetailBackgroundColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.paddingValues
@@ -82,8 +83,14 @@ private fun SeasonsContent(
     ) -> Unit
 ) {
 
+    val defaultBackgroundColor = MaterialTheme.colorScheme.surfaceDim
+
     var backgroundColor by remember {
-        mutableStateOf(state.backgroundColor)
+        if (state.backgroundColor == null) {
+            mutableStateOf(defaultBackgroundColor)
+        } else {
+            mutableStateOf(Color(state.backgroundColor))
+        }
     }
 
     SetSystemBarsColors(
@@ -185,21 +192,23 @@ private fun SeasonsContent(
 @Preview(showBackground = true, heightDp = 2000)
 @Composable
 private fun SeasonsScreenPreview() {
-    SeasonsContent(
-        state = SeasonsDetailState(
-            isLoading = true,
-            isGetSeasonsError = true,
-            tvShowId = 0L,
-            tvShowName = "Jack Reacher",
-            posterUrl = null,
-            releaseYear = "2003",
-            backgroundColor = DetailBackgroundColor,
-            seasonList = listOf(seasonSample, seasonSample, seasonSample)
-        ),
-        onBackClick = {},
-        onRetryClick = {},
-        onSearchClick = { },
-        onLogoClick = {},
-        onSeasonClick = { _, _, _ -> }
-    )
+    AppTheme {
+        SeasonsContent(
+            state = SeasonsDetailState(
+                isLoading = true,
+                isGetSeasonsError = true,
+                tvShowId = 0L,
+                tvShowName = "Jack Reacher",
+                posterUrl = null,
+                releaseYear = "2003",
+                backgroundColor = null,
+                seasonList = listOf(seasonSample, seasonSample, seasonSample)
+            ),
+            onBackClick = {},
+            onRetryClick = {},
+            onSearchClick = { },
+            onLogoClick = {},
+            onSeasonClick = { _, _, _ -> }
+        )
+    }
 }

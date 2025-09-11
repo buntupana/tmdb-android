@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.delete_item_list
 
+import android.content.res.Configuration
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
@@ -14,6 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.composables.dialog.ConfirmationDialog
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.annotatedStringResource
 import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -84,25 +86,36 @@ fun DeleteItemListDialog(
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun DeleteItemListScreenPreview() {
-    DeleteItemListDialog(
-        deleteItemListNav = DeleteItemListNav(
-            itemId = "",
-            listId = 0,
-            mediaId = 0,
-            mediaName = "The incredible Hulk",
-            mediaType = MediaType.MOVIE
-        ),
-        showDialog = true,
-        sheetState = SheetState(
-            skipPartiallyExpanded = true,
-            positionalThreshold = { 0f },
-            initialValue = SheetValue.Expanded,
-            velocityThreshold = { 0f }
-        ),
-        onDismiss = {},
-        onDeleteSuccess = {}
-    )
+    AppTheme {
+        DeleteItemListDialog(
+            deleteItemListNav = DeleteItemListNav(
+                itemId = "",
+                listId = 0,
+                mediaId = 0,
+                mediaName = "The incredible Hulk",
+                mediaType = MediaType.MOVIE
+            ),
+            showDialog = true,
+            sheetState = SheetState(
+                skipPartiallyExpanded = true,
+                positionalThreshold = { 0f },
+                initialValue = SheetValue.Expanded,
+                velocityThreshold = { 0f }
+            ),
+            onDismiss = {},
+            onDeleteSuccess = {}
+        )
+    }
 }

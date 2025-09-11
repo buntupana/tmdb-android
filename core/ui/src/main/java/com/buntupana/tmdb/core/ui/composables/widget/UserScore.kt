@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.widget
 
+import android.content.res.Configuration
 import androidx.annotation.IntRange
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,12 +29,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.ui.theme.HighScoreColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.HkFontFamily
-import com.buntupana.tmdb.core.ui.theme.LowScoreColor
-import com.buntupana.tmdb.core.ui.theme.MediumScoreColor
-import com.buntupana.tmdb.core.ui.theme.NoScoreColor
-import com.buntupana.tmdb.core.ui.theme.PrimaryDarkColor
+import com.buntupana.tmdb.core.ui.theme.StaticColor
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.toSp
 
 @Composable
@@ -40,13 +40,15 @@ fun UserScore(
     modifier: Modifier = Modifier,
     size: Dp = 50.dp,
     @IntRange(from = 0, to = 100) score: Int?,
-    backGroundColor: Color = PrimaryDarkColor,
-    noScoreColor: Color = NoScoreColor,
-    lowScoreColor: Color = LowScoreColor,
-    mediumScoreColor: Color = MediumScoreColor,
-    highScoreColor: Color = HighScoreColor,
+    backGroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    noScoreColor: Color = StaticColor.scoreNoScore,
+    lowScoreColor: Color = StaticColor.scoreLowScore,
+    mediumScoreColor: Color = StaticColor.scoreMediumScore,
+    highScoreColor: Color = StaticColor.scoreHighScore,
     fontFamily: FontFamily = HkFontFamily
 ) {
+
+    val contentColor = backGroundColor.getOnBackgroundColor()
 
     // Choosing stroke color depending on score
     val strokeColor = when (score) {
@@ -104,7 +106,7 @@ fun UserScore(
             if (score == null) {
                 Text(
                     text = "NR",
-                    color = Color.White,
+                    color = contentColor,
                     textAlign = TextAlign.Center,
                     fontFamily = fontFamily,
                     fontSize = textSize,
@@ -117,7 +119,7 @@ fun UserScore(
             } else {
                 Text(
                     text = score.toString(),
-                    color = Color.White,
+                    color = contentColor,
                     textAlign = TextAlign.Center,
                     fontFamily = fontFamily,
                     fontSize = textSize,
@@ -129,7 +131,7 @@ fun UserScore(
                 )
                 Text(
                     text = "%",
-                    color = Color.White,
+                    color = contentColor,
                     fontFamily = fontFamily,
                     modifier = Modifier.fillMaxHeight(0.5f),
                     fontSize = symbolSize,
@@ -144,11 +146,22 @@ fun UserScore(
     }
 }
 
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-@Preview
-fun UserScorePreview() {
-    UserScore(
-        size = 100.dp,
-        score = 20
-    )
+private fun UserScorePreview() {
+    AppTheme {
+        UserScore(
+            size = 100.dp,
+            score = 20
+        )
+    }
 }

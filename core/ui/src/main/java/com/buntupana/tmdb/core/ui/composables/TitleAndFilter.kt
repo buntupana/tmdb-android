@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,10 +16,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.widget.AppTextButton
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelector
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelectorAlign
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelectorItem
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 
 @Composable
@@ -36,12 +37,13 @@ fun <T : ExpandableMenuSelectorItem> TitleAndFilter(
         modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-        TextButton(
+        AppTextButton(
             modifier = Modifier
                 .padding(start = Dimens.padding.tiny)
                 .align(Alignment.CenterStart),
             onClick = { titleClicked?.invoke() },
-            enabled = titleClicked != null
+            enabled = titleClicked != null,
+            rippleColor = MaterialTheme.colorScheme.onBackground
         ) {
             Text(
                 text = title,
@@ -49,7 +51,7 @@ fun <T : ExpandableMenuSelectorItem> TitleAndFilter(
                 fontSize = 22.sp,
                 color = MaterialTheme.colorScheme.onBackground
             )
-            titleClicked ?: return@TextButton
+            titleClicked ?: return@AppTextButton
             Icon(
                 modifier = Modifier.size(22.dp),
                 painter = painterResource(R.drawable.ic_arrow_right),
@@ -73,9 +75,11 @@ fun <T : ExpandableMenuSelectorItem> TitleAndFilter(
 @Preview(showBackground = true)
 @Composable
 fun TitleAndFilterPreview() {
-    TitleAndFilter(
-        title = "Title",
-        filterSet = MediaFilter.entries.toSet(),
-        titleClicked = {}
-    )
+    AppTheme {
+        TitleAndFilter(
+            title = "Title",
+            filterSet = MediaFilter.entries.toSet(),
+            titleClicked = {}
+        )
+    }
 }

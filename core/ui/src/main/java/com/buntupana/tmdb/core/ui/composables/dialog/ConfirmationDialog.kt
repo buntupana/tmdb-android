@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.dialog
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,8 +30,12 @@ import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.LifecycleStartEffect
+import com.buntupana.tmdb.core.ui.composables.widget.AppButton
+import com.buntupana.tmdb.core.ui.composables.widget.AppOutlinedButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.util.balanced
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isInvisible
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,9 +45,10 @@ fun ConfirmationDialog(
     title: String,
     description: String,
     isLoading: Boolean,
-    confirmButtonColor: Color = SecondaryColor,
-    onCancelClick: () -> Unit = {},
+    confirmButtonColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+    confirmationButtonTextColor: Color = confirmButtonColor.getOnBackgroundColor(),
     onConfirmClick: () -> Unit,
+    onCancelClick: () -> Unit = {},
     onDismiss: () -> Unit,
 ) {
 
@@ -53,6 +58,7 @@ fun ConfirmationDialog(
         description = AnnotatedString.fromHtml(description),
         isLoading = isLoading,
         confirmButtonColor = confirmButtonColor,
+        confirmationButtonTextColor = confirmationButtonTextColor,
         onCancelClick = onCancelClick,
         onConfirmClick = onConfirmClick,
         onDismiss = onDismiss
@@ -66,7 +72,8 @@ fun ConfirmationDialog(
     title: String,
     description: AnnotatedString,
     isLoading: Boolean,
-    confirmButtonColor: Color = SecondaryColor,
+    confirmButtonColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+    confirmationButtonTextColor: Color = confirmButtonColor.getOnBackgroundColor(),
     onConfirmClick: () -> Unit,
     onCancelClick: () -> Unit = {},
     onDismiss: () -> Unit,
@@ -125,7 +132,7 @@ fun ConfirmationDialog(
 
                     Text(
                         text = description,
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.bodyLarge.balanced(),
                         textAlign = TextAlign.Center
                     )
 
@@ -135,7 +142,8 @@ fun ConfirmationDialog(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceAround
                     ) {
-                        Button(
+
+                        AppOutlinedButton(
                             onClick = {
                                 onCancelClick()
                                 onDismiss()
@@ -146,9 +154,13 @@ fun ConfirmationDialog(
                                 style = MaterialTheme.typography.titleMedium,
                             )
                         }
-                        Button(
+
+                        AppButton(
                             onClick = onConfirmClick,
-                            colors = ButtonDefaults.buttonColors(containerColor = confirmButtonColor)
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = confirmButtonColor,
+                                contentColor = confirmationButtonTextColor
+                            )
                         ) {
                             Text(
                                 text = stringResource(com.buntupana.tmdb.core.ui.R.string.text_confirm),
@@ -163,21 +175,32 @@ fun ConfirmationDialog(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun ConfirmationDialogPreview() {
-    ConfirmationDialog(
-        sheetState = SheetState(
-            skipPartiallyExpanded = true,
-            positionalThreshold = { 0f },
-            initialValue = SheetValue.Expanded,
-            velocityThreshold = { 0f }
-        ),
-        title = "Dialog Title",
-        description = "Dialog Description",
-        isLoading = false,
-        onCancelClick = {},
-        onConfirmClick = {},
-        onDismiss = {}
-    )
+    AppTheme {
+        ConfirmationDialog(
+            sheetState = SheetState(
+                skipPartiallyExpanded = true,
+                positionalThreshold = { 0f },
+                initialValue = SheetValue.Expanded,
+                velocityThreshold = { 0f }
+            ),
+            title = "Dialog Title",
+            description = "Dialog Description",
+            isLoading = false,
+            onCancelClick = {},
+            onConfirmClick = {},
+            onDismiss = {}
+        )
+    }
 }

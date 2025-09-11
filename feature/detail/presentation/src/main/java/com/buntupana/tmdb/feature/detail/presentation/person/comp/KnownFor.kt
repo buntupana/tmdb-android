@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.person.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.toDp
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
@@ -129,11 +131,22 @@ fun KnownFor(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun KnownForPreview() {
-    KnownFor(
-        itemList = listOf(creditItemPersonSample, creditItemPersonSample, creditItemPersonSample),
-        onItemClick = {_,_,_ ->}
-    )
+    AppTheme {
+        KnownFor(
+            itemList = listOf(creditItemPersonSample, creditItemPersonSample, creditItemPersonSample),
+            onItemClick = {_,_,_ ->}
+        )
+    }
 }

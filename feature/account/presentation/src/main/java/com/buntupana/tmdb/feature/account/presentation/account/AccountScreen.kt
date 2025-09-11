@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.account.presentation.account
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,9 +31,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.TitleAndFilter
 import com.buntupana.tmdb.core.ui.composables.item.CarouselMediaItem
+import com.buntupana.tmdb.core.ui.composables.widget.AppButton
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.account.presentation.R
 import com.buntupana.tmdb.feature.account.presentation.account.comp.AccountTopBar
@@ -54,7 +55,7 @@ fun AccountScreen(
     onFavoritesClick: (mediaType: MediaType) -> Unit,
     onListsClick: () -> Unit,
     onMediaItemClicked: (mediaItemType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit,
-    onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
+    onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit
 ) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -135,7 +136,7 @@ fun AccountContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor
+        statusBarColor = MaterialTheme.colorScheme.primaryContainer
     )
 
     Scaffold(
@@ -234,7 +235,7 @@ fun AccountContent(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Button(
+                    AppButton(
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                         onClick = onSignOutClick
                     ) {
@@ -253,24 +254,38 @@ fun AccountContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+    heightDp = 1150
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+    heightDp = 1150
+)
+@Preview(showBackground = true, heightDp = 1150)
 @Composable
 fun AccountScreenPreview() {
-    AccountContent(
-        AccountState(
-            isUserLogged = false,
-            username = "Alvaro",
-            userListDetailsList = null
-        ),
-        onSignUpClick = {},
-        onSignOutClick = {},
-        onWatchListClick = {},
-        onFavoritesClick = {},
-        onListsClick = {},
-        changeWatchlistType = {},
-        changeFavoritesType = {},
-        navigateToMediaDetail = { _, _ -> },
-        navigateToListDetail = { _, _, _, _ -> },
-        listLoadItems = {}
-    )
+    AppTheme {
+        AccountContent(
+            AccountState(
+                isUserLogged = true,
+                username = "Alvaro",
+                userListDetailsList = null
+            ),
+            onSignUpClick = {},
+            onSignOutClick = {},
+            onWatchListClick = {},
+            onFavoritesClick = {},
+            onListsClick = {},
+            changeWatchlistType = {},
+            changeFavoritesType = {},
+            navigateToMediaDetail = { _, _ -> },
+            navigateToListDetail = { _, _, _, _ -> },
+            listLoadItems = {}
+        )
+    }
 }

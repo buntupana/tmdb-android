@@ -1,10 +1,10 @@
 package com.buntupana.tmdb.feature.account.presentation.account.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,23 +14,20 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.composables.widget.AppTextWithIconButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
-import com.buntupana.tmdb.core.ui.theme.SignUpBackgroundColor
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.account.presentation.R
 
 @Composable
@@ -39,11 +36,11 @@ fun SignUp(
     onSignUpClick: () -> Unit,
 ) {
 
-    val backgroundColor = SignUpBackgroundColor
-
+    val backgroundColor = MaterialTheme.colorScheme.primaryContainer
+    val contentColor = backgroundColor.getOnBackgroundColor()
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(backgroundColor)
     ) {
@@ -72,7 +69,7 @@ fun SignUp(
             Text(
                 text = stringResource(R.string.text_join_today),
                 style = MaterialTheme.typography.headlineLarge.copy(
-                    color = Color.White
+                    color = contentColor
                 ),
                 fontWeight = FontWeight.Bold
             )
@@ -81,37 +78,45 @@ fun SignUp(
                 modifier = Modifier.padding(top = Dimens.padding.medium),
                 text = AnnotatedString.fromHtml(htmlString = stringResource(R.string.message_sign_up_html_description)),
                 style = MaterialTheme.typography.titleLarge.copy(
-                    color = Color.White
+                    color = contentColor
                 )
             )
 
-            Button(
+            AppTextWithIconButton(
                 modifier = Modifier.padding(top = Dimens.padding.medium),
-                colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
-                onClick = onSignUpClick,
-            ) {
-                Icon(Icons.AutoMirrored.Filled.Login, contentDescription = null)
-                Spacer(modifier = Modifier.padding(horizontal = Dimens.padding.tiny))
-                Text(text = stringResource(R.string.text_sign_up))
-            }
+                text = stringResource(R.string.text_sign_up),
+                imageVector = Icons.AutoMirrored.Filled.Login,
+                onClick = onSignUpClick
+            )
 
             Text(
                 modifier = Modifier.padding(top = Dimens.padding.big),
                 text = AnnotatedString.fromHtml(htmlString = stringResource(R.string.list_sign_up_vantages)),
                 style = MaterialTheme.typography.titleSmall.copy(
-                    color = Color.White
+                    color = contentColor
                 )
             )
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-private fun JoinPreview() {
-    SignUp(
-        modifier = Modifier
-            .fillMaxSize(),
-        onSignUpClick = {}
-    )
+private fun SignUpPreview() {
+    AppTheme {
+        SignUp(
+            modifier = Modifier
+                .fillMaxSize(),
+            onSignUpClick = {}
+        )
+    }
 }

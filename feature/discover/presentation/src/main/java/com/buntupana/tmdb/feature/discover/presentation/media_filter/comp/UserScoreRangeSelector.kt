@@ -16,9 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.composables.widget.sliders.RangeSliderCustom
+import com.buntupana.tmdb.core.ui.composables.widget.sliders.AppRangeSlider
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.feature.discover.presentation.R
 import com.panabuntu.tmdb.core.common.util.Const
 
@@ -45,7 +45,7 @@ fun UserScoreRangeSelector(
             style = MaterialTheme.typography.titleMedium
         )
 
-        RangeSliderCustom(
+        AppRangeSlider(
             modifier = Modifier.fillMaxWidth(),
             startValue = userScoreMin,
             endValue = userScoreMax,
@@ -70,7 +70,7 @@ fun UserScoreRangeSelector(
             Switch(
                 modifier = Modifier,
                 checked = includeNotRated,
-                colors = SwitchDefaults.colors(checkedTrackColor = PrimaryColor),
+                colors = SwitchDefaults.colors(checkedTrackColor = MaterialTheme.colorScheme.primary),
                 onCheckedChange = {
                     onUserScoreRangeChanged(userScoreMin, userScoreMax, it)
                 }
@@ -82,11 +82,13 @@ fun UserScoreRangeSelector(
 @Preview(showBackground = true)
 @Composable
 private fun UserScoreRangeSelectorPreview() {
-    UserScoreRangeSelector(
-        modifier = Modifier,
-        userScoreMin = 20,
-        userScoreMax = 80,
-        includeNotRated = true,
-        onUserScoreRangeChanged = { _, _, _ -> }
-    )
+    AppTheme {
+        UserScoreRangeSelector(
+            modifier = Modifier,
+            userScoreMin = 20,
+            userScoreMax = 80,
+            includeNotRated = true,
+            onUserScoreRangeChanged = { _, _, _ -> }
+        )
+    }
 }

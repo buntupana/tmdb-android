@@ -1,7 +1,7 @@
 package com.buntupana.tmdb.feature.detail.presentation.rating
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,14 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
@@ -33,17 +30,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleStartEffect
+import com.buntupana.tmdb.core.ui.composables.widget.AppButton
+import com.buntupana.tmdb.core.ui.composables.widget.AppOutlinedButton
+import com.buntupana.tmdb.core.ui.composables.widget.AppTextWithBorder
 import com.buntupana.tmdb.core.ui.composables.widget.sliders.RatingSlider
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.annotatedStringResource
 import com.buntupana.tmdb.core.ui.util.balanced
@@ -117,24 +114,17 @@ fun RatingContent(
 
     ModalBottomSheet(
         onDismissRequest = {
-            if (state.isLoading.not()) {
-                onDismiss()
-            }
+            Timber.d("RatingContent: dismiss")
+            onDismiss()
         },
         sheetState = sheetState,
         containerColor = MaterialTheme.colorScheme.background,
         dragHandle = {},
-        properties = ModalBottomSheetProperties(
-            shouldDismissOnBackPress = false
-        )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    horizontal = Dimens.padding.horizontal,
-                    vertical = Dimens.padding.big
-                )
+                .padding(vertical = Dimens.padding.big)
                 .animateContentSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -147,110 +137,124 @@ fun RatingContent(
             Spacer(modifier = Modifier.height(Dimens.padding.big))
 
             Text(
+                modifier = Modifier
+                    .padding(horizontal = Dimens.padding.horizontal),
                 textAlign = TextAlign.Center,
-                text = annotatedStringResource(R.string.message_what_do_you_think, state.mediaTitle),
+                text = annotatedStringResource(
+                    R.string.message_what_do_you_think,
+                    state.mediaTitle
+                ),
                 style = MaterialTheme.typography.titleMedium.balanced(),
-                fontWeight = FontWeight.Normal
+                fontWeight = FontWeight.Normal,
             )
 
             Spacer(modifier = Modifier.height(Dimens.padding.huge))
 
-            if (state.isLoading.not()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .isInvisible(state.rating == 0)
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .clip(RoundedCornerShape(100.dp))
-                            .background(PrimaryColor)
-                            .padding(horizontal = 12.dp, vertical = 8.dp),
-                        text = state.ratingTitle.asString(),
-                        fontWeight = FontWeight.Bold,
-                        color = getRatingColor(state.rating)
-                    )
-                }
-            }
+            AppTextWithBorder(
+                text = state.ratingTitle.asString(),
+                color = getRatingColor(state.rating),
+                borderColor = MaterialTheme.colorScheme.primaryContainer,
+                borderWidth = 4f,
+                minLines = 1,
+                style = MaterialTheme.typography.headlineMedium.balanced(),
+            )
 
             Spacer(modifier = Modifier.height(Dimens.padding.big))
 
-            if (state.isLoading) {
-                CircularProgressIndicator()
-            } else {
-                RatingSlider(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = state.rating,
-                    onValueChange = onRatingValueChange
-                )
+            RatingSlider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Dimens.padding.horizontal),
+                value = state.rating,
+                enabled = state.isLoading.not(),
+                onValueChange = onRatingValueChange
+            )
 
-                Spacer(modifier = Modifier.height(Dimens.padding.big))
+            Spacer(modifier = Modifier.height(Dimens.padding.big))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                AppOutlinedButton(
+                    onClick = clearRatingClick,
+                    enabled = state.isLoading.not()
                 ) {
-                    Button(
-                        onClick = clearRatingClick
-                    ) {
-                        Text(
-                            text = stringResource(R.string.text_clear_rating),
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    }
-                    Button(
+                    Text(
+                        text = stringResource(R.string.text_clear_rating),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                }
+
+                Box(
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.isInvisible(state.isLoading.not())
+                    )
+                    AppButton(
+                        modifier = Modifier.isInvisible(state.isLoading),
                         onClick = addRatingClick,
                         enabled = state.rating > 0,
-                        colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor)
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer
+                        )
                     ) {
                         Text(
                             text = stringResource(RCore.string.text_confirm),
                             style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
                         )
                     }
                 }
             }
 
             Spacer(
-                modifier = Modifier
-                    .windowInsetsBottomHeight(
-                        WindowInsets.systemBars
-                    )
+                modifier = Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)
             )
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true, heightDp = 500
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true, heightDp = 500
+)
 @Composable
 fun RatingScreenPreview() {
-
-    var ratingState by remember {
-        mutableStateOf(
-            RatingState(
-                isLoading = false,
-                rating = 20,
-                mediaTitle = "The Office",
-                ratingTitle = UiText.DynamicString("Champion")
+    AppTheme {
+        var ratingState by remember {
+            mutableStateOf(
+                RatingState(
+                    isLoading = true,
+                    rating = 60,
+                    mediaTitle = "The Office",
+                    ratingTitle = UiText.DynamicString("Champion")
+                )
             )
+        }
+
+        RatingContent(
+            state = ratingState,
+            sheetState = SheetState(
+                skipPartiallyExpanded = true,
+                positionalThreshold = { 0f },
+                initialValue = SheetValue.Expanded,
+                velocityThreshold = { 0f }
+            ),
+            onDismiss = {},
+            onRatingValueChange = {
+                ratingState = ratingState.copy(rating = it)
+            },
+            addRatingClick = {},
+            clearRatingClick = {}
         )
     }
-
-    RatingContent(
-        state = ratingState,
-        sheetState = SheetState(
-            skipPartiallyExpanded = true,
-            positionalThreshold = { 0f },
-            initialValue = SheetValue.Expanded,
-            velocityThreshold = { 0f }
-        ),
-        onDismiss = {},
-        onRatingValueChange = {
-            ratingState = ratingState.copy(rating = it)
-        },
-        addRatingClick = {},
-        clearRatingClick = {}
-    )
 }

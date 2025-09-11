@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.create_update_list.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,8 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -21,9 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.buntupana.tmdb.core.ui.composables.widget.AppButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.buntupana.tmdb.feature.presentation.R
 import com.buntupana.tmdb.core.ui.R as RCore
 
@@ -33,6 +34,7 @@ fun CreateListForm(
     listName: String,
     description: String,
     isPublic: Boolean,
+    isLoading: Boolean = false,
     updateForm: (listName: String, listDescription: String, isPublic: Boolean) -> Unit,
     onCreateListClick: () -> Unit
 ) {
@@ -45,8 +47,9 @@ fun CreateListForm(
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = SecondaryColor),
+            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.secondary),
             value = listName,
+            enabled = isLoading.not(),
             onValueChange = {
                 updateForm(it, description, isPublic)
             },
@@ -58,8 +61,9 @@ fun CreateListForm(
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = SecondaryColor),
+            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.secondary),
             value = description,
+            enabled = isLoading.not(),
             onValueChange = {
                 updateForm(listName, it, isPublic)
             },
@@ -83,7 +87,8 @@ fun CreateListForm(
             Switch(
                 modifier = Modifier,
                 checked = isPublic,
-                colors = SwitchDefaults.colors(checkedTrackColor = PrimaryColor),
+                enabled = isLoading.not(),
+                colors = SwitchDefaults.colors(checkedTrackColor = MaterialTheme.colorScheme.primary),
                 onCheckedChange = {
                     updateForm(listName, description, it)
                 }
@@ -96,30 +101,49 @@ fun CreateListForm(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.CenterEnd
         ) {
-            Button(
-                onClick = {
-                    keyboardController?.hide()
-                    onCreateListClick()
-                },
-                enabled = listName.isNotBlank(),
-                colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
+            Box(
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = stringResource(RCore.string.text_confirm)
+                CircularProgressIndicator(
+                    modifier = Modifier.isInvisible(isLoading.not())
                 )
+                AppButton(
+                    modifier = Modifier.isInvisible(isLoading),
+                    onClick = {
+                        keyboardController?.hide()
+                        onCreateListClick()
+                    },
+                    enabled = listName.isNotBlank(),
+                ) {
+                    Text(
+                        text = stringResource(RCore.string.text_confirm)
+                    )
+                }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun CreateListFormPreview() {
-    CreateListForm(
-        listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
-        description = "Description",
-        isPublic = true,
-        updateForm = { _, _, _ -> },
-        onCreateListClick = {}
-    )
+    AppTheme {
+        CreateListForm(
+            listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
+            description = "Description",
+            isPublic = true,
+            isLoading = false,
+            updateForm = { _, _, _ -> },
+            onCreateListClick = {}
+        )
+    }
 }

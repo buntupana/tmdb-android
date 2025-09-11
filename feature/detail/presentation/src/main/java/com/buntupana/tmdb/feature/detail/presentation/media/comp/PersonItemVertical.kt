@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,8 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,7 +26,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.buntupana.tmdb.core.ui.composables.AppCard
 import com.buntupana.tmdb.core.ui.composables.ImagePersonFromUrl
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.Person
 import com.buntupana.tmdb.feature.detail.presentation.R
@@ -38,9 +41,9 @@ fun PersonItemVertical(
     personCast: Person.Cast,
     onItemClick: ((personId: Long) -> Unit)? = null
 ) {
-    Surface(
+    AppCard(
         modifier = modifier,
-        shadowElevation = Dimens.cardElevation,
+        elevation = CardDefaults.cardElevation(defaultElevation = Dimens.cardElevation),
         shape = RoundedCornerShape(Dimens.posterRound),
     ) {
         Box(
@@ -100,7 +103,7 @@ private fun NameAndCharacter(
             mutableIntStateOf(2)
         }
 
-        var characterMaxLines = when(nameLinesCount) {
+        var characterMaxLines = when (nameLinesCount) {
             1 -> 3
             2 -> 2
             else -> 2
@@ -135,10 +138,22 @@ private fun NameAndCharacter(
     }
 }
 
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Preview(showBackground = true)
 @Composable
 fun PersonItemVerticalPreview() {
-    PersonItemVertical(
-        personCast = castTvShowPersonSample
-    )
+    AppTheme {
+        PersonItemVertical(
+            personCast = castTvShowPersonSample
+        )
+    }
 }

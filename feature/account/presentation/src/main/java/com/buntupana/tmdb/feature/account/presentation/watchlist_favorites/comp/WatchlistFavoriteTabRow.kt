@@ -1,9 +1,11 @@
 package com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
@@ -20,8 +22,7 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.OrderButtonAnimation
 import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.panabuntu.tmdb.core.common.model.Order
 import kotlinx.coroutines.launch
@@ -40,20 +41,20 @@ fun WatchlistFavoriteTabRow(
 
     Row(
         modifier = modifier
-            .background(PrimaryColor),
+            .background(MaterialTheme.colorScheme.primaryContainer),
         verticalAlignment = Alignment.CenterVertically,
     ) {
 
         ScrollableTabRow(
             modifier = Modifier.weight(1f),
-            contentColor = PrimaryColor.getOnBackgroundColor(),
+            contentColor = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor(),
             edgePadding = 0.dp,
-            containerColor = PrimaryColor,
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
             selectedTabIndex = pagerState.currentPage,
             indicator = { tabPositions ->
                 SecondaryIndicator(
                     modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
-                    color = SecondaryColor,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                 )
             }
         ) {
@@ -86,7 +87,7 @@ fun WatchlistFavoriteTabRow(
 
         OrderButtonAnimation(
             modifier = Modifier,
-            textColor = PrimaryColor.getOnBackgroundColor(),
+            textColor = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor(),
             text = stringResource(R.string.text_last_added),
             order = order,
             onClick = onOrderClick
@@ -94,15 +95,26 @@ fun WatchlistFavoriteTabRow(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun WatchlistFavoriteTabRowPreview() {
-    WatchlistFavoriteTabRow(
-        modifier = Modifier,
-        pagerState = rememberPagerState { 2 },
-        order = Order.DESC,
-        movieItemsTotalCount = 15,
-        tvShowItemsTotalCount = null,
-        onOrderClick = {}
-    )
+    AppTheme {
+        WatchlistFavoriteTabRow(
+            modifier = Modifier,
+            pagerState = rememberPagerState { 2 },
+            order = Order.DESC,
+            movieItemsTotalCount = 15,
+            tvShowItemsTotalCount = 12,
+            onOrderClick = {}
+        )
+    }
 }

@@ -1,6 +1,5 @@
 package com.buntupana.tmdb.core.ui.composables.top_bar
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -18,11 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.widget.AppIconButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.util.IconButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,10 +45,10 @@ fun TopBarTitle(
         ),
         scrollBehavior = scrollBehavior,
         navigationIcon = {
-            IconButton(
+            AppIconButton(
                 modifier = Modifier,
                 onClick = onBackClick,
-                rippleColor = PrimaryColor.getOnBackgroundColor()
+                rippleColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
@@ -58,10 +59,10 @@ fun TopBarTitle(
             
         },
         actions = {
-            IconButton(
+            AppIconButton(
                 modifier = Modifier,
                 onClick = onSearchClick,
-                rippleColor = PrimaryColor.getOnBackgroundColor()
+                rippleColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Icon(
                     modifier = Modifier
@@ -83,7 +84,8 @@ fun TopBarTitle(
 
                 Text(
                     text = title,
-                    color = backgroundColor.getOnBackgroundColor()
+                    color = backgroundColor.getOnBackgroundColor(),
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
@@ -94,11 +96,12 @@ fun TopBarTitle(
 @Preview
 @Composable
 private fun TopBarTitlePreview() {
-    TopBarTitle(
-        Modifier.background(Color.Blue),
-        title = "Watchlist",
-        backgroundColor = Color.Blue,
-        onSearchClick = {},
-        onBackClick = {}
-    )
+    AppTheme {
+        TopBarTitle(
+            title = "Watchlist",
+            backgroundColor = Color.Gray,
+            onSearchClick = {},
+            onBackClick = {}
+        )
+    }
 }

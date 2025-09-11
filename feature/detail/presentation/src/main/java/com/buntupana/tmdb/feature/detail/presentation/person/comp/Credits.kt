@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.person.comp
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
@@ -29,9 +30,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.DropdownMenuText
+import com.buntupana.tmdb.core.ui.composables.widget.AppTextButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
-import com.buntupana.tmdb.core.ui.util.TextButton
 import com.buntupana.tmdb.core.ui.util.clickableTextPadding
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.model.CreditPersonItem
@@ -81,14 +82,14 @@ fun CreditsFilter(
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                TextButton(
+                AppTextButton(
                     onClick = { onFilterChange(null, null) },
                     rippleColor = MaterialTheme.colorScheme.background.getOnBackgroundColor()
                 ) {
                     Text(
                         modifier = Modifier,
                         text = stringResource(id = RCore.string.text_clear),
-                        color = SecondaryColor
+                        color = MaterialTheme.colorScheme.secondary
                     )
                 }
             }
@@ -284,21 +285,32 @@ private fun LazyListScope.creditList(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun CreditsFilterPreview() {
-    CreditsFilter(
-        mainDepartment = "Acting",
-        mediaTypeMap = mapOf(
-            RCore.string.text_movies to "Movies",
-            RCore.string.text_tv_shows to "TV Shows"
-        ),
-        departmentMap = mapOf(
-            "Acting" to "Acting",
-            "Directing" to "Directing"
-        ),
-        mediaTypeSelected = RCore.string.text_movies,
-        departmentSelected = "Acting",
-        onFilterChange = { _, _ -> }
-    )
+    AppTheme {
+        CreditsFilter(
+            mainDepartment = "Acting",
+            mediaTypeMap = mapOf(
+                RCore.string.text_movies to "Movies",
+                RCore.string.text_tv_shows to "TV Shows"
+            ),
+            departmentMap = mapOf(
+                "Acting" to "Acting",
+                "Directing" to "Directing"
+            ),
+            mediaTypeSelected = RCore.string.text_movies,
+            departmentSelected = "Acting",
+            onFilterChange = { _, _ -> }
+        )
+    }
 }

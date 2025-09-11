@@ -1,10 +1,9 @@
 package com.buntupana.tmdb.feature.search.presentation.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,14 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ripple
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,13 +28,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.TextFieldSearch
+import com.buntupana.tmdb.core.ui.composables.widget.AppIconButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
-import com.buntupana.tmdb.core.ui.theme.SecondaryColor
-import com.buntupana.tmdb.core.ui.theme.TertiaryColor
 
 @Composable
-fun SearchBar(
+fun SearchTopBar(
     modifier: Modifier = Modifier,
     barHeight: Dp = Dimens.topBarHeight,
     onValueChanged: (searchKey: String) -> Unit,
@@ -49,7 +45,7 @@ fun SearchBar(
 ) {
     Row(
         modifier = modifier
-            .background(PrimaryColor)
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .windowInsetsPadding(WindowInsets.statusBars)
             .height(barHeight)
             .padding(horizontal = Dimens.padding.medium),
@@ -59,7 +55,7 @@ fun SearchBar(
             modifier = Modifier.size(24.dp),
             painter = painterResource(id = R.drawable.ic_search),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(SecondaryColor)
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondaryContainer)
         )
         TextFieldSearch(
             modifier = Modifier
@@ -74,43 +70,51 @@ fun SearchBar(
             },
             isEnabled = isLoadingSearch.not(),
             requestFocus = requestFocus,
-            cursorColor = SecondaryColor
+            cursorColor = MaterialTheme.colorScheme.secondaryContainer
         )
         Spacer(modifier = Modifier.width(8.dp))
         Box(
             modifier = Modifier.size(24.dp)
         ) {
             if (!isLoadingSuggestions && searchKey.isNotBlank()) {
-                val interactionSource = remember { MutableInteractionSource() }
-                Image(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .indication(
-                            indication = ripple(color = TertiaryColor),
-                            interactionSource = interactionSource
-                        )
-                        .clickable {
-                            onValueChanged("")
-                        },
-                    painter = painterResource(id = R.drawable.ic_cancel),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(SecondaryColor)
-                )
+                AppIconButton(
+                    onClick = {
+                        onValueChanged("")
+                    },
+                    modifier = Modifier.clickable { onValueChanged("") },
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_cancel),
+                        tint = MaterialTheme.colorScheme.secondaryContainer,
+                        contentDescription = null
+                    )
+                }
             } else if (isLoadingSuggestions) {
                 CircularProgressIndicator(
-                    color = SecondaryColor
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
         }
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun SearchBarPreview() {
-    SearchBar(
-        onValueChanged = {},
-        searchKey = "hola",
-        onSearch = {},
-    )
+    AppTheme {
+        SearchTopBar(
+            onValueChanged = {},
+            searchKey = "hola",
+            onSearch = {},
+        )
+    }
 }

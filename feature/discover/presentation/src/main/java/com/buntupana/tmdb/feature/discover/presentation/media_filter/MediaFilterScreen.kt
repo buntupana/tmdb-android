@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.discover.presentation.media_filter
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -7,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,8 +20,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.composables.widget.ChipSelector
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.PrimaryColor
 import com.buntupana.tmdb.core.ui.util.SelectableItem
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
@@ -132,8 +134,8 @@ fun MediaFilterContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = PrimaryColor,
-        navigationBarColor = PrimaryColor,
+        statusBarColor = MaterialTheme.colorScheme.primaryContainer,
+        navigationBarColor = MaterialTheme.colorScheme.primaryContainer,
         translucentNavigationBar = true
     )
 
@@ -257,25 +259,36 @@ fun MediaFilterContent(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true, heightDp = 2000)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun MediaFilterScreenPreview() {
-    MediaFilterContent(
-        state = MediaFilterState(
-            availabilitiesList = MonetizationType.entries.map { it.toSelectableItem(0) },
-            releaseTypesList = ReleaseType.entries.map { it.toSelectableItem(0) },
-            genreList = MovieGenre.entries.map { it.toSelectableItem(0) },
-        ),
-        onBackClick = {},
-        onApplySortBy = { _, _ -> },
-        onAvailabilityListChanged = {},
-        onReleaseTypeSelectedListChanged = {},
-        onSelectReleaseDateRange = { _, _ -> },
-        onGenreSelectedListChanged = {},
-        onUserScoreRangeSelected = { _, _, _ -> },
-        onMinUserVotesChanged = {},
-        onRuntimeRangeSelected = { _, _ -> },
-        onApplyFilterClick = {},
-        onSearchFirstAirDateChange = {}
-    )
+    AppTheme {
+        MediaFilterContent(
+            state = MediaFilterState(
+                availabilitiesList = MonetizationType.entries.map { it.toSelectableItem(0) },
+                releaseTypesList = ReleaseType.entries.map { it.toSelectableItem(0) },
+                genreList = MovieGenre.entries.map { it.toSelectableItem(0) },
+            ),
+            onBackClick = {},
+            onApplySortBy = { _, _ -> },
+            onAvailabilityListChanged = {},
+            onReleaseTypeSelectedListChanged = {},
+            onSelectReleaseDateRange = { _, _ -> },
+            onGenreSelectedListChanged = {},
+            onUserScoreRangeSelected = { _, _, _ -> },
+            onMinUserVotesChanged = {},
+            onRuntimeRangeSelected = { _, _ -> },
+            onApplyFilterClick = {},
+            onSearchFirstAirDateChange = {}
+        )
+    }
 }

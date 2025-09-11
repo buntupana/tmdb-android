@@ -2,7 +2,6 @@ package com.buntupana.tmdb.core.ui.composables.top_bar
 
 import android.content.Intent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +15,9 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -31,8 +32,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.widget.AppIconButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.IconButton
 import com.buntupana.tmdb.core.ui.util.RippleColorContainer
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isInvisible
@@ -50,6 +52,8 @@ fun TopBarLogo(
     shareLink: String? = null
 ) {
 
+    val contentColor = backgroundColor.getOnBackgroundColor()
+
     TopAppBar(
         modifier = modifier,
         colors = TopAppBarDefaults.topAppBarColors(
@@ -58,7 +62,7 @@ fun TopBarLogo(
         ),
         scrollBehavior = scrollBehavior,
         navigationIcon = {
-            IconButton(
+            AppIconButton(
                 modifier = Modifier,
                 rippleColor = backgroundColor.getOnBackgroundColor(),
                 onClick = onBackClick,
@@ -66,7 +70,7 @@ fun TopBarLogo(
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                     contentDescription = "Back",
-                    tint = backgroundColor.getOnBackgroundColor()
+                    tint = contentColor
                 )
             }
 
@@ -89,7 +93,7 @@ fun TopBarLogo(
                 horizontalArrangement = Arrangement.Center
             ) {
                 RippleColorContainer(
-                    rippleColor = backgroundColor.getOnBackgroundColor()
+                    rippleColor = contentColor
                 ) {
                     Box(
                         modifier = Modifier
@@ -102,7 +106,7 @@ fun TopBarLogo(
                                 .size(Dimens.topBarIconSize),
                             painter = painterResource(id = R.drawable.img_logo),
                             contentDescription = null,
-                            colorFilter = ColorFilter.tint(backgroundColor.getOnBackgroundColor())
+                            colorFilter = ColorFilter.tint(contentColor)
                         )
                     }
                 }
@@ -121,34 +125,34 @@ fun TopBarLogo(
 
                 val context = LocalContext.current
 
-                IconButton(
+                AppIconButton(
                     modifier = Modifier,
-                    rippleColor = backgroundColor.getOnBackgroundColor(),
+                    rippleColor = contentColor,
                     onClick = {
                         context.startActivity(shareIntent)
                     },
+                    colors = IconButtonDefaults.iconButtonColors(contentColor = contentColor)
                 ) {
                     Icon(
                         modifier = Modifier
                             .padding(horizontal = Dimens.padding.small),
                         imageVector = Icons.Rounded.Share,
                         contentDescription = "Share",
-                        tint = backgroundColor.getOnBackgroundColor()
                     )
                 }
             }
 
-            IconButton(
+            AppIconButton(
                 modifier = Modifier.isInvisible(onSearchClick == null),
                 onClick = {onSearchClick?.invoke()},
-                rippleColor = backgroundColor.getOnBackgroundColor()
+                rippleColor = backgroundColor.getOnBackgroundColor(),
+                colors = IconButtonDefaults.iconButtonColors(contentColor = contentColor)
             ) {
                 Icon(
                     modifier = Modifier
                         .padding(horizontal = Dimens.padding.small),
                     painter = painterResource(R.drawable.ic_search),
                     contentDescription = "Search",
-                    tint = backgroundColor.getOnBackgroundColor()
                 )
             }
         },
@@ -159,12 +163,13 @@ fun TopBarLogo(
 @Preview
 @Composable
 private fun TopBarLogoPreview() {
-    TopBarLogo(
-        Modifier.background(Color.Blue),
-        backgroundColor = Color.Blue,
-        shareLink = "asdf",
-        onSearchClick = {},
-        onBackClick = {},
-        onLogoClick = {}
-    )
+    AppTheme {
+        TopBarLogo(
+            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+            shareLink = "asdf",
+            onSearchClick = {},
+            onBackClick = {},
+            onLogoClick = {}
+        )
+    }
 }

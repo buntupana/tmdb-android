@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.episodes.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,16 +9,18 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.buntupana.tmdb.core.ui.composables.AppCard
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
@@ -33,9 +36,9 @@ fun EpisodeHorizontal(
     onSeeMoreClick: () -> Unit
 ) {
 
-    Surface(
+    AppCard(
         modifier = modifier,
-        shadowElevation = Dimens.cardElevation,
+        elevation = CardDefaults.cardElevation(defaultElevation = Dimens.cardElevation),
         shape = RoundedCornerShape(Dimens.posterRound)
     ) {
 
@@ -108,13 +111,24 @@ fun EpisodeHorizontal(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun EpisodeHorizontalPreview() {
-    EpisodeHorizontal(
-        episode = episodeSample,
-        isLogged = true,
-        seasonNumber = 1,
-        onSeeMoreClick = {}
-    )
+    AppTheme {
+        EpisodeHorizontal(
+            episode = episodeSample,
+            isLogged = true,
+            seasonNumber = 1,
+            onSeeMoreClick = {}
+        )
+    }
 }

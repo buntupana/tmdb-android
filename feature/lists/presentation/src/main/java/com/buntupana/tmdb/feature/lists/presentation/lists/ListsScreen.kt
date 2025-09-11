@@ -115,7 +115,7 @@ fun ListsContent(
             Box(modifier = Modifier.fillMaxSize()) {
                 ErrorAndRetry(
                     modifier = Modifier.align(Alignment.Center),
-                    textColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
+                    contentColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
                     errorMessage = stringResource(id = RCore.string.message_loading_content_error),
                     onRetryClick = onRetryClick
                 )

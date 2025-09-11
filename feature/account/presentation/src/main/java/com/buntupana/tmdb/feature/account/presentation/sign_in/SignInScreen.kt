@@ -124,7 +124,7 @@ fun SignInContent(
                     )
                 } else if (state.isSignInError) {
                     ErrorAndRetry(
-                        textColor = MaterialTheme.colorScheme.onBackground,
+                        contentColor = MaterialTheme.colorScheme.onBackground,
                         errorMessage = stringResource(R.string.text_signing_in_error),
                         onRetryClick = onRetryClicked
                     )

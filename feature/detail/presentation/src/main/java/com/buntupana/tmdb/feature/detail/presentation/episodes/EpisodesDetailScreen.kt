@@ -157,10 +157,11 @@ private fun EpisodesDetailContent(
         }
 
         if (state.isGetEpisodesError) {
+
             ErrorAndRetry(
                 modifier = Modifier
-                    .padding(vertical = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(top = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding),
                 errorMessage = stringResource(id = RCore.string.message_loading_content_error),
                 onRetryClick = onRetryClick
             )

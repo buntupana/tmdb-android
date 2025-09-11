@@ -260,7 +260,7 @@ fun MediaDetailContent(
                         .padding(vertical = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding)
                         .fillMaxWidth(),
                     errorMessage = stringResource(id = R.string.message_loading_content_error),
-                    textColor = backgroundColor.getOnBackgroundColor(),
+                    contentColor = backgroundColor.getOnBackgroundColor(),
                     onRetryClick = onRetryClick
                 )
             }

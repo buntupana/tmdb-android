@@ -63,7 +63,7 @@ fun LazyListScope.lazyListLoadStateGeneric(
                     contentAlignment = Alignment.Center
                 ) {
                     ErrorAndRetry(
-                        textColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
+                        contentColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
                         errorMessage = stringResource(id = R.string.message_loading_content_error),
                         onRetryClick = retry
                     )

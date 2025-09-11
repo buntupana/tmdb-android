@@ -137,7 +137,7 @@ fun CarouselMediaItem(
                 modifier = Modifier
                     .matchParentSize()
                     .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
-                textColor = MaterialTheme.colorScheme.onBackground,
+                contentColor = MaterialTheme.colorScheme.onBackground,
                 errorMessage = stringResource(RCore.string.message_loading_content_error),
                 onRetryClick = onRetryClicked
             )

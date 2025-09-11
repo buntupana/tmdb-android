@@ -136,7 +136,7 @@ fun WatchlistContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding),
-                textColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
+                contentColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
                 errorMessage = stringResource(id = com.buntupana.tmdb.core.ui.R.string.message_loading_content_error),
                 onRetryClick = onRetryClick
             )

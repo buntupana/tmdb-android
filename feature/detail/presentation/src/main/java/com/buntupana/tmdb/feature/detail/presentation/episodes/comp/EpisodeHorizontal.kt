@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.episodes.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.AppCard
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
@@ -109,13 +111,24 @@ fun EpisodeHorizontal(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun EpisodeHorizontalPreview() {
-    EpisodeHorizontal(
-        episode = episodeSample,
-        isLogged = true,
-        seasonNumber = 1,
-        onSeeMoreClick = {}
-    )
+    AppTheme {
+        EpisodeHorizontal(
+            episode = episodeSample,
+            isLogged = true,
+            seasonNumber = 1,
+            onSeeMoreClick = {}
+        )
+    }
 }

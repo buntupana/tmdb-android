@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.util.fastForEachIndexed
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.RippleColorContainer
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -134,15 +136,26 @@ fun WatchProviders(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun WatchProvidersPreview() {
-    WatchProviders(
-        modifier = Modifier.fillMaxWidth(),
-        backgroundColor = MaterialTheme.colorScheme.primary,
-        providers = Providers(
-            justWatchLink = "justWatchLink",
-            logoUrlList = listOf("", "", "", "", "", "", "", "", "", "", "", "", "", "")
+    AppTheme {
+        WatchProviders(
+            modifier = Modifier.fillMaxWidth(),
+            backgroundColor = MaterialTheme.colorScheme.background,
+            providers = Providers(
+                justWatchLink = "justWatchLink",
+                logoUrlList = listOf("", "", "", "", "", "", "", "", "", "", "", "", "", "")
+            )
         )
-    )
+    }
 }

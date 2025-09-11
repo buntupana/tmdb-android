@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.app.presentation.home
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -21,7 +22,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.buntupana.tmdb.app.R
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
 import com.buntupana.tmdb.feature.account.presentation.account.AccountScreen
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNav
@@ -71,7 +74,7 @@ fun HomeScreenContent(
 ) {
 
     SetSystemBarsColors(
-        navigationBarColor = MaterialTheme.colorScheme.primary,
+        navigationBarColor = MaterialTheme.colorScheme.primaryContainer,
         translucentNavigationBar = false
     )
 
@@ -91,8 +94,8 @@ fun HomeScreenContent(
 
             NavigationBar(
                 modifier = Modifier.fillMaxWidth(),
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.secondary
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.secondaryContainer
             ) {
                 navigationItems.forEach { item ->
 
@@ -112,18 +115,21 @@ fun HomeScreenContent(
                         },
                         icon = {
                             if (isSelected) {
-                                Icon(item.selectedIcon, contentDescription = item.title)
+                                Icon(
+                                    item.selectedIcon,
+                                    contentDescription = item.title,
+                                )
                             } else {
                                 Icon(
                                     imageVector = item.unselectedIcon,
                                     contentDescription = item.title,
-                                    tint = MaterialTheme.colorScheme.onPrimary
+                                    tint = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor()
                                 )
                             }
                         },
                         label = {
                             Text(
-                                color = MaterialTheme.colorScheme.onPrimary,
+                                color = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor(),
                                 text = item.title
                             )
                         }
@@ -172,18 +178,29 @@ fun HomeScreenContent(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreenContent(
-        mediaListFilterResult = null,
-        onSignInClicked = {},
-        onSearchClicked = {},
-        onWatchListClick = {},
-        onFavoritesClick = {},
-        onListsClick = {},
-        onMediaItemClicked = { _, _, _ -> },
-        onMovieFilterClick = {},
-        onListDetailClick = { _, _, _, _ -> }
-    )
+    AppTheme {
+        HomeScreenContent(
+            mediaListFilterResult = null,
+            onSignInClicked = {},
+            onSearchClicked = {},
+            onWatchListClick = {},
+            onFavoritesClick = {},
+            onListsClick = {},
+            onMediaItemClicked = { _, _, _ -> },
+            onMovieFilterClick = {},
+            onListDetailClick = { _, _, _, _ -> }
+        )
+    }
 }

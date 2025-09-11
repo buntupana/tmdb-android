@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.lists.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -30,6 +30,7 @@ import com.buntupana.tmdb.core.ui.composables.AppCard
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.buntupana.tmdb.feature.lists.presentation.util.listItemMediaLists
 import com.buntupana.tmdb.feature.presentation.R
@@ -72,7 +73,7 @@ fun ListItemVertical(
                     .aspectRatio(16f / 10f)
             ) {
 
-                var backgroundColor = MaterialTheme.colorScheme.primary
+                var backgroundColor = MaterialTheme.colorScheme.primaryContainer
 
                 if (userListDetails.backdropUrl.isNotNullOrBlank()) {
                     backgroundColor = backgroundColor.copy(alpha = 0.8f)
@@ -112,12 +113,12 @@ fun ListItemVertical(
                         }
 
                         Text(
-                            text  = userListDetails.name,
+                            text = userListDetails.name,
                             style = TextStyle.Default.copy(textAlign = TextAlign.Center),
                             autoSize = TextAutoSize.StepBased(minFontSize = 18.sp),
                             maxLines = maxLines,
                             overflow = TextOverflow.Ellipsis,
-                            color =  Color.White
+                            color = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor()
                         )
                     }
 
@@ -129,7 +130,7 @@ fun ListItemVertical(
                                 RCore.string.text_num_items,
                                 userListDetails.itemCount
                             ),
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor(),
                             style = MaterialTheme.typography.bodyLarge
                         )
 
@@ -143,10 +144,10 @@ fun ListItemVertical(
                             modifier = Modifier
                                 .padding(start = Dimens.padding.medium)
                                 .clip(RoundedCornerShape(Dimens.posterRound))
-                                .background(Color.Gray)
+                                .background(MaterialTheme.colorScheme.onPrimaryContainer)
                                 .padding(horizontal = Dimens.padding.small),
                             text = stringResource(listTypeResId).uppercase(),
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.primaryContainer,
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }
@@ -166,7 +167,16 @@ fun ListItemVertical(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun ListItemVerticalPreview() {
     AppTheme {

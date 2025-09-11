@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -136,20 +137,21 @@ private fun NameAndCharacter(
         }
     }
 }
-@Preview(showBackground = true)
-@Composable
-fun PersonItemVerticalPreviewLight() {
-    AppTheme(darkTheme = false) {
-        PersonItemVertical(
-            personCast = castTvShowPersonSample
-        )
-    }
-}
 
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Preview(showBackground = true)
 @Composable
-fun PersonItemVerticalPreviewDark() {
-    AppTheme(darkTheme = true) {
+fun PersonItemVerticalPreview() {
+    AppTheme {
         PersonItemVertical(
             personCast = castTvShowPersonSample
         )

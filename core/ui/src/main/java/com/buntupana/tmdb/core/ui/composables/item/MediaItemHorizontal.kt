@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.item
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -99,27 +100,19 @@ fun MediaItemHorizontal(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-private fun MediaItemHorizontalPreviewLight() {
-    AppTheme(darkTheme = false) {
-        MediaItemHorizontal(
-            modifier = Modifier
-                .fillMaxWidth(),
-            mediaId = 0L,
-            title = "Thor: Love and Thunder",
-            posterUrl = null,
-            overview = "After his retirement is interrupted by Gorr the God Butcher, a galactic killer who seeks the extinction of the gods, Thor enlists the help of King",
-            releaseDate = "10-11-20",
-            onMediaClick = { _, _ -> }
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun MediaItemHorizontalPreviewDark() {
-    AppTheme(darkTheme = true) {
+private fun MediaItemHorizontalPreview() {
+    AppTheme {
         MediaItemHorizontal(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -194,20 +187,19 @@ fun MediaItemHorizontalPlaceHolder(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-private fun MediaItemHorizontalPlaceHolderPreviewLight() {
-    AppTheme(darkTheme = false) {
-        MediaItemHorizontalPlaceHolder(
-            modifier = Modifier
-                .fillMaxWidth(),
-        )
-    }
-}
-@Preview(showBackground = true)
-@Composable
-private fun MediaItemHorizontalPlaceHolderPreviewDark() {
-    AppTheme(darkTheme = true) {
+private fun MediaItemHorizontalPlaceHolderPreview() {
+    AppTheme {
         MediaItemHorizontalPlaceHolder(
             modifier = Modifier
                 .fillMaxWidth(),

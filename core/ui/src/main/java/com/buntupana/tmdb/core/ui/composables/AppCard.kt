@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables
 
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.ColumnScope
@@ -68,24 +69,20 @@ fun AppCard(
     }
 }
 
-@Preview
-@Composable
-fun AppCardPreviewLight() {
-    AppTheme(darkTheme = false) {
-        AppCard(
-            modifier = Modifier
-                .padding(16.dp)
-                .size(200.dp)
-        ) {
-            Text(text = "This is an AppCard")
-        }
-    }
-}
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-fun AppCardPreviewDark() {
-    AppTheme(darkTheme = true) {
+fun AppCardPreview() {
+    AppTheme {
         AppCard(
             modifier = Modifier
                 .padding(16.dp)

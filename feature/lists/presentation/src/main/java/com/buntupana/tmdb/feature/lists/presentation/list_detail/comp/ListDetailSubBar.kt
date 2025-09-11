@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.list_detail.comp
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,19 +22,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
+import com.buntupana.tmdb.core.ui.composables.widget.AppIconButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.IconButton
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
-fun ListDetailHeader(
+fun ListDetailSubBar(
     modifier: Modifier = Modifier,
     listName: String,
     description: String?,
@@ -42,6 +44,9 @@ fun ListDetailHeader(
     onEditClick: () -> Unit = {},
     onDeleteClick: () -> Unit = {}
 ) {
+
+    val textColor = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor()
+
     Box(
         modifier = modifier.animateContentSize()
     ) {
@@ -68,10 +73,10 @@ fun ListDetailHeader(
                         .weight(1f)
                         .padding(top = Dimens.padding.small),
                     text = listName,
-                    color = Color.White,
-                    style = MaterialTheme.typography.titleLarge
+                    color = textColor,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
                 )
-
             }
 
             if (description.isNotNullOrBlank()) {
@@ -80,7 +85,7 @@ fun ListDetailHeader(
 
                 Text(
                     text = description,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
             }
 
@@ -100,13 +105,13 @@ fun ListDetailHeader(
 
                         VerticalTextRoulette(
                             text = " $itemsTotalCount ",
-                            color = Color.White,
+                            color = textColor,
                             fontWeight = FontWeight.Bold
                         )
 
                         Text(
                             text = stringResource(RCore.string.text_items).lowercase(),
-                            color = Color.White,
+                            color = textColor,
                             fontWeight = FontWeight.Bold
                         )
 
@@ -121,35 +126,35 @@ fun ListDetailHeader(
                                 .animateContentSize()
                                 .padding(start = Dimens.padding.medium)
                                 .clip(RoundedCornerShape(Dimens.posterRound))
-                                .background(Color.Gray)
+                                .background(MaterialTheme.colorScheme.onPrimaryContainer)
                                 .padding(horizontal = Dimens.padding.small),
                             text = stringResource(listTypeResId).uppercase(),
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.primaryContainer,
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }
 
                     Row {
 
-                        IconButton(
+                        AppIconButton(
                             onClick = onEditClick,
-                            rippleColor = MaterialTheme.colorScheme.onPrimary
+                            rippleColor = textColor.getOnBackgroundColor()
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Edit,
                                 contentDescription = null,
-                                tint = Color.White
+                                tint = textColor,
                             )
                         }
 
-                        IconButton(
+                        AppIconButton(
                             onClick = onDeleteClick,
-                            rippleColor = MaterialTheme.colorScheme.onPrimary
+                            rippleColor = textColor.getOnBackgroundColor()
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Delete,
                                 contentDescription = null,
-                                tint = Color.White
+                                tint = textColor
                             )
                         }
                     }
@@ -159,14 +164,27 @@ fun ListDetailHeader(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
-private fun ListDetailHeaderPreview() {
-    ListDetailHeader(
-        modifier = Modifier.fillMaxWidth(),
-        listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
-        description = "",
-        isPublic = true,
-        itemsTotalCount = 3
-    )
+private fun ListDetailSubBarPreview() {
+    AppTheme {
+        ListDetailSubBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.primaryContainer),
+            listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
+            description = "This is a description of the list",
+            isPublic = true,
+            itemsTotalCount = 3
+        )
+    }
 }

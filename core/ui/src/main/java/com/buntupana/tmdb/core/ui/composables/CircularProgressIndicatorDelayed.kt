@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -12,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import kotlinx.coroutines.delay
 
 @Composable
@@ -37,11 +39,21 @@ fun CircularProgressIndicatorDelayed(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun CircularProgressIndicatorDelayedPreview() {
-
-    CircularProgressIndicatorDelayed(
-        modifier = Modifier.background(MaterialTheme.colorScheme.background),
-    )
+    AppTheme {
+        CircularProgressIndicatorDelayed(
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
+        )
+    }
 }

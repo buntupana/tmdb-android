@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.widget.menu_selector
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -92,30 +93,26 @@ fun SelectedText(
             maxLines = 1,
             overflow = TextOverflow.Visible,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.primaryContainer
         )
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-fun SelectedTextLightPreview() {
+fun SelectedTextPreview() {
     AppTheme {
         SelectedText(
-            text = "Text",
-            isSelected = true,
-            isCollapsed = true
-        )
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun SelectedTextDarkPreview() {
-    AppTheme(darkTheme = true) {
-        SelectedText(
-            text = "Text",
+            text = "Button",
             isSelected = true,
             isCollapsed = true
         )

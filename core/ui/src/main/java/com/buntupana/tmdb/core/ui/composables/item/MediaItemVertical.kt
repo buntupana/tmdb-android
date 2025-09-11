@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.item
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -103,8 +104,9 @@ fun MediaItemVertical(
                 TitleAndDate(
                     modifier = Modifier.isInvisible(true),
                     fontSize = fontSize,
-                    title = "This a dummy text just for draw max size of this composable, it has be long to cover the min 3 lines",
-                    date = "This a dummy text just for draw max size of this composable, it has be long to cover the min 3 lines"
+                    minTitleLines = 3,
+                    title = "",
+                    date = ""
                 )
 
                 TitleAndDate(
@@ -122,7 +124,8 @@ private fun TitleAndDate(
     modifier: Modifier = Modifier,
     fontSize: TextUnit = TextUnit.Unspecified,
     title: String,
-    date: String
+    date: String,
+    minTitleLines: Int = 1,
 ) {
     Column(
         modifier = modifier
@@ -133,6 +136,7 @@ private fun TitleAndDate(
             maxLines = MAX_TITLE_LINES,
             fontWeight = FontWeight.Bold,
             overflow = TextOverflow.Ellipsis,
+            minLines = minTitleLines,
             fontSize = fontSize
         )
 
@@ -147,22 +151,20 @@ private fun TitleAndDate(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun MediaItemPreviewLight() {
-    AppTheme(darkTheme = false) {
-        MediaItemVertical(
-            modifier = Modifier.width(Dimens.carouselMediaItemWidth),
-            mediaItem = mediaItemMovie,
-            onClick = { }
-        )
-    }
-}
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-private fun MediaItemPreviewDark() {
-    AppTheme(darkTheme = true) {
+private fun MediaItemPreview() {
+    AppTheme {
         MediaItemVertical(
             modifier = Modifier.width(Dimens.carouselMediaItemWidth),
             mediaItem = mediaItemMovie,
@@ -204,7 +206,7 @@ fun MediaItemVerticalPlaceHolder(
                     .padding(top = 8.dp)
             ) {
                 Column(
-                    modifier = Modifier.isInvisible(true)
+                    modifier = Modifier.isInvisible(false)
                 ) {
 
                     Text(
@@ -243,20 +245,20 @@ fun MediaItemVerticalPlaceHolder(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MediaItemPlaceHolderPreviewLight() {
-    AppTheme(darkTheme = false) {
-        MediaItemVerticalPlaceHolder(
-            modifier = Modifier
-        )
-    }
-}
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-fun MediaItemPlaceHolderPreviewDark() {
-    AppTheme(darkTheme = true) {
+fun MediaItemPlaceHolderPreview() {
+    AppTheme {
         MediaItemVerticalPlaceHolder(
             modifier = Modifier
         )

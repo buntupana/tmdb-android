@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.composables.widget.sliders.RangeSliderCustom
+import com.buntupana.tmdb.core.ui.composables.widget.sliders.AppRangeSlider
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.discover.presentation.R
@@ -45,7 +45,7 @@ fun UserScoreRangeSelector(
             style = MaterialTheme.typography.titleMedium
         )
 
-        RangeSliderCustom(
+        AppRangeSlider(
             modifier = Modifier.fillMaxWidth(),
             startValue = userScoreMin,
             endValue = userScoreMax,

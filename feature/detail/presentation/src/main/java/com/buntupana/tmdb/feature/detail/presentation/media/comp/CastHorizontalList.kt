@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.ShowMoreButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
@@ -109,14 +111,25 @@ fun CastHorizontalList(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun CastHorizontalListPreview() {
-    CastHorizontalList(
-        modifier = Modifier,
-        mediaDetails = mediaDetailsMovieSample,
-        onFullCastClick = {},
-        onItemClick = {}
-    )
+    AppTheme {
+        CastHorizontalList(
+            modifier = Modifier,
+            mediaDetails = mediaDetailsMovieSample,
+            onFullCastClick = {},
+            onItemClick = {}
+        )
+    }
 }
 

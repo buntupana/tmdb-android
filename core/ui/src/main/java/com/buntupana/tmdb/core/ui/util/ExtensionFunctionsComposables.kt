@@ -8,19 +8,12 @@ import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButtonColors
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RippleConfiguration
@@ -33,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -272,68 +264,6 @@ fun RippleColorContainer(
         LocalRippleConfiguration provides configuration
     ) {
         content()
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun IconButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    rippleColor: Color = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
-    enabled: Boolean = true,
-    colors: IconButtonColors = IconButtonDefaults.iconButtonColors(),
-    interactionSource: MutableInteractionSource? = null,
-    content: @Composable () -> Unit
-) {
-    val configuration = RippleConfiguration(color = rippleColor)
-
-    CompositionLocalProvider(
-        LocalRippleConfiguration provides configuration
-    ) {
-        androidx.compose.material3.IconButton(
-            onClick = onClick,
-            modifier = modifier,
-            enabled = enabled,
-            colors = colors,
-            interactionSource = interactionSource,
-            content = content
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TextButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    rippleColor: Color = MaterialTheme.colorScheme.background,
-    enabled: Boolean = true,
-    shape: Shape = ButtonDefaults.textShape,
-    colors: ButtonColors = ButtonDefaults.textButtonColors(),
-    elevation: ButtonElevation? = null,
-    border: BorderStroke? = null,
-    contentPadding: PaddingValues = ButtonDefaults.TextButtonContentPadding,
-    interactionSource: MutableInteractionSource? = null,
-    content: @Composable RowScope.() -> Unit
-) {
-    val configuration = RippleConfiguration(color = rippleColor)
-
-    CompositionLocalProvider(
-        LocalRippleConfiguration provides configuration
-    ) {
-        androidx.compose.material3.TextButton(
-            onClick = onClick,
-            modifier = modifier,
-            enabled = enabled,
-            shape = shape,
-            colors = colors,
-            elevation = elevation,
-            border = border,
-            contentPadding = contentPadding,
-            interactionSource = interactionSource,
-            content = content
-        )
     }
 }
 

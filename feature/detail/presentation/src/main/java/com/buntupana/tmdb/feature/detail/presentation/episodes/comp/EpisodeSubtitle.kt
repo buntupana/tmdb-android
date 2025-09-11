@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.episodes.comp
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,7 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
@@ -77,7 +80,7 @@ fun EpisodeSubtitle(
                 .border(
                     width = 1.dp,
                     shape = RoundedCornerShape(Dimens.posterRound),
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primaryContainer
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -106,7 +109,7 @@ fun EpisodeSubtitle(
             if (isLogged) {
                 Row(
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.secondary)
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
                         .animateContentSize()
                         .clickable { onRateClick() }
                         .padding(horizontal = 8.dp, vertical = 2.dp),
@@ -115,20 +118,20 @@ fun EpisodeSubtitle(
                     if (episode.userRating == null) {
                         Text(
                             text = stringResource(R.string.text_rate_it),
-                            color = MaterialTheme.colorScheme.background
+                            color = MaterialTheme.colorScheme.secondaryContainer.getOnBackgroundColor()
                         )
                     } else {
                         Text(
                             text = stringResource(R.string.text_yours_is),
-                            color = MaterialTheme.colorScheme.background
+                            color = MaterialTheme.colorScheme.secondaryContainer.getOnBackgroundColor()
                         )
                         VerticalTextRoulette(
                             text = " ${episode.userRating}",
-                            color = MaterialTheme.colorScheme.background
+                            color = MaterialTheme.colorScheme.secondaryContainer.getOnBackgroundColor()
                         )
                         Text(
                             text = "%",
-                            color = MaterialTheme.colorScheme.background
+                            color = MaterialTheme.colorScheme.secondaryContainer.getOnBackgroundColor()
                         )
                     }
                 }
@@ -137,11 +140,22 @@ fun EpisodeSubtitle(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun SeasonSubtitlePreview() {
-    EpisodeSubtitle(
-        episode = episodeSample,
-        isLogged = true
-    )
+    AppTheme {
+        EpisodeSubtitle(
+            episode = episodeSample,
+            isLogged = true
+        )
+    }
 }

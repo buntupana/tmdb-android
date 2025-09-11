@@ -1,28 +1,26 @@
 package com.buntupana.tmdb.feature.discover.presentation.media_list.comp
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FilterList
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.IconButton
+import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.widget.AppIconButton
+import com.buntupana.tmdb.core.ui.composables.widget.AppTextWithIconButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaListTopBar(
     modifier: Modifier = Modifier,
@@ -30,54 +28,61 @@ fun MediaListTopBar(
     onDefaultFiltersClick: () -> Unit,
     onFilterClick: () -> Unit
 ) {
-    Row(
+    TopAppBar(
         modifier = modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primary)
-            .windowInsetsPadding(WindowInsets.statusBars)
-            .padding(
-                horizontal = Dimens.padding.medium,
-                vertical = Dimens.padding.vertical
+            .fillMaxWidth(),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
+        title = {
+//            AppButton(
+//                onClick = onDefaultFiltersClick,
+//            ) {
+//                Icon(
+//                    painter = painterResource(R.drawable.ic_arrow_down),
+//                    contentDescription = null
+//                )
+//            }
+            AppTextWithIconButton(
+                onClick = onDefaultFiltersClick,
+                text = filterName,
+                painter = painterResource(R.drawable.ic_arrow_down)
             )
-        ,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        Button(
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
-            onClick = onDefaultFiltersClick,
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+        },
+        actions = {
+            AppIconButton(
+                onClick = onFilterClick,
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor()
+                ),
             ) {
-
-                Text(
-                    modifier = Modifier.animateContentSize(),
-                    text = filterName
+                Icon(
+                    imageVector = Icons.Rounded.FilterList,
+                    contentDescription = null
                 )
             }
         }
-
-        IconButton(
-            onClick = onFilterClick,
-            rippleColor = MaterialTheme.colorScheme.onPrimary
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.FilterList,
-                contentDescription = "Filter",
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
-        }
-    }
+    )
 }
 
-@Preview(showBackground = true)
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun MediaListTopBarPreview() {
-    MediaListTopBar(
-        filterName = "Popular",
-        onDefaultFiltersClick = {},
-        onFilterClick = {}
-    )
+    AppTheme {
+        MediaListTopBar(
+            filterName = "Popular",
+            onDefaultFiltersClick = {},
+            onFilterClick = {}
+        )
+    }
 }

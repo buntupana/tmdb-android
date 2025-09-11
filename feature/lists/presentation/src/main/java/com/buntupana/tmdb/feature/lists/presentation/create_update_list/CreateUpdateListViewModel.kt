@@ -82,6 +82,7 @@ class CreateUpdateListViewModel(
                 )
             )
         }.onSuccess {
+            state = state.copy(isLoading = false)
             _sideEffect.send(CreateUpdateListSideEffect.CreateUpdateListSuccess)
         }
     }
@@ -102,6 +103,7 @@ class CreateUpdateListViewModel(
                 )
             )
         }.onSuccess {
+            state = state.copy(isLoading = false)
             _sideEffect.send(CreateUpdateListSideEffect.CreateUpdateListSuccess)
         }
     }

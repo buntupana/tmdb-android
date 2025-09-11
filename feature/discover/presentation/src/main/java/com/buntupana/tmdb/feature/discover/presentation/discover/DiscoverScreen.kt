@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.discover.presentation.discover
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +29,7 @@ import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.feature.discover.presentation.R
-import com.buntupana.tmdb.feature.discover.presentation.comp.TopBar
+import com.buntupana.tmdb.feature.discover.presentation.comp.DiscoverTopBar
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.PopularFilter
 import com.buntupana.tmdb.feature.discover.presentation.filter_type.TrendingFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -87,12 +88,12 @@ fun DiscoverContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = MaterialTheme.colorScheme.primary
+        statusBarColor = MaterialTheme.colorScheme.primaryContainer
     )
 
     Scaffold(
         topBar = {
-            TopBar(
+            DiscoverTopBar(
                 onSearchClick = onSearchClicked
             )
         }
@@ -197,10 +198,19 @@ fun DiscoverContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun DiscoverScreenPreview() {
-    AppTheme(darkTheme = false) {
+    AppTheme {
         DiscoverContent(
             state = DiscoverState(),
             onSearchClicked = {},

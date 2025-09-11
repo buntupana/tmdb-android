@@ -1,5 +1,7 @@
 package com.buntupana.tmdb.feature.lists.presentation.manage_lists
 
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -35,6 +37,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
@@ -207,7 +210,7 @@ fun ManageListsContent(
                 }
             }
 
-            androidx.compose.animation.AnimatedVisibility(
+            AnimatedVisibility(
                 visible = state.isContentLoading.not() && state.isConfirmLoading.not() && state.isError.not(),
                 enter = slideIn(
                     tween(
@@ -232,53 +235,64 @@ fun ManageListsContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun ManageListsPreview() {
-    ManageListsContent(
-        ManageListsState(
-            isContentLoading = false,
-            mediaType = MediaType.MOVIE,
-            searchKey = "",
-            mediaName = "Blue Velvet",
-            backgroundColor = null,
-            posterUrl = "asdf",
-            releaseYear = "1998",
-            userListDetails = listOf(
-                UserListDetails(
-                    id = 1,
-                    name = "List 1",
-                    description = "Description 1",
-                    itemCount = 1,
-                    isPublic = true,
-                    backdropUrl = null,
-                    revenue = null,
-                    runtime = null,
-                    posterUrl = null,
-                    averageRating = null,
-                    updatedAt = null,
-                    shareLink = "test"
+    AppTheme {
+        ManageListsContent(
+            ManageListsState(
+                isContentLoading = false,
+                mediaType = MediaType.MOVIE,
+                searchKey = "",
+                mediaName = "Blue Velvet",
+                backgroundColor = null,
+                posterUrl = "asdf",
+                releaseYear = "1998",
+                userListDetails = listOf(
+                    UserListDetails(
+                        id = 1,
+                        name = "List 1",
+                        description = "Description 1",
+                        itemCount = 1,
+                        isPublic = true,
+                        backdropUrl = null,
+                        revenue = null,
+                        runtime = null,
+                        posterUrl = null,
+                        averageRating = null,
+                        updatedAt = null,
+                        shareLink = "test"
+                    )
+                ),
+                listAllLists = listOf(
+                    UserListDetails(
+                        id = 2,
+                        name = "List 2",
+                        description = "Description 1",
+                        itemCount = 1,
+                        isPublic = true,
+                        backdropUrl = null,
+                        revenue = null,
+                        runtime = null,
+                        posterUrl = null,
+                        averageRating = null,
+                        updatedAt = null,
+                        shareLink = "test"
+                    )
                 )
             ),
-            listAllLists = listOf(
-                UserListDetails(
-                    id = 2,
-                    name = "List 2",
-                    description = "Description 1",
-                    itemCount = 1,
-                    isPublic = true,
-                    backdropUrl = null,
-                    revenue = null,
-                    runtime = null,
-                    posterUrl = null,
-                    averageRating = null,
-                    updatedAt = null,
-                    shareLink = "test"
-                )
-            )
-        ),
-        onRetryClick = {},
-        onBackClick = {},
-        onLogoClick = {}
-    )
+            onRetryClick = {},
+            onBackClick = {},
+            onLogoClick = {}
+        )
+    }
 }

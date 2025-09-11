@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.lists
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -68,8 +69,8 @@ fun ListsContent(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     SetSystemBarsColors(
-        statusBarColor = MaterialTheme.colorScheme.primary,
-        navigationBarColor = MaterialTheme.colorScheme.primary,
+        statusBarColor = MaterialTheme.colorScheme.primaryContainer,
+        navigationBarColor = MaterialTheme.colorScheme.primaryContainer,
         translucentNavigationBar = true
     )
 
@@ -80,7 +81,7 @@ fun ListsContent(
             Column {
                 TopBarTitle(
                     title = stringResource(R.string.text_lists),
-                    backgroundColor = MaterialTheme.colorScheme.primary,
+                    backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     onBackClick = onBackClick,
                     onSearchClick = onSearchClick,
                     scrollBehavior = scrollBehavior
@@ -157,7 +158,16 @@ fun ListsContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 fun ListsScreenPreview() {
     AppTheme {

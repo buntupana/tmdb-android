@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.widget
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -21,6 +22,7 @@ import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SelectableItem
 import com.buntupana.tmdb.core.ui.util.UiText
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 
 @Composable
 fun ChipSelector(
@@ -67,11 +69,16 @@ fun ChipSelector(
                         }
                     },
                     label = {
+                        val textColor = if (isAllSelected) {
+                            MaterialTheme.colorScheme.tertiary.getOnBackgroundColor()
+                        } else {
+                            MaterialTheme.colorScheme.onBackground
+                        }
                         Text(
                             text = stringResource(R.string.text_all),
-                            color = MaterialTheme.colorScheme.onTertiary
+                            color = textColor
                         )
-                    },
+                    }
                 )
             }
 
@@ -91,7 +98,15 @@ fun ChipSelector(
                         }
                     },
                     label = {
-                        Text(text = it.name.asString())
+                        val textColor = if (it.isSelected) {
+                            MaterialTheme.colorScheme.tertiary.getOnBackgroundColor()
+                        } else {
+                            MaterialTheme.colorScheme.onBackground
+                        }
+                        Text(
+                            text = it.name.asString(),
+                            color = textColor
+                        )
                     }
                 )
             }
@@ -99,7 +114,16 @@ fun ChipSelector(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun ChipSelectorPreview() {
 

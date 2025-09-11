@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.cast
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -31,6 +32,7 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.HeaderSimple
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.paddingValues
@@ -159,26 +161,36 @@ fun CastDetailContent(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun CastDetailScreenPreview() {
-
-    CastDetailContent(
-        state = CastDetailState(
-            isLoading = false,
-            mediaId = 0,
-            mediaType = MediaType.MOVIE,
-            mediaName = "Pain Hustlers",
-            releaseYear = "2023",
-            posterUrl = "",
-            backgroundColor = null,
-            personCastList = mediaDetailsMovieSample.castList,
-            personCrewMap = mediaDetailsMovieSample.crewList.groupBy { it.department }
-        ),
-        onBackClick = {},
-        onRetryClick = {},
-        onSearchClick = {},
-        onPersonClick = {},
-        onLogoClick = {}
-    )
+    AppTheme {
+        CastDetailContent(
+            state = CastDetailState(
+                isLoading = false,
+                mediaId = 0,
+                mediaType = MediaType.MOVIE,
+                mediaName = "Pain Hustlers",
+                releaseYear = "2023",
+                posterUrl = "",
+                backgroundColor = null,
+                personCastList = mediaDetailsMovieSample.castList,
+                personCrewMap = mediaDetailsMovieSample.crewList.groupBy { it.department }
+            ),
+            onBackClick = {},
+            onRetryClick = {},
+            onSearchClick = {},
+            onPersonClick = {},
+            onLogoClick = {}
+        )
+    }
 }

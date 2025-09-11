@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.list_detail.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +38,7 @@ fun ListDetailTopBar(
     Box(
         modifier = modifier
     ) {
-        var backgroundColor = MaterialTheme.colorScheme.primary
+        var backgroundColor = MaterialTheme.colorScheme.primaryContainer
 
         if (backdropUrl.isNotNullOrBlank()) {
             backgroundColor = backgroundColor.copy(alpha = 0.8f)
@@ -62,7 +64,7 @@ fun ListDetailTopBar(
                 shareLink = shareLink
             )
 
-            ListDetailHeader(
+            ListDetailSubBar(
                 modifier = Modifier.fillMaxWidth(),
                 listName = listName,
                 description = description,
@@ -76,23 +78,34 @@ fun ListDetailTopBar(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun ListDetailTopBarPreview() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    ListDetailTopBar(
-        listName = "List name",
-        description = "List description",
-        backdropUrl = null,
-        shareLink = null,
-        isPublic = true,
-        itemTotalCount = 10,
-        onBackClick = {},
-        onLogoClick = {},
-        onSearchClick = {},
-        onEditClick = {},
-        onDeleteClick = {},
-        scrollBehavior = scrollBehavior
-    )
+    AppTheme {
+        ListDetailTopBar(
+            listName = "List name",
+            description = "List description",
+            backdropUrl = null,
+            shareLink = null,
+            isPublic = true,
+            itemTotalCount = 10,
+            onBackClick = {},
+            onLogoClick = {},
+            onSearchClick = {},
+            onEditClick = {},
+            onDeleteClick = {},
+            scrollBehavior = scrollBehavior
+        )
+    }
 }

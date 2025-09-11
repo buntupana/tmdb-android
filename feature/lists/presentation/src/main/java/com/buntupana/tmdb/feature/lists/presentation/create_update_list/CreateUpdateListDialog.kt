@@ -1,17 +1,15 @@
 package com.buntupana.tmdb.feature.lists.presentation.create_update_list
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
@@ -27,8 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.isInvisible
 import com.buntupana.tmdb.feature.lists.presentation.create_update_list.comp.CreateListForm
 import com.buntupana.tmdb.feature.presentation.R
 import kotlinx.coroutines.launch
@@ -43,8 +41,7 @@ fun CreateUpdateListDialog(
         skipPartiallyExpanded = true,
         confirmValueChange = { viewModel.state.isLoading.not() }
     ),
-    onDismiss: () -> Unit,
-    onCreateUpdateListSuccess: () -> Unit = {}
+    onDismiss: () -> Unit
 ) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -57,7 +54,6 @@ fun CreateUpdateListDialog(
                     Timber.d("CreateListDialog: sideEffect = $sideEffect")
                     when (sideEffect) {
                         CreateUpdateListSideEffect.CreateUpdateListSuccess -> {
-                            onCreateUpdateListSuccess()
                             sheetState.hide()
                             onDismiss()
                         }
@@ -107,10 +103,7 @@ fun CreateListContent(
         },
         sheetState = sheetState,
         containerColor = MaterialTheme.colorScheme.background,
-        dragHandle = {},
-        properties = ModalBottomSheetProperties(
-            shouldDismissOnBackPress = false
-        )
+        dragHandle = {}
     ) {
         Column(
             modifier = Modifier
@@ -137,48 +130,51 @@ fun CreateListContent(
 
             Spacer(modifier = Modifier.height(Dimens.padding.huge))
 
-            Box {
-
-                if (state.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center),
-                    )
-                }
-
-                CreateListForm(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .isInvisible(state.isLoading),
-                    listName = state.listName,
-                    description = state.description,
-                    isPublic = state.isPublic,
-                    updateForm = updateForm,
-                    onCreateListClick = onCreateListClick
-                )
-            }
+            CreateListForm(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                listName = state.listName,
+                description = state.description,
+                isPublic = state.isPublic,
+                isLoading = state.isLoading,
+                updateForm = updateForm,
+                onCreateListClick = onCreateListClick
+            )
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true, heightDp = 600
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true, heightDp = 600
+)
 @Composable
 fun CreateListScreenPreview() {
-    CreateListContent(
-        state = CreateUpdateListState(
-            isNewList = false,
-            listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
-            description = "",
-            isPublic = true
-        ),
-        sheetState = SheetState(
-            skipPartiallyExpanded = true,
-            positionalThreshold = { 0f },
-            initialValue = SheetValue.Expanded,
-            velocityThreshold = { 0f }
-        ),
-        onDismiss = {},
-        onCreateListClick = {},
-        updateForm = { _, _, _ -> }
-    )
+    AppTheme {
+        CreateListContent(
+            state = CreateUpdateListState(
+                isLoading = true,
+                isNewList = false,
+                listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
+                description = "",
+                isPublic = true
+            ),
+            sheetState = SheetState(
+                skipPartiallyExpanded = true,
+                positionalThreshold = { 0f },
+                initialValue = SheetValue.Expanded,
+                velocityThreshold = { 0f }
+            ),
+            onDismiss = {},
+            onCreateListClick = {},
+            updateForm = { _, _, _ -> }
+        )
+    }
 }

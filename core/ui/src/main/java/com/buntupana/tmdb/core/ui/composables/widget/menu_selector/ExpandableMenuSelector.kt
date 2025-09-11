@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.widget.menu_selector
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
@@ -175,14 +176,23 @@ fun <T : ExpandableMenuSelectorItem> ExpandableMenuSelector(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 fun ExpandableMenuSelectorPreview() {
-    AppTheme(darkTheme = false) {
+    AppTheme {
         ExpandableMenuSelector(
             menuItemSet = ExpandableMenuSelectorItemSample.entries.toSet(),
             menuAlign = ExpandableMenuSelectorAlign.START,
-            defaultCollapsed = true
+            defaultCollapsed = false
         )
     }
 }

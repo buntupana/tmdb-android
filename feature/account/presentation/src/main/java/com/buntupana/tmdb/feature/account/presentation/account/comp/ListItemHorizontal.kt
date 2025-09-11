@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.account.presentation.account.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -15,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
 import com.panabuntu.tmdb.core.common.util.countWordsBySpace
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
@@ -54,7 +55,7 @@ fun ListItemHorizontal(
             }
     ) {
 
-        var backgroundColor = MaterialTheme.colorScheme.primary
+        var backgroundColor = MaterialTheme.colorScheme.primaryContainer
 
         if (userListDetails.backdropUrl.isNotNullOrBlank()) {
             backgroundColor = backgroundColor.copy(alpha = 0.8f)
@@ -92,16 +93,26 @@ fun ListItemHorizontal(
                 autoSize = TextAutoSize.StepBased(minFontSize = 18.sp, maxFontSize = 60.sp),
                 maxLines = maxLines,
                 overflow = TextOverflow.Ellipsis,
-                color = Color.White
+                color = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor()
             )
         }
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-private fun ListItemHorizontalPreviewLight() {
-    AppTheme(darkTheme = false) {
+private fun ListItemHorizontalPreview() {
+    AppTheme {
         ListItemHorizontal(
             width = 200.dp,
             userListDetails = UserListDetails(
@@ -123,30 +134,6 @@ private fun ListItemHorizontalPreviewLight() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun ListItemHorizontalPreviewDark() {
-    AppTheme(darkTheme = true) {
-        ListItemHorizontal(
-            width = 200.dp,
-            userListDetails = UserListDetails(
-                id = 1,
-                name = "Multi Story Lines",
-                description = "List Description",
-                backdropUrl = null,
-                posterUrl = null,
-                itemCount = 0,
-                isPublic = false,
-                revenue = 0L,
-                runtime = null,
-                averageRating = null,
-                updatedAt = null,
-                shareLink = "test"
-            ),
-            onListClick = { _, _, _, _ -> }
-        )
-    }
-}
 
 @Composable
 fun ListItemHorizontalPlaceHolder(
@@ -163,18 +150,20 @@ fun ListItemHorizontalPlaceHolder(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun ListItemHorizontalPlaceHolderPreviewLight() {
-    AppTheme {
-        ListItemHorizontalPlaceHolder()
-    }
-}
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-private fun ListItemHorizontalPlaceHolderPreviewDark() {
-    AppTheme(darkTheme = true) {
+private fun ListItemHorizontalPlaceHolderPreview() {
+    AppTheme {
         ListItemHorizontalPlaceHolder()
     }
 }

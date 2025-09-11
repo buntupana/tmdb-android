@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.search.presentation.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.search.presentation.R
 import com.buntupana.tmdb.core.ui.R as RCore
@@ -106,27 +108,36 @@ fun SuggestionItem(
                 )
             }
         }
-        HorizontalDivider(
-            color = MaterialTheme.colorScheme.primary,
-        )
+        HorizontalDivider()
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun SuggestionItemPreview() {
-    SuggestionItem(
-        mediaItem = com.buntupana.tmdb.feature.search.domain.model.SearchItem.Movie(
-            id = 0,
-            name = "Terminator",
-            originalName = null,
-            imageUrl = null,
-            originalLanguage = null,
-            popularity = 0f,
-            voteAverage = 0,
-            voteCount = 0
-        ),
-        showItemIcon = true,
-        clickable = {}
-    )
+    AppTheme {
+        SuggestionItem(
+            mediaItem = com.buntupana.tmdb.feature.search.domain.model.SearchItem.Movie(
+                id = 0,
+                name = "Terminator",
+                originalName = null,
+                imageUrl = null,
+                originalLanguage = null,
+                popularity = 0f,
+                voteAverage = 0,
+                voteCount = 0
+            ),
+            showItemIcon = true,
+            clickable = {}
+        )
+    }
 }

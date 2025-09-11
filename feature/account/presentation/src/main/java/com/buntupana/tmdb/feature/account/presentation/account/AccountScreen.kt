@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.account.presentation.account
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,27 +14,24 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.TitleAndFilter
 import com.buntupana.tmdb.core.ui.composables.item.CarouselMediaItem
+import com.buntupana.tmdb.core.ui.composables.widget.AppButton
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
@@ -138,7 +136,7 @@ fun AccountContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = MaterialTheme.colorScheme.primary
+        statusBarColor = MaterialTheme.colorScheme.primaryContainer
     )
 
     Scaffold(
@@ -237,7 +235,7 @@ fun AccountContent(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Button(
+                    AppButton(
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                         onClick = onSignOutClick
                     ) {
@@ -245,31 +243,6 @@ fun AccountContent(
                         Spacer(modifier = Modifier.padding(horizontal = Dimens.padding.tiny))
                         Text(text = stringResource(R.string.text_sign_out))
                     }
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = Dimens.padding.huge),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        modifier = Modifier.padding(horizontal = Dimens.padding.horizontal),
-                        text = "Dark Theme",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-
-                    var isEnabled by remember { mutableStateOf(false) }
-
-                    Switch(
-                        modifier = Modifier,
-                        checked = isEnabled,
-                        colors = SwitchDefaults.colors(checkedTrackColor = MaterialTheme.colorScheme.primary),
-                        onCheckedChange = {
-                            isEnabled = it
-                        }
-                    )
                 }
             }
         } else {
@@ -281,39 +254,38 @@ fun AccountContent(
     }
 }
 
-@Preview(showBackground = true, heightDp = 1200)
-@Composable
-fun AccountScreenPreviewLight() {
-    AppTheme {
-        AccountScreenPreview()
-    }
-}
-
-@Preview(showBackground = true, heightDp = 1200)
-@Composable
-fun AccountScreenPreviewDark() {
-    AppTheme(darkTheme = true) {
-        AccountScreenPreview()
-    }
-}
-
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+    heightDp = 1150
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+    heightDp = 1150
+)
+@Preview(showBackground = true, heightDp = 1150)
 @Composable
 fun AccountScreenPreview() {
-    AccountContent(
-        AccountState(
-            isUserLogged = true,
-            username = "Alvaro",
-            userListDetailsList = null
-        ),
-        onSignUpClick = {},
-        onSignOutClick = {},
-        onWatchListClick = {},
-        onFavoritesClick = {},
-        onListsClick = {},
-        changeWatchlistType = {},
-        changeFavoritesType = {},
-        navigateToMediaDetail = { _, _ -> },
-        navigateToListDetail = { _, _, _, _ -> },
-        listLoadItems = {}
-    )
+    AppTheme {
+        AccountContent(
+            AccountState(
+                isUserLogged = true,
+                username = "Alvaro",
+                userListDetailsList = null
+            ),
+            onSignUpClick = {},
+            onSignOutClick = {},
+            onWatchListClick = {},
+            onFavoritesClick = {},
+            onListsClick = {},
+            changeWatchlistType = {},
+            changeFavoritesType = {},
+            navigateToMediaDetail = { _, _ -> },
+            navigateToListDetail = { _, _, _, _ -> },
+            listLoadItems = {}
+        )
+    }
 }

@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -14,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.widget.AppTextButton
 import com.buntupana.tmdb.core.ui.theme.AppTheme
-import com.buntupana.tmdb.core.ui.util.TextButton
 
 @Composable
 fun <OPTION_ID> DropdownMenuText(
@@ -53,7 +54,7 @@ fun <OPTION_ID> DropdownMenuCustom(
             mutableStateOf(false)
         }
 
-        TextButton(
+        AppTextButton(
             onClick = { dropdownExpanded = true },
             rippleColor = MaterialTheme.colorScheme.onSurface,
         ) {
@@ -82,10 +83,19 @@ fun <OPTION_ID> DropdownMenuCustom(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun DropdownMenuTextPreview() {
-    AppTheme(darkTheme = true) {
+    AppTheme {
         DropdownMenuText(
             modifier = Modifier,
             text = "Text",

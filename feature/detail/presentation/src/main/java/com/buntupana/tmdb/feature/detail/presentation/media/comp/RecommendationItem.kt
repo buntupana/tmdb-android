@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -50,12 +52,23 @@ fun RecommendationItem(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun RecommendationItemPreview() {
-    RecommendationItem(
-        itemWidth = Dimens.recommendationItemWidth,
-        mediaItem = mediaItemMovie,
-        onItemClick = { _, _ -> }
-    )
+    AppTheme {
+        RecommendationItem(
+            itemWidth = Dimens.recommendationItemWidth,
+            mediaItem = mediaItemMovie,
+            onItemClick = { _, _ -> }
+        )
+    }
 }

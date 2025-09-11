@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
@@ -21,10 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.buntupana.tmdb.core.ui.composables.widget.AppIconButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.theme.RatingColor
 import com.buntupana.tmdb.core.ui.theme.StaticColor
-import com.buntupana.tmdb.core.ui.util.IconButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.panabuntu.tmdb.core.common.util.Const.ANIM_DURATION
 import com.buntupana.tmdb.core.ui.R as RCore
@@ -71,7 +72,7 @@ fun AccountBar(
     val ratingTint =
         getColor(
             isActive = userRating != null,
-            activeColor = RatingColor,
+            activeColor = StaticColor.rating,
             inactiveColor = iconColor
         )
 
@@ -92,7 +93,7 @@ fun AccountBar(
             contentAlignment = Alignment.Center
         ) {
 
-            IconButton(
+            AppIconButton(
                 onClick = onListClick,
                 rippleColor = iconColor,
             ) {
@@ -109,7 +110,7 @@ fun AccountBar(
             modifier = Modifier.weight(1f),
             contentAlignment = Alignment.Center
         ) {
-            IconButton(
+            AppIconButton(
                 rippleColor = iconColor,
                 onClick = onFavoriteClick,
                 enabled = isFavoriteLoading.not()
@@ -126,7 +127,7 @@ fun AccountBar(
             modifier = Modifier.weight(1f),
             contentAlignment = Alignment.Center
         ) {
-            IconButton(
+            AppIconButton(
                 rippleColor = iconColor,
                 onClick = onWatchlistClick,
                 enabled = isWatchlistLoading.not()
@@ -147,7 +148,7 @@ fun AccountBar(
                     .animateContentSize(),
                 contentAlignment = Alignment.Center
             ) {
-                IconButton(
+                AppIconButton(
                     rippleColor = iconColor,
                     onClick = onRatingClick,
                     enabled = isRatingLoading.not()
@@ -171,7 +172,16 @@ private fun getColor(isActive: Boolean, activeColor: Color, inactiveColor: Color
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 fun AccountBarPreview() {
 
@@ -181,28 +191,30 @@ fun AccountBarPreview() {
 
     val backgroundColor = Color.Gray
 
-    AccountBar(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(backgroundColor)
-        ,
-        iconColor = backgroundColor.getOnBackgroundColor(),
-        isFavorite = isFavorite,
-        isWatchListed = isWatchListed,
-        userRating = userRating,
-        isRateable = true,
-        isFavoriteLoading = false,
-        isWatchlistLoading = false,
-        isRatingLoading = false,
-        onListClick = {},
-        onFavoriteClick = {
-            isFavorite = isFavorite.not()
-        },
-        onWatchlistClick = {
-            isWatchListed = isWatchListed.not()
-        },
-        onRatingClick = {
-            userRating = if (userRating == null) 20  else null
-        }
-    )
+    AppTheme {
+        AccountBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(backgroundColor)
+            ,
+            iconColor = backgroundColor.getOnBackgroundColor(),
+            isFavorite = isFavorite,
+            isWatchListed = isWatchListed,
+            userRating = userRating,
+            isRateable = true,
+            isFavoriteLoading = false,
+            isWatchlistLoading = false,
+            isRatingLoading = false,
+            onListClick = {},
+            onFavoriteClick = {
+                isFavorite = isFavorite.not()
+            },
+            onWatchlistClick = {
+                isWatchListed = isWatchListed.not()
+            },
+            onRatingClick = {
+                userRating = if (userRating == null) 20  else null
+            }
+        )
+    }
 }

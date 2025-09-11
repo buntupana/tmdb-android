@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.cast.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.Typography
 import com.buntupana.tmdb.feature.detail.domain.model.Person
@@ -124,15 +126,26 @@ fun LazyListScope.castList(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun CastListPreview() {
-    LazyColumn {
-        castList(
-            personCastList = mediaDetailsMovieSample.castList,
-            personCrewMap = mediaDetailsMovieSample.crewList.groupBy { it.department },
-            onPersonClick = {}
-        )
+    AppTheme {
+        LazyColumn {
+            castList(
+                personCastList = mediaDetailsMovieSample.castList,
+                personCrewMap = mediaDetailsMovieSample.crewList.groupBy { it.department },
+                onPersonClick = {}
+            )
+        }
     }
 }
 

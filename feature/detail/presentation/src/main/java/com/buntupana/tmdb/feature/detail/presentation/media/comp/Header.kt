@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,7 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
@@ -110,15 +112,25 @@ fun Header(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun HeaderPreview() {
-
-    Header(
-        modifier = Modifier,
-        isLoading = false,
-        mediaDetails = mediaDetailsMovieSample,
-        backgroundColor = MaterialTheme.colorScheme.surfaceDim,
-        setDominantColor = {}
-    )
+    AppTheme {
+        Header(
+            modifier = Modifier,
+            isLoading = false,
+            mediaDetails = mediaDetailsMovieSample,
+            backgroundColor = MaterialTheme.colorScheme.surfaceDim,
+            setDominantColor = {}
+        )
+    }
 }

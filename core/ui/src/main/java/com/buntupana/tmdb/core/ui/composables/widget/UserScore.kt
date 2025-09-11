@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.widget
 
+import android.content.res.Configuration
 import androidx.annotation.IntRange
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -38,7 +39,7 @@ fun UserScore(
     modifier: Modifier = Modifier,
     size: Dp = 50.dp,
     @IntRange(from = 0, to = 100) score: Int?,
-    backGroundColor: Color = MaterialTheme.colorScheme.primary,
+    backGroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     noScoreColor: Color = StaticColor.scoreNoScore,
     lowScoreColor: Color = StaticColor.scoreLowScore,
     mediumScoreColor: Color = StaticColor.scoreMediumScore,
@@ -142,9 +143,18 @@ fun UserScore(
     }
 }
 
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-@Preview
-fun UserScorePreview() {
+private fun UserScorePreview() {
     AppTheme {
         UserScore(
             size = 100.dp,

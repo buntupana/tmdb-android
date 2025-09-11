@@ -16,13 +16,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.composables.widget.AppTextButton
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelector
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelectorAlign
 import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMenuSelectorItem
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.TextButton
 
 @Composable
 fun <T : ExpandableMenuSelectorItem> TitleAndFilter(
@@ -37,7 +37,7 @@ fun <T : ExpandableMenuSelectorItem> TitleAndFilter(
         modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-        TextButton(
+        AppTextButton(
             modifier = Modifier
                 .padding(start = Dimens.padding.tiny)
                 .align(Alignment.CenterStart),
@@ -51,7 +51,7 @@ fun <T : ExpandableMenuSelectorItem> TitleAndFilter(
                 fontSize = 22.sp,
                 color = MaterialTheme.colorScheme.onBackground
             )
-            titleClicked ?: return@TextButton
+            titleClicked ?: return@AppTextButton
             Icon(
                 modifier = Modifier.size(22.dp),
                 painter = painterResource(R.drawable.ic_arrow_right),

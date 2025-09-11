@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.search.presentation.comp
 
+import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,12 +30,12 @@ fun TabSearchResult(
     val fontWeight: FontWeight
 
     if (isSelected) {
-        textColor = MaterialTheme.colorScheme.secondary
-        outLineColor = MaterialTheme.colorScheme.secondary
+        textColor = MaterialTheme.colorScheme.secondaryContainer
+        outLineColor = MaterialTheme.colorScheme.secondaryContainer
         fontWeight = FontWeight.Bold
     } else {
         textColor = MaterialTheme.colorScheme.onBackground
-        outLineColor = MaterialTheme.colorScheme.surfaceContainer
+        outLineColor = MaterialTheme.colorScheme.outline
         fontWeight = FontWeight.Normal
     }
 
@@ -49,7 +49,6 @@ fun TabSearchResult(
         )
         Spacer(modifier = Modifier.width(4.dp))
         OutlinedText(
-            modifier = Modifier.alpha(0.6f),
             text = resultCount.toString(),
             cornerRound = 6.dp,
             internalHorizontalPadding = 8.dp,
@@ -59,15 +58,23 @@ fun TabSearchResult(
     }
 }
 
-
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun TabSearchResultPreview() {
-    AppTheme(darkTheme = true) {
+    AppTheme {
         TabSearchResult(
             titleResId = com.buntupana.tmdb.core.ui.R.string.text_movies,
             resultCount = 3,
-            isSelected = false
+            isSelected = true
         )
     }
 }

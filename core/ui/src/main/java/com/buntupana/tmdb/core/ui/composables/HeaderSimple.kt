@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -115,31 +116,27 @@ fun HeaderSimple(
     }
 }
 
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun CastHeaderPreview() {
-    HeaderSimple(
-        backgroundColor = MaterialTheme.colorScheme.surfaceDim,
-        posterUrl = null,
-        mediaName = "Pain Hustlers",
-        subtitle = "7 episodes",
-        releaseYear = "2023",
-        setDominantColor = {}
-    )
-}
-
-@Preview
-@Composable
-private fun CastHeaderPreviewLight() {
     AppTheme {
-        CastHeaderPreview()
-    }
-}
-
-@Preview
-@Composable
-private fun CastHeaderPreviewDark() {
-    AppTheme(darkTheme = true) {
-        CastHeaderPreview()
+        HeaderSimple(
+            backgroundColor = MaterialTheme.colorScheme.surfaceDim,
+            posterUrl = null,
+            mediaName = "Pain Hustlers",
+            subtitle = "7 episodes",
+            releaseYear = "2023",
+            setDominantColor = {}
+        )
     }
 }
 

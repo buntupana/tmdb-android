@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.account.presentation.watchlist_favorites
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +27,7 @@ import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarTitle
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -76,8 +78,8 @@ fun WatchlistContent(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     SetSystemBarsColors(
-        statusBarColor = MaterialTheme.colorScheme.primary,
-        navigationBarColor = MaterialTheme.colorScheme.primary,
+        statusBarColor = MaterialTheme.colorScheme.primaryContainer,
+        navigationBarColor = MaterialTheme.colorScheme.primaryContainer,
         translucentNavigationBar = true
     )
 
@@ -92,7 +94,7 @@ fun WatchlistContent(
             Column {
                 TopBarTitle(
                     title = stringResource(state.screenType.titleResId),
-                    backgroundColor = MaterialTheme.colorScheme.primary,
+                    backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     onBackClick = onBackClick,
                     onSearchClick = onSearchClick,
                     scrollBehavior = scrollBehavior
@@ -183,31 +185,43 @@ fun WatchlistContent(
     }
 }
 
-@Preview
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun WatchlistScreenPreview() {
-    WatchlistContent(
-        WatchlistFavoritesState(
-            isLoading = false,
-            screenType = ScreenType.FAVORITES,
-            isError = true,
-            movieItemsTotalCount = 15,
-            tvShowItemsTotalCount = 40,
-            movieItems = flow {
-                PagingData.from(
-                    listOf(mediaItemMovie, mediaItemMovie),
-                    sourceLoadStates = LoadStates(
-                        refresh = LoadState.NotLoading(true),
-                        prepend = LoadState.NotLoading(true),
-                        append = LoadState.NotLoading(true)
+    AppTheme {
+        WatchlistContent(
+            WatchlistFavoritesState(
+                isLoading = false,
+                screenType = ScreenType.FAVORITES,
+                isError = true,
+                movieItemsTotalCount = 15,
+                tvShowItemsTotalCount = 40,
+                movieItems = flow {
+                    PagingData.from(
+                        listOf(mediaItemMovie, mediaItemMovie),
+                        sourceLoadStates = LoadStates(
+                            refresh = LoadState.NotLoading(true),
+                            prepend = LoadState.NotLoading(true),
+                            append = LoadState.NotLoading(true)
+                        )
                     )
-                )
-            }
-        ),
-        onBackClick = {},
-        onSearchClick = {},
-        onMediaClick = { _, _ -> },
-        onOrderClick = {},
-        onRetryClick = {}
-    )
+                }
+            ),
+            onBackClick = {},
+            onSearchClick = {},
+            onMediaClick = { _, _ -> },
+            onOrderClick = {},
+            onRetryClick = {}
+        )
+    }
 }

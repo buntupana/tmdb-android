@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.repeatable
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,8 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.buntupana.tmdb.core.ui.composables.widget.AppTextButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.TextButton
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.panabuntu.tmdb.core.common.model.Order
 
@@ -44,7 +47,7 @@ fun OrderButtonAnimation(
         )
     )
 
-    TextButton(
+    AppTextButton(
         modifier = modifier,
         rippleColor = textColor,
         onClick = {
@@ -75,15 +78,25 @@ fun OrderButtonAnimation(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun OrderButtonAnimationPreview() {
-
-    OrderButtonAnimation(
-        modifier = Modifier.background(Color.Black),
-        textColor = Color.Black.getOnBackgroundColor(),
-        text = "Last Added",
-        order = Order.DESC,
-        onClick = {}
-    )
+    AppTheme {
+        OrderButtonAnimation(
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
+            textColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
+            text = "Last Added",
+            order = Order.DESC,
+            onClick = {}
+        )
+    }
 }

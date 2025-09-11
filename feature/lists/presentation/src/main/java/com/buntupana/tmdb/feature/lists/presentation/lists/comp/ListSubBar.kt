@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.lists.comp
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,9 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
+import com.buntupana.tmdb.core.ui.composables.widget.AppTextWithIconButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.presentation.R
 
 @Composable
@@ -30,9 +31,11 @@ fun ListSubBar(
     onCreateListClick: () -> Unit,
 ) {
 
+    val textColor = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor()
+
     Row(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.primary)
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .animateContentSize()
             .padding(
                 horizontal = Dimens.padding.horizontal,
@@ -44,52 +47,53 @@ fun ListSubBar(
 
         listItemTotalCount ?: return
 
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
                 text = stringResource(R.string.text_you_have),
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = textColor,
                 fontWeight = FontWeight.Bold
             )
 
             VerticalTextRoulette(
                 text = " $listItemTotalCount ",
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = textColor,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = stringResource(R.string.text_lists).lowercase(),
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = textColor,
                 fontWeight = FontWeight.Bold
             )
         }
 
-        Button(
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+        AppTextWithIconButton(
             onClick = onCreateListClick,
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = null
-                )
-                Text(
-                    modifier = Modifier.padding(start = Dimens.padding.small),
-                    text = stringResource(R.string.text_create_list)
-                )
-            }
-        }
+            text = stringResource(R.string.text_create_list),
+            imageVector = Icons.Rounded.Add
+        )
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun ListSubBarPreview() {
-    ListSubBar(
-        modifier = Modifier.fillMaxWidth(),
-        listItemTotalCount = 6,
-        onCreateListClick = {}
-    )
+    AppTheme {
+        ListSubBar(
+            modifier = Modifier.fillMaxWidth(),
+            listItemTotalCount = 6,
+            onCreateListClick = {}
+        )
+    }
 }

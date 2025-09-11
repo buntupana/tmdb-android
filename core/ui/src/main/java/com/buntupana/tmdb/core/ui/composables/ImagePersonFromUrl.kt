@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -65,21 +66,20 @@ fun ImagePersonFromUrl(
     }
 }
 
-@Preview
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-private fun ImagePersonFromUrlPreviewLight() {
-    AppTheme(darkTheme = false) {
-        ImagePersonFromUrl(
-            modifier = Modifier.size(100.dp),
-            imageUrl = "",
-            gender = Gender.FEMALE
-        )
-    }
-}
-@Preview
-@Composable
-private fun ImagePersonFromUrlPreviewDark() {
-    AppTheme(darkTheme = true) {
+private fun ImagePersonFromUrlPreview() {
+    AppTheme {
         ImagePersonFromUrl(
             modifier = Modifier.size(100.dp),
             imageUrl = "",

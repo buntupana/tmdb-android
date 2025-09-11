@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.account.presentation.account.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.ShowMoreButton
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.account.presentation.R
 import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
@@ -146,14 +148,25 @@ fun ListItemsSection(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun ListItemsSectionPreview() {
-    ListItemsSection(
-        userListDetailsList = null,
-        isLoadingError = false,
-        onItemClicked = { _, _, _, _ -> },
-        titleClicked = {},
-        onRetryClicked = {}
-    )
+    AppTheme {
+        ListItemsSection(
+            userListDetailsList = null,
+            isLoadingError = false,
+            onItemClicked = { _, _, _, _ -> },
+            titleClicked = {},
+            onRetryClicked = {}
+        )
+    }
 }

@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
@@ -66,12 +68,23 @@ fun RecommendationsHorizontal(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun RecommendationsHorizontalPreview() {
-    RecommendationsHorizontal(
-        modifier = Modifier.fillMaxWidth(),
-        mediaItemList = mediaDetailsMovieSample.recommendationList,
-        onItemClick = {_, _ ->}
-    )
+    AppTheme {
+        RecommendationsHorizontal(
+            modifier = Modifier.fillMaxWidth(),
+            mediaItemList = mediaDetailsMovieSample.recommendationList,
+            onItemClick = {_, _ ->}
+        )
+    }
 }

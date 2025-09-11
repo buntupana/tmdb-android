@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.account.presentation.sign_in
 
+import android.content.res.Configuration
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -51,7 +52,7 @@ fun SignInScreen(
         }
     }
 
-    val customTabToolbarColor = MaterialTheme.colorScheme.primary
+    val customTabToolbarColor = MaterialTheme.colorScheme.primaryContainer
 
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collect { sideEffect ->
@@ -133,10 +134,19 @@ fun SignInContent(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun SignInScreenPreview() {
-    AppTheme(darkTheme = true) {
+    AppTheme {
         SignInContent(
             SignInState(
                 isSignInError = true,

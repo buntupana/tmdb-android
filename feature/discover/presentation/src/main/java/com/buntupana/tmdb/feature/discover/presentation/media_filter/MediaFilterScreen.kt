@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.discover.presentation.media_filter
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -133,8 +134,8 @@ fun MediaFilterContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = MaterialTheme.colorScheme.primary,
-        navigationBarColor = MaterialTheme.colorScheme.primary,
+        statusBarColor = MaterialTheme.colorScheme.primaryContainer,
+        navigationBarColor = MaterialTheme.colorScheme.primaryContainer,
         translucentNavigationBar = true
     )
 
@@ -258,7 +259,16 @@ fun MediaFilterContent(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true, heightDp = 2000)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun MediaFilterScreenPreview() {
     AppTheme {

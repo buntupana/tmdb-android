@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.search.presentation.comp
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.R
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.search.domain.model.SearchItem
 import com.buntupana.tmdb.feature.search.presentation.SearchType
@@ -75,17 +77,15 @@ fun SearchSuggestionList(
                         textAlign = TextAlign.Center
                     )
                 } else {
-                    val listState = rememberLazyListState()
                     LazyColumn(
                         modifier = Modifier.fillMaxWidth(),
-                        state = listState
+                        state = rememberLazyListState()
                     ) {
-                        items(suggestionList.orEmpty()) { searchItem ->
+                        items(suggestionList) { searchItem ->
                             SuggestionItem(
                                 mediaItem = searchItem,
                                 showItemIcon = searchItem.isHighlighted,
                                 clickable = {
-
                                     val searchType: SearchType? = if (searchItem.isHighlighted) {
                                         when (searchItem) {
                                             is SearchItem.Movie -> SearchType.MOVIE
@@ -122,7 +122,16 @@ fun SearchSuggestionList(
 //    }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun SearchSuggestionListPreview() {
 
@@ -132,11 +141,13 @@ private fun SearchSuggestionListPreview() {
         searchItemPersonSample
     )
 
-    SearchSuggestionList(
-        modifier = Modifier.fillMaxSize(),
-        onSuggestionItemClick = { _, _ -> },
-        isSearchSuggestionError = true,
-        onDismissSuggestionsClick = {},
-        suggestionList = suggestionList
-    )
+    AppTheme {
+        SearchSuggestionList(
+            modifier = Modifier.fillMaxSize(),
+            onSuggestionItemClick = { _, _ -> },
+            isSearchSuggestionError = true,
+            onDismissSuggestionsClick = {},
+            suggestionList = suggestionList
+        )
+    }
 }

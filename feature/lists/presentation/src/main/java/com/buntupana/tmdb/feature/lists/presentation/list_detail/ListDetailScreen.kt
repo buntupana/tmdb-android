@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.lists.presentation.list_detail
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.AnimationConstants
 import androidx.compose.animation.core.tween
@@ -169,8 +170,8 @@ fun ListDetailContent(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     SetSystemBarsColors(
-        statusBarColor = MaterialTheme.colorScheme.primary,
-        navigationBarColor = MaterialTheme.colorScheme.primary,
+        statusBarColor = MaterialTheme.colorScheme.primaryContainer,
+        navigationBarColor = MaterialTheme.colorScheme.primaryContainer,
         translucentNavigationBar = true
     )
 
@@ -311,7 +312,16 @@ fun ListDetailContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 fun ListDetailScreenPreview() {
     AppTheme {

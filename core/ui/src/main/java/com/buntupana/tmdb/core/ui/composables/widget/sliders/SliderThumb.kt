@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.widget.sliders
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.ui.theme.SliderThumbColor
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 
 @Composable
 fun SliderThumb(
@@ -41,7 +42,10 @@ fun SliderThumb(
         }
         Box(
             modifier = Modifier
-                .background(SliderThumbColor, shape = RoundedCornerShape(15.dp))
+                .background(
+                    MaterialTheme.colorScheme.primaryContainer,
+                    shape = RoundedCornerShape(15.dp)
+                )
                 .size(width = 40.dp, height = 30.dp)
         )
 
@@ -49,10 +53,21 @@ fun SliderThumb(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 private fun SliderThumbPreview() {
-    SliderThumb(
-        value = "20"
-    )
+    AppTheme {
+        SliderThumb(
+            value = "20"
+        )
+    }
 }

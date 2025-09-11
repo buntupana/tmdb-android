@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,9 +21,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.AppCard
+import com.buntupana.tmdb.core.ui.composables.widget.AppTextButton
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.TextButton
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
 import com.buntupana.tmdb.feature.detail.domain.model.Season
 import com.buntupana.tmdb.feature.detail.presentation.R
@@ -106,7 +107,7 @@ fun SeasonsSection(
             }
         }
 
-        TextButton(
+        AppTextButton(
             onClick = onAllSeasonsClick,
             rippleColor = MaterialTheme.colorScheme.onBackground
         ) {
@@ -158,26 +159,19 @@ private fun LastEpisode(episode: Episode?) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-private fun SeasonsPreviewLight() {
-    AppTheme(darkTheme = false) {
-        SeasonsSection(
-            modifier = Modifier.fillMaxWidth(),
-            isInAir = false,
-            seasonList = listOf(seasonSample, seasonSample, seasonSample),
-            lastEpisode = episodeSample,
-            nextEpisode = episodeSample,
-            onAllSeasonsClick = {},
-            onLastSeasonClick = { _ -> }
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun SeasonsPreviewDark() {
-    AppTheme(darkTheme = true) {
+private fun SeasonsPreview() {
+    AppTheme {
         SeasonsSection(
             modifier = Modifier.fillMaxWidth(),
             isInAir = false,

@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.search.presentation
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,10 +17,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
-import com.buntupana.tmdb.feature.search.presentation.comp.SearchBar
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchResults
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchSuggestionList
+import com.buntupana.tmdb.feature.search.presentation.comp.SearchTopBar
 import com.buntupana.tmdb.feature.search.presentation.comp.TrendingList
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
@@ -78,14 +80,14 @@ fun SearchScreenContent(
 ) {
 
     SetSystemBarsColors(
-        statusBarColor = MaterialTheme.colorScheme.primary,
+        statusBarColor = MaterialTheme.colorScheme.onPrimaryContainer,
         navigationBarColor = MaterialTheme.colorScheme.background,
         translucentNavigationBar = true
     )
 
     Scaffold(
         topBar = {
-            SearchBar(
+            SearchTopBar(
                 modifier = Modifier.fillMaxWidth(),
                 searchKey = state.searchKey,
                 onValueChanged = {
@@ -111,7 +113,7 @@ fun SearchScreenContent(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.secondaryContainer)
                     }
 
                 }
@@ -160,7 +162,16 @@ fun SearchScreenContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
 fun SearchScreenPreview() {
 
@@ -170,17 +181,19 @@ fun SearchScreenPreview() {
         searchItemPersonSample
     )
 
-    SearchScreenContent(
-        state = SearchState(
-            searchKey = "asdf",
-            resultCountList = listOf(MediaResultCount(SearchType.MOVIE, 100)),
-            searchSuggestionList = suggestionList,
-            isSearchError = false
-        ),
-        onSearchSuggestions = {},
-        onSearch = { _, _ -> },
-        onMediaClick = { _, _ -> },
-        onPersonClick = {},
-        onDismissSuggestionsClick = {}
-    )
+    AppTheme {
+        SearchScreenContent(
+            state = SearchState(
+                searchKey = "asdf",
+                resultCountList = listOf(MediaResultCount(SearchType.MOVIE, 100)),
+                searchSuggestionList = suggestionList,
+                isSearchError = false
+            ),
+            onSearchSuggestions = {},
+            onSearch = { _, _ -> },
+            onMediaClick = { _, _ -> },
+            onPersonClick = {},
+            onDismissSuggestionsClick = {}
+        )
+    }
 }

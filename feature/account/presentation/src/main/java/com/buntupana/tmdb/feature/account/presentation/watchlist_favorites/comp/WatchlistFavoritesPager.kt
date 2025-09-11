@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -21,6 +22,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import com.buntupana.tmdb.feature.account.presentation.R
@@ -71,7 +73,16 @@ fun WatchlistFavoritePager(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun WatchlistPagerPreview() {
 
@@ -84,15 +95,17 @@ private fun WatchlistPagerPreview() {
         )
     )
 
-    WatchlistFavoritePager(
-        modifier = Modifier.fillMaxSize(),
-        pagingItems = flowOf(itemsList).collectAsLazyPagingItems(),
-        navigationBarPadding = 0.dp,
-        noResultMessage = stringResource(
-            R.string.message_no_results_in,
-            "movies",
-            "favorites"
-        ),
-        onMediaClick = { _, _ -> }
-    )
+    AppTheme {
+        WatchlistFavoritePager(
+            modifier = Modifier.fillMaxSize(),
+            pagingItems = flowOf(itemsList).collectAsLazyPagingItems(),
+            navigationBarPadding = 0.dp,
+            noResultMessage = stringResource(
+                R.string.message_no_results_in,
+                "movies",
+                "favorites"
+            ),
+            onMediaClick = { _, _ -> }
+        )
+    }
 }

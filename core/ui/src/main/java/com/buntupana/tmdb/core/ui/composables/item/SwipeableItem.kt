@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.core.ui.composables.item
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -32,6 +33,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import kotlinx.coroutines.launch
@@ -140,48 +142,59 @@ fun SwipeableItem(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun SwipeableItemPreview() {
-    SwipeableItem(
-        modifier = Modifier
-            .fillMaxWidth(),
-        isRevealed = true,
-        actionsAlign = ActionsAlign.END,
-        actions = {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(end = Dimens.padding.horizontal)
-                    .padding(vertical = Dimens.padding.verticalItem)
-                    .clip(
-                        RoundedCornerShape(
-                            topEnd = Dimens.posterRound,
-                            bottomEnd = Dimens.posterRound
+    AppTheme {
+        SwipeableItem(
+            modifier = Modifier
+                .fillMaxWidth(),
+            isRevealed = true,
+            actionsAlign = ActionsAlign.END,
+            actions = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(end = Dimens.padding.horizontal)
+                        .padding(vertical = Dimens.padding.verticalItem)
+                        .clip(
+                            RoundedCornerShape(
+                                topEnd = Dimens.posterRound,
+                                bottomEnd = Dimens.posterRound
+                            )
                         )
+                        .background(MaterialTheme.colorScheme.error)
+                        .padding(horizontal = 50.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Delete,
+                        contentDescription = null,
+                        tint = Color.White
                     )
-                    .background(MaterialTheme.colorScheme.error)
-                    .padding(horizontal = 50.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Delete,
-                    contentDescription = null,
-                    tint = Color.White
+                }
+            },
+            content = {
+                MediaItemHorizontal(
+                    modifier = Modifier,
+                    mediaId = 0,
+                    title = mediaItemMovie.name,
+                    posterUrl = mediaItemMovie.posterUrl,
+                    overview = mediaItemMovie.overview,
+                    releaseDate = mediaItemMovie.releaseDate,
+                    onMediaClick = { _, _ ->
+                    }
                 )
             }
-        },
-        content = {
-            MediaItemHorizontal(
-                modifier = Modifier,
-                mediaId = 0,
-                title = mediaItemMovie.name,
-                posterUrl = mediaItemMovie.posterUrl,
-                overview = mediaItemMovie.overview,
-                releaseDate = mediaItemMovie.releaseDate,
-                onMediaClick = { _, _ ->
-                }
-            )
-        }
-    )
+        )
+    }
 }

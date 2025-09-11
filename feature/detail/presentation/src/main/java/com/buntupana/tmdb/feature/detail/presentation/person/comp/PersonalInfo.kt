@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.person.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.ExpandableText
 import com.buntupana.tmdb.core.ui.composables.TitleAndSubtitle
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.getString
 import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
@@ -113,8 +115,19 @@ fun PersonalInfo(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 private fun PersonalInfoPreview() {
-    PersonalInfo(personDetails = personDetailsSample)
+    AppTheme {
+        PersonalInfo(personDetails = personDetailsSample)
+    }
 }

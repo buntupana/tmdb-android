@@ -383,7 +383,6 @@ fun MediaDetailContent(
 @Preview(showBackground = true, heightDp = 2000)
 @Composable
 fun MediaDetailScreenPreview() {
-
     AppTheme {
         MediaDetailContent(
             state = MediaDetailState(

@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.composables.widget.sliders.SliderCustom
+import com.buntupana.tmdb.core.ui.composables.widget.sliders.AppSlider
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.discover.presentation.R
 
@@ -29,7 +29,7 @@ fun MinUserVotesSelector(
             style = MaterialTheme.typography.titleMedium
         )
 
-        SliderCustom(
+        AppSlider(
             valueRange = 0..500,
             steps = 9,
             value = minUserVotes,

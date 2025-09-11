@@ -1,6 +1,9 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
-import androidx.compose.animation.animateContentSize
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -43,11 +47,14 @@ import com.buntupana.tmdb.core.ui.composables.HoursMinutesText
 import com.buntupana.tmdb.core.ui.composables.OutlinedText
 import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
 import com.buntupana.tmdb.core.ui.composables.list.NestedVerticalLazyGrid
+import com.buntupana.tmdb.core.ui.composables.widget.AppButton
+import com.buntupana.tmdb.core.ui.composables.widget.AppTextButton
 import com.buntupana.tmdb.core.ui.composables.widget.UserScore
+import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
-import com.buntupana.tmdb.core.ui.util.TextButton
 import com.buntupana.tmdb.core.ui.util.balanced
 import com.buntupana.tmdb.core.ui.util.clickableWithRipple
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.getRatingColor
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Person
@@ -164,7 +171,7 @@ fun MainInfo(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    TextButton(
+                    AppTextButton(
                         rippleColor = textColor,
                         onClick = { uriHandler.openUri(mediaDetails.trailerUrl) }
                     ) {
@@ -186,53 +193,49 @@ fun MainInfo(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .animateContentSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            if (mediaDetails.userRating != null) {
 
-                Box(
-                    modifier = Modifier
-                        .padding(top = Dimens.padding.small, bottom = Dimens.padding.medium)
-                        .clip(RoundedCornerShape(100.dp))
-                        .clickableWithRipple(
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            onClick = onRatingClick
-                        )
-                        .background(MaterialTheme.colorScheme.primary)
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            shape = RoundedCornerShape(100.dp)
-                        )
-                        .padding(
-                            vertical = Dimens.padding.small,
-                            horizontal = Dimens.padding.medium
-                        )
+        AnimatedVisibility(
+            modifier = Modifier
+                .fillMaxWidth(),
+            visible = mediaDetails.userRating != null,
+            enter = expandVertically(),
+            exit = shrinkVertically()
+        ) {
+
+            Box(
+                modifier = Modifier.padding(vertical = Dimens.padding.vertical),
+                contentAlignment = Alignment.Center
+            ) {
+                AppButton(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor()
+                    ),
+                    rippleColor = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor(),
+                    border = BorderStroke(
+                        ButtonDefaults.outlinedButtonBorder(true).width,
+                        MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor()
+                    ),
+                    onClick = onRatingClick
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.Bottom
-                    ) {
-                        Text(
-                            text = stringResource(R.string.text_your_rating_is),
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontWeight = FontWeight.Bold
-                        )
-                        VerticalTextRoulette(
-                            text = " ${mediaDetails.userRating}",
-                            color = getRatingColor(mediaDetails.userRating!!),
-                            fontWeight = FontWeight.Bold,
-                        )
-                        Text(
-                            text = "%",
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 10.sp
-                        )
-                    }
+                    Text(
+                        text = stringResource(R.string.text_your_rating_is),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.getOnBackgroundColor(),
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    VerticalTextRoulette(
+                        text = " ${mediaDetails.userRating}",
+                        color = getRatingColor(mediaDetails.userRating ?: 0),
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = "%",
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.getOnBackgroundColor(),
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleSmall
+                    )
                 }
             }
         }
@@ -384,16 +387,26 @@ fun MainInfo(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
 @Composable
-fun MainInfoPreview() {
-
-    MainInfo(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surfaceDim),
-        mediaDetails = mediaDetailsMovieSample,
-        onCreatorClick = {},
-        onRatingClick = {},
-        textColor = MaterialTheme.colorScheme.onSurface
-    )
+private fun MainInfoPreview() {
+    AppTheme {
+        MainInfo(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.surfaceDim),
+            mediaDetails = mediaDetailsMovieSample,
+            onCreatorClick = {},
+            onRatingClick = {},
+            textColor = MaterialTheme.colorScheme.onSurface
+        )
+    }
 }

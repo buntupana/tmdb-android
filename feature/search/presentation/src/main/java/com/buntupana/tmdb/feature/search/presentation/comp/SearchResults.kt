@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.search.presentation.comp
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -62,7 +63,7 @@ fun SearchResults(
             indicator = { tabPositions ->
                 SecondaryIndicator(
                     modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                 )
             }
         ) {
@@ -108,7 +109,8 @@ fun SearchResults(
                 SearchType.MOVIE -> {
                     LazyColumnGeneric(
                         modifier = Modifier.fillMaxSize(),
-                        bottomPadding = { bottomPadding },
+                        topPadding = Dimens.padding.medium,
+                        bottomPadding = { bottomPadding + Dimens.padding.small },
                         itemList = searchState.movieItems?.collectAsLazyPagingItems(),
                         noResultContent = {
                             Box(
@@ -160,7 +162,7 @@ fun SearchResults(
                                 mediaId = item.id,
                                 title = item.name,
                                 posterUrl = item.posterUrl,
-                                overview = item.overview.orEmpty(),
+                                overview = item.overview,
                                 releaseDate = item.releaseDate
                             )
                         }
@@ -206,10 +208,19 @@ fun SearchResults(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
 @Composable
 fun SearchResultsPreview() {
-    AppTheme(darkTheme = true) {
+    AppTheme {
         SearchResults(
             searchState = SearchState(
                 resultCountList = listOf(

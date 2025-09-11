@@ -78,18 +78,19 @@ fun List<MediaCastTvShowRaw>.toModel(
 fun List<MediaCastGuestStarRaw>.toModel(
     baseUrlProfile: String
 ): List<Person.Cast.TvShow> {
-    return map {
-        val profileUrl =
-            it.profilePath.ifNotNullOrBlank { baseUrlProfile + it.profilePath }
-        Person.Cast.TvShow(
-            id = it.id,
-            name = it.name,
-            gender = getGender(it.gender),
-            profileUrl = profileUrl,
-            totalEpisodeCount = 0,
-            roleList = listOf(Role(character = it.character, episodeCount = 0))
-        )
-    }
+    return filter { it.id != null }
+        .map {
+            val profileUrl =
+                it.profilePath.ifNotNullOrBlank { baseUrlProfile + it.profilePath }
+            Person.Cast.TvShow(
+                id = it.id!!,
+                name = it.name.orEmpty(),
+                gender = getGender(it.gender),
+                profileUrl = profileUrl,
+                totalEpisodeCount = 0,
+                roleList = listOf(Role(character = it.character, episodeCount = 0))
+            )
+        }
 }
 
 @JvmName("toModelTvShowCrew")

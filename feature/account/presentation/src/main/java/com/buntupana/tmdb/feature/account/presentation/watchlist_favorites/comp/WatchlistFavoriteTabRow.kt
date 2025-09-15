@@ -6,10 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -45,15 +44,15 @@ fun WatchlistFavoriteTabRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
 
-        ScrollableTabRow(
+        SecondaryScrollableTabRow(
             modifier = Modifier.weight(1f),
             contentColor = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor(),
             edgePadding = 0.dp,
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             selectedTabIndex = pagerState.currentPage,
-            indicator = { tabPositions ->
+            indicator = {
                 SecondaryIndicator(
-                    modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
+                    modifier = Modifier.tabIndicatorOffset(pagerState.currentPage),
                     color = MaterialTheme.colorScheme.secondaryContainer,
                 )
             }
@@ -62,17 +61,17 @@ fun WatchlistFavoriteTabRow(
 
                 Tab(
                     text = {
-                        Row {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             val itemsCount = when (mediaType) {
                                 MediaFilter.MOVIES -> movieItemsTotalCount
                                 MediaFilter.TV_SHOWS -> tvShowItemsTotalCount
                             }
 
-                            Text(text = stringResource(mediaType.strRes))
+                            Text(text = stringResource(mediaType.strRes) + " ")
 
-                            VerticalTextRoulette(
-                                text = " $itemsCount"
-                            )
+                            VerticalTextRoulette(text = "$itemsCount")
                         }
                     },
                     selected = pagerState.currentPage == index,

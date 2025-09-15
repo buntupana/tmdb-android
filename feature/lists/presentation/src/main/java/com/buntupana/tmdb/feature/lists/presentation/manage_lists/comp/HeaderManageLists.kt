@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.HeaderSimple
-import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
+import com.buntupana.tmdb.core.ui.composables.VerticalNumberRoulette
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Typography
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -40,17 +40,17 @@ fun HeaderManageLists(
 
         Row {
             Text(
-                text = stringResource(R.string.text_belongs_to),
+                text = stringResource(R.string.text_belongs_to) + " ",
                 color = backgroundColor.getOnBackgroundColor(),
                 fontSize = Typography.titleMedium.fontSize
             )
-            VerticalTextRoulette(
-                text = " $listsCount ",
+            VerticalNumberRoulette(
+                value = listsCount,
                 color = backgroundColor.getOnBackgroundColor(),
                 fontSize = Typography.titleMedium.fontSize
             )
             Text(
-                text = stringResource(R.string.text_lists).lowercase(),
+                text = " " + stringResource(R.string.text_lists).lowercase(),
                 color = backgroundColor.getOnBackgroundColor(),
                 fontSize = Typography.titleMedium.fontSize
             )

@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.OrderButtonAnimation
-import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
+import com.buntupana.tmdb.core.ui.composables.VerticalNumberRoulette
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -71,7 +71,7 @@ fun WatchlistFavoriteTabRow(
 
                             Text(text = stringResource(mediaType.strRes) + " ")
 
-                            VerticalTextRoulette(text = "$itemsCount")
+                            VerticalNumberRoulette(value = itemsCount)
                         }
                     },
                     selected = pagerState.currentPage == index,

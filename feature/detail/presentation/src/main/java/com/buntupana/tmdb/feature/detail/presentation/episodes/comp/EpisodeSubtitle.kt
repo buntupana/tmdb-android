@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
+import com.buntupana.tmdb.core.ui.composables.VerticalNumberRoulette
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -122,11 +122,11 @@ fun EpisodeSubtitle(
                         )
                     } else {
                         Text(
-                            text = stringResource(R.string.text_yours_is),
+                            text = stringResource(R.string.text_yours_is) + " ",
                             color = MaterialTheme.colorScheme.secondaryContainer.getOnBackgroundColor()
                         )
-                        VerticalTextRoulette(
-                            text = " ${episode.userRating}",
+                        VerticalNumberRoulette(
+                            value = episode.userRating,
                             color = MaterialTheme.colorScheme.secondaryContainer.getOnBackgroundColor()
                         )
                         Text(

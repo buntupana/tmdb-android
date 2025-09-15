@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
+import com.buntupana.tmdb.core.ui.composables.VerticalNumberRoulette
 import com.buntupana.tmdb.core.ui.composables.widget.AppTextWithIconButton
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
@@ -51,19 +51,19 @@ fun ListSubBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.text_you_have),
+                text = stringResource(R.string.text_you_have) + " ",
                 color = textColor,
                 fontWeight = FontWeight.Bold
             )
 
-            VerticalTextRoulette(
-                text = " $listItemTotalCount ",
+            VerticalNumberRoulette(
+                value = listItemTotalCount,
                 color = textColor,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = stringResource(R.string.text_lists).lowercase(),
+                text = " " + stringResource(R.string.text_lists).lowercase(),
                 color = textColor,
                 fontWeight = FontWeight.Bold
             )

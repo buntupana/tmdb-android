@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.sp
 import com.buntupana.tmdb.core.ui.composables.DivisorCircle
 import com.buntupana.tmdb.core.ui.composables.HoursMinutesText
 import com.buntupana.tmdb.core.ui.composables.OutlinedText
-import com.buntupana.tmdb.core.ui.composables.VerticalTextRoulette
+import com.buntupana.tmdb.core.ui.composables.VerticalNumberRoulette
 import com.buntupana.tmdb.core.ui.composables.list.NestedVerticalLazyGrid
 import com.buntupana.tmdb.core.ui.composables.widget.AppButton
 import com.buntupana.tmdb.core.ui.composables.widget.AppTextButton
@@ -219,13 +219,13 @@ fun MainInfo(
                     onClick = onRatingClick
                 ) {
                     Text(
-                        text = stringResource(R.string.text_your_rating_is),
+                        text = stringResource(R.string.text_your_rating_is) + " ",
                         color = MaterialTheme.colorScheme.onPrimaryContainer.getOnBackgroundColor(),
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.titleMedium
                     )
-                    VerticalTextRoulette(
-                        text = " ${mediaDetails.userRating}",
+                    VerticalNumberRoulette(
+                        value = mediaDetails.userRating,
                         color = getRatingColor(mediaDetails.userRating ?: 0),
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.titleMedium

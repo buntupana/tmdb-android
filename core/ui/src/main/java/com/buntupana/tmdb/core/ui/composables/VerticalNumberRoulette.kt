@@ -16,21 +16,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 
 @Composable
-fun VerticalTextRoulette(
+fun VerticalNumberRoulette(
     modifier: Modifier = Modifier,
-    text: String?,
+    value: Int?,
     color: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Unspecified,
     fontWeight: FontWeight = FontWeight.Normal,
     style: TextStyle = LocalTextStyle.current
 ) {
 
-    text ?: return
+    value ?: return
 
     AnimatedContent(
-        targetState = text,
+        targetState = value,
         transitionSpec = {
-            if (targetState > initialState) {
+            if (targetState < initialState) {
                 // Number increased → Animate up
                 slideInVertically { it } + fadeIn() togetherWith slideOutVertically { -it } + fadeOut()
             } else {
@@ -39,10 +39,10 @@ fun VerticalTextRoulette(
             }
         },
         label = "NumberAnimation"
-    ) { targetText ->
+    ) { targetValue ->
         Text(
             modifier = modifier,
-            text = targetText,
+            text = targetValue.toString(),
             color = color,
             fontSize = fontSize,
             fontWeight = fontWeight,

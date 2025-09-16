@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.account.domain.usecase
+package com.buntupana.tmdb.feature.lists.domain.usecase
 
 data class GetMediaItemTotalCountResult(
     val movieTotalCount: Int = 0,

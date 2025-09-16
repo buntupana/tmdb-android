@@ -4,6 +4,7 @@ import com.buntupana.tmdb.feature.detail.data.remote_data_source.DetailRemoteDat
 import com.buntupana.tmdb.feature.detail.data.repository.DetailRepositoryImpl
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
 import com.buntupana.tmdb.feature.detail.domain.usecase.AddEpisodeRatingUseCase
+import com.buntupana.tmdb.feature.detail.domain.usecase.AddMediaRatingUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieCreditsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetPersonDetailsUseCase
@@ -45,8 +46,9 @@ private val presentationModule = module {
     factoryOf(::PersonDetailViewModel)
     factoryOf(::RatingViewModel)
     factoryOf(::SeasonDetailViewModel)
+    factoryOf(::AddMediaRatingUseCase)
 }
 
-val searchModule = module {
+val detailModule = module {
     includes(dataModule, domainModule, presentationModule)
 }

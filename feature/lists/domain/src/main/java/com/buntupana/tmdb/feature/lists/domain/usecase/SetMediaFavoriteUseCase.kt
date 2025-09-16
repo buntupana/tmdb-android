@@ -1,23 +1,23 @@
-package com.buntupana.tmdb.feature.account.domain.usecase
+package com.buntupana.tmdb.feature.lists.domain.usecase
 
-import com.buntupana.tmdb.feature.account.domain.repository.AccountRepository
+import com.buntupana.tmdb.feature.lists.domain.repository.ListRepository
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 
-class SetMediaWatchListUseCase(
-    private val accountRepository: AccountRepository
+class SetMediaFavoriteUseCase(
+    private val listRepository: ListRepository
 ) {
 
     suspend operator fun invoke(
         mediaType: MediaType,
         mediaId: Long,
-        watchlist: Boolean
+        isFavorite: Boolean
     ): Result<Unit, NetworkError> {
-        return accountRepository.setMediaWatchList(
+        return listRepository.setMediaFavorite(
             mediaId = mediaId,
             mediaType = mediaType,
-            isWatchlisted = watchlist
+            isFavorite = isFavorite
         )
     }
 }

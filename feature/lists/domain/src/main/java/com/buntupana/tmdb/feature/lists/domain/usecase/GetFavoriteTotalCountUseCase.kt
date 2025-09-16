@@ -1,6 +1,6 @@
-package com.buntupana.tmdb.feature.account.domain.usecase
+package com.buntupana.tmdb.feature.lists.domain.usecase
 
-import com.buntupana.tmdb.feature.account.domain.repository.AccountRepository
+import com.buntupana.tmdb.feature.lists.domain.repository.ListRepository
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import kotlinx.coroutines.async
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
 class GetFavoriteTotalCountUseCase(
-    private val accountRepository: AccountRepository
+    private val accountRepository: ListRepository
 ) {
 
     suspend operator fun invoke(): Flow<Result<GetMediaItemTotalCountResult, NetworkError>> {

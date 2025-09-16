@@ -1,9 +1,9 @@
-package com.buntupana.tmdb.feature.account.presentation.watchlist_favorites
+package com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites
 
 import androidx.paging.PagingData
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
+import com.buntupana.tmdb.core.ui.util.MediaItemRevealedViewEntity
 import com.panabuntu.tmdb.core.common.entity.MediaType
-import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.model.Order
 import kotlinx.coroutines.flow.Flow
 
@@ -16,8 +16,8 @@ data class WatchlistFavoritesState(
     val isWatchlistLoadingError: Boolean = false,
     val movieItemsTotalCount: Int? = null,
     val tvShowItemsTotalCount: Int? = null,
-    val movieItems: Flow<PagingData<MediaItem.Movie>>? = null,
-    val tvShowItems: Flow<PagingData<MediaItem.TvShow>>? = null,
+    val movieItems: Flow<PagingData<MediaItemRevealedViewEntity>>? = null,
+    val tvShowItems: Flow<PagingData<MediaItemRevealedViewEntity>>? = null,
     val order: Order = Order.DESC,
     val defaultPage: Int = MediaFilter.entries.indexOf(MediaFilter.MOVIES)
 )

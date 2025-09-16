@@ -38,7 +38,7 @@ dependencies {
     implementation(project(":feature:detail:presentation"))
     implementation(project(":feature:detail:domain"))
     implementation(project(":feature:detail:data"))
-    implementation(project(":feature:account:domain"))
+    implementation(project(":feature:lists:domain"))
     implementation(project(":core:di"))
     implementation(project(":core:data"))
 

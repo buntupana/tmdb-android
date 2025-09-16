@@ -11,6 +11,7 @@ import androidx.paging.map
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
+import com.buntupana.tmdb.core.ui.util.MediaItemRevealedViewEntity
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.lists.domain.usecase.GetListDetailsUseCase
@@ -104,7 +105,7 @@ class ListDetailViewModel(
             state = state.copy(
                 mediaItemList = it.map { pagingData ->
                     pagingData.map { mediaItem ->
-                        ItemListViewEntity(
+                        MediaItemRevealedViewEntity(
                             id = "${mediaItem.id}_${mediaItem.mediaType}",
                             mediaItem = mediaItem
                         )

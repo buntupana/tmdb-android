@@ -10,8 +10,8 @@ import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.navArgs
-import com.buntupana.tmdb.feature.account.domain.usecase.AddMediaRatingUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.AddEpisodeRatingUseCase
+import com.buntupana.tmdb.feature.detail.domain.usecase.AddMediaRatingUseCase
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError

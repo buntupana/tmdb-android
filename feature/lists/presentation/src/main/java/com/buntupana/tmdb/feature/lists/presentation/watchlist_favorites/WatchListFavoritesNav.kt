@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.account.presentation.watchlist_favorites
+package com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites
 
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.navigation.Route

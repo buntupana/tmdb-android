@@ -245,9 +245,9 @@ fun ListDetailContent(
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-            ) { _, itemListViewEntity ->
+            ) { _, item ->
 
-                val isRevealed = itemListViewEntity.isDeleteRevealed
+                val isRevealed = item.isDeleteRevealed
 
                 // key is need it to recomposite when isRevealed
                 key(isRevealed) {
@@ -257,8 +257,8 @@ fun ListDetailContent(
                             .animateItem(),
                         actionsAlign = ActionsAlign.END,
                         onExpanded = {
-                            onItemDeleteClick(itemListViewEntity.id, itemListViewEntity.mediaItem)
-                            itemListViewEntity.isDeleteRevealed.value = true
+                            onItemDeleteClick(item.id, item.mediaItem)
+                            item.isDeleteRevealed.value = true
                         },
                         isRevealed = isRevealed.value,
                         actions = { progressProvider ->
@@ -296,13 +296,13 @@ fun ListDetailContent(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .animateItem(),
-                                mediaId = itemListViewEntity.mediaItem.id,
-                                title = itemListViewEntity.mediaItem.name,
-                                posterUrl = itemListViewEntity.mediaItem.posterUrl,
-                                overview = itemListViewEntity.mediaItem.overview,
-                                releaseDate = itemListViewEntity.mediaItem.releaseDate,
+                                mediaId = item.mediaItem.id,
+                                title = item.mediaItem.name,
+                                posterUrl = item.mediaItem.posterUrl,
+                                overview = item.mediaItem.overview,
+                                releaseDate = item.mediaItem.releaseDate,
                                 onMediaClick = { _, mainPosterColor ->
-                                    onMediaClick(itemListViewEntity.mediaItem, mainPosterColor)
+                                    onMediaClick(item.mediaItem, mainPosterColor)
                                 }
                             )
                         }

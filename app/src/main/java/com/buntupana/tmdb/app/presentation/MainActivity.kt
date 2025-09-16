@@ -33,9 +33,6 @@ import com.buntupana.tmdb.core.ui.util.bottomSheet
 import com.buntupana.tmdb.core.ui.util.getResult
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInNav
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInScreen
-import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.ScreenType
-import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.WatchListFavoritesNav
-import com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.WatchlistScreen
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailScreen
 import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailNav
@@ -62,6 +59,9 @@ import com.buntupana.tmdb.feature.lists.presentation.lists.ListsNav
 import com.buntupana.tmdb.feature.lists.presentation.lists.ListsScreen
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsDialog
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsNav
+import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.ScreenType
+import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchListFavoritesNav
+import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchlistFavoritesScreen
 import com.buntupana.tmdb.feature.search.presentation.SearchNav
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -392,7 +392,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable<WatchListFavoritesNav> {
-                            WatchlistScreen(
+                            WatchlistFavoritesScreen(
                                 onBackClick = { navRoutesMain.popBackStack() },
                                 onSearchClick = { navRoutesMain.navigate(SearchNav) },
                                 onMediaClick = { mediaId, mediaType, mainPosterColor ->

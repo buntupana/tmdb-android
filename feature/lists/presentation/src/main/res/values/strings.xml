@@ -23,4 +23,10 @@
     <string name="message_no_list_to_show">No lists to show</string>
     <string name="text_belongs_to">belongs to</string>
     <string name="text_public_list">Public List</string>
+
+    <string name="message_no_results_in">There are no %s in your %s.</string>
+    <string name="text_delete_from_favorites">Delete From Favorites</string>
+    <string name="text_delete_from_watchlist">Delete From Watchlist</string>
+    <string name="message_delete_item_watchlist_confirmation">Are you sure you want to delete <b>%s</b> from the watchlist?</string>
+    <string name="message_delete_item_favorites_confirmation">Are you sure you want to delete <b>%s</b> from the favorites?</string>
 </resources>

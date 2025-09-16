@@ -9,6 +9,7 @@ import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.SeasonDetai
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.TvShowSeasonsDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.request.AddRatingRequest
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import io.ktor.client.HttpClient
@@ -52,6 +53,32 @@ class DetailRemoteDataSource(
                 if (sessionId != null) {
                     parameter("session_id", sessionId)
                 }
+            }
+        }
+    }
+
+    suspend fun addMediaRating(
+        sessionId: String?,
+        mediaType: MediaType,
+        mediaId: Long,
+        rating: Int
+    ): Result<Unit, NetworkError> {
+        return getResult {
+            httpClient.post(urlString = "/3/${mediaType.value}/$mediaId/rating") {
+                parameter("session_id", sessionId)
+                setBody(AddRatingRequest(value = (rating / 10).toFloat()))
+            }
+        }
+    }
+
+    suspend fun deleteMediaRating(
+        sessionId: String?,
+        mediaType: MediaType,
+        mediaId: Long,
+    ): Result<Unit, NetworkError> {
+        return getResult {
+            httpClient.delete(urlString = "/3/${mediaType.value}/$mediaId/rating") {
+                parameter("session_id", sessionId)
             }
         }
     }

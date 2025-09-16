@@ -33,6 +33,6 @@ private val presentationModule = module {
     factoryOf(::SearchViewModel)
 }
 
-val detailModule = module {
+val searchModule = module {
     includes(dataModule, domainModule, presentationModule)
 }

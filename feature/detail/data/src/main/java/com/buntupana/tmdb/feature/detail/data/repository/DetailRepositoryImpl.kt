@@ -102,6 +102,43 @@ class DetailRepositoryImpl(
         )
     }
 
+    override suspend fun addMediaRating(
+        mediaType: MediaType,
+        mediaId: Long,
+        value: Int?
+    ): Result<Unit, NetworkError> {
+
+        val result = if (value == null || value == 0) {
+            detailRemoteDataSource.deleteMediaRating(
+                sessionId = session.value.sessionId,
+                mediaType = mediaType,
+                mediaId = mediaId
+            ).onSuccess {
+                db.mediaDao.updateRating(
+                    id = mediaId,
+                    mediaType = mediaType,
+                    rating = value
+                )
+            }
+        } else {
+            detailRemoteDataSource.addMediaRating(
+                sessionId = session.value.sessionId,
+                mediaType = mediaType,
+                mediaId = mediaId,
+                rating = value
+            ).onSuccess {
+                db.mediaDao.updateRatingAndWatchlist(
+                    id = mediaId,
+                    mediaType = mediaType,
+                    rating = value
+                )
+                db.watchlistDao.delete(mediaId, mediaType)
+            }
+        }
+
+        return result
+    }
+
     override suspend fun getSeasonDetails(
         tvShowId: Long,
         seasonNumber: Int

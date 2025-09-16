@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.lists.presentation.delete_item_list
+package com.buntupana.tmdb.feature.lists.presentation.delete_item_watchlist_favorites
 
 import android.content.res.Configuration
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,26 +17,28 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.composables.dialog.ConfirmationDialog
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.annotatedStringResource
+import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.ScreenType
 import com.buntupana.tmdb.feature.presentation.R
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeleteItemListDialog(
-    viewModel: DeleteItemListViewModel = koinViewModel(),
-    deleteItemListNav: DeleteItemListNav?,
+fun DeleteItemWatchlistFavoritesDialog(
+    viewModel: DeleteItemWatchlistFavoritesViewModel = koinViewModel(),
+    deleteItemWatchlistFavoritesNav: DeleteItemWatchlistFavoritesNav?,
     showDialog: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onDismiss: () -> Unit,
-    onCancelClick: (itemId: String) -> Unit = {},
+    onCancelClick: (mediaId: Long, mediaType: MediaType) -> Unit,
     onDeleteSuccess: () -> Unit
 ) {
-    if (showDialog.not() || deleteItemListNav == null) return
+    if (showDialog.not() || deleteItemWatchlistFavoritesNav == null) return
 
-    LaunchedEffect(deleteItemListNav) {
-        viewModel.onEvent(DeleteItemListEvent.Init(deleteItemListNav))
+    LaunchedEffect(deleteItemWatchlistFavoritesNav) {
+        viewModel.onEvent(DeleteItemWatchlistFavoritesEvent.Init(deleteItemWatchlistFavoritesNav))
     }
 
     val scope = rememberCoroutineScope()
@@ -48,7 +50,7 @@ fun DeleteItemListDialog(
                 viewModel.sideEffect.collect { sideEffect ->
                     Timber.d("SignOutDialog: sideEffect = $sideEffect")
                     when (sideEffect) {
-                        DeleteItemListSideEffect.DeleteSuccess -> {
+                        DeleteItemWatchlistFavoritesSideEffect.DeleteSuccess -> {
                             sheetState.hide()
                             onDismiss()
                             onDeleteSuccess()
@@ -59,7 +61,7 @@ fun DeleteItemListDialog(
         }
     }
 
-    DeleteItemListContent(
+    DeleteItemWatchlistFavoritesContent(
         state = viewModel.state,
         sheetState = sheetState,
         onDismiss = {
@@ -69,29 +71,41 @@ fun DeleteItemListDialog(
             }
         },
         onConfirmClick = {
-            viewModel.onEvent(DeleteItemListEvent.ConfirmDelete)
+            viewModel.onEvent(DeleteItemWatchlistFavoritesEvent.ConfirmDelete)
         },
         onCancelClick = {
-            onCancelClick(deleteItemListNav.itemId)
+            onCancelClick(
+                deleteItemWatchlistFavoritesNav.mediaId,
+                deleteItemWatchlistFavoritesNav.mediaType
+            )
         }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DeleteItemListContent(
-    state: DeleteItemListState,
+private fun DeleteItemWatchlistFavoritesContent(
+    state: DeleteItemWatchlistFavoritesState,
     sheetState: SheetState,
     onDismiss: () -> Unit,
     onConfirmClick: () -> Unit,
     onCancelClick: () -> Unit
 ) {
 
+    val (titleStrResId, descriptionStrResId) = when(state.screenType) {
+        ScreenType.WATCHLIST -> {
+            R.string.text_delete_from_watchlist to R.string.message_delete_item_watchlist_confirmation
+        }
+        ScreenType.FAVORITES -> {
+            R.string.text_delete_from_favorites to R.string.message_delete_item_favorites_confirmation
+        }
+    }
+
     ConfirmationDialog(
         sheetState = sheetState,
-        title = stringResource(R.string.text_delete_from_list),
+        title = stringResource(titleStrResId),
         description = annotatedStringResource(
-            R.string.message_delete_item_list_confirmation,
+            descriptionStrResId,
             state.mediaName
         ),
         isLoading = state.isLoading,
@@ -114,10 +128,12 @@ private fun DeleteItemListContent(
     showBackground = true, heightDp = 300
 )
 @Composable
-fun DeleteItemListScreenPreview() {
+fun DeleteItemWatchlistFavoritesPreview() {
     AppTheme {
-        DeleteItemListContent(
-            state = DeleteItemListState(),
+        DeleteItemWatchlistFavoritesContent(
+            state = DeleteItemWatchlistFavoritesState(
+                screenType = ScreenType.WATCHLIST,
+            ),
             sheetState = SheetState(
                 skipPartiallyExpanded = true,
                 positionalThreshold = { 0f },

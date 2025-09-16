@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.account.presentation.watchlist_favorites
+package com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,15 +7,17 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
+import com.buntupana.tmdb.core.ui.util.MediaItemRevealedViewEntity
 import com.buntupana.tmdb.core.ui.util.navArgs
-import com.buntupana.tmdb.feature.account.domain.usecase.GetFavoriteTotalCountUseCase
-import com.buntupana.tmdb.feature.account.domain.usecase.GetMediaItemTotalCountResult
-import com.buntupana.tmdb.feature.account.domain.usecase.GetMovieFavoritesPagingUseCase
-import com.buntupana.tmdb.feature.account.domain.usecase.GetMovieWatchlistPagingUseCase
-import com.buntupana.tmdb.feature.account.domain.usecase.GetTvShowFavoritesPagingUseCase
-import com.buntupana.tmdb.feature.account.domain.usecase.GetTvShowWatchlistPagingUseCase
-import com.buntupana.tmdb.feature.account.domain.usecase.GetWatchlistTotalCountUseCase
+import com.buntupana.tmdb.feature.lists.domain.usecase.GetFavoriteTotalCountUseCase
+import com.buntupana.tmdb.feature.lists.domain.usecase.GetMediaItemTotalCountResult
+import com.buntupana.tmdb.feature.lists.domain.usecase.GetMovieFavoritesPagingUseCase
+import com.buntupana.tmdb.feature.lists.domain.usecase.GetMovieWatchlistPagingUseCase
+import com.buntupana.tmdb.feature.lists.domain.usecase.GetTvShowFavoritesPagingUseCase
+import com.buntupana.tmdb.feature.lists.domain.usecase.GetTvShowWatchlistPagingUseCase
+import com.buntupana.tmdb.feature.lists.domain.usecase.GetWatchlistTotalCountUseCase
 import com.panabuntu.tmdb.core.common.entity.NetworkError
 import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.entity.onError
@@ -24,6 +26,7 @@ import com.panabuntu.tmdb.core.common.model.Order
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -112,28 +115,64 @@ class WatchlistFavoritesViewModel(
             mediaFilter == MediaFilter.MOVIES && state.screenType == ScreenType.WATCHLIST -> {
                 state = state.copy(movieItems = null, tvShowItems = null)
                 getMovieWatchlistPagingUseCase(order = state.order).let {
-                    state = state.copy(movieItems = it.cachedIn(viewModelScope))
+                    state = state.copy(
+                        movieItems = it.map { pagingData ->
+                            pagingData.map { mediaItem ->
+                                MediaItemRevealedViewEntity(
+                                    id = mediaItem.id.toString(),
+                                    mediaItem = mediaItem
+                                )
+                            }
+                        }.cachedIn(viewModelScope)
+                    )
                 }
             }
 
             mediaFilter == MediaFilter.TV_SHOWS && state.screenType == ScreenType.WATCHLIST -> {
                 state = state.copy(tvShowItems = null)
                 getTvShowWatchlistPagingUseCase(order = state.order).let {
-                    state = state.copy(tvShowItems = it.cachedIn(viewModelScope))
+                    state = state.copy(
+                        tvShowItems = it.map { pagingData ->
+                            pagingData.map { mediaItem ->
+                                MediaItemRevealedViewEntity(
+                                    id = mediaItem.id.toString(),
+                                    mediaItem = mediaItem
+                                )
+                            }
+                        }.cachedIn(viewModelScope)
+                    )
                 }
             }
 
             mediaFilter == MediaFilter.MOVIES && state.screenType == ScreenType.FAVORITES -> {
                 state = state.copy(movieItems = null)
                 getMovieFavoritesPagingUseCase(order = state.order).let {
-                    state = state.copy(movieItems = it.cachedIn(viewModelScope))
+                    state = state.copy(
+                        movieItems = it.map { pagingData ->
+                            pagingData.map { mediaItem ->
+                                MediaItemRevealedViewEntity(
+                                    id = mediaItem.id.toString(),
+                                    mediaItem = mediaItem
+                                )
+                            }
+                        }.cachedIn(viewModelScope)
+                    )
                 }
             }
 
             mediaFilter == MediaFilter.TV_SHOWS && state.screenType == ScreenType.FAVORITES -> {
                 state = state.copy(tvShowItems = null)
                 getTvShowFavoritesPagingUseCase(order = state.order).let {
-                    state = state.copy(tvShowItems = it.cachedIn(viewModelScope))
+                    state = state.copy(
+                        tvShowItems = it.map { pagingData ->
+                            pagingData.map { mediaItem ->
+                                MediaItemRevealedViewEntity(
+                                    id = mediaItem.id.toString(),
+                                    mediaItem = mediaItem
+                                )
+                            }
+                        }.cachedIn(viewModelScope)
+                    )
                 }
             }
         }

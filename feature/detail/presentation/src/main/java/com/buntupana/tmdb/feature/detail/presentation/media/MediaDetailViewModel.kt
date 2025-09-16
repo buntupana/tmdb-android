@@ -10,12 +10,12 @@ import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.navArgs
-import com.buntupana.tmdb.feature.account.domain.usecase.SetMediaFavoriteUseCase
-import com.buntupana.tmdb.feature.account.domain.usecase.SetMediaWatchListUseCase
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
 import com.buntupana.tmdb.feature.detail.presentation.R
+import com.buntupana.tmdb.feature.lists.domain.usecase.SetMediaFavoriteUseCase
+import com.buntupana.tmdb.feature.lists.domain.usecase.SetMediaWatchListUseCase
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess

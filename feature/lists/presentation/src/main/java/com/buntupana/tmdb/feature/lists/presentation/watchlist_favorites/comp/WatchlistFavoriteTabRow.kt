@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.account.presentation.watchlist_favorites.comp
+package com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.comp
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background

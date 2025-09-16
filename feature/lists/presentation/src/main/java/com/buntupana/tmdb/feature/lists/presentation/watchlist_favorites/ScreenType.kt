@@ -1,4 +1,4 @@
-package com.buntupana.tmdb.feature.account.presentation.watchlist_favorites
+package com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites
 
 import androidx.annotation.StringRes
 import com.buntupana.tmdb.core.ui.R

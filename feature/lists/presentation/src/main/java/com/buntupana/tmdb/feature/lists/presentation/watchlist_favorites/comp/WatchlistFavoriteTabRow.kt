@@ -70,7 +70,7 @@ fun WatchlistFavoriteTabRow(
                                 MediaFilter.TV_SHOWS -> tvShowItemsTotalCount
                             }
 
-                            Text(text = stringResource(mediaType.strRes) + " ")
+                            Text(text = stringResource(mediaType.strRes) + "  ")
 
                             VerticalNumberRoulette(value = itemsCount)
                         }

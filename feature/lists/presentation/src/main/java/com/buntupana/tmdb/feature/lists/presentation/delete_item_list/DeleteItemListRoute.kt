@@ -6,13 +6,13 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DeleteItemListNav(
+data class DeleteItemListRoute(
     val mediaId: Long,
     val mediaName: String,
     val mediaType: MediaType,
     val listType: ListType
 ): Route {
-    companion object {
+    companion object Companion {
         val typeMap = mapOf(navType<ListType>())
     }
 }

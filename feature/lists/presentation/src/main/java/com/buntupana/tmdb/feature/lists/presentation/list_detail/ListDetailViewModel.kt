@@ -32,7 +32,7 @@ class ListDetailViewModel(
     private val getListItemsPagingUseCase: GetListItemsPagingUseCase
 ) : ViewModel() {
 
-    private val navArgs = savedStateHandle.navArgs<ListDetailNav>()
+    private val navArgs = savedStateHandle.navArgs<ListDetailRoute>()
 
     var state by mutableStateOf(
         ListDetailState(

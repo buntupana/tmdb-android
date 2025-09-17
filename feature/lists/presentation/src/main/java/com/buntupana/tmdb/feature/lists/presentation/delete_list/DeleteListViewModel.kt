@@ -25,7 +25,7 @@ class DeleteListViewModel(
     private val deleteListUseCase: DeleteListUseCase
 ) : ViewModel() {
 
-    private val navArgs = savedStateHandle.navArgs<DeleteListNav>()
+    private val navArgs = savedStateHandle.navArgs<DeleteListRoute>()
 
     var state by mutableStateOf(DeleteListState(listName = navArgs.listName))
         private set

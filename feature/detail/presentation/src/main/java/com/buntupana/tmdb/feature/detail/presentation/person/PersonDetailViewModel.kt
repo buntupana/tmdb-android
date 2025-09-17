@@ -18,7 +18,7 @@ class PersonDetailViewModel(
     private val getPersonDetailsUseCase: GetPersonDetailsUseCase
 ) : ViewModel() {
 
-    private val navArgs: PersonDetailNav = savedStateHandle.navArgs()
+    private val navArgs: PersonDetailRoute = savedStateHandle.navArgs()
 
     var state by mutableStateOf(PersonDetailState())
         private set

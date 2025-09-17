@@ -4,4 +4,4 @@ import com.buntupana.tmdb.core.ui.navigation.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
-object ListsNav: Route
+object ListsRoute: Route

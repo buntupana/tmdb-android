@@ -26,7 +26,7 @@ class CreateUpdateListViewModel(
     private val updateListUseCase: UpdateListUseCase
 ) : ViewModel() {
 
-    private val navArgs = savedStateHandle.navArgs<CreateUpdateListNav>()
+    private val navArgs = savedStateHandle.navArgs<CreateUpdateListRoute>()
 
     var state by mutableStateOf(
         CreateUpdateListState(

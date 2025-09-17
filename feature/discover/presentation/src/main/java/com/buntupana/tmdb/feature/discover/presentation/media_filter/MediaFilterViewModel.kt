@@ -25,7 +25,7 @@ class MediaFilterViewModel(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val navArgs: MediaFilterNav = savedStateHandle.navArgs(MediaFilterNav.typeMap)
+    val navArgs: MediaFilterRoute = savedStateHandle.navArgs(MediaFilterRoute.typeMap)
 
     var state by mutableStateOf(MediaFilterState())
         private set

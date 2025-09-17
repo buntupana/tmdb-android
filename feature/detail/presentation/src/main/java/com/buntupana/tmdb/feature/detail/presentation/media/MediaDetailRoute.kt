@@ -5,7 +5,7 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MediaDetailNav(
+data class MediaDetailRoute(
     val mediaId: Long,
     val mediaType: MediaType,
     val backgroundColor: Int?

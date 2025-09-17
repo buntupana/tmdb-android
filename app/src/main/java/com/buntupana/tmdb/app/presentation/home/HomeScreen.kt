@@ -25,12 +25,12 @@ import com.buntupana.tmdb.app.R
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
-import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
+import com.buntupana.tmdb.feature.account.presentation.account.AccountRoute
 import com.buntupana.tmdb.feature.account.presentation.account.AccountScreen
-import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNav
+import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverRoute
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverScreen
-import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListNav
 import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListResult
+import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListRoute
 import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListScreen
 import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -143,29 +143,29 @@ fun HomeScreenContent(
         NavHost(
             modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()),
             navController = navController,
-            startDestination = DiscoverNav
+            startDestination = DiscoverRoute
         ) {
-            composable<DiscoverNav> {
+            composable<DiscoverRoute> {
                 DiscoverScreen(
                     onSearchClicked = onSearchClicked,
                     onMediaItemClicked = onMediaItemClicked
                 )
             }
-            composable<MediaListNav.Movie> {
+            composable<MediaListRoute.Movie> {
                 MediaListScreen(
                     mediaListResult = mediaListResult,
                     onMediaItemClicked = onMediaItemClicked,
                     onFilterClick = onMovieFilterClick
                 )
             }
-            composable<MediaListNav.TvShow> {
+            composable<MediaListRoute.TvShow> {
                 MediaListScreen(
                     mediaListResult = mediaListResult,
                     onMediaItemClicked = onMediaItemClicked,
                     onFilterClick = onMovieFilterClick
                 )
             }
-            composable<AccountNav> {
+            composable<AccountRoute> {
                 AccountScreen(
                     onSignInClick = onSignInClicked,
                     onWatchListClick = onWatchListClick,

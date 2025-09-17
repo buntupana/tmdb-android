@@ -18,7 +18,7 @@ class SeasonDetailViewModel(
     private val getTvShowSeasonsUseCase: GetTvShowSeasonsUseCase
 ) : ViewModel() {
 
-    private val navArgs: SeasonsDetailNav = savedStateHandle.navArgs()
+    private val navArgs: SeasonsDetailRoute = savedStateHandle.navArgs()
 
     var state by mutableStateOf(
         SeasonsDetailState(

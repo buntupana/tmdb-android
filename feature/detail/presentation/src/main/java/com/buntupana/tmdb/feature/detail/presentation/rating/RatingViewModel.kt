@@ -30,7 +30,7 @@ class RatingViewModel(
     private val addEpisodeRatingUseCase: AddEpisodeRatingUseCase
 ) : ViewModel() {
 
-    private val navArgs = savedStateHandle.navArgs<RatingNav>(RatingNav.typeMap)
+    private val navArgs = savedStateHandle.navArgs<RatingRoute>(RatingRoute.typeMap)
 
     var state by mutableStateOf(
         RatingState(

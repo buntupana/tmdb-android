@@ -1,7 +1,7 @@
-package com.buntupana.tmdb.feature.discover.presentation.discover
+package com.buntupana.tmdb.app.presentation.home
 
 import com.buntupana.tmdb.core.ui.navigation.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object DiscoverNav: Route
+data object HomeRoute: Route

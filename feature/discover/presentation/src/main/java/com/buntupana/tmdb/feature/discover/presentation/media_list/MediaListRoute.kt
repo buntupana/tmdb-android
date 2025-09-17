@@ -5,16 +5,16 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class MediaListNav(
+sealed class MediaListRoute(
     val mediaType: MediaType
 ) : Route {
     @Serializable
     data class Movie(
         private val _mediaType: MediaType = MediaType.MOVIE
-    ) : MediaListNav(_mediaType)
+    ) : MediaListRoute(_mediaType)
 
     @Serializable
     data class TvShow(
         private val _mediaType: MediaType = MediaType.TV_SHOW
-    ) : MediaListNav(_mediaType)
+    ) : MediaListRoute(_mediaType)
 }

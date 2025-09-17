@@ -29,7 +29,6 @@ class NavRoutesMainImpl : NavRoutesMain {
     override fun navigate(
         destination: Route
     ) {
-        Timber.d("navigate() called with: destination = [$destination]")
         navigate<Route>(
             destination = destination,
             popUpTo = null,
@@ -54,10 +53,10 @@ class NavRoutesMainImpl : NavRoutesMain {
     @SuppressLint("RestrictedApi")
     @OptIn(InternalSerializationApi::class)
     override fun <T : Route> popBackStack(
-        destination: KClass<in T>,
+        route: KClass<in T>,
         inclusive: Boolean
     ) {
-        navController?.popBackStack(destination.serializer().generateHashCode(), inclusive)
+        navController?.popBackStack(route.serializer().generateHashCode(), inclusive)
     }
 
     override fun <T : Route> isCurrentDestination(destination: KClass<T>): Boolean {

@@ -35,7 +35,7 @@ interface NavRoutesMain {
 
     fun popBackStack()
 
-    fun <T : Route> popBackStack(destination: KClass<in T>, inclusive: Boolean = false)
+    fun <T : Route> popBackStack(route: KClass<in T>, inclusive: Boolean = false)
 
     fun <T : Route> isCurrentDestination(destination: KClass<T>): Boolean
 

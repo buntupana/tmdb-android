@@ -32,7 +32,7 @@ class MediaListViewModel(
 
     // it can be used MediaListNav.Movie or MediaListNav.TvShow because they have the same parameter
     // There are two of them to treat them as different routes but the screen is the same
-    private val navArgs = savedStateHandle.navArgs<MediaListNav.Movie>()
+    private val navArgs = savedStateHandle.navArgs<MediaListRoute.Movie>()
 
     var state by mutableStateOf(
         MediaListState(

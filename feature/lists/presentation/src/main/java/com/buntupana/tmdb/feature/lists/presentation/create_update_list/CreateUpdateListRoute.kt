@@ -4,7 +4,7 @@ import com.buntupana.tmdb.core.ui.navigation.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateUpdateListNav(
+data class CreateUpdateListRoute(
     val listId: Long? = null,
     val listName: String = "",
     val listDescription: String = "",

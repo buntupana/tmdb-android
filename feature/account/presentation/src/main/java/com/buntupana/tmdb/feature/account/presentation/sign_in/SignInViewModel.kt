@@ -23,7 +23,7 @@ class SignInViewModel(
     private val createSessionUseCase: CreateSessionUseCase
 ) : ViewModel() {
 
-    private val navArgs = savedStateHandle.navArgs<SignInNav>()
+    private val navArgs = savedStateHandle.navArgs<SignInRoute>()
 
     var state by mutableStateOf(SignInState())
         private set

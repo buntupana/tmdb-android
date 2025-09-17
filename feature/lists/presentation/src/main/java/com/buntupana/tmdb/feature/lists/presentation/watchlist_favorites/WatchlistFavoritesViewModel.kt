@@ -41,7 +41,7 @@ class WatchlistFavoritesViewModel(
     private val getFavoriteTotalCountUseCase: GetFavoriteTotalCountUseCase,
 ) : ViewModel() {
 
-    private val args = savedStateHandle.navArgs<WatchListFavoritesNav>()
+    private val args = savedStateHandle.navArgs<WatchListFavoritesRoute>()
 
     var state by mutableStateOf(
         WatchlistFavoritesState(

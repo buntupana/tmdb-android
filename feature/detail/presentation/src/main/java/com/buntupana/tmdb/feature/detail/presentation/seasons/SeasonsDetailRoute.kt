@@ -4,7 +4,7 @@ import com.buntupana.tmdb.core.ui.navigation.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SeasonsDetailNav(
+data class SeasonsDetailRoute(
     val tvShowId: Long,
     val tvShowName: String,
     val releaseYear: String?,

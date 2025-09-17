@@ -52,7 +52,7 @@ import timber.log.Timber
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
-fun ManageListsDialog(
+fun ManageListsScreen(
     viewModel: ManageListsViewModel = koinViewModel(),
     onBackClick: () -> Unit,
     onLogoClick: () -> Unit,
@@ -98,7 +98,7 @@ fun ManageListsDialog(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ManageListsContent(
+private fun ManageListsContent(
     state: ManageListsState,
     onBackClick: () -> Unit,
     onRetryClick: () -> Unit,

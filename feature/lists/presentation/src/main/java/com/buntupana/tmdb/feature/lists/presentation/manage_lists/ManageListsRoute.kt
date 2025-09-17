@@ -5,7 +5,7 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ManageListsNav(
+data class ManageListsRoute(
     val mediaId: Long,
     val mediaType: MediaType,
     val mediaName: String,

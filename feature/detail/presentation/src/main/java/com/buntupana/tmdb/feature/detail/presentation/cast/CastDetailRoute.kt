@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Parcelize
 @Serializable
-data class CastDetailNav(
+data class CastDetailRoute(
     val mediaId: Long,
     val mediaType: MediaType,
     val mediaTitle: String,

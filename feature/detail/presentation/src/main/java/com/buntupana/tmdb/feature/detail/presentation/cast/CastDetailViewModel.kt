@@ -21,7 +21,7 @@ class CastDetailViewModel(
     private val getTvShowCreditsUseCase: GetTvShowCreditsUseCase
 ) : ViewModel() {
 
-    private val navArgs: CastDetailNav = savedStateHandle.navArgs()
+    private val navArgs: CastDetailRoute = savedStateHandle.navArgs()
     var state by mutableStateOf(
         CastDetailState(
             mediaId = navArgs.mediaId,

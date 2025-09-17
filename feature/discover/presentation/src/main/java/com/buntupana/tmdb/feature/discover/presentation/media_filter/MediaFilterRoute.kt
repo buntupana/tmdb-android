@@ -6,10 +6,10 @@ import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MediaFilterNav(
+data class MediaFilterRoute(
     val mediaListFilter: MediaListFilter,
 ): Route {
-    companion object {
+    companion object Companion {
         val typeMap = mapOf(navType<MediaListFilter>())
     }
 }

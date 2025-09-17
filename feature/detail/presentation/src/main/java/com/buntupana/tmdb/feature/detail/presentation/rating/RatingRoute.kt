@@ -5,10 +5,10 @@ import com.buntupana.tmdb.core.ui.util.navType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RatingNav(
+data class RatingRoute(
     val ratingMediaType: RatingMediaType
 ): Route {
-    companion object  {
+    companion object Companion {
         val typeMap = mapOf(navType<RatingMediaType>())
     }
 }

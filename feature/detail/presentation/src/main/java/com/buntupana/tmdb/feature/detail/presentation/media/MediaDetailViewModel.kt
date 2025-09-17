@@ -37,7 +37,7 @@ class MediaDetailViewModel(
     private val sessionManager: SessionManager
 ) : ViewModel() {
 
-    private val navArgs: MediaDetailNav = savedStateHandle.navArgs()
+    private val navArgs: MediaDetailRoute = savedStateHandle.navArgs()
 
     var state by mutableStateOf(
         MediaDetailState(

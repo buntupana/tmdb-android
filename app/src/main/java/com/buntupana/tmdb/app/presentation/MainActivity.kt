@@ -7,7 +7,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -15,62 +14,51 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
-import com.buntupana.tmdb.app.presentation.home.HomeNav
-import com.buntupana.tmdb.app.presentation.home.HomeScreen
-import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
+import com.buntupana.tmdb.app.presentation.home.HomeRoute
+import com.buntupana.tmdb.app.presentation.navigation.CastDetailNav
+import com.buntupana.tmdb.app.presentation.navigation.CreateUpdateListNav
+import com.buntupana.tmdb.app.presentation.navigation.DeleteItemListNav
+import com.buntupana.tmdb.app.presentation.navigation.DeleteListNav
+import com.buntupana.tmdb.app.presentation.navigation.EpisodesDetailNav
+import com.buntupana.tmdb.app.presentation.navigation.HomeNav
+import com.buntupana.tmdb.app.presentation.navigation.ListDetailNav
+import com.buntupana.tmdb.app.presentation.navigation.ListsNav
+import com.buntupana.tmdb.app.presentation.navigation.ManageListsNav
+import com.buntupana.tmdb.app.presentation.navigation.MediaDetailNav
+import com.buntupana.tmdb.app.presentation.navigation.MediaFilterNav
+import com.buntupana.tmdb.app.presentation.navigation.PersonDetailNav
+import com.buntupana.tmdb.app.presentation.navigation.RatingNav
+import com.buntupana.tmdb.app.presentation.navigation.SearchNav
+import com.buntupana.tmdb.app.presentation.navigation.SeasonsDetailNav
+import com.buntupana.tmdb.app.presentation.navigation.SignInNav
+import com.buntupana.tmdb.app.presentation.navigation.WatchlistFavoritesNav
 import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.ObserveAsEvents
 import com.buntupana.tmdb.core.ui.util.bottomSheet
-import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInNav
-import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInScreen
-import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNav
-import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailScreen
-import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailNav
-import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailScreen
-import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailNav
-import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailScreen
-import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailNav
-import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailScreen
-import com.buntupana.tmdb.feature.detail.presentation.rating.RatingDialog
-import com.buntupana.tmdb.feature.detail.presentation.rating.RatingMediaType
-import com.buntupana.tmdb.feature.detail.presentation.rating.RatingNav
-import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNav
-import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
-import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterNav
-import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterResult
-import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterScreen
-import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListResult
-import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListDialog
-import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListNav
-import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListDialog
-import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListNav
-import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemResult
-import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.ListType
-import com.buntupana.tmdb.feature.lists.presentation.delete_list.DeleteListDialog
-import com.buntupana.tmdb.feature.lists.presentation.delete_list.DeleteListNav
-import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailNav
-import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailResult
-import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailScreen
-import com.buntupana.tmdb.feature.lists.presentation.lists.ListsNav
-import com.buntupana.tmdb.feature.lists.presentation.lists.ListsScreen
-import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsDialog
-import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsNav
-import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.ScreenType
-import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchListFavoritesNav
-import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchlistFavoritesResult
-import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchlistFavoritesScreen
-import com.buntupana.tmdb.feature.search.presentation.SearchNav
-import com.buntupana.tmdb.feature.search.presentation.SearchScreen
-import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInRoute
+import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailRoute
+import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailRoute
+import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailRoute
+import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailRoute
+import com.buntupana.tmdb.feature.detail.presentation.rating.RatingRoute
+import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailRoute
+import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterRoute
+import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListRoute
+import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListRoute
+import com.buntupana.tmdb.feature.lists.presentation.delete_list.DeleteListRoute
+import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailRoute
+import com.buntupana.tmdb.feature.lists.presentation.lists.ListsRoute
+import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsRoute
+import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchListFavoritesRoute
+import com.buntupana.tmdb.feature.search.presentation.SearchRoute
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -85,7 +73,6 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: MainActivityViewModel by viewModel()
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -126,455 +113,81 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         modifier = Modifier.fillMaxSize(),
                         navController = navController,
-                        startDestination = HomeNav
+                        startDestination = HomeRoute
                     ) {
 
-                        composable<HomeNav> {
-
-                            val mediaListResult = navRoutesMain.getResult<MediaFilterResult>()?.let {
-                                MediaListResult.ApplyFilter(it.mediaListFilter)
-                            }
-
-                            HomeScreen(
-                                mediaListResult = mediaListResult,
-                                onSignInClicked = {
-                                    navRoutesMain.navigate(SignInNav())
-                                },
-                                onSearchClicked = {
-                                    navRoutesMain.navigate(SearchNav)
-                                },
-                                onMediaItemClicked = { mediaItemType, mediaItemId, posterDominantColor ->
-                                    navRoutesMain.navigate(
-                                        MediaDetailNav(
-                                            mediaId = mediaItemId,
-                                            mediaType = mediaItemType,
-                                            backgroundColor = posterDominantColor.toArgb()
-                                        )
-                                    )
-                                },
-                                onWatchListClick = { mediaType ->
-                                    val mediaFilter = when (mediaType) {
-                                        MediaType.MOVIE -> MediaFilter.MOVIES
-                                        MediaType.TV_SHOW -> MediaFilter.TV_SHOWS
-                                    }
-                                    navRoutesMain.navigate(
-                                        WatchListFavoritesNav(
-                                            ScreenType.WATCHLIST,
-                                            mediaFilter
-                                        )
-                                    )
-                                },
-                                onFavoritesClick = { mediaType ->
-                                    val mediaFilter = when (mediaType) {
-                                        MediaType.MOVIE -> MediaFilter.MOVIES
-                                        MediaType.TV_SHOW -> MediaFilter.TV_SHOWS
-                                    }
-                                    navRoutesMain.navigate(
-                                        WatchListFavoritesNav(
-                                            ScreenType.FAVORITES,
-                                            mediaFilter
-                                        )
-                                    )
-                                },
-                                onListsClick = {
-                                    navRoutesMain.navigate(ListsNav)
-                                },
-                                onListDetailClick = { listId, listName, description, backdropUrl ->
-                                    navRoutesMain.navigate(
-                                        ListDetailNav(
-                                            listId = listId,
-                                            listName = listName,
-                                            description = description,
-                                            backdropUrl = backdropUrl
-                                        )
-                                    )
-                                },
-                                onMovieFilterClick = { mediaListFilter ->
-                                    navRoutesMain.navigate(
-                                        MediaFilterNav(
-                                            mediaListFilter = mediaListFilter
-                                        )
-                                    )
-                                }
-                            )
+                        composable<HomeRoute> {
+                            HomeNav(navRoutesMain)
                         }
-                        composable<SignInNav>(
+
+                        composable<SignInRoute>(
                             deepLinks = listOf(
-                                navDeepLink<SignInNav>(basePath = urlProvider.SIGN_IN_DEEP_LINK_URL)
+                                navDeepLink<SignInRoute>(basePath = urlProvider.SIGN_IN_DEEP_LINK_URL)
                             ),
                         ) {
-                            SignInScreen(
-                                onNavigateBack = {
-                                    if (navRoutesMain.isCurrentDestination(SignInNav::class)) {
-                                        navRoutesMain.popBackStack()
-                                    }
-                                }
-                            )
+                            SignInNav(navRoutesMain)
                         }
-                        composable<SearchNav> {
-                            SearchScreen(
-                                onMediaClick = { mediaItemId, mediaItemType, posterDominantColor ->
-                                    navRoutesMain.navigate(
-                                        MediaDetailNav(
-                                            mediaId = mediaItemId,
-                                            mediaType = mediaItemType,
-                                            backgroundColor = posterDominantColor?.toArgb()
-                                        )
-                                    )
-                                },
-                                onPersonClick = { personId ->
-                                    navRoutesMain.navigate(
-                                        PersonDetailNav(personId = personId)
-                                    )
-                                }
-                            )
-                        }
-                        composable<MediaDetailNav> {
-                            MediaDetailScreen(
-                                onBackClick = navRoutesMain::popBackStack,
-                                onSearchClick = { navRoutesMain.navigate(SearchNav) },
-                                onPersonClick = { personId ->
-                                    navRoutesMain.navigate(
-                                        PersonDetailNav(personId = personId)
-                                    )
-                                },
-                                onFullCastClick = { mediaId, mediaType, mediaTitle, mediaReleaseYear, mediaPosterUrl, backgroundColor ->
-                                    navRoutesMain.navigate(
-                                        CastDetailNav(
-                                            mediaId = mediaId,
-                                            mediaType = mediaType,
-                                            mediaTitle = mediaTitle,
-                                            releaseYear = mediaReleaseYear,
-                                            posterUrl = mediaPosterUrl,
-                                            backgroundColor = backgroundColor.toArgb()
-                                        )
-                                    )
-                                },
-                                onSeasonClick = { tvShowId, seasonName, seasonNumber, posterUrl, backgroundColor, releaseYear ->
-                                    navRoutesMain.navigate(
-                                        EpisodesDetailNav(
-                                            tvShowId = tvShowId,
-                                            seasonName = seasonName,
-                                            seasonNumber = seasonNumber,
-                                            posterUrl = posterUrl,
-                                            backgroundColor = backgroundColor.toArgb(),
-                                            releaseYear = releaseYear
-                                        )
-                                    )
-                                },
-                                onAllSeasonsClick = { tvShowId, tvShowTitle, releaseYear, posterUrl, backgroundColor ->
-                                    navRoutesMain.navigate(
-                                        SeasonsDetailNav(
-                                            tvShowId = tvShowId,
-                                            tvShowName = tvShowTitle,
-                                            releaseYear = releaseYear,
-                                            posterUrl = posterUrl,
-                                            backgroundColor = backgroundColor.toArgb()
-                                        )
-                                    )
-                                },
-                                onRecommendationClick = { mediaId, mediaType, backgroundColor ->
-                                    navRoutesMain.navigate(
-                                        MediaDetailNav(
-                                            mediaId = mediaId,
-                                            mediaType = mediaType,
-                                            backgroundColor = backgroundColor?.toArgb()
-                                        )
-                                    )
-                                },
-                                onLogoClick = {
-                                    navController.popBackStack(HomeNav, false)
-                                },
-                                onRatingClick = { mediaId, mediaType, mediaTitle, rating ->
 
-                                    when (mediaType) {
-                                        MediaType.MOVIE -> {
-                                            RatingMediaType.Movie(
-                                                movieId = mediaId,
-                                                _title = mediaTitle,
-                                                _rating = rating
-                                            )
-                                        }
+                        composable<SearchRoute> {
+                            SearchNav(navRoutesMain)
+                        }
 
-                                        MediaType.TV_SHOW -> {
-                                            RatingMediaType.TvShow(
-                                                tvShowId = mediaId,
-                                                _title = mediaTitle,
-                                                _rating = rating
-                                            )
-                                        }
-                                    }.let {
-                                        navRoutesMain.navigate(
-                                            RatingNav(it)
-                                        )
-                                    }
+                        composable<MediaDetailRoute> {
+                            MediaDetailNav(navRoutesMain)
+                        }
 
-                                },
-                                onManageListClick = { mediaId, mediaType, mediaName, mediaPosterUrl, backgroundColor, releaseYear ->
-                                    navRoutesMain.navigate(
-                                        ManageListsNav(
-                                            mediaId = mediaId,
-                                            mediaType = mediaType,
-                                            posterUrl = mediaPosterUrl,
-                                            mediaName = mediaName,
-                                            backgroundColor = backgroundColor,
-                                            releaseYear = releaseYear
-                                        )
-                                    )
-                                }
-                            )
+                        composable<CastDetailRoute> {
+                            CastDetailNav(navRoutesMain)
                         }
-                        composable<CastDetailNav> {
-                            CastDetailScreen(
-                                onBackClick = { navRoutesMain.popBackStack() },
-                                onSearchClick = { navRoutesMain.navigate(SearchNav) },
-                                onPersonClick = { personId ->
-                                    navRoutesMain.navigate(
-                                        PersonDetailNav(personId = personId)
-                                    )
-                                },
-                                onLogoClick = {
-                                    navRoutesMain.popBackStack(HomeNav::class)
-                                }
-                            )
-                        }
-                        composable<PersonDetailNav> {
-                            PersonDetailScreen(
-                                onBackClick = { navRoutesMain.popBackStack() },
-                                onSearchClick = { navRoutesMain.navigate(SearchNav) },
-                                onMediaClick = { mediaItemId, mediaItemType, posterDominantColor ->
-                                    navRoutesMain.navigate(
-                                        MediaDetailNav(
-                                            mediaId = mediaItemId,
-                                            mediaType = mediaItemType,
-                                            backgroundColor = posterDominantColor?.toArgb()
-                                        )
-                                    )
-                                },
-                                onLogoClick = {
-                                    navRoutesMain.popBackStack(HomeNav::class)
-                                }
-                            )
-                        }
-                        composable<SeasonsDetailNav> {
-                            SeasonsDetailScreen(
-                                onBackClick = { navRoutesMain.popBackStack() },
-                                onSearchClick = { navRoutesMain.navigate(SearchNav) },
-                                onSeasonClick = { tvShowId, seasonName, seasonNumber, posterUrl, backgroundColor, releaseYear ->
-                                    navRoutesMain.navigate(
-                                        EpisodesDetailNav(
-                                            tvShowId = tvShowId,
-                                            seasonName = seasonName,
-                                            seasonNumber = seasonNumber,
-                                            posterUrl = posterUrl,
-                                            backgroundColor = backgroundColor.toArgb(),
-                                            releaseYear = releaseYear
-                                        )
-                                    )
-                                },
-                                onLogoClick = {
-                                    navRoutesMain.popBackStack(HomeNav::class)
-                                }
-                            )
-                        }
-                        composable<EpisodesDetailNav> {
-                            EpisodesDetailScreen(
-                                onBackClick = { navRoutesMain.popBackStack() },
-                                onSearchClick = { navRoutesMain.navigate(SearchNav) },
-                                onLogoClick = { navRoutesMain.popBackStack(HomeNav::class) },
-                                onRateEpisodeClick = { tvShowId, episodeName: String, seasonNumber, episodeNumber, currentRating ->
-                                    navRoutesMain.navigate(
-                                        RatingNav(
-                                            RatingMediaType.Episode(
-                                                tvShowId = tvShowId,
-                                                _title = episodeName,
-                                                seasonNumber = seasonNumber,
-                                                episodeNumber = episodeNumber,
-                                                _rating = currentRating
-                                            )
-                                        )
-                                    )
-                                },
-                                onPersonClick = { personId: Long ->
-                                    navRoutesMain.navigate(
-                                        PersonDetailNav(personId = personId)
-                                    )
-                                }
-                            )
-                        }
-                        composable<WatchListFavoritesNav> {
 
-                            val result = navRoutesMain.getStateFlowResult<DeleteItemResult>()
-                                ?.collectAsStateWithLifecycle()?.value?.let {
-                                    WatchlistFavoritesResult.CancelRemoveItem(
-                                        mediaId = it.mediaId,
-                                        mediaType = it.mediaType
-                                    )
-                                }
-
-                            WatchlistFavoritesScreen(
-                                watchlistFavoritesResult = result,
-                                onBackClick = { navRoutesMain.popBackStack() },
-                                onSearchClick = { navRoutesMain.navigate(SearchNav) },
-                                onMediaClick = { mediaId, mediaType, mainPosterColor ->
-                                    navRoutesMain.navigate(
-                                        MediaDetailNav(
-                                            mediaId = mediaId,
-                                            mediaType = mediaType,
-                                            backgroundColor = mainPosterColor?.toArgb()
-                                        )
-                                    )
-                                },
-                                onDeleteClick = { itemId, mediaItem, screenType ->
-
-                                    val listType = when (screenType) {
-                                        ScreenType.WATCHLIST -> ListType.Watchlist
-                                        ScreenType.FAVORITES -> ListType.Favorites
-                                    }
-
-                                    navRoutesMain.navigate(
-                                        DeleteItemListNav(
-                                            mediaId = mediaItem.id,
-                                            mediaName = mediaItem.name,
-                                            mediaType = mediaItem.mediaType,
-                                            listType = listType
-                                        )
-                                    )
-                                }
-                            )
+                        composable<PersonDetailRoute> {
+                            PersonDetailNav(navRoutesMain)
                         }
-                        composable<ListsNav> {
-                            ListsScreen(
-                                onBackClick = { navRoutesMain.popBackStack() },
-                                onListDetailClick = { listId, listName, description, backdropUrl ->
-                                    navRoutesMain.navigate(
-                                        ListDetailNav(
-                                            listId = listId,
-                                            listName = listName,
-                                            description = description,
-                                            backdropUrl = backdropUrl
-                                        )
-                                    )
-                                },
-                                onSearchClick = { navRoutesMain.navigate(SearchNav) },
-                                onCreateListDialogClick = {
-                                    navRoutesMain.navigate(
-                                        CreateUpdateListNav()
-                                    )
-                                }
-                            )
-                        }
-                        composable<ListDetailNav> { entry ->
 
-                            val result = navRoutesMain.getStateFlowResult<DeleteItemResult>()
-                                ?.collectAsStateWithLifecycle()?.value?.let {
-                                    ListDetailResult.CancelRemoveItem(
-                                        mediaId = it.mediaId,
-                                        mediaType = it.mediaType
-                                    )
-                                }
+                        composable<SeasonsDetailRoute> {
+                            SeasonsDetailNav(navRoutesMain)
+                        }
 
-                            ListDetailScreen(
-                                listDetailResult = result,
-                                onBackClick = { navRoutesMain.popBackStack() },
-                                onLogoClick = { navRoutesMain.popBackStack(HomeNav::class) },
-                                onSearchClick = { navRoutesMain.navigate(SearchNav) },
-                                onMediaClick = { mediaId, mediaType, mainPosterColor ->
-                                    navRoutesMain.navigate(
-                                        MediaDetailNav(
-                                            mediaId = mediaId,
-                                            mediaType = mediaType,
-                                            backgroundColor = mainPosterColor?.toArgb()
-                                        )
-                                    )
-                                },
-                                onUpdateListClick = { listId, listName, listDescription, isPublic ->
-                                    navRoutesMain.navigate(
-                                        CreateUpdateListNav(
-                                            listId = listId,
-                                            listName = listName,
-                                            listDescription = listDescription,
-                                            isPublic = isPublic
-                                        )
-                                    )
-                                },
-                                onDeleteListClick = { listId, listName ->
-                                    navRoutesMain.navigate(
-                                        DeleteListNav(
-                                            listId = listId,
-                                            listName = listName
-                                        )
-                                    )
-                                },
-                                onDeleteClick = { itemId, mediaItem, listId ->
-                                    navRoutesMain.navigate(
-                                        DeleteItemListNav(
-                                            mediaId = mediaItem.id,
-                                            mediaName = mediaItem.name,
-                                            mediaType = mediaItem.mediaType,
-                                            listType = ListType.CustomList(listId)
-                                        )
-                                    )
-                                }
-                            )
+                        composable<EpisodesDetailRoute> {
+                            EpisodesDetailNav(navRoutesMain)
                         }
-                        composable<ManageListsNav> {
-                            ManageListsDialog(
-                                onBackClick = { navRoutesMain.popBackStack() },
-                                onLogoClick = { navRoutesMain.popBackStack(HomeNav::class) },
-                                onCreateListClick = {
-                                    navRoutesMain.navigate(CreateUpdateListNav())
-                                }
-                            )
+
+                        composable<WatchListFavoritesRoute> {
+                            WatchlistFavoritesNav(navRoutesMain)
                         }
-                        composable<MediaFilterNav>(
-                            typeMap = MediaFilterNav.typeMap
+
+                        composable<ListsRoute> {
+                            ListsNav(navRoutesMain)
+                        }
+
+                        composable<ListDetailRoute> { entry ->
+                            ListDetailNav(navRoutesMain)
+                        }
+
+                        composable<ManageListsRoute> {
+                            ManageListsNav(navRoutesMain)
+                        }
+
+                        composable<MediaFilterRoute>(typeMap = MediaFilterRoute.typeMap) {
+                            MediaFilterNav(navRoutesMain)
+                        }
+
+                        bottomSheet<RatingRoute>(typeMap = RatingRoute.typeMap) {
+                            RatingNav(navRoutesMain)
+                        }
+
+                        bottomSheet<CreateUpdateListRoute> {
+                            CreateUpdateListNav(navRoutesMain)
+                        }
+
+                        bottomSheet<DeleteListRoute> {
+                            DeleteListNav(navRoutesMain)
+                        }
+
+                        bottomSheet<DeleteItemListRoute>(
+                            typeMap = DeleteItemListRoute.typeMap
                         ) {
-                            MediaFilterScreen(
-                                onBackClick = {
-                                    navRoutesMain.popBackStack()
-                                },
-                                onApplyFilterClick = { mediaListFilter ->
-                                    navRoutesMain.saveResult(
-                                        MediaFilterResult(mediaListFilter)
-                                    )
-                                    navRoutesMain.popBackStack()
-                                }
-                            )
-                        }
-                        bottomSheet<RatingNav>(
-                            typeMap = RatingNav.typeMap
-                        ) {
-                            RatingDialog(
-                                onDismiss = {
-                                    navRoutesMain.popBackStack()
-                                }
-                            )
-                        }
-                        bottomSheet<CreateUpdateListNav> {
-                            CreateUpdateListDialog(
-                                onDismiss = { navRoutesMain.popBackStack() }
-                            )
-                        }
-                        bottomSheet<DeleteListNav> {
-                            DeleteListDialog(
-                                onDismiss = { navRoutesMain.popBackStack() }
-                            )
-                        }
-                        bottomSheet<DeleteItemListNav>(
-                            typeMap = DeleteItemListNav.typeMap
-                        ) {
-                            DeleteItemListDialog(
-                                onDeleteSuccess = {
-                                    navRoutesMain.popBackStack()
-                                },
-                                onDismiss = { mediaId, mediaType ->
-                                    navRoutesMain.saveResult(
-                                        DeleteItemResult(mediaId, mediaType)
-                                    )
-                                    navRoutesMain.popBackStack()
-                                }
-                            )
+                            DeleteItemListNav(navRoutesMain)
                         }
                     }
                 }

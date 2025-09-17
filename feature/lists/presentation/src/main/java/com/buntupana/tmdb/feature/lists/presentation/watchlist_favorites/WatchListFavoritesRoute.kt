@@ -5,7 +5,7 @@ import com.buntupana.tmdb.core.ui.navigation.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class WatchListFavoritesNav(
+data class WatchListFavoritesRoute(
     val screenType: ScreenType,
     val mediaFilterSelected: MediaFilter
 ): Route

@@ -29,7 +29,7 @@ class DeleteItemListViewModel(
     private val setMediaWatchListUseCase: SetMediaWatchListUseCase
 ) : ViewModel() {
 
-    private val navArgs = savedStateHandle.navArgs<DeleteItemListNav>(typeMap = DeleteItemListNav.typeMap)
+    private val navArgs = savedStateHandle.navArgs<DeleteItemListRoute>(typeMap = DeleteItemListRoute.typeMap)
 
     var state by mutableStateOf(
         DeleteItemListState(

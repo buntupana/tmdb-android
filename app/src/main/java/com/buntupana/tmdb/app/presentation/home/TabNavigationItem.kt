@@ -11,9 +11,9 @@ import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Tv
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.buntupana.tmdb.core.ui.navigation.Route
-import com.buntupana.tmdb.feature.account.presentation.account.AccountNav
-import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNav
-import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListNav
+import com.buntupana.tmdb.feature.account.presentation.account.AccountRoute
+import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverRoute
+import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListRoute
 
 
 sealed class TabNavigationItem(
@@ -28,7 +28,7 @@ sealed class TabNavigationItem(
         title = title,
         selectedIcon = Icons.Rounded.Explore,
         unselectedIcon = Icons.Outlined.Explore,
-        route = DiscoverNav
+        route = DiscoverRoute
     )
 
     data class Movies(
@@ -37,7 +37,7 @@ sealed class TabNavigationItem(
         title = title,
         selectedIcon = Icons.Rounded.Movie,
         unselectedIcon = Icons.Outlined.Movie,
-        route = MediaListNav.Movie()
+        route = MediaListRoute.Movie()
     )
 
     data class TVShows(
@@ -46,7 +46,7 @@ sealed class TabNavigationItem(
         title = title,
         selectedIcon = Icons.Rounded.Tv,
         unselectedIcon = Icons.Outlined.Tv,
-        route = MediaListNav.TvShow()
+        route = MediaListRoute.TvShow()
     )
 
     data class Account(
@@ -55,6 +55,6 @@ sealed class TabNavigationItem(
         title = title,
         selectedIcon = Icons.Rounded.Person,
         unselectedIcon = Icons.Outlined.Person,
-        route = AccountNav
+        route = AccountRoute
     )
 }

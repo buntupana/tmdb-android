@@ -30,7 +30,7 @@ class ManageListsViewModel(
     private val setListsForMediaUseCase: SetListsForMediaUseCase
 ) : ViewModel() {
 
-    private val navArgs: ManageListsNav = savedStateHandle.navArgs()
+    private val navArgs: ManageListsRoute = savedStateHandle.navArgs()
 
     var state by mutableStateOf(
         ManageListsState(

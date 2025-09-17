@@ -47,9 +47,10 @@ fun WatchlistFavoriteTabRow(
         SecondaryScrollableTabRow(
             modifier = Modifier.weight(1f),
             contentColor = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor(),
-            edgePadding = 0.dp,
             containerColor = MaterialTheme.colorScheme.primaryContainer,
+            edgePadding = 0.dp,
             selectedTabIndex = pagerState.currentPage,
+            divider = {},
             indicator = {
                 SecondaryIndicator(
                     modifier = Modifier.tabIndicatorOffset(pagerState.currentPage),

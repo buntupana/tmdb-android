@@ -30,7 +30,6 @@ import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.ObserveAsEvents
 import com.buntupana.tmdb.core.ui.util.bottomSheet
-import com.buntupana.tmdb.core.ui.util.getResult
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInNav
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInScreen
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailNav
@@ -47,13 +46,19 @@ import com.buntupana.tmdb.feature.detail.presentation.rating.RatingNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailNav
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailScreen
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterNav
+import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterResult
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterScreen
-import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
+import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListResult
 import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListDialog
 import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListNav
+import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListDialog
+import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListNav
+import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemResult
+import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.ListType
 import com.buntupana.tmdb.feature.lists.presentation.delete_list.DeleteListDialog
 import com.buntupana.tmdb.feature.lists.presentation.delete_list.DeleteListNav
 import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailNav
+import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailResult
 import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailScreen
 import com.buntupana.tmdb.feature.lists.presentation.lists.ListsNav
 import com.buntupana.tmdb.feature.lists.presentation.lists.ListsScreen
@@ -61,6 +66,7 @@ import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsDia
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsNav
 import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.ScreenType
 import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchListFavoritesNav
+import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchlistFavoritesResult
 import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchlistFavoritesScreen
 import com.buntupana.tmdb.feature.search.presentation.SearchNav
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
@@ -123,9 +129,14 @@ class MainActivity : ComponentActivity() {
                         startDestination = HomeNav
                     ) {
 
-                        composable<HomeNav> { entry ->
+                        composable<HomeNav> {
+
+                            val mediaListResult = navRoutesMain.getResult<MediaFilterResult>()?.let {
+                                MediaListResult.ApplyFilter(it.mediaListFilter)
+                            }
+
                             HomeScreen(
-                                mediaListFilterResult = entry.getResult<MediaListFilter>(),
+                                mediaListResult = mediaListResult,
                                 onSignInClicked = {
                                     navRoutesMain.navigate(SignInNav())
                                 },
@@ -392,7 +403,17 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable<WatchListFavoritesNav> {
+
+                            val result = navRoutesMain.getStateFlowResult<DeleteItemResult>()
+                                ?.collectAsStateWithLifecycle()?.value?.let {
+                                    WatchlistFavoritesResult.CancelRemoveItem(
+                                        mediaId = it.mediaId,
+                                        mediaType = it.mediaType
+                                    )
+                                }
+
                             WatchlistFavoritesScreen(
+                                watchlistFavoritesResult = result,
                                 onBackClick = { navRoutesMain.popBackStack() },
                                 onSearchClick = { navRoutesMain.navigate(SearchNav) },
                                 onMediaClick = { mediaId, mediaType, mainPosterColor ->
@@ -401,6 +422,22 @@ class MainActivity : ComponentActivity() {
                                             mediaId = mediaId,
                                             mediaType = mediaType,
                                             backgroundColor = mainPosterColor?.toArgb()
+                                        )
+                                    )
+                                },
+                                onDeleteClick = { itemId, mediaItem, screenType ->
+
+                                    val listType = when (screenType) {
+                                        ScreenType.WATCHLIST -> ListType.Watchlist
+                                        ScreenType.FAVORITES -> ListType.Favorites
+                                    }
+
+                                    navRoutesMain.navigate(
+                                        DeleteItemListNav(
+                                            mediaId = mediaItem.id,
+                                            mediaName = mediaItem.name,
+                                            mediaType = mediaItem.mediaType,
+                                            listType = listType
                                         )
                                     )
                                 }
@@ -427,8 +464,18 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
-                        composable<ListDetailNav> {
+                        composable<ListDetailNav> { entry ->
+
+                            val result = navRoutesMain.getStateFlowResult<DeleteItemResult>()
+                                ?.collectAsStateWithLifecycle()?.value?.let {
+                                    ListDetailResult.CancelRemoveItem(
+                                        mediaId = it.mediaId,
+                                        mediaType = it.mediaType
+                                    )
+                                }
+
                             ListDetailScreen(
+                                listDetailResult = result,
                                 onBackClick = { navRoutesMain.popBackStack() },
                                 onLogoClick = { navRoutesMain.popBackStack(HomeNav::class) },
                                 onSearchClick = { navRoutesMain.navigate(SearchNav) },
@@ -458,6 +505,16 @@ class MainActivity : ComponentActivity() {
                                             listName = listName
                                         )
                                     )
+                                },
+                                onDeleteClick = { itemId, mediaItem, listId ->
+                                    navRoutesMain.navigate(
+                                        DeleteItemListNav(
+                                            mediaId = mediaItem.id,
+                                            mediaName = mediaItem.name,
+                                            mediaType = mediaItem.mediaType,
+                                            listType = ListType.CustomList(listId)
+                                        )
+                                    )
                                 }
                             )
                         }
@@ -478,7 +535,9 @@ class MainActivity : ComponentActivity() {
                                     navRoutesMain.popBackStack()
                                 },
                                 onApplyFilterClick = { mediaListFilter ->
-                                    navRoutesMain.saveResult(mediaListFilter)
+                                    navRoutesMain.saveResult(
+                                        MediaFilterResult(mediaListFilter)
+                                    )
                                     navRoutesMain.popBackStack()
                                 }
                             )
@@ -502,6 +561,21 @@ class MainActivity : ComponentActivity() {
                                 onDismiss = { navRoutesMain.popBackStack() }
                             )
                         }
+                        bottomSheet<DeleteItemListNav>(
+                            typeMap = DeleteItemListNav.typeMap
+                        ) {
+                            DeleteItemListDialog(
+                                onDeleteSuccess = {
+                                    navRoutesMain.popBackStack()
+                                },
+                                onDismiss = { mediaId, mediaType ->
+                                    navRoutesMain.saveResult(
+                                        DeleteItemResult(mediaId, mediaType)
+                                    )
+                                    navRoutesMain.popBackStack()
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -511,6 +585,6 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         Timber.d("onNewIntent() called with: intent = [$intent]")
         super.onNewIntent(intent)
-        navRoutesMain.handleDeepLing(intent)
+        navRoutesMain.handleDeepLink(intent)
     }
 }

@@ -26,7 +26,6 @@ import com.buntupana.tmdb.feature.lists.domain.usecase.SetMediaWatchListUseCase
 import com.buntupana.tmdb.feature.lists.domain.usecase.UpdateListUseCase
 import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListViewModel
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListViewModel
-import com.buntupana.tmdb.feature.lists.presentation.delete_item_watchlist_favorites.DeleteItemWatchlistFavoritesViewModel
 import com.buntupana.tmdb.feature.lists.presentation.delete_list.DeleteListViewModel
 import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailViewModel
 import com.buntupana.tmdb.feature.lists.presentation.lists.ListsViewModel
@@ -64,7 +63,6 @@ private val domainModule = module {
     factoryOf(::GetWatchlistUseCase)
     factoryOf(::SetMediaFavoriteUseCase)
     factoryOf(::SetMediaWatchListUseCase)
-    factoryOf(::DeleteItemWatchlistFavoritesViewModel)
 }
 
 private val presentationModule = module {

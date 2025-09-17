@@ -21,11 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,8 +47,6 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.paddingValues
-import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListDialog
-import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListNav
 import com.buntupana.tmdb.feature.lists.presentation.list_detail.comp.ListDetailTopBar
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
@@ -65,21 +59,33 @@ import timber.log.Timber
 @Composable
 fun ListDetailScreen(
     viewModel: ListDetailViewModel = koinViewModel(),
+    listDetailResult: ListDetailResult?,
     onBackClick: () -> Unit,
     onLogoClick: () -> Unit,
     onSearchClick: () -> Unit,
     onMediaClick: (mediaItemId: Long, mediaType: MediaType, mainPosterColor: Color?) -> Unit,
     onUpdateListClick: (listId: Long, listName: String, listDescription: String, isPublic: Boolean) -> Unit,
-    onDeleteListClick: (listId: Long, listName: String) -> Unit
+    onDeleteListClick: (listId: Long, listName: String) -> Unit,
+    onDeleteClick: (itemId: String, mediaItem: MediaItem, listId: Long) -> Unit
 ) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    var showRemoveItemListConfirmDialog by remember { mutableStateOf(false) }
-
-    var deleteItemListNav by remember { mutableStateOf<DeleteItemListNav?>(null) }
-
     val mediaItemList = viewModel.state.mediaItemList?.collectAsLazyPagingItems()
+
+    LaunchedEffect(listDetailResult) {
+        when (listDetailResult) {
+            is ListDetailResult.CancelRemoveItem -> {
+                mediaItemList?.itemSnapshotList?.find {
+                    it?.id == listDetailResult.mediaId.toString() + listDetailResult.mediaType.toString()
+                }?.let { itemListViewEntity ->
+                    itemListViewEntity.isDeleteRevealed.value = false
+                }
+            }
+
+            null -> {}
+        }
+    }
 
     LaunchedEffect(lifecycleOwner.lifecycle) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -123,32 +129,11 @@ fun ListDetailScreen(
             onDeleteListClick(viewModel.state.listId, viewModel.state.listName)
         },
         onItemDeleteClick = { itemId, mediaItem ->
-            deleteItemListNav = DeleteItemListNav(
-                itemId = itemId,
-                listId = viewModel.state.listId,
-                mediaId = mediaItem.id,
-                mediaName = mediaItem.name,
-                mediaType = mediaItem.mediaType
+            onDeleteClick(
+                itemId,
+                mediaItem,
+                viewModel.state.listId,
             )
-            showRemoveItemListConfirmDialog = true
-        }
-    )
-
-    DeleteItemListDialog(
-        deleteItemListNav = deleteItemListNav,
-        showDialog = showRemoveItemListConfirmDialog,
-        onDismiss = {
-            showRemoveItemListConfirmDialog = false
-        },
-        onCancelClick = { itemId ->
-            mediaItemList?.itemSnapshotList?.find {
-                it?.id == itemId
-            }?.let { itemListViewEntity ->
-                itemListViewEntity.isDeleteRevealed.value = false
-            }
-        },
-        onDeleteSuccess = {
-            showRemoveItemListConfirmDialog = false
         }
     )
 }

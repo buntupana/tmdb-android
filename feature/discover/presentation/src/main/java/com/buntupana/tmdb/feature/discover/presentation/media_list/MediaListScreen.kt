@@ -37,14 +37,18 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MediaListScreen(
     viewModel: MediaListViewModel = koinViewModel(),
-    mediaListFilterResult: MediaListFilter?,
+    mediaListResult: MediaListResult?,
     onMediaItemClicked: (mediaType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit,
     onFilterClick: (movieListFilter: MediaListFilter) -> Unit
 ) {
 
-    LaunchedEffect(mediaListFilterResult) {
-        if (mediaListFilterResult != null) {
-            viewModel.onEvent(MediaListEvent.FilterMediaList(mediaListFilterResult))
+    LaunchedEffect(mediaListResult) {
+        if (mediaListResult != null) {
+            when (mediaListResult) {
+                is MediaListResult.ApplyFilter -> {
+                    viewModel.onEvent(MediaListEvent.FilterMediaList(mediaListResult.mediaListFilter))
+                }
+            }
         }
     }
 

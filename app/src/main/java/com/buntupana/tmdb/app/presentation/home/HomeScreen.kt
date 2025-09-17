@@ -30,6 +30,7 @@ import com.buntupana.tmdb.feature.account.presentation.account.AccountScreen
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverNav
 import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverScreen
 import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListNav
+import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListResult
 import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListScreen
 import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -37,7 +38,7 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 
 @Composable
 fun HomeScreen(
-    mediaListFilterResult: MediaListFilter?,
+    mediaListResult: MediaListResult?,
     onSignInClicked: () -> Unit,
     onSearchClicked: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
@@ -48,7 +49,7 @@ fun HomeScreen(
     onMovieFilterClick: (mediaListFilter: MediaListFilter) -> Unit
 ) {
     HomeScreenContent(
-        mediaListFilterResult = mediaListFilterResult,
+        mediaListResult = mediaListResult,
         onSignInClicked = onSignInClicked,
         onSearchClicked = onSearchClicked,
         onWatchListClick = onWatchListClick,
@@ -62,7 +63,7 @@ fun HomeScreen(
 
 @Composable
 fun HomeScreenContent(
-    mediaListFilterResult: MediaListFilter?,
+    mediaListResult: MediaListResult?,
     onSignInClicked: () -> Unit,
     onSearchClicked: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
@@ -152,14 +153,14 @@ fun HomeScreenContent(
             }
             composable<MediaListNav.Movie> {
                 MediaListScreen(
-                    mediaListFilterResult = mediaListFilterResult,
+                    mediaListResult = mediaListResult,
                     onMediaItemClicked = onMediaItemClicked,
                     onFilterClick = onMovieFilterClick
                 )
             }
             composable<MediaListNav.TvShow> {
                 MediaListScreen(
-                    mediaListFilterResult = mediaListFilterResult,
+                    mediaListResult = mediaListResult,
                     onMediaItemClicked = onMediaItemClicked,
                     onFilterClick = onMovieFilterClick
                 )
@@ -192,7 +193,7 @@ fun HomeScreenContent(
 fun HomeScreenPreview() {
     AppTheme {
         HomeScreenContent(
-            mediaListFilterResult = null,
+            mediaListResult = null,
             onSignInClicked = {},
             onSearchClicked = {},
             onWatchListClick = {},

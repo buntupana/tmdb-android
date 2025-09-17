@@ -13,10 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,8 +35,6 @@ import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.core.ui.util.isVisible
 import com.buntupana.tmdb.core.ui.util.mediaItemMovie
 import com.buntupana.tmdb.core.ui.util.paddingValues
-import com.buntupana.tmdb.feature.lists.presentation.delete_item_watchlist_favorites.DeleteItemWatchlistFavoritesDialog
-import com.buntupana.tmdb.feature.lists.presentation.delete_item_watchlist_favorites.DeleteItemWatchlistFavoritesNav
 import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.comp.WatchlistFavoritePager
 import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.comp.WatchlistFavoriteTabRow
 import com.buntupana.tmdb.feature.presentation.R
@@ -53,18 +48,34 @@ import com.buntupana.tmdb.core.ui.R as RCore
 @Composable
 fun WatchlistFavoritesScreen(
     viewModel: WatchlistFavoritesViewModel = koinViewModel(),
+    watchlistFavoritesResult: WatchlistFavoritesResult?,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onMediaClick: (mediaItemId: Long, mediaType: MediaType, mainPosterColor: Color?) -> Unit,
+    onDeleteClick: (itemId: String, mediaItem: MediaItem, screenType: ScreenType) -> Unit
 ) {
-
-    var showRemoveItemListConfirmDialog by remember { mutableStateOf(false) }
-
-    var deleteItemListNav by remember { mutableStateOf<DeleteItemWatchlistFavoritesNav?>(null) }
-
 
     val movieItems = viewModel.state.movieItems?.collectAsLazyPagingItems()
     val tvShowItems = viewModel.state.tvShowItems?.collectAsLazyPagingItems()
+
+    LaunchedEffect(watchlistFavoritesResult) {
+        when (watchlistFavoritesResult) {
+            is WatchlistFavoritesResult.CancelRemoveItem -> {
+                val mediaItems = when(watchlistFavoritesResult.mediaType) {
+                    MediaType.MOVIE -> movieItems
+                    MediaType.TV_SHOW -> tvShowItems
+                }
+
+                mediaItems?.itemSnapshotList?.find {
+                    it?.id == watchlistFavoritesResult.mediaId.toString()
+                }?.let { itemListViewEntity ->
+                    itemListViewEntity.isDeleteRevealed.value = false
+                }
+            }
+
+            null -> {}
+        }
+    }
 
     WatchlistFavoritesContent(
         state = viewModel.state,
@@ -80,37 +91,29 @@ fun WatchlistFavoritesScreen(
             viewModel.onEvent(WatchlistFavoritesEvent.GetMediaItemList)
         },
         onItemDeleteClick = { mediaItem ->
-            deleteItemListNav = DeleteItemWatchlistFavoritesNav(
-                mediaId = mediaItem.id,
-                mediaName = mediaItem.name,
-                mediaType = mediaItem.mediaType,
-                screenType = viewModel.state.screenType
-            )
-            showRemoveItemListConfirmDialog = true
+            onDeleteClick(mediaItem.id.toString(), mediaItem, viewModel.state.screenType)
         }
     )
 
-    DeleteItemWatchlistFavoritesDialog(
-        deleteItemWatchlistFavoritesNav = deleteItemListNav,
-        showDialog = showRemoveItemListConfirmDialog,
-        onDismiss = {
-            showRemoveItemListConfirmDialog = false
-        },
-        onCancelClick = { mediaId, mediaType ->
-            val items = when (mediaType) {
-                MediaType.MOVIE -> movieItems
-                MediaType.TV_SHOW -> tvShowItems
-            }
-            items?.itemSnapshotList?.find {
-                it?.id == mediaId.toString()
-            }?.let { itemListViewEntity ->
-                itemListViewEntity.isDeleteRevealed.value = false
-            }
-        },
-        onDeleteSuccess = {
-            showRemoveItemListConfirmDialog = false
-        }
-    )
+//    DeleteItemWatchlistFavoritesDialog(
+//        deleteItemWatchlistFavoritesNav = deleteItemListNav,
+//        showDialog = showRemoveItemListConfirmDialog,
+//        onDismiss = { mediaId, mediaType ->
+//            val items = when (mediaType) {
+//                MediaType.MOVIE -> movieItems
+//                MediaType.TV_SHOW -> tvShowItems
+//            }
+//            items?.itemSnapshotList?.find {
+//                it?.id == mediaId.toString()
+//            }?.let { itemListViewEntity ->
+//                itemListViewEntity.isDeleteRevealed.value = false
+//            }
+//            showRemoveItemListConfirmDialog = false
+//        },
+//        onDeleteSuccess = {
+//            showRemoveItemListConfirmDialog = false
+//        }
+//    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

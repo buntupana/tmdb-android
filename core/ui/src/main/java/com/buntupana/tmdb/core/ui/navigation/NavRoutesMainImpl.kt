@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.serialization.generateHashCode
 import com.panabuntu.tmdb.core.common.util.encodeAllStrings
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializer
 import timber.log.Timber
@@ -20,7 +21,7 @@ class NavRoutesMainImpl : NavRoutesMain {
         return this
     }
 
-    override fun handleDeepLing(intent: Intent) {
+    override fun handleDeepLink(intent: Intent) {
         Timber.d("handleDeepLing() called with: intent = [$intent]")
         navController?.handleDeepLink(intent)
     }
@@ -64,7 +65,23 @@ class NavRoutesMainImpl : NavRoutesMain {
         return navController?.currentDestination?.hasRoute(destination) ?: false
     }
 
-    override fun saveResult(value: Any) {
-        navController?.previousBackStackEntry?.savedStateHandle?.set("result", value)
+    override fun saveResult(value: Any, key: String) {
+        navController?.previousBackStackEntry?.savedStateHandle?.set(key, value)
+    }
+
+    override fun <T> getStateFlowResult(key: String): StateFlow<T?>? {
+        return navController?.currentBackStackEntry?.savedStateHandle?.run {
+            val result = getStateFlow<T?>(key, null)
+            set(key, null)
+            result
+        }
+    }
+
+    override fun <T> getResult(key: String): T? {
+        return navController?.currentBackStackEntry?.savedStateHandle?.run {
+            val result = get<T>(key)
+            remove<T>(key)
+            result
+        }
     }
 }

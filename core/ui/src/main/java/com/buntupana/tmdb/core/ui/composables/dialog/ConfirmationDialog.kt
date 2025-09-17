@@ -29,7 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.compose.LifecycleStartEffect
 import com.buntupana.tmdb.core.ui.composables.widget.AppButton
 import com.buntupana.tmdb.core.ui.composables.widget.AppOutlinedButton
 import com.buntupana.tmdb.core.ui.theme.AppTheme
@@ -48,7 +47,6 @@ fun ConfirmationDialog(
     confirmButtonColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     confirmationButtonTextColor: Color = confirmButtonColor.getOnBackgroundColor(),
     onConfirmClick: () -> Unit,
-    onCancelClick: () -> Unit = {},
     onDismiss: () -> Unit,
 ) {
 
@@ -59,7 +57,6 @@ fun ConfirmationDialog(
         isLoading = isLoading,
         confirmButtonColor = confirmButtonColor,
         confirmationButtonTextColor = confirmationButtonTextColor,
-        onCancelClick = onCancelClick,
         onConfirmClick = onConfirmClick,
         onDismiss = onDismiss
     )
@@ -75,21 +72,12 @@ fun ConfirmationDialog(
     confirmButtonColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     confirmationButtonTextColor: Color = confirmButtonColor.getOnBackgroundColor(),
     onConfirmClick: () -> Unit,
-    onCancelClick: () -> Unit = {},
     onDismiss: () -> Unit,
 ) {
-
-    LifecycleStartEffect(Unit) {
-        onStopOrDispose {
-            onCancelClick()
-            onDismiss()
-        }
-    }
 
     ModalBottomSheet(
         onDismissRequest = {
             if (isLoading.not()) {
-                onCancelClick()
                 onDismiss()
             }
         },
@@ -145,7 +133,6 @@ fun ConfirmationDialog(
 
                         AppOutlinedButton(
                             onClick = {
-                                onCancelClick()
                                 onDismiss()
                             }
                         ) {
@@ -198,7 +185,6 @@ private fun ConfirmationDialogPreview() {
             title = "Dialog Title",
             description = "Dialog Description",
             isLoading = false,
-            onCancelClick = {},
             onConfirmClick = {},
             onDismiss = {}
         )

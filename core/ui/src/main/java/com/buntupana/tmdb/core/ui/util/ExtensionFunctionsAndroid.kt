@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.toRoute
 import androidx.palette.graphics.Palette
@@ -87,14 +86,4 @@ inline fun <reified T : Any> serializableType(
 
 inline fun <reified T : Any> navType(): Pair<KType, NavType<*>> {
     return typeOf<T>() to serializableType<T>()
-}
-
-fun <T> NavBackStackEntry.getResult(): T? {
-    return try {
-        val result = savedStateHandle.get<T>("result")
-        savedStateHandle.remove<T>("result")
-        result
-    } catch (_: Exception) {
-        null
-    }
 }

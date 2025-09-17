@@ -8,7 +8,6 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
@@ -18,6 +17,7 @@ import com.buntupana.tmdb.core.ui.composables.dialog.ConfirmationDialog
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.annotatedStringResource
 import com.buntupana.tmdb.feature.presentation.R
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import timber.log.Timber
@@ -26,20 +26,10 @@ import timber.log.Timber
 @Composable
 fun DeleteItemListDialog(
     viewModel: DeleteItemListViewModel = koinViewModel(),
-    deleteItemListNav: DeleteItemListNav?,
-    showDialog: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-    onDismiss: () -> Unit,
-    onCancelClick: (itemId: String) -> Unit = {},
+    onDismiss: (mediaId: Long, mediaType: MediaType) -> Unit,
     onDeleteSuccess: () -> Unit
 ) {
-    if (showDialog.not() || deleteItemListNav == null) return
-
-    LaunchedEffect(deleteItemListNav) {
-        viewModel.onEvent(DeleteItemListEvent.Init(deleteItemListNav))
-    }
-
-    val scope = rememberCoroutineScope()
     val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(lifecycleOwner.lifecycle) {
@@ -49,8 +39,6 @@ fun DeleteItemListDialog(
                     Timber.d("SignOutDialog: sideEffect = $sideEffect")
                     when (sideEffect) {
                         DeleteItemListSideEffect.DeleteSuccess -> {
-                            sheetState.hide()
-                            onDismiss()
                             onDeleteSuccess()
                         }
                     }
@@ -63,16 +51,10 @@ fun DeleteItemListDialog(
         state = viewModel.state,
         sheetState = sheetState,
         onDismiss = {
-            scope.launch {
-                sheetState.hide()
-                onDismiss()
-            }
+            onDismiss(viewModel.state.mediaId, viewModel.state.mediaType)
         },
         onConfirmClick = {
             viewModel.onEvent(DeleteItemListEvent.ConfirmDelete)
-        },
-        onCancelClick = {
-            onCancelClick(deleteItemListNav.itemId)
         }
     )
 }
@@ -83,20 +65,30 @@ private fun DeleteItemListContent(
     state: DeleteItemListState,
     sheetState: SheetState,
     onDismiss: () -> Unit,
-    onConfirmClick: () -> Unit,
-    onCancelClick: () -> Unit
+    onConfirmClick: () -> Unit
 ) {
+
+    val (titleStrResId, descriptionStrResId) =when(state.listType) {
+        is ListType.CustomList -> {
+            R.string.text_delete_from_list to R.string.message_delete_item_list_confirmation
+        }
+        ListType.Favorites -> {
+            R.string.text_delete_from_favorites to R.string.message_delete_item_favorites_confirmation
+        }
+        ListType.Watchlist -> {
+            R.string.text_delete_from_watchlist to R.string.message_delete_item_watchlist_confirmation
+        }
+    }
 
     ConfirmationDialog(
         sheetState = sheetState,
-        title = stringResource(R.string.text_delete_from_list),
+        title = stringResource(titleStrResId),
         description = annotatedStringResource(
-            R.string.message_delete_item_list_confirmation,
+            descriptionStrResId,
             state.mediaName
         ),
         isLoading = state.isLoading,
         confirmButtonColor = MaterialTheme.colorScheme.error,
-        onCancelClick = onCancelClick,
         onConfirmClick = onConfirmClick,
         onDismiss = onDismiss
     )
@@ -117,7 +109,13 @@ private fun DeleteItemListContent(
 fun DeleteItemListScreenPreview() {
     AppTheme {
         DeleteItemListContent(
-            state = DeleteItemListState(),
+            state = DeleteItemListState(
+                isLoading = false,
+                mediaName = "The Flash",
+                mediaType = MediaType.MOVIE,
+                mediaId = 1,
+                listType = ListType.Favorites
+            ),
             sheetState = SheetState(
                 skipPartiallyExpanded = true,
                 positionalThreshold = { 0f },
@@ -125,8 +123,7 @@ fun DeleteItemListScreenPreview() {
                 velocityThreshold = { 0f }
             ),
             onDismiss = {},
-            onConfirmClick = {},
-            onCancelClick = {}
+            onConfirmClick = {}
         )
     }
 }

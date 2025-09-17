@@ -78,7 +78,6 @@ class ListDetailViewModel(
             }.onSuccess { listDetails ->
 
                 if (listDetails == null) {
-                    Timber.d("getListDetails: null")
                     _sideEffect.send(ListDetailSideEffect.NavigateBack)
                     return@onSuccess
                 }
@@ -106,7 +105,7 @@ class ListDetailViewModel(
                 mediaItemList = it.map { pagingData ->
                     pagingData.map { mediaItem ->
                         MediaItemRevealedViewEntity(
-                            id = "${mediaItem.id}_${mediaItem.mediaType}",
+                            id = mediaItem.id.toString() + mediaItem.mediaType.toString(),
                             mediaItem = mediaItem
                         )
                     }

@@ -45,15 +45,15 @@ fun SeasonsSection(
     onAllSeasonsClick: () -> Unit
 ) {
 
-    if (seasonList.isEmpty()) return
+    val lastSeason = seasonList.lastOrNull { it.airDate != null }
+
+    if (seasonList.isEmpty() || lastSeason == null) return
 
     val titleStrRes = if (isInAir) {
         R.string.text_current_season
     } else {
         R.string.text_last_season
     }
-
-    val lastSeason = seasonList.last()
 
     Column(
         modifier = modifier

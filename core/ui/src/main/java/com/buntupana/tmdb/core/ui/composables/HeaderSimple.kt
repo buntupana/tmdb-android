@@ -75,7 +75,9 @@ fun HeaderSimple(
                         append(mediaName)
                     }
                     append(" ")
-                    append("($releaseYear)")
+                    if (releaseYear != null) {
+                        append("($releaseYear)")
+                    }
                 },
                 color = backgroundColor.getOnBackgroundColor(),
                 fontSize = Typography.titleLarge.fontSize

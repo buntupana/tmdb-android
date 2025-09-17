@@ -62,7 +62,7 @@ fun SeasonsDetailScreen(
                 season.seasonNumber ?: 0,
                 season.posterUrl,
                 backgroundColor,
-                season.airDate?.year.toString()
+                season.airDate?.year?.toString()
             )
         }
     )
@@ -196,8 +196,8 @@ private fun SeasonsScreenPreview() {
     AppTheme {
         SeasonsContent(
             state = SeasonsDetailState(
-                isLoading = true,
-                isGetSeasonsError = true,
+                isLoading = false,
+                isGetSeasonsError = false,
                 tvShowId = 0L,
                 tvShowName = "Jack Reacher",
                 posterUrl = null,

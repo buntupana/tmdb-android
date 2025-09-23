@@ -54,7 +54,7 @@ fun KnownFor(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = Dimens.padding.medium),
-            text = stringResource(id = R.string.text_known_for),
+            text = stringResource(id = R.string.detail_known_for),
             style = MaterialTheme.typography.titleLarge
         )
 

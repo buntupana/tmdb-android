@@ -47,7 +47,7 @@ fun LazyListScope.lazyListLoadStateGeneric(
                     LaunchedEffect(true) {
                         SnackbarController.sendEvent(
                             SnackbarEvent(
-                                UiText.StringResource(R.string.message_refresh_content_error)
+                                UiText.StringResource(R.string.common_refresh_content_error)
                             )
                         )
                     }
@@ -64,7 +64,7 @@ fun LazyListScope.lazyListLoadStateGeneric(
                 ) {
                     ErrorAndRetry(
                         contentColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
-                        errorMessage = stringResource(id = R.string.message_loading_content_error),
+                        errorMessage = stringResource(id = R.string.common_loading_content_error),
                         onRetryClick = retry
                     )
                 }

@@ -25,7 +25,7 @@ fun MinUserVotesSelector(
             modifier = Modifier.padding(
                 bottom = Dimens.padding.small
             ),
-            text = stringResource(R.string.text_min_user_votes),
+            text = stringResource(R.string.discover_min_user_votes),
             style = MaterialTheme.typography.titleMedium
         )
 

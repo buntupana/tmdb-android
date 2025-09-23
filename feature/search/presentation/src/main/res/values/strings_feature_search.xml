@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_in_movies">in Movies</string>
+    <string name="search_in_tv_shows">in TV Shows</string>
+    <string name="search_in_person">in Persons</string>
+    <string name="search_people">People</string>
+    <string name="search_movies_no_result">There are no movies that matched your query.</string>
+    <string name="search_tv_shows_no_result">There are no TV shows that matched your query.</string>
+    <string name="search_people_no_result">There are no people that matched your query.</string>
+</resources>

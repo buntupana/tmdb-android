@@ -44,8 +44,8 @@ fun SearchSuggestionList(
 ) {
 
     val errorTextResId = when {
-        isSearchSuggestionError -> R.string.message_loading_content_error
-        suggestionList != null && suggestionList.isEmpty() -> R.string.text_no_results
+        isSearchSuggestionError -> R.string.common_loading_content_error
+        suggestionList != null && suggestionList.isEmpty() -> R.string.common_no_results
         else -> null
     }
 

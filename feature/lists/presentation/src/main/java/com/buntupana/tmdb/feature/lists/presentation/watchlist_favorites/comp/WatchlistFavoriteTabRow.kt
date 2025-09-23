@@ -17,12 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.OrderButtonAnimation
 import com.buntupana.tmdb.core.ui.composables.VerticalNumberRoulette
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.model.Order
 import kotlinx.coroutines.launch
 
@@ -88,7 +88,7 @@ fun WatchlistFavoriteTabRow(
         OrderButtonAnimation(
             modifier = Modifier,
             textColor = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor(),
-            text = stringResource(R.string.text_last_added),
+            text = stringResource(R.string.lists_last_added),
             order = order,
             onClick = onOrderClick
         )

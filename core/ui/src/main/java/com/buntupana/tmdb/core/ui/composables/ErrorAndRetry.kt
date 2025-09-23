@@ -46,7 +46,7 @@ fun ErrorAndRetry(
             rippleColor = contentColor
         ) {
             Text(
-                text = stringResource(id = R.string.text_retry),
+                text = stringResource(id = R.string.common_retry),
                 color = contentColor.getOnBackgroundColor()
             )
         }

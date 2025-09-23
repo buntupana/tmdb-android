@@ -39,7 +39,7 @@ fun PersonalInfo(
         Spacer(modifier = Modifier.height(Dimens.padding.small))
 
         Text(
-            text = stringResource(id = R.string.text_personal_info),
+            text = stringResource(id = R.string.detail_personal_info),
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.titleLarge
         )
@@ -50,7 +50,7 @@ fun PersonalInfo(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth(),
-                    title = stringResource(id = R.string.text_known_for),
+                    title = stringResource(id = R.string.detail_known_for),
                     subtitle = personDetails.knownForDepartment
                 )
             }
@@ -58,18 +58,18 @@ fun PersonalInfo(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
-                title = stringResource(id = R.string.text_known_credits),
+                title = stringResource(id = R.string.detail_known_credits),
                 subtitle = personDetails.knownCredits.toString()
             )
         }
 
         TitleAndSubtitle(
-            title = stringResource(id = R.string.text_gender),
+            title = stringResource(id = R.string.detail_gender),
             subtitle = personDetails.gender.getString()
         )
 
         val ageString = if (personDetails.age > 0) {
-            "(${stringResource(id = R.string.text_age, personDetails.age)})"
+            "(${stringResource(id = R.string.detail_age, personDetails.age)})"
         } else ""
 
         val birthdayString = if (personDetails.deathDate == null) {
@@ -79,25 +79,25 @@ fun PersonalInfo(
         }
 
         TitleAndSubtitle(
-            title = stringResource(id = R.string.text_birthdate),
+            title = stringResource(id = R.string.detail_birthdate),
             subtitle = birthdayString
         )
 
         if (personDetails.deathDate != null) {
             TitleAndSubtitle(
-                title = stringResource(id = R.string.text_day_of_death),
+                title = stringResource(id = R.string.detail_day_of_death),
                 subtitle = personDetails.deathDate!!.toLocalFormat() + " $ageString"
             )
         }
         TitleAndSubtitle(
-            title = stringResource(id = R.string.text_place_birth),
+            title = stringResource(id = R.string.detail_place_birth),
             subtitle = personDetails.placeOfBirth.ifBlank { " - " }
         )
 
         Spacer(modifier = Modifier.height(Dimens.padding.small))
 
         Text(
-            text = stringResource(id = R.string.text_biography),
+            text = stringResource(id = R.string.detail_biography),
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.titleLarge
         )
@@ -106,7 +106,7 @@ fun PersonalInfo(
 
         ExpandableText(text = personDetails.biography.ifBlank {
             stringResource(
-                id = R.string.text_no_biography,
+                id = R.string.detail_no_biography,
                 personDetails.name
             )
         })

@@ -71,7 +71,7 @@ class ListDetailViewModel(
                 } else {
                     SnackbarController.sendEvent(
                         SnackbarEvent(
-                            UiText.StringResource(R.string.message_refresh_content_error)
+                            UiText.StringResource(R.string.common_refresh_content_error)
                         )
                     )
                 }

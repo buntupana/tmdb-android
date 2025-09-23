@@ -70,7 +70,7 @@ fun TrendingList(
                     )
                     Spacer(modifier = Modifier.width(Dimens.padding.small))
                     Text(
-                        text = stringResource(id = RCore.string.text_trending),
+                        text = stringResource(id = RCore.string.common_trending),
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
                     )

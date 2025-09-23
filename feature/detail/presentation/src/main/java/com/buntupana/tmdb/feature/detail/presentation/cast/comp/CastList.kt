@@ -14,11 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.theme.Typography
 import com.buntupana.tmdb.feature.detail.domain.model.Person
+import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
 import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
 
@@ -39,7 +39,7 @@ fun LazyListScope.castList(
                     .padding(top = Dimens.padding.vertical, bottom = Dimens.padding.verticalItem)
             ) {
 
-                val castText = if (isEpisode) R.string.text_guest_stars else R.string.text_cast
+                val castText = if (isEpisode) R.string.detail_guest_stars else R.string.detail_cast
 
                 Text(
                     text = stringResource(id = castText),
@@ -82,7 +82,7 @@ fun LazyListScope.castList(
                     )
             ) {
                 Text(
-                    text = stringResource(id = R.string.text_crew),
+                    text = stringResource(id = R.string.detail_crew),
                     fontSize = Typography.titleMedium.fontSize,
                     fontWeight = FontWeight.Bold
                 )

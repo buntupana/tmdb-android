@@ -53,7 +53,7 @@ fun CreateListForm(
             onValueChange = {
                 updateForm(it, description, isPublic)
             },
-            label = { Text(text = stringResource(RCore.string.text_name)) },
+            label = { Text(text = stringResource(RCore.string.common_name)) },
             maxLines = 1,
 
             )
@@ -67,7 +67,7 @@ fun CreateListForm(
             onValueChange = {
                 updateForm(listName, it, isPublic)
             },
-            label = { Text(text = stringResource(RCore.string.text_description)) },
+            label = { Text(text = stringResource(RCore.string.common_description)) },
             maxLines = 5,
             minLines = 5
         )
@@ -80,7 +80,7 @@ fun CreateListForm(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(R.string.text_public_list),
+                text = stringResource(R.string.lists_public_list),
                 style = MaterialTheme.typography.bodyLarge
             )
 
@@ -116,7 +116,7 @@ fun CreateListForm(
                     enabled = listName.isNotBlank(),
                 ) {
                     Text(
-                        text = stringResource(RCore.string.text_confirm)
+                        text = stringResource(RCore.string.common_confirm)
                     )
                 }
             }

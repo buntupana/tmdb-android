@@ -67,7 +67,7 @@ fun SignUp(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = stringResource(R.string.text_join_today),
+                text = stringResource(R.string.account_join_today),
                 style = MaterialTheme.typography.headlineLarge.copy(
                     color = contentColor
                 ),
@@ -76,7 +76,7 @@ fun SignUp(
 
             Text(
                 modifier = Modifier.padding(top = Dimens.padding.medium),
-                text = AnnotatedString.fromHtml(htmlString = stringResource(R.string.message_sign_up_html_description)),
+                text = AnnotatedString.fromHtml(htmlString = stringResource(R.string.account_sign_up_html_description)),
                 style = MaterialTheme.typography.titleLarge.copy(
                     color = contentColor
                 )
@@ -84,14 +84,14 @@ fun SignUp(
 
             AppTextWithIconButton(
                 modifier = Modifier.padding(top = Dimens.padding.medium),
-                text = stringResource(R.string.text_sign_up),
+                text = stringResource(R.string.account_sign_up),
                 imageVector = Icons.AutoMirrored.Filled.Login,
                 onClick = onSignUpClick
             )
 
             Text(
                 modifier = Modifier.padding(top = Dimens.padding.big),
-                text = AnnotatedString.fromHtml(htmlString = stringResource(R.string.list_sign_up_vantages)),
+                text = AnnotatedString.fromHtml(htmlString = stringResource(R.string.account_list_sign_up_vantages)),
                 style = MaterialTheme.typography.titleSmall.copy(
                     color = contentColor
                 )

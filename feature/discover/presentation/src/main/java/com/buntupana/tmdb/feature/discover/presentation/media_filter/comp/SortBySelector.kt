@@ -32,7 +32,7 @@ fun SortBySelector(
             modifier = Modifier.padding(
                 bottom = Dimens.padding.small
             ),
-            text = stringResource(R.string.text_sort_by),
+            text = stringResource(R.string.discover_sort_by),
             style = MaterialTheme.typography.titleMedium
         )
 

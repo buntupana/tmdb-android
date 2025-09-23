@@ -117,9 +117,9 @@ fun CreateListContent(
         ) {
 
             val titleStrResId = if (state.isNewList) {
-                R.string.text_create_list
+                R.string.lists_create_list
             } else {
-                R.string.text_edit_list
+                R.string.lists_edit_list
             }
 
             Text(

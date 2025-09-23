@@ -117,12 +117,12 @@ fun EpisodeSubtitle(
                 ) {
                     if (episode.userRating == null) {
                         Text(
-                            text = stringResource(R.string.text_rate_it),
+                            text = stringResource(R.string.detail_rate_it),
                             color = MaterialTheme.colorScheme.secondaryContainer.getOnBackgroundColor()
                         )
                     } else {
                         Text(
-                            text = stringResource(R.string.text_yours_is) + " ",
+                            text = stringResource(R.string.detail_yours_is) + " ",
                             color = MaterialTheme.colorScheme.secondaryContainer.getOnBackgroundColor()
                         )
                         VerticalNumberRoulette(

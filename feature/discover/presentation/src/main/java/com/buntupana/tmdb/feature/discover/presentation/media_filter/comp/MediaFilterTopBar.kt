@@ -40,8 +40,8 @@ fun MediaFilterTopBar(
 ) {
 
     val titleStrResId = when (mediaType) {
-        MediaType.MOVIE -> R.string.text_movies_filter
-        MediaType.TV_SHOW -> R.string.text_tv_shows_filter
+        MediaType.MOVIE -> R.string.discover_movies_filter
+        MediaType.TV_SHOW -> R.string.discover_tv_shows_filter
     }
 
     TopAppBar(
@@ -81,7 +81,7 @@ fun MediaFilterTopBar(
             AppTextWithIconButton(
                 modifier = Modifier.padding(end = Dimens.padding.horizontal),
                 onClick = onApplyClick,
-                text = stringResource(RCore.string.text_apply),
+                text = stringResource(RCore.string.common_apply),
                 imageVector = Icons.Rounded.Check,
             )
         },

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detail_department">Department</string>
+    <string name="detail_clear">Clear</string>
+
+    <string name="detail_cast">Cast</string>
+    <string name="detail_crew">Crew</string>
+    <string name="detail_guest_stars">Guest Stars</string>
+
+    <string name="detail_play_trailer">Play Trailer</string>
+    <string name="detail_overview">Overview</string>
+    <string name="detail_creator">Creator</string>
+
+    <string name="detail_cast_movie">Top Billed Cast</string>
+    <string name="detail_cast_tv_show">Series Cast</string>
+    <string name="detail_full_cast">Full Cast &amp; Crew</string>
+
+    <string name="detail_recommendations">Recommendations</string>
+    <string name="detail_current_season">Current Season</string>
+    <string name="detail_last_season">Last Season</string>
+    <string name="detail_view_all_seasons">View All Seasons</string>
+
+    <string name="detail_season_premiered">"%1$s of %2$s premiered on %3$s"</string>
+
+    <string name="detail_as">as</string>
+
+    <string name="detail_personal_info">Personal Info</string>
+    <string name="detail_known_for">Known For</string>
+    <string name="detail_gender">Gender</string>
+    <string name="detail_known_credits">Known Credits</string>
+    <string name="detail_birthdate">Birthdate</string>
+    <string name="detail_day_of_death">Day of Death</string>
+    <string name="detail_age">%d years old</string>
+    <string name="detail_place_birth">Place of Birth</string>
+    <string name="detail_biography">Biography</string>
+    <string name="detail_no_biography">We don\'t have a biography for %s.</string>
+    <string name="detail_no_credits">%s doesn\'t have any credits.</string>
+
+    <plurals name="detail_episodes_count">
+        <item quantity="one">%d episode</item>
+        <item quantity="other">%d episodes</item>
+    </plurals>
+
+    <string name="detail_clear_rating">Clear Rating</string>
+
+    <string name="detail_set_favorite_error">Sorry there was an error setting favorite</string>
+    <string name="detail_set_watchlist_error">Sorry there was an error setting watchlist</string>
+    <string name="detail_rating_error">Sorry there was an error rating %s</string>
+
+    // Rating
+    <string name="detail_rating">Rating</string>
+    <string name="detail_votes">%s votes</string>
+    <string name="detail_your_rating_is">Your Rating is</string>
+    <string name="detail_what_do_you_think">What do you think of <b>%s</b>?</string>
+    <string name="detail_rate_it">Rate it!</string>
+    <string name="detail_yours_is">Yours is</string>
+
+    // Rating titles
+    <string name="detail_rating_10">Absolute Trash</string>
+    <string name="detail_rating_20">Garbage</string>
+    <string name="detail_rating_30">Truly Bad</string>
+    <string name="detail_rating_40">Not Good</string>
+    <string name="detail_rating_50">Passable</string>
+    <string name="detail_rating_60">It\'s Alright</string>
+    <string name="detail_rating_70">Pretty Decent</string>
+    <string name="detail_rating_80">Really Good</string>
+    <string name="detail_rating_90">Greatness</string>
+    <string name="detail_rating_100">Champion</string>
+
+    // Additional Info
+    <string name="detail_status">Status</string>
+    <string name="detail_original_title">Original Title</string>
+    <string name="detail_original_language">Original Language</string>
+    <string name="detail_budget">Budget</string>
+    <string name="detail_revenue">Revenue</string>
+    <string name="detail_type">Type</string>
+
+    // Watch Providers
+    <string name="detail_available_in">Available In</string>
+    <string name="detail_powered_by">powered by</string>
+
+</resources>

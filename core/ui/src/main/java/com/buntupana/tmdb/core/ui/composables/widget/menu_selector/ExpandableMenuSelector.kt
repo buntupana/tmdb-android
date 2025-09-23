@@ -199,15 +199,15 @@ fun ExpandableMenuSelectorPreview() {
 
 enum class ExpandableMenuSelectorItemSample : ExpandableMenuSelectorItem {
     STREAMING {
-        override val strRes: Int = R.string.text_menu_selector_sample_streaming
+        override val strRes: Int = R.string.common_menu_selector_sample_streaming
     },
     ON_TV {
-        override val strRes: Int = R.string.text_menu_selector_sample_on_tv
+        override val strRes: Int = R.string.common_menu_selector_sample_on_tv
     },
     FOR_RENT {
-        override val strRes: Int = R.string.text_menu_selector_sample_for_rent
+        override val strRes: Int = R.string.common_menu_selector_sample_for_rent
     },
     IN_THEATRES {
-        override val strRes: Int = R.string.text_menu_selector_sample_in_theatres
+        override val strRes: Int = R.string.common_menu_selector_sample_in_theatres
     }
 }

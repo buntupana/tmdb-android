@@ -72,7 +72,7 @@ fun TabSearchResult(
 private fun TabSearchResultPreview() {
     AppTheme {
         TabSearchResult(
-            titleResId = com.buntupana.tmdb.core.ui.R.string.text_movies,
+            titleResId = com.buntupana.tmdb.core.ui.R.string.common_movies,
             resultCount = 3,
             isSelected = true
         )

@@ -123,7 +123,7 @@ fun SearchScreenContent(
                         modifier = Modifier
                             .padding(paddingValues)
                             .fillMaxSize(),
-                        errorMessage = stringResource(R.string.message_loading_content_error)
+                        errorMessage = stringResource(R.string.common_loading_content_error)
                     ) {
                         onSearch(state.searchKey, null)
                     }

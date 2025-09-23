@@ -80,7 +80,7 @@ fun ListsContent(
         topBar = {
             Column {
                 TopBarTitle(
-                    title = stringResource(R.string.text_lists),
+                    title = stringResource(R.string.lists_lists),
                     backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     onBackClick = onBackClick,
                     onSearchClick = onSearchClick,
@@ -116,7 +116,7 @@ fun ListsContent(
                 ErrorAndRetry(
                     modifier = Modifier.align(Alignment.Center),
                     contentColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
-                    errorMessage = stringResource(id = RCore.string.message_loading_content_error),
+                    errorMessage = stringResource(id = RCore.string.common_loading_content_error),
                     onRetryClick = onRetryClick
                 )
             }
@@ -143,7 +143,7 @@ fun ListsContent(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = stringResource(RCore.string.message_no_results_found)
+                            text = stringResource(RCore.string.common_no_results_found)
                         )
                     }
                 }

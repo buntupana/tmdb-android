@@ -71,7 +71,7 @@ class RatingViewModel(
                 SnackbarController.sendEvent(
                     SnackbarEvent(
                         message = UiText.StringResource(
-                            R.string.message_rating_error,
+                            R.string.detail_rating_error,
                             state.mediaTitle
                         )
                     )
@@ -87,27 +87,27 @@ class RatingViewModel(
     private fun getRatingTitle(rating: Int?): UiText {
 
         val ratingTitle = when (rating) {
-            10 -> R.string.text_rating_10
+            10 -> R.string.detail_rating_10
 
-            20 -> R.string.text_rating_20
+            20 -> R.string.detail_rating_20
 
-            30 -> R.string.text_rating_30
+            30 -> R.string.detail_rating_30
 
-            40 -> R.string.text_rating_40
+            40 -> R.string.detail_rating_40
 
-            50 -> R.string.text_rating_50
+            50 -> R.string.detail_rating_50
 
-            60 -> R.string.text_rating_60
+            60 -> R.string.detail_rating_60
 
-            70 -> R.string.text_rating_70
+            70 -> R.string.detail_rating_70
 
-            80 -> R.string.text_rating_80
+            80 -> R.string.detail_rating_80
 
-            90 -> R.string.text_rating_90
+            90 -> R.string.detail_rating_90
 
-            100 -> R.string.text_rating_100
+            100 -> R.string.detail_rating_100
 
-            else -> com.buntupana.tmdb.core.ui.R.string.empty
+            else -> com.buntupana.tmdb.core.ui.R.string.common_empty
         }
 
         return UiText.StringResource(ratingTitle)

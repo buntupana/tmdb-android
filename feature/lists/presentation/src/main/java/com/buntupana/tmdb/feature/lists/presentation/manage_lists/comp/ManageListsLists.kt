@@ -44,15 +44,15 @@ fun ManageListsLists(
             Spacer(modifier = Modifier.height(Dimens.padding.medium))
 
             val mediaName = when (state.mediaType) {
-                MediaType.MOVIE -> stringResource(RCore.string.text_movie)
-                MediaType.TV_SHOW -> stringResource(RCore.string.text_tv_show)
+                MediaType.MOVIE -> stringResource(RCore.string.common_movie)
+                MediaType.TV_SHOW -> stringResource(RCore.string.common_tv_show)
             }
 
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .animateItem(),
-                text = stringResource(R.string.text_media_belongs_to, mediaName),
+                text = stringResource(R.string.lists_media_belongs_to, mediaName),
                 fontWeight = FontWeight.Bold
             )
 
@@ -89,7 +89,7 @@ fun ManageListsLists(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.message_it_does_no_belongs_to_lists)
+                    text = stringResource(R.string.lists_it_does_no_belongs_to_lists)
                 )
             }
         }
@@ -104,7 +104,7 @@ fun ManageListsLists(
                 modifier = Modifier
                     .fillMaxWidth()
                     .animateItem(),
-                text = stringResource(R.string.text_rest_of_the_lists),
+                text = stringResource(R.string.lists_rest_of_the_lists),
                 fontWeight = FontWeight.Bold
             )
 
@@ -141,7 +141,7 @@ fun ManageListsLists(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.message_no_list_to_show)
+                    text = stringResource(R.string.lists_no_list_to_show)
                 )
             }
         }

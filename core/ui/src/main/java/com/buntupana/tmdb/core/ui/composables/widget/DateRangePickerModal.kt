@@ -42,12 +42,12 @@ fun DatePickerModal(
                 }
                 onDismiss()
             }) {
-                Text(stringResource(R.string.text_confirm))
+                Text(stringResource(R.string.common_confirm))
             }
         },
         dismissButton = {
             AppTextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.text_cancel))
+                Text(stringResource(R.string.common_cancel))
             }
         }
     ) {

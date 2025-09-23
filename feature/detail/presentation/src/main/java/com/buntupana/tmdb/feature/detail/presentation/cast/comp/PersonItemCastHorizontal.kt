@@ -116,7 +116,7 @@ private fun TvShowCredits(
                         append(
                             "(${
                                 pluralStringResource(
-                                    id = R.plurals.text_episodes_count,
+                                    id = R.plurals.detail_episodes_count,
                                     count = pair.second,
                                     pair.second
                                 )

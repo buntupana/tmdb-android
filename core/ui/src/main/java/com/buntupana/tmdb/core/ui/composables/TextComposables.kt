@@ -133,9 +133,9 @@ fun HoursMinutesText(
     val minutes = time - (hours * 60)
 
     val timeText = if (hours == 0L) {
-        stringResource(id = R.string.text_minutes, minutes)
+        stringResource(id = R.string.common_minutes, minutes)
     } else {
-        stringResource(id = R.string.text_hours_minutes, hours, minutes)
+        stringResource(id = R.string.common_hours_minutes, hours, minutes)
     }
     Text(
         modifier = modifier,
@@ -209,7 +209,7 @@ fun TextFieldSearch(
         }
         if (value.isBlank()) {
             Text(
-                text = stringResource(id = R.string.text_search),
+                text = stringResource(id = R.string.common_search),
                 color = fontColor.copy(alpha = 0.5f),
                 fontSize = fontSize
             )
@@ -341,7 +341,7 @@ fun ExpandableText(
                 rippleColor = MaterialTheme.colorScheme.onBackground,
             ) {
                 Text(
-                    text = stringResource(id = R.string.text_read_more),
+                    text = stringResource(id = R.string.common_read_more),
                     color = MaterialTheme.colorScheme.secondaryContainer,
                     fontWeight = FontWeight.Bold
                 )

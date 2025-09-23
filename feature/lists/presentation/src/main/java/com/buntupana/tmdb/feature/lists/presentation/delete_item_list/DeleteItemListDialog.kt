@@ -70,13 +70,13 @@ private fun DeleteItemListContent(
 
     val (titleStrResId, descriptionStrResId) =when(state.listType) {
         is ListType.CustomList -> {
-            R.string.text_delete_from_list to R.string.message_delete_item_list_confirmation
+            R.string.lists_delete_from_list to R.string.lists_delete_item_list_confirmation
         }
         ListType.Favorites -> {
-            R.string.text_delete_from_favorites to R.string.message_delete_item_favorites_confirmation
+            R.string.lists_delete_from_favorites to R.string.lists_delete_item_favorites_confirmation
         }
         ListType.Watchlist -> {
-            R.string.text_delete_from_watchlist to R.string.message_delete_item_watchlist_confirmation
+            R.string.lists_delete_from_watchlist to R.string.lists_delete_item_watchlist_confirmation
         }
     }
 

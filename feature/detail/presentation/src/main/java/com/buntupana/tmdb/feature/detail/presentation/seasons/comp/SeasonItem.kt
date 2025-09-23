@@ -71,7 +71,7 @@ fun SeasonItem(
                 Text(
                     modifier = Modifier.padding(top = Dimens.padding.vertical),
                     text = stringResource(
-                        id = R.string.message_season_premiered,
+                        id = R.string.detail_season_premiered,
                         season.name,
                         tvShowName,
                         season.airDate!!.toFullDate()

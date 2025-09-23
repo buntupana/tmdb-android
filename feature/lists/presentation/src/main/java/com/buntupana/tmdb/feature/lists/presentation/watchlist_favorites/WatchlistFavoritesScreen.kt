@@ -190,7 +190,7 @@ fun WatchlistFavoritesContent(
                     .padding(top = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding)
                     .padding(horizontal = Dimens.padding.horizontal),
                 contentColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
-                errorMessage = stringResource(id = RCore.string.message_loading_content_error),
+                errorMessage = stringResource(id = RCore.string.common_loading_content_error),
                 onRetryClick = onRetryClick
             )
         }
@@ -228,7 +228,7 @@ fun WatchlistFavoritesContent(
                     navigationBarPadding = paddingValues.calculateBottomPadding(),
                     pagingItems = pagingItems,
                     noResultMessage = stringResource(
-                        R.string.message_no_results_in,
+                        R.string.lists_no_results_in,
                         stringResource(mediaNameResId),
                         stringResource(state.screenType.titleResId).lowercase()
                     ),

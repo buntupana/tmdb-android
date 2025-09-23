@@ -43,7 +43,7 @@ fun RecommendationsHorizontal(
                 horizontal = Dimens.padding.horizontal,
                 vertical = Dimens.padding.vertical
             ),
-            text = stringResource(id = R.string.text_recommendations),
+            text = stringResource(id = R.string.detail_recommendations),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )

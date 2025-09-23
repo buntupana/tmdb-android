@@ -32,7 +32,6 @@ import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
-import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun ListDetailSubBar(
@@ -112,15 +111,15 @@ fun ListDetailSubBar(
                         )
 
                         Text(
-                            text = " " + stringResource(RCore.string.text_items).lowercase(),
+                            text = " " + stringResource(R.string.lists_items).lowercase(),
                             color = textColor,
                             fontWeight = FontWeight.Bold
                         )
 
                         val listTypeResId = if (isPublic) {
-                            R.string.text_public
+                            R.string.lists_public
                         } else {
-                            R.string.text_private
+                            R.string.lists_private
                         }
 
                         Text(

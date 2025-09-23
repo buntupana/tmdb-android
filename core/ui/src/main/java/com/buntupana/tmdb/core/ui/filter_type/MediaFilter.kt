@@ -5,9 +5,9 @@ import com.buntupana.tmdb.core.ui.composables.widget.menu_selector.ExpandableMen
 
 enum class MediaFilter : ExpandableMenuSelectorItem {
     MOVIES {
-        override val strRes: Int = R.string.text_movies
+        override val strRes: Int = R.string.common_movies
     },
     TV_SHOWS {
-        override val strRes: Int = R.string.text_tv_shows
+        override val strRes: Int = R.string.common_tv_shows
     },
 }

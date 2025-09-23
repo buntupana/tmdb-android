@@ -165,7 +165,7 @@ fun AccountContent(
 
                 TitleAndFilter(
                     modifier = Modifier.padding(vertical = Dimens.padding.medium),
-                    title = stringResource(id = RCore.string.text_watchlist),
+                    title = stringResource(id = RCore.string.common_watchlist),
                     filterSet = MediaFilter.entries.toSet(),
                     indexSelected = MediaFilter.entries.toSet()
                         .indexOf(state.watchlistFilterSelected),
@@ -203,7 +203,7 @@ fun AccountContent(
 
                 TitleAndFilter(
                     modifier = Modifier.padding(vertical = Dimens.padding.medium),
-                    title = stringResource(id = RCore.string.text_favorites),
+                    title = stringResource(id = RCore.string.common_favorites),
                     filterSet = MediaFilter.entries.toSet(),
                     indexSelected = MediaFilter.entries.toSet()
                         .indexOf(state.favoritesFilterSelected),
@@ -241,7 +241,7 @@ fun AccountContent(
                     ) {
                         Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null)
                         Spacer(modifier = Modifier.padding(horizontal = Dimens.padding.tiny))
-                        Text(text = stringResource(R.string.text_sign_out))
+                        Text(text = stringResource(R.string.account_sign_out))
                     }
                 }
             }

@@ -51,7 +51,7 @@ fun ListItemsSection(
             onClick = titleClicked
         ) {
             Text(
-                text = stringResource(R.string.text_lists),
+                text = stringResource(R.string.account_lists),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 22.sp,
                 color = MaterialTheme.colorScheme.onBackground
@@ -128,7 +128,7 @@ fun ListItemsSection(
                         modifier = Modifier
                             .align(Alignment.TopCenter)
                             .padding(top = Dimens.padding.huge),
-                        text = stringResource(RCore.string.message_no_results_found),
+                        text = stringResource(RCore.string.common_no_results_found),
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -140,7 +140,7 @@ fun ListItemsSection(
                         .matchParentSize()
                         .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
                     contentColor = MaterialTheme.colorScheme.onBackground,
-                    errorMessage = stringResource(RCore.string.message_loading_content_error),
+                    errorMessage = stringResource(RCore.string.common_loading_content_error),
                     onRetryClick = onRetryClicked
                 )
             }

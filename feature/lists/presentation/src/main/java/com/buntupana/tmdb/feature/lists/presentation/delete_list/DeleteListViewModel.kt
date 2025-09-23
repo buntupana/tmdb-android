@@ -51,7 +51,7 @@ class DeleteListViewModel(
                 state = state.copy(isLoading = false)
                 SnackbarController.sendEvent(
                     SnackbarEvent(
-                        message = UiText.StringResource(R.string.message_error_delete_list)
+                        message = UiText.StringResource(R.string.lists_error_delete_list)
                     )
                 )
             }.onSuccess {

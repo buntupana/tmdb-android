@@ -142,13 +142,13 @@ fun MainInfo(
                 Spacer(modifier = Modifier.width(Dimens.padding.small))
                 Column {
                     Text(
-                        text = stringResource(id = RCore.string.text_user_score),
+                        text = stringResource(id = RCore.string.common_user_score),
                         color = textColor,
                         fontWeight = FontWeight(700)
                     )
                     Text(
                         text = stringResource(
-                            R.string.text_votes,
+                            R.string.detail_votes,
                             mediaDetails.voteCount.toLocalizedString()
                         ),
                         color = textColor,
@@ -184,7 +184,7 @@ fun MainInfo(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             modifier = Modifier.align(Alignment.CenterVertically),
-                            text = stringResource(R.string.text_play_trailer),
+                            text = stringResource(R.string.detail_play_trailer),
                             color = textColor,
                             fontWeight = FontWeight(400),
                         )
@@ -219,7 +219,7 @@ fun MainInfo(
                     onClick = onRatingClick
                 ) {
                     Text(
-                        text = stringResource(R.string.text_your_rating_is) + " ",
+                        text = stringResource(R.string.detail_your_rating_is) + " ",
                         color = MaterialTheme.colorScheme.onPrimaryContainer.getOnBackgroundColor(),
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.titleMedium
@@ -332,7 +332,7 @@ fun MainInfo(
             }
             if (mediaDetails.overview.isNotBlank()) {
                 Text(
-                    text = stringResource(id = R.string.text_overview),
+                    text = stringResource(id = R.string.detail_overview),
                     color = textColor,
                     fontWeight = FontWeight(600),
                     fontSize = 18.sp
@@ -377,7 +377,7 @@ fun MainInfo(
                         }
 
                         Text(
-                            text = job.ifBlank { stringResource(R.string.text_creator) },
+                            text = job.ifBlank { stringResource(R.string.detail_creator) },
                             color = textColor
                         )
                     }

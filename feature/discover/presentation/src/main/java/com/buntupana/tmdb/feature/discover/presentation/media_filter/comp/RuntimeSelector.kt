@@ -26,7 +26,7 @@ fun RuntimeSelector(
             modifier = Modifier.padding(
                 bottom = Dimens.padding.small
             ),
-            text = stringResource(R.string.text_runtime),
+            text = stringResource(R.string.discover_runtime),
             style = MaterialTheme.typography.titleMedium
         )
 

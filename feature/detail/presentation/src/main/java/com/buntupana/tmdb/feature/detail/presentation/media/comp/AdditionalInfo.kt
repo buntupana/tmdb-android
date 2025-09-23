@@ -53,7 +53,7 @@ private fun MovieAdditionalInfo(
         modifier = modifier
     ) {
         AdditionalInfoItem(
-            title = stringResource(R.string.text_status),
+            title = stringResource(R.string.detail_status),
             value = movieDetails.status
         )
 
@@ -62,7 +62,7 @@ private fun MovieAdditionalInfo(
             Spacer(modifier = Modifier.padding(vertical = verticalItemPadding))
 
             AdditionalInfoItem(
-                title = stringResource(R.string.text_original_title),
+                title = stringResource(R.string.detail_original_title),
                 value = movieDetails.originalTitle
             )
         }
@@ -70,21 +70,21 @@ private fun MovieAdditionalInfo(
         Spacer(modifier = Modifier.padding(vertical = verticalItemPadding))
 
         AdditionalInfoItem(
-            title = stringResource(R.string.text_original_language),
+            title = stringResource(R.string.detail_original_language),
             value = movieDetails.originalLanguage
         )
 
         Spacer(modifier = Modifier.padding(vertical = verticalItemPadding))
 
         AdditionalInfoItem(
-            title = stringResource(R.string.text_budget),
+            title = stringResource(R.string.detail_budget),
             value = if (movieDetails.budget == null || movieDetails.budget == 0L) " - " else "$${movieDetails.budget?.toLocalizedString()}"
         )
 
         Spacer(modifier = Modifier.padding(vertical = verticalItemPadding))
 
         AdditionalInfoItem(
-            title = stringResource(R.string.text_revenue),
+            title = stringResource(R.string.detail_revenue),
             value = if (movieDetails.revenue == null || movieDetails.revenue == 0L) " - " else "$${movieDetails.revenue?.toLocalizedString()}"
         )
     }
@@ -100,14 +100,14 @@ private fun TvShowAdditionalInfo(
         modifier = modifier
     ) {
         AdditionalInfoItem(
-            title = stringResource(R.string.text_status),
+            title = stringResource(R.string.detail_status),
             value = tvShowDetails.status
         )
 
         Spacer(modifier = Modifier.padding(vertical = verticalItemPadding))
 
         AdditionalInfoItem(
-            title = stringResource(R.string.text_type),
+            title = stringResource(R.string.detail_type),
             value = tvShowDetails.type
         )
 
@@ -116,7 +116,7 @@ private fun TvShowAdditionalInfo(
             Spacer(modifier = Modifier.padding(vertical = verticalItemPadding))
 
             AdditionalInfoItem(
-                title = stringResource(R.string.text_original_title),
+                title = stringResource(R.string.detail_original_title),
                 value = tvShowDetails.originalTitle
             )
         }
@@ -124,7 +124,7 @@ private fun TvShowAdditionalInfo(
         Spacer(modifier = Modifier.padding(vertical = verticalItemPadding))
 
         AdditionalInfoItem(
-            title = stringResource(R.string.text_original_language),
+            title = stringResource(R.string.detail_original_language),
             value = tvShowDetails.originalLanguage
         )
     }

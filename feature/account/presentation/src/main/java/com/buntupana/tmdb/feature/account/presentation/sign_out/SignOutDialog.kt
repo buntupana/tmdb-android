@@ -70,8 +70,8 @@ private fun SignOutContent(
 ) {
     ConfirmationDialog(
         sheetState = sheetState,
-        title = stringResource(R.string.text_sign_out),
-        description = stringResource(R.string.message_sign_out_confirmation),
+        title = stringResource(R.string.account_sign_out),
+        description = stringResource(R.string.account_sign_out_confirmation),
         isLoading = state.isLoading,
         confirmButtonColor = MaterialTheme.colorScheme.error,
         confirmationButtonTextColor = MaterialTheme.colorScheme.onError,

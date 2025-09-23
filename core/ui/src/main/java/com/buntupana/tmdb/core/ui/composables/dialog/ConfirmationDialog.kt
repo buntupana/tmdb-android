@@ -137,7 +137,7 @@ fun ConfirmationDialog(
                             }
                         ) {
                             Text(
-                                text = stringResource(com.buntupana.tmdb.core.ui.R.string.text_cancel),
+                                text = stringResource(com.buntupana.tmdb.core.ui.R.string.common_cancel),
                                 style = MaterialTheme.typography.titleMedium,
                             )
                         }
@@ -150,7 +150,7 @@ fun ConfirmationDialog(
                             )
                         ) {
                             Text(
-                                text = stringResource(com.buntupana.tmdb.core.ui.R.string.text_confirm),
+                                text = stringResource(com.buntupana.tmdb.core.ui.R.string.common_confirm),
                                 style = MaterialTheme.typography.titleMedium
                             )
                         }

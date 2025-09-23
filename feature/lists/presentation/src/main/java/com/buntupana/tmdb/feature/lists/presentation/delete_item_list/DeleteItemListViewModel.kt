@@ -71,7 +71,7 @@ class DeleteItemListViewModel(
             SnackbarController.sendEvent(
                 SnackbarEvent(
                     message = UiText.StringResource(
-                        R.string.message_error_delete_item_list,
+                        R.string.lists_error_delete_item_list,
                         navArgs.mediaName
                     )
                 )
@@ -93,7 +93,7 @@ class DeleteItemListViewModel(
             SnackbarController.sendEvent(
                 SnackbarEvent(
                     message = UiText.StringResource(
-                        R.string.message_error_delete_item_list,
+                        R.string.lists_error_delete_item_list,
                         navArgs.mediaName
                     )
                 )
@@ -115,7 +115,7 @@ class DeleteItemListViewModel(
             SnackbarController.sendEvent(
                 SnackbarEvent(
                     message = UiText.StringResource(
-                        R.string.message_error_delete_item_list,
+                        R.string.lists_error_delete_item_list,
                         navArgs.mediaName
                     )
                 )

@@ -202,7 +202,7 @@ fun ListDetailContent(
                             .padding(horizontal = Dimens.padding.horizontal)
                             .fillMaxWidth(),
                         contentColor = MaterialTheme.colorScheme.background.getOnBackgroundColor(),
-                        errorMessage = stringResource(id = R.string.message_loading_content_error),
+                        errorMessage = stringResource(id = R.string.common_loading_content_error),
                         onRetryClick = onRetryClick
                     )
                 }
@@ -221,7 +221,7 @@ fun ListDetailContent(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = stringResource(R.string.message_no_results_found)
+                            text = stringResource(R.string.common_no_results_found)
                         )
                     }
                 },

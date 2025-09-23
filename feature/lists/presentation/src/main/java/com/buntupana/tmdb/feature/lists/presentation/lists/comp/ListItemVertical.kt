@@ -36,7 +36,6 @@ import com.buntupana.tmdb.feature.lists.presentation.util.listItemMediaLists
 import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.util.countWordsBySpace
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
-import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun ListItemVertical(
@@ -127,7 +126,7 @@ fun ListItemVertical(
                     ) {
                         Text(
                             text = stringResource(
-                                RCore.string.text_num_items,
+                                R.string.lists_num_items,
                                 userListDetails.itemCount
                             ),
                             color = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor(),
@@ -135,9 +134,9 @@ fun ListItemVertical(
                         )
 
                         val listTypeResId = if (userListDetails.isPublic) {
-                            R.string.text_public
+                            R.string.lists_public
                         } else {
-                            R.string.text_private
+                            R.string.lists_private
                         }
 
                         Text(

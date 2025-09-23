@@ -75,7 +75,7 @@ fun ChipSelector(
                             MaterialTheme.colorScheme.onBackground
                         }
                         Text(
-                            text = stringResource(R.string.text_all),
+                            text = stringResource(R.string.common_all),
                             color = textColor
                         )
                     }

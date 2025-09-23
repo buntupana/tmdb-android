@@ -47,8 +47,8 @@ fun CastHorizontalList(
         Spacer(modifier = Modifier.height(16.dp))
 
         val castTitle = when (mediaDetails) {
-            is MediaDetails.Movie -> stringResource(id = R.string.text_cast_movie)
-            is MediaDetails.TvShow -> stringResource(id = R.string.text_cast_tv_show)
+            is MediaDetails.Movie -> stringResource(id = R.string.detail_cast_movie)
+            is MediaDetails.TvShow -> stringResource(id = R.string.detail_cast_tv_show)
         }
 
         Text(
@@ -101,7 +101,7 @@ fun CastHorizontalList(
             Text(
                 modifier = Modifier
                     .padding(horizontal = Dimens.padding.small),
-                text = stringResource(id = R.string.text_full_cast),
+                text = stringResource(id = R.string.detail_full_cast),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )

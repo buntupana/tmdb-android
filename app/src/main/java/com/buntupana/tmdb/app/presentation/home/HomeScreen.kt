@@ -21,7 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.buntupana.tmdb.app.R
+import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -80,10 +80,10 @@ fun HomeScreenContent(
     )
 
     val navigationItems = listOf(
-        TabNavigationItem.Discover(title = stringResource(R.string.text_explore)),
-        TabNavigationItem.Movies(title = stringResource(R.string.text_movies)),
-        TabNavigationItem.TVShows(title = stringResource(R.string.text_tv_shows)),
-        TabNavigationItem.Account(title = stringResource(R.string.text_account))
+        TabNavigationItem.Discover(title = stringResource(R.string.common_explore)),
+        TabNavigationItem.Movies(title = stringResource(R.string.common_movies)),
+        TabNavigationItem.TVShows(title = stringResource(R.string.common_tv_shows)),
+        TabNavigationItem.Account(title = stringResource(R.string.common_account))
     )
 
     val navController = rememberNavController()

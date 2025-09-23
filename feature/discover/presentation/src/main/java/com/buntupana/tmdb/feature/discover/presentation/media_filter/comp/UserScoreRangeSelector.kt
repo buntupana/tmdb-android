@@ -41,7 +41,7 @@ fun UserScoreRangeSelector(
 
         Text(
             modifier = Modifier,
-            text = stringResource(R.string.text_user_score),
+            text = stringResource(R.string.discover_user_score),
             style = MaterialTheme.typography.titleMedium
         )
 
@@ -63,7 +63,7 @@ fun UserScoreRangeSelector(
         ) {
             Text(
                 modifier = Modifier.padding(horizontal = Dimens.padding.horizontal),
-                text = stringResource(R.string.text_include_not_rated),
+                text = stringResource(R.string.discover_include_not_rated),
                 style = MaterialTheme.typography.bodyLarge
             )
 

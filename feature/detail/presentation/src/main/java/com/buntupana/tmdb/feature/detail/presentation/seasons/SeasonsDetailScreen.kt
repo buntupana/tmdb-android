@@ -144,7 +144,7 @@ private fun SeasonsContent(
                     .padding(top = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding)
                     .padding(horizontal = Dimens.padding.horizontal)
                     .fillMaxWidth(),
-                errorMessage = stringResource(id = R.string.message_loading_content_error),
+                errorMessage = stringResource(id = R.string.common_loading_content_error),
                 onRetryClick = onRetryClick
             )
         }

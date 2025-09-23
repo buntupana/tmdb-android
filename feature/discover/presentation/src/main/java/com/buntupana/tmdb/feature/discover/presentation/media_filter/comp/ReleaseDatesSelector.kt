@@ -39,8 +39,8 @@ fun ReleaseDatesSelector(
     Column(modifier = modifier) {
 
         val titleStringResId = when (mediaType) {
-            MediaType.MOVIE -> R.string.text_release_dates
-            MediaType.TV_SHOW -> R.string.text_air_dates
+            MediaType.MOVIE -> R.string.discover_release_dates
+            MediaType.TV_SHOW -> R.string.discover_air_dates
         }
 
         Text(
@@ -64,7 +64,7 @@ fun ReleaseDatesSelector(
                 .padding(
                     vertical = Dimens.padding.small
                 ),
-            label = stringResource(RCore.string.text_from),
+            label = stringResource(RCore.string.common_from),
             localDate = releaseDateFrom,
             onValueChange = { onSelectReleaseDateRange(it, releaseDateTo) },
         )
@@ -74,7 +74,7 @@ fun ReleaseDatesSelector(
                 .padding(
                     top = Dimens.padding.small
                 ),
-            label = stringResource(RCore.string.text_to),
+            label = stringResource(RCore.string.common_to),
             localDate = releaseDateTo,
             onValueChange = { onSelectReleaseDateRange(releaseDateFrom, it) },
         )
@@ -89,7 +89,7 @@ fun ReleaseDatesSelector(
             ) {
                 Text(
                     modifier = Modifier.padding(horizontal = Dimens.padding.horizontal),
-                    text = stringResource(R.string.text_search_first_air_date),
+                    text = stringResource(R.string.discover_search_first_air_date),
                     style = MaterialTheme.typography.bodyLarge
                 )
 
@@ -113,7 +113,7 @@ private fun ReleaseDatesSelectorPreview() {
         releaseTypeList = listOf(
             SelectableItem(
                 1,
-                UiText.StringResource(R.string.text_release_type_theatrical),
+                UiText.StringResource(R.string.discover_release_type_theatrical),
                 true
             )
         ),

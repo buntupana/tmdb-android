@@ -126,7 +126,7 @@ fun CarouselMediaItem(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
                         .padding(top = Dimens.padding.huge),
-                    text = stringResource(RCore.string.message_no_results_found),
+                    text = stringResource(RCore.string.common_no_results_found),
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -138,7 +138,7 @@ fun CarouselMediaItem(
                     .matchParentSize()
                     .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
                 contentColor = MaterialTheme.colorScheme.onBackground,
-                errorMessage = stringResource(RCore.string.message_loading_content_error),
+                errorMessage = stringResource(RCore.string.common_loading_content_error),
                 onRetryClick = onRetryClicked
             )
         }

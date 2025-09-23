@@ -179,7 +179,7 @@ fun MediaFilterContent(
                         horizontal = Dimens.padding.horizontal,
                         vertical = Dimens.padding.vertical
                     ),
-                title = stringResource(R.string.text_availabilities),
+                title = stringResource(R.string.discover_availabilities),
                 chipItemList = state.availabilitiesList,
                 showAllChip = true,
                 onSelectionChanged = onAvailabilityListChanged
@@ -235,7 +235,7 @@ fun MediaFilterContent(
                         horizontal = Dimens.padding.horizontal,
                         vertical = Dimens.padding.vertical
                     ),
-                title = stringResource(R.string.text_genres),
+                title = stringResource(R.string.discover_genres),
                 chipItemList = state.genreList,
                 showAllChip = false,
                 onSelectionChanged = onGenreSelectedListChanged

@@ -146,7 +146,7 @@ class MediaDetailViewModel(
             SnackbarController.sendEvent(
                 SnackbarEvent(
                     message = UiText.StringResource(
-                        R.string.message_set_favorite_error
+                        R.string.detail_set_favorite_error
                     )
                 )
             )
@@ -176,7 +176,7 @@ class MediaDetailViewModel(
             SnackbarController.sendEvent(
                 SnackbarEvent(
                     message = UiText.StringResource(
-                        R.string.message_set_watchlist_error
+                        R.string.detail_set_watchlist_error
                     )
                 )
             )

@@ -169,7 +169,7 @@ private fun WatchlistPagerPreview() {
             pagingItems = flowOf(itemsList).collectAsLazyPagingItems(),
             navigationBarPadding = 0.dp,
             noResultMessage = stringResource(
-                R.string.message_no_results_in,
+                R.string.lists_no_results_in,
                 "movies",
                 "favorites"
             ),

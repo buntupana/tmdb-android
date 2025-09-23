@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_signing_in">Signing In…</string>
+    <string name="account_signing_in_error">There was an error signing in.</string>
+    <string name="account_sign_out">Sign Out</string>
+    <string name="account_sign_up">Sign Up</string>
+    <string name="account_sign_out_confirmation">Are you sure you want to sign out?</string>
+
+    <string name="account_lists">Lists</string>
+
+    <string name="account_join_today">Join Today</string>
+
+    <!-- Your new HTML formatted string -->
+    <string name="account_sign_up_html_description"><![CDATA[Get access to maintain your own <font color="#bab4c2"><i>custom personal lists</i></font>, <font color="#bab4c2"><i>track what you\'ve seen</i></font>, and search and filter for <font color="#bab4c2"><i>what to watch next</i></font>—regardless if it\'s in theatres, on TV or available on popular streaming services like Netflix, Disney Plus, Apple TV+, amazon Primer Video and Movistar Plus+.]]></string>
+
+    <string name="account_list_sign_up_vantages"><![CDATA[
+    <font color="#bab4c2">
+        <ul>
+            <li>Enjoy TMDB ad free</li>
+            <li>Maintain a personal watchlist</li>
+            <li>Filter by your subscribed streaming services and find something to watch</li>
+            <li>Log the movies and TV shows you\'ve seen</li>
+            <li>Build custom lists</li>
+            <li>Contribute to and improve our database</li>
+        </ul>
+        </font>
+    ]]></string>
+
+</resources>

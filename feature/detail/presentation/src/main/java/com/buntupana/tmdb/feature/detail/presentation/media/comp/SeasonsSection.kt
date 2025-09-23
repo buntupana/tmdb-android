@@ -50,9 +50,9 @@ fun SeasonsSection(
     if (seasonList.isEmpty() || lastSeason == null) return
 
     val titleStrRes = if (isInAir) {
-        R.string.text_current_season
+        R.string.detail_current_season
     } else {
-        R.string.text_last_season
+        R.string.detail_last_season
     }
 
     Column(
@@ -114,7 +114,7 @@ fun SeasonsSection(
             Text(
                 modifier = Modifier
                     .padding(horizontal = Dimens.padding.small),
-                text = stringResource(id = R.string.text_view_all_seasons),
+                text = stringResource(id = R.string.detail_view_all_seasons),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )

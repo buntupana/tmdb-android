@@ -78,7 +78,7 @@ class CreateUpdateListViewModel(
             state = state.copy(isLoading = false)
             SnackbarController.sendEvent(
                 SnackbarEvent(
-                    UiText.StringResource(R.string.message_error_create_list)
+                    UiText.StringResource(R.string.lists_error_create_list)
                 )
             )
         }.onSuccess {
@@ -99,7 +99,7 @@ class CreateUpdateListViewModel(
             state = state.copy(isLoading = false)
             SnackbarController.sendEvent(
                 SnackbarEvent(
-                    UiText.StringResource(R.string.message_error_create_list)
+                    UiText.StringResource(R.string.lists_error_create_list)
                 )
             )
         }.onSuccess {

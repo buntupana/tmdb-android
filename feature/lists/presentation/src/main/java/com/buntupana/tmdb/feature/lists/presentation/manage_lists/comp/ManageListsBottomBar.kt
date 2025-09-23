@@ -48,7 +48,7 @@ fun ManageListsBottomBar(
             colors = ButtonDefaults.buttonColors(containerColor = backgroundColor, contentColor = backgroundColor.getOnBackgroundColor()),
             onClick = onCreateListClick,
             border = BorderStroke(ButtonDefaults.outlinedButtonBorder(true).width, backgroundColor.getOnBackgroundColor()),
-            text = stringResource(R.string.text_create_list),
+            text = stringResource(R.string.lists_create_list),
             imageVector = Icons.Rounded.Add,
         )
 
@@ -56,7 +56,7 @@ fun ManageListsBottomBar(
             border = BorderStroke(2.dp, backgroundColor.getOnBackgroundColor()),
             onClick = onConfirmClick,
             imageVector = Icons.Rounded.Check,
-            text = stringResource(RCore.string.text_confirm)
+            text = stringResource(RCore.string.common_confirm)
         )
     }
 }

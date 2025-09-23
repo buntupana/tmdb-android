@@ -27,7 +27,7 @@ fun ShowMoreButton(
         rippleColor = MaterialTheme.colorScheme.onBackground
     ) {
         Text(
-            text = stringResource(R.string.text_show_more),
+            text = stringResource(R.string.common_show_more),
             color = MaterialTheme.colorScheme.onBackground
         )
 

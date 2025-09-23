@@ -40,7 +40,7 @@ fun HeaderManageLists(
 
         Row {
             Text(
-                text = stringResource(R.string.text_belongs_to) + " ",
+                text = stringResource(R.string.lists_belongs_to) + " ",
                 color = backgroundColor.getOnBackgroundColor(),
                 fontSize = Typography.titleMedium.fontSize
             )
@@ -50,7 +50,7 @@ fun HeaderManageLists(
                 fontSize = Typography.titleMedium.fontSize
             )
             Text(
-                text = " " + stringResource(R.string.text_lists).lowercase(),
+                text = " " + stringResource(R.string.lists_lists).lowercase(),
                 color = backgroundColor.getOnBackgroundColor(),
                 fontSize = Typography.titleMedium.fontSize
             )

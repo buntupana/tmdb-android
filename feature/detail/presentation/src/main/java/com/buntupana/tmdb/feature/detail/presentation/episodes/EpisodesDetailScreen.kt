@@ -127,7 +127,7 @@ private fun EpisodesDetailContent(
 
                 val subtitle = if (state.episodeList.isNotNullOrEmpty()) {
                     pluralStringResource(
-                        id = R.plurals.text_episodes_count,
+                        id = R.plurals.detail_episodes_count,
                         count = state.episodeList.size,
                         state.episodeList.size
                     )
@@ -163,7 +163,7 @@ private fun EpisodesDetailContent(
                     .fillMaxWidth()
                     .padding(top = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding)
                     .padding(horizontal = Dimens.padding.horizontal),
-                errorMessage = stringResource(id = RCore.string.message_loading_content_error),
+                errorMessage = stringResource(id = RCore.string.common_loading_content_error),
                 onRetryClick = onRetryClick
             )
         }

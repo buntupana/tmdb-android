@@ -129,7 +129,7 @@ fun RatingContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.text_rating),
+                text = stringResource(R.string.detail_rating),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -141,7 +141,7 @@ fun RatingContent(
                     .padding(horizontal = Dimens.padding.horizontal),
                 textAlign = TextAlign.Center,
                 text = annotatedStringResource(
-                    R.string.message_what_do_you_think,
+                    R.string.detail_what_do_you_think,
                     state.mediaTitle
                 ),
                 style = MaterialTheme.typography.titleMedium.balanced(),
@@ -181,7 +181,7 @@ fun RatingContent(
                     enabled = state.isLoading.not()
                 ) {
                     Text(
-                        text = stringResource(R.string.text_clear_rating),
+                        text = stringResource(R.string.detail_clear_rating),
                         style = MaterialTheme.typography.titleMedium,
                     )
                 }
@@ -201,7 +201,7 @@ fun RatingContent(
                         )
                     ) {
                         Text(
-                            text = stringResource(RCore.string.text_confirm),
+                            text = stringResource(RCore.string.common_confirm),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSecondaryContainer
                         )

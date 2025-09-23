@@ -88,7 +88,7 @@ private fun MovieFilterContent(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = stringResource(R.string.text_select_filter),
+                    text = stringResource(R.string.discover_select_filter),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )

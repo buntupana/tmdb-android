@@ -112,7 +112,7 @@ fun DiscoverContent(
 
             TitleAndFilter(
                 modifier = Modifier.padding(vertical = Dimens.padding.medium),
-                title = stringResource(id = R.string.text_trending),
+                title = stringResource(id = R.string.discover_trending),
                 filterSet = state.trendingFilterSet,
                 indexSelected = state.trendingFilterSet.indexOf(state.trendingFilterSelected),
                 filterClicked = { item, _ ->
@@ -147,7 +147,7 @@ fun DiscoverContent(
 
             TitleAndFilter(
                 modifier = Modifier.padding(vertical = Dimens.padding.medium),
-                title = stringResource(id = R.string.text_whats_popular),
+                title = stringResource(id = R.string.discover_whats_popular),
                 filterSet = state.popularFilterSet,
                 indexSelected = state.popularFilterSet.indexOf(state.popularFilterSelected),
                 filterClicked = { item, _ ->
@@ -171,7 +171,7 @@ fun DiscoverContent(
 
             TitleAndFilter(
                 modifier = Modifier.padding(vertical = Dimens.padding.medium),
-                title = stringResource(id = R.string.text_free_to_watch),
+                title = stringResource(id = R.string.discover_free_to_watch),
                 filterSet = state.freeToWatchFilterSet,
                 indexSelected = state.freeToWatchFilterSet.indexOf(state.freeToWatchFilterSelected),
                 filterClicked = { item, _ ->

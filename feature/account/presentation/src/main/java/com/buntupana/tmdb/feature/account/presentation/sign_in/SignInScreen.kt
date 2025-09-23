@@ -113,7 +113,7 @@ fun SignInContent(
             ) {
                 if (state.isLoading) {
                     Text(
-                        text = stringResource(R.string.text_signing_in),
+                        text = stringResource(R.string.account_signing_in),
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     Spacer(
@@ -125,7 +125,7 @@ fun SignInContent(
                 } else if (state.isSignInError) {
                     ErrorAndRetry(
                         contentColor = MaterialTheme.colorScheme.onBackground,
-                        errorMessage = stringResource(R.string.text_signing_in_error),
+                        errorMessage = stringResource(R.string.account_signing_in_error),
                         onRetryClick = onRetryClicked
                     )
                 }

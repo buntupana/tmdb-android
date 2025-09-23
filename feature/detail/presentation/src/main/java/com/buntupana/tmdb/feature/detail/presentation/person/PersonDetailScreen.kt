@@ -80,8 +80,8 @@ fun PersonDetailContent(
     )
 
     val mediaTypeMap = mapOf(
-        R.string.text_movies to stringResource(id = R.string.text_movies),
-        R.string.text_tv_shows to stringResource(id = R.string.text_tv_shows)
+        R.string.common_movies to stringResource(id = R.string.common_movies),
+        R.string.common_tv_shows to stringResource(id = R.string.common_tv_shows)
     )
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -117,7 +117,7 @@ fun PersonDetailContent(
                     .padding(top = paddingValues.calculateTopPadding() + Dimens.errorAndRetryTopPadding)
                     .padding(horizontal = Dimens.padding.horizontal)
                     .fillMaxWidth(),
-                errorMessage = stringResource(id = R.string.message_loading_content_error),
+                errorMessage = stringResource(id = R.string.common_loading_content_error),
                 onRetryClick = onRetryClick
             )
         }

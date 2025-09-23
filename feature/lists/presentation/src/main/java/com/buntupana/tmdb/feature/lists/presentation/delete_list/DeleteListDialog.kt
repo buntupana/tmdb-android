@@ -76,9 +76,9 @@ private fun DeleteListContent(
 ) {
     ConfirmationDialog(
         sheetState = sheetState,
-        title = stringResource(R.string.text_delete_list),
+        title = stringResource(R.string.lists_delete_list),
         description = annotatedStringResource(
-            R.string.message_delete_list_confirmation,
+            R.string.lists_delete_list_confirmation,
             state.listName
         ),
         isLoading = state.isLoading,

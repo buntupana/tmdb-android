@@ -82,7 +82,7 @@ fun SeasonSubtitle(season: Season) {
 
             Text(
                 text = pluralStringResource(
-                    id = R.plurals.text_episodes_count,
+                    id = R.plurals.detail_episodes_count,
                     count = season.episodeCount!!,
                     season.episodeCount!!
                 ),

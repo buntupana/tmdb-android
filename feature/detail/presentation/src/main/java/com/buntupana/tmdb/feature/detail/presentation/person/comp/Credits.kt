@@ -51,12 +51,12 @@ fun CreditsFilter(
     onFilterChange: (mediaType: Int?, department: String?) -> Unit,
 ) {
 
-    val departmentAllValue = stringResource(id = RCore.string.text_department)
+    val departmentAllValue = stringResource(id = R.string.detail_department)
 
     val departmentSelectedValue =
         if (departmentSelected == null) departmentAllValue else departmentMap[departmentSelected].orEmpty()
     val mediaTypeSelectedValue =
-        if (mediaTypeSelected == null) stringResource(id = RCore.string.text_all) else mediaTypeMap[mediaTypeSelected].orEmpty()
+        if (mediaTypeSelected == null) stringResource(id = RCore.string.common_all) else mediaTypeMap[mediaTypeSelected].orEmpty()
 
     Spacer(modifier = Modifier.height(Dimens.padding.big))
 
@@ -88,7 +88,7 @@ fun CreditsFilter(
                 ) {
                     Text(
                         modifier = Modifier,
-                        text = stringResource(id = RCore.string.text_clear),
+                        text = stringResource(id = R.string.detail_clear),
                         color = MaterialTheme.colorScheme.secondary
                     )
                 }
@@ -197,7 +197,7 @@ fun LazyListScope.noCreditFound(
                 horizontal = Dimens.padding.horizontal,
                 vertical = Dimens.padding.big
             ),
-            text = stringResource(id = R.string.text_no_credits, personName)
+            text = stringResource(id = R.string.detail_no_credits, personName)
         )
     }
 }
@@ -208,8 +208,8 @@ private fun filterCreditsByMediaType(
 ): Map<String, List<CreditPersonItem>> {
 
     val mediaType = when (mediaTypeRes) {
-        RCore.string.text_movies -> CreditPersonItem.Movie::class.java
-        RCore.string.text_tv_shows -> CreditPersonItem.TvShow::class.java
+        RCore.string.common_movies -> CreditPersonItem.Movie::class.java
+        RCore.string.common_tv_shows -> CreditPersonItem.TvShow::class.java
         else -> return creditMap
     }
 
@@ -270,7 +270,7 @@ private fun LazyListScope.creditList(
                             withStyle(
                                 style = SpanStyle(fontWeight = FontWeight.Light)
                             ) {
-                                append(stringResource(id = R.string.text_as))
+                                append(stringResource(id = R.string.detail_as))
                             }
                             append(" ")
                             append(credit.role)
@@ -301,14 +301,14 @@ fun CreditsFilterPreview() {
         CreditsFilter(
             mainDepartment = "Acting",
             mediaTypeMap = mapOf(
-                RCore.string.text_movies to "Movies",
-                RCore.string.text_tv_shows to "TV Shows"
+                RCore.string.common_movies to "Movies",
+                RCore.string.common_tv_shows to "TV Shows"
             ),
             departmentMap = mapOf(
                 "Acting" to "Acting",
                 "Directing" to "Directing"
             ),
-            mediaTypeSelected = RCore.string.text_movies,
+            mediaTypeSelected = RCore.string.common_movies,
             departmentSelected = "Acting",
             onFilterChange = { _, _ -> }
         )

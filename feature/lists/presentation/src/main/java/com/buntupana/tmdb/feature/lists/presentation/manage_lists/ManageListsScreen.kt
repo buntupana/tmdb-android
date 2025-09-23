@@ -187,7 +187,7 @@ private fun ManageListsContent(
                     ) {
                         ErrorAndRetry(
                             modifier = Modifier,
-                            errorMessage = stringResource(RCore.string.message_loading_content_error),
+                            errorMessage = stringResource(RCore.string.common_loading_content_error),
                             onRetryClick = onRetryClick
                         )
                     }

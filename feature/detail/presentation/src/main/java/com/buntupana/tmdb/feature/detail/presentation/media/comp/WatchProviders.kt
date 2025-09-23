@@ -67,7 +67,7 @@ fun WatchProviders(
 
             Text(
                 modifier = Modifier.padding(horizontal = Dimens.padding.horizontal),
-                text = stringResource(R.string.text_available_in),
+                text = stringResource(R.string.detail_available_in),
                 color = backgroundColor.getOnBackgroundColor(),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
@@ -112,7 +112,7 @@ fun WatchProviders(
             ) {
 
                 Text(
-                    text = stringResource(R.string.text_powered_by),
+                    text = stringResource(R.string.detail_powered_by),
                     color = backgroundColor.getOnBackgroundColor(),
                     fontSize = MaterialTheme.typography.bodySmall.fontSize
                 )

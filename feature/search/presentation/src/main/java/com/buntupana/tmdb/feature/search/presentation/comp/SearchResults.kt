@@ -25,17 +25,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.search.presentation.MediaResultCount
+import com.buntupana.tmdb.feature.search.presentation.R
 import com.buntupana.tmdb.feature.search.presentation.SearchState
 import com.buntupana.tmdb.feature.search.presentation.SearchType
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun SearchResults(
@@ -71,9 +72,9 @@ fun SearchResults(
             searchState.resultCountList.forEachIndexed { index, resultCount ->
 
                 val titleResId = when (resultCount.searchType) {
-                    SearchType.MOVIE -> R.string.text_movies
-                    SearchType.TV_SHOW -> R.string.text_tv_shows
-                    SearchType.PERSON -> R.string.text_people
+                    SearchType.MOVIE -> RCore.string.common_movies
+                    SearchType.TV_SHOW -> RCore.string.common_tv_shows
+                    SearchType.PERSON -> R.string.search_people
                 }
 
                 Tab(
@@ -119,7 +120,7 @@ fun SearchResults(
                                     .padding(Dimens.padding.medium),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(text = stringResource(R.string.message_movies_no_result))
+                                Text(text = stringResource(R.string.search_movies_no_result))
                             }
                         },
                         itemContent = { index, item ->
@@ -150,7 +151,7 @@ fun SearchResults(
                                     .padding(Dimens.padding.medium),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(text = stringResource(R.string.message_tv_shows_no_result))
+                                Text(text = stringResource(R.string.search_tv_shows_no_result))
                             }
                         },
                         itemContent = { index, item ->
@@ -181,7 +182,7 @@ fun SearchResults(
                                     .padding(Dimens.padding.medium),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(text = stringResource(R.string.message_people_no_result))
+                                Text(text = stringResource(R.string.search_people_no_result))
                             }
                         },
                         itemContent = { index, item ->

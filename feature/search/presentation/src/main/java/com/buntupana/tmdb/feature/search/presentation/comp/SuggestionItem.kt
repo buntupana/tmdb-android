@@ -47,17 +47,17 @@ fun SuggestionItem(
         when (mediaItem) {
             is com.buntupana.tmdb.feature.search.domain.model.SearchItem.Movie -> {
                 suggestionIconResId = R.drawable.ic_movie
-                auxResId = R.string.text_in_movies
+                auxResId = R.string.search_in_movies
             }
 
             is com.buntupana.tmdb.feature.search.domain.model.SearchItem.Person -> {
                 suggestionIconResId = R.drawable.ic_person
-                auxResId = R.string.text_in_person
+                auxResId = R.string.search_in_person
             }
 
             is com.buntupana.tmdb.feature.search.domain.model.SearchItem.TvShow -> {
                 suggestionIconResId = R.drawable.ic_tv_show
-                auxResId = R.string.text_in_tv_shows
+                auxResId = R.string.search_in_tv_shows
             }
         }
     } else {

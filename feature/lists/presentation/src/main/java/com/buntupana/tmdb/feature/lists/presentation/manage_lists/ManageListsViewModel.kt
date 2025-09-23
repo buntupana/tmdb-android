@@ -146,7 +146,7 @@ class ManageListsViewModel(
 
             SnackbarController.sendEvent(
                 SnackbarEvent(
-                    message = UiText.StringResource(R.string.message_set_lists_error)
+                    message = UiText.StringResource(R.string.lists_set_lists_error)
                 )
             )
         }.onSuccess {

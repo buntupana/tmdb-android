@@ -51,7 +51,7 @@ fun ListSubBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.text_you_have) + " ",
+                text = stringResource(R.string.lists_you_have) + " ",
                 color = textColor,
                 fontWeight = FontWeight.Bold
             )
@@ -63,7 +63,7 @@ fun ListSubBar(
             )
 
             Text(
-                text = " " + stringResource(R.string.text_lists).lowercase(),
+                text = " " + stringResource(R.string.lists_lists).lowercase(),
                 color = textColor,
                 fontWeight = FontWeight.Bold
             )
@@ -71,7 +71,7 @@ fun ListSubBar(
 
         AppTextWithIconButton(
             onClick = onCreateListClick,
-            text = stringResource(R.string.text_create_list),
+            text = stringResource(R.string.lists_create_list),
             imageVector = Icons.Rounded.Add
         )
     }

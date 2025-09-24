@@ -251,11 +251,12 @@ fun ExpandableText(
     fontSize: TextUnit = TextUnit.Unspecified,
     expandColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     fontWeight: FontWeight = FontWeight.Normal,
+    isExpanded: Boolean = false,
     collapsedVisibleLines: Int = 12
 ) {
 
     var textExpanded by remember {
-        mutableStateOf(false)
+        mutableStateOf(isExpanded)
     }
 
     Box(modifier = modifier) {

@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,119 +46,113 @@ fun ListDetailSubBar(
 
     val textColor = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor()
 
-    Box(
-        modifier = modifier.animateContentSize()
+    Column(
+        modifier = modifier
+            .padding(
+                horizontal = Dimens.padding.horizontal,
+                vertical = Dimens.padding.vertical
+            )
+            .animateContentSize()
     ) {
 
-        Column(
-            modifier = Modifier
-                .padding(
-                    horizontal = Dimens.padding.horizontal,
-                    vertical = Dimens.padding.vertical
-                )
-                .animateContentSize()
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+
+            Text(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(top = Dimens.padding.small),
+                text = listName,
+                color = textColor,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        if (description.isNotNullOrBlank()) {
+
+            Spacer(modifier = Modifier.height(Dimens.padding.medium))
+
+            ExpandableText(
+                modifier = Modifier.fillMaxWidth(),
+                text = description,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                fadeColor = MaterialTheme.colorScheme.primaryContainer,
+                collapsedVisibleLines = 3
+            )
+        }
+
+        itemsTotalCount ?: return@Column
+
+        Spacer(modifier = Modifier.height(Dimens.padding.medium))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
+
+                Text(text = " ")
+
+                VerticalNumberRoulette(
+                    value = itemsTotalCount,
+                    color = textColor,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = " " + stringResource(R.string.lists_items).lowercase(),
+                    color = textColor,
+                    fontWeight = FontWeight.Bold
+                )
+
+                val listTypeResId = if (isPublic) {
+                    R.string.lists_public
+                } else {
+                    R.string.lists_private
+                }
 
                 Text(
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(top = Dimens.padding.small),
-                    text = listName,
-                    color = textColor,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
+                        .animateContentSize()
+                        .padding(start = Dimens.padding.medium)
+                        .clip(RoundedCornerShape(Dimens.posterRound))
+                        .background(MaterialTheme.colorScheme.onPrimaryContainer)
+                        .padding(horizontal = Dimens.padding.small),
+                    text = stringResource(listTypeResId).uppercase(),
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
 
-            if (description.isNotNullOrBlank()) {
+            Row {
 
-                Spacer(modifier = Modifier.height(Dimens.padding.medium))
-
-                ExpandableText(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = description,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                    fadeColor = MaterialTheme.colorScheme.primaryContainer,
-                    collapsedVisibleLines = 3
-                )
-            }
-
-            if (itemsTotalCount != null) {
-
-                Spacer(modifier = Modifier.height(Dimens.padding.medium))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                AppIconButton(
+                    onClick = onEditClick,
+                    rippleColor = textColor.getOnBackgroundColor()
                 ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Edit,
+                        contentDescription = null,
+                        tint = textColor,
+                    )
+                }
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-
-                        Text(text = " ")
-
-                        VerticalNumberRoulette(
-                            value = itemsTotalCount,
-                            color = textColor,
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        Text(
-                            text = " " + stringResource(R.string.lists_items).lowercase(),
-                            color = textColor,
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        val listTypeResId = if (isPublic) {
-                            R.string.lists_public
-                        } else {
-                            R.string.lists_private
-                        }
-
-                        Text(
-                            modifier = Modifier
-                                .animateContentSize()
-                                .padding(start = Dimens.padding.medium)
-                                .clip(RoundedCornerShape(Dimens.posterRound))
-                                .background(MaterialTheme.colorScheme.onPrimaryContainer)
-                                .padding(horizontal = Dimens.padding.small),
-                            text = stringResource(listTypeResId).uppercase(),
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-
-                    Row {
-
-                        AppIconButton(
-                            onClick = onEditClick,
-                            rippleColor = textColor.getOnBackgroundColor()
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.Edit,
-                                contentDescription = null,
-                                tint = textColor,
-                            )
-                        }
-
-                        AppIconButton(
-                            onClick = onDeleteClick,
-                            rippleColor = textColor.getOnBackgroundColor()
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.Delete,
-                                contentDescription = null,
-                                tint = textColor
-                            )
-                        }
-                    }
+                AppIconButton(
+                    onClick = onDeleteClick,
+                    rippleColor = textColor.getOnBackgroundColor()
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Delete,
+                        contentDescription = null,
+                        tint = textColor
+                    )
                 }
             }
         }

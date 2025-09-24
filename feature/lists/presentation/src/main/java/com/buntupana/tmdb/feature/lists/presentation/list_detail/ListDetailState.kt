@@ -14,5 +14,6 @@ data class ListDetailState(
     val isPublic: Boolean = true,
     val itemTotalCount: Int? = null,
     val mediaItemList: Flow<PagingData<MediaItemRevealedViewEntity>>? = null,
-    val shareLink: String? = null
+    val shareLink: String? = null,
+    val isDescriptionExpanded: Boolean = false
 )

@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.buntupana.tmdb.core.ui.composables.ExpandableText
 import com.buntupana.tmdb.core.ui.composables.VerticalNumberRoulette
 import com.buntupana.tmdb.core.ui.composables.widget.AppIconButton
 import com.buntupana.tmdb.core.ui.theme.AppTheme
@@ -50,16 +51,13 @@ fun ListDetailSubBar(
         modifier = modifier.animateContentSize()
     ) {
 
-        Box(
-            modifier = Modifier.matchParentSize()
-        )
-
         Column(
             modifier = Modifier
                 .padding(
                     horizontal = Dimens.padding.horizontal,
                     vertical = Dimens.padding.vertical
                 )
+                .animateContentSize()
         ) {
 
             Row(
@@ -82,9 +80,12 @@ fun ListDetailSubBar(
 
                 Spacer(modifier = Modifier.height(Dimens.padding.medium))
 
-                Text(
+                ExpandableText(
+                    modifier = Modifier.fillMaxWidth(),
                     text = description,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    fadeColor = MaterialTheme.colorScheme.primaryContainer,
+                    collapsedVisibleLines = 3
                 )
             }
 
@@ -183,7 +184,7 @@ private fun ListDetailSubBarPreview() {
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.primaryContainer),
             listName = "The 97th Academy Award nominees for Best Motion Picture of the Year Oscars",
-            description = "This is a description of the list",
+            description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
             isPublic = true,
             itemsTotalCount = 3
         )

@@ -246,7 +246,10 @@ fun TitleAndSubtitle(
 fun ExpandableText(
     modifier: Modifier = Modifier,
     text: String,
+    color: Color = Color.Unspecified,
+    fadeColor: Color = MaterialTheme.colorScheme.background,
     fontSize: TextUnit = TextUnit.Unspecified,
+    expandColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     fontWeight: FontWeight = FontWeight.Normal,
     collapsedVisibleLines: Int = 12
 ) {
@@ -261,6 +264,7 @@ fun ExpandableText(
             modifier = Modifier
                 .animateContentSize(),
             text = text,
+            color = color,
             fontSize = fontSize,
             fontWeight = fontWeight,
             maxLines = if (textExpanded) Int.MAX_VALUE else collapsedVisibleLines,
@@ -297,8 +301,8 @@ fun ExpandableText(
                         .background(
                             Brush.radialGradient(
                                 colorStops = arrayOf(
-                                    0f to MaterialTheme.colorScheme.background,
-                                    0.5f to MaterialTheme.colorScheme.background,
+                                    0f to fadeColor,
+                                    0.5f to fadeColor,
                                     1f to Color.Transparent
                                 ),
                                 center = Offset(
@@ -319,8 +323,8 @@ fun ExpandableText(
                             Brush.verticalGradient(
                                 colorStops = arrayOf(
                                     0f to Color.Transparent,
-                                    0.5f to MaterialTheme.colorScheme.background,
-                                    1f to MaterialTheme.colorScheme.background
+                                    0.5f to fadeColor,
+                                    1f to fadeColor
                                 ),
                             )
                         )
@@ -338,18 +342,18 @@ fun ExpandableText(
                         }
                     },
                 onClick = { textExpanded = true },
-                rippleColor = MaterialTheme.colorScheme.onBackground,
+                rippleColor = fadeColor.getOnBackgroundColor(),
             ) {
                 Text(
                     text = stringResource(id = R.string.common_read_more),
-                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    color = expandColor,
                     fontWeight = FontWeight.Bold
                 )
                 Image(
                     modifier = Modifier.size(16.dp),
                     painter = painterResource(id = R.drawable.ic_arrow_right),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondaryContainer)
+                    colorFilter = ColorFilter.tint(expandColor)
                 )
             }
         }

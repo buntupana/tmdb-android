@@ -20,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
+import androidx.navigation.toRoute
 import com.buntupana.tmdb.app.presentation.home.HomeRoute
 import com.buntupana.tmdb.app.presentation.navigation.CastDetailNav
 import com.buntupana.tmdb.app.presentation.navigation.CreateUpdateListNav
@@ -46,7 +47,9 @@ import com.buntupana.tmdb.core.ui.util.bottomSheet
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInRoute
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailRoute
 import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailRoute
+import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailDeepLinkRoute
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailRoute
+import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailDeepLinkRoute
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailRoute
 import com.buntupana.tmdb.feature.detail.presentation.rating.RatingRoute
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailRoute
@@ -59,6 +62,7 @@ import com.buntupana.tmdb.feature.lists.presentation.lists.ListsRoute
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsRoute
 import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchListFavoritesRoute
 import com.buntupana.tmdb.feature.search.presentation.SearchRoute
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -132,12 +136,59 @@ class MainActivity : ComponentActivity() {
                             SearchNav(navRoutesMain)
                         }
 
+                        composable<MediaDetailDeepLinkRoute>(
+                            deepLinks = listOf(
+                                navDeepLink<MediaDetailDeepLinkRoute>(basePath = urlProvider.BASE_DEEP_LINK_MOVIE_URL),
+                                navDeepLink<MediaDetailDeepLinkRoute>(basePath = urlProvider.BASE_DEPP_LINK_TV_SHOW_URL)
+                            ),
+                        ) { entry ->
+
+                            val route = entry.toRoute<MediaDetailDeepLinkRoute>()
+
+                            val movieId = route.movieId?.substringBefore("-")?.toLong()
+                            val tvShowId = route.tvShowId?.substringBefore("-")?.toLong()
+
+                            val (mediaId, mediaType) = when{
+                                movieId != null -> {
+                                    movieId to MediaType.MOVIE
+                                }
+                                tvShowId != null -> {
+                                    tvShowId to MediaType.TV_SHOW
+                                }
+
+                                else -> null to null
+                            }
+
+                            navRoutesMain.navigate(
+                                destination = MediaDetailRoute(
+                                    mediaId = mediaId!!,
+                                    mediaType = mediaType!!,
+                                    backgroundColor = null
+                                )
+                            )
+                        }
                         composable<MediaDetailRoute> {
                             MediaDetailsNav(navRoutesMain)
                         }
 
                         composable<CastDetailRoute> {
                             CastDetailNav(navRoutesMain)
+                        }
+
+                        composable< PersonDetailDeepLinkRoute>(
+                            deepLinks = listOf(
+                                navDeepLink<PersonDetailDeepLinkRoute>(basePath = urlProvider.BASE_DEEP_LINK_PERSON_URL)
+                            ),
+                        ) { entry ->
+                            val route = entry.toRoute<PersonDetailDeepLinkRoute>()
+
+                            val personId = route.personId?.substringBefore("-")?.toLong()
+
+                            navRoutesMain.navigate(
+                                destination = PersonDetailRoute(
+                                    personId = personId!!
+                                )
+                            )
                         }
 
                         composable<PersonDetailRoute> {

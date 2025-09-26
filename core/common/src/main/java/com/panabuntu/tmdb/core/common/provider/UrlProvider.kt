@@ -27,4 +27,7 @@ interface UrlProvider {
     fun getPersonShareLink(personId: Long): String
     fun getListShareLink(listId: Long): String
     val BASE_URL_IMAGE_ORIGINAL_SIZE: String
+    val BASE_DEEP_LINK_PERSON_URL: String
+    val BASE_DEEP_LINK_MOVIE_URL: String
+    val BASE_DEPP_LINK_TV_SHOW_URL: String
 }

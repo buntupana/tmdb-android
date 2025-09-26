@@ -23,6 +23,11 @@ class UrlProviderImpl : UrlProvider {
     override val SIGN_IN_DEEP_LINK_URL = "$BASE_DEEP_LINK_URL/signin"
     override val SIGN_IN_DEEP_LINK_REDIRECT = "$SIGN_IN_DEEP_LINK_URL?approved=true"
 
+    private val BASE_DEEP_LINK_WEB_URL = "https://www.themoviedb.org"
+    override val BASE_DEEP_LINK_PERSON_URL = "$BASE_DEEP_LINK_WEB_URL/person/{personId}"
+    override val BASE_DEEP_LINK_MOVIE_URL = "$BASE_DEEP_LINK_WEB_URL/movie/{movieId}"
+    override val BASE_DEPP_LINK_TV_SHOW_URL = "$BASE_DEEP_LINK_WEB_URL/tv/{tvShowId}"
+
     override val BASE_URL_FACEBOOK = "https://www.facebook.com/"
     override val BASE_URL_INSTAGRAM = "https://instagram.com/"
     override val BASE_URL_X = "https://x.com/"

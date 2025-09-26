@@ -70,7 +70,7 @@ fun SearchScreen(
 }
 
 @Composable
-fun SearchScreenContent(
+private fun SearchScreenContent(
     state: SearchState,
     onSearchSuggestions: (searchKey: String) -> Unit,
     onSearch: (searchKey: String, searchType: SearchType?) -> Unit,
@@ -173,7 +173,7 @@ fun SearchScreenContent(
     showBackground = true
 )
 @Composable
-fun SearchScreenPreview() {
+private fun SearchScreenPreview() {
 
     val suggestionList = listOf(
         searchItemMovieSample,
@@ -184,7 +184,7 @@ fun SearchScreenPreview() {
     AppTheme {
         SearchScreenContent(
             state = SearchState(
-                searchKey = "asdf",
+                searchKey = "",
                 resultCountList = listOf(MediaResultCount(SearchType.MOVIE, 100)),
                 searchSuggestionList = suggestionList,
                 isSearchError = false

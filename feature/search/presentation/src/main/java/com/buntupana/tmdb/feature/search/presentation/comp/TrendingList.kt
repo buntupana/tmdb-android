@@ -14,11 +14,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -66,7 +68,8 @@ fun TrendingList(
                     Image(
                         modifier = Modifier.size(32.dp),
                         painter = painterResource(id = R.drawable.ic_trending_icon),
-                        contentDescription = null
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
                     )
                     Spacer(modifier = Modifier.width(Dimens.padding.small))
                     Text(
@@ -99,7 +102,7 @@ fun TrendingList(
     showBackground = true
 )
 @Composable
-fun TrendingListPreview() {
+private fun TrendingListPreview() {
     val mediaItemList = listOf(
         SearchItem.Movie(
             id = 1,

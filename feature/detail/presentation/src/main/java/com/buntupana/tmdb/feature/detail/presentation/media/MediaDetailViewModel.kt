@@ -11,6 +11,7 @@ import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.UiText
 import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
+import com.buntupana.tmdb.feature.detail.domain.usecase.GetMediaImagesUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
 import com.buntupana.tmdb.feature.detail.presentation.R
@@ -21,9 +22,11 @@ import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.util.applyDelayFor
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import com.buntupana.tmdb.core.ui.R as RCore
 
 // to smooth transitions a delay it's applied
 private const val FIRST_LOAD_DELAY = 300L
@@ -34,6 +37,7 @@ class MediaDetailViewModel(
     private val getTvShowDetailsUseCase: GetTvShowDetailsUseCase,
     private val setMediaFavoriteUseCase: SetMediaFavoriteUseCase,
     private val setMediaWatchListUseCase: SetMediaWatchListUseCase,
+    private val getMediaImagesUseCase: GetMediaImagesUseCase,
     private val sessionManager: SessionManager
 ) : ViewModel() {
 
@@ -47,6 +51,8 @@ class MediaDetailViewModel(
         )
     )
         private set
+
+    private var getImagesJob: Job? = null
 
     init {
         onEvent(MediaDetailEvent.GetMediaDetails)
@@ -79,6 +85,19 @@ class MediaDetailViewModel(
                 is MediaDetailEvent.OnRatingSuccess -> {
                     onRatingSuccess(event.rating)
                 }
+
+                MediaDetailEvent.ShowBackdropImages -> {
+                    getBackdropImages()
+                }
+
+                MediaDetailEvent.ShowPosterImages -> {
+                    getPosterImages()
+                }
+
+                MediaDetailEvent.DismissImageViewer -> {
+                    getImagesJob?.cancel()
+                    state = state.copy(showImageViewer = false)
+                }
             }
         }
     }
@@ -95,7 +114,10 @@ class MediaDetailViewModel(
                 state = state.copy(isLoading = false, isGetContentError = true)
             }.onSuccess {
                 if (state.mediaDetails == null) {
-                    applyDelayFor(initMillis = startRequestMillis, minDurationDifference = FIRST_LOAD_DELAY)
+                    applyDelayFor(
+                        initMillis = startRequestMillis,
+                        minDurationDifference = FIRST_LOAD_DELAY
+                    )
                 }
                 state =
                     state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
@@ -115,7 +137,10 @@ class MediaDetailViewModel(
                 state = state.copy(isLoading = false, isGetContentError = true)
             }.onSuccess {
                 if (state.mediaDetails == null) {
-                    applyDelayFor(initMillis = startRequestMillis, minDurationDifference = FIRST_LOAD_DELAY)
+                    applyDelayFor(
+                        initMillis = startRequestMillis,
+                        minDurationDifference = FIRST_LOAD_DELAY
+                    )
                 }
                 state =
                     state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
@@ -231,6 +256,48 @@ class MediaDetailViewModel(
                 mediaDetails = it,
                 isFavoriteLoading = isFavoriteLoading
             )
+        }
+    }
+
+    private fun getPosterImages() {
+        state = state.copy(showImageViewer = true, imageList = null)
+        getImagesJob?.cancel()
+        getImagesJob = viewModelScope.launch {
+            getMediaImagesUseCase(
+                mediaId = state.mediaId,
+                mediaType = state.mediaType,
+                mainPoster = state.mediaDetails?.posterUrl
+            ).onError {
+                state = state.copy(showImageViewer = false)
+                SnackbarController.sendEvent(
+                    SnackbarEvent(
+                        UiText.StringResource(RCore.string.common_loading_content_error)
+                    )
+                )
+            }.onSuccess { mediaImages ->
+                state = state.copy(showImageViewer = true, imageList = mediaImages.posterList)
+            }
+        }
+    }
+
+    private fun getBackdropImages() {
+        state = state.copy(showImageViewer = true, imageList = null)
+        getImagesJob?.cancel()
+        getImagesJob = viewModelScope.launch {
+            getMediaImagesUseCase(
+                mediaId = state.mediaId,
+                mediaType = state.mediaType,
+                mainBackdrop = state.mediaDetails?.backdropUrl
+            ).onError {
+                state = state.copy(showImageViewer = false)
+                SnackbarController.sendEvent(
+                    SnackbarEvent(
+                        UiText.StringResource(RCore.string.common_loading_content_error)
+                    )
+                )
+            }.onSuccess { mediaImages ->
+                state = state.copy(showImageViewer = true, imageList = mediaImages.backdropList)
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ import com.buntupana.tmdb.feature.search.presentation.SearchRoute
 import com.panabuntu.tmdb.core.common.entity.MediaType
 
 @Composable
-fun MediaDetailNav(
+fun MediaDetailsNav(
     navRoutesMain: NavRoutesMain
 ) {
     MediaDetailScreen(

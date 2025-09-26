@@ -14,5 +14,7 @@ data class MediaDetailState(
     val isFavoriteLoading: Boolean = false,
     val isWatchlistLoading: Boolean = false,
     val isRatingLoading: Boolean = false,
-    val isRateable: Boolean = false
+    val isRateable: Boolean = false,
+    val imageList: List<String>? = null,
+    val showImageViewer: Boolean = false,
 )

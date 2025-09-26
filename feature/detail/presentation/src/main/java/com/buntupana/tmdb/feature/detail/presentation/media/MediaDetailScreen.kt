@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.media
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -37,6 +38,7 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
+import com.buntupana.tmdb.core.ui.composables.widget.ImageViewer
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
@@ -136,6 +138,15 @@ fun MediaDetailScreen(
                 backgroundColor.toArgb(),
                 viewModel.state.mediaDetails?.releaseDate?.year.toString(),
             )
+        },
+        onPosterClick = {
+            viewModel.onEvent(MediaDetailEvent.ShowPosterImages)
+        },
+        onBackdropClick = {
+            viewModel.onEvent(MediaDetailEvent.ShowBackdropImages)
+        },
+        onImageViewerDismiss = {
+            viewModel.onEvent(MediaDetailEvent.DismissImageViewer)
         }
     )
 }
@@ -156,7 +167,10 @@ fun MediaDetailContent(
     onFavoriteClick: () -> Unit,
     onWatchlistClick: () -> Unit,
     onRatingClick: () -> Unit,
-    onListClick: (backgroundColor: Color) -> Unit
+    onListClick: (backgroundColor: Color) -> Unit,
+    onPosterClick: () -> Unit,
+    onBackdropClick: () -> Unit,
+    onImageViewerDismiss: () -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -175,6 +189,11 @@ fun MediaDetailContent(
         statusBarColor = backgroundColor,
         navigationBarColor = backgroundColor,
         translucentNavigationBar = state.isUserLoggedIn.not()
+    )
+
+    BackHandler(
+        enabled = state.showImageViewer,
+        onBack = onImageViewerDismiss
     )
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -294,7 +313,9 @@ fun MediaDetailContent(
 
                     Header(
                         mediaDetails = state.mediaDetails,
-                        backgroundColor = backgroundColor
+                        backgroundColor = backgroundColor,
+                        onPosterClick = onPosterClick,
+                        onBackdropClick = onBackdropClick
                     ) { dominantColor ->
                         if (dominantColor != backgroundColor) {
                             backgroundColor = dominantColor
@@ -379,6 +400,18 @@ fun MediaDetailContent(
             }
         }
     }
+
+    AnimatedVisibility(
+        visible = state.showImageViewer,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        ImageViewer(
+            modifier = Modifier.fillMaxSize(),
+            imageUrlList = state.imageList,
+            onDismiss = onImageViewerDismiss
+        )
+    }
 }
 
 @Preview(showBackground = true, heightDp = 2000)
@@ -407,7 +440,10 @@ fun MediaDetailScreenPreview() {
             onFavoriteClick = {},
             onWatchlistClick = {},
             onRatingClick = {},
-            onListClick = {}
+            onListClick = {},
+            onPosterClick = {},
+            onBackdropClick = {},
+            onImageViewerDismiss = {}
         )
     }
 }

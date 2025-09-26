@@ -1,6 +1,7 @@
 package com.buntupana.tmdb.feature.detail.presentation.person.comp
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +28,8 @@ import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 @Composable
 fun HeaderContent(
-    personDetails: PersonFullDetails
+    personDetails: PersonFullDetails,
+    onProfileClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -39,7 +41,8 @@ fun HeaderContent(
             ImageFromUrl(
                 modifier = Modifier
                     .size(Dimens.imageSize.personHeightBig)
-                    .clip(RoundedCornerShape(Dimens.posterRound)),
+                    .clip(RoundedCornerShape(Dimens.posterRound))
+                    .clickable(onClick = onProfileClick),
                 imageUrl = personDetails.profileUrl
             )
         }
@@ -74,6 +77,9 @@ fun HeaderContent(
 @Composable
 fun HeaderContentPreview() {
     AppTheme {
-        HeaderContent(personDetailsSample)
+        HeaderContent(
+            personDetails = personDetailsSample,
+            onProfileClick = {}
+        )
     }
 }

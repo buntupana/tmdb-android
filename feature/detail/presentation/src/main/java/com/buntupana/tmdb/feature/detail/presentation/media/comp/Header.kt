@@ -3,6 +3,7 @@ package com.buntupana.tmdb.feature.detail.presentation.media.comp
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,8 @@ fun Header(
     isLoading: Boolean = false,
     mediaDetails: MediaDetails,
     backgroundColor: Color,
+    onPosterClick: () -> Unit,
+    onBackdropClick: () -> Unit,
     setDominantColor: (dominantColor: Color) -> Unit
 ) {
 
@@ -63,7 +66,9 @@ fun Header(
 
                 if (mediaDetails.backdropUrl.isNotNullOrBlank()) {
                     ImageFromUrl(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable(onClick = onBackdropClick),
                         imageUrl = mediaDetails.backdropUrl,
                         showPlaceHolder = false
                     )
@@ -103,6 +108,9 @@ fun Header(
                 modifier = Modifier
                     .fillMaxHeight(0.8f)
                     .clip(RoundedCornerShape(Dimens.posterRound))
+                    .clickable(
+                        onClick = onPosterClick
+                    )
                     .aspectRatio(Dimens.aspectRatioMediaPoster),
                 imageUrl = mediaDetails.posterUrl,
                 setDominantColor = { setDominantColor(it) },
@@ -130,7 +138,9 @@ private fun HeaderPreview() {
             isLoading = false,
             mediaDetails = mediaDetailsMovieSample,
             backgroundColor = MaterialTheme.colorScheme.surfaceDim,
-            setDominantColor = {}
+            setDominantColor = {},
+            onBackdropClick = {},
+            onPosterClick = {}
         )
     }
 }

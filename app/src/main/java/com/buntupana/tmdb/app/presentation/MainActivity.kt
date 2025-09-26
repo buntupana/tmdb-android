@@ -30,7 +30,7 @@ import com.buntupana.tmdb.app.presentation.navigation.HomeNav
 import com.buntupana.tmdb.app.presentation.navigation.ListDetailNav
 import com.buntupana.tmdb.app.presentation.navigation.ListsNav
 import com.buntupana.tmdb.app.presentation.navigation.ManageListsNav
-import com.buntupana.tmdb.app.presentation.navigation.MediaDetailNav
+import com.buntupana.tmdb.app.presentation.navigation.MediaDetailsNav
 import com.buntupana.tmdb.app.presentation.navigation.MediaFilterNav
 import com.buntupana.tmdb.app.presentation.navigation.PersonDetailNav
 import com.buntupana.tmdb.app.presentation.navigation.RatingNav
@@ -133,7 +133,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable<MediaDetailRoute> {
-                            MediaDetailNav(navRoutesMain)
+                            MediaDetailsNav(navRoutesMain)
                         }
 
                         composable<CastDetailRoute> {

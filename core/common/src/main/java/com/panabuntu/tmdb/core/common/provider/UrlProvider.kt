@@ -26,4 +26,5 @@ interface UrlProvider {
     fun getMediaShareLink(mediaType: MediaType, mediaId: Long): String
     fun getPersonShareLink(personId: Long): String
     fun getListShareLink(listId: Long): String
+    val BASE_URL_IMAGE_ORIGINAL_SIZE: String
 }

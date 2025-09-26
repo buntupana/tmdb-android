@@ -10,6 +10,7 @@ class UrlProviderImpl : UrlProvider {
     override val BASE_URL_API = "https://api.themoviedb.org"
 
     private val BASE_URL_IMAGE = "https://image.tmdb.org/t/p"
+    override val BASE_URL_IMAGE_ORIGINAL_SIZE = "$BASE_URL_IMAGE/original/"
     override val BASE_URL_POSTER = "$BASE_URL_IMAGE/w342/"
     override val BASE_URL_BACKDROP = "$BASE_URL_IMAGE/w1000_and_h450_multi_faces/"
     override val BASE_URL_PROFILE = "$BASE_URL_IMAGE/w240_and_h266_face/"

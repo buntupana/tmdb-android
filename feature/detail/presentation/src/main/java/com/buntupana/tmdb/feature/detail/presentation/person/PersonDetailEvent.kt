@@ -6,4 +6,6 @@ sealed class PersonDetailEvent {
         val mediaType: Int?,
         val department: String?
     ) : PersonDetailEvent()
+    data object ShowProfileImages : PersonDetailEvent()
+    data object DismissImageViewer : PersonDetailEvent()
 }

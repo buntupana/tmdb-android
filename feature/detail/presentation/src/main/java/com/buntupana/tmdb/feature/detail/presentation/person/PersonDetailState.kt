@@ -7,5 +7,7 @@ data class PersonDetailState(
     val isGetPersonError: Boolean = false,
     val personDetails: PersonFullDetails? = null,
     val mediaTypeSelected: Int? = null,
-    val departmentSelected: String? = null
+    val departmentSelected: String? = null,
+    val imageList: List<String>? = null,
+    val showImageViewer: Boolean = false,
 )

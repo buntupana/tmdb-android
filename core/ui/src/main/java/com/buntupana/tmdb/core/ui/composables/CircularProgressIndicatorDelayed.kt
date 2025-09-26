@@ -20,7 +20,7 @@ import kotlinx.coroutines.delay
 fun CircularProgressIndicatorDelayed(
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.onBackground,
-    delayTime: Long = 500
+    delayTime: Long = 300
 ) {
 
     var showLoading by remember { mutableStateOf(false) }

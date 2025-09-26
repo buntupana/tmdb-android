@@ -1,5 +1,6 @@
 package com.buntupana.tmdb.feature.detail.presentation.person
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -24,6 +25,7 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
+import com.buntupana.tmdb.core.ui.composables.widget.ImageViewer
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
@@ -57,6 +59,12 @@ fun PersonDetailScreen(
         onLogoClick = onLogoClick,
         mediaTypeAndDepartmentSelected = { mediaType, department ->
             viewModel.onEvent(PersonDetailEvent.SelectMediaTypeAndDepartment(mediaType, department))
+        },
+        onProfileClick = {
+          viewModel.onEvent(PersonDetailEvent.ShowProfileImages)
+        },
+        onImageViewerDismiss = {
+            viewModel.onEvent(PersonDetailEvent.DismissImageViewer)
         }
     )
 }
@@ -70,13 +78,20 @@ fun PersonDetailContent(
     onRetryClick: () -> Unit,
     onMediaClick: (id: Long, mediaType: MediaType, dominantColor: Color?) -> Unit,
     onLogoClick: () -> Unit,
-    mediaTypeAndDepartmentSelected: (mediaType: Int?, department: String?) -> Unit
+    mediaTypeAndDepartmentSelected: (mediaType: Int?, department: String?) -> Unit,
+    onProfileClick: () -> Unit,
+    onImageViewerDismiss: () -> Unit
 ) {
 
     SetSystemBarsColors(
         statusBarColor = MaterialTheme.colorScheme.background,
         navigationBarColor = MaterialTheme.colorScheme.background,
         translucentNavigationBar = true
+    )
+
+    BackHandler(
+        enabled = state.showImageViewer,
+        onBack = onImageViewerDismiss
     )
 
     val mediaTypeMap = mapOf(
@@ -140,7 +155,10 @@ fun PersonDetailContent(
                 val departmentMap = state.personDetails.creditMap.keys.associateWith { it }
 
                 item {
-                    HeaderContent(personDetails = state.personDetails)
+                    HeaderContent(
+                        personDetails = state.personDetails,
+                        onProfileClick = onProfileClick
+                    )
                 }
 
                 item {
@@ -181,6 +199,18 @@ fun PersonDetailContent(
             }
         }
     }
+
+    AnimatedVisibility(
+        visible = state.showImageViewer,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        ImageViewer(
+            modifier = Modifier.fillMaxSize(),
+            imageUrlList = state.imageList,
+            onDismiss = onImageViewerDismiss
+        )
+    }
 }
 
 @Preview(showBackground = true, heightDp = 1000)
@@ -198,7 +228,9 @@ fun PersonDetailsContentPreview() {
             onRetryClick = {},
             onMediaClick = { _, _, _ -> },
             onLogoClick = {},
-            mediaTypeAndDepartmentSelected = { _, _ -> }
+            mediaTypeAndDepartmentSelected = { _, _ -> },
+            onProfileClick = {},
+            onImageViewerDismiss = {}
         )
     }
 }

@@ -3,8 +3,10 @@ package com.buntupana.tmdb.feature.detail.data.remote_data_source
 import com.buntupana.tmdb.core.data.remote_data_source.RemoteDataSource
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsMovieRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.CreditsTvShowRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.MediaImagesRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.MovieDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.PersonDetailsRaw
+import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.PersonImagesRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.TvShowDetailsRaw
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.TvShowSeasonsDetailsRaw
@@ -31,7 +33,7 @@ class DetailRemoteDataSource(
             httpClient.get("/3/movie/$movieId") {
                 parameter(
                     "append_to_response",
-                    "release_dates,videos,credits,recommendations,account_states,external_ids,watch/providers"
+                    "release_dates,videos,credits,recommendations,account_states,external_ids,watch/providers,images"
                 )
                 if (sessionId != null) {
                     parameter("session_id", sessionId)
@@ -48,7 +50,7 @@ class DetailRemoteDataSource(
             httpClient.get(urlString = "/3/tv/$tvShowId") {
                 parameter(
                     "append_to_response",
-                    "content_ratings,videos,aggregate_credits,recommendations,account_states,external_ids,watch/providers"
+                    "content_ratings,videos,aggregate_credits,recommendations,account_states,external_ids,watch/providers,images"
                 )
                 if (sessionId != null) {
                     parameter("session_id", sessionId)
@@ -150,6 +152,24 @@ class DetailRemoteDataSource(
     suspend fun getTvShowSeasonsDetails(tvShowId: Long): Result<TvShowSeasonsDetailsRaw, NetworkError> {
         return getResult {
             httpClient.get("/3/tv/$tvShowId")
+        }
+    }
+
+    suspend fun getMovieImages(movieId: Long): Result<MediaImagesRaw, NetworkError> {
+        return getResult {
+            httpClient.get("/3/movie/$movieId/images")
+        }
+    }
+
+    suspend fun getTvShowImages(tvShowId: Long): Result<MediaImagesRaw, NetworkError> {
+        return getResult {
+            httpClient.get("/3/tv/$tvShowId/images")
+        }
+    }
+
+    suspend fun getPersonImages(personId: Long): Result<PersonImagesRaw, NetworkError> {
+        return getResult {
+            httpClient.get("/3/person/$personId/images")
         }
     }
 }

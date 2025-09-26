@@ -2,6 +2,7 @@ package com.buntupana.tmdb.feature.detail.domain.repository
 
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsMovie
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
+import com.buntupana.tmdb.feature.detail.domain.model.MediaImages
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
 import com.buntupana.tmdb.feature.detail.domain.model.PersonDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Season
@@ -39,4 +40,7 @@ interface DetailRepository {
         episodeNumber: Int,
         rating: Int?
     ): Result<Unit, NetworkError>
+
+    suspend fun getMediaImages(mediaId: Long, mediaType: MediaType): Result<MediaImages, NetworkError>
+    suspend fun getPersonImages(personId: Long): Result<List<String>, NetworkError>
 }

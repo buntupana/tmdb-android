@@ -5,9 +5,11 @@ import com.buntupana.tmdb.feature.detail.data.repository.DetailRepositoryImpl
 import com.buntupana.tmdb.feature.detail.domain.repository.DetailRepository
 import com.buntupana.tmdb.feature.detail.domain.usecase.AddEpisodeRatingUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.AddMediaRatingUseCase
+import com.buntupana.tmdb.feature.detail.domain.usecase.GetMediaImagesUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieCreditsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetPersonDetailsUseCase
+import com.buntupana.tmdb.feature.detail.domain.usecase.GetPersonImagesUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetSeasonDetailsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowCreditsUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
@@ -37,6 +39,10 @@ private val domainModule = module {
     factoryOf(::GetTvShowCreditsUseCase)
     factoryOf(::GetTvShowDetailsUseCase)
     factoryOf(::GetTvShowSeasonsUseCase)
+    factoryOf(::GetMediaImagesUseCase)
+    factoryOf(::GetPersonImagesUseCase)
+    factoryOf(::GetPersonDetailsUseCase)
+    factoryOf(::AddMediaRatingUseCase)
 }
 
 private val presentationModule = module {
@@ -46,7 +52,6 @@ private val presentationModule = module {
     factoryOf(::PersonDetailViewModel)
     factoryOf(::RatingViewModel)
     factoryOf(::SeasonDetailViewModel)
-    factoryOf(::AddMediaRatingUseCase)
 }
 
 val detailModule = module {

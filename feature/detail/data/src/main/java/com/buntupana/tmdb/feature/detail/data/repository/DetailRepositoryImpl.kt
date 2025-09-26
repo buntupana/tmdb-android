@@ -3,6 +3,7 @@ package com.buntupana.tmdb.feature.detail.data.repository
 import com.buntupana.tmdb.core.data.database.TmdbDataBase
 import com.buntupana.tmdb.core.data.util.getFlowResult
 import com.buntupana.tmdb.feature.detail.data.mapper.toEntity
+import com.buntupana.tmdb.feature.detail.data.mapper.toList
 import com.buntupana.tmdb.feature.detail.data.mapper.toModel
 import com.buntupana.tmdb.feature.detail.data.mapper.toMovieModel
 import com.buntupana.tmdb.feature.detail.data.mapper.toTvShowModel
@@ -10,6 +11,7 @@ import com.buntupana.tmdb.feature.detail.data.remote_data_source.DetailRemoteDat
 import com.buntupana.tmdb.feature.detail.data.remote_data_source.raw.SeasonDetailsRaw
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsMovie
 import com.buntupana.tmdb.feature.detail.domain.model.CreditsTvShow
+import com.buntupana.tmdb.feature.detail.domain.model.MediaImages
 import com.buntupana.tmdb.feature.detail.domain.model.MovieDetails
 import com.buntupana.tmdb.feature.detail.domain.model.PersonDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Season
@@ -245,5 +247,20 @@ class DetailRepositoryImpl(
             .map {
                 it.seasons.toModel(baseUrlPoster = urlProvider.BASE_URL_POSTER)
             }
+    }
+
+    override suspend fun getMediaImages(
+        mediaId: Long,
+        mediaType: MediaType
+    ): Result<MediaImages, NetworkError> {
+        return when (mediaType) {
+            MediaType.MOVIE -> detailRemoteDataSource.getMovieImages(movieId = mediaId)
+            MediaType.TV_SHOW -> detailRemoteDataSource.getTvShowImages(tvShowId = mediaId)
+        }.map { it.toModel(urlProvider.BASE_URL_IMAGE_ORIGINAL_SIZE) }
+    }
+
+    override suspend fun getPersonImages(personId: Long): Result<List<String>, NetworkError> {
+        return detailRemoteDataSource.getPersonImages(personId)
+            .map { it.toList(urlProvider.BASE_URL_IMAGE_ORIGINAL_SIZE) }
     }
 }

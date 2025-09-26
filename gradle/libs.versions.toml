@@ -11,29 +11,30 @@ min_sdk = "23"
 
 #Kotlin
 kotlin = "2.2.20"
-ksp = "2.2.20-2.0.2"
+ksp = "2.2.20-2.0.3"
 ktx = '1.17.0'
 work = '2.4.0'
 
 #Compose
-composeBom = "2025.09.00"
+composeBom = "2025.09.01"
 compose_activity = "1.11.0"
 compose_constraint = '1.1.01'
-compose_foundation = "1.9.1"
+compose_foundation = "1.9.2"
 compose_paging = "3.3.6"
-compose_lifecycle = "2.9.3"
+compose_lifecycle = "2.9.4"
 
 #Android dependencies
-lifecycle = "2.9.3"
-room = "2.8.0"
-navigation = "2.9.4"
+lifecycle = "2.9.4"
+room = "2.8.1"
+navigation = "2.9.5"
 palette = '1.0.0'
 
 #Accompanist
 accompanist = "0.36.0"
 
 #Material Design
-material3 = "1.4.0-rc01"
+material = "1.13.0"
+material3 = "1.4.0"
 splashscreen = "1.0.1"
 
 #Firebase
@@ -73,10 +74,9 @@ agp = "8.13.0"
 uiToolingPreviewAndroid = "1.6.7"
 uiTooling = "1.7.3"
 appcompat = "1.7.1"
-material = "1.13.0"
 jetbrainsKotlinJvm = "2.2.20"
-uiTextGoogleFonts = "1.9.1"
-uiGraphicsAndroid = "1.9.1"
+uiTextGoogleFonts = "1.9.2"
+uiGraphicsAndroid = "1.9.2"
 
 [libraries]
 

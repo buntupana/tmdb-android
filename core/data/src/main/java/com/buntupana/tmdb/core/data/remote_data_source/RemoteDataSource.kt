@@ -5,11 +5,13 @@ import com.panabuntu.tmdb.core.common.entity.Result
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
+import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.SerializationException
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 import java.nio.channels.UnresolvedAddressException
+import kotlin.coroutines.coroutineContext
 
 /**
  * Abstract Base Data source class with error handling
@@ -28,6 +30,7 @@ abstract class RemoteDataSource: KoinComponent {
             Timber.e(e)
             return Result.Error(NetworkError.SERIALIZATION)
         } catch (e: Exception) {
+            coroutineContext.ensureActive()
             Timber.e(e)
             return Result.Error(NetworkError.UNKNOWN)
         }

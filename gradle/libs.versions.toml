@@ -38,7 +38,8 @@ material3 = "1.4.0"
 splashscreen = "1.0.1"
 
 #Firebase
-firebase = '28.1.0'
+firebase = '34.3.0'
+crashlytics = "3.0.6"
 
 #Di
 dagger = "2.57.1"
@@ -71,6 +72,7 @@ mockito = '4.5.0'
 
 # Plugins
 agp = "8.13.0"
+google_services = "4.4.3"
 uiToolingPreviewAndroid = "1.6.7"
 uiTooling = "1.7.3"
 appcompat = "1.7.1"
@@ -146,6 +148,11 @@ desugar-jdk = { group = "com.android.tools", name = "desugar_jdk_libs", version.
 #Accompanist
 google-accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
 
+#Firebase
+google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
+google-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ndk"}
+google-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+
 #Tools
 jakewharton-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 io-coil-kt = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
@@ -175,6 +182,8 @@ google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 secrets-gradle = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+google-services = {id = "com.google.gms.google-services", version.ref = "google_services"}
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics"}
 
 [bundles]
 compose = [

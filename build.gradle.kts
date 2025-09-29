@@ -8,4 +8,6 @@ plugins {
     alias(libs.plugins.secrets.gradle) apply false
     alias(libs.plugins.kotlinSerialization) apply  false
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
+    alias(libs.plugins.google.services) apply false
+    alias(libs.plugins.google.firebase.crashlytics) apply false
 }

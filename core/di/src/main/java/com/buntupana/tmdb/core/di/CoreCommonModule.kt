@@ -3,8 +3,10 @@ package com.buntupana.tmdb.core.di
 import com.buntupana.tmdb.core.data.database.TmdbDataBase
 import com.buntupana.tmdb.core.data.manager.SessionManagerImpl
 import com.buntupana.tmdb.core.data.provider.UrlProviderImpl
+import com.buntupana.tmdb.core.ui.CrashReporterImpl
 import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
 import com.buntupana.tmdb.core.ui.navigation.NavRoutesMainImpl
+import com.panabuntu.tmdb.core.common.CrashReporter
 import com.panabuntu.tmdb.core.common.manager.SessionManager
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import com.panabuntu.tmdb.core.common.util.ifNullOrBlank
@@ -87,4 +89,6 @@ val commonModule = module {
             }
         }
     }
+
+    singleOf(::CrashReporterImpl) bind CrashReporter::class
 }

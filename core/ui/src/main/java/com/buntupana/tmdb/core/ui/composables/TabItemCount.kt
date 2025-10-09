@@ -1,10 +1,13 @@
-package com.buntupana.tmdb.feature.search.presentation.comp
+package com.buntupana.tmdb.core.ui.composables
 
 import android.content.res.Configuration
 import androidx.annotation.StringRes
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,11 +18,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.buntupana.tmdb.core.ui.composables.OutlinedText
+import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.theme.AppTheme
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 
 @Composable
-fun TabSearchResult(
+fun TabItemCount(
     @StringRes titleResId: Int,
     resultCount: Int,
     isSelected: Boolean
@@ -34,7 +39,7 @@ fun TabSearchResult(
         outLineColor = MaterialTheme.colorScheme.secondaryContainer
         fontWeight = FontWeight.Bold
     } else {
-        textColor = MaterialTheme.colorScheme.onBackground
+        textColor = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor()
         outLineColor = MaterialTheme.colorScheme.outline
         fontWeight = FontWeight.Normal
     }
@@ -48,12 +53,12 @@ fun TabSearchResult(
             color = textColor
         )
         Spacer(modifier = Modifier.width(4.dp))
-        OutlinedText(
-            text = resultCount.toString(),
-            cornerRound = 6.dp,
-            internalHorizontalPadding = 8.dp,
-            outlineColor = outLineColor,
-            color = MaterialTheme.colorScheme.onBackground
+        VerticalNumberRoulette(
+            modifier = Modifier
+                .border(width = 1.dp, color = outLineColor, shape = RoundedCornerShape(6.dp))
+                .padding(horizontal = Dimens.padding.small),
+            value = resultCount,
+            color = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor()
         )
     }
 }
@@ -69,10 +74,10 @@ fun TabSearchResult(
     showBackground = true
 )
 @Composable
-private fun TabSearchResultPreview() {
+private fun TabItemCountPreview() {
     AppTheme {
-        TabSearchResult(
-            titleResId = com.buntupana.tmdb.core.ui.R.string.common_movies,
+        TabItemCount(
+            titleResId = R.string.common_movies,
             resultCount = 3,
             isSelected = true
         )

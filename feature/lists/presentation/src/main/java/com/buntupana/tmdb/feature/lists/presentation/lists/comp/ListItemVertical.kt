@@ -152,16 +152,6 @@ fun ListItemVertical(
                     }
                 }
             }
-
-            if (userListDetails.description.isNullOrBlank()) return@Column
-
-            Text(
-                modifier = Modifier.padding(
-                    horizontal = Dimens.padding.horizontal,
-                    Dimens.padding.vertical
-                ),
-                text = userListDetails.description!!
-            )
         }
     }
 }

@@ -10,10 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -25,10 +24,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.buntupana.tmdb.core.ui.composables.TabItemCount
 import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
 import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
 import com.buntupana.tmdb.feature.search.presentation.MediaResultCount
 import com.buntupana.tmdb.feature.search.presentation.R
 import com.buntupana.tmdb.feature.search.presentation.SearchState
@@ -58,12 +59,15 @@ fun SearchResults(
         ) { searchState.resultCountList.size }
 
         // Adding a tab bar with result titles
-        ScrollableTabRow(
+        SecondaryScrollableTabRow(
             selectedTabIndex = pagerState.currentPage,
-            Modifier.background(MaterialTheme.colorScheme.background),
-            indicator = { tabPositions ->
+            modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer),
+            contentColor = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor(),
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            edgePadding = 0.dp,
+            indicator = {
                 SecondaryIndicator(
-                    modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
+                    modifier = Modifier.tabIndicatorOffset(pagerState.currentPage),
                     color = MaterialTheme.colorScheme.secondaryContainer,
                 )
             }
@@ -79,7 +83,7 @@ fun SearchResults(
 
                 Tab(
                     text = {
-                        TabSearchResult(
+                        TabItemCount(
                             titleResId = titleResId,
                             resultCount = resultCount.resultCount,
                             isSelected = pagerState.currentPage == index
@@ -142,7 +146,8 @@ fun SearchResults(
                 SearchType.TV_SHOW -> {
                     LazyColumnGeneric(
                         modifier = Modifier.fillMaxSize(),
-                        bottomPadding = { bottomPadding },
+                        topPadding = Dimens.padding.medium,
+                        bottomPadding = { bottomPadding + Dimens.padding.small },
                         itemList = searchState.tvShowItems?.collectAsLazyPagingItems(),
                         noResultContent = {
                             Box(
@@ -173,7 +178,8 @@ fun SearchResults(
                 SearchType.PERSON -> {
                     LazyColumnGeneric(
                         modifier = Modifier.fillMaxSize(),
-                        bottomPadding = { bottomPadding },
+                        topPadding = Dimens.padding.medium,
+                        bottomPadding = { bottomPadding + Dimens.padding.small },
                         itemList = searchState.personItems?.collectAsLazyPagingItems(),
                         noResultContent = {
                             Box(

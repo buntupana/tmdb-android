@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -18,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.OrderButtonAnimation
-import com.buntupana.tmdb.core.ui.composables.VerticalNumberRoulette
+import com.buntupana.tmdb.core.ui.composables.TabItemCount
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
@@ -62,18 +61,17 @@ fun WatchlistFavoriteTabRow(
 
                 Tab(
                     text = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            val itemsCount = when (mediaType) {
-                                MediaFilter.MOVIES -> movieItemsTotalCount
-                                MediaFilter.TV_SHOWS -> tvShowItemsTotalCount
-                            }
 
-                            Text(text = stringResource(mediaType.strRes) + "  ")
-
-                            VerticalNumberRoulette(value = itemsCount)
+                        val itemsCount = when (mediaType) {
+                            MediaFilter.MOVIES -> movieItemsTotalCount
+                            MediaFilter.TV_SHOWS -> tvShowItemsTotalCount
                         }
+
+                        TabItemCount(
+                            titleResId = mediaType.strRes,
+                            resultCount = itemsCount ?: 0,
+                            isSelected = pagerState.currentPage == index
+                        )
                     },
                     selected = pagerState.currentPage == index,
                     onClick = {

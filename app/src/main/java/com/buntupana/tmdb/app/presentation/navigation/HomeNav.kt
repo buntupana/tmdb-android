@@ -7,6 +7,7 @@ import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
 import com.buntupana.tmdb.feature.account.presentation.sign_in.SignInRoute
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailRoute
+import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterResult
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterRoute
 import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListResult
 import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailRoute
@@ -20,8 +21,13 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 fun HomeNav(
     navRoutesMain: NavRoutesMain,
 ) {
+
+    val mediaListResult = navRoutesMain.getResult<MediaFilterResult>()?.let { result ->
+        MediaListResult.ApplyFilter(result.mediaListFilter)
+    }
+
     HomeScreen(
-        mediaListResult = navRoutesMain.getResult<MediaListResult>(),
+        mediaListResult = mediaListResult,
         onSignInClicked = {
             navRoutesMain.navigate(SignInRoute())
         },

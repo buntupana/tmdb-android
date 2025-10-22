@@ -148,10 +148,11 @@ class MainActivity : ComponentActivity() {
                             val movieId = route.movieId?.substringBefore("-")?.toLong()
                             val tvShowId = route.tvShowId?.substringBefore("-")?.toLong()
 
-                            val (mediaId, mediaType) = when{
+                            val (mediaId, mediaType) = when {
                                 movieId != null -> {
                                     movieId to MediaType.MOVIE
                                 }
+
                                 tvShowId != null -> {
                                     tvShowId to MediaType.TV_SHOW
                                 }
@@ -175,7 +176,7 @@ class MainActivity : ComponentActivity() {
                             CastDetailNav(navRoutesMain)
                         }
 
-                        composable< PersonDetailDeepLinkRoute>(
+                        composable<PersonDetailDeepLinkRoute>(
                             deepLinks = listOf(
                                 navDeepLink<PersonDetailDeepLinkRoute>(basePath = urlProvider.BASE_DEEP_LINK_PERSON_URL)
                             ),
@@ -235,9 +236,7 @@ class MainActivity : ComponentActivity() {
                             DeleteListNav(navRoutesMain)
                         }
 
-                        bottomSheet<DeleteItemListRoute>(
-                            typeMap = DeleteItemListRoute.typeMap
-                        ) {
+                        bottomSheet<DeleteItemListRoute>(typeMap = DeleteItemListRoute.typeMap) {
                             DeleteItemListNav(navRoutesMain)
                         }
                     }

@@ -2,9 +2,11 @@ package com.buntupana.tmdb.feature.search.presentation
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -19,8 +21,10 @@ import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
+import com.buntupana.tmdb.core.ui.util.isVisible
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchResults
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchSuggestionList
+import com.buntupana.tmdb.feature.search.presentation.comp.SearchTabRow
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchTopBar
 import com.buntupana.tmdb.feature.search.presentation.comp.TrendingList
 import com.panabuntu.tmdb.core.common.entity.MediaType
@@ -85,21 +89,37 @@ private fun SearchScreenContent(
         translucentNavigationBar = true
     )
 
+    val pagerState = rememberPagerState(
+        initialPage = state.defaultPage
+    ) { state.resultCountList.size }
+
     Scaffold(
         topBar = {
-            SearchTopBar(
-                modifier = Modifier.fillMaxWidth(),
-                searchKey = state.searchKey,
-                onValueChanged = {
-                    onSearchSuggestions(it)
-                },
-                isLoadingSuggestions = state.isSearchSuggestionsLoading,
-                onSearch = { searchKey ->
-                    onSearch(searchKey, null)
-                },
-                isLoadingSearch = state.isSearchLoading,
-                requestFocus = true
-            )
+            Column {
+                SearchTopBar(
+                    modifier = Modifier.fillMaxWidth(),
+                    searchKey = state.searchKey,
+                    onValueChanged = {
+                        onSearchSuggestions(it)
+                    },
+                    isLoadingSuggestions = state.isSearchSuggestionsLoading,
+                    onSearch = { searchKey ->
+                        onSearch(searchKey, null)
+                    },
+                    isLoadingSearch = state.isSearchLoading,
+                    requestFocus = true
+                )
+                SearchTabRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .isVisible(
+                            isVisible = state.resultCountList.isNotEmpty(),
+                            animateSize = true
+                        ),
+                    pagerState = pagerState,
+                    resultCountList = state.resultCountList
+                )
+            }
         }
     ) { paddingValues ->
         Box(
@@ -133,6 +153,7 @@ private fun SearchScreenContent(
                     SearchResults(
                         modifier = Modifier.fillMaxSize(),
                         bottomPadding = paddingValues.calculateBottomPadding(),
+                        pagerState = pagerState,
                         searchState = state,
                         onMediaClick = onMediaClick,
                         onPersonClick = onPersonClick

@@ -161,28 +161,21 @@ class SearchViewModel(
                 }
                 .onSuccess { result ->
 
-                    val mediaResultCountList = mutableListOf<MediaResultCount>()
+                    val mediaResultCountList = listOf(
+                        MediaResultCount(
+                            searchType = SearchType.MOVIE,
+                            resultCount = result.moviesCount
+                        ),
+                        MediaResultCount(
+                            searchType = SearchType.TV_SHOW,
+                            resultCount = result.tvShowsCount
+                        ),
+                        MediaResultCount(
+                            searchType = SearchType.PERSON,
+                            resultCount = result.personsCount
+                        )
+                    )
 
-                    MediaResultCount(
-                        SearchType.MOVIE,
-                        result.moviesCount
-                    ).let {
-                        mediaResultCountList.add(it)
-                    }
-
-                    MediaResultCount(
-                        SearchType.TV_SHOW,
-                        result.tvShowsCount
-                    ).let {
-                        mediaResultCountList.add(it)
-                    }
-
-                    MediaResultCount(
-                        SearchType.PERSON,
-                        result.personsCount
-                    ).let {
-                        mediaResultCountList.add(it)
-                    }
                     state = state.copy(
                         resultCountList = mediaResultCountList,
                         isSearchLoading = false,

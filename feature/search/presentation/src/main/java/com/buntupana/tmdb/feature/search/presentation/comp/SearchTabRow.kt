@@ -24,11 +24,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchTabRow(
     modifier: Modifier = Modifier,
-    pagerState: PagerState,
+    pagerState: PagerState?,
     resultCountList: List<MediaResultCount>
 ) {
 
-    if (resultCountList.isEmpty()) return
+    if (resultCountList.isEmpty() || pagerState == null) return
 
     val scope = rememberCoroutineScope()
 

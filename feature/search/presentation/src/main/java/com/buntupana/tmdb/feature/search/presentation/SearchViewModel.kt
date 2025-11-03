@@ -72,6 +72,10 @@ class SearchViewModel(
                     isSearchSuggestionsError = false
                 )
             }
+
+            is SearchEvent.ChangePage -> {
+                state = state.copy(defaultPage = event.page)
+            }
         }
     }
 

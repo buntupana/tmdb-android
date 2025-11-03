@@ -35,21 +35,25 @@ import timber.log.Timber
 fun SearchResults(
     modifier: Modifier = Modifier,
     searchState: SearchState,
-    pagerState: PagerState,
+    pagerState: PagerState?,
     bottomPadding: Dp,
     onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color) -> Unit,
-    onPersonClick: (personId: Long) -> Unit
+    onPersonClick: (personId: Long) -> Unit,
+    onChangePage: (page: Int) -> Unit
 ) {
+
+    pagerState ?: return
+
     // Pager with all results pages
     HorizontalPager(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
         state = pagerState,
-        beyondViewportPageCount = 2
+        beyondViewportPageCount = 2,
     ) { currentPage ->
-
         Timber.d("SearchResults() called with: currentPage = [$currentPage]")
+        onChangePage(currentPage)
         // Getting Result information for each page of the pager
         when (searchState.resultCountList[currentPage].searchType) {
             SearchType.MOVIE -> {
@@ -68,7 +72,7 @@ fun SearchResults(
                             Text(text = stringResource(R.string.search_movies_no_result))
                         }
                     },
-                    itemContent = { index, item ->
+                    itemContent = { _, item ->
                         MediaItemHorizontal(
                             modifier = Modifier.height(Dimens.imageSize.posterHeight),
                             onMediaClick = { _, mainPosterColor ->
@@ -100,7 +104,7 @@ fun SearchResults(
                             Text(text = stringResource(R.string.search_tv_shows_no_result))
                         }
                     },
-                    itemContent = { index, item ->
+                    itemContent = { _, item ->
                         MediaItemHorizontal(
                             modifier = Modifier.height(Dimens.imageSize.posterHeight),
                             onMediaClick = { _, mainPosterColor ->
@@ -132,7 +136,7 @@ fun SearchResults(
                             Text(text = stringResource(R.string.search_people_no_result))
                         }
                     },
-                    itemContent = { index, item ->
+                    itemContent = { _, item ->
                         val description = if (item.knownForList.firstOrNull() == null) {
                             item.knownForDepartment
                         } else {
@@ -180,6 +184,7 @@ fun SearchResultsPreview() {
             bottomPadding = 0.dp,
             onMediaClick = { _, _ -> },
             onPersonClick = {},
+            onChangePage = {}
         )
     }
 }

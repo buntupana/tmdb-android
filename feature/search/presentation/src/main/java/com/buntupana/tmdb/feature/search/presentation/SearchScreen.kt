@@ -28,6 +28,7 @@ import com.buntupana.tmdb.feature.search.presentation.comp.SearchTabRow
 import com.buntupana.tmdb.feature.search.presentation.comp.SearchTopBar
 import com.buntupana.tmdb.feature.search.presentation.comp.TrendingList
 import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.panabuntu.tmdb.core.common.model.MediaItem
 import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -44,11 +45,16 @@ fun SearchScreen(
         state = viewModel.state,
         onSearchSuggestions = { viewModel.onEvent(SearchEvent.OnSearchSuggestions(it)) },
         onSearch = { searchKey, searchType ->
-            viewModel.onEvent(SearchEvent.OnSearch(searchKey, searchType ?: SearchType.MOVIE))
+            viewModel.onEvent(
+                SearchEvent.OnSearch(
+                    searchKey = searchKey,
+                    searchType = searchType ?: SearchType.MOVIE
+                )
+            )
         },
         onMediaClick = { mediaItem, mainPosterColor ->
             when (mediaItem) {
-                is com.panabuntu.tmdb.core.common.model.MediaItem.Movie -> {
+                is MediaItem.Movie -> {
                     onMediaClick(
                         mediaItem.id,
                         MediaType.MOVIE,
@@ -56,7 +62,7 @@ fun SearchScreen(
                     )
                 }
 
-                is com.panabuntu.tmdb.core.common.model.MediaItem.TvShow -> {
+                is MediaItem.TvShow -> {
                     onMediaClick(
                         mediaItem.id,
                         MediaType.TV_SHOW,
@@ -69,6 +75,9 @@ fun SearchScreen(
         onDismissSuggestionsClick = {
             focusManager.clearFocus()
             viewModel.onEvent(SearchEvent.DismissSuggestions)
+        },
+        onChangePage = {
+            viewModel.onEvent(SearchEvent.ChangePage(it))
         }
     )
 }
@@ -78,9 +87,10 @@ private fun SearchScreenContent(
     state: SearchState,
     onSearchSuggestions: (searchKey: String) -> Unit,
     onSearch: (searchKey: String, searchType: SearchType?) -> Unit,
-    onMediaClick: (mediaItem: com.panabuntu.tmdb.core.common.model.MediaItem, mainPosterColor: Color?) -> Unit,
+    onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color?) -> Unit,
     onPersonClick: (personId: Long) -> Unit,
-    onDismissSuggestionsClick: () -> Unit
+    onDismissSuggestionsClick: () -> Unit,
+    onChangePage: (page: Int) -> Unit
 ) {
 
     SetSystemBarsColors(
@@ -89,9 +99,13 @@ private fun SearchScreenContent(
         translucentNavigationBar = true
     )
 
-    val pagerState = rememberPagerState(
-        initialPage = state.defaultPage
-    ) { state.resultCountList.size }
+    val pagerState = if (state.defaultPage != null) {
+        rememberPagerState(
+            initialPage = state.defaultPage,
+        ) { state.resultCountList.size }
+    } else {
+        null
+    }
 
     Scaffold(
         topBar = {
@@ -113,7 +127,8 @@ private fun SearchScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .isVisible(
-                            isVisible = state.resultCountList.isNotEmpty(),
+                            isVisible = state.resultCountList.isNotEmpty() && state.searchSuggestionList.orEmpty()
+                                .isEmpty(),
                             animateSize = true
                         ),
                     pagerState = pagerState,
@@ -156,7 +171,8 @@ private fun SearchScreenContent(
                         pagerState = pagerState,
                         searchState = state,
                         onMediaClick = onMediaClick,
-                        onPersonClick = onPersonClick
+                        onPersonClick = onPersonClick,
+                        onChangePage = onChangePage
                     )
                 }
 
@@ -206,7 +222,11 @@ private fun SearchScreenPreview() {
         SearchScreenContent(
             state = SearchState(
                 searchKey = "",
-                resultCountList = listOf(MediaResultCount(SearchType.MOVIE, 100)),
+                resultCountList = listOf(
+                    MediaResultCount(SearchType.MOVIE, 100),
+                    MediaResultCount(SearchType.TV_SHOW, 87),
+                    MediaResultCount(SearchType.PERSON, 10)
+                ),
                 searchSuggestionList = suggestionList,
                 isSearchError = false
             ),
@@ -214,7 +234,8 @@ private fun SearchScreenPreview() {
             onSearch = { _, _ -> },
             onMediaClick = { _, _ -> },
             onPersonClick = {},
-            onDismissSuggestionsClick = {}
+            onDismissSuggestionsClick = {},
+            onChangePage = {}
         )
     }
 }

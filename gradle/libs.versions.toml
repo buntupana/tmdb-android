@@ -16,16 +16,15 @@ ktx = '1.17.0'
 work = '2.4.0'
 
 #Compose
-composeBom = "2025.11.00"
-compose_activity = "1.11.0"
-compose_constraint = '1.1.01'
-compose_foundation = "1.9.4"
+composeBom = "2025.12.00"
+compose_activity = "1.12.1"
+compose_foundation = "1.10.0"
 compose_paging = "3.3.6"
-compose_lifecycle = "2.9.4"
+compose_lifecycle = "2.10.0"
 
 #Android dependencies
-lifecycle = "2.9.4"
-room = "2.8.3"
+lifecycle = "2.10.0"
+room = "2.8.4"
 navigation = "2.9.6"
 palette = '1.0.0'
 
@@ -38,7 +37,7 @@ material3 = "1.4.0"
 splashscreen = "1.2.0"
 
 #Firebase
-firebase = '34.5.0'
+firebase = '34.6.0'
 crashlytics = "3.0.6"
 
 #Di
@@ -46,10 +45,10 @@ dagger_android = "1.2.0"
 koin-bom = "4.1.1"
 
 #Ktor
-ktor_bom = "3.3.2"
+ktor_bom = "3.3.3"
 
 #Storage
-datastore = "1.1.7"
+datastore = "1.2.0"
 
 #Tools
 timber = '5.0.1'
@@ -70,13 +69,13 @@ test_runner = '1.4.0'
 mockito = '4.5.0'
 
 # Plugins
-agp = "8.13.0"
+agp = "8.13.2"
 google_services = "4.4.4"
 uiToolingPreviewAndroid = "1.6.7"
 uiTooling = "1.7.3"
 appcompat = "1.7.1"
 jetbrainsKotlinJvm = "2.2.21"
-uiTextGoogleFonts = "1.9.4"
+uiTextGoogleFonts = "1.10.0"
 uiGraphicsAndroid = "1.9.4"
 
 [libraries]
@@ -98,9 +97,7 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
-androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
 
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "compose_constraint" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "compose_paging" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "compose_foundation" }
 

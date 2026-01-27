@@ -35,7 +35,7 @@ fun Image.getDominantColor(context: Context, colorResult: (dominantColor: Color)
         val paletteColor = if (context.inDarkMode) {
             palette.darkVibrantSwatch?.rgb
         } else {
-            palette.lightVibrantSwatch?.rgb
+            palette.dominantSwatch?.rgb
         }
 
         paletteColor ?: return@generate

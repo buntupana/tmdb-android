@@ -2,6 +2,7 @@ package com.buntupana.tmdb.feature.lists.presentation.manage_lists.comp
 
 import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +37,6 @@ fun ManageListsLists(
 ) {
     LazyColumn(
         modifier = modifier
-            .padding(horizontal = Dimens.padding.horizontal)
             .animateContentSize()
     ) {
 
@@ -50,6 +51,7 @@ fun ManageListsLists(
 
             Text(
                 modifier = Modifier
+                    .padding(horizontal = Dimens.padding.horizontal)
                     .fillMaxWidth()
                     .animateItem(),
                 text = stringResource(R.string.lists_media_belongs_to, mediaName),
@@ -67,13 +69,20 @@ fun ManageListsLists(
             val listItem = state.userListDetails?.get(index)
             listItem ?: return@items
 
+            if (index != 0) {
+                Spacer(modifier = Modifier.height(Dimens.padding.small))
+            }
+
             ManageListsItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .animateItem(),
+                    .animateItem()
+                    .clickable(
+                        onClick = { onDeleteFromListClick(listItem) }
+                    )
+                    .padding(horizontal = Dimens.padding.horizontal),
                 mediaList = listItem,
                 isForAdd = false,
-                onItemClick = { onDeleteFromListClick(listItem) }
             )
         }
 
@@ -83,6 +92,7 @@ fun ManageListsLists(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = Dimens.padding.horizontal)
                     .height(LocalMinimumInteractiveComponentSize.current)
                     .animateItem(),
                 horizontalArrangement = Arrangement.Center,
@@ -98,11 +108,16 @@ fun ManageListsLists(
             count = 1,
             key = { "all" }
         ) {
-            Spacer(modifier = Modifier.height(Dimens.padding.big))
+            Spacer(modifier = Modifier.height(Dimens.padding.medium))
+
+            HorizontalDivider()
+
+            Spacer(modifier = Modifier.height(Dimens.padding.medium))
 
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = Dimens.padding.horizontal)
                     .animateItem(),
                 text = stringResource(R.string.lists_rest_of_the_lists),
                 fontWeight = FontWeight.Bold
@@ -119,13 +134,20 @@ fun ManageListsLists(
             val listItem = state.listAllLists?.get(index)
             listItem ?: return@items
 
+            if (index != 0) {
+                Spacer(modifier = Modifier.height(Dimens.padding.small))
+            }
+
             ManageListsItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .animateItem(),
+                    .animateItem()
+                    .clickable(
+                        onClick = { onAddToListClick(listItem) }
+                    )
+                    .padding(horizontal = Dimens.padding.horizontal),
                 mediaList = listItem,
                 isForAdd = true,
-                onItemClick = { onAddToListClick(listItem) }
             )
         }
 
@@ -136,6 +158,7 @@ fun ManageListsLists(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(LocalMinimumInteractiveComponentSize.current)
+                    .padding(horizontal = Dimens.padding.horizontal)
                     .animateItem(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically

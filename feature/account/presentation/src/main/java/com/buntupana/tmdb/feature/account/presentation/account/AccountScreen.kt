@@ -266,7 +266,6 @@ fun AccountContent(
     showBackground = true,
     heightDp = 1150
 )
-@Preview(showBackground = true, heightDp = 1150)
 @Composable
 fun AccountScreenPreview() {
     AppTheme {

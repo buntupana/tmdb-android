@@ -2,7 +2,6 @@ import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)

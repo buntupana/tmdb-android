@@ -71,8 +71,6 @@ mockito = '4.5.0'
 # Plugins
 agp = "9.0.1"
 google_services = "4.4.4"
-uiToolingPreviewAndroid = "1.6.7"
-uiTooling = "1.7.3"
 appcompat = "1.7.1"
 jetbrainsKotlinJvm = "2.3.10"
 uiTextGoogleFonts = "1.10.3"

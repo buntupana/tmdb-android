@@ -1,0 +1,15 @@
+package com.buntupana.tmdb.feature.lists.presentation.manage_lists
+
+import com.buntupana.tmdb.core.ui.navigation.Route
+import com.panabuntu.tmdb.core.common.entity.MediaType
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ManageListsRoute(
+    val mediaId: Long,
+    val mediaType: MediaType,
+    val mediaName: String,
+    val backgroundColor: Int?,
+    val posterUrl: String?,
+    val releaseYear: String?
+) : Route

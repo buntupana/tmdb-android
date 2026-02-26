@@ -1,0 +1,169 @@
+package com.buntupana.tmdb.feature.account.presentation.account.comp
+
+import android.content.res.Configuration
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.theme.AppTheme
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
+import com.buntupana.tmdb.feature.lists.domain.model.UserListDetails
+import com.panabuntu.tmdb.core.common.util.countWordsBySpace
+import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
+
+@Composable
+fun ListItemHorizontal(
+    modifier: Modifier = Modifier,
+    width: Dp = 200.dp,
+    userListDetails: UserListDetails,
+    onListClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,
+) {
+
+    Box(
+        modifier = modifier
+            .width(width)
+            .aspectRatio(16f / 10f)
+            .clip(RoundedCornerShape(Dimens.posterRound))
+            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+            .clickable {
+                onListClick(
+                    userListDetails.id,
+                    userListDetails.name,
+                    userListDetails.description,
+                    userListDetails.backdropUrl
+                )
+            }
+    ) {
+
+        var backgroundColor = MaterialTheme.colorScheme.primaryContainer
+
+        if (userListDetails.backdropUrl.isNotNullOrBlank()) {
+            backgroundColor = backgroundColor.copy(alpha = 0.8f)
+            ImageFromUrl(
+                modifier = Modifier.fillMaxSize(),
+                imageUrl = userListDetails.backdropUrl,
+                showPlaceHolder = true
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor)
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    horizontal = Dimens.padding.horizontal,
+                    vertical = Dimens.padding.small
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            var maxLines = userListDetails.name.countWordsBySpace()
+
+            if (maxLines > 2) {
+                maxLines = 3
+            }
+
+            Text(
+                text = userListDetails.name,
+                style = TextStyle.Default.copy(textAlign = TextAlign.Center),
+                autoSize = TextAutoSize.StepBased(minFontSize = 18.sp, maxFontSize = 60.sp),
+                maxLines = maxLines,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.primaryContainer.getOnBackgroundColor()
+            )
+        }
+    }
+}
+
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
+@Composable
+private fun ListItemHorizontalPreview() {
+    AppTheme {
+        ListItemHorizontal(
+            width = 200.dp,
+            userListDetails = UserListDetails(
+                id = 1,
+                name = "Multi Story Lines",
+                description = "List Description",
+                backdropUrl = null,
+                posterUrl = null,
+                itemCount = 0,
+                isPublic = false,
+                revenue = 0L,
+                runtime = null,
+                averageRating = null,
+                updatedAt = null,
+                shareLink = "test"
+            ),
+            onListClick = { _, _, _, _ -> }
+        )
+    }
+}
+
+
+@Composable
+fun ListItemHorizontalPlaceHolder(
+    modifier: Modifier = Modifier,
+    width: Dp = 200.dp
+) {
+    Box(
+        modifier = modifier
+            .width(width)
+            .aspectRatio(16f / 10f)
+            .clip(RoundedCornerShape(Dimens.posterRound))
+            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+    ) {
+    }
+}
+
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
+@Composable
+private fun ListItemHorizontalPlaceHolderPreview() {
+    AppTheme {
+        ListItemHorizontalPlaceHolder()
+    }
+}

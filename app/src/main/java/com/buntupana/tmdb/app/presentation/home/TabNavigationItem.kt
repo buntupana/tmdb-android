@@ -1,0 +1,60 @@
+package com.buntupana.tmdb.app.presentation.home
+
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Explore
+import androidx.compose.material.icons.outlined.Movie
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Tv
+import androidx.compose.material.icons.rounded.Explore
+import androidx.compose.material.icons.rounded.Movie
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Tv
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.buntupana.tmdb.core.ui.navigation.Route
+import com.buntupana.tmdb.feature.account.presentation.account.AccountRoute
+import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverRoute
+import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListRoute
+
+
+sealed class TabNavigationItem(
+    open val title: String,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector = selectedIcon,
+    val route: Route
+) {
+    data class Discover(
+        override val title: String
+    ) : TabNavigationItem(
+        title = title,
+        selectedIcon = Icons.Rounded.Explore,
+        unselectedIcon = Icons.Outlined.Explore,
+        route = DiscoverRoute
+    )
+
+    data class Movies(
+        override val title: String
+    ) : TabNavigationItem(
+        title = title,
+        selectedIcon = Icons.Rounded.Movie,
+        unselectedIcon = Icons.Outlined.Movie,
+        route = MediaListRoute.Movie()
+    )
+
+    data class TVShows(
+        override val title: String
+    ) : TabNavigationItem(
+        title = title,
+        selectedIcon = Icons.Rounded.Tv,
+        unselectedIcon = Icons.Outlined.Tv,
+        route = MediaListRoute.TvShow()
+    )
+
+    data class Account(
+        override val title: String
+    ) : TabNavigationItem(
+        title = title,
+        selectedIcon = Icons.Rounded.Person,
+        unselectedIcon = Icons.Outlined.Person,
+        route = AccountRoute
+    )
+}

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="common_explore">Explore</string>
+    <string name="common_movies">Movies</string>
+    <string name="common_tv_shows">TV Shows</string>
+    <string name="common_account">Account</string>
+
+    <string name="common_trending">Trending</string>
+    <string name="common_retry">Retry</string>
+    <string name="common_no_results">No Results</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_confirm">Confirm</string>
+    <string name="common_empty"/>
+    <string name="common_show_more">Show More</string>
+    <string name="common_description">Description</string>
+    <string name="common_name">Name</string>
+    <string name="common_movie">Movie</string>
+    <string name="common_tv_show">Tv Show</string>
+    <string name="common_apply_changes">Apply Changes</string>
+    <string name="common_apply">Apply</string>
+    <string name="common_from">From</string>
+    <string name="common_to">To</string>
+    <string name="common_all">All</string>
+
+    <string name="common_loading_content_error">Sorry, there was an error loading this content</string>
+    <string name="common_refresh_content_error">Sorry, there was an error refreshing this content</string>
+    <string name="common_no_results_found">No results found</string>
+
+    // Time
+    <string name="common_hours_minutes">%1$dh %2$dm</string>
+    <string name="common_minutes">%1$dm</string>
+
+    // Discover
+    <string name="common_menu_selector_sample_streaming" translatable="false">Streaming</string>
+    <string name="common_menu_selector_sample_on_tv">On TV</string>
+    <string name="common_menu_selector_sample_for_rent">For Rent</string>
+    <string name="common_menu_selector_sample_in_theatres">In Theatres</string>
+
+    // Search
+    <string name="common_search">Search</string>
+
+    // Person Detail
+    <string name="common_gender_not_specified">Not specified</string>
+    <string name="common_gender_female">Female</string>
+    <string name="common_gender_male">Male</string>
+    <string name="common_gender_no_binary">No-Binary</string>
+    <string name="common_read_more">Read More</string>
+
+    // Media Detail
+    <string name="common_user_score">User Score</string>
+
+    // WatchList
+    <string name="common_watchlist">Watchlist</string>
+
+    // Favorites
+    <string name="common_favorites">Favorites</string>
+
+</resources>

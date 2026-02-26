@@ -1,0 +1,2 @@
+-keep class com.buntupana.tmdb.feature.account.data.raw.* { *; }
+-keep class com.buntupana.tmdb.feature.account.data.request.* { *; }

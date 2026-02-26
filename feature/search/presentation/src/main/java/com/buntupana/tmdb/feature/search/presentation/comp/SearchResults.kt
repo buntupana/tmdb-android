@@ -1,0 +1,190 @@
+package com.buntupana.tmdb.feature.search.presentation.comp
+
+import android.content.res.Configuration
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.buntupana.tmdb.core.ui.composables.item.MediaItemHorizontal
+import com.buntupana.tmdb.core.ui.composables.list.LazyColumnGeneric
+import com.buntupana.tmdb.core.ui.theme.AppTheme
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.feature.search.presentation.MediaResultCount
+import com.buntupana.tmdb.feature.search.presentation.R
+import com.buntupana.tmdb.feature.search.presentation.SearchState
+import com.buntupana.tmdb.feature.search.presentation.SearchType
+import com.panabuntu.tmdb.core.common.model.MediaItem
+import timber.log.Timber
+
+@Composable
+fun SearchResults(
+    modifier: Modifier = Modifier,
+    searchState: SearchState,
+    pagerState: PagerState?,
+    bottomPadding: Dp,
+    onMediaClick: (mediaItem: MediaItem, mainPosterColor: Color) -> Unit,
+    onPersonClick: (personId: Long) -> Unit,
+    onChangePage: (page: Int) -> Unit
+) {
+
+    pagerState ?: return
+
+    // Pager with all results pages
+    HorizontalPager(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        state = pagerState,
+        beyondViewportPageCount = 2,
+    ) { currentPage ->
+        Timber.d("SearchResults() called with: currentPage = [$currentPage]")
+        onChangePage(currentPage)
+        // Getting Result information for each page of the pager
+        when (searchState.resultCountList[currentPage].searchType) {
+            SearchType.MOVIE -> {
+                LazyColumnGeneric(
+                    modifier = Modifier.fillMaxSize(),
+                    topPadding = Dimens.padding.medium,
+                    bottomPadding = { bottomPadding + Dimens.padding.small },
+                    itemList = searchState.movieItems?.collectAsLazyPagingItems(),
+                    noResultContent = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(Dimens.padding.medium),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = stringResource(R.string.search_movies_no_result))
+                        }
+                    },
+                    itemContent = { _, item ->
+                        MediaItemHorizontal(
+                            modifier = Modifier.height(Dimens.imageSize.posterHeight),
+                            onMediaClick = { _, mainPosterColor ->
+                                onMediaClick(item, mainPosterColor)
+                            },
+                            mediaId = item.id,
+                            title = item.name,
+                            posterUrl = item.posterUrl,
+                            overview = item.overview,
+                            releaseDate = item.releaseDate
+                        )
+                    }
+                )
+            }
+
+            SearchType.TV_SHOW -> {
+                LazyColumnGeneric(
+                    modifier = Modifier.fillMaxSize(),
+                    topPadding = Dimens.padding.medium,
+                    bottomPadding = { bottomPadding + Dimens.padding.small },
+                    itemList = searchState.tvShowItems?.collectAsLazyPagingItems(),
+                    noResultContent = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(Dimens.padding.medium),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = stringResource(R.string.search_tv_shows_no_result))
+                        }
+                    },
+                    itemContent = { _, item ->
+                        MediaItemHorizontal(
+                            modifier = Modifier.height(Dimens.imageSize.posterHeight),
+                            onMediaClick = { _, mainPosterColor ->
+                                onMediaClick(item, mainPosterColor)
+                            },
+                            mediaId = item.id,
+                            title = item.name,
+                            posterUrl = item.posterUrl,
+                            overview = item.overview,
+                            releaseDate = item.releaseDate
+                        )
+                    }
+                )
+            }
+
+            SearchType.PERSON -> {
+                LazyColumnGeneric(
+                    modifier = Modifier.fillMaxSize(),
+                    topPadding = Dimens.padding.medium,
+                    bottomPadding = { bottomPadding + Dimens.padding.small },
+                    itemList = searchState.personItems?.collectAsLazyPagingItems(),
+                    noResultContent = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(Dimens.padding.medium),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = stringResource(R.string.search_people_no_result))
+                        }
+                    },
+                    itemContent = { _, item ->
+                        val description = if (item.knownForList.firstOrNull() == null) {
+                            item.knownForDepartment
+                        } else {
+                            "${item.knownForDepartment} • ${item.knownForList.first()}"
+                        }
+
+                        PersonItemHorizontal(
+                            modifier = Modifier.height(Dimens.imageSize.personHeightSmall),
+                            personId = item.id,
+                            name = item.name,
+                            profileUrl = item.profilePath,
+                            gender = item.gender,
+                            description = description,
+                            onClick = onPersonClick
+                        )
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true,
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true,
+)
+@Composable
+fun SearchResultsPreview() {
+    AppTheme {
+        SearchResults(
+            searchState = SearchState(
+                resultCountList = listOf(
+                    MediaResultCount(SearchType.MOVIE, 100),
+                    MediaResultCount(SearchType.TV_SHOW, 87),
+                    MediaResultCount(SearchType.PERSON, 10)
+                )
+            ),
+            pagerState = rememberPagerState(initialPage = 0) { 0 },
+            bottomPadding = 0.dp,
+            onMediaClick = { _, _ -> },
+            onPersonClick = {},
+            onChangePage = {}
+        )
+    }
+}

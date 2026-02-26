@@ -1,0 +1,266 @@
+package com.buntupana.tmdb.core.ui.composables.item
+
+import android.content.res.Configuration
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.composables.widget.UserScore
+import com.buntupana.tmdb.core.ui.theme.AppTheme
+import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.buntupana.tmdb.core.ui.theme.HkFontFamily
+import com.buntupana.tmdb.core.ui.util.isInvisible
+import com.buntupana.tmdb.core.ui.util.mediaItemMovie
+import com.panabuntu.tmdb.core.common.model.MediaItem
+
+private const val MAX_TITLE_LINES = 3
+
+@Composable
+fun MediaItemVertical(
+    modifier: Modifier = Modifier,
+    width: Dp = Dimens.carouselMediaItemWidth,
+    mediaItem: MediaItem,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    onClick: (mainPosterColor: Color) -> Unit
+) {
+
+    var mainPosterColor: Color = MaterialTheme.colorScheme.surfaceDim
+
+    BoxWithConstraints(
+        modifier = modifier
+            .width(width)
+            .padding(4.dp)
+            .clip(RoundedCornerShape(Dimens.posterRound))
+            .clickable {
+                onClick(mainPosterColor)
+            }
+    ) {
+
+        val maxWidth = maxWidth
+
+        Column {
+            Box {
+                val userScoreSize = (36f * maxWidth.value / 120f).dp
+
+                Box(
+                    modifier = Modifier.padding(bottom = userScoreSize / 2)
+                ) {
+                    ImageFromUrl(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(Dimens.posterRound))
+                            .aspectRatio(Dimens.aspectRatioMediaPoster),
+                        imageUrl = mediaItem.posterUrl,
+                        showPlaceHolder = true,
+                        setDominantColor = { dominantColor ->
+                            mainPosterColor = dominantColor
+                        },
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .padding(
+                            start = Dimens.padding.tiny
+                        )
+                        .align(Alignment.BottomStart)
+                        .size(userScoreSize)
+                ) {
+                    UserScore(
+                        score = mediaItem.voteAverage,
+                        modifier = Modifier.fillMaxSize(),
+                        fontFamily = HkFontFamily
+                    )
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+            ) {
+                TitleAndDate(
+                    modifier = Modifier.isInvisible(true),
+                    fontSize = fontSize,
+                    minTitleLines = 3,
+                    title = "",
+                    date = ""
+                )
+
+                TitleAndDate(
+                    fontSize = fontSize,
+                    title = mediaItem.name,
+                    date = mediaItem.releaseDate
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun TitleAndDate(
+    modifier: Modifier = Modifier,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    title: String,
+    date: String,
+    minTitleLines: Int = 1,
+) {
+    Column(
+        modifier = modifier
+    ) {
+
+        Text(
+            text = title,
+            maxLines = MAX_TITLE_LINES,
+            fontWeight = FontWeight.Bold,
+            overflow = TextOverflow.Ellipsis,
+            minLines = minTitleLines,
+            fontSize = fontSize
+        )
+
+        Text(
+            text = date,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.alpha(0.6f),
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+            fontSize = fontSize
+        )
+    }
+}
+
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
+@Composable
+private fun MediaItemPreview() {
+    AppTheme {
+        MediaItemVertical(
+            modifier = Modifier.width(Dimens.carouselMediaItemWidth),
+            mediaItem = mediaItemMovie,
+            onClick = { }
+        )
+    }
+}
+
+@Composable
+fun MediaItemVerticalPlaceHolder(
+    modifier: Modifier = Modifier,
+    width: Dp = Dimens.carouselMediaItemWidth,
+    fontSize: TextUnit = TextUnit.Unspecified
+) {
+
+    BoxWithConstraints(
+        modifier = modifier
+            .width(width)
+            .padding(4.dp)
+    ) {
+
+        val maxWidth = maxWidth
+
+        Column {
+
+            val userScoreSize = (36f * maxWidth.value / 120f).dp
+
+            Box(
+                modifier = Modifier
+                    .padding(bottom = userScoreSize / 2)
+                    .clip(RoundedCornerShape(Dimens.posterRound))
+                    .aspectRatio(2f / 3f)
+                    .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+            ) {
+            }
+
+            Box(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+            ) {
+                Column(
+                    modifier = Modifier.isInvisible(false)
+                ) {
+
+                    Text(
+                        text = "",
+                        maxLines = MAX_TITLE_LINES,
+                        fontWeight = FontWeight.Bold,
+                        overflow = TextOverflow.Ellipsis,
+                        minLines = 1,
+                        fontSize = fontSize
+                    )
+
+                    Text(
+                        text = "",
+                        fontWeight = FontWeight.Normal,
+                        overflow = TextOverflow.Ellipsis,
+                        minLines = 3,
+                        fontSize = fontSize
+                    )
+                }
+
+                Text(
+                    modifier = Modifier
+                        .padding(end = Dimens.padding.medium)
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                        .fillMaxWidth(),
+                    text = "",
+                    maxLines = MAX_TITLE_LINES,
+                    minLines = 1,
+                    fontWeight = FontWeight.Bold,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = fontSize
+                )
+            }
+        }
+    }
+}
+
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+    showBackground = true
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+    showBackground = true
+)
+@Composable
+fun MediaItemPlaceHolderPreview() {
+    AppTheme {
+        MediaItemVerticalPlaceHolder(
+            modifier = Modifier
+        )
+    }
+}

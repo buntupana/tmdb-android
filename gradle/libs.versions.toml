@@ -1,8 +1,7 @@
 [versions]
 #Versioning
-#version_code = 1
-#version_name = '0.0.0'
-#build_tools = '30.0.3'
+version_code = "2"
+version_name = "1.0.1"
 
 #Sdk and tools
 compile_sdk = "36"
@@ -11,14 +10,14 @@ min_sdk = "23"
 
 #Kotlin
 kotlin = "2.3.10"
-ksp = "2.3.4"
+ksp = "2.3.6"
 ktx = '1.17.0'
 work = '2.4.0'
 
 #Compose
 composeBom = "2026.02.00"
 compose_activity = "1.12.4"
-compose_foundation = "1.10.3"
+compose_foundation = "1.10.4"
 compose_paging = "3.4.1"
 compose_lifecycle = "2.10.0"
 

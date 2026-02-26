@@ -18,8 +18,8 @@ android {
         applicationId = "com.buntupana.tmdb.app"
         minSdk = libs.versions.min.sdk.get().toInt()
         targetSdk = libs.versions.target.sdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = libs.versions.version.code.get().toInt()
+        versionName = libs.versions.version.name.get().toString()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

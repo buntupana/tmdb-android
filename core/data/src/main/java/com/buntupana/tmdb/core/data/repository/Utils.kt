@@ -29,7 +29,7 @@ suspend fun <RAW> getAllItemsFromPaging(
     }
 
     return if (networkError != null) {
-        Result.Error(networkError!!)
+        Result.Error(networkError)
     } else {
         Result.Success(
             ResponseListRaw(

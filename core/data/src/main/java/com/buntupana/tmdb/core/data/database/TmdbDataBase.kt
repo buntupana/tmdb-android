@@ -40,7 +40,7 @@ abstract class TmdbDataBase : RoomDatabase() {
                 context = context,
                 klass = TmdbDataBase::class.java,
                 name = "tmdb-database"
-            ).fallbackToDestructiveMigration()
+            ).fallbackToDestructiveMigration(false)
                 .build()
         }
     }

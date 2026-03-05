@@ -68,7 +68,7 @@ test_runner = '1.4.0'
 mockito = '4.5.0'
 
 # Plugins
-agp = "9.0.1"
+agp = "9.1.0"
 google_services = "4.4.4"
 appcompat = "1.7.1"
 jetbrainsKotlinJvm = "2.3.10"

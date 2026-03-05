@@ -6,7 +6,6 @@ import com.buntupana.tmdb.app.presentation.home.HomeRoute
 import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
 import com.buntupana.tmdb.feature.detail.presentation.cast.CastDetailRoute
 import com.buntupana.tmdb.feature.detail.presentation.episodes.EpisodesDetailRoute
-import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailRoute
 import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailScreen
 import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailRoute
 import com.buntupana.tmdb.feature.detail.presentation.rating.RatingMediaType
@@ -64,13 +63,13 @@ fun MediaDetailsNav(
             )
         },
         onRecommendationClick = { mediaId, mediaType, backgroundColor ->
-            navRoutesMain.navigate(
-                MediaDetailRoute(
-                    mediaId = mediaId,
-                    mediaType = mediaType,
-                    backgroundColor = backgroundColor?.toArgb()
-                )
-            )
+//            navRoutesMain.navigate(
+//                MediaDetailNavArgs(
+//                    mediaId = mediaId,
+//                    mediaType = mediaType,
+//                    backgroundColor = backgroundColor?.toArgb()
+//                )
+//            )
         },
         onLogoClick = {
             navRoutesMain.popBackStack(route = HomeRoute::class, inclusive = false)

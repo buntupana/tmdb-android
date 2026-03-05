@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.UiText
-import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMediaImagesUseCase
 import com.buntupana.tmdb.feature.detail.domain.usecase.GetMovieDetailsUseCase
@@ -33,6 +32,7 @@ private const val FIRST_LOAD_DELAY = 300L
 
 class MediaDetailViewModel(
     savedStateHandle: SavedStateHandle,
+    private val navArgs: MediaDetailNavArgs,
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     private val getTvShowDetailsUseCase: GetTvShowDetailsUseCase,
     private val setMediaFavoriteUseCase: SetMediaFavoriteUseCase,
@@ -40,8 +40,6 @@ class MediaDetailViewModel(
     private val getMediaImagesUseCase: GetMediaImagesUseCase,
     private val sessionManager: SessionManager
 ) : ViewModel() {
-
-    private val navArgs: MediaDetailRoute = savedStateHandle.navArgs()
 
     var state by mutableStateOf(
         MediaDetailState(

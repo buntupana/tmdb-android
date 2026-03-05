@@ -32,11 +32,10 @@ import com.buntupana.tmdb.feature.discover.presentation.media_list.comp.MediaLis
 import com.buntupana.tmdb.feature.discover.presentation.media_list.filters.MediaFilterListDefault
 import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MediaListScreen(
-    viewModel: MediaListViewModel = koinViewModel(),
+    viewModel: MediaListViewModel,
     mediaListResult: MediaListResult?,
     onMediaItemClicked: (mediaType: MediaType, mediaItemId: Long, posterDominantColor: Color) -> Unit,
     onFilterClick: (movieListFilter: MediaListFilter) -> Unit

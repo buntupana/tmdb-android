@@ -1,11 +1,9 @@
 package com.buntupana.tmdb.app.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.buntupana.tmdb.app.presentation.home.HomeRoute
 import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
-import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailRoute
 import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListRoute
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListRoute
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemResult
@@ -33,13 +31,13 @@ fun ListDetailNav(
         onLogoClick = { navRoutesMain.popBackStack(HomeRoute::class) },
         onSearchClick = { navRoutesMain.navigate(SearchRoute) },
         onMediaClick = { mediaId, mediaType, mainPosterColor ->
-            navRoutesMain.navigate(
-                MediaDetailRoute(
-                    mediaId = mediaId,
-                    mediaType = mediaType,
-                    backgroundColor = mainPosterColor?.toArgb()
-                )
-            )
+//            navRoutesMain.navigate(
+//                MediaDetailNavArgs(
+//                    mediaId = mediaId,
+//                    mediaType = mediaType,
+//                    backgroundColor = mainPosterColor?.toArgb()
+//                )
+//            )
         },
         onUpdateListClick = { listId, listName, listDescription, isPublic ->
             navRoutesMain.navigate(

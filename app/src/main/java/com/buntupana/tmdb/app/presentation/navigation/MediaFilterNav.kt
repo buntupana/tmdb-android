@@ -1,23 +1,23 @@
 package com.buntupana.tmdb.app.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
+import com.buntupana.tmdb.app.presentation.nav3.Navigator
+import com.buntupana.tmdb.app.presentation.nav3.ResultStore
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterResult
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterScreen
 
 @Composable
 fun MediaFilterNav(
-    navRoutesMain: NavRoutesMain
+    navigator: Navigator,
+    resultStore: ResultStore
 ) {
     MediaFilterScreen(
         onBackClick = {
-            navRoutesMain.popBackStack()
+            navigator.goBack()
         },
         onApplyFilterClick = { mediaListFilter ->
-            navRoutesMain.saveResult(
-                MediaFilterResult(mediaListFilter)
-            )
-            navRoutesMain.popBackStack()
+            resultStore.setResult(MediaFilterResult::class, MediaFilterResult(mediaListFilter))
+            navigator.goBack()
         }
     )
 }

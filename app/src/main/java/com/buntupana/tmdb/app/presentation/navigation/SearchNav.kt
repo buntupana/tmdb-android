@@ -1,28 +1,27 @@
 package com.buntupana.tmdb.app.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.toArgb
-import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
-import com.buntupana.tmdb.feature.detail.presentation.media.MediaDetailRoute
-import com.buntupana.tmdb.feature.detail.presentation.person.PersonDetailRoute
+import com.buntupana.tmdb.app.presentation.nav3.Navigator
 import com.buntupana.tmdb.feature.search.presentation.SearchScreen
 
 @Composable
-fun SearchNav(navRoutesMain: NavRoutesMain) {
+fun SearchNav(
+    navigator: Navigator,
+) {
     SearchScreen(
         onMediaClick = { mediaItemId, mediaItemType, posterDominantColor ->
-            navRoutesMain.navigate(
-                MediaDetailRoute(
-                    mediaId = mediaItemId,
-                    mediaType = mediaItemType,
-                    backgroundColor = posterDominantColor?.toArgb()
-                )
-            )
+//            navRoutesMain.navigate(
+//                MediaDetailNavArgs(
+//                    mediaId = mediaItemId,
+//                    mediaType = mediaItemType,
+//                    backgroundColor = posterDominantColor?.toArgb()
+//                )
+//            )
         },
         onPersonClick = { personId ->
-            navRoutesMain.navigate(
-                PersonDetailRoute(personId = personId)
-            )
+//            navRoutesMain.navigate(
+//                PersonDetailRoute(personId = personId)
+//            )
         }
     )
 }

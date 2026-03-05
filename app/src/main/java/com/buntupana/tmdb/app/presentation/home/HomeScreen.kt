@@ -1,6 +1,5 @@
 package com.buntupana.tmdb.app.presentation.home
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -9,35 +8,35 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
+import com.buntupana.tmdb.app.presentation.nav3.Navigator
+import com.buntupana.tmdb.app.presentation.nav3.ResultStore
+import com.buntupana.tmdb.app.presentation.nav3.RouteNav3
+import com.buntupana.tmdb.app.presentation.nav3.rememberNavigationState
+import com.buntupana.tmdb.app.presentation.nav3.toEntries
+import com.buntupana.tmdb.app.presentation.navigation.AccountNav
+import com.buntupana.tmdb.app.presentation.navigation.DiscoverNav
+import com.buntupana.tmdb.app.presentation.navigation.MediaListNav
 import com.buntupana.tmdb.core.ui.R
-import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.getOnBackgroundColor
-import com.buntupana.tmdb.feature.account.presentation.account.AccountRoute
-import com.buntupana.tmdb.feature.account.presentation.account.AccountScreen
-import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverRoute
-import com.buntupana.tmdb.feature.discover.presentation.discover.DiscoverScreen
 import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListResult
-import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListRoute
-import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListScreen
 import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
 
 
 @Composable
 fun HomeScreen(
+    rootNavigator: Navigator,
+    resultStore: ResultStore,
     mediaListResult: MediaListResult?,
     onSignInClicked: () -> Unit,
     onSearchClicked: () -> Unit,
@@ -49,6 +48,8 @@ fun HomeScreen(
     onMovieFilterClick: (mediaListFilter: MediaListFilter) -> Unit
 ) {
     HomeScreenContent(
+        rootNavigator = rootNavigator,
+        resultStore = resultStore,
         mediaListResult = mediaListResult,
         onSignInClicked = onSignInClicked,
         onSearchClicked = onSearchClicked,
@@ -61,8 +62,11 @@ fun HomeScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun HomeScreenContent(
+    rootNavigator: Navigator,
+    resultStore: ResultStore,
     mediaListResult: MediaListResult?,
     onSignInClicked: () -> Unit,
     onSearchClicked: () -> Unit,
@@ -86,12 +90,21 @@ fun HomeScreenContent(
         TabNavigationItem.Account(title = stringResource(R.string.common_account))
     )
 
-    val navController = rememberNavController()
+    val navigationState = rememberNavigationState(
+        startRoute = RouteNav3.Discover,
+        topLevelRoutes = setOf(
+            RouteNav3.Discover,
+            RouteNav3.Account,
+            RouteNav3.MediaList.Movie(),
+            RouteNav3.MediaList.TvShow()
+        )
+    )
+    val navigator = remember {
+        Navigator(navigationState)
+    }
 
     Scaffold(
         bottomBar = {
-
-            val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
             NavigationBar(
                 modifier = Modifier.fillMaxWidth(),
@@ -100,19 +113,12 @@ fun HomeScreenContent(
             ) {
                 navigationItems.forEach { item ->
 
-                    val isSelected =
-                        currentBackStackEntry?.destination?.hasRoute(item.route::class) ?: false
+                    val isSelected = item.route == navigator.state.topLevelRoute
 
                     NavigationBarItem(
                         selected = isSelected,
                         onClick = {
-                            navController.navigate(item.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                            navigator.navigate(item.route)
                         },
                         icon = {
                             if (isSelected) {
@@ -140,68 +146,72 @@ fun HomeScreenContent(
         }
     ) { paddingValues ->
 
-        NavHost(
+        NavDisplay(
             modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()),
-            navController = navController,
-            startDestination = DiscoverRoute
-        ) {
-            composable<DiscoverRoute> {
-                DiscoverScreen(
-                    onSearchClicked = onSearchClicked,
-                    onMediaItemClicked = onMediaItemClicked
-                )
-            }
-            composable<MediaListRoute.Movie> {
-                MediaListScreen(
-                    mediaListResult = mediaListResult,
-                    onMediaItemClicked = onMediaItemClicked,
-                    onFilterClick = onMovieFilterClick
-                )
-            }
-            composable<MediaListRoute.TvShow> {
-                MediaListScreen(
-                    mediaListResult = mediaListResult,
-                    onMediaItemClicked = onMediaItemClicked,
-                    onFilterClick = onMovieFilterClick
-                )
-            }
-            composable<AccountRoute> {
-                AccountScreen(
-                    onSignInClick = onSignInClicked,
-                    onWatchListClick = onWatchListClick,
-                    onFavoritesClick = onFavoritesClick,
-                    onMediaItemClicked = onMediaItemClicked,
-                    onListsClick = onListsClick,
-                    onListDetailClick = onListDetailClick
-                )
-            }
-        }
-    }
-}
+            onBack = navigator::goBack,
+            sceneStrategy = rememberListDetailSceneStrategy(),
+            entries = navigationState.toEntries(
+                entryProvider {
+                    entry<RouteNav3.Discover>(
+//                        metadata = ListDetailScene.listPane()
+                    ) {
+                        DiscoverNav(
+                            navigator = rootNavigator
+                        )
+                    }
 
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "DefaultPreviewLight",
-    showBackground = true,
-)
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark",
-    showBackground = true,
-)
-@Composable
-fun HomeScreenPreview() {
-    AppTheme {
-        HomeScreenContent(
-            mediaListResult = null,
-            onSignInClicked = {},
-            onSearchClicked = {},
-            onWatchListClick = {},
-            onFavoritesClick = {},
-            onListsClick = {},
-            onMediaItemClicked = { _, _, _ -> },
-            onMovieFilterClick = {},
-            onListDetailClick = { _, _, _, _ -> }
+                    entry<RouteNav3.MediaList.Movie> {
+                        MediaListNav(
+                            navigator = rootNavigator,
+                            resultStore = resultStore,
+                            mediaType = MediaType.MOVIE
+                        )
+                    }
+
+                    entry<RouteNav3.MediaList.TvShow> {
+                        MediaListNav(
+                            navigator = rootNavigator,
+                            resultStore = resultStore,
+                            mediaType = MediaType.TV_SHOW
+                        )
+                    }
+
+                    entry<RouteNav3.Account> {
+                        AccountNav(
+                            navigator = navigator
+                        )
+                    }
+                }
+            )
         )
     }
 }
+
+//@Preview(
+//    uiMode = Configuration.UI_MODE_NIGHT_NO,
+//    name = "DefaultPreviewLight",
+//    showBackground = true,
+//)
+//@Preview(
+//    uiMode = Configuration.UI_MODE_NIGHT_YES,
+//    name = "DefaultPreviewDark",
+//    showBackground = true,
+//)
+//@Composable
+//fun HomeScreenPreview() {
+//    AppTheme {
+//        HomeScreenContent(
+//            rootNavigator = Navigator(NavigationState()),
+//            resultStore = null,
+//            mediaListResult = null,
+//            onSignInClicked = {},
+//            onSearchClicked = {},
+//            onWatchListClick = {},
+//            onFavoritesClick = {},
+//            onListsClick = {},
+//            onMediaItemClicked = { _, _, _ -> },
+//            onMovieFilterClick = {},
+//            onListDetailClick = { _, _, _, _ -> }
+//        )
+//    }
+//}

@@ -7,7 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.discover.domain.entity.MovieListFilter
 import com.buntupana.tmdb.feature.discover.domain.entity.SortBy
 import com.buntupana.tmdb.feature.discover.domain.entity.TvShowListFilter
@@ -26,13 +25,14 @@ import timber.log.Timber
 
 class MediaListViewModel(
     savedStateHandle: SavedStateHandle,
+    navArgs: MediaListNavArgs,
     private val getFilteredMoviesPagingUseCase: GetFilteredMoviesPagingUseCase,
     private val getFilteredTvShowsPagingUseCase: GetFilteredTvShowsPagingUseCase
 ) : ViewModel() {
 
     // it can be used MediaListNav.Movie or MediaListNav.TvShow because they have the same parameter
     // There are two of them to treat them as different routes but the screen is the same
-    private val navArgs = savedStateHandle.navArgs<MediaListRoute.Movie>()
+//    private val navArgs = savedStateHandle.navArgs<MediaListNavArgs.Movie>()
 
     var state by mutableStateOf(
         MediaListState(

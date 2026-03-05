@@ -37,14 +37,13 @@ import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.SortBy
 import com.buntupana.tmdb.feature.discover.presentation.media_filter.comp.UserScoreRangeSelector
 import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
 import timber.log.Timber
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaFilterScreen(
-    viewModel: MediaFilterViewModel = koinViewModel(),
+    viewModel: MediaFilterViewModel,
     onBackClick: () -> Unit,
     onApplyFilterClick: (movieListFilter: MediaListFilter) -> Unit,
 ) {

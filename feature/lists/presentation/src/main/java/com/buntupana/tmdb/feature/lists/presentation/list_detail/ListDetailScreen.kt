@@ -52,13 +52,12 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.compose.viewmodel.koinViewModel
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListDetailScreen(
-    viewModel: ListDetailViewModel = koinViewModel(),
+    viewModel: ListDetailViewModel,
     listDetailResult: ListDetailResult?,
     onBackClick: () -> Unit,
     onLogoClick: () -> Unit,

@@ -3,14 +3,12 @@ package com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.buntupana.tmdb.core.ui.filter_type.MediaFilter
 import com.buntupana.tmdb.core.ui.util.MediaItemRevealedViewEntity
-import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.lists.domain.usecase.GetFavoriteTotalCountUseCase
 import com.buntupana.tmdb.feature.lists.domain.usecase.GetMediaItemTotalCountResult
 import com.buntupana.tmdb.feature.lists.domain.usecase.GetMovieFavoritesPagingUseCase
@@ -32,7 +30,7 @@ import timber.log.Timber
 
 
 class WatchlistFavoritesViewModel(
-    savedStateHandle: SavedStateHandle,
+    navArgs : WatchListFavoritesNavArgs,
     private val getMovieWatchlistPagingUseCase: GetMovieWatchlistPagingUseCase,
     private val getTvShowWatchlistPagingUseCase: GetTvShowWatchlistPagingUseCase,
     private val getWatchlistTotalCountUseCase: GetWatchlistTotalCountUseCase,
@@ -41,12 +39,10 @@ class WatchlistFavoritesViewModel(
     private val getFavoriteTotalCountUseCase: GetFavoriteTotalCountUseCase,
 ) : ViewModel() {
 
-    private val args = savedStateHandle.navArgs<WatchListFavoritesRoute>()
-
     var state by mutableStateOf(
         WatchlistFavoritesState(
-            screenType = args.screenType,
-            defaultPage = MediaFilter.entries.indexOf(args.mediaFilterSelected)
+            screenType = navArgs.screenType,
+            defaultPage = MediaFilter.entries.indexOf(navArgs.mediaFilterSelected)
         )
     )
         private set

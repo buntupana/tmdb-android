@@ -1,16 +1,16 @@
 package com.buntupana.tmdb.app.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModel
+import androidx.compose.ui.graphics.toArgb
+import com.buntupana.tmdb.app.presentation.getViewModel
 import com.buntupana.tmdb.app.presentation.nav3.Navigator
 import com.buntupana.tmdb.app.presentation.nav3.ResultStore
+import com.buntupana.tmdb.app.presentation.nav3.RouteNav3
+import com.buntupana.tmdb.feature.discover.presentation.media_filter.MediaFilterResult
 import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListNavArgs
 import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListResult
 import com.buntupana.tmdb.feature.discover.presentation.media_list.MediaListScreen
-import com.buntupana.tmdb.feature.discover.presentation.model.MediaListFilter
 import com.panabuntu.tmdb.core.common.entity.MediaType
-import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @Composable
 fun MediaListNav(
@@ -19,30 +19,24 @@ fun MediaListNav(
     mediaType: MediaType
 ) {
 
-    val mediaListResult = resultStore.getResult<MediaListResult>(MediaListResult::class)
+    val mediaListResult = resultStore.getResult<MediaFilterResult>(MediaFilterResult::class)?.let { result ->
+        MediaListResult.ApplyFilter(result.mediaListFilter)
+    }
 
     MediaListScreen(
-        viewModel = getViewModelWithNavArgs(
-            MediaListNavArgs(mediaType)
-        ),
+        viewModel = getViewModel(MediaListNavArgs(mediaType)),
         mediaListResult = mediaListResult,
         onMediaItemClicked = { mediaType, mediaItemId, posterDominantColor ->
-
+            navigator.navigate(
+                RouteNav3.MediaDetail(
+                    mediaId = mediaItemId,
+                    mediaType = mediaType,
+                    backgroundColor = posterDominantColor.toArgb()
+                )
+            )
         },
         onFilterClick = { mediaListFilter ->
-            when (mediaListFilter) {
-                is MediaListFilter.Movie -> {}
-                is MediaListFilter.TvShow -> {}
-            }
-        },
-    )
-}
-
-@Composable
-inline fun <reified V : ViewModel> getViewModelWithNavArgs(navArgs: Any? = null): V {
-    return koinViewModel<V>(
-        parameters = {
-            parametersOf(navArgs)
+            navigator.navigate(RouteNav3.MediaFilter(mediaListFilter))
         }
     )
 }

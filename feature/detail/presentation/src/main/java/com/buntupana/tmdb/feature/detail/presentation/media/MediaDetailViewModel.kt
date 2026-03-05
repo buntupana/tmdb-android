@@ -3,7 +3,6 @@ package com.buntupana.tmdb.feature.detail.presentation.media
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
@@ -31,7 +30,6 @@ import com.buntupana.tmdb.core.ui.R as RCore
 private const val FIRST_LOAD_DELAY = 300L
 
 class MediaDetailViewModel(
-    savedStateHandle: SavedStateHandle,
     private val navArgs: MediaDetailNavArgs,
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     private val getTvShowDetailsUseCase: GetTvShowDetailsUseCase,

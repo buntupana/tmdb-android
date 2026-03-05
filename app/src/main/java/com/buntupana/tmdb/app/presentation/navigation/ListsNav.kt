@@ -1,21 +1,21 @@
 package com.buntupana.tmdb.app.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
-import com.buntupana.tmdb.feature.lists.presentation.create_update_list.CreateUpdateListRoute
-import com.buntupana.tmdb.feature.lists.presentation.list_detail.ListDetailRoute
+import com.buntupana.tmdb.app.presentation.getViewModel
+import com.buntupana.tmdb.app.presentation.nav3.Navigator
+import com.buntupana.tmdb.app.presentation.nav3.RouteNav3
 import com.buntupana.tmdb.feature.lists.presentation.lists.ListsScreen
-import com.buntupana.tmdb.feature.search.presentation.SearchRoute
 
 @Composable
 fun ListsNav(
-    navRoutesMain: NavRoutesMain
+    navigator: Navigator
 ) {
     ListsScreen(
-        onBackClick = { navRoutesMain.popBackStack() },
+        viewModel = getViewModel(),
+        onBackClick = { navigator.goBack() },
         onListDetailClick = { listId, listName, description, backdropUrl ->
-            navRoutesMain.navigate(
-                ListDetailRoute(
+            navigator.navigate(
+                RouteNav3.ListDetail(
                     listId = listId,
                     listName = listName,
                     description = description,
@@ -23,11 +23,11 @@ fun ListsNav(
                 )
             )
         },
-        onSearchClick = { navRoutesMain.navigate(SearchRoute) },
+        onSearchClick = { navigator.navigate(RouteNav3.Search) },
         onCreateListDialogClick = {
-            navRoutesMain.navigate(
-                CreateUpdateListRoute()
-            )
+//            navRoutesMain.navigate(
+//                CreateUpdateListRoute()
+//            )
         }
     )
 }

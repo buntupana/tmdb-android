@@ -9,7 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.buntupana.tmdb.app.presentation.navigation.HomeNav
+import com.buntupana.tmdb.app.presentation.navigation.ListDetailNav
+import com.buntupana.tmdb.app.presentation.navigation.ListsNav
+import com.buntupana.tmdb.app.presentation.navigation.MediaDetailsNav
+import com.buntupana.tmdb.app.presentation.navigation.MediaFilterNav
 import com.buntupana.tmdb.app.presentation.navigation.SearchNav
+import com.buntupana.tmdb.app.presentation.navigation.WatchlistFavoritesNav
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
@@ -38,9 +43,39 @@ fun NavigationRootNav3(
                         resultStore = resultStore
                     )
                 }
-                entry<RouteNav3.Search>{
+                entry<RouteNav3.Search> {
                     SearchNav(
                         navigator = navigator
+                    )
+                }
+                entry<RouteNav3.MediaDetail> {
+                    MediaDetailsNav(
+                        navigator = navigator,
+                        route = it
+                    )
+                }
+                entry<RouteNav3.MediaFilter> {
+                    MediaFilterNav(
+                        navigator = navigator,
+                        resultStore = resultStore,
+                        route = it
+                    )
+                }
+                entry<RouteNav3.WatchListFavorites> {
+                    WatchlistFavoritesNav(
+                        navigator = navigator,
+                        resultStore = resultStore,
+                        route = it
+                    )
+                }
+                entry<RouteNav3.Lists> {
+                    ListsNav(navigator = navigator)
+                }
+                entry<RouteNav3.ListDetail> {
+                    ListDetailNav(
+                        navigator = navigator,
+                        resultStore = resultStore,
+                        route = it
                     )
                 }
             }

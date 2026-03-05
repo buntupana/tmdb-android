@@ -3,7 +3,6 @@ package com.buntupana.tmdb.feature.discover.presentation.media_list
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -24,15 +23,10 @@ import timber.log.Timber
 
 
 class MediaListViewModel(
-    savedStateHandle: SavedStateHandle,
     navArgs: MediaListNavArgs,
     private val getFilteredMoviesPagingUseCase: GetFilteredMoviesPagingUseCase,
     private val getFilteredTvShowsPagingUseCase: GetFilteredTvShowsPagingUseCase
 ) : ViewModel() {
-
-    // it can be used MediaListNav.Movie or MediaListNav.TvShow because they have the same parameter
-    // There are two of them to treat them as different routes but the screen is the same
-//    private val navArgs = savedStateHandle.navArgs<MediaListNavArgs.Movie>()
 
     var state by mutableStateOf(
         MediaListState(

@@ -41,13 +41,12 @@ import com.buntupana.tmdb.feature.presentation.R
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import kotlinx.coroutines.flow.flow
-import org.koin.compose.viewmodel.koinViewModel
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WatchlistFavoritesScreen(
-    viewModel: WatchlistFavoritesViewModel = koinViewModel(),
+    viewModel: WatchlistFavoritesViewModel,
     watchlistFavoritesResult: WatchlistFavoritesResult?,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,

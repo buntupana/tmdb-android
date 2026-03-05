@@ -3,7 +3,6 @@ package com.buntupana.tmdb.feature.lists.presentation.list_detail
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -13,7 +12,6 @@ import com.buntupana.tmdb.core.ui.snackbar.SnackbarController
 import com.buntupana.tmdb.core.ui.snackbar.SnackbarEvent
 import com.buntupana.tmdb.core.ui.util.MediaItemRevealedViewEntity
 import com.buntupana.tmdb.core.ui.util.UiText
-import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.lists.domain.usecase.GetListDetailsUseCase
 import com.buntupana.tmdb.feature.lists.domain.usecase.GetListItemsPagingUseCase
 import com.panabuntu.tmdb.core.common.entity.onError
@@ -27,12 +25,10 @@ import timber.log.Timber
 
 
 class ListDetailViewModel(
-    savedStateHandle: SavedStateHandle,
+    private val navArgs: ListDetailNavArgs,
     private val getListDetailsUseCase: GetListDetailsUseCase,
     private val getListItemsPagingUseCase: GetListItemsPagingUseCase
 ) : ViewModel() {
-
-    private val navArgs = savedStateHandle.navArgs<ListDetailRoute>()
 
     var state by mutableStateOf(
         ListDetailState(

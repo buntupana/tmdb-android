@@ -3,11 +3,9 @@ package com.buntupana.tmdb.feature.discover.presentation.media_filter
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buntupana.tmdb.core.ui.util.SelectableItem
-import com.buntupana.tmdb.core.ui.util.navArgs
 import com.buntupana.tmdb.feature.discover.domain.entity.MonetizationType
 import com.buntupana.tmdb.feature.discover.domain.entity.MovieGenre
 import com.buntupana.tmdb.feature.discover.domain.entity.ReleaseType
@@ -22,10 +20,8 @@ import timber.log.Timber
 
 
 class MediaFilterViewModel(
-    savedStateHandle: SavedStateHandle
+    navArgs: MediaFilterNavArgs
 ) : ViewModel() {
-
-    val navArgs: MediaFilterRoute = savedStateHandle.navArgs(MediaFilterRoute.typeMap)
 
     var state by mutableStateOf(MediaFilterState())
         private set

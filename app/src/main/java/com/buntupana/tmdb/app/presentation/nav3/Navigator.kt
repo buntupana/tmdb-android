@@ -23,4 +23,8 @@ class Navigator(val state: NavigationState) {
             currentStack.removeLastOrNull()
         }
     }
+
+    fun goBackRoot() {
+
+    }
 }

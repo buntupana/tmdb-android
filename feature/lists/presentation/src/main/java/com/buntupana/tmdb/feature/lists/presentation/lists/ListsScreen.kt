@@ -31,12 +31,11 @@ import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListItemVertical
 import com.buntupana.tmdb.feature.lists.presentation.lists.comp.ListSubBar
 import com.buntupana.tmdb.feature.presentation.R
-import org.koin.compose.viewmodel.koinViewModel
 import com.buntupana.tmdb.core.ui.R as RCore
 
 @Composable
 fun ListsScreen(
-    viewModel: ListsViewModel = koinViewModel(),
+    viewModel: ListsViewModel,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onListDetailClick: (listId: Long, listName: String, description: String?, backdropUrl: String?) -> Unit,

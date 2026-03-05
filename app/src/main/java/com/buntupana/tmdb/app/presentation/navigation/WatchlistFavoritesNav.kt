@@ -1,40 +1,49 @@
 package com.buntupana.tmdb.app.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
-import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemListRoute
-import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.DeleteItemResult
+import androidx.compose.ui.graphics.toArgb
+import com.buntupana.tmdb.app.presentation.getViewModel
+import com.buntupana.tmdb.app.presentation.nav3.Navigator
+import com.buntupana.tmdb.app.presentation.nav3.ResultStore
+import com.buntupana.tmdb.app.presentation.nav3.RouteNav3
 import com.buntupana.tmdb.feature.lists.presentation.delete_item_list.ListType
 import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.ScreenType
-import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchlistFavoritesResult
+import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchListFavoritesNavArgs
 import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchlistFavoritesScreen
-import com.buntupana.tmdb.feature.search.presentation.SearchRoute
 
 @Composable
 fun WatchlistFavoritesNav(
-    navRoutesMain: NavRoutesMain
+    navigator: Navigator,
+    resultStore: ResultStore,
+    route: RouteNav3.WatchListFavorites
 ) {
-    val result = navRoutesMain.getStateFlowResult<DeleteItemResult>()
-        ?.collectAsStateWithLifecycle()?.value?.let {
-            WatchlistFavoritesResult.CancelRemoveItem(
-                mediaId = it.mediaId,
-                mediaType = it.mediaType
-            )
-        }
+
+    val navArgs = WatchListFavoritesNavArgs(
+        screenType = route.screenType,
+        mediaFilterSelected = route.mediaFilterSelected
+    )
+
+//    val result = navRoutesMain.getStateFlowResult<DeleteItemResult>()
+//        ?.collectAsStateWithLifecycle()?.value?.let {
+//            WatchlistFavoritesResult.CancelRemoveItem(
+//                mediaId = it.mediaId,
+//                mediaType = it.mediaType
+//            )
+//        }
 
     WatchlistFavoritesScreen(
-        watchlistFavoritesResult = result,
-        onBackClick = { navRoutesMain.popBackStack() },
-        onSearchClick = { navRoutesMain.navigate(SearchRoute) },
+        viewModel = getViewModel(navArgs),
+        watchlistFavoritesResult = null,
+        onBackClick = { navigator.goBack() },
+        onSearchClick = { navigator.navigate(RouteNav3.Search) },
         onMediaClick = { mediaId, mediaType, mainPosterColor ->
-//            navRoutesMain.navigate(
-//                MediaDetailNavArgs(
-//                    mediaId = mediaId,
-//                    mediaType = mediaType,
-//                    backgroundColor = mainPosterColor?.toArgb()
-//                )
-//            )
+            navigator.navigate(
+                RouteNav3.MediaDetail(
+                    mediaId = mediaId,
+                    mediaType = mediaType,
+                    backgroundColor = mainPosterColor?.toArgb()
+                )
+            )
         },
         onDeleteClick = { itemId, mediaItem, screenType ->
 
@@ -43,14 +52,14 @@ fun WatchlistFavoritesNav(
                 ScreenType.FAVORITES -> ListType.Favorites
             }
 
-            navRoutesMain.navigate(
-                DeleteItemListRoute(
-                    mediaId = mediaItem.id,
-                    mediaName = mediaItem.name,
-                    mediaType = mediaItem.mediaType,
-                    listType = listType
-                )
-            )
+//            navRoutesMain.navigate(
+//                DeleteItemListRoute(
+//                    mediaId = mediaItem.id,
+//                    mediaName = mediaItem.name,
+//                    mediaType = mediaItem.mediaType,
+//                    listType = listType
+//                )
+//            )
         }
     )
 }

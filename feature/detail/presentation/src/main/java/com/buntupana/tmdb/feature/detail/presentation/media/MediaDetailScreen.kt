@@ -57,11 +57,10 @@ import com.buntupana.tmdb.feature.detail.presentation.media.comp.WatchProviders
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.ExternalLinksRow
 import com.panabuntu.tmdb.core.common.entity.MediaType
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MediaDetailScreen(
-    viewModel: MediaDetailViewModel = koinViewModel(),
+    viewModel: MediaDetailViewModel,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onPersonClick: (personId: Long) -> Unit,

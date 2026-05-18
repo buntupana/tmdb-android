@@ -74,8 +74,8 @@ fun HeaderSimple(
                     withStyle(SpanStyle(fontWeight = Typography.titleLarge.fontWeight)) {
                         append(mediaName)
                     }
-                    append(" ")
                     if (releaseYear != null) {
+                        append(" ")
                         append("($releaseYear)")
                     }
                 },

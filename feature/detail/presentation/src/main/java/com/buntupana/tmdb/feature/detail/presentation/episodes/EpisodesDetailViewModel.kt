@@ -26,6 +26,7 @@ class EpisodesDetailViewModel(
     var state by mutableStateOf(
         EpisodesDetailState(
             tvShowId = navArgs.tvShowId,
+            tvShowName = navArgs.tvShowName,
             sessionName = navArgs.seasonName,
             seasonNumber = navArgs.seasonNumber,
             posterUrl = navArgs.posterUrl,

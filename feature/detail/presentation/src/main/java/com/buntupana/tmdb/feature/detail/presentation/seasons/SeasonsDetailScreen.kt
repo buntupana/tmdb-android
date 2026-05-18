@@ -46,7 +46,7 @@ fun SeasonsDetailScreen(
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onLogoClick: () -> Unit,
-    onSeasonClick: (tvShowId: Long, seasonName: String, seasonNumber: Int, posterUrl: String?, backgroundColor: Color, releaseYear: String?) -> Unit,
+    onSeasonClick: (tvShowId: Long, tvShowName: String, seasonName: String, seasonNumber: Int, posterUrl: String?, backgroundColor: Color, releaseYear: String?) -> Unit,
 ) {
 
     SeasonsContent(
@@ -55,9 +55,10 @@ fun SeasonsDetailScreen(
         onRetryClick = { viewModel.onEvent(SeasonsDetailEvent.GetSeasons) },
         onSearchClick = onSearchClick,
         onLogoClick = onLogoClick,
-        onSeasonClick = { tvShowId, season, backgroundColor ->
+        onSeasonClick = { tvShowId, tvShowName, season, backgroundColor ->
             onSeasonClick(
                 tvShowId,
+                tvShowName,
                 season.name,
                 season.seasonNumber ?: 0,
                 season.posterUrl,
@@ -78,6 +79,7 @@ private fun SeasonsContent(
     onLogoClick: () -> Unit,
     onSeasonClick: (
         tvShowId: Long,
+        tvShowName: String,
         season: Season,
         backgroundColor: Color,
     ) -> Unit
@@ -173,7 +175,12 @@ private fun SeasonsContent(
                         tvShowName = state.tvShowName,
                         season = season,
                         onSeasonClick = {
-                            onSeasonClick(state.tvShowId, season, backgroundColor)
+                            onSeasonClick(
+                                state.tvShowId,
+                                state.tvShowName,
+                                season,
+                                backgroundColor
+                            )
                         }
                     )
                 }
@@ -209,7 +216,7 @@ private fun SeasonsScreenPreview() {
             onRetryClick = {},
             onSearchClick = { },
             onLogoClick = {},
-            onSeasonClick = { _, _, _ -> }
+            onSeasonClick = { _, _, _, _ -> }
         )
     }
 }

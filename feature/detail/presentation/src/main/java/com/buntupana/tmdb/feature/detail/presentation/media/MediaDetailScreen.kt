@@ -66,7 +66,7 @@ fun MediaDetailScreen(
     onSearchClick: () -> Unit,
     onPersonClick: (personId: Long) -> Unit,
     onFullCastClick: (mediaId: Long, mediaType: MediaType, mediaTitle: String, mediaReleaseYear: String?, mediaPosterUrl: String?, backgroundColor: Color) -> Unit,
-    onSeasonClick: (tvShowId: Long, seasonName: String, seasonNumber: Int, posterUrl: String?, backgroundColor: Color, releaseYear: String?) -> Unit,
+    onSeasonClick: (tvShowId: Long, tvShowName: String, seasonName: String, seasonNumber: Int, posterUrl: String?, backgroundColor: Color, releaseYear: String?) -> Unit,
     onAllSeasonsClick: (tvShowId: Long, tvShowTitle: String, releaseYear: String?, posterUrl: String?, backgroundColor: Color) -> Unit,
     onRecommendationClick: (mediaId: Long, mediaType: MediaType, backgroundColor: Color?) -> Unit,
     onLogoClick: () -> Unit,
@@ -89,9 +89,10 @@ fun MediaDetailScreen(
                 backgroundColor
             )
         },
-        onSeasonClick = { tvShowId, season, backgroundColor ->
+        onSeasonClick = { tvShowId, tvShowName, season, backgroundColor ->
             onSeasonClick(
                 tvShowId,
+                tvShowName,
                 season.name,
                 season.seasonNumber ?: 0,
                 season.posterUrl,
@@ -159,7 +160,7 @@ fun MediaDetailContent(
     onSearchClick: () -> Unit,
     onPersonClick: (personId: Long) -> Unit,
     onFullCastClick: (mediaDetails: MediaDetails, mediaType: MediaType, backgroundColor: Color) -> Unit,
-    onSeasonClick: (tvShowId: Long, season: Season, backgroundColor: Color) -> Unit,
+    onSeasonClick: (tvShowId: Long, tvShowName: String, season: Season, backgroundColor: Color) -> Unit,
     onAllSeasonsClick: (mediaDetails: MediaDetails.TvShow, backgroundColor: Color) -> Unit,
     onRecommendationClick: (mediaId: Long, mediaType: MediaType) -> Unit,
     onRetryClick: () -> Unit,
@@ -362,7 +363,12 @@ fun MediaDetailContent(
                             lastEpisode = state.mediaDetails.lastEpisode,
                             nextEpisode = state.mediaDetails.nextEpisode,
                             onLastSeasonClick = { season ->
-                                onSeasonClick(state.mediaId, season, backgroundColor)
+                                onSeasonClick(
+                                    state.mediaId,
+                                    state.mediaDetails.title,
+                                    season,
+                                    backgroundColor
+                                )
                             },
                             onAllSeasonsClick = {
                                 onAllSeasonsClick(
@@ -432,7 +438,7 @@ fun MediaDetailScreenPreview() {
             onSearchClick = {},
             onPersonClick = {},
             onFullCastClick = { _, _, _ -> },
-            onSeasonClick = { _, _, _ -> },
+            onSeasonClick = { _, _, _, _ -> },
             onAllSeasonsClick = { _, _ -> },
             onRecommendationClick = { _, _ -> },
             onRetryClick = {},

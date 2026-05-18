@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class EpisodesDetailRoute(
     val tvShowId: Long,
+    val tvShowName: String,
     val seasonName: String,
     val seasonNumber: Int,
     val posterUrl: String?,

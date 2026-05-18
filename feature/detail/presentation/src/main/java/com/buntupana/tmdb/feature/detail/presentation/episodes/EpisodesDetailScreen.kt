@@ -24,22 +24,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
-import com.buntupana.tmdb.core.ui.composables.HeaderSimple
 import com.buntupana.tmdb.core.ui.composables.top_bar.TopBarLogo
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.SetSystemBarsColors
 import com.buntupana.tmdb.core.ui.util.paddingValues
 import com.buntupana.tmdb.feature.detail.domain.model.Episode
-import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.detail.presentation.episodeSample
 import com.buntupana.tmdb.feature.detail.presentation.episodes.comp.EpisodeHorizontal
-import com.panabuntu.tmdb.core.common.util.isNotNullOrEmpty
+import com.buntupana.tmdb.feature.detail.presentation.episodes.comp.HeaderEpisodesDetail
 import org.koin.androidx.compose.koinViewModel
 import com.buntupana.tmdb.core.ui.R as RCore
 
@@ -125,22 +122,13 @@ private fun EpisodesDetailContent(
                     scrollBehavior = scrollBehavior
                 )
 
-                val subtitle = if (state.episodeList.isNotNullOrEmpty()) {
-                    pluralStringResource(
-                        id = R.plurals.detail_episodes_count,
-                        count = state.episodeList.size,
-                        state.episodeList.size
-                    )
-                } else {
-                    null
-                }
-
-                HeaderSimple(
+                HeaderEpisodesDetail(
                     backgroundColor = backgroundColor,
                     posterUrl = state.posterUrl,
-                    mediaName = state.sessionName,
-                    subtitle = subtitle,
-                    releaseYear = state.releaseYear,
+                    tvShowName = state.tvShowName,
+                    seasonName = state.sessionName,
+                    episodesCount = state.episodeList?.size ?: 0,
+                    releaseYear = state.releaseYear
                 )
             }
         }
@@ -243,11 +231,12 @@ fun EpisodesDetailScreenPreview() {
             state = EpisodesDetailState(
                 isLoading = true,
                 tvShowId = 0L,
-                sessionName = "Jack Reacher",
+                sessionName = "Session 2",
                 isGetEpisodesError = true,
                 posterUrl = "asdf",
                 releaseYear = "2003",
                 backgroundColor = null,
+                tvShowName = "Jack Reacher",
                 seasonNumber = 3,
                 episodeList = listOf(
                     episodeSample,

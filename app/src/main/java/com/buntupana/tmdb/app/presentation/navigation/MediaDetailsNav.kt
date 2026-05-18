@@ -40,10 +40,11 @@ fun MediaDetailsNav(
                 )
             )
         },
-        onSeasonClick = { tvShowId, seasonName, seasonNumber, posterUrl, backgroundColor, releaseYear ->
+        onSeasonClick = { tvShowId, tvShowName, seasonName, seasonNumber, posterUrl, backgroundColor, releaseYear ->
             navRoutesMain.navigate(
                 EpisodesDetailRoute(
                     tvShowId = tvShowId,
+                    tvShowName = tvShowName,
                     seasonName = seasonName,
                     seasonNumber = seasonNumber,
                     posterUrl = posterUrl,

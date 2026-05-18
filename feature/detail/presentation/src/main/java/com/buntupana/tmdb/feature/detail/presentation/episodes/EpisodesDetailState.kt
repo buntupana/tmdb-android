@@ -7,6 +7,7 @@ data class EpisodesDetailState(
     val isLogged: Boolean = false,
     val isGetEpisodesError: Boolean = false,
     val tvShowId: Long,
+    val tvShowName: String,
     val sessionName: String = "",
     val seasonNumber: Int,
     val posterUrl: String? = null,

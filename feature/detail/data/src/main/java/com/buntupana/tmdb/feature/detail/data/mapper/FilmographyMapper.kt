@@ -23,7 +23,7 @@ fun FilmographyRaw.toModel(
 
         val releaseDateLocal = try {
             LocalDate.parse(it.releaseDate.ifNull { it.firstAirDate.orEmpty() })
-        } catch (exc: DateTimeParseException) {
+        } catch (_: DateTimeParseException) {
             null
         }
 
@@ -31,6 +31,7 @@ fun FilmographyRaw.toModel(
             MediaType.MOVIE -> {
                 CreditPersonItem.Movie(
                     id = it.id,
+                    mediaType = MediaType.MOVIE,
                     title = it.title.ifNull { it.name.orEmpty() },
                     department = "Acting",
                     role = it.character.orEmpty(),
@@ -47,6 +48,7 @@ fun FilmographyRaw.toModel(
             MediaType.TV_SHOW -> {
                 CreditPersonItem.TvShow(
                     id = it.id,
+                    mediaType = MediaType.TV_SHOW,
                     title = it.title.ifNull { it.name.orEmpty() },
                     department = "Acting",
                     role = it.character.orEmpty(),
@@ -71,7 +73,7 @@ fun FilmographyRaw.toModel(
 
         val releaseDateLocal = try {
             LocalDate.parse(it.releaseDate.ifNull { it.firstAirDate.orEmpty() })
-        } catch (exc: DateTimeParseException) {
+        } catch (_: DateTimeParseException) {
             null
         }
 
@@ -79,6 +81,7 @@ fun FilmographyRaw.toModel(
             MediaType.MOVIE -> {
                 CreditPersonItem.Movie(
                     id = it.id,
+                    mediaType = MediaType.MOVIE,
                     title = it.title.ifNull { it.name.orEmpty() },
                     department = it.department,
                     role = it.job.orEmpty(),
@@ -95,6 +98,7 @@ fun FilmographyRaw.toModel(
             MediaType.TV_SHOW -> {
                 CreditPersonItem.TvShow(
                     id = it.id,
+                    mediaType = MediaType.TV_SHOW,
                     title = it.title.ifNull { it.name.orEmpty() },
                     department = it.department,
                     role = it.job.orEmpty(),

@@ -13,6 +13,7 @@ import com.buntupana.tmdb.feature.detail.domain.model.PersonFullDetails
 import com.buntupana.tmdb.feature.detail.domain.model.Providers
 import com.buntupana.tmdb.feature.detail.domain.model.Role
 import com.buntupana.tmdb.feature.detail.domain.model.Season
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.Gender
 import java.time.LocalDate
 
@@ -155,6 +156,7 @@ val mediaDetailsMovieSample = MediaDetails.Movie(
 
 val creditItemPersonSample = CreditPersonItem.Movie(
     id = 0L,
+    mediaType = MediaType.MOVIE,
     title = "Thor Ragnarock",
     department = "Acting",
     role = "Acting",

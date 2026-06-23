@@ -1,5 +1,7 @@
 package com.buntupana.tmdb.core.ui.composables.seerr
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,25 +39,33 @@ fun SeerrStatusBadge(
     modifier: Modifier = Modifier,
     status: SeerrStatus?,
 ) {
-    val resolved = status ?: return
 
-    val statusIconRes = getSeerIcon(resolved) ?: return
-
-    Image(
+    AnimatedVisibility(
         modifier = modifier,
-        painter = painterResource(statusIconRes),
-        contentDescription = null
-    )
+        visible = status != null,
+        enter = fadeIn()
+    ) {
+
+        val statusIconRes = getSeerIcon(status)
+
+        statusIconRes ?: return@AnimatedVisibility
+
+        Image(
+            painter = painterResource(statusIconRes),
+            contentDescription = null
+        )
+    }
 }
 
 @Composable
-private fun getSeerIcon(status: SeerrStatus): Int? {
+private fun getSeerIcon(status: SeerrStatus?): Int? {
     return when (status) {
         SeerrStatus.AVAILABLE -> R.drawable.ic_seerr_available
         SeerrStatus.PARTIALLY_AVAILABLE -> R.drawable.ic_seerr_parcially_available
         SeerrStatus.REQUESTED -> R.drawable.ic_seerr_requested
         SeerrStatus.PENDING -> R.drawable.ic_seerr_pending
         SeerrStatus.UNKNOWN, SeerrStatus.DELETED -> null
+        else -> null
     }
 }
 

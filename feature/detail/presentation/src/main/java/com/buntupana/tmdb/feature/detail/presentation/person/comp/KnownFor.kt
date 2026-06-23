@@ -2,6 +2,7 @@ package com.buntupana.tmdb.feature.detail.presentation.person.comp
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -19,6 +20,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -27,6 +29,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.composables.seerr.SeerrStatusBadge
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.core.ui.util.toDp
@@ -87,14 +90,23 @@ fun KnownFor(
                             }
                         }
                 ) {
-                    ImageFromUrl(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(Dimens.posterRound))
-                            .fillMaxWidth()
-                            .aspectRatio(Dimens.aspectRatioMediaPoster),
-                        imageUrl = item.posterUrl,
-                    ) { dominantColor ->
-                        dominantColoAux = dominantColor
+                    Box() {
+                        ImageFromUrl(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(Dimens.posterRound))
+                                .fillMaxWidth()
+                                .aspectRatio(Dimens.aspectRatioMediaPoster),
+                            imageUrl = item.posterUrl,
+                        ) { dominantColor ->
+                            dominantColoAux = dominantColor
+                        }
+                        SeerrStatusBadge(
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(Dimens.padding.tiny),
+                            mediaType = item.mediaType,
+                            tmdbId = item.id
+                        )
                     }
                     var nameExtraLinesCount by remember {
                         mutableIntStateOf(0)

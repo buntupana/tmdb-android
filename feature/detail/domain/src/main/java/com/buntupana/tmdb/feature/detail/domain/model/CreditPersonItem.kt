@@ -1,10 +1,12 @@
 package com.buntupana.tmdb.feature.detail.domain.model
 
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import java.time.LocalDate
 
 
 sealed class CreditPersonItem(
     open val id: Long,
+    open val mediaType: MediaType,
     open val title: String,
     open val department: String,
     open val role: String,
@@ -18,6 +20,7 @@ sealed class CreditPersonItem(
 
     data class Movie(
         override val id: Long,
+        override val mediaType: MediaType,
         override val title: String,
         override val department: String,
         override val role: String,
@@ -29,20 +32,22 @@ sealed class CreditPersonItem(
         override val releaseDate: LocalDate?,
         val castOrder: Int
     ) : CreditPersonItem(
-        id,
-        title,
-        department,
-        role,
-        posterUrl,
-        backdropUrl,
-        popularity,
-        userScore,
-        voteCount,
-        releaseDate
+        id = id,
+        mediaType = mediaType,
+        title = title,
+        department = department,
+        role = role,
+        posterUrl = posterUrl,
+        backdropUrl = backdropUrl,
+        popularity = popularity,
+        userScore = userScore,
+        voteCount = voteCount,
+        releaseDate = releaseDate
     )
 
     data class TvShow(
         override val id: Long,
+        override val mediaType: MediaType,
         override val title: String,
         override val department: String,
         override val role: String,
@@ -54,15 +59,16 @@ sealed class CreditPersonItem(
         override val releaseDate: LocalDate?,
         val episodeCount: Int
     ) : CreditPersonItem(
-        id,
-        title,
-        department,
-        role,
-        posterUrl,
-        backdropUrl,
-        popularity,
-        userScore,
-        voteCount,
-        releaseDate
+        id = id,
+        mediaType = mediaType,
+        title = title,
+        department = department,
+        role = role,
+        posterUrl = posterUrl,
+        backdropUrl = backdropUrl,
+        popularity = popularity,
+        userScore = userScore,
+        voteCount = voteCount,
+        releaseDate = releaseDate
     )
 }

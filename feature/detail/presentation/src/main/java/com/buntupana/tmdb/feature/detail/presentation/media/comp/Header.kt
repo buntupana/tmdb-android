@@ -1,6 +1,8 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -122,12 +124,18 @@ fun Header(
             )
         }
 
-        SeerrStatusLabel(
+        AnimatedVisibility(
             modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(Dimens.padding.small),
-            status = seerrStatus
-        )
+                .align(Alignment.TopEnd),
+            visible = seerrStatus != null,
+            enter = fadeIn()
+        ) {
+            SeerrStatusLabel(
+                modifier = Modifier
+                    .padding(Dimens.padding.small),
+                status = seerrStatus
+            )
+        }
     }
 }
 

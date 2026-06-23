@@ -6,7 +6,7 @@ import com.buntupana.tmdb.core.di.commonModule
 import com.buntupana.tmdb.feature.account.di.accountModule
 import com.buntupana.tmdb.feature.discover.di.discoverModule
 import com.buntupana.tmdb.feature.lists.di.listsModule
-import com.buntupana.tmdb.feature.seer.di.seerModule
+import com.buntupana.tmdb.feature.seerr.di.seerrModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -32,7 +32,7 @@ class TMDBApplication: Application() {
                 discoverModule,
                 listsModule,
                 com.buntupana.tmdb.feature.detail.di.detailModule,
-                seerModule,
+                seerrModule,
             )
         }
     }

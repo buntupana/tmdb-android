@@ -1,2 +1,2 @@
 
--keep class com.buntupana.tmdb.feature.seer.data.remote_data_source.raw.* { *; }
+-keep class com.buntupana.tmdb.feature.seerr.data.remote_data_source.raw.* { *; }

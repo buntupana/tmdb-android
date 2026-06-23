@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.AppCard
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
-import com.buntupana.tmdb.core.ui.composables.seer.SeerrStatusBadge
+import com.buntupana.tmdb.core.ui.composables.seerr.SeerrStatusBadge
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.panabuntu.tmdb.core.common.entity.MediaType

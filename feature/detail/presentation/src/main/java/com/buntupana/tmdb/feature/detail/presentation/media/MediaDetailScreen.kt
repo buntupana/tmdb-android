@@ -61,6 +61,7 @@ import com.buntupana.tmdb.feature.detail.presentation.media.comp.WatchProviders
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.ExternalLinksRow
 import com.panabuntu.tmdb.core.common.entity.MediaType
+import com.panabuntu.tmdb.core.common.model.canBeRequested
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import timber.log.Timber
@@ -268,7 +269,7 @@ fun MediaDetailContent(
                         isRateable = state.mediaDetails?.isRateable ?: false,
                         isRatingLoading = state.isRatingLoading,
                         isRequestLoading = state.isRequestLoading,
-                        ableToRequest = state.ableToRequest,
+                        ableToRequest = state.seerStatus.canBeRequested(),
                         onFavoriteClick = onFavoriteClick,
                         onWatchlistClick = onWatchlistClick,
                         onRatingClick = onRatingClick,

@@ -17,12 +17,11 @@ import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.lists.domain.usecase.SetMediaFavoriteUseCase
 import com.buntupana.tmdb.feature.lists.domain.usecase.SetMediaWatchListUseCase
-import com.buntupana.tmdb.feature.seer.domain.usecase.GetSeerMediaInfoUseCase
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.manager.SessionManager
-import com.panabuntu.tmdb.core.common.model.SeerrStatus
+import com.panabuntu.tmdb.core.common.provider.SeerrStatusProvider
 import com.panabuntu.tmdb.core.common.util.applyDelayFor
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -42,7 +41,7 @@ class MediaDetailViewModel(
     private val setMediaFavoriteUseCase: SetMediaFavoriteUseCase,
     private val setMediaWatchListUseCase: SetMediaWatchListUseCase,
     private val getMediaImagesUseCase: GetMediaImagesUseCase,
-    private val getMediaInfoUseCase: GetSeerMediaInfoUseCase,
+    private val seerrStatusProvider: SeerrStatusProvider,
     private val sessionManager: SessionManager
 ) : ViewModel() {
 
@@ -164,24 +163,13 @@ class MediaDetailViewModel(
     }
 
     private suspend fun getSeerrMediaInfoDetails(mediaType: MediaType, mediaId: Long) {
-        state = state.copy(isSeerStatusLoading = true, isSeerStatusError = false)
-        getMediaInfoUseCase(mediaType = mediaType, mediaId = mediaId)
-            .onError {
-                state = state.copy(isSeerStatusLoading = false, isSeerStatusError = true)
-            }
-            .onSuccess {
 
-                val ableToRequest = when (it.mediaStatus) {
-                    SeerrStatus.AVAILABLE, SeerrStatus.PENDING, SeerrStatus.REQUESTED -> false
-                    else -> true
-                }
-
-                state = state.copy(
-                    isSeerStatusLoading = false,
-                    seerStatus = it.mediaStatus,
-                    ableToRequest = ableToRequest
-                )
-            }
+        seerrStatusProvider.statusFor(
+            mediaType = mediaType,
+            mediaId = mediaId
+        ).collectLatest { seerrStatus ->
+            state = state.copy(seerStatus = seerrStatus)
+        }
     }
 
     private suspend fun setFavorite() {
@@ -338,6 +326,11 @@ class MediaDetailViewModel(
     }
 
     private suspend fun requestMedia() {
-        _sideEffect.send(MediaDetailSideEffect.NavigateToSeasonSelection(navArgs.mediaId, navArgs.mediaType))
+        _sideEffect.send(
+            MediaDetailSideEffect.NavigateToSeasonSelection(
+                navArgs.mediaId,
+                navArgs.mediaType
+            )
+        )
     }
 }

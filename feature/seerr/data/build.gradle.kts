@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.buntupana.tmdb.feature.seer.data"
+    namespace = "com.buntupana.tmdb.feature.seerr.data"
     compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {

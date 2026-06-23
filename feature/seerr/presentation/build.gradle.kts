@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.buntupana.tmdb.feature.seer.presentation"
+    namespace = "com.buntupana.tmdb.feature.seerr.presentation"
     compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {

@@ -18,9 +18,6 @@ data class MediaDetailState(
     val isRateable: Boolean = false,
     val imageList: List<String>? = null,
     val showImageViewer: Boolean = false,
-    val isSeerStatusLoading: Boolean = true,
-    val isSeerStatusError: Boolean = false,
     val seerStatus: SeerrStatus? = null,
-    val ableToRequest: Boolean = false,
     val isRequestLoading: Boolean = false
 )

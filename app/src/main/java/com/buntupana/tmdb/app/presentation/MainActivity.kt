@@ -64,8 +64,8 @@ import com.buntupana.tmdb.feature.lists.presentation.lists.ListsRoute
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsRoute
 import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchListFavoritesRoute
 import com.buntupana.tmdb.feature.search.presentation.SearchRoute
-import com.buntupana.tmdb.feature.seer.presentation.request.SeerrRequestRoute
-import com.buntupana.tmdb.feature.seer.presentation.sign_in.SeerSignInRoute
+import com.buntupana.tmdb.feature.seerr.presentation.request.SeerrRequestRoute
+import com.buntupana.tmdb.feature.seerr.presentation.sign_in.SeerrSignInRoute
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import kotlinx.coroutines.launch
@@ -140,7 +140,7 @@ class MainActivity : ComponentActivity() {
                             SearchNav(navRoutesMain)
                         }
 
-                        composable<SeerSignInRoute> {
+                        composable<SeerrSignInRoute> {
                             SeerrSignInNav(navRoutesMain)
                         }
 

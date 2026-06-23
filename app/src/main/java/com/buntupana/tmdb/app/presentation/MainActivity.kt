@@ -37,6 +37,8 @@ import com.buntupana.tmdb.app.presentation.navigation.PersonDetailNav
 import com.buntupana.tmdb.app.presentation.navigation.RatingNav
 import com.buntupana.tmdb.app.presentation.navigation.SearchNav
 import com.buntupana.tmdb.app.presentation.navigation.SeasonsDetailNav
+import com.buntupana.tmdb.app.presentation.navigation.SeerrRequestNav
+import com.buntupana.tmdb.app.presentation.navigation.SeerrSignInNav
 import com.buntupana.tmdb.app.presentation.navigation.SignInNav
 import com.buntupana.tmdb.app.presentation.navigation.WatchlistFavoritesNav
 import com.buntupana.tmdb.core.ui.navigation.NavRoutesMain
@@ -62,6 +64,8 @@ import com.buntupana.tmdb.feature.lists.presentation.lists.ListsRoute
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsRoute
 import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchListFavoritesRoute
 import com.buntupana.tmdb.feature.search.presentation.SearchRoute
+import com.buntupana.tmdb.feature.seer.presentation.request.SeerrRequestRoute
+import com.buntupana.tmdb.feature.seer.presentation.sign_in.SeerSignInRoute
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.provider.UrlProvider
 import kotlinx.coroutines.launch
@@ -134,6 +138,10 @@ class MainActivity : ComponentActivity() {
 
                         composable<SearchRoute> {
                             SearchNav(navRoutesMain)
+                        }
+
+                        composable<SeerSignInRoute> {
+                            SeerrSignInNav(navRoutesMain)
                         }
 
                         composable<MediaDetailDeepLinkRoute>(
@@ -212,7 +220,7 @@ class MainActivity : ComponentActivity() {
                             ListsNav(navRoutesMain)
                         }
 
-                        composable<ListDetailRoute> { entry ->
+                        composable<ListDetailRoute> {
                             ListDetailNav(navRoutesMain)
                         }
 
@@ -238,6 +246,10 @@ class MainActivity : ComponentActivity() {
 
                         bottomSheet<DeleteItemListRoute>(typeMap = DeleteItemListRoute.typeMap) {
                             DeleteItemListNav(navRoutesMain)
+                        }
+
+                        bottomSheet<SeerrRequestRoute> {
+                            SeerrRequestNav(navRoutesMain)
                         }
                     }
                 }

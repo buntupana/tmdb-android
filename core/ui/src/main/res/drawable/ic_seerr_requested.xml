@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="20dp"
+    android:height="20dp"
+    android:viewportWidth="20"
+    android:viewportHeight="20">
+
+    <path
+        android:fillColor="@color/seerr_status_requested_transparent"
+        android:pathData="M10,10m-7.5,0a7.5,7.5 0,1,0 15,0a7.5,7.5 0,1,0 -15,0" />
+
+    <path
+        android:strokeColor="@color/seerr_status_requested"
+        android:strokeWidth="2.0"
+        android:fillColor="#00000000"
+        android:pathData="M10,10m-7.5,0a7.5,7.5 0,1,0 15,0a7.5,7.5 0,1,0 -15,0" />
+
+    <path
+        android:strokeColor="@color/seerr_status_requested_light"
+        android:strokeWidth="1.0"
+        android:fillColor="#00000000"
+        android:pathData="M10,10m-9.0,0a9.0,9.0 0,1,0 18,0a9.0,9.0 0,1,0 -18,0" />
+
+    <!-- Minute hand pointing to 12 -->
+    <path
+        android:strokeColor="@color/seerr_status_requested"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M10,10 L10,5.5" />
+
+    <!-- Hour hand pointing to 3 -->
+    <path
+        android:strokeColor="@color/seerr_status_requested"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M10,10 L13.5,10" />
+
+    <!-- Center dot -->
+    <path
+        android:fillColor="@color/seerr_status_requested"
+        android:pathData="M10,10m-0.8,0a0.8,0.8 0,1,0 1.6,0a0.8,0.8 0,1,0 -1.6,0" />
+
+</vector>

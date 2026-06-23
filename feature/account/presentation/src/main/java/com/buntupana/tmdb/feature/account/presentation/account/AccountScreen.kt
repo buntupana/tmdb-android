@@ -41,6 +41,7 @@ import com.buntupana.tmdb.feature.account.presentation.account.comp.AccountTopBa
 import com.buntupana.tmdb.feature.account.presentation.account.comp.ListItemsSection
 import com.buntupana.tmdb.feature.account.presentation.account.comp.SignUp
 import com.buntupana.tmdb.feature.account.presentation.sign_out.SignOutDialog
+import com.buntupana.tmdb.feature.seer.presentation.status.SeerrAccountCard
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.model.MediaItem
 import org.koin.androidx.compose.koinViewModel
@@ -51,6 +52,7 @@ import com.buntupana.tmdb.core.ui.R as RCore
 fun AccountScreen(
     viewModel: AccountViewModel = koinViewModel(),
     onSignInClick: () -> Unit,
+    onSeerConnectClick: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
     onFavoritesClick: (mediaType: MediaType) -> Unit,
     onListsClick: () -> Unit,
@@ -63,6 +65,7 @@ fun AccountScreen(
     AccountContent(
         state = viewModel.state,
         onSignUpClick = onSignInClick,
+        onSeerConnectClick = onSeerConnectClick,
         onSignOutClick = {
             showBottomSheet = true
         },
@@ -124,6 +127,7 @@ fun AccountScreen(
 fun AccountContent(
     state: AccountState,
     onSignUpClick: () -> Unit,
+    onSeerConnectClick: () -> Unit,
     onSignOutClick: () -> Unit,
     onWatchListClick: () -> Unit,
     onFavoritesClick: () -> Unit,
@@ -231,6 +235,12 @@ fun AccountContent(
 
                 Spacer(Modifier.padding(vertical = Dimens.padding.vertical))
 
+                SeerrAccountCard(
+                    onConnectClick = onSeerConnectClick
+                )
+
+                Spacer(Modifier.padding(vertical = Dimens.padding.vertical))
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
@@ -267,7 +277,7 @@ fun AccountContent(
     heightDp = 1150
 )
 @Composable
-fun AccountScreenPreview() {
+private fun AccountScreenPreview() {
     AppTheme {
         AccountContent(
             AccountState(
@@ -276,6 +286,7 @@ fun AccountScreenPreview() {
                 userListDetailsList = null
             ),
             onSignUpClick = {},
+            onSeerConnectClick = {},
             onSignOutClick = {},
             onWatchListClick = {},
             onFavoritesClick = {},

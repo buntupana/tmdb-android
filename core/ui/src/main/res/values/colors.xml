@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="seerr_status_available">#1fa350</color>
+    <color name="seerr_status_available_light">#4ade80</color>
+    <color name="seerr_status_available_transparent">#dcfce7</color>
+    
+    <color name="seerr_status_parcially_available">#1fa350</color>
+    <color name="seerr_status_parcially_available_light">#4ade80</color>
+    <color name="seerr_status_parcially_available_transparent">#dcfce7</color>
+    
+    <color name="seerr_status_pending">#c6940c</color>
+    <color name="seerr_status_pending_light">#eab308</color>
+    <color name="seerr_status_pending_transparent">#fef9c3</color>
+
+    <color name="seerr_status_requested">#6366f1</color>
+    <color name="seerr_status_requested_light">#a5b4fc</color>
+    <color name="seerr_status_requested_transparent">#e0e7ff</color>
+
+    <color name="seerr_status_rejected">#ba2224</color>
+    <color name="seerr_status_rejected_light">#ef4444</color>
+    <color name="seerr_status_rejected_transparent">#fee2e2</color>
+</resources>

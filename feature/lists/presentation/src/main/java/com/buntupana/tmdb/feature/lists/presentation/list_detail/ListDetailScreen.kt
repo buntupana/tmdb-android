@@ -54,6 +54,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -95,7 +96,7 @@ fun ListDetailScreen(
                     when (sideEffect) {
                         ListDetailSideEffect.NavigateBack -> {
                             // add delay to wait for bottomsheet to disappear
-                            delay(AnimationConstants.DefaultDurationMillis.toLong() + 100)
+                            delay((AnimationConstants.DefaultDurationMillis.toLong() + 100).milliseconds)
                             onBackClick()
                         }
                     }
@@ -282,6 +283,7 @@ fun ListDetailContent(
                                     .fillMaxWidth()
                                     .animateItem(),
                                 mediaId = item.mediaItem.id,
+                                mediaType = item.mediaItem.mediaType,
                                 title = item.mediaItem.name,
                                 posterUrl = item.mediaItem.posterUrl,
                                 overview = item.mediaItem.overview,

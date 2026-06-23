@@ -140,6 +140,7 @@ fun MediaListContent(
                         onMediaClick(state.mediaType, item.id, mainPosterColor)
                     },
                     mediaId = item.id,
+                    mediaType = state.mediaType,
                     title = item.name,
                     posterUrl = item.posterUrl,
                     overview = item.overview,

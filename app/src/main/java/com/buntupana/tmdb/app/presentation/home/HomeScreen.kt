@@ -40,6 +40,7 @@ import com.panabuntu.tmdb.core.common.entity.MediaType
 fun HomeScreen(
     mediaListResult: MediaListResult?,
     onSignInClicked: () -> Unit,
+    onSeerConnectClick: () -> Unit,
     onSearchClicked: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
     onFavoritesClick: (mediaType: MediaType) -> Unit,
@@ -51,6 +52,7 @@ fun HomeScreen(
     HomeScreenContent(
         mediaListResult = mediaListResult,
         onSignInClicked = onSignInClicked,
+        onSeerConnectClick = onSeerConnectClick,
         onSearchClicked = onSearchClicked,
         onWatchListClick = onWatchListClick,
         onFavoritesClick = onFavoritesClick,
@@ -65,6 +67,7 @@ fun HomeScreen(
 fun HomeScreenContent(
     mediaListResult: MediaListResult?,
     onSignInClicked: () -> Unit,
+    onSeerConnectClick: () -> Unit,
     onSearchClicked: () -> Unit,
     onWatchListClick: (mediaType: MediaType) -> Unit,
     onFavoritesClick: (mediaType: MediaType) -> Unit,
@@ -168,6 +171,7 @@ fun HomeScreenContent(
             composable<AccountRoute> {
                 AccountScreen(
                     onSignInClick = onSignInClicked,
+                    onSeerConnectClick = onSeerConnectClick,
                     onWatchListClick = onWatchListClick,
                     onFavoritesClick = onFavoritesClick,
                     onMediaItemClicked = onMediaItemClicked,
@@ -195,6 +199,7 @@ fun HomeScreenPreview() {
         HomeScreenContent(
             mediaListResult = null,
             onSignInClicked = {},
+            onSeerConnectClick = {},
             onSearchClicked = {},
             onWatchListClick = {},
             onFavoritesClick = {},

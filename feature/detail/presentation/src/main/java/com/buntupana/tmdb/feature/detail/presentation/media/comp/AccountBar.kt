@@ -1,9 +1,15 @@
 package com.buntupana.tmdb.feature.detail.presentation.media.comp
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -41,10 +47,13 @@ fun AccountBar(
     isFavoriteLoading: Boolean,
     isWatchlistLoading: Boolean,
     isRatingLoading: Boolean,
+    isRequestLoading: Boolean,
+    ableToRequest: Boolean,
     onListClick: () -> Unit,
     onFavoriteClick: () -> Unit,
     onWatchlistClick: () -> Unit,
-    onRatingClick: () -> Unit
+    onRatingClick: () -> Unit,
+    onRequestClick: () -> Unit
 ) {
 
     val favoriteTint = getColor(
@@ -83,6 +92,7 @@ fun AccountBar(
 
     Row(
         modifier = modifier
+            .animateContentSize()
             .clickable(enabled = false) {}
             .padding(Dimens.padding.medium),
         verticalAlignment = Alignment.CenterVertically
@@ -161,6 +171,31 @@ fun AccountBar(
                 }
             }
         }
+
+        AnimatedVisibility(
+            modifier = Modifier.weight(1f),
+            visible = ableToRequest,
+            enter = expandHorizontally() + fadeIn(),
+            exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut() + shrinkHorizontally()
+        ) {
+            Box(
+                contentAlignment = Alignment.Center
+            ) {
+
+                AppIconButton(
+                    onClick = onRequestClick,
+                    rippleColor = iconColor,
+                    enabled = isRequestLoading.not()
+                ) {
+                    Icon(
+                        modifier = Modifier,
+                        painter = painterResource(RCore.drawable.ic_request),
+                        contentDescription = null,
+                        tint = iconColor
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -188,6 +223,7 @@ fun AccountBarPreview() {
     var isFavorite by remember { mutableStateOf(true) }
     var isWatchListed by remember { mutableStateOf(true) }
     var userRating by remember { mutableStateOf<Int?>(20) }
+    var ableToRequest by remember { mutableStateOf(true) }
 
     val backgroundColor = Color.Gray
 
@@ -195,8 +231,7 @@ fun AccountBarPreview() {
         AccountBar(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(backgroundColor)
-            ,
+                .background(backgroundColor),
             iconColor = backgroundColor.getOnBackgroundColor(),
             isFavorite = isFavorite,
             isWatchListed = isWatchListed,
@@ -205,7 +240,9 @@ fun AccountBarPreview() {
             isFavoriteLoading = false,
             isWatchlistLoading = false,
             isRatingLoading = false,
+            isRequestLoading = false,
             onListClick = {},
+            ableToRequest = ableToRequest,
             onFavoriteClick = {
                 isFavorite = isFavorite.not()
             },
@@ -213,7 +250,10 @@ fun AccountBarPreview() {
                 isWatchListed = isWatchListed.not()
             },
             onRatingClick = {
-                userRating = if (userRating == null) 20  else null
+                userRating = if (userRating == null) 20 else null
+            },
+            onRequestClick = {
+                ableToRequest = ableToRequest.not()
             }
         )
     }

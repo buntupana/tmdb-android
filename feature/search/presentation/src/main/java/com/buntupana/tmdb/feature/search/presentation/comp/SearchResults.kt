@@ -79,6 +79,7 @@ fun SearchResults(
                                 onMediaClick(item, mainPosterColor)
                             },
                             mediaId = item.id,
+                            mediaType = com.panabuntu.tmdb.core.common.entity.MediaType.MOVIE,
                             title = item.name,
                             posterUrl = item.posterUrl,
                             overview = item.overview,
@@ -111,6 +112,7 @@ fun SearchResults(
                                 onMediaClick(item, mainPosterColor)
                             },
                             mediaId = item.id,
+                            mediaType = com.panabuntu.tmdb.core.common.entity.MediaType.TV_SHOW,
                             title = item.name,
                             posterUrl = item.posterUrl,
                             overview = item.overview,

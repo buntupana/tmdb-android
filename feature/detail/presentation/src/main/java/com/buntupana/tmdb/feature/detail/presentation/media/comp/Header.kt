@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -25,10 +26,12 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.composables.seer.SeerrStatusLabel
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
 import com.buntupana.tmdb.feature.detail.domain.model.MediaDetails
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsMovieSample
+import com.panabuntu.tmdb.core.common.model.SeerrStatus
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 @Composable
@@ -37,6 +40,7 @@ fun Header(
     isLoading: Boolean = false,
     mediaDetails: MediaDetails,
     backgroundColor: Color,
+    seerrStatus: SeerrStatus?,
     onPosterClick: () -> Unit,
     onBackdropClick: () -> Unit,
     setDominantColor: (dominantColor: Color) -> Unit
@@ -117,6 +121,13 @@ fun Header(
                 showPlaceHolder = false
             )
         }
+
+        SeerrStatusLabel(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(Dimens.padding.small),
+            status = seerrStatus
+        )
     }
 }
 
@@ -138,6 +149,7 @@ private fun HeaderPreview() {
             isLoading = false,
             mediaDetails = mediaDetailsMovieSample,
             backgroundColor = MaterialTheme.colorScheme.surfaceDim,
+            seerrStatus = SeerrStatus.AVAILABLE,
             setDominantColor = {},
             onBackdropClick = {},
             onPosterClick = {}

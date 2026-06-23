@@ -124,6 +124,7 @@ fun WatchlistFavoritePager(
                             .fillMaxWidth()
                             .animateItem(),
                         mediaId = item.mediaItem.id,
+                        mediaType = item.mediaItem.mediaType,
                         title = item.mediaItem.name,
                         posterUrl = item.mediaItem.posterUrl,
                         overview = item.mediaItem.overview,

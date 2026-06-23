@@ -15,6 +15,7 @@ import com.buntupana.tmdb.feature.lists.presentation.lists.ListsRoute
 import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.ScreenType
 import com.buntupana.tmdb.feature.lists.presentation.watchlist_favorites.WatchListFavoritesRoute
 import com.buntupana.tmdb.feature.search.presentation.SearchRoute
+import com.buntupana.tmdb.feature.seer.presentation.sign_in.SeerSignInRoute
 import com.panabuntu.tmdb.core.common.entity.MediaType
 
 @Composable
@@ -30,6 +31,9 @@ fun HomeNav(
         mediaListResult = mediaListResult,
         onSignInClicked = {
             navRoutesMain.navigate(SignInRoute())
+        },
+        onSeerConnectClick = {
+            navRoutesMain.navigate(SeerSignInRoute)
         },
         onSearchClicked = {
             navRoutesMain.navigate(SearchRoute)

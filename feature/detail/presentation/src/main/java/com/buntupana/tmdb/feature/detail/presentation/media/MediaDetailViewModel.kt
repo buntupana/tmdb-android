@@ -17,13 +17,17 @@ import com.buntupana.tmdb.feature.detail.domain.usecase.GetTvShowDetailsUseCase
 import com.buntupana.tmdb.feature.detail.presentation.R
 import com.buntupana.tmdb.feature.lists.domain.usecase.SetMediaFavoriteUseCase
 import com.buntupana.tmdb.feature.lists.domain.usecase.SetMediaWatchListUseCase
+import com.buntupana.tmdb.feature.seer.domain.usecase.GetSeerMediaInfoUseCase
 import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.entity.onError
 import com.panabuntu.tmdb.core.common.entity.onSuccess
 import com.panabuntu.tmdb.core.common.manager.SessionManager
+import com.panabuntu.tmdb.core.common.model.SeerrStatus
 import com.panabuntu.tmdb.core.common.util.applyDelayFor
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import com.buntupana.tmdb.core.ui.R as RCore
@@ -38,6 +42,7 @@ class MediaDetailViewModel(
     private val setMediaFavoriteUseCase: SetMediaFavoriteUseCase,
     private val setMediaWatchListUseCase: SetMediaWatchListUseCase,
     private val getMediaImagesUseCase: GetMediaImagesUseCase,
+    private val getMediaInfoUseCase: GetSeerMediaInfoUseCase,
     private val sessionManager: SessionManager
 ) : ViewModel() {
 
@@ -52,10 +57,14 @@ class MediaDetailViewModel(
     )
         private set
 
+    val _sideEffect = Channel<MediaDetailSideEffect>()
+    val sideEffect = _sideEffect.receiveAsFlow()
+
     private var getImagesJob: Job? = null
 
     init {
         onEvent(MediaDetailEvent.GetMediaDetails)
+        onEvent(MediaDetailEvent.GetSeerrMediaInfoDetails)
         viewModelScope.launch {
             sessionManager.session.collectLatest { session ->
                 state = state.copy(isUserLoggedIn = session.isLogged)
@@ -72,6 +81,10 @@ class MediaDetailViewModel(
                         MediaType.MOVIE -> getMovieDetails()
                         MediaType.TV_SHOW -> getTvShowDetails()
                     }
+                }
+
+                MediaDetailEvent.GetSeerrMediaInfoDetails -> {
+                    getSeerrMediaInfoDetails(navArgs.mediaType, navArgs.mediaId)
                 }
 
                 MediaDetailEvent.SetFavorite -> {
@@ -98,6 +111,8 @@ class MediaDetailViewModel(
                     getImagesJob?.cancel()
                     state = state.copy(showImageViewer = false)
                 }
+
+                MediaDetailEvent.RequestMedia -> requestMedia()
             }
         }
     }
@@ -146,6 +161,27 @@ class MediaDetailViewModel(
                     state.copy(isLoading = false, isGetContentError = false, mediaDetails = it)
             }
         }
+    }
+
+    private suspend fun getSeerrMediaInfoDetails(mediaType: MediaType, mediaId: Long) {
+        state = state.copy(isSeerStatusLoading = true, isSeerStatusError = false)
+        getMediaInfoUseCase(mediaType = mediaType, mediaId = mediaId)
+            .onError {
+                state = state.copy(isSeerStatusLoading = false, isSeerStatusError = true)
+            }
+            .onSuccess {
+
+                val ableToRequest = when (it.mediaStatus) {
+                    SeerrStatus.AVAILABLE, SeerrStatus.PENDING, SeerrStatus.REQUESTED -> false
+                    else -> true
+                }
+
+                state = state.copy(
+                    isSeerStatusLoading = false,
+                    seerStatus = it.mediaStatus,
+                    ableToRequest = ableToRequest
+                )
+            }
     }
 
     private suspend fun setFavorite() {
@@ -299,5 +335,9 @@ class MediaDetailViewModel(
                 state = state.copy(showImageViewer = true, imageList = mediaImages.backdropList)
             }
         }
+    }
+
+    private suspend fun requestMedia() {
+        _sideEffect.send(MediaDetailSideEffect.NavigateToSeasonSelection(navArgs.mediaId, navArgs.mediaType))
     }
 }

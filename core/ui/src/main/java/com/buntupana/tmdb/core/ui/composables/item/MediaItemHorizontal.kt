@@ -27,8 +27,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.buntupana.tmdb.core.ui.composables.AppCard
 import com.buntupana.tmdb.core.ui.composables.ImageFromUrl
+import com.buntupana.tmdb.core.ui.composables.seer.SeerrStatusBadge
 import com.buntupana.tmdb.core.ui.theme.AppTheme
 import com.buntupana.tmdb.core.ui.theme.Dimens
+import com.panabuntu.tmdb.core.common.entity.MediaType
 import com.panabuntu.tmdb.core.common.util.isNotNullOrBlank
 
 
@@ -38,6 +40,7 @@ fun MediaItemHorizontal(
     height: Dp = Dimens.imageSize.posterHeight,
     onMediaClick: (mediaId: Long, mainPosterColor: Color) -> Unit,
     mediaId: Long,
+    mediaType: MediaType? = null,
     title: String,
     posterUrl: String?,
     overview: String?,
@@ -59,12 +62,23 @@ fun MediaItemHorizontal(
             modifier = modifier
         ) {
 
-            ImageFromUrl(
-                modifier = Modifier
-                    .aspectRatio(2f / 3f),
-                imageUrl = posterUrl,
-                setDominantColor = { mainPosterColor = it }
-            )
+            Box {
+                ImageFromUrl(
+                    modifier = Modifier
+                        .aspectRatio(2f / 3f),
+                    imageUrl = posterUrl,
+                    setDominantColor = { mainPosterColor = it }
+                )
+                if (mediaType != null) {
+                    SeerrStatusBadge(
+                        modifier = Modifier
+                            .align(androidx.compose.ui.Alignment.TopEnd)
+                            .padding(Dimens.padding.tiny),
+                        mediaType = mediaType,
+                        tmdbId = mediaId
+                    )
+                }
+            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()

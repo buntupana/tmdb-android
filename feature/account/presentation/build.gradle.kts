@@ -50,6 +50,8 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":feature:account:domain"))
     implementation(project(":feature:lists:domain"))
+    implementation(project(":feature:seerr:presentation"))
+    implementation(project(":feature:seerr:domain"))
 
     // Kotlin
     implementation(libs.kotlinx.serialization.json)

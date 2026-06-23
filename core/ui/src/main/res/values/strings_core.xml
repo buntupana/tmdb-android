@@ -56,4 +56,11 @@
     // Favorites
     <string name="common_favorites">Favorites</string>
 
+    // Seer
+    <string name="seerr_status_available">Available</string>
+    <string name="seerr_status_partially_available">Partially Available</string>
+    <string name="seerr_status_pending">Pending</string>
+    <string name="seerr_status_requested">Requested</string>
+    <string name="seerr_status_deleted">Deleted</string>
+
 </resources>

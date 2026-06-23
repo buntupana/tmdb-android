@@ -14,6 +14,7 @@ import com.buntupana.tmdb.feature.detail.presentation.rating.RatingRoute
 import com.buntupana.tmdb.feature.detail.presentation.seasons.SeasonsDetailRoute
 import com.buntupana.tmdb.feature.lists.presentation.manage_lists.ManageListsRoute
 import com.buntupana.tmdb.feature.search.presentation.SearchRoute
+import com.buntupana.tmdb.feature.seer.presentation.request.SeerrRequestRoute
 import com.panabuntu.tmdb.core.common.entity.MediaType
 
 @Composable
@@ -111,6 +112,11 @@ fun MediaDetailsNav(
                     backgroundColor = backgroundColor,
                     releaseYear = releaseYear
                 )
+            )
+        },
+        navigateToSeasonSelection = { mediaId, mediatype ->
+            navRoutesMain.navigate(
+                SeerrRequestRoute(mediaId = mediaId, mediaType = mediatype)
             )
         }
     )

@@ -11,7 +11,9 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-@Suppress("UnstableApiUsage")
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -46,3 +48,7 @@ include(":feature:lists:data")
 include(":feature:lists:domain")
 include(":feature:lists:presentation")
 include(":feature:lists:di")
+include(":feature:seerr:data")
+include(":feature:seerr:domain")
+include(":feature:seerr:presentation")
+include(":feature:seerr:di")

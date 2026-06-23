@@ -83,6 +83,8 @@ dependencies {
     implementation(project(":feature:search:presentation"))
     implementation(project(":feature:lists:di"))
     implementation(project(":feature:lists:presentation"))
+    implementation(project(":feature:seerr:di"))
+    implementation(project(":feature:seerr:presentation"))
 
     implementation(libs.kotlinx.serialization.json)
 

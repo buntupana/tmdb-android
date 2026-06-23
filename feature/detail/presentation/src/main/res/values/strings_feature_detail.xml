@@ -46,6 +46,7 @@
     <string name="detail_set_favorite_error">Sorry there was an error setting favorite</string>
     <string name="detail_set_watchlist_error">Sorry there was an error setting watchlist</string>
     <string name="detail_rating_error">Sorry there was an error rating %s</string>
+    <string name="detail_request_error">Sorry there was an error requesting $s</string>
 
     // Rating
     <string name="detail_rating">Rating</string>

@@ -17,6 +17,7 @@ import java.time.format.FormatStyle
 import java.util.Locale
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
+import kotlin.time.Duration.Companion.milliseconds
 
 
 fun LocalDate.toLocalFormat(): String {
@@ -36,7 +37,7 @@ fun LocalDate.toFullDate(): String {
 fun getCurrentUTC(): String {
     val currentInstant = Instant.now()
     val currentUTCDateTime = ZonedDateTime.ofInstant(currentInstant, ZoneOffset.UTC)
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss 'UTC'") // Format
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss 'UTC'") // Format
 
     return formatter.format(currentUTCDateTime)
 }
@@ -112,7 +113,7 @@ fun <K, V> Map<out K, V>?.isNotNullOrEmpty(): Boolean {
 suspend fun applyDelayFor(initMillis: Long, minDurationDifference: Long = 500) {
     val difference = System.currentTimeMillis() - initMillis
     if (difference < minDurationDifference) {
-        delay(minDurationDifference - difference)
+        delay((minDurationDifference - difference).milliseconds)
     }
 }
 

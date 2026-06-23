@@ -41,6 +41,7 @@ dependencies {
     implementation(project(":feature:detail:domain"))
     implementation(project(":feature:detail:data"))
     implementation(project(":feature:lists:domain"))
+    implementation(project(":feature:seerr:domain"))
     implementation(project(":core:di"))
     implementation(project(":core:data"))
 

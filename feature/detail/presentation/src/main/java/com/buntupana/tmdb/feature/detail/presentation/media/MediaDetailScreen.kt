@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import com.buntupana.tmdb.core.ui.R
 import com.buntupana.tmdb.core.ui.composables.CircularProgressIndicatorDelayed
 import com.buntupana.tmdb.core.ui.composables.ErrorAndRetry
@@ -57,7 +61,9 @@ import com.buntupana.tmdb.feature.detail.presentation.media.comp.WatchProviders
 import com.buntupana.tmdb.feature.detail.presentation.mediaDetailsTvShowSample
 import com.buntupana.tmdb.feature.detail.presentation.person.comp.ExternalLinksRow
 import com.panabuntu.tmdb.core.common.entity.MediaType
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 @Composable
 fun MediaDetailScreen(
@@ -71,8 +77,26 @@ fun MediaDetailScreen(
     onRecommendationClick: (mediaId: Long, mediaType: MediaType, backgroundColor: Color?) -> Unit,
     onLogoClick: () -> Unit,
     onRatingClick: (mediaId: Long, mediaType: MediaType, mediaTitle: String, rating: Int?) -> Unit,
-    onManageListClick: (mediaId: Long, mediaType: MediaType, mediaName: String, mediaPosterUrl: String?, backgroundColor: Int, releaseYear: String?) -> Unit
+    onManageListClick: (mediaId: Long, mediaType: MediaType, mediaName: String, mediaPosterUrl: String?, backgroundColor: Int, releaseYear: String?) -> Unit,
+    navigateToSeasonSelection: (mediaId: Long, mediaType: MediaType) -> Unit
 ) {
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(lifecycleOwner.lifecycle) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            launch {
+                viewModel.sideEffect.collect { sideEffect ->
+                    Timber.d("MediaDetailScreen: sideEffect = $sideEffect")
+                    when (sideEffect) {
+                        is MediaDetailSideEffect.NavigateToSeasonSelection -> {
+                            navigateToSeasonSelection(sideEffect.mediaId, sideEffect.mediaType)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     MediaDetailContent(
         state = viewModel.state,
@@ -148,6 +172,9 @@ fun MediaDetailScreen(
         },
         onImageViewerDismiss = {
             viewModel.onEvent(MediaDetailEvent.DismissImageViewer)
+        },
+        onRequestClick = {
+            viewModel.onEvent(MediaDetailEvent.RequestMedia)
         }
     )
 }
@@ -171,7 +198,8 @@ fun MediaDetailContent(
     onListClick: (backgroundColor: Color) -> Unit,
     onPosterClick: () -> Unit,
     onBackdropClick: () -> Unit,
-    onImageViewerDismiss: () -> Unit
+    onImageViewerDismiss: () -> Unit,
+    onRequestClick: () -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -239,10 +267,13 @@ fun MediaDetailContent(
                         userRating = state.mediaDetails?.userRating,
                         isRateable = state.mediaDetails?.isRateable ?: false,
                         isRatingLoading = state.isRatingLoading,
+                        isRequestLoading = state.isRequestLoading,
+                        ableToRequest = state.ableToRequest,
                         onFavoriteClick = onFavoriteClick,
                         onWatchlistClick = onWatchlistClick,
                         onRatingClick = onRatingClick,
-                        onListClick = { onListClick(backgroundColor) }
+                        onListClick = { onListClick(backgroundColor) },
+                        onRequestClick = onRequestClick
                     )
                     Spacer(
                         modifier = Modifier
@@ -316,7 +347,8 @@ fun MediaDetailContent(
                         mediaDetails = state.mediaDetails,
                         backgroundColor = backgroundColor,
                         onPosterClick = onPosterClick,
-                        onBackdropClick = onBackdropClick
+                        onBackdropClick = onBackdropClick,
+                        seerrStatus = state.seerStatus
                     ) { dominantColor ->
                         if (dominantColor != backgroundColor) {
                             backgroundColor = dominantColor
@@ -449,7 +481,8 @@ fun MediaDetailScreenPreview() {
             onListClick = {},
             onPosterClick = {},
             onBackdropClick = {},
-            onImageViewerDismiss = {}
+            onImageViewerDismiss = {},
+            onRequestClick = {}
         )
     }
 }

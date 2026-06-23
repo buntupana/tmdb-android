@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Sign-in -->
+    <string name="seerr_sign_in_title">Seer</string>
+    <string name="seerr_auth_local">Local</string>
+    <string name="seerr_auth_jellyfin">Jellyfin</string>
+    <string name="seerr_server_url_label">Server URL</string>
+    <string name="seerr_server_url_placeholder">https://seer.example.com</string>
+    <string name="seerr_email_label">Email</string>
+    <string name="seerr_username_label">Username</string>
+    <string name="seerr_password_label">Password</string>
+    <string name="seerr_sign_in_button">Sign in</string>
+    <string name="seerr_sign_in_error">Sign-in failed</string>
+
+    <!-- Account section -->
+    <string name="seerr_account_title">Seer</string>
+    <string name="seerr_account_not_connected">Not connected</string>
+    <string name="seerr_account_connect">Connect</string>
+    <string name="seerr_account_disconnect">Disconnect</string>
+    <string name="seerr_account_connected_as">Connected as %1$s</string>
+
+    <!-- Request -->
+    <string name="seerr_request_button">Request</string>
+    <string name="seerr_request_again_button">Request more</string>
+    <string name="seerr_request_title">Request media</string>
+    <string name="seerr_request_seasons">Select seasons</string>
+    <string name="seerr_request_season_format">Season %1$d</string>
+    <string name="seerr_request_all_seasons">All seasons</string>
+    <string name="seerr_request_submit">Send request</string>
+    <string name="seerr_request_success">Request sent</string>
+    <string name="seerr_request_error">Could not send the request</string>
+    <string name="seerr_request_media">Request Media</string>
+    <string name="seerr_request_movie_confirmation">Do you want to request this movie?</string>
+    <string name="seerr_request_movie_not_able">This movie cannot be requested</string>
+    <string name="seerr_request_media_error">There was an error requesting this media</string>
+
+</resources>

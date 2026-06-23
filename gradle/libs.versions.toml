@@ -4,24 +4,24 @@ version_code = "2"
 version_name = "1.0.1"
 
 #Sdk and tools
-compile_sdk = "36"
-target_sdk = "36"
+compile_sdk = "37"
+target_sdk = "37"
 min_sdk = "23"
 
 #Kotlin
-kotlin = "2.3.21"
-ksp = "2.3.6"
-ktx = '1.18.0'
+kotlin = "2.4.0"
+ksp = "2.3.9"
+ktx = '1.19.0'
 
 #Compose
-composeBom = "2026.05.00"
+composeBom = "2026.06.00"
 compose_activity = "1.13.0"
-compose_foundation = "1.11.1"
+compose_foundation = "1.11.3"
 compose_paging = "3.5.0"
-compose_lifecycle = "2.10.0"
+compose_lifecycle = "2.11.0"
 
 #Android dependencies
-lifecycle = "2.10.0"
+lifecycle = "2.11.0"
 room = "2.8.4"
 navigation = "2.9.8"
 palette = '1.0.0'
@@ -33,11 +33,11 @@ accompanist = "0.36.0"
 material3 = "1.4.0"
 
 #Firebase
-firebase = '34.13.0'
+firebase = '34.15.0'
 crashlytics = "3.0.7"
 
 #Di
-koin-bom = "4.2.1"
+koin-bom = "4.2.2"
 
 #Ktor
 ktor_bom = "3.5.0"
@@ -51,7 +51,7 @@ serialization = "1.11.0"
 moshi = "1.15.2"
 desugar_jdk = "2.1.5"
 secrets = "2.0.1"
-coil = "3.4.0"
+coil = "3.5.0"
 browser = "1.10.0"
 
 #Testing
@@ -61,9 +61,9 @@ espresso = '3.7.0'
 
 # Plugins
 agp = "9.2.1"
-google_services = "4.4.4"
-jetbrainsKotlinJvm = "2.3.21"
-uiTextGoogleFonts = "1.11.1"
+google_services = "4.5.0"
+jetbrainsKotlinJvm = "2.4.0"
+uiTextGoogleFonts = "1.11.3"
 
 [libraries]
 

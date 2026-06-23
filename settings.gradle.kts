@@ -11,22 +11,23 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
     }
-
 }
 
 rootProject.name = "TMDB"
-include (":app")
+include(":app")
 include(":core:ui")
 include(":core:common")
 include(":feature:account:data")
 include(":feature:account:domain")
 include(":feature:account:presentation")
+include(":feature:account:di")
 include(":feature:detail:data")
 include(":feature:detail:domain")
 include(":feature:detail:presentation")
@@ -39,7 +40,6 @@ include(":feature:search:domain")
 include(":feature:search:data")
 include(":feature:search:presentation")
 include(":feature:search:di")
-include(":feature:account:di")
 include(":core:data")
 include(":core:di")
 include(":feature:lists:data")
